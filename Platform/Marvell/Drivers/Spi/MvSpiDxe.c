@@ -240,7 +240,8 @@ MvSpiTransfer (
     }
 
     if (Iterator >= SPI_TIMEOUT) {
-      DEBUG ((DEBUG_ERROR, "Timeout\n"));
+      DEBUG ((DEBUG_ERROR, "%a: Timeout\n", __FUNCTION__));
+      return EFI_TIMEOUT;
     }
   }
 
