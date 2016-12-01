@@ -565,6 +565,7 @@ MvI2cStartRequest (
   UINTN Transmitted;
   I2C_MASTER_CONTEXT *I2cMasterContext = I2C_SC_FROM_MASTER(This);
   EFI_I2C_OPERATION *Operation;
+  EFI_STATUS Status = EFI_SUCCESS;
 
   ASSERT (RequestPacket != NULL);
   ASSERT (I2cMasterContext != NULL);
@@ -574,33 +575,52 @@ MvI2cStartRequest (
     ReadMode = Operation->Flags & I2C_FLAG_READ;
 
     if (Count == 0) {
-      MvI2cStart ( I2cMasterContext,
-                   (SlaveAddress << 1) | ReadMode,
-                   I2C_TRANSFER_TIMEOUT
-                 );
+      Status = MvI2cStart (I2cMasterContext,
+                 (SlaveAddress << 1) | ReadMode,
+                 I2C_TRANSFER_TIMEOUT);
     } else if (!(Operation->Flags & I2C_FLAG_NORESTART)) {
-      MvI2cRepeatedStart ( I2cMasterContext,
-                           (SlaveAddress << 1) | ReadMode,
-                           I2C_TRANSFER_TIMEOUT
-                         );
+      Status = MvI2cRepeatedStart (I2cMasterContext,
+                 (SlaveAddress << 1) | ReadMode,
+                 I2C_TRANSFER_TIMEOUT);
     }
 
-    if (ReadMode) {
-      MvI2cRead ( I2cMasterContext,
-                  Operation->Buffer,
-                  Operation->LengthInBytes,
-                  &Transmitted,
-                  Count == 1,
-                  I2C_TRANSFER_TIMEOUT
-                 );
-    } else {
-      MvI2cWrite ( I2cMasterContext,
-                   Operation->Buffer,
-                   Operation->LengthInBytes,
-                   &Transmitted,
-                   I2C_TRANSFER_TIMEOUT
-                  );
+    /* I2C transaction was aborted, so stop further transactions */
+    if (EFI_ERROR (Status)) {
+      MvI2cStop (I2cMasterContext);
+      break;
     }
+
+    /*
+     * If sending the slave address was successful,
+     * proceed to read or write section.
+     */
+    if (ReadMode) {
+      Status = MvI2cRead (I2cMasterContext,
+                 Operation->Buffer,
+                 Operation->LengthInBytes,
+                 &Transmitted,
+                 Count == 1,
+                 I2C_TRANSFER_TIMEOUT);
+      Operation->LengthInBytes = Transmitted;
+    } else {
+      Status = MvI2cWrite (I2cMasterContext,
+                 Operation->Buffer,
+                 Operation->LengthInBytes,
+                 &Transmitted,
+                 I2C_TRANSFER_TIMEOUT);
+      Operation->LengthInBytes = Transmitted;
+    }
+
+    /*
+     * The I2C read or write transaction failed.
+     * Stop the I2C transaction.
+     */
+    if (EFI_ERROR (Status)) {
+      MvI2cStop (I2cMasterContext);
+      break;
+    }
+
+    /* Check if there is any more data to be sent */
     if (Count == RequestPacket->OperationCount - 1) {
       MvI2cStop ( I2cMasterContext );
     }
