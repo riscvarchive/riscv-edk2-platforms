@@ -1,0 +1,373 @@
+UEFI Porting Guide
+==================
+
+This document provides instructions for adding support for new Marvell Armada
+board. For the sake of simplicity new Marvell board will be called "new_board".
+
+1. Create configuration files for new target
+	1.1 Create FDF file for new board
+
+	 - Copy and rename edk2-platforms/Platform/Marvell/Armada/Armada70x0.fdf to
+	   edk2-platforms/Platform/Marvell/Armada/new_board.fdf
+	 - Change the first no-comment line:
+	   [FD.Armada70x0_EFI] to [FD.{new_board}_EFI]
+
+	1.2 Create DSC file for new board
+
+	 - Add new_board.dsc file to edk2-platforms/Platform/Marvell/Armada directory
+	 - Insert following [Defines] section to new_board.dsc:
+
+			[Defines]
+			  PLATFORM_NAME                  = {new_board}
+			  PLATFORM_GUID                  = {newly_generated_GUID}
+			  PLATFORM_VERSION               = 0.1
+			  DSC_SPECIFICATION              = 0x00010019
+			  OUTPUT_DIRECTORY               = {output_directory}
+			  SUPPORTED_ARCHITECTURES        = AARCH64
+			  BUILD_TARGETS                  = DEBUG|RELEASE
+			  SKUID_IDENTIFIER               = DEFAULT
+			  FLASH_DEFINITION               = {path_to_fdf_file}
+
+	 - Add "!include Armada.dsc.inc" entry to new_board.dsc
+
+2. Driver support
+ - According to content of files from
+   edk2-platforms/Silicon/Marvell/Documentation/PortingGuide.txt
+   insert PCD entries into new_board.dsc for every needed interface (as listed below).
+
+3. Compilation
+ - Refer to edk2-platforms/Platform/Marvell/Readme.md. Remember to change
+   {platform} to new_board in order to point build system to newly created DSC file.
+
+4. Output file
+ - Output files (and among others FD file, which may be used by ATF) are
+   generated under directory pointed by "OUTPUT_DIRECTORY" entry (see point 1.2).
+
+
+COMPHY configuration
+====================
+In order to configure ComPhy library, following PCDs are available:
+
+  - gMarvellTokenSpaceGuid.PcdComPhyDevices
+
+This array indicates, which ones of the ComPhy chips defined in
+MVHW_COMPHY_DESC template will be configured.
+
+Every ComPhy PCD has <Num> part where <Num> stands for chip ID (order is not
+important, but configuration will be set for first PcdComPhyChipCount chips).
+
+Every chip has 3 ComPhy PCDs and three of them comprise per-board lanes
+settings for this chip. Their format is unicode string, containing settings
+for up to 10 lanes. Setting for each one is separated with semicolon.
+These PCDs together describe outputs of PHY integrated in simple cihp.
+Below is example for the first chip (Chip0).
+
+  - gMarvellTokenSpaceGuid.PcdChip0ComPhyTypes
+	(Unicode string indicating PHY types. Currently supported are:
+
+		{ L"unconnected", L"PCIE0", L"PCIE1", L"PCIE2", L"PCIE3",
+		  L"SATA0", L"SATA1", L"SATA2", L"SATA3", L"SGMII0",
+		  L"SGMII1", L"SGMII2", L"SGMII3", L"QSGMII",
+		  L"USB3_HOST0", L"USB3_HOST1", L"USB3_DEVICE",
+		  L"XAUI0", L"XAUI1", L"XAUI2", L"XAUI3", L"RXAUI0",
+		  L"RXAUI1", L"KR" } )
+
+  - gMarvellTokenSpaceGuid.PcdChip0ComPhySpeeds
+	(Indicates PHY speeds in MHz. Currently supported are:
+		{ 1250, 1500, 2500, 3000, 3125, 5000, 6000, 6250, 1031 }  )
+
+  - gMarvellTokenSpaceGuid.PcdChip0ComPhyInvFlags
+	(Indicates lane polarity invert)
+
+Example
+-------
+
+		  #ComPhy
+		  gMarvellTokenSpaceGuid.PcdComPhyDevices|{ 0x1 }
+		  gMarvellTokenSpaceGuid.PcdChip0ComPhyTypes|L"SGMII1;USB3_HOST0;SFI;SATA1;USB3_HOST1;PCIE2"
+		  gMarvellTokenSpaceGuid.PcdChip0ComPhySpeeds|L"1250;5000;10310;5000;5000;5000"
+
+
+PHY Driver configuration
+========================
+MvPhyDxe provides basic initialization and status routines for Marvell PHYs.
+Currently only 1518 series PHYs are supported. Following PCDs are required:
+
+  - gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
+	(list of values corresponding to PHY_CONNECTION enum)
+  - gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg
+	(boolean - if true, driver waits for autonegotiation on startup)
+  - gMarvellTokenSpaceGuid.PcdPhyDeviceIds
+	(list of values corresponding to MV_PHY_DEVICE_ID enum)
+
+PHY_CONNECTION enum type is defined as follows:
+
+		typedef enum {
+			0    PHY_CONNECTION_RGMII,
+			1    PHY_CONNECTION_RGMII_ID,
+			2    PHY_CONNECTION_RGMII_TXID,
+			3    PHY_CONNECTION_RGMII_RXID,
+			4    PHY_CONNECTION_SGMII,
+			5    PHY_CONNECTION_RTBI,
+			6    PHY_CONNECTION_XAUI,
+			7    PHY_CONNECTION_RXAUI
+		} PHY_CONNECTION;
+
+MV_PHY_DEVICE_ID:
+
+		typedef enum {
+			0    MV_PHY_DEVICE_1512,
+		} MV_PHY_DEVICE_ID;
+
+It should be extended when adding support for other PHY models.
+Thus in order to set RGMII for 1st PHY and SGMII for 2nd, PCD should be:
+
+ gMarvellTokenSpaceGuid.PcdPhyConnectionTypes|{ 0x0, 0x4 }
+
+with disabled autonegotiation:
+
+ gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg|FALSE
+
+assuming, that PHY models are 1512:
+
+ gMarvellTokenSpaceGuid.PcdPhyDeviceIds|{ 0x0, 0x0 }
+
+
+MDIO configuration
+==================
+MDIO driver provides access to network PHYs' registers via EFI_MDIO_READ and
+EFI_MDIO_WRITE functions (EFI_MDIO_PROTOCOL). Following PCD is required:
+
+  - gMarvellTokenSpaceGuid.PcdMdioBaseAddress
+	(base address of SMI management register)
+
+
+I2C configuration
+=================
+In order to enable driver on a new platform, following steps need to be taken:
+ - add following line to .dsc file:
+   edk2-platforms/Platform/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
+ - add following line to .fdf file:
+   INF edk2-platforms/Platform/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
+ - add PCDs with relevant values to .dsc file:
+	- gMarvellTokenSpaceGuid.PcdI2cSlaveAddresses|{ 0x50, 0x57 }
+		(addresses of I2C slave devices on bus)
+	- gMarvellTokenSpaceGuid.PcdI2cSlaveBuses|{ 0x0, 0x0 }
+		(buses to which accoring slaves are attached)
+	- gMarvellTokenSpaceGuid.PcdI2cBusCount|2
+		(number of SoC's I2C buses)
+	- gMarvellTokenSpaceGuid.PcdI2cBaseAddresses|L"0xF2701000;0xF2701100"
+		(base addresses of I2C controller buses)
+	- gMarvellTokenSpaceGuid.PcdI2cClockFrequency|200000000
+		(I2C host controller clock frequency)
+	- gMarvellTokenSpaceGuid.PcdI2cBaudRate|100000
+		(baud rate used in I2C transmission)
+
+
+PciEmulation configuration
+==========================
+Installation of various NonDiscoverable devices via PciEmulation driver is performed
+via set of PCDs. Following are available:
+
+  - gMarvellTokenSpaceGuid.PcdPciEXhci
+	(Indicates, which Xhci devices are used)
+
+  - gMarvellTokenSpaceGuid.PcdPciEAhci
+	(Indicates, which Ahci devices are used)
+
+  - gMarvellTokenSpaceGuid.PcdPciESdhci
+	(Indicates, which Sdhci devices are used)
+
+All above PCD's correspond to hardware description in a dedicated structure:
+
+STATIC PCI_E_PLATFORM_DESC A70x0PlatDescTemplate
+
+in Platform/Marvell/PciEmulation/PciEmulation.c file. It comprises device
+count, base addresses, register region size and DMA-coherency type.
+
+Example
+-------
+
+Assuming we want to enable second XHCI port and one SDHCI port on Armada
+70x0 board, following needs to be declared:
+
+		gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x0 0x1 }
+		gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x1 }
+
+
+SATA configuration
+==================
+There is one additional PCD for AHCI:
+
+  - gMarvellTokenSpaceGuid.PcdSataBaseAddress
+	(Base address of SATA controller register space - used in SATA ComPhy init
+	 sequence)
+
+
+Pp2Dxe configuration
+====================
+Pp2Dxe is driver supporting PP2 NIC on Marvell platforms. Following PCDs
+are required to operate:
+
+  - gMarvellTokenSpaceGuid.PcdPp2Controllers
+	(Array with used controllers
+	 Set to 0x1 for enabled, 0x0 for disabled)
+
+  - gMarvellTokenSpaceGuid.PcdPp2Port2Controller
+	(Array specifying, to which controller the port belongs to)
+
+  - gMarvellTokenSpaceGuid.PcdPhySmiAddresses
+	(Addresses of PHY devices)
+
+  - gMarvellTokenSpaceGuid.PcdPp2PortIds
+	(Identificators of PP2 ports)
+
+  - gMarvellTokenSpaceGuid.PcdPp2GopIndexes
+	(Indexes used in GOP operation)
+
+  - gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
+	(Set to 0x1 for always-up interface, 0x0 otherwise)
+
+  - gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
+	(Values corresponding to PHY_SPEED enum.
+	 PHY_SPEED is defined as follows:
+
+		  typedef enum {
+			  0  NO_SPEED,
+			  1  SPEED_10,
+			  2  SPEED_100,
+			  3  SPEED_1000,
+			  4  SPEED_2500,
+			  5  SPEED_10000
+		  } PHY_SPEED;
+
+
+UTMI PHY configuration
+======================
+In order to configure UTMI, following PCDs are available:
+
+  - gMarvellTokenSpaceGuid.PcdUtmiPhyCount
+	(Indicates how many UTMI PHYs are available on platform)
+
+Next four PCDs are in unicode string format containing settings for all devices
+separated with semicolon.
+
+  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit
+	(Indicates base address of the UTMI unit)
+
+  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg
+	(Indicates address of USB Configuration register)
+
+  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg
+	(Indicates address of external UTMI configuration)
+
+  - gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort
+	(Indicates type of the connected USB port)
+
+Example
+-------
+
+		# UtmiPhy
+		  gMarvellTokenSpaceGuid.PcdUtmiPhyCount|2
+		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit|L"0xF2580000;0xF2581000"
+		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg|L"0xF2440420;0xF2440420"
+		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg|L"0xF2440440;0xF2440444"
+		  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort|L"0x0;0x1"
+
+
+SPI driver configuration
+========================
+Following PCDs are available for configuration of spi driver:
+
+  - gMarvellTokenSpaceGuid.PcdSpiClockFrequency
+	(Frequency (in Hz) of SPI clock)
+
+  - gMarvellTokenSpaceGuid.PcdSpiMaxFrequency
+	(Max SCLK line frequency (in Hz) (max transfer frequency) )
+
+  - gMarvellTokenSpaceGuid.PcdSpiDefaultMode
+	(default SCLK mode (see SPI_MODE enum in file
+	 edk2-platforms/Platform/Marvell/Drivers/Spi/MvSpi.h) )
+
+
+SpiFlash configuration
+======================
+Folowing PCDs for spi flash driver configuration must be set properly:
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashAddressCycles
+	(Size of SPI flash address in bytes (3 or 4) )
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashEraseSize
+	(Size of minimal erase block in bytes)
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashPageSize
+	(Size of SPI flash page)
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashId
+	(Id of SPI flash)
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashPollCmd
+	(Spi flash polling flag)
+
+
+MPP configuration
+=================
+Multi-Purpose Ports (MPP) are configurable through platform PCDs.
+In order to set desired pin multiplexing, .dsc file needs to be modified.
+(edk2-platforms/Platform/Marvell/Armada/{platform_name}.dsc - please refer to
+Documentation/Build.txt for currently supported {platftorm_name} )
+Following PCDs are available:
+
+  - gMarvellTokenSpaceGuid.PcdMppChipCount
+	(Indicates how many different chips are placed on board. So far up to 4 chips
+	 are supported)
+
+Every MPP PCD has <Num> part where
+ <Num> stands for chip ID (order is not important, but configuration will be
+ set for first PcdMppChipCount chips).
+
+Below is example for the first chip (Chip0).
+
+  - gMarvellTokenSpaceGuid.PcdChip0MppReverseFlag
+	(Indicates that register order is reversed. (Needs to be used only for AP806-Z1) )
+
+  - gMarvellTokenSpaceGuid.PcdChip0MppBaseAddress
+	(This is base address for MPP configuration register)
+
+  - gMarvellTokenSpaceGuid.PcdChip0MppPinCount
+	(Defines how many MPP pins are available)
+
+  - gMarvellTokenSpaceGuid.PcdChip0MppSel0
+  - gMarvellTokenSpaceGuid.PcdChip0MppSel1
+  - gMarvellTokenSpaceGuid.PcdChip0MppSel2
+	(This registers defines functions of 10 pins in ascending order)
+
+Examples
+--------
+
+		# APN806-A0 MPP SET
+		 gMarvellTokenSpaceGuid.PcdChip0MppReverseFlag|FALSE
+		 gMarvellTokenSpaceGuid.PcdChip0MppBaseAddress|0xF06F4000
+		 gMarvellTokenSpaceGuid.PcdChip0MppRegCount|3
+		 gMarvellTokenSpaceGuid.PcdChip0MppSel0|{ 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x0 }
+		 gMarvellTokenSpaceGuid.PcdChip0MppSel1|{ 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+
+Set pin 6 and 7 to 0xa function:
+		 gMarvellTokenSpaceGuid.PcdChip0MppSel0|{ 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xa, 0xa, 0x0, 0x0 }
+
+
+MarvellResetSystemLib configuration
+===================================
+This simple library allows to mask given bits in given reg at UEFI 'reset'
+command call. These variables are configurable through PCDs:
+
+  - gMarvellTokenSpaceGuid.PcdResetRegAddress
+  - gMarvellTokenSpaceGuid.PcdResetRegMask
+
+
+Ramdisk configuration
+=====================
+There is one PCD available for Ramdisk configuration
+
+  - gMarvellTokenSpaceGuid.PcdRamDiskSize
+	(Defines size of Ramdisk)
