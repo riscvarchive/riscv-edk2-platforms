@@ -226,9 +226,8 @@ MvSpiTransfer (
     // Wait for memory ready
     for (Iterator = 0; Iterator < SPI_TIMEOUT; Iterator++) {
       if (MmioRead32 (SpiRegBase + SPI_INT_CAUSE_REG)) {
-        *DataInPtr = MmioRead32 (SpiRegBase + SPI_DATA_IN_REG);
-
         if (DataInPtr != NULL) {
+          *DataInPtr = MmioRead32 (SpiRegBase + SPI_DATA_IN_REG);
           DataInPtr++;
         }
         if (DataOutPtr != NULL) {
