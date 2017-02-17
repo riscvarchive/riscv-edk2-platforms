@@ -378,6 +378,9 @@
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
+  # Platform Initialization
+  Platform/Marvell/Armada/Drivers/PlatInitDxe/PlatInitDxe.inf
+
   # Platform drivers
   Platform/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
   MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf

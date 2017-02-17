@@ -89,6 +89,11 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
 
   INF MdeModulePkg/Core/Dxe/DxeMain.inf
 
+  #
+  # Platform Initialization
+  #
+  INF Platform/Marvell/Armada/Drivers/PlatInitDxe/PlatInitDxe.inf
+
   # PI DXE Drivers producing Architectural Protocols (EFI Services)
   INF ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
