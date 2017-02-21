@@ -74,7 +74,7 @@ STATIC
 VOID
 SetRegisterValue (
   UINT8 RegCount,
-  UINT8 **MppRegPcd,
+  UINT8 MppRegPcd[][MPP_PINS_PER_REG],
   UINTN BaseAddr,
   BOOLEAN ReverseFlag
   )
@@ -99,10 +99,10 @@ STATIC
 UINT8
 PcdToMppRegs (
   UINTN PinCount,
-  UINT8 **MppRegPcd
+  UINT8 **MppRegPcd,
+  UINT8 MppRegPcdTmp[][MPP_PINS_PER_REG]
   )
 {
-  UINT8 MppRegPcdTmp[MPP_MAX_REGS][MPP_PINS_PER_REG];
   UINT8 PcdGroupCount, MppRegCount;
   UINTN i, j, k, l;
 
@@ -125,14 +125,7 @@ PcdToMppRegs (
     for (j = 0; j < PCD_PINS_PER_GROUP; j++) {
       k = (PCD_PINS_PER_GROUP * i + j) / MPP_PINS_PER_REG;
       l = (PCD_PINS_PER_GROUP * i + j) % MPP_PINS_PER_REG;
-      MppRegPcdTmp[k][l] = MppRegPcd[i][j];
-    }
-  }
-
-  /* Update input table */
-  for (i = 0; i < MppRegCount; i++) {
-    for (j = 0; j < MPP_PINS_PER_REG; j++) {
-      MppRegPcd[i][j] = MppRegPcdTmp[i][j];
+      MppRegPcdTmp[k][l] = (UINT8)MppRegPcd[i][j];
     }
   }
 
@@ -191,6 +184,7 @@ MppInitialize (
   BOOLEAN ReverseFlag[MAX_CHIPS];
   UINT8 *MppRegPcd[MAX_CHIPS][MPP_MAX_REGS];
   UINT32 i, ChipCount;
+  UINT8 TmpMppValue[MPP_MAX_REGS][MPP_PINS_PER_REG];
 
   ChipCount = PcdGet32 (PcdMppChipCount);
 
@@ -203,8 +197,9 @@ MppInitialize (
   for (i = 0; i < MAX_CHIPS; i++) {
     if (i == ChipCount)
       break;
-    RegCount = PcdToMppRegs (PinCount[i], MppRegPcd[i]);
-    SetRegisterValue (RegCount, MppRegPcd[i], BaseAddr[i], ReverseFlag[i]);
+
+    RegCount = PcdToMppRegs (PinCount[i], MppRegPcd[i], TmpMppValue);
+    SetRegisterValue (RegCount, TmpMppValue, BaseAddr[i], ReverseFlag[i]);
 
     /*
      * eMMC PHY IP has its own MPP configuration.
