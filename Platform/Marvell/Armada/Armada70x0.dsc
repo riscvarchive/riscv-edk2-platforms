@@ -95,6 +95,8 @@
   gMarvellTokenSpaceGuid.PcdSpiFlashEraseSize|65536
   gMarvellTokenSpaceGuid.PcdSpiFlashPageSize|256
   gMarvellTokenSpaceGuid.PcdSpiFlashId|0x20BA18
+  gMarvellTokenSpaceGuid.PcdSpiFlashMode|3
+  gMarvellTokenSpaceGuid.PcdSpiFlashCs|0
 
   #ComPhy
   gMarvellTokenSpaceGuid.PcdComPhyDevices|{ 0x1 }
