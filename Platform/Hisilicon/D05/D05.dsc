@@ -329,12 +329,12 @@
   gHisiTokenSpaceGuid.PcdHb1Rb0PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb1Rb1PciRegionBaseAddress|0x400a9400000
   gHisiTokenSpaceGuid.PcdHb1Rb1PciRegionSize|0xbf0000
-  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionBaseAddress|0x20000000
-  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionSize|0xd0000000
+  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionBaseAddress|0x40000000
+  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionSize|0xb0000000
   gHisiTokenSpaceGuid.PcdHb1Rb3PciRegionBaseAddress|0x400ab400000
   gHisiTokenSpaceGuid.PcdHb1Rb3PciRegionSize|0xbf0000
-  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionBaseAddress|0x30000000
-  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionSize|0xc0000000
+  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionBaseAddress|0x40000000
+  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionSize|0xb0000000
   gHisiTokenSpaceGuid.PcdHb1Rb5PciRegionBaseAddress|0x40000000
   gHisiTokenSpaceGuid.PcdHb1Rb5PciRegionSize|0xb0000000
   gHisiTokenSpaceGuid.PcdHb1Rb6PciRegionBaseAddress|0x408aa400000
@@ -352,9 +352,9 @@
   gHisiTokenSpaceGuid.PcdHb0Rb7CpuMemRegionBase|0x8B9800000
   gHisiTokenSpaceGuid.PcdHb1Rb0CpuMemRegionBase|0x400A8400000
   gHisiTokenSpaceGuid.PcdHb1Rb1CpuMemRegionBase|0x400A9400000
-  gHisiTokenSpaceGuid.PcdHb1Rb2CpuMemRegionBase|0x65020000000
+  gHisiTokenSpaceGuid.PcdHb1Rb2CpuMemRegionBase|0x65040000000
   gHisiTokenSpaceGuid.PcdHb1Rb3CpuMemRegionBase|0x400AB400000
-  gHisiTokenSpaceGuid.PcdHb1Rb4CpuMemRegionBase|0x75030000000
+  gHisiTokenSpaceGuid.PcdHb1Rb4CpuMemRegionBase|0x75040000000
   gHisiTokenSpaceGuid.PcdHb1Rb5CpuMemRegionBase|0x79040000000
   gHisiTokenSpaceGuid.PcdHb1Rb6CpuMemRegionBase|0x408AA400000
   gHisiTokenSpaceGuid.PcdHb1Rb7CpuMemRegionBase|0x408AB400000

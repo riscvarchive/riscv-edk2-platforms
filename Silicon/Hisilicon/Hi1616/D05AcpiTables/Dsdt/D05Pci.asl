@@ -646,10 +646,10 @@ Scope(_SB)
           Cacheable,
           ReadWrite,
           0x0, // Granularity
-          0x20000000, // Min Base Address
+          0x40000000, // Min Base Address
           0xefffffff, // Max Base Address
           0x65000000000, // Translate
-          0xd0000000 // Length
+          0xb0000000 // Length
         )
         QWordIO (
           ResourceProducer,
@@ -766,10 +766,10 @@ Scope(_SB)
           Cacheable,
           ReadWrite,
           0x0, // Granularity
-          0x30000000, // Min Base Address
+          0x40000000, // Min Base Address
           0xefffffff, // Max Base Address
           0x75000000000, // Translate
-          0xc0000000 // Length
+          0xb0000000 // Length
         )
         QWordIO (
           ResourceProducer,
