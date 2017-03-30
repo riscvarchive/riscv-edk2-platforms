@@ -77,6 +77,8 @@
 #define RegWrite(addr,data)            MmioWrite32((addr), (data))
 #define RegRead(addr,data)             ((data) = MmioRead32 (addr))
 
+#define PCIE_ASPM_DISABLE 0x0
+#define PCIE_ASPM_ENABLE 0x1
 
 typedef struct tagPcieDebugInfo
 {

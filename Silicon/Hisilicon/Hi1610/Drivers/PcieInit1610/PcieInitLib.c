@@ -1033,6 +1033,106 @@ DisableRcOptionRom (
   return;
 }
 
+STATIC
+VOID
+PcieDbiCs2Enable (
+  IN UINT32 HostBridgeNum,
+  IN UINT32 Port,
+  IN BOOLEAN Val
+  )
+{
+  UINT32 RegVal;
+
+  RegRead (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_SUBCTRL_SC_PCIE_SYS_CTRL21,
+    RegVal
+    );
+  if (Val) {
+    RegVal = RegVal | BIT2;
+    /* BIT2: DBI Chip Select indicator. 0 indicates CS, 1 indicates CS2.*/
+  } else {
+    RegVal = RegVal & (~BIT2);
+  }
+  RegWrite (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_SUBCTRL_SC_PCIE_SYS_CTRL21,
+    RegVal
+    );
+}
+
+STATIC
+BOOLEAN
+PcieDBIReadOnlyWriteEnable (
+  IN UINT32 HostBridgeNum,
+  IN UINT32 Port
+  )
+{
+  UINT32  Val;
+
+  RegRead (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_DBI_READ_ONLY_WRITE_ENABLE,
+    Val
+    );
+  if (Val == 0x1) {
+    return TRUE;
+  } else {
+    RegWrite (
+      PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_DBI_READ_ONLY_WRITE_ENABLE,
+      0x1
+      );
+    /* Delay 10us to make sure the PCIE device have enouph time to response. */
+    MicroSecondDelay(10);
+    RegRead (
+      PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_DBI_READ_ONLY_WRITE_ENABLE,
+      Val
+      );
+    if (Val == 0x1) {
+      return TRUE;
+    }
+  }
+  DEBUG ((DEBUG_ERROR,"PcieDBIReadOnlyWriteEnable Fail!!!\n"));
+  return FALSE;
+}
+
+STATIC
+VOID
+SwitchPcieASPMSupport (
+  IN UINT32 HostBridgeNum,
+  IN UINT32 Port,
+  IN UINT8 Val
+  )
+{
+  PCIE_EP_PCIE_CAP3_U PcieCap3;
+
+  if (Port >= PCIE_MAX_ROOTBRIDGE) {
+    DEBUG ((DEBUG_ERROR, "Port is not valid\n"));
+    return;
+  }
+  if (!PcieDBIReadOnlyWriteEnable (HostBridgeNum, Port)) {
+    DEBUG ((DEBUG_INFO, "PcieDBI ReadOnly Reg do not Enable!!!\n"));
+    return;
+  }
+  PcieDbiCs2Enable (HostBridgeNum, Port, FALSE);
+
+  RegRead (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_EP_PCIE_CAP3_REG,
+    PcieCap3.UInt32
+    );
+  PcieCap3.Bits.active_state_power_management = Val;
+  RegWrite (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_EP_PCIE_CAP3_REG,
+    PcieCap3.UInt32
+    );
+  RegRead (
+    PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_EP_PCIE_CAP3_REG,
+    PcieCap3.UInt32
+    );
+  DEBUG ((DEBUG_INFO,
+          "ASPI active state power management: %d\n",
+          PcieCap3.Bits.active_state_power_management));
+
+  PcieDbiCs2Enable (HostBridgeNum, Port, TRUE);
+}
+
 EFI_STATUS
 EFIAPI
 PciePortInit (
@@ -1089,6 +1189,9 @@ PciePortInit (
 
      /* disable link up interrupt */
      (VOID)PcieMaskLinkUpInit(soctype, HostBridgeNum, PortIndex);
+
+     /* disable ASPM */
+     SwitchPcieASPMSupport (HostBridgeNum, PortIndex, PCIE_ASPM_DISABLE);
 
      /* Pcie Equalization*/
      (VOID)PcieEqualization(soctype ,HostBridgeNum, PortIndex);
