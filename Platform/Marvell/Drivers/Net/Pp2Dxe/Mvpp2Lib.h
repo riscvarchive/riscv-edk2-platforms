@@ -504,6 +504,11 @@ MvGop110XlgPortLinkEventMask (
   IN PP2DXE_PORT *Port
   );
 
+VOID
+MvGop110GmacForceLinkUp (
+  IN PP2DXE_PORT *Port
+  );
+
 INT32
 MvGop110FlCfg (
   IN PP2DXE_PORT *Port

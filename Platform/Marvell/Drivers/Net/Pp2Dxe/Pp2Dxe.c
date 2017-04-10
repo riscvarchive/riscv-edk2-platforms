@@ -1310,7 +1310,11 @@ Pp2DxeInitialiseController (
     NetCompConfig |= MvpPp2xGop110NetcCfgCreate(&Pp2Context->Port);
 
     MvGop110PortInit(&Pp2Context->Port);
-    MvGop110FlCfg(&Pp2Context->Port);
+
+    if (Pp2Context->Port.AlwaysUp == TRUE) {
+      MvGop110GmacForceLinkUp (&Pp2Context->Port);
+      MvGop110FlCfg (&Pp2Context->Port);
+    }
 
     Status = gBS->CreateEvent (
                  EVT_SIGNAL_EXIT_BOOT_SERVICES,
