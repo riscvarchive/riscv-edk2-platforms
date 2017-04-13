@@ -112,7 +112,6 @@
   #  It could be set FALSE to save size.
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
   gHisiTokenSpaceGuid.PcdIsItsSupported|TRUE
-  gHisiTokenSpaceGuid.PcdIsPciPerfTuningEnable|TRUE
 
 [PcdsFixedAtBuild.common]
   gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"D03"

@@ -315,50 +315,6 @@ PcieEnableItssm (
 
 }
 
-STATIC EFI_STATUS PciPerfTuning(UINT32 soctype, UINT32 HostBridgeNum, UINT32 Port)
-{
-    UINT32 Value;
-    UINTN  RegSegmentOffset;
-
-    if (Port >= PCIE_MAX_ROOTBRIDGE) {
-      DEBUG((DEBUG_ERROR, "Invalid port number: %d\n", Port));
-      return EFI_INVALID_PARAMETER;
-    }
-
-    RegSegmentOffset = PCIE_APB_SLAVE_BASE_1610[HostBridgeNum][Port] + PCIE_SYS_REG_OFFSET;
-
-    //Enable SMMU bypass for translation
-    RegRead(RegSegmentOffset + PCIE_SYS_CTRL13_REG, Value);
-    //BIT13: controller master read SMMU bypass
-    //BIT12: controller master write SMMU bypass
-    //BIT10: SMMU bypass enable
-    Value |= (BIT13 | BIT12 | BIT10);
-    RegWrite(RegSegmentOffset + PCIE_SYS_CTRL13_REG, Value);
-
-    //Switch strongly order (SO) to relaxed order (RO) for write transaction
-    RegRead(RegSegmentOffset + PCIE_CTRL_6_REG, Value);
-    //BIT13 | BIT12: Enable write merge and SMMU streaming ordered write acknowledge
-    Value |= (BIT13 | BIT12);
-    //BIT29 | BIT27 | BIT25 | BIT23 | BIT21 | BIT19 | BIT17: Enable RO for all types of write transaction
-    Value |= (BIT29 | BIT27 | BIT25 | BIT23 | BIT21 | BIT19 | BIT17);
-    RegWrite(RegSegmentOffset + PCIE_CTRL_6_REG, Value);
-
-    //Force streamID for controller read operation
-    RegRead(RegSegmentOffset + PCIE_SYS_CTRL54_REG, Value);
-    //Force using streamID in PCIE_SYS_CTRL54_REG
-    Value &= ~(BIT30);
-    //Set streamID to 0, bit[0:15] is for request ID and should be kept
-    Value &= ~(0xff << 16);
-    RegWrite(RegSegmentOffset + PCIE_SYS_CTRL54_REG, Value);
-
-    //Enable read and write snoopy
-    RegRead(RegSegmentOffset + PCIE_SYS_CTRL19_REG, Value);
-    Value |= (BIT30 | BIT28);
-    RegWrite(RegSegmentOffset + PCIE_SYS_CTRL19_REG, Value);
-
-    return EFI_SUCCESS;
-}
-
 EFI_STATUS PcieDisableItssm(UINT32 soctype, UINT32 HostBridgeNum, UINT32 Port)
 {
     PCIE_CTRL_7_U pcie_ctrl7;
@@ -1141,12 +1097,6 @@ PciePortInit (
      DisableRcOptionRom (soctype, HostBridgeNum, PortIndex, PcieCfg->PortInfo.PortType);
      /* assert LTSSM enable */
      (VOID)PcieEnableItssm (soctype, HostBridgeNum, PortIndex, PcieCfg);
-     if (FeaturePcdGet(PcdIsPciPerfTuningEnable)) {
-       //PCIe will still work even if performance tuning fails,
-       //and there is warning message inside the function to print
-       //detailed error if there is.
-       (VOID)PciPerfTuning(soctype, HostBridgeNum, PortIndex);
-     }
 
      PcieConfigContextHi1610(soctype, HostBridgeNum, PortIndex);
      /*

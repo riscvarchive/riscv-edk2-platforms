@@ -274,7 +274,6 @@
 
 [PcdsFeatureFlag]
   gHisiTokenSpaceGuid.PcdIsItsSupported|FALSE|BOOLEAN|0x00000065
-  gHisiTokenSpaceGuid.PcdIsPciPerfTuningEnable|FALSE|BOOLEAN|0x00000066
 
 
 

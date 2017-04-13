@@ -55,7 +55,6 @@
 
 [FeaturePcd]
   gHisiTokenSpaceGuid.PcdIsItsSupported
-  gHisiTokenSpaceGuid.PcdIsPciPerfTuningEnable
 
 [depex]
   TRUE
