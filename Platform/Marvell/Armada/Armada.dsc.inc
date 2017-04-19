@@ -126,8 +126,9 @@
 
   # BDS Libraries
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
-  PlatformBdsLib|ArmPlatformPkg/Library/PlatformIntelBdsLib/PlatformIntelBdsLib.inf
+  BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
+  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+  PlatformBootManagerLib|ArmPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
 
@@ -350,6 +351,12 @@
   # Shell.
   gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
 
+  # GUID of the generic BDS UiApp
+  gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
+
+  # use the 'TTYTERM' terminal type for optimal compatibility with Linux terminal emulators
+  gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|4
+
   # ARM Pcds
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x40000000
@@ -459,7 +466,13 @@
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
-  IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf
+  MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+  MdeModulePkg/Application/UiApp/UiApp.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
+  }
 
   # UEFI application (Shell Embedded Boot Loader)
   ShellPkg/Application/Shell/Shell.inf {
