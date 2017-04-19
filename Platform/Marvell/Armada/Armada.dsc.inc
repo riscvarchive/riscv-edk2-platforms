@@ -67,8 +67,7 @@
   UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
   UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
 
-  # Assume everything is fixed at build. do not use runtime PCD feature
-  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+  PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
 
   BaseMemoryLib|MdePkg/Library/BaseMemoryLibOptDxe/BaseMemoryLibOptDxe.inf
 
@@ -150,6 +149,7 @@
   PrePiHobListPointerLib|ArmPlatformPkg/Library/PrePiHobListPointerLib/PrePiHobListPointerLib.inf
   PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
   ArmGicArchLib|ArmPkg/Library/ArmGicArchSecLib/ArmGicArchSecLib.inf
+  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
 
 [LibraryClasses.common.SEC, LibraryClasses.common.PEIM]
   MemoryInitPeiLib|ArmPlatformPkg/MemoryInitPei/MemoryInitPeiLib.inf
@@ -368,8 +368,12 @@
   # DXE
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
-      PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
       NULL|MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
+  }
+
+  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
+    <LibraryClasses>
+      PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   }
 
   # Architectural Protocols DXE
