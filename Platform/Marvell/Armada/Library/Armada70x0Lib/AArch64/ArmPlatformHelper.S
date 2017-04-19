@@ -16,6 +16,7 @@
 #include <Library/ArmLib.h>
 
 ASM_FUNC(ArmPlatformPeiBootAction)
+  mov   x29, xzr
   ret
 
 //UINTN
