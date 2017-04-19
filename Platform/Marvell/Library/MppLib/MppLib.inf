@@ -106,3 +106,6 @@
   gMarvellTokenSpaceGuid.PcdChip3MppSel7
 
   gMarvellTokenSpaceGuid.PcdPciESdhci
+
+[BuildOptions]
+  *_*_*_CC_FLAGS = -fno-stack-protector
