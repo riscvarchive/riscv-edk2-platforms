@@ -78,7 +78,7 @@
   # I2C
   gMarvellTokenSpaceGuid.PcdI2cSlaveAddresses|{ 0x50, 0x57, 0x60 }
   gMarvellTokenSpaceGuid.PcdI2cSlaveBuses|{ 0x0, 0x0, 0x0 }
-  gMarvellTokenSpaceGuid.PcdI2cBaseAddresses|L"0xF2701000;0xF2701100"
+  gMarvellTokenSpaceGuid.PcdI2cControllersEnabled|{ 0x1, 0x1 }
   gMarvellTokenSpaceGuid.PcdEepromI2cAddresses|{ 0x50, 0x57 }
   gMarvellTokenSpaceGuid.PcdEepromI2cBuses|{ 0x0, 0x0 }
   gMarvellTokenSpaceGuid.PcdI2cClockFrequency|250000000

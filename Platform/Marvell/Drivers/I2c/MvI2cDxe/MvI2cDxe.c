@@ -42,11 +42,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiLib.h>
-#include <Library/ParsePcdLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/MvHwDescLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
 #include "MvI2cDxe.h"
+
+DECLARE_A7K8K_I2C_TEMPLATE;
 
 STATIC MV_I2C_BAUD_RATE baud_rate;
 
@@ -172,35 +174,39 @@ MvI2cInitialise (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
+  MVHW_I2C_DESC *Desc = &mA7k8kI2cDescTemplate;
+  UINT8 *I2cDeviceTable, Index;
   EFI_STATUS Status;
-  UINT32 BusCount;
-  EFI_PHYSICAL_ADDRESS I2cBaseAddresses[PcdGet32 (PcdI2cBusCount)];
-  INTN i;
 
-  BusCount = PcdGet32 (PcdI2cBusCount);
-  if (BusCount == 0)
-    return EFI_SUCCESS;
+  /* Obtain table with enabled I2c devices */
+  I2cDeviceTable = (UINT8 *)PcdGetPtr (PcdI2cControllersEnabled);
+  if (I2cDeviceTable == NULL) {
+    DEBUG ((DEBUG_ERROR, "Missing PcdI2cControllersEnabled\n"));
+    return EFI_INVALID_PARAMETER;
+  }
 
-  Status = ParsePcdString (
-      (CHAR16 *) PcdGetPtr (PcdI2cBaseAddresses),
-      BusCount,
-      I2cBaseAddresses,
-      NULL
-      );
-  if (EFI_ERROR(Status))
-    return Status;
+  if (PcdGetSize (PcdI2cControllersEnabled) > MVHW_MAX_I2C_DEVS) {
+    DEBUG ((DEBUG_ERROR, "Wrong PcdI2cControllersEnabled format\n"));
+    return EFI_INVALID_PARAMETER;
+  }
 
-  for (i = 0; i < BusCount; i++) {
+  /* Initialize enabled chips */
+  for (Index = 0; Index < PcdGetSize (PcdI2cControllersEnabled); Index++) {
+    if (!MVHW_DEV_ENABLED (I2c, Index)) {
+      DEBUG ((DEBUG_ERROR, "Skip I2c chip %d\n", Index));
+      continue;
+    }
+
     Status = MvI2cInitialiseController(
         ImageHandle,
         SystemTable,
-        I2cBaseAddresses[i]
+        Desc->I2cBaseAddresses[Index]
         );
     if (EFI_ERROR(Status))
       return Status;
   }
 
-  return Status;
+  return EFI_SUCCESS;
 }
 
 STATIC

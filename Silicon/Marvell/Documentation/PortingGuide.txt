@@ -189,8 +189,8 @@ In order to enable driver on a new platform, following steps need to be taken:
 		(buses to which accoring slaves are attached)
 	- gMarvellTokenSpaceGuid.PcdI2cBusCount|2
 		(number of SoC's I2C buses)
-	- gMarvellTokenSpaceGuid.PcdI2cBaseAddresses|L"0xF2701000;0xF2701100"
-		(base addresses of I2C controller buses)
+	- gMarvellTokenSpaceGuid.PcdI2cControllersEnabled|{ 0x1, 0x1 }
+		(array with used controllers)
 	- gMarvellTokenSpaceGuid.PcdI2cClockFrequency|200000000
 		(I2C host controller clock frequency)
 	- gMarvellTokenSpaceGuid.PcdI2cBaudRate|100000

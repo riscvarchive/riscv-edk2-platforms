@@ -60,6 +60,16 @@ typedef struct {
 } MVHW_COMPHY_DESC;
 
 //
+// I2C devices description template definition
+//
+#define MVHW_MAX_I2C_DEVS         4
+
+typedef struct {
+  UINT8 I2cDevCount;
+  UINTN I2cBaseAddresses[MVHW_MAX_I2C_DEVS];
+} MVHW_I2C_DESC;
+
+//
 // NonDiscoverable devices description template definition
 //
 #define MVHW_MAX_XHCI_DEVS         4
@@ -127,6 +137,21 @@ MVHW_COMPHY_DESC mA7k8kComPhyDescTemplate = {\
   { MVHW_CP0_COMPHY_LANES, MVHW_CP1_COMPHY_LANES },\
   { MVHW_CP0_COMPHY_MUX_BITS, MVHW_CP1_COMPHY_MUX_BITS },\
   { MvComPhyTypeCp110, MvComPhyTypeCp110 }\
+}
+
+//
+// Platform description of I2C devices
+//
+#define MVHW_CP0_I2C0_BASE       0xF2701000
+#define MVHW_CP0_I2C1_BASE       0xF2701100
+#define MVHW_CP1_I2C0_BASE       0xF4701000
+#define MVHW_CP1_I2C1_BASE       0xF4701100
+
+#define DECLARE_A7K8K_I2C_TEMPLATE \
+STATIC \
+MVHW_I2C_DESC mA7k8kI2cDescTemplate = {\
+  4,\
+  { MVHW_CP0_I2C0_BASE, MVHW_CP0_I2C1_BASE, MVHW_CP1_I2C0_BASE, MVHW_CP1_I2C1_BASE }\
 }
 
 //
