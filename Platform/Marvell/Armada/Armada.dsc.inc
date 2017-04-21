@@ -263,7 +263,14 @@
 
   # ARM Generic Interrupt Controller
   gArmTokenSpaceGuid.PcdGicDistributorBase|0xF0210000
-  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xF0220000
+
+  #
+  # NOTE: the GIC architecture mandates that the CPU interface, which consists
+  # of 2 consecutive 4 KB frames, can be mapped using separate mappings.
+  # Since this is problematic on 64 KB pages, the MMU-400 aliases each frame
+  # 16 times, and the two consecutive frames can be found at offset 0xf000
+  #
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xF022F000
 
   # ARM Architectural Timer Support
   gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|25000000
