@@ -33,7 +33,6 @@
   ArmPlatformLib|Platform/Marvell/Armada/Library/Armada70x0Lib/Armada70x0Lib.inf
   ComPhyLib|Platform/Marvell/Library/ComPhyLib/ComPhyLib.inf
   MppLib|Platform/Marvell/Library/MppLib/MppLib.inf
-  ParsePcdLib|Platform/Marvell/Library/ParsePcdLib/ParsePcdLib.inf
   UtmiPhyLib|Platform/Marvell/Library/UtmiPhyLib/UtmiPhyLib.inf
 
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
