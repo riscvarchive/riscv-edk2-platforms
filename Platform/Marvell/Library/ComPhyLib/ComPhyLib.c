@@ -113,47 +113,6 @@ RegSetSilent16(
   MmioWrite16 (Addr, RegData);
 }
 
-/* This function returns enum with SerDesType */
-UINT32
-ParseSerdesTypeString (
-  CHAR16* String
-  )
-{
-  UINT32 i;
-
-  if (String == NULL)
-    return COMPHY_TYPE_INVALID;
-
-  for (i = 0; i < COMPHY_TYPE_MAX; i++) {
-    if (StrCmp (String, TypeStringTable[i]) == 0) {
-      return i;
-    }
-  }
-
-  /* PCD string doesn't match any supported SerDes Type */
-  return COMPHY_TYPE_INVALID;
-}
-
-/* This function converts SerDes speed in MHz to enum with SerDesSpeed */
-UINT32
-ParseSerdesSpeed (
-  UINT32 Value
-  )
-{
-  UINT32 i;
-  UINT32 ValueTable [] = {0, 1250, 1500, 2500, 3000, 3125,
-                          5000, 5156, 6000, 6250, 10310};
-
-  for (i = 0; i < COMPHY_SPEED_MAX; i++) {
-    if (Value == ValueTable[i]) {
-      return i;
-    }
-  }
-
-  /* PCD SerDes speed value doesn't match any supported SerDes speed */
-  return COMPHY_SPEED_INVALID;
-}
-
 CHAR16 *
 GetTypeString (
   UINT32 Type
@@ -182,7 +141,8 @@ GetSpeedString (
 
 VOID
 ComPhyPrint (
-  IN CHIP_COMPHY_CONFIG *PtrChipCfg
+  IN CHIP_COMPHY_CONFIG *PtrChipCfg,
+  IN UINT8 Index
   )
 {
   UINT32 Lane;
@@ -191,7 +151,7 @@ ComPhyPrint (
   for (Lane = 0; Lane < PtrChipCfg->LanesCount; Lane++) {
     SpeedStr = GetSpeedString(PtrChipCfg->MapData[Lane].Speed);
     TypeStr = GetTypeString(PtrChipCfg->MapData[Lane].Type);
-    DEBUG((DEBUG_ERROR, "Comphy-%d: %-13s %-10s\n", Lane, TypeStr, SpeedStr));
+    DEBUG ((DEBUG_ERROR, "Comphy%d-%d: %-13s %-10s\n", Index, Lane, TypeStr, SpeedStr));
   }
 
   DEBUG((DEBUG_ERROR, "\n"));
@@ -238,16 +198,16 @@ InitComPhyConfig (
    */
   switch (Id) {
   case 0:
-    GetComPhyPcd (ChipConfig, LaneData, 0);
+    GetComPhyPcd (LaneData, 0);
     break;
   case 1:
-    GetComPhyPcd (ChipConfig, LaneData, 1);
+    GetComPhyPcd (LaneData, 1);
     break;
   case 2:
-    GetComPhyPcd (ChipConfig, LaneData, 2);
+    GetComPhyPcd (LaneData, 2);
     break;
   case 3:
-    GetComPhyPcd (ChipConfig, LaneData, 3);
+    GetComPhyPcd (LaneData, 3);
     break;
   }
 }
@@ -288,12 +248,9 @@ MvComPhyInit (
     /* Get the count of the SerDes of the specific chip */
     MaxComphyCount = PtrChipCfg->LanesCount;
     for (Lane = 0; Lane < MaxComphyCount; Lane++) {
-      /* Parse PCD with string indicating SerDes Type */
-      PtrChipCfg->MapData[Lane].Type =
-        ParseSerdesTypeString (LaneData[Index].TypeStr[Lane]);
-      PtrChipCfg->MapData[Lane].Speed =
-        ParseSerdesSpeed (LaneData[Index].SpeedValue[Lane]);
-      PtrChipCfg->MapData[Lane].Invert = (UINT32)LaneData[Index].InvFlag[Lane];
+      PtrChipCfg->MapData[Lane].Type = LaneData[Index].Type[Lane];
+      PtrChipCfg->MapData[Lane].Speed = LaneData[Index].SpeedValue[Lane];
+      PtrChipCfg->MapData[Lane].Invert = LaneData[Index].InvFlag[Lane];
 
       if ((PtrChipCfg->MapData[Lane].Speed == COMPHY_SPEED_INVALID) ||
           (PtrChipCfg->MapData[Lane].Speed == COMPHY_SPEED_ERROR) ||
@@ -311,7 +268,7 @@ MvComPhyInit (
      return Status;
     }
 
-    ComPhyPrint (PtrChipCfg);
+    ComPhyPrint (PtrChipCfg, Index);
 
     /* PHY power UP sequence */
     PtrChipCfg->Init (PtrChipCfg);

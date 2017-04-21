@@ -51,7 +51,6 @@
   MemoryAllocationLib
   PcdLib
   IoLib
-  ParsePcdLib
 
 [Sources.common]
   ComPhyLib.c

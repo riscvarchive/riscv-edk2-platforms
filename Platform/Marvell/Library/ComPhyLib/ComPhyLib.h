@@ -43,7 +43,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/MvComPhyLib.h>
 #include <Library/IoLib.h>
 #include <Library/TimerLib.h>
-#include <Library/ParsePcdLib.h>
 
 #define MAX_LANE_OPTIONS          10
 
@@ -52,14 +51,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define GET_LANE_SPEED(id)        PcdGetPtr(PcdChip##id##ComPhySpeeds)
 #define GET_LANE_INV(id)          PcdGetPtr(PcdChip##id##ComPhyInvFlags)
 
-#define FillLaneMap(chip_struct, lane_struct, id) { \
-  ParsePcdString((CHAR16 *) GET_LANE_TYPE(id), chip_struct[id].LanesCount, NULL, lane_struct[id].TypeStr);     \
-  ParsePcdString((CHAR16 *) GET_LANE_SPEED(id), chip_struct[id].LanesCount, lane_struct[id].SpeedValue, NULL); \
-  ParsePcdString((CHAR16 *) GET_LANE_INV(id), chip_struct[id].LanesCount, lane_struct[id].InvFlag, NULL);      \
-}
-
-#define GetComPhyPcd(chip_struct, lane_struct, id) {               \
-  FillLaneMap(chip_struct, lane_struct, id);                       \
+#define GetComPhyPcd(lane_struct, id) {                      \
+  lane_struct[id].Type = (UINT8 *)GET_LANE_TYPE(id);         \
+  lane_struct[id].SpeedValue = (UINT8 *)GET_LANE_SPEED(id);  \
+  lane_struct[id].InvFlag = (UINT8 *)GET_LANE_SPEED(id);     \
 }
 
 /***** ComPhy *****/
@@ -573,15 +568,15 @@ typedef struct {
 } COMPHY_MUX_DATA;
 
 typedef struct {
-  UINT32 Type;
-  UINT32 Speed;
-  UINT32 Invert;
+  UINT8 Type;
+  UINT8 Speed;
+  UINT8 Invert;
 } COMPHY_MAP;
 
 typedef struct {
-  CHAR16 *TypeStr[MAX_LANE_OPTIONS];
-  UINTN SpeedValue[MAX_LANE_OPTIONS];
-  UINTN InvFlag[MAX_LANE_OPTIONS];
+  UINT8 *Type;
+  UINT8 *SpeedValue;
+  UINT8 *InvFlag;
 } PCD_LANE_MAP;
 
 typedef

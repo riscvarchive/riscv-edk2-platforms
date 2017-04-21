@@ -479,3 +479,47 @@
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
+
+################################################################################
+#
+# Defines - platform description macros
+#
+################################################################################
+[Defines]
+  # ComPhy speed
+  DEFINE CP_1_25G           = 0x1
+  DEFINE CP_1_5G            = 0x2
+  DEFINE CP_2_5G            = 0x3
+  DEFINE CP_3G              = 0x4
+  DEFINE CP_3_125G          = 0x5
+  DEFINE CP_5G              = 0x6
+  DEFINE CP_5_15625G        = 0x7
+  DEFINE CP_6G              = 0x8
+  DEFINE CP_6_25G           = 0x9
+  DEFINE CP_10_3125G        = 0xA
+
+  # ComPhy type
+  DEFINE CP_UNCONNECTED     = 0x0
+  DEFINE CP_PCIE0           = 0x1
+  DEFINE CP_PCIE1           = 0x2
+  DEFINE CP_PCIE2           = 0x3
+  DEFINE CP_PCIE3           = 0x4
+  DEFINE CP_SATA0           = 0x5
+  DEFINE CP_SATA1           = 0x6
+  DEFINE CP_SATA2           = 0x7
+  DEFINE CP_SATA3           = 0x8
+  DEFINE CP_SGMII0          = 0x9
+  DEFINE CP_SGMII1          = 0xA
+  DEFINE CP_SGMII2          = 0xB
+  DEFINE CP_SGMII3          = 0xC
+  DEFINE CP_QSGMII          = 0xD
+  DEFINE CP_USB3_HOST0      = 0xE
+  DEFINE CP_USB3_HOST1      = 0xF
+  DEFINE CP_USB3_DEVICE     = 0x10
+  DEFINE CP_XAUI0           = 0x11
+  DEFINE CP_XAUI1           = 0x12
+  DEFINE CP_XAUI2           = 0x13
+  DEFINE CP_XAUI3           = 0x14
+  DEFINE CP_RXAUI0          = 0x15
+  DEFINE CP_RXAUI1          = 0x16
+  DEFINE CP_SFI             = 0x17
