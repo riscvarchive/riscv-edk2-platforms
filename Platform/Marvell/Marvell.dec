@@ -156,11 +156,8 @@
   gMarvellTokenSpaceGuid.PcdChip3ComPhyInvFlags|{ 0x0 }|VOID*|0x30000177
 
 #UtmiPhy
-  gMarvellTokenSpaceGuid.PcdUtmiPhyCount|0|UINT32|0x30000205
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg|{ 0x0 }|VOID*|0x30000206
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg|{ 0x0 }|VOID*|0x30000207
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit|{ 0x0 }|VOID*|0x30000208
-  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort|{ 0x0 }|VOID*|0x30000209
+  gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled|{ 0x0 }|VOID*|0x30000206
+  gMarvellTokenSpaceGuid.PcdUtmiPortType|{ 0x0 }|VOID*|0x30000207
 
 #MDIO
   gMarvellTokenSpaceGuid.PcdMdioBaseAddress|0|UINT64|0x3000043

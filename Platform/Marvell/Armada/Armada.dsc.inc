@@ -523,3 +523,8 @@
   DEFINE CP_RXAUI0          = 0x15
   DEFINE CP_RXAUI1          = 0x16
   DEFINE CP_SFI             = 0x17
+
+  #UTMI PHY connection type
+  DEFINE UTMI_USB_HOST0     = 0x0
+  DEFINE UTMI_USB_HOST1     = 0x1
+  DEFINE UTMI_USB_DEVICE0   = 0x2

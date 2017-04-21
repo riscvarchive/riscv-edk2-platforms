@@ -33,12 +33,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #include "UtmiPhyLib.h"
+#include <Library/MvHwDescLib.h>
+
+DECLARE_A7K8K_UTMI_TEMPLATE;
 
 typedef struct {
   EFI_PHYSICAL_ADDRESS UtmiBaseAddr;
   EFI_PHYSICAL_ADDRESS UsbCfgAddr;
   EFI_PHYSICAL_ADDRESS UtmiCfgAddr;
   UINT32 UtmiPhyPort;
+  UINT32 PhyId;
 } UTMI_PHY_DATA;
 
 STATIC
@@ -236,48 +240,47 @@ UtmiPhyPowerUp (
 STATIC
 VOID
 Cp110UtmiPhyInit (
-  IN UINT32 UtmiPhyCount,
   IN UTMI_PHY_DATA *UtmiData
   )
 {
-  UINT32 i;
+  EFI_STATUS Status;
 
-  for (i = 0; i < UtmiPhyCount; i++) {
-    UtmiPhyPowerDown(i, UtmiData[i].UtmiBaseAddr,
-      UtmiData[i].UsbCfgAddr, UtmiData[i].UtmiCfgAddr,
-      UtmiData[i].UtmiPhyPort);
-  }
+  UtmiPhyPowerDown (UtmiData->PhyId,
+    UtmiData->UtmiBaseAddr,
+    UtmiData->UsbCfgAddr,
+    UtmiData->UtmiCfgAddr,
+    UtmiData->UtmiPhyPort);
 
   /* Power down PLL */
   DEBUG((DEBUG_INFO, "UtmiPhy: stage: PHY power down PLL\n"));
-  RegSet (UtmiData[0].UsbCfgAddr, 0x0 << UTMI_USB_CFG_PLL_OFFSET,
-    UTMI_USB_CFG_PLL_MASK);
+  MmioAnd32 (UtmiData->UsbCfgAddr, ~UTMI_USB_CFG_PLL_MASK);
 
-  for (i = 0; i < UtmiPhyCount; i++) {
-    UtmiPhyConfig(i, UtmiData[i].UtmiBaseAddr,
-      UtmiData[i].UsbCfgAddr, UtmiData[i].UtmiCfgAddr,
-      UtmiData[i].UtmiPhyPort);
+  UtmiPhyConfig (UtmiData->PhyId,
+    UtmiData->UtmiBaseAddr,
+    UtmiData->UsbCfgAddr,
+    UtmiData->UtmiCfgAddr,
+    UtmiData->UtmiPhyPort);
+
+  Status = UtmiPhyPowerUp (UtmiData->PhyId,
+             UtmiData->UtmiBaseAddr,
+             UtmiData->UsbCfgAddr,
+             UtmiData->UtmiCfgAddr,
+             UtmiData->UtmiPhyPort);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "UtmiPhy: Failed to initialize UTMI PHY %d\n", UtmiData->PhyId));
+    return;
   }
 
-  for (i = 0; i < UtmiPhyCount; i++) {
-    if (EFI_ERROR(UtmiPhyPowerUp(i, UtmiData[i].UtmiBaseAddr,
-        UtmiData[i].UsbCfgAddr, UtmiData[i].UtmiCfgAddr,
-        UtmiData[i].UtmiPhyPort))) {
-      DEBUG((DEBUG_ERROR, "UtmiPhy: Failed to initialize UTMI PHY %d\n", i));
-      continue;
-    }
-    DEBUG((DEBUG_ERROR, "UTMI PHY %d initialized to ", i));
-
-    if (UtmiData[i].UtmiPhyPort == UTMI_PHY_TO_USB_DEVICE0)
-      DEBUG((DEBUG_ERROR, "USB Device\n"));
-    else
-      DEBUG((DEBUG_ERROR, "USB Host%d\n", UtmiData[i].UtmiPhyPort));
+  DEBUG ((DEBUG_ERROR, "UTMI PHY %d initialized to ", UtmiData->PhyId));
+  if (UtmiData->UtmiPhyPort == UTMI_PHY_TO_USB_DEVICE0) {
+    DEBUG ((DEBUG_ERROR, "USB Device\n"));
+  } else {
+    DEBUG ((DEBUG_ERROR, "USB Host%d\n", UtmiData->UtmiPhyPort));
   }
 
   /* Power up PLL */
   DEBUG((DEBUG_INFO, "UtmiPhy: stage: PHY power up PLL\n"));
-  RegSet (UtmiData[0].UsbCfgAddr, 0x1 << UTMI_USB_CFG_PLL_OFFSET,
-    UTMI_USB_CFG_PLL_MASK);
+  MmioOr32 (UtmiData->UsbCfgAddr, UTMI_USB_CFG_PLL_MASK);
 }
 
 EFI_STATUS
@@ -285,69 +288,67 @@ UtmiPhyInit (
   VOID
   )
 {
-  EFI_STATUS Status;
-  UTMI_PHY_DATA UtmiData[PcdGet32 (PcdUtmiPhyCount)];
-  EFI_PHYSICAL_ADDRESS RegUtmiUnit[PcdGet32 (PcdUtmiPhyCount)];
-  EFI_PHYSICAL_ADDRESS RegUsbCfg[PcdGet32 (PcdUtmiPhyCount)];
-  EFI_PHYSICAL_ADDRESS RegUtmiCfg[PcdGet32 (PcdUtmiPhyCount)];
-  UINTN UtmiPort[PcdGet32 (PcdUtmiPhyCount)];
-  UINTN i, Count;
+  UTMI_PHY_DATA UtmiData;
+  UINT8 *UtmiDeviceTable, *XhciDeviceTable, *UtmiPortType, Index;
+  MVHW_UTMI_DESC *Desc = &mA7k8kUtmiDescTemplate;
 
-  Count = PcdGet32 (PcdUtmiPhyCount);
-  if (Count == 0) {
+  /* Obtain table with enabled Utmi PHY's*/
+  UtmiDeviceTable = (UINT8 *)PcdGetPtr (PcdUtmiControllersEnabled);
+  if (UtmiDeviceTable == NULL) {
     /* No UTMI PHY on platform */
     return EFI_SUCCESS;
   }
 
-  DEBUG((DEBUG_INFO, "UtmiPhy: Initialize USB UTMI PHYs\n"));
-  /* Parse UtmiPhy PCDs */
-  Status = ParsePcdString ((CHAR16 *) PcdGetPtr (PcdUtmiPhyRegUtmiUnit),
-    Count, RegUtmiUnit, NULL);
-  if (EFI_ERROR(Status)) {
-    DEBUG((DEBUG_ERROR, "UtmiPhy: Wrong PcdUtmiPhyRegUtmiUnit format\n"));
+  if (PcdGetSize (PcdUtmiControllersEnabled) > MVHW_MAX_XHCI_DEVS) {
+    DEBUG ((DEBUG_ERROR, "UTMI: Wrong PcdUtmiControllersEnabled format\n"));
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = ParsePcdString ((CHAR16 *) PcdGetPtr (PcdUtmiPhyRegUsbCfg),
-    Count, RegUsbCfg, NULL);
-  if (EFI_ERROR(Status)) {
-    DEBUG((DEBUG_ERROR, "UtmiPhy: Wrong PcdUtmiPhyRegUsbCfg format\n"));
+  /* Make sure XHCI controllers table is present */
+  XhciDeviceTable = (UINT8 *)PcdGetPtr (PcdPciEXhci);
+  if (XhciDeviceTable == NULL) {
+    DEBUG ((DEBUG_ERROR, "UTMI: Missing PcdPciEXhci\n"));
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = ParsePcdString ((CHAR16 *) PcdGetPtr (PcdUtmiPhyRegUtmiCfg),
-    Count, RegUtmiCfg, NULL);
-  if (EFI_ERROR(Status)) {
-    DEBUG((DEBUG_ERROR, "UtmiPhy: Wrong PcdUtmiPhyRegUtmiCfg format\n"));
+  /* Obtain port type table */
+  UtmiPortType = (UINT8 *)PcdGetPtr (PcdUtmiPortType);
+  if (UtmiPortType == NULL ||
+      PcdGetSize (PcdUtmiPortType) != PcdGetSize (PcdUtmiControllersEnabled)) {
+    DEBUG ((DEBUG_ERROR, "UTMI: Wrong PcdUtmiPortType format\n"));
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = ParsePcdString ((CHAR16 *) PcdGetPtr (PcdUtmiPhyUtmiPort),
-    Count, UtmiPort, NULL);
-  if (EFI_ERROR(Status)) {
-    DEBUG((DEBUG_ERROR, "UtmiPhy: Wrong PcdUtmiPhyUtmiPort format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
+  /* Initialize enabled chips */
+  for (Index = 0; Index < PcdGetSize (PcdUtmiControllersEnabled); Index++) {
+    if (!MVHW_DEV_ENABLED (Utmi, Index)) {
+      continue;
+    }
 
-  for (i = 0 ; i < Count ; i++) {
+    /* UTMI PHY without enabled XHCI controller is useless */
+    if (!MVHW_DEV_ENABLED (Xhci, Index)) {
+      DEBUG ((DEBUG_ERROR, "UTMI: Disabled Xhci controller %d\n", Index));
+      return EFI_INVALID_PARAMETER;
+    }
+
     /* Get base address of UTMI phy */
-    UtmiData[i].UtmiBaseAddr = RegUtmiUnit[i];
+    UtmiData.UtmiBaseAddr = Desc->UtmiBaseAddresses[Index];
 
     /* Get usb config address */
-    UtmiData[i].UsbCfgAddr = RegUsbCfg[i];
+    UtmiData.UsbCfgAddr = Desc->UtmiUsbConfigAddresses[Index];
 
     /* Get UTMI config address */
-    UtmiData[i].UtmiCfgAddr = RegUtmiCfg[i];
+    UtmiData.UtmiCfgAddr = Desc->UtmiConfigAddresses[Index];
 
-    /*
-     * Get the usb port number, which will be used to check if
-     * the utmi connected to host or device
-     */
-    UtmiData[i].UtmiPhyPort = UtmiPort[i];
+    /* Get UTMI PHY ID */
+    UtmiData.PhyId = Desc->UtmiPhyId[Index];
+
+    /* Get the usb port type */
+    UtmiData.UtmiPhyPort = UtmiPortType[Index];
+
+    /* Currently only Cp110 is supported */
+    Cp110UtmiPhyInit (&UtmiData);
   }
-
-  /* Currently only Cp110 is supported */
-  Cp110UtmiPhyInit (Count, UtmiData);
 
   return EFI_SUCCESS;
 }

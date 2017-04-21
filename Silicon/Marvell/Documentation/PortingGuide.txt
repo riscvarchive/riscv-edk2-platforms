@@ -279,33 +279,23 @@ UTMI PHY configuration
 ======================
 In order to configure UTMI, following PCDs are available:
 
-  - gMarvellTokenSpaceGuid.PcdUtmiPhyCount
-	(Indicates how many UTMI PHYs are available on platform)
+  - gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled
+	(Array with used controllers
+	 Set to 0x1 for enabled, 0x0 for disabled)
 
-Next four PCDs are in unicode string format containing settings for all devices
-separated with semicolon.
+  - gMarvellTokenSpaceGuid.PcdUtmiPortType
+	(Indicates type of the connected USB port:
 
-  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit
-	(Indicates base address of the UTMI unit)
-
-  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg
-	(Indicates address of USB Configuration register)
-
-  - gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg
-	(Indicates address of external UTMI configuration)
-
-  - gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort
-	(Indicates type of the connected USB port)
+	UTMI_USB_HOST0                     0x0
+	UTMI_USB_HOST1                     0x1
+	UTMI_USB_DEVICE0                   0x2 )
 
 Example
 -------
 
 		# UtmiPhy
-		  gMarvellTokenSpaceGuid.PcdUtmiPhyCount|2
-		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit|L"0xF2580000;0xF2581000"
-		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg|L"0xF2440420;0xF2440420"
-		  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg|L"0xF2440440;0xF2440444"
-		  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort|L"0x0;0x1"
+		  gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled|{ 0x1, 0x1 }
+		  gMarvellTokenSpaceGuid.PcdUtmiPortType|{ $(UTMI_USB_HOST0), $(UTMI_USB_HOST1) }
 
 
 SPI driver configuration

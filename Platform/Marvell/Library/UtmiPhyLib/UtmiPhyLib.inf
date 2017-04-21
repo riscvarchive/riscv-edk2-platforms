@@ -50,15 +50,12 @@
   DebugLib
   IoLib
   MemoryAllocationLib
-  ParsePcdLib
   PcdLib
 
 [Sources.common]
   UtmiPhyLib.c
 
-[FixedPcd]
-  gMarvellTokenSpaceGuid.PcdUtmiPhyCount
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg
-  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit
-  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort
+[Pcd]
+  gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled
+  gMarvellTokenSpaceGuid.PcdUtmiPortType
+  gMarvellTokenSpaceGuid.PcdPciEXhci
