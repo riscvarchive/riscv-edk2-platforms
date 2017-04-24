@@ -35,7 +35,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Base.h>
 #include <Library/ArmPlatformLib.h>
 #include <Library/DebugLib.h>
+#include <Library/HobLib.h>
+#include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+
+#include "Armada70x0LibMem.h"
 
 // The total number of descriptors, including the final "end-of-table" descriptor.
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 16
@@ -43,6 +47,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 // DDR attributes
 #define DDR_ATTRIBUTES_CACHED           ARM_MEMORY_REGION_ATTRIBUTE_NONSECURE_WRITE_BACK
 #define DDR_ATTRIBUTES_UNCACHED         ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED
+
+STATIC ARM_MEMORY_REGION_DESCRIPTOR mVirtualMemoryTable[MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS];
 
 /**
   Return the Virtual Memory Map of your platform
@@ -59,35 +65,81 @@ ArmPlatformGetVirtualMemoryMap (
   IN ARM_MEMORY_REGION_DESCRIPTOR** VirtualMemoryMap
   )
 {
-  ARM_MEMORY_REGION_DESCRIPTOR  *VirtualMemoryTable;
   UINTN                         Index = 0;
+  UINT64                        MemSize;
+  UINT64                        MemLowSize;
+  UINT64                        MemHighStart;
+  UINT64                        MemHighSize;
+  UINT64                        ConfigSpaceBaseAddr;
+  EFI_RESOURCE_ATTRIBUTE_TYPE   ResourceAttributes;
 
   ASSERT (VirtualMemoryMap != NULL);
 
-  VirtualMemoryTable = (ARM_MEMORY_REGION_DESCRIPTOR*)AllocatePages(EFI_SIZE_TO_PAGES (sizeof(ARM_MEMORY_REGION_DESCRIPTOR) * MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS));
-  if (VirtualMemoryTable == NULL) {
-      return;
+  ConfigSpaceBaseAddr = FixedPcdGet64 (PcdConfigSpaceBaseAddress);
+
+  MemSize = FixedPcdGet64 (PcdSystemMemorySize);
+
+  if (DRAM_REMAP_ENABLED) {
+    MemLowSize = MIN (DRAM_REMAP_TARGET, MemSize);
+    MemHighStart = (UINT64)DRAM_REMAP_TARGET + DRAM_REMAP_SIZE;
+    MemHighSize = MemSize - MemLowSize;
+  } else {
+    MemLowSize = MIN (ConfigSpaceBaseAddr, MemSize);
   }
 
-  // DDR
-  VirtualMemoryTable[Index].PhysicalBase    = PcdGet64 (PcdSystemMemoryBase);
-  VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdSystemMemoryBase);
-  VirtualMemoryTable[Index].Length          = PcdGet64 (PcdSystemMemorySize);
-  VirtualMemoryTable[Index].Attributes      = DDR_ATTRIBUTES_CACHED;
+  ResourceAttributes = (
+      EFI_RESOURCE_ATTRIBUTE_PRESENT |
+      EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+      EFI_RESOURCE_ATTRIBUTE_TESTED
+  );
 
-  // Configuration space 0xF000_0000 - 0xFFFF_FFFF
-  VirtualMemoryTable[++Index].PhysicalBase  = 0xF0000000;
-  VirtualMemoryTable[Index].VirtualBase     = 0xF0000000;
-  VirtualMemoryTable[Index].Length          = 0x10000000;
-  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+  BuildResourceDescriptorHob (
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    ResourceAttributes,
+    FixedPcdGet64 (PcdSystemMemoryBase),
+    MemLowSize
+    );
+
+  // DDR
+  mVirtualMemoryTable[Index].PhysicalBase    = FixedPcdGet64 (PcdSystemMemoryBase);
+  mVirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64 (PcdSystemMemoryBase);
+  mVirtualMemoryTable[Index].Length          = MemLowSize;
+  mVirtualMemoryTable[Index].Attributes      = DDR_ATTRIBUTES_CACHED;
+
+  // Configuration space
+  mVirtualMemoryTable[++Index].PhysicalBase  = ConfigSpaceBaseAddr;
+  mVirtualMemoryTable[Index].VirtualBase     = ConfigSpaceBaseAddr;
+  mVirtualMemoryTable[Index].Length          = SIZE_4GB - ConfigSpaceBaseAddr;
+  mVirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  if (MemSize > MemLowSize) {
+    //
+    // If we have more than MemLowSize worth of DRAM, the remainder will be
+    // mapped at the top of the remapped window.
+    //
+    mVirtualMemoryTable[++Index].PhysicalBase  = MemHighStart;
+    mVirtualMemoryTable[Index].VirtualBase     = MemHighStart;
+    mVirtualMemoryTable[Index].Length          = MemHighSize;
+    mVirtualMemoryTable[Index].Attributes      = DDR_ATTRIBUTES_CACHED;
+
+    BuildResourceDescriptorHob (
+      EFI_RESOURCE_SYSTEM_MEMORY,
+      ResourceAttributes,
+      MemHighStart,
+      MemHighSize
+      );
+  }
 
   // End of Table
-  VirtualMemoryTable[++Index].PhysicalBase  = 0;
-  VirtualMemoryTable[Index].VirtualBase     = 0;
-  VirtualMemoryTable[Index].Length          = 0;
-  VirtualMemoryTable[Index].Attributes      = 0;
+  mVirtualMemoryTable[++Index].PhysicalBase  = 0;
+  mVirtualMemoryTable[Index].VirtualBase     = 0;
+  mVirtualMemoryTable[Index].Length          = 0;
+  mVirtualMemoryTable[Index].Attributes      = 0;
 
   ASSERT((Index + 1) <= MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS);
 
-  *VirtualMemoryMap = VirtualMemoryTable;
+  *VirtualMemoryMap = mVirtualMemoryTable;
 }
