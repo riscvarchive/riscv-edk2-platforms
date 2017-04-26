@@ -79,18 +79,24 @@ SetRegisterValue (
   BOOLEAN ReverseFlag
   )
 {
-  UINT32 i, j, CtrlVal;
+  UINT32 i, j, CtrlVal, CtrlMask, PinIndex;
   INTN Sign;
 
   Sign = ReverseFlag ? -1 : 1;
 
   for (i = 0; i < RegCount; i++) {
     CtrlVal = 0;
+    CtrlMask = 0;
     for (j = 0; j < MPP_PINS_PER_REG; j++) {
-      CtrlVal |= MPP_PIN_VAL(7 * (UINTN) ReverseFlag + j * Sign,
-        MppRegPcd[i][7 * (UINTN) ReverseFlag + j * Sign]);
+
+      PinIndex = 7 * (UINTN)ReverseFlag + j * Sign;
+
+      if (MppRegPcd[i][PinIndex] != 0xff) {
+        CtrlVal |= MPP_PIN_VAL(PinIndex, MppRegPcd[i][PinIndex]);
+        CtrlMask |= MPP_PIN_VAL(PinIndex, 0xf);
+      }
     }
-    MmioWrite32 (BaseAddr + 4 * i * Sign, CtrlVal);
+    MmioAndThenOr32 (BaseAddr + 4 * i * Sign, ~CtrlMask, CtrlVal);
   }
 }
 
