@@ -412,6 +412,7 @@
   MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
   MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
   MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
+  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
   Platform/Marvell/Drivers/Net/MvMdioDxe/MvMdioDxe.inf
   Platform/Marvell/Drivers/Net/Phy/MvPhyDxe/MvPhyDxe.inf
   Platform/Marvell/Drivers/Net/Pp2Dxe/Pp2Dxe.inf
