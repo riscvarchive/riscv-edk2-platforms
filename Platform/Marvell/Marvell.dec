@@ -197,6 +197,14 @@
 #Configuration space
   gMarvellTokenSpaceGuid.PcdConfigSpaceBaseAddress|0xF0000000|UINT64|0x50000054
 
+  #
+  # The secure firmware may occupy a DRAM region that is accessible by the
+  # normal world. These PCDs describe such a region, which will be converted
+  # to 'reserved' memory before DXE is entered.
+  #
+  gMarvellTokenSpaceGuid.PcdSecureRegionBase|0x0|UINT64|0x50000000
+  gMarvellTokenSpaceGuid.PcdSecureRegionSize|0x0|UINT32|0x50000001
+
 [Protocols]
   gMarvellEepromProtocolGuid               = { 0x71954bda, 0x60d3, 0x4ef8, { 0x8e, 0x3c, 0x0e, 0x33, 0x9f, 0x3b, 0xc2, 0x2b }}
   gMarvellMdioProtocolGuid                 = { 0x40010b03, 0x5f08, 0x496a, { 0xa2, 0x64, 0x10, 0x5e, 0x72, 0xd3, 0x71, 0xaa }}
