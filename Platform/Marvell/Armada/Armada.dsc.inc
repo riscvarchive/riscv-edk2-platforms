@@ -364,6 +364,9 @@
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x40000000
   gArmTokenSpaceGuid.PcdArmScr|0x531
 
+  # TRNG
+  gMarvellTokenSpaceGuid.PcdEip76TrngBaseAddress|0xF2760000
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform
@@ -400,6 +403,7 @@
   Platform/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
   Platform/Marvell/Drivers/Spi/MvSpiDxe.inf
   Platform/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
+  Platform/Marvell/Armada/Drivers/Armada70x0RngDxe/Armada70x0RngDxe.inf
 
   # Network support
   MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf

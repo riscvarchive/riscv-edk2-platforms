@@ -113,6 +113,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF Platform/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
   INF Platform/Marvell/Drivers/Spi/MvSpiDxe.inf
   INF Platform/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
+  INF Platform/Marvell/Armada/Drivers/Armada70x0RngDxe/Armada70x0RngDxe.inf
 
   # Network support
   INF MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
