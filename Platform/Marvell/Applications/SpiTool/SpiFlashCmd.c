@@ -378,7 +378,7 @@ EFI_STATUS              Status;
       FilePath = (CHAR16 *) FileStr;
       Status = ShellIsFile (FilePath);
       // When read file into flash, file doesn't have to exist
-      if (EFI_ERROR(Status && !(Flag & READ_FILE))) {
+      if (EFI_ERROR (Status) && !(Flag & READ_FILE)) {
         Print (L"sf: Wrong FilePath parameter!\n");
         return SHELL_ABORTED;
       }
