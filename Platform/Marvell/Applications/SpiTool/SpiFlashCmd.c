@@ -211,7 +211,8 @@ EFI_STATUS              Status;
   LIST_ENTRY            *CheckPackage;
   EFI_PHYSICAL_ADDRESS  Address = 0, Offset = 0;
   SHELL_FILE_HANDLE     FileHandle = NULL;
-  UINTN                 ByteCount, FileSize, I;
+  UINTN                 ByteCount, I;
+  UINT64                FileSize;
   UINT8                 *Buffer = NULL, *FileBuffer = NULL;
   CHAR16                *ProblemParam, *FilePath;
   CONST CHAR16          *AddressStr = NULL, *OffsetStr = NULL;
@@ -418,7 +419,7 @@ EFI_STATUS              Status;
     }
   }
 
-  Buffer = (UINT8 *) Address;
+  Buffer = (UINT8 *)(UINTN)Address;
   if (FileFlag) {
     Buffer = FileBuffer;
   }
