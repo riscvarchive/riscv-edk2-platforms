@@ -165,7 +165,7 @@ PrepareFirmwareImage (
   IN LIST_ENTRY             *CheckPackage,
   IN OUT SHELL_FILE_HANDLE  *FileHandle,
   IN OUT UINTN              **FileBuffer,
-  IN OUT UINTN              *FileSize
+  IN OUT UINT64             *FileSize
   )
 {
   CONST CHAR16         *FileStr;
@@ -203,7 +203,7 @@ PrepareFirmwareImage (
   // Read Image header into buffer
   Buffer = AllocateZeroPool (*FileSize);
 
-  Status = FileHandleRead (*FileHandle, FileSize, Buffer);
+  Status = FileHandleRead (*FileHandle, (UINTN *)FileSize, Buffer);
   if (EFI_ERROR (Status)) {
     Print (L"%s: Cannot read Image file header\n", CMD_NAME_STRING);
     ShellCloseFile (FileHandle);
@@ -256,7 +256,7 @@ ShellCommandRunFUpdate (
 {
   IN SHELL_FILE_HANDLE    FileHandle;
   SPI_DEVICE              *Slave;
-  UINTN                   FileSize;
+  UINT64                  FileSize;
   UINTN                   *FileBuffer = NULL;
   CHAR16                  *ProblemParam;
   LIST_ENTRY              *CheckPackage;
