@@ -132,7 +132,6 @@
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
 
-[LibraryClasses.AARCH64]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
   ArmGenericTimerCounterLib|ArmPkg/Library/ArmGenericTimerPhyCounterLib/ArmGenericTimerPhyCounterLib.inf
@@ -362,7 +361,7 @@
   # ARM Pcds
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x40000000
-  gArmTokenSpaceGuid.PcdArmScr|0x531
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|36
 
   # Secure region reservation
   gMarvellTokenSpaceGuid.PcdSecureRegionBase|0x4000000

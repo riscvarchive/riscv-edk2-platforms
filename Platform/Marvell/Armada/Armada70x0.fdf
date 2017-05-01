@@ -237,7 +237,7 @@ READ_LOCK_STATUS   = TRUE
 #
 ############################################################################
 
-[Rule.AARCH64.SEC]
+[Rule.Common.SEC]
   FILE SEC = $(NAMED_GUID) RELOCS_STRIPPED FIXED {
     TE  TE    Align = Auto              $(INF_OUTPUT)/$(MODULE_NAME).efi
   }
