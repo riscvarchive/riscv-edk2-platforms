@@ -138,9 +138,5 @@
   gMarvellTokenSpaceGuid.PcdPciEAhci|{ 0x1, 0x0 }
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x1, 0x1 }
 
-  #ResetLib
-  gMarvellTokenSpaceGuid.PcdResetRegAddress|0xf06f0084
-  gMarvellTokenSpaceGuid.PcdResetRegMask|0x1
-
   #RTC
   gMarvellTokenSpaceGuid.PcdRtcEnabled|{ 0x1 }
