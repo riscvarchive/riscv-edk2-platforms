@@ -310,37 +310,37 @@
   gHisiTokenSpaceGuid.PciHb1Rb7Base|0x700a00b0000
 
   gHisiTokenSpaceGuid.PcdHb0Rb0PciRegionBaseAddress|0xa8400000
-  gHisiTokenSpaceGuid.PcdHb0Rb0PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb0Rb0PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb0Rb1PciRegionBaseAddress|0xa9400000
-  gHisiTokenSpaceGuid.PcdHb0Rb1PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb0Rb1PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb0Rb2PciRegionBaseAddress|0xa8800000
-  gHisiTokenSpaceGuid.PcdHb0Rb2PciRegionSize|0x77effff
+  gHisiTokenSpaceGuid.PcdHb0Rb2PciRegionSize|0x77f0000
   gHisiTokenSpaceGuid.PcdHb0Rb3PciRegionBaseAddress|0xab400000
-  gHisiTokenSpaceGuid.PcdHb0Rb3PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb0Rb3PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb0Rb4PciRegionBaseAddress|0xa9000000
-  gHisiTokenSpaceGuid.PcdHb0Rb4PciRegionSize|0x2feffff
+  gHisiTokenSpaceGuid.PcdHb0Rb4PciRegionSize|0x2ff0000
   gHisiTokenSpaceGuid.PcdHb0Rb5PciRegionBaseAddress|0xb0800000
-  gHisiTokenSpaceGuid.PcdHb0Rb5PciRegionSize|0x77effff
+  gHisiTokenSpaceGuid.PcdHb0Rb5PciRegionSize|0x77f0000
   gHisiTokenSpaceGuid.PcdHb0Rb6PciRegionBaseAddress|0xac900000
-  gHisiTokenSpaceGuid.PcdHb0Rb6PciRegionSize|0x36effff
+  gHisiTokenSpaceGuid.PcdHb0Rb6PciRegionSize|0x36f0000
   gHisiTokenSpaceGuid.PcdHb0Rb7PciRegionBaseAddress|0xb9800000
-  gHisiTokenSpaceGuid.PcdHb0Rb7PciRegionSize|0x67effff
+  gHisiTokenSpaceGuid.PcdHb0Rb7PciRegionSize|0x67f0000
   gHisiTokenSpaceGuid.PcdHb1Rb0PciRegionBaseAddress|0x400a8400000
-  gHisiTokenSpaceGuid.PcdHb1Rb0PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb1Rb0PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb1Rb1PciRegionBaseAddress|0x400a9400000
-  gHisiTokenSpaceGuid.PcdHb1Rb1PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb1Rb1PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionBaseAddress|0x20000000
-  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionSize|0xcfffffff
+  gHisiTokenSpaceGuid.PcdHb1Rb2PciRegionSize|0xd0000000
   gHisiTokenSpaceGuid.PcdHb1Rb3PciRegionBaseAddress|0x400ab400000
-  gHisiTokenSpaceGuid.PcdHb1Rb3PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb1Rb3PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionBaseAddress|0x30000000
-  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionSize|0xbfffffff
+  gHisiTokenSpaceGuid.PcdHb1Rb4PciRegionSize|0xc0000000
   gHisiTokenSpaceGuid.PcdHb1Rb5PciRegionBaseAddress|0x40000000
-  gHisiTokenSpaceGuid.PcdHb1Rb5PciRegionSize|0xafffffff
+  gHisiTokenSpaceGuid.PcdHb1Rb5PciRegionSize|0xb0000000
   gHisiTokenSpaceGuid.PcdHb1Rb6PciRegionBaseAddress|0x408aa400000
-  gHisiTokenSpaceGuid.PcdHb1Rb6PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb1Rb6PciRegionSize|0xbf0000
   gHisiTokenSpaceGuid.PcdHb1Rb7PciRegionBaseAddress|0x408ab400000
-  gHisiTokenSpaceGuid.PcdHb1Rb7PciRegionSize|0xbeffff
+  gHisiTokenSpaceGuid.PcdHb1Rb7PciRegionSize|0xbf0000
 
   gHisiTokenSpaceGuid.PcdHb0Rb0CpuMemRegionBase|0xA8400000
   gHisiTokenSpaceGuid.PcdHb0Rb1CpuMemRegionBase|0xA9400000
@@ -377,52 +377,52 @@
   gHisiTokenSpaceGuid.PcdHb1Rb7CpuIoRegionBase|0x408abff0000
 
   gHisiTokenSpaceGuid.PcdHb0Rb0IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb0IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb0IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb1IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb1IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb1IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb2IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb2IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb2IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb3IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb3IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb3IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb4IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb4IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb4IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb5IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb5IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb5IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb6IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb6IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb6IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb0Rb7IoBase|0
-  gHisiTokenSpaceGuid.PcdHb0Rb7IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb0Rb7IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb0IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb0IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb0IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb1IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb1IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb1IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb2IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb2IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb2IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb3IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb3IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb3IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb4IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb4IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb4IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb5IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb5IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb5IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb6IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb6IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb6IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.PcdHb1Rb7IoBase|0
-  gHisiTokenSpaceGuid.PcdHb1Rb7IoSize|0xffff #64K
+  gHisiTokenSpaceGuid.PcdHb1Rb7IoSize|0x10000 #64K
 
   gHisiTokenSpaceGuid.Pcdsoctype|0x1610
 
