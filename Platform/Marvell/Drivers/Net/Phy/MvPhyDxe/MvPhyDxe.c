@@ -41,6 +41,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/MvHwDescLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
@@ -50,6 +51,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define TIMEOUT   500
 
 STATIC MARVELL_MDIO_PROTOCOL *Mdio;
+
+//
+// Table with available Mdio controllers
+//
+STATIC UINT8 * CONST MdioDeviceTable = PcdGetPtr (PcdMdioControllersEnabled);
+//
+// Table with PHY to Mdio controller mappings
+//
+STATIC UINT8 * CONST Phy2MdioController = PcdGetPtr (PcdPhy2MdioController);
+//
+// Table with PHYs' SMI addresses
+//
+STATIC UINT8 * CONST PhySmiAddresses = PcdGetPtr (PcdPhySmiAddresses);
 
 STATIC MV_PHY_DEVICE MvPhyDevices[] = {
   { MV_PHY_DEVICE_1512, MvPhyInit1512 },
@@ -64,18 +78,18 @@ MvPhyStatus (
 
 EFI_STATUS
 MvPhyReset (
-  IN UINT32 PhyAddr
+  IN PHY_DEVICE *PhyDev
   )
 {
   UINT32 Reg = 0;
   INTN timeout = TIMEOUT;
 
-  Mdio->Read(Mdio, PhyAddr, MII_BMCR, &Reg);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMCR, &Reg);
   Reg |= BMCR_RESET;
-  Mdio->Write(Mdio, PhyAddr, MII_BMCR, Reg);
+  Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMCR, Reg);
 
   while ((Reg & BMCR_RESET) && timeout--) {
-    Mdio->Read(Mdio, PhyAddr, MII_BMCR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMCR, &Reg);
     gBS->Stall(1000);
   }
 
@@ -99,7 +113,7 @@ MvPhyM88e1111sConfig (
       (PhyDev->Connection == PHY_CONNECTION_RGMII_ID) ||
       (PhyDev->Connection == PHY_CONNECTION_RGMII_RXID) ||
       (PhyDev->Connection == PHY_CONNECTION_RGMII_TXID)) {
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_CR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_CR, &Reg);
 
     if ((PhyDev->Connection == PHY_CONNECTION_RGMII) ||
       (PhyDev->Connection == PHY_CONNECTION_RGMII_ID)) {
@@ -112,9 +126,9 @@ MvPhyM88e1111sConfig (
       Reg |= MIIM_88E1111_TX_DELAY;
     }
 
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_CR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_CR, Reg);
 
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, &Reg);
 
     Reg &= ~(MIIM_88E1111_HWCFG_MODE_MASK);
 
@@ -123,50 +137,50 @@ MvPhyM88e1111sConfig (
     else
       Reg |= MIIM_88E1111_HWCFG_MODE_COPPER_RGMII;
 
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, Reg);
   }
 
   if (PhyDev->Connection == PHY_CONNECTION_SGMII) {
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, &Reg);
 
     Reg &= ~(MIIM_88E1111_HWCFG_MODE_MASK);
     Reg |= MIIM_88E1111_HWCFG_MODE_SGMII_NO_CLK;
     Reg |= MIIM_88E1111_HWCFG_FIBER_COPPER_AUTO;
 
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, Reg);
   }
 
   if (PhyDev->Connection == PHY_CONNECTION_RTBI) {
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_CR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_CR, &Reg);
     Reg |= (MIIM_88E1111_RX_DELAY | MIIM_88E1111_TX_DELAY);
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_CR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_CR, Reg);
 
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, &Reg);
     Reg &= ~(MIIM_88E1111_HWCFG_MODE_MASK |
       MIIM_88E1111_HWCFG_FIBER_COPPER_RES);
     Reg |= 0x7 | MIIM_88E1111_HWCFG_FIBER_COPPER_AUTO;
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, Reg);
 
     /* Soft reset */
-    MvPhyReset(PhyDev->Addr);
+    MvPhyReset (PhyDev);
 
-    Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, &Reg);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, &Reg);
     Reg &= ~(MIIM_88E1111_HWCFG_MODE_MASK |
       MIIM_88E1111_HWCFG_FIBER_COPPER_RES);
     Reg |= MIIM_88E1111_HWCFG_MODE_COPPER_RTBI |
       MIIM_88E1111_HWCFG_FIBER_COPPER_AUTO;
-    Mdio->Write(Mdio, PhyDev->Addr, MIIM_88E1111_PHY_EXT_SR, Reg);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1111_PHY_EXT_SR, Reg);
   }
 
-  Mdio->Read(Mdio, PhyDev->Addr, MII_BMCR, &Reg);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMCR, &Reg);
   Reg |= (BMCR_ANENABLE | BMCR_ANRESTART);
   Reg &= ~BMCR_ISOLATE;
-  Mdio->Write(Mdio, PhyDev->Addr, MII_BMCR, Reg);
+  Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMCR, Reg);
 
   /* Soft reset */
-  MvPhyReset(PhyDev->Addr);
+  MvPhyReset (PhyDev);
 
-  MvPhyReset(PhyDev->Addr);
+  MvPhyReset (PhyDev);
 
   return EFI_SUCCESS;
 }
@@ -179,7 +193,7 @@ MvPhyParseStatus (
   UINT32 Data;
   UINT32 Speed;
 
-  Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1xxx_PHY_STATUS, &Data);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1xxx_PHY_STATUS, &Data);
 
   if ((Data & MIIM_88E1xxx_PHYSTAT_LINK) &&
     !(Data & MIIM_88E1xxx_PHYSTAT_SPDDONE)) {
@@ -196,7 +210,7 @@ MvPhyParseStatus (
       if ((i++ % 1000) == 0)
         DEBUG((DEBUG_ERROR, "."));
       gBS->Stall(1000);
-      Mdio->Read(Mdio, PhyDev->Addr, MIIM_88E1xxx_PHY_STATUS, &Data);
+      Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MIIM_88E1xxx_PHY_STATUS, &Data);
     }
     DEBUG((DEBUG_ERROR," done\n"));
     gBS->Stall(500000);
@@ -241,7 +255,7 @@ MvPhyParseStatus (
 STATIC
 VOID
 MvPhy1512WriteBits (
-  IN UINT32 PhyAddr,
+  IN PHY_DEVICE *PhyDev,
   IN UINT8 RegNum,
   IN UINT16 Offset,
   IN UINT16 Len,
@@ -254,19 +268,18 @@ MvPhy1512WriteBits (
   else
     Mask = (1 << (Len + Offset)) - (1 << Offset);
 
-  Mdio->Read(Mdio, PhyAddr, RegNum, &Reg);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, RegNum, &Reg);
 
   Reg &= ~Mask;
   Reg |= Data << Offset;
 
-  Mdio->Write(Mdio, PhyAddr, RegNum, Reg);
+  Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, RegNum, Reg);
 }
 
 STATIC
 EFI_STATUS
 MvPhyInit1512 (
     IN CONST MARVELL_PHY_PROTOCOL *Snp,
-    IN UINT32 PhyAddr,
     IN OUT PHY_DEVICE *PhyDev
     )
 {
@@ -278,28 +291,28 @@ MvPhyInit1512 (
      * Marvell Release Notes - Alaska 88E1510/88E1518/88E1512 Rev A0,
      * Errata Section 3.1 - needed in SGMII mode.
      */
-    Mdio->Write(Mdio, PhyAddr, 22, 0x00ff);
-    Mdio->Write(Mdio, PhyAddr, 17, 0x214B);
-    Mdio->Write(Mdio, PhyAddr, 16, 0x2144);
-    Mdio->Write(Mdio, PhyAddr, 17, 0x0C28);
-    Mdio->Write(Mdio, PhyAddr, 16, 0x2146);
-    Mdio->Write(Mdio, PhyAddr, 17, 0xB233);
-    Mdio->Write(Mdio, PhyAddr, 16, 0x214D);
-    Mdio->Write(Mdio, PhyAddr, 17, 0xCC0C);
-    Mdio->Write(Mdio, PhyAddr, 16, 0x2159);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 22, 0x00ff);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 17, 0x214B);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 16, 0x2144);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 17, 0x0C28);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 16, 0x2146);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 17, 0xB233);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 16, 0x214D);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 17, 0xCC0C);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 16, 0x2159);
 
     /* Reset page selection and select page 0x12 */
-    Mdio->Write(Mdio, PhyAddr, 22, 0x0000);
-    Mdio->Write(Mdio, PhyAddr, 22, 0x0012);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 22, 0x0000);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 22, 0x0012);
 
     /* Write HWCFG_MODE = SGMII to Copper */
-    MvPhy1512WriteBits(PhyAddr, 20, 0, 3, 1);
+    MvPhy1512WriteBits(PhyDev, 20, 0, 3, 1);
 
     /* Phy reset - necessary after changing mode */
-    MvPhy1512WriteBits(PhyAddr, 20, 15, 1, 1);
+    MvPhy1512WriteBits(PhyDev, 20, 15, 1, 1);
 
     /* Reset page selection */
-    Mdio->Write(Mdio, PhyAddr, 22, 0x0000);
+    Mdio->Write (Mdio, PhyDev->Addr, PhyDev->MdioIndex, 22, 0x0000);
     gBS->Stall(100);
   }
 
@@ -309,7 +322,7 @@ MvPhyInit1512 (
   if (!PcdGetBool (PcdPhyStartupAutoneg))
     return EFI_SUCCESS;
 
-  Mdio->Read(Mdio, PhyAddr, MII_BMSR, &Data);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
 
   if ((Data & BMSR_ANEGCAPABLE) && !(Data & BMSR_ANEGCOMPLETE)) {
 
@@ -322,12 +335,12 @@ MvPhyInit1512 (
       }
 
       gBS->Stall(1000);  /* 1 ms */
-      Mdio->Read(Mdio, PhyAddr, MII_BMSR, &Data);
+      Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
     }
     PhyDev->LinkUp = TRUE;
     DEBUG((DEBUG_INFO, "MvPhyDxe: link up\n"));
   } else {
-    Mdio->Read(Mdio, PhyAddr, MII_BMSR, &Data);
+    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
 
     if (Data & BMSR_LSTATUS) {
       PhyDev->LinkUp = TRUE;
@@ -345,7 +358,7 @@ MvPhyInit1512 (
 EFI_STATUS
 MvPhyInit (
   IN CONST MARVELL_PHY_PROTOCOL *Snp,
-  IN UINT32 PhyAddr,
+  IN UINT32 PhyIndex,
   IN PHY_CONNECTION PhyConnection,
   IN OUT PHY_DEVICE **OutPhyDev
   )
@@ -353,6 +366,7 @@ MvPhyInit (
   EFI_STATUS Status;
   PHY_DEVICE *PhyDev;
   UINT8 *DeviceIds;
+  UINT8 MdioIndex;
   INTN i;
 
   Status = gBS->LocateProtocol (
@@ -363,12 +377,20 @@ MvPhyInit (
   if (EFI_ERROR(Status))
     return Status;
 
+  MdioIndex = Phy2MdioController[PhyIndex];
+
+  /* Verify correctness of PHY <-> MDIO assignment */
+  if (!MVHW_DEV_ENABLED (Mdio, MdioIndex) || MdioIndex >= Mdio->ControllerCount) {
+    DEBUG ((DEBUG_ERROR, "MvPhyDxe: Incorrect Mdio controller assignment for PHY#%d", PhyIndex));
+    return EFI_INVALID_PARAMETER;
+  }
+
   /* perform setup common for all PHYs */
   PhyDev = AllocateZeroPool (sizeof (PHY_DEVICE));
-  PhyDev->Addr = PhyAddr;
+  PhyDev->Addr = PhySmiAddresses[PhyIndex];
   PhyDev->Connection = PhyConnection;
   DEBUG((DEBUG_INFO, "MvPhyDxe: PhyAddr is %d, connection %d\n",
-        PhyAddr, PhyConnection));
+        PhyDev->Addr, PhyConnection));
   *OutPhyDev = PhyDev;
 
   DeviceIds = PcdGetPtr (PcdPhyDeviceIds);
@@ -377,7 +399,7 @@ MvPhyInit (
     if (MvPhyDevices[i].DevId == DeviceIds[i]) {
       ASSERT (MvPhyDevices[i].DevInit != NULL);
       /* proceed with PHY-specific initialization */
-      return MvPhyDevices[i].DevInit(Snp, PhyAddr, PhyDev);
+      return MvPhyDevices[i].DevInit (Snp, PhyDev);
     }
   }
 
@@ -395,8 +417,8 @@ MvPhyStatus (
 {
   UINT32 Data;
 
-  Mdio->Read(Mdio, PhyDev->Addr, MII_BMSR, &Data);
-  Mdio->Read(Mdio, PhyDev->Addr, MII_BMSR, &Data);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
+  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
 
   if ((Data & BMSR_LSTATUS) == 0) {
     PhyDev->LinkUp = FALSE;

@@ -327,7 +327,7 @@ struct Pp2DxePort {
   UINT16 RxRingSize;
 
   INT32 PhyInterface;
-  UINTN PhyAddr;
+  UINT32 PhyIndex;
   BOOLEAN Link;
   BOOLEAN Duplex;
   BOOLEAN AlwaysUp;

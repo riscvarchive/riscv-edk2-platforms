@@ -70,6 +70,16 @@ typedef struct {
 } MVHW_I2C_DESC;
 
 //
+// MDIO devices description template definition
+//
+#define MVHW_MAX_MDIO_DEVS         2
+
+typedef struct {
+  UINT8 MdioDevCount;
+  UINTN MdioBaseAddresses[MVHW_MAX_MDIO_DEVS];
+} MVHW_MDIO_DESC;
+
+//
 // NonDiscoverable devices description template definition
 //
 #define MVHW_MAX_XHCI_DEVS         4
@@ -165,6 +175,19 @@ STATIC \
 MVHW_I2C_DESC mA7k8kI2cDescTemplate = {\
   4,\
   { MVHW_CP0_I2C0_BASE, MVHW_CP0_I2C1_BASE, MVHW_CP1_I2C0_BASE, MVHW_CP1_I2C1_BASE }\
+}
+
+//
+// Platform description of MDIO devices
+//
+#define MVHW_CP0_MDIO_BASE       0xF212A200
+#define MVHW_CP1_MDIO_BASE       0xF412A200
+
+#define DECLARE_A7K8K_MDIO_TEMPLATE \
+STATIC \
+MVHW_MDIO_DESC mA7k8kMdioDescTemplate = {\
+  2,\
+  { MVHW_CP0_MDIO_BASE, MVHW_CP1_MDIO_BASE }\
 }
 
 //

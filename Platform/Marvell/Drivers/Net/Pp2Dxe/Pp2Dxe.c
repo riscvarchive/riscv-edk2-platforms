@@ -519,14 +519,14 @@ Pp2DxePhyInitialize (
     return Status;
   }
 
-  if (Pp2Context->Port.PhyAddr == 0xff) {
+  if (Pp2Context->Port.PhyIndex == 0xff) {
     /* PHY iniitalization not required */
     return EFI_SUCCESS;
   }
 
   Status = Pp2Context->Phy->Init(
                Pp2Context->Phy,
-               Pp2Context->Port.PhyAddr,
+               Pp2Context->Port.PhyIndex,
                Pp2Context->Port.PhyInterface,
                &Pp2Context->PhyDev
              );
@@ -1147,25 +1147,25 @@ Pp2DxeParsePortPcd (
   IN INTN Index
   )
 {
-  UINT8 *PortIds, *GopIndexes, *PhyConnectionTypes, *AlwaysUp, *Speed, *PhyAddresses;
+  UINT8 *PortIds, *GopIndexes, *PhyConnectionTypes, *AlwaysUp, *Speed, *PhyIndexes;
 
   PortIds = PcdGetPtr (PcdPp2PortIds);
   GopIndexes = PcdGetPtr (PcdPp2GopIndexes);
-  PhyConnectionTypes = PcdGetPtr (PcdPhyConnectionTypes);
-  PhyAddresses = PcdGetPtr (PcdPhySmiAddresses);
+  PhyConnectionTypes = PcdGetPtr (PcdPp2PhyConnectionTypes);
+  PhyIndexes = PcdGetPtr (PcdPp2PhyIndexes);
   AlwaysUp = PcdGetPtr (PcdPp2InterfaceAlwaysUp);
   Speed = PcdGetPtr (PcdPp2InterfaceSpeed);
 
   ASSERT (PcdGetSize (PcdPp2GopIndexes) == PcdGetSize (PcdPp2PortIds));
-  ASSERT (PcdGetSize (PcdPhyConnectionTypes) == PcdGetSize (PcdPp2PortIds));
+  ASSERT (PcdGetSize (PcdPp2PhyConnectionTypes) == PcdGetSize (PcdPp2PortIds));
   ASSERT (PcdGetSize (PcdPp2InterfaceAlwaysUp) == PcdGetSize (PcdPp2PortIds));
   ASSERT (PcdGetSize (PcdPp2InterfaceSpeed) == PcdGetSize (PcdPp2PortIds));
-  ASSERT (PcdGetSize (PcdPhySmiAddresses) == PcdGetSize (PcdPp2PortIds));
+  ASSERT (PcdGetSize (PcdPp2PhyIndexes) == PcdGetSize (PcdPp2PortIds));
 
   Pp2Context->Port.Id = PortIds[Index];
   Pp2Context->Port.GopIndex = GopIndexes[Index];
   Pp2Context->Port.PhyInterface = PhyConnectionTypes[Index];
-  Pp2Context->Port.PhyAddr = PhyAddresses[Index];
+  Pp2Context->Port.PhyIndex = PhyIndexes[Index];
   Pp2Context->Port.AlwaysUp = AlwaysUp[Index];
   Pp2Context->Port.Speed = Speed[Index];
 }

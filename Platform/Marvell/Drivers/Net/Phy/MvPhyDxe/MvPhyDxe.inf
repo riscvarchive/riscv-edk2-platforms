@@ -63,8 +63,10 @@
   gMarvellPhyProtocolGuid
 
 [Pcd]
-  gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
+  gMarvellTokenSpaceGuid.PcdMdioControllersEnabled
+  gMarvellTokenSpaceGuid.PcdPhy2MdioController
   gMarvellTokenSpaceGuid.PcdPhyDeviceIds
+  gMarvellTokenSpaceGuid.PcdPhySmiAddresses
   gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg
 
 [Depex]

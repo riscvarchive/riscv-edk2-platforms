@@ -524,6 +524,24 @@
   DEFINE CP_RXAUI1          = 0x16
   DEFINE CP_SFI             = 0x17
 
+  #Network interface speed
+  DEFINE PHY_SPEED_10       = 0x1
+  DEFINE PHY_SPEED_100      = 0x2
+  DEFINE PHY_SPEED_1000     = 0x3
+  DEFINE PHY_SPEED_2500     = 0x4
+  DEFINE PHY_SPEED_10000    = 0x5
+
+  #Network PHY type
+  DEFINE PHY_RGMII          = 0x0
+  DEFINE PHY_RGMII_ID       = 0x1
+  DEFINE PHY_RGMII_TXID     = 0x2
+  DEFINE PHY_RGMII_RXID     = 0x3
+  DEFINE PHY_SGMII          = 0x4
+  DEFINE PHY_RTBI           = 0x5
+  DEFINE PHY_XAUI           = 0x6
+  DEFINE PHY_RXAUI          = 0x7
+  DEFINE PHY_SFI            = 0x8
+
   #UTMI PHY connection type
   DEFINE UTMI_USB_HOST0     = 0x0
   DEFINE UTMI_USB_HOST1     = 0x1

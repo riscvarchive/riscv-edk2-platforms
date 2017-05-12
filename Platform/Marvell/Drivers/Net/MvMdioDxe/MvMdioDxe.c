@@ -46,7 +46,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "MvMdioDxe.h"
 
-UINT64 MdioBase = 0;
+DECLARE_A7K8K_MDIO_TEMPLATE;
 
 STATIC
 EFI_STATUS
@@ -70,7 +70,7 @@ MdioCheckParam (
 STATIC
 EFI_STATUS
 MdioWaitReady (
-  VOID
+  UINT32 MdioBase
   )
 {
   UINT32 Timeout = MVEBU_SMI_TIMEOUT;
@@ -92,7 +92,7 @@ MdioWaitReady (
 STATIC
 EFI_STATUS
 MdioWaitValid (
-  VOID
+  UINT32 MdioBase
   )
 {
   UINT32 Timeout = MVEBU_SMI_TIMEOUT;
@@ -116,11 +116,13 @@ EFI_STATUS
 MdioOperation (
   IN CONST MARVELL_MDIO_PROTOCOL *This,
   IN UINT32 PhyAddr,
+  IN UINT32 MdioIndex,
   IN UINT32 RegOff,
   IN BOOLEAN Write,
   IN OUT UINT32 *Data
   )
 {
+  UINT32 MdioBase = This->BaseAddresses[MdioIndex];
   UINT32 MdioReg;
   EFI_STATUS Status;
 
@@ -131,7 +133,7 @@ MdioOperation (
   }
 
   /* wait till the SMI is not busy */
-  Status = MdioWaitReady ();
+  Status = MdioWaitReady (MdioBase);
   if (EFI_ERROR(Status)) {
     DEBUG((DEBUG_ERROR, "MdioDxe: MdioWaitReady error\n"));
     return Status;
@@ -151,7 +153,7 @@ MdioOperation (
   MdioRegWrite32 (MdioReg, MdioBase);
 
   /* make sure that the write transaction  is over */
-  Status = Write ? MdioWaitReady () : MdioWaitValid ();
+  Status = Write ? MdioWaitReady (MdioBase) : MdioWaitValid (MdioBase);
   if (EFI_ERROR(Status)) {
     DEBUG((DEBUG_ERROR, "MdioDxe: MdioWaitReady error\n"));
     return Status;
@@ -169,6 +171,7 @@ EFI_STATUS
 MvMdioRead (
   IN CONST MARVELL_MDIO_PROTOCOL *This,
   IN UINT32 PhyAddr,
+  IN UINT32 MdioIndex,
   IN UINT32 RegOff,
   IN UINT32 *Data
   )
@@ -178,6 +181,7 @@ MvMdioRead (
   Status = MdioOperation (
             This,
             PhyAddr,
+            MdioIndex,
             RegOff,
             FALSE,
             Data
@@ -190,6 +194,7 @@ EFI_STATUS
 MvMdioWrite (
   IN CONST MARVELL_MDIO_PROTOCOL *This,
   IN UINT32 PhyAddr,
+  IN UINT32 MdioIndex,
   IN UINT32 RegOff,
   IN UINT32 Data
   )
@@ -197,6 +202,7 @@ MvMdioWrite (
   return MdioOperation (
             This,
             PhyAddr,
+            MdioIndex,
             RegOff,
             TRUE,
             &Data
@@ -210,18 +216,27 @@ MvMdioDxeInitialise (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
+  MVHW_MDIO_DESC *Desc = &mA7k8kMdioDescTemplate;
+  UINT8 Index;
   MARVELL_MDIO_PROTOCOL *Mdio;
   EFI_STATUS Status;
   EFI_HANDLE Handle = NULL;
 
   Mdio = AllocateZeroPool (sizeof (MARVELL_MDIO_PROTOCOL));
+  if (Mdio == NULL) {
+    DEBUG ((DEBUG_ERROR, "MdioDxe: Protocol allocation failed\n"));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  /* Obtain base addresses of all possible controllers */
+  for (Index = 0; Index < Desc->MdioDevCount; Index++) {
+    Mdio->BaseAddresses[Index] = Desc->MdioBaseAddresses[Index];
+  }
+
+  Mdio->ControllerCount = Desc->MdioDevCount;
   Mdio->Read = MvMdioRead;
   Mdio->Write = MvMdioWrite;
-  MdioBase = PcdGet64 (PcdMdioBaseAddress);
-  if (MdioBase == 0) {
-    DEBUG((DEBUG_ERROR, "MdioDxe: PcdMdioBaseAddress not set\n"));
-    return EFI_INVALID_PARAMETER;
-  }
+
   Status = gBS->InstallMultipleProtocolInterfaces (
                   &Handle,
                   &gMarvellMdioProtocolGuid, Mdio,

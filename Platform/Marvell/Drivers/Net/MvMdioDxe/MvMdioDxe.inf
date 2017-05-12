@@ -62,8 +62,5 @@
 [Protocols]
   gMarvellMdioProtocolGuid
 
-[Pcd]
-  gMarvellTokenSpaceGuid.PcdMdioBaseAddress
-
 [Depex]
   TRUE

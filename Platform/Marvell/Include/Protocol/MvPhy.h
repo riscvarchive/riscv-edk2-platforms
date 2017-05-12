@@ -62,6 +62,7 @@ typedef enum {
 
 typedef struct {
   UINT32          Addr;
+  UINT8           MdioIndex;
   BOOLEAN         LinkUp;
   BOOLEAN         FullDuplex;
   BOOLEAN         AutoNegotiation;

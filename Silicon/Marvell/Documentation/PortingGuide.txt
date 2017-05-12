@@ -126,25 +126,15 @@ PHY Driver configuration
 MvPhyDxe provides basic initialization and status routines for Marvell PHYs.
 Currently only 1518 series PHYs are supported. Following PCDs are required:
 
-  - gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
-	(list of values corresponding to PHY_CONNECTION enum)
   - gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg
 	(boolean - if true, driver waits for autonegotiation on startup)
   - gMarvellTokenSpaceGuid.PcdPhyDeviceIds
 	(list of values corresponding to MV_PHY_DEVICE_ID enum)
+  - gMarvellTokenSpaceGuid.PcdPhySmiAddresses
+	(addresses of PHY devices)
+  - gMarvellTokenSpaceGuid.PcdPhy2MdioController
+	(Array specifying, which Mdio controller the PHY is attached to)
 
-PHY_CONNECTION enum type is defined as follows:
-
-		typedef enum {
-			0    PHY_CONNECTION_RGMII,
-			1    PHY_CONNECTION_RGMII_ID,
-			2    PHY_CONNECTION_RGMII_TXID,
-			3    PHY_CONNECTION_RGMII_RXID,
-			4    PHY_CONNECTION_SGMII,
-			5    PHY_CONNECTION_RTBI,
-			6    PHY_CONNECTION_XAUI,
-			7    PHY_CONNECTION_RXAUI
-		} PHY_CONNECTION;
 
 MV_PHY_DEVICE_ID:
 
@@ -153,11 +143,8 @@ MV_PHY_DEVICE_ID:
 		} MV_PHY_DEVICE_ID;
 
 It should be extended when adding support for other PHY models.
-Thus in order to set RGMII for 1st PHY and SGMII for 2nd, PCD should be:
 
- gMarvellTokenSpaceGuid.PcdPhyConnectionTypes|{ 0x0, 0x4 }
-
-with disabled autonegotiation:
+Disable autonegotiation:
 
  gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg|FALSE
 
@@ -171,8 +158,9 @@ MDIO configuration
 MDIO driver provides access to network PHYs' registers via EFI_MDIO_READ and
 EFI_MDIO_WRITE functions (EFI_MDIO_PROTOCOL). Following PCD is required:
 
-  - gMarvellTokenSpaceGuid.PcdMdioBaseAddress
-	(base address of SMI management register)
+  - gMarvellTokenSpaceGuid.PcdMdioControllers
+	(Array with used controllers
+	 Set to 0x1 for enabled, 0x0 for disabled)
 
 
 I2C configuration
@@ -249,8 +237,24 @@ are required to operate:
   - gMarvellTokenSpaceGuid.PcdPp2Port2Controller
 	(Array specifying, to which controller the port belongs to)
 
-  - gMarvellTokenSpaceGuid.PcdPhySmiAddresses
-	(Addresses of PHY devices)
+  - gMarvellTokenSpaceGuid.PcdPp2PhyConnectionTypes
+	(Indicates speed of the network interface:
+
+	PHY_RGMII                        0x0
+	PHY_RGMII_ID                     0x1
+	PHY_RGMII_TXID                   0x2
+	PHY_RGMII_RXID                   0x3
+	PHY_SGMII                        0x4
+	PHY_RTBI                         0x5
+	PHY_XAUI                         0x6
+	PHY_RXAUI                        0x7
+	PHY_SFI                          0x8 )
+
+  - gMarvellTokenSpaceGuid.PcdPp2PhyIndexes
+	(Array specifying, to which PHY from
+	 gMarvellTokenSpaceGuid.PcdPhyDeviceIds is used. If none,
+	 e.g. in 10G SFI in-band link detection, 0xFF value must
+	 be specified)
 
   - gMarvellTokenSpaceGuid.PcdPp2PortIds
 	(Identificators of PP2 ports)
@@ -262,17 +266,13 @@ are required to operate:
 	(Set to 0x1 for always-up interface, 0x0 otherwise)
 
   - gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
-	(Values corresponding to PHY_SPEED enum.
-	 PHY_SPEED is defined as follows:
+	(Indicates speed of the network interface:
 
-		  typedef enum {
-			  0  NO_SPEED,
-			  1  SPEED_10,
-			  2  SPEED_100,
-			  3  SPEED_1000,
-			  4  SPEED_2500,
-			  5  SPEED_10000
-		  } PHY_SPEED;
+	PHY_SPEED_10                     0x1
+	PHY_SPEED_100                    0x2
+	PHY_SPEED_1000                   0x3
+	PHY_SPEED_2500                   0x4
+	PHY_SPEED_10000                  0x5 )
 
 
 UTMI PHY configuration

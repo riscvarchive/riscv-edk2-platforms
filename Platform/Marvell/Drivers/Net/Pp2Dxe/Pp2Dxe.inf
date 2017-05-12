@@ -71,12 +71,12 @@
   gMarvellPhyProtocolGuid
 
 [Pcd]
-  gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
-  gMarvellTokenSpaceGuid.PcdPhySmiAddresses
   gMarvellTokenSpaceGuid.PcdPp2Controllers
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
+  gMarvellTokenSpaceGuid.PcdPp2PhyConnectionTypes
+  gMarvellTokenSpaceGuid.PcdPp2PhyIndexes
   gMarvellTokenSpaceGuid.PcdPp2Port2Controller
   gMarvellTokenSpaceGuid.PcdPp2PortIds
 
