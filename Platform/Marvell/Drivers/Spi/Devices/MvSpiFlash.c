@@ -191,7 +191,21 @@ MvSpiFlashErase (
     return EFI_DEVICE_ERROR;
   }
 
-  Cmd[0] = CMD_ERASE_64K;
+  switch (EraseSize) {
+  case SIZE_4KB:
+    Cmd[0] = CMD_ERASE_4K;
+    break;
+  case SIZE_32KB:
+    Cmd[0] = CMD_ERASE_32K;
+    break;
+  case SIZE_64KB:
+    Cmd[0] = CMD_ERASE_64K;
+    break;
+  default:
+    DEBUG ((DEBUG_ERROR, "MvSpiFlash: Invalid EraseSize parameter\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
   while (Length) {
     EraseAddr = Offset;
 
@@ -353,14 +367,14 @@ MvSpiFlashUpdate (
   )
 {
   EFI_STATUS Status;
-  UINT64 EraseSize, ToUpdate, Scale = 1;
+  UINT64 SectorSize, ToUpdate, Scale = 1;
   UINT8 *TmpBuf, *End;
 
-  EraseSize = PcdGet64 (PcdSpiFlashEraseSize);
+  SectorSize = PcdGet64 (PcdSpiFlashSectorSize);
 
   End = Buf + ByteCount;
 
-  TmpBuf = (UINT8 *)AllocateZeroPool (EraseSize);
+  TmpBuf = (UINT8 *)AllocateZeroPool (SectorSize);
   if (TmpBuf == NULL) {
     DEBUG((DEBUG_ERROR, "SpiFlash: Cannot allocate memory\n"));
     return EFI_OUT_OF_RESOURCES;
@@ -370,9 +384,9 @@ MvSpiFlashUpdate (
     Scale = (End - Buf) / 100;
 
   for (; Buf < End; Buf += ToUpdate, Offset += ToUpdate) {
-    ToUpdate = MIN((UINT64)(End - Buf), EraseSize);
+    ToUpdate = MIN((UINT64)(End - Buf), SectorSize);
     Print (L"   \rUpdating, %d%%", 100 - (End - Buf) / Scale);
-    Status = MvSpiFlashUpdateBlock (Slave, Offset, ToUpdate, Buf, TmpBuf, EraseSize);
+    Status = MvSpiFlashUpdateBlock (Slave, Offset, ToUpdate, Buf, TmpBuf, SectorSize);
 
     if (EFI_ERROR (Status)) {
       DEBUG((DEBUG_ERROR, "SpiFlash: Error while updating\n"));

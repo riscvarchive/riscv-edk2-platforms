@@ -58,6 +58,7 @@
   gMarvellTokenSpaceGuid.PcdSpiFlashEraseSize
   gMarvellTokenSpaceGuid.PcdSpiFlashPageSize
   gMarvellTokenSpaceGuid.PcdSpiFlashPollCmd
+  gMarvellTokenSpaceGuid.PcdSpiFlashSectorSize
 
 [Protocols]
   gMarvellSpiMasterProtocolGuid

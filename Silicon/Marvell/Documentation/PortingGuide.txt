@@ -298,6 +298,9 @@ Folowing PCDs for spi flash driver configuration must be set properly:
   - gMarvellTokenSpaceGuid.PcdSpiFlashPageSize
 	(Size of SPI flash page)
 
+  - gMarvellTokenSpaceGuid.PcdSpiFlashSectorSize
+	(Size of SPI flash sector, 65536 bytes by default)
+
   - gMarvellTokenSpaceGuid.PcdSpiFlashId
 	(Id of SPI flash)
 
