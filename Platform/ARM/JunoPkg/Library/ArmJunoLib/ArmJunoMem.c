@@ -21,8 +21,10 @@
 
 #include <ArmPlatform.h>
 
+#define FRAME_BUFFER_DESCRIPTOR ((FixedPcdGet32 (PcdArmLcdDdrFrameBufferBase) != 0) ? 1 : 0)
+
 // The total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 16
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS (16 + FRAME_BUFFER_DESCRIPTOR)
 
 // DDR attributes
 #define DDR_ATTRIBUTES_CACHED           ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK
@@ -148,6 +150,23 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = ARM_JUNO_SOC_PERIPHERALS_BASE;
   VirtualMemoryTable[Index].Length          = ARM_JUNO_SOC_PERIPHERALS_SZ;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Framebuffer Memory
+  if (FixedPcdGet32 (PcdArmLcdDdrFrameBufferBase) != 0) {
+    ASSERT ((PcdGet64 (PcdSystemMemoryBase) +
+             PcdGet64 (PcdSystemMemorySize) - 1) <
+             FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase));
+    VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase);
+    VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase);
+    VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdArmLcdDdrFrameBufferSize);
+    // Map as Normal Non-Cacheable memory, so that we can use the accelerated
+    // SetMem/CopyMem routines that may use unaligned accesses or
+    // DC ZVA instructions. If mapped as device memory, these routine may cause
+    // alignment faults.
+    // NOTE: The attribute value is misleading, it indicates memory map type as
+    // an un-cached, un-buffered but allows buffering and reordering.
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+  }
 
   // DDR - 2GB
   VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdSystemMemoryBase);

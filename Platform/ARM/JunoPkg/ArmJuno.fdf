@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2013-2015, ARM Limited. All rights reserved.
+#  Copyright (c) 2013-2018, ARM Limited. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -163,6 +163,13 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
   INF MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
+!ifndef HEADLESS_PLATFORM
+  #
+  # Graphics Output Protocol
+  #
+  INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+!endif
+
   #
   # PCI Support
   #
@@ -222,6 +229,9 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   # The UEFI driver is at the end of the list of the driver to be dispatched
   # after the device drivers (eg: Ethernet) to ensure we have support for them.
   INF Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
+
+  # SCMI Driver
+  INF ArmPkg/Drivers/ArmScmiDxe/ArmScmiDxe.inf
 
 !if $(ARCH) == AARCH64
   #
