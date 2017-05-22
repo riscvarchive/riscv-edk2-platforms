@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2017, ARM Limited. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -134,6 +134,11 @@
 
   ## PL031 RealTimeClock
   gArmPlatformTokenSpaceGuid.PcdPL031RtcBase|0x1C170000
+
+  ## SBSA Watchdog Count
+!ifndef DISABLE_SBSA_WATCHDOG
+  gArmPlatformTokenSpaceGuid.PcdWatchdogCount|1
+!endif
 
 !ifdef EDK2_ENABLE_PL111
   ## PL111 Versatile Express Motherboard controller
