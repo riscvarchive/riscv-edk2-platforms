@@ -207,6 +207,10 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   # DTB
   INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 
+  # SMBIOS/DMI
+  INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  INF Silicon/Marvell/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
+
 !if $(ARCH) == AARCH64
   # ACPI support
   INF MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
