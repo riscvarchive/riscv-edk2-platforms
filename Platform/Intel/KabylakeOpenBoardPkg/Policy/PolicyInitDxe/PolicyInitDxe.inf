@@ -1,0 +1,72 @@
+### @file
+# Module Information file for the PolicyInit DXE driver.
+#
+# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available under
+# the terms and conditions of the BSD License which accompanies this distribution.
+# The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+###
+
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = KabylakeRvp3PolicyInitDxe
+  FILE_GUID                      = 490D0119-4448-440D-8F5C-F58FB53EE057
+  VERSION_STRING                 = 1.0
+  MODULE_TYPE                    = DXE_DRIVER
+  ENTRY_POINT                    = PolicyInitDxeEntryPoint
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  CpuPlatformLib
+  DebugLib
+  DxeServicesTableLib
+  IoLib
+  MemoryAllocationLib
+  DxeSaPolicyLib
+  MmPciLib
+  PcdLib
+  PostCodeLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+  ConfigBlockLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  KabylakeSiliconPkg/SiPkg.dec
+  MinPlatformPkg/MinPlatformPkg.dec
+  KabylakeOpenBoardPkg/OpenBoardPkg.dec
+
+[Pcd]
+  gBoardModuleTokenSpaceGuid.PcdIntelGopEnable
+
+[Sources]
+  PolicyInitDxe.c
+  PolicyInitDxe.h
+  SaPolicyInitDxe.c
+  SaPolicyInitDxe.h
+  GopPolicyInitDxe.c
+  GopPolicyInitDxe.h
+  DxeSaPolicyUpdate.c
+
+[Protocols]
+  gEfiFirmwareVolume2ProtocolGuid               ## CONSUMES
+  gSaPolicyProtocolGuid                         ## CONSUMES
+  gDxeSiPolicyProtocolGuid                      ## PRODUCES
+  gGopPolicyProtocolGuid                        ## PRODUCES
+
+[Guids]
+  gIntelPeiGraphicsVbtGuid                      ## CONSUMES
+  gMiscDxeConfigGuid
+
+[Depex]
+  gEfiVariableArchProtocolGuid
+
