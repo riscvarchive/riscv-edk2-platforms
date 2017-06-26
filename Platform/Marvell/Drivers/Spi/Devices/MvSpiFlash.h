@@ -57,6 +57,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CMD_READ_ARRAY_FAST             0x0b
 #define CMD_PAGE_PROGRAM                0x02
 #define CMD_BANK_WRITE                  0xc5
+#define CMD_BANKADDR_BRWR               0x17
 #define CMD_ERASE_4K                    0x20
 #define CMD_ERASE_32K                   0x52
 #define CMD_ERASE_64K                   0xd8
