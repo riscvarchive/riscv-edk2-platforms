@@ -58,6 +58,8 @@ EFI_HANDLE gShellSfHiiHandle = NULL;
 
 BOOLEAN InitFlag = 1;
 
+STATIC SPI_DEVICE *mSlave;
+
 STATIC CONST SHELL_PARAM_ITEM ParamList[] = {
   {L"read", TypeFlag},
   {L"readfile", TypeFlag},
@@ -191,7 +193,6 @@ ShellCommandRunSpiFlash (
   )
 {
 EFI_STATUS              Status;
-  SPI_DEVICE            *Slave;
   LIST_ENTRY            *CheckPackage;
   EFI_PHYSICAL_ADDRESS  Address = 0, Offset = 0;
   SHELL_FILE_HANDLE     FileHandle = NULL;
@@ -273,8 +274,8 @@ EFI_STATUS              Status;
   Cs = PcdGet32 (PcdSpiFlashCs);
 
   // Setup new spi device
-  Slave = SpiMasterProtocol->SetupDevice (SpiMasterProtocol, Cs, Mode);
-    if (Slave == NULL) {
+  mSlave = SpiMasterProtocol->SetupDevice (SpiMasterProtocol, mSlave, Cs, Mode);
+    if (mSlave == NULL) {
       Print(L"sf: Cannot allocate SPI device!\n");
       return SHELL_ABORTED;
     }
@@ -282,9 +283,11 @@ EFI_STATUS              Status;
   switch (Flag) {
   case PROBE:
     // Probe spi bus
-    Status = FlashProbe (Slave);
+    Status = FlashProbe (mSlave);
     if (EFI_ERROR(Status)) {
       // No supported spi flash detected
+      SpiMasterProtocol->FreeDevice(mSlave);
+      mSlave = NULL;
       return SHELL_ABORTED;
     } else {
       return Status;
@@ -411,22 +414,20 @@ EFI_STATUS              Status;
   switch (Flag) {
   case READ:
   case READ_FILE:
-    Status = SpiFlashProtocol->Read (Slave, Offset, ByteCount, Buffer);
+    Status = SpiFlashProtocol->Read (mSlave, Offset, ByteCount, Buffer);
     break;
   case ERASE:
-    Status = SpiFlashProtocol->Erase (Slave, Offset, ByteCount);
+    Status = SpiFlashProtocol->Erase (mSlave, Offset, ByteCount);
     break;
   case WRITE:
   case WRITE_FILE:
-    Status = SpiFlashProtocol->Write (Slave, Offset, ByteCount, Buffer);
+    Status = SpiFlashProtocol->Write (mSlave, Offset, ByteCount, Buffer);
     break;
   case UPDATE:
   case UPDATE_FILE:
-    Status = SpiFlashProtocol->Update (Slave, Offset, ByteCount, Buffer);
+    Status = SpiFlashProtocol->Update (mSlave, Offset, ByteCount, Buffer);
     break;
   }
-
-  SpiMasterProtocol->FreeDevice(Slave);
 
   if (EFI_ERROR (Status)) {
     Print (L"sf: Error while performing spi transfer\n");

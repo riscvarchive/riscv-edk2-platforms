@@ -125,6 +125,7 @@ SPI_DEVICE *
 EFIAPI
 MvSpiSetupSlave (
   IN MARVELL_SPI_MASTER_PROTOCOL     * This,
+  IN SPI_DEVICE *Slave,
   IN UINTN Cs,
   IN SPI_MODE Mode
   );

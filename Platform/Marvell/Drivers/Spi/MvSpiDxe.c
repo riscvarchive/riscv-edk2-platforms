@@ -296,20 +296,21 @@ SPI_DEVICE *
 EFIAPI
 MvSpiSetupSlave (
   IN MARVELL_SPI_MASTER_PROTOCOL *This,
+  IN SPI_DEVICE *Slave,
   IN UINTN Cs,
   IN SPI_MODE Mode
   )
 {
-  SPI_DEVICE  *Slave;
+  if (!Slave) {
+    Slave = AllocateZeroPool (sizeof(SPI_DEVICE));
+    if (Slave == NULL) {
+      DEBUG((DEBUG_ERROR, "Cannot allocate memory\n"));
+      return NULL;
+    }
 
-  Slave = AllocateZeroPool (sizeof(SPI_DEVICE));
-  if (Slave == NULL) {
-    DEBUG((DEBUG_ERROR, "Cannot allocate memory\n"));
-    return NULL;
+    Slave->Cs   = Cs;
+    Slave->Mode = Mode;
   }
-
-  Slave->Cs   = Cs;
-  Slave->Mode = Mode;
 
   SpiSetupTransfer (This, Slave);
 
