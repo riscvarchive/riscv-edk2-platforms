@@ -121,7 +121,7 @@
   #
   # PEI phase common
   #
-  FspWrapperPlatformResetLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformResetLib/PeiFspWrapperPlatformResetLib.inf
+  FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
 !endif
@@ -142,7 +142,7 @@
   #
   # DXE phase common
   #
-  FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/DxeFspWrapperPlatformResetLib/DxeFspWrapperPlatformResetLib.inf
+  FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/DxeFspWrapperPlatformLib/DxeFspWrapperPlatformLib.inf
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/DxeTestPointCheckLib.inf
 !endif

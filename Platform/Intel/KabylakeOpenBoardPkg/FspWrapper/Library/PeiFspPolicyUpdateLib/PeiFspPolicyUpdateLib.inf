@@ -69,7 +69,7 @@
   FspWrapperApiLib
   OcWdtLib
   PchResetLib
-  FspWrapperPlatformResetLib
+  FspWrapperPlatformLib
   BaseMemoryLib
   CpuPlatformLib
   DebugLib
