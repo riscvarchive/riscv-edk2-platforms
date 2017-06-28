@@ -103,7 +103,7 @@ GetVbtData (
         VbtBufferSize = 0;
         Status = Fv->ReadSection (
                        Fv,
-                       &gIntelPeiGraphicsVbtGuid,
+                       PcdGetPtr (PcdGraphicsVbtGuid),
                        EFI_SECTION_RAW,
                        0,
                        (VOID **) &Buffer,

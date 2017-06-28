@@ -64,8 +64,10 @@
   gGopPolicyProtocolGuid                        ## PRODUCES
 
 [Guids]
-  gIntelPeiGraphicsVbtGuid                      ## CONSUMES
   gMiscDxeConfigGuid
+
+[Pcd]
+  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
 
 [Depex]
   gEfiVariableArchProtocolGuid

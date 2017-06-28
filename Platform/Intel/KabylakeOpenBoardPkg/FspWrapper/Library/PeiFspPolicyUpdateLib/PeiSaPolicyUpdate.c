@@ -49,7 +49,7 @@ PeiFspSaPolicyUpdate (
 
     Size   = 0;
     Buffer = NULL;
-    PeiGetSectionFromAnyFv (&gIntelPeiGraphicsVbtGuid, EFI_SECTION_RAW, 0, &Buffer, &Size);
+    PeiGetSectionFromAnyFv (PcdGetPtr (PcdGraphicsVbtGuid), EFI_SECTION_RAW, 0, &Buffer, &Size);
     if (Buffer == NULL) {
       DEBUG((DEBUG_WARN, "Could not locate VBT\n"));
     } else {

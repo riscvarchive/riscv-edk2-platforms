@@ -136,9 +136,10 @@
 
   gBoardModuleTokenSpaceGuid.PcdAudioConnector
 
+  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
+
 [Guids]
   gFspNonVolatileStorageHobGuid                 ## CONSUMES
-  gIntelPeiGraphicsVbtGuid                      ## CONSUMES
   gTianoLogoGuid                                ## CONSUMES
   gEfiMemoryOverwriteControlDataGuid
 

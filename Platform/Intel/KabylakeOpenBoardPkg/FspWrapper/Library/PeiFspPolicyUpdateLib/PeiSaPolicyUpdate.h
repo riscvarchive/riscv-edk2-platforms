@@ -30,7 +30,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <FspmUpd.h>
 #include <FspsUpd.h>
 
-extern EFI_GUID gIntelPeiGraphicsVbtGuid;
 extern EFI_GUID gTianoLogoGuid;
 
 #endif
