@@ -37,10 +37,6 @@ PolicyInitDxeEntryPoint (
 {
   EFI_STATUS           Status;
   
-  if (LibPcdGetSku () != BoardIdKabyLakeYLpddr3Rvp3) {
-    return EFI_UNSUPPORTED;
-  }
-
   //
   // SystemAgent Dxe Platform Policy Initialization
   //
