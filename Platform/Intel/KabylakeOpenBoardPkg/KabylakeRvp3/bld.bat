@@ -52,13 +52,14 @@ cd %WORKSPACE%
 if exist %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc attrib -r %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc
 @call python %WORKSPACE_PLATFORM%\%PLATFORM_PACKAGE%\Tools\Fsp\RebaseAndPatchFspBinBaseAddress.py %WORKSPACE_PLATFORM%\%PLATFORM_BOARD_PACKAGE%\Include\Fdf\FlashMapInclude.fdf %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg Fsp.fd %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc 0x70
 
-cd %WORKSPACE%
-
 @if %ERRORLEVEL% NEQ 0 (
   @echo !!! ERROR:RebaseAndPatchFspBinBaseAddress failed!!!
   set SCRIPT_ERROR=1
   goto :BldFail
 )
+
+cd %WORKSPACE%
+
 copy /y /b %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_M.fd+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_T.fd %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_M_T.fd
 @REM prefix pad.bin file which adds 0xC bytes of data (Note: Section will add 4 bytes of SECTION Header). This is done to align the FSP Header to 16 bytes
 copy /y /b %WORKSPACE_PLATFORM%\%PLATFORM_PACKAGE%\Tools\Fsp\pad.bin+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_S.fd %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_S_padded.fd
