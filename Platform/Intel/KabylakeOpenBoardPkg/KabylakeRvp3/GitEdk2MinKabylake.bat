@@ -40,7 +40,7 @@ if not exist %WORKSPACE%\Conf (
 @REM   Platform override Silicon override Core
 @REM   Source override Binary
 
-set PACKAGES_PATH=%WORKSPACE%\edk2-platforms\Platform\Intel;%WORKSPACE%\edk2-platforms\Silicon\Intel;%WORKSPACE%\edk2-non-osi\Platform\Intel;%WORKSPACE%\edk2-non-osi\Silicon\Intel;%WORKSPACE%\FSP;%WORKSPACE%\edk2;%WORKSPACE%
+set PACKAGES_PATH=%WORKSPACE%\edk2-platforms\Platform\Intel;%WORKSPACE%\edk2-platforms\Silicon\Intel;%WORKSPACE%\edk2-non-osi\Silicon\Intel;%WORKSPACE%\FSP;%WORKSPACE%\edk2;%WORKSPACE%
 set EDK_TOOLS_BIN=%WORKSPACE%\edk2-BaseTools-win32
 
 @REM Call edksetup.bat in the edk2 repository.
