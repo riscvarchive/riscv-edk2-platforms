@@ -88,6 +88,11 @@ Scope(_SB)
       Store(0x7ffff, CLK)
       Sleep(1)
     }
+
+	Method (_STA, 0, NotSerialized)
+	{
+	  Return (0x0)
+	}
   }
 
   Device(SAS1) {
@@ -239,6 +244,11 @@ Scope(_SB)
       Store(0x7ffff, CLK)
       Sleep(1)
     }
+
+	Method (_STA, 0, NotSerialized)
+	{
+	  Return (0x0)
+	}
   }
 
 }
