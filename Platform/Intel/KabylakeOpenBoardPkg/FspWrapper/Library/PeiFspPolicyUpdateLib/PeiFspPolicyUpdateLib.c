@@ -114,6 +114,15 @@ InternalPrintVariableData (
   DEBUG ((DEBUG_INFO, "\n"));
 }
 
+/**
+  Performs FSPM UPD Policy update.
+
+  A platform may use this API to update the FSPM UPD policy initialized
+  by the silicon module or the default UPD data.
+  The output of FSPM UPD data from this API is the final UPD data.
+
+  @param[in, out] FspmUpd       Pointer to FSPM UPD data.
+**/
 VOID
 EFIAPI
 FspmPolicyUpdate (
@@ -130,6 +139,15 @@ FspmPolicyUpdate (
   InternalPrintVariableData ((VOID *)FspmUpdDataPtr, sizeof(FSPM_UPD));
 }
 
+/**
+  Performs FSPS UPD Policy update.
+
+  A platform may use this API to update the FSPS UPD policy initialized
+  by the silicon module or the default UPD data.
+  The output of FSPS UPD data from this API is the final UPD data.
+
+  @param[in, out] FspsUpd       Pointer to FSPS UPD data.
+**/
 VOID
 EFIAPI
 FspsPolicyUpdate (

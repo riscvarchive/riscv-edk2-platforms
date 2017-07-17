@@ -15,9 +15,12 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <PeiFspPolicyInitLib.h>
 
 /**
-  Performs FSP PEI Policy Pre-memory initialization.
+  Performs FSPM UPD Policy initialization.
 
-  @param[in] FspmUpdDataPtr       Pointer to FSPM UPD data.
+  Value of FspmUpd has been initialized by FSP binary default value.
+  Only a subset of FspmUpd needs to be updated for different silicon sku.
+
+  @param[in, out] FspmUpd       Pointer to FSPM UPD data.
 **/
 VOID
 EFIAPI
@@ -84,10 +87,12 @@ FspmPolicyInit (
 }
 
 /**
-  Performs FSP PEI Policy initialization.
+  Performs FSPS UPD Policy initialization.
 
-  @param[in][out] FspsUpd  Pointer UPD data region
+  Value of FspsUpd has been initialized by FSP binary default value.
+  Only a subset of FspsUpd needs to be updated for different silicon sku.
 
+  @param[in, out] FspsUpd       Pointer to FSPS UPD data.
 **/
 VOID
 EFIAPI
