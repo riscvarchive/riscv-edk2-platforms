@@ -1,0 +1,47 @@
+## @file
+# This driver produces an EFI_RNG_PROTOCOL instance for the AMD Seattle CCP
+#
+# Copyright (C) 2016, Linaro Ltd. All rights reserved.<BR>
+#
+# This program and the accompanying materials are licensed and made available
+# under the terms and conditions of the BSD License which accompanies this
+# distribution. The full text of the license may be found at
+# http://opensource.org/licenses/bsd-license.php
+#
+# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS, WITHOUT
+# WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = StyxRngDxe
+  FILE_GUID                      = 58E26F0D-CBAC-4BBA-B70F-18221415665A
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = StyxRngEntryPoint
+
+[Sources]
+  StyxRngDxe.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/AMD/Styx/AmdModulePkg/AmdModulePkg.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  IoLib
+  PcdLib
+  UefiDriverEntryPoint
+
+[Pcd]
+  gAmdModulePkgTokenSpaceGuid.PcdCCPBase
+
+[Protocols]
+  gEfiRngProtocolGuid              ## PRODUCES
+
+[Guids]
+  gEfiRngAlgorithmRaw
+
+[Depex]
+  TRUE

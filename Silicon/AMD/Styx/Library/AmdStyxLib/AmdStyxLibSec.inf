@@ -1,0 +1,67 @@
+#/* @file
+#
+#  Copyright (c) 2011-2012, ARM Limited. All rights reserved.<BR>
+#  Copyright (c) 2014 - 2016, AMD Inc. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#*/
+#/**
+#  Derived from:
+#   ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLibSec.inf
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AmdStyxLibSec
+  FILE_GUID                      = 2228e985-60ae-406e-bdf0-410c6750c7d2
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ArmPlatformLib
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/AMD/Styx/AmdModulePkg/AmdModulePkg.dec
+  Silicon/AMD/Styx/AmdStyx.dec
+
+[LibraryClasses]
+  ArmLib
+  HobLib
+  DebugLib
+
+[Sources.common]
+  Styx.c
+
+[Sources.AARCH64]
+  AArch64/Helper.S  | GCC
+
+[Guids]
+  gAmdStyxMpCoreInfoGuid               ## CONSUMER
+
+[FeaturePcd]
+  gEmbeddedTokenSpaceGuid.PcdCacheEnable
+  gArmPlatformTokenSpaceGuid.PcdNorFlashRemapping
+
+[Ppis]
+  gArmMpCoreInfoPpiGuid
+
+[Pcd]
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gArmTokenSpaceGuid.PcdFvBaseAddress
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdArmPrimaryCore
+
+  gArmPlatformTokenSpaceGuid.PcdCoreCount

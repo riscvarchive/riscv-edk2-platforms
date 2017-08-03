@@ -1,0 +1,53 @@
+#/** @file
+#  Sample ACPI Platform Driver
+#
+#  Copyright (c) 2008 - 2014, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2014 - 2016, AMD Inc. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+#/**
+#  Derived from:
+#   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = AcpiPlatform
+  FILE_GUID                      = f229c831-6a35-440b-9c84-dd3bc71e3865
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = AcpiPlatformEntryPoint
+
+[Sources]
+  AcpiPlatform.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  Silicon/AMD/Styx/AmdModulePkg/AmdModulePkg.dec
+  Silicon/AMD/Styx/AmdStyx.dec
+
+[LibraryClasses]
+  AmdStyxAcpiLib
+  DebugLib
+  PcdLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+
+[Pcd]
+  gAmdStyxTokenSpaceGuid.PcdEnableSmmus
+
+[Protocols]
+  gEfiAcpiTableProtocolGuid                     ## ALWAYS_CONSUMED
+
+[Depex]
+  gEfiAcpiTableProtocolGuid
