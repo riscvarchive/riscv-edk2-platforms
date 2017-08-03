@@ -1,0 +1,7 @@
+MDIO driver configuration
+-------------------------
+MDIO driver provides access to network PHYs' registers via MARVELL_MDIO_READ and
+MARVELL_MDIO_WRITE functions (MARVELL_MDIO_PROTOCOL). Following PCD is required:
+
+  gMarvellTokenSpaceGuid.PcdMdioBaseAddress
+  (base address of SMI management register)

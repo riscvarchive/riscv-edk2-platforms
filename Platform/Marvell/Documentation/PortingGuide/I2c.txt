@@ -1,0 +1,20 @@
+1. Porting I2C driver to a new SOC
+----------------------------------
+In order to enable driver on a new platform, following steps need to be taken:
+ - add following line to .dsc file:
+   Platform/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
+ - add following line to .fdf file:
+   INF Platform/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
+ - add PCDs with relevant values to .dsc file:
+     gMarvellTokenSpaceGuid.PcdI2cSlaveAddresses|{ 0x50, 0x57 }
+   (addresses of I2C slave devices on bus)
+     gMarvellTokenSpaceGuid.PcdI2cSlaveBuses|{ 0x0, 0x0 }
+   (buses to which accoring slaves are attached)
+     gMarvellTokenSpaceGuid.PcdI2cBusCount|2
+   (number of SoC's I2C buses)
+     gMarvellTokenSpaceGuid.PcdI2cBaseAddresses|L"0xF2701000;0xF2701100"
+   (base addresses of I2C controller buses)
+     gMarvellTokenSpaceGuid.PcdI2cClockFrequency|200000000
+   (I2C host controller clock frequency)
+     gMarvellTokenSpaceGuid.PcdI2cBaudRate|100000
+   (baud rate used in I2C transmission)

@@ -1,0 +1,31 @@
+PciEmulation configuration
+--------------------------
+Installation of various NonDiscoverable devices via PciEmulation driver is performed
+via set of PCDs. Following are available:
+
+ gMarvellTokenSpaceGuid.PcdPciEXhci
+
+Indicates, which Xhci devices are used.
+
+ gMarvellTokenSpaceGuid.PcdPciEAhci
+
+Indicates, which Ahci devices are used.
+
+ gMarvellTokenSpaceGuid.PcdPciESdhci
+
+Indicates, which Sdhci devices are used.
+
+All above PCD's correspond to hardware description in a dedicated structure:
+
+STATIC PCI_E_PLATFORM_DESC A70x0PlatDescTemplate
+
+in Platforms/Marvell/PciEmulation/PciEmulation.c file. It comprises device
+count, base addresses, register region size and DMA-coherency type.
+
+Examples
+--------
+Assuming we want to enable second XHCI port and one SDHCI port on Armada
+70x0 board, following needs to be declared:
+
+  gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x0 0x1 }
+  gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x1 }

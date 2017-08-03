@@ -1,0 +1,48 @@
+MPP configuration
+-----------------
+Multi-Purpose Ports (MPP) are configurable through platform PCDs.
+In order to set desired pin multiplexing, .dsc file needs to be modified.
+(Platform/Marvell/Armada/{platform_name}.dsc - please refer to
+Documentation/Build.txt for currently supported {platftorm_name} )
+Following PCDs are available:
+
+ gMarvellTokenSpaceGuid.PcdMppChipCount
+
+Indicates how many different chips are placed on board. So far up to 4 chips
+are supported.
+
+Every MPP PCD has <Num> part where
+ <Num> stands for chip ID (order is not important, but configuration will be
+ set for first PcdMppChipCount chips).
+
+Below is example for the first chip (Chip0).
+
+ gMarvellTokenSpaceGuid.PcdChip0MppReverseFlag
+
+Indicates that register order is reversed. (Needs to be used only for AP806-Z1)
+
+ gMarvellTokenSpaceGuid.PcdChip0MppBaseAddress
+
+This is base address for MPP configuration register.
+
+ gMarvellTokenSpaceGuid.PcdChip0MppPinCount
+
+Defines how many MPP pins are available.
+
+ gMarvellTokenSpaceGuid.PcdChip0MppSel0
+ gMarvellTokenSpaceGuid.PcdChip0MppSel1
+ gMarvellTokenSpaceGuid.PcdChip0MppSel2
+
+This registers defines functions of 10 pins in ascending order.
+
+Examples
+--------
+#APN806-A0 MPP SET
+ gMarvellTokenSpaceGuid.PcdChip0MppReverseFlag|FALSE
+ gMarvellTokenSpaceGuid.PcdChip0MppBaseAddress|0xF06F4000
+ gMarvellTokenSpaceGuid.PcdChip0MppRegCount|3
+ gMarvellTokenSpaceGuid.PcdChip0MppSel0|{ 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x0 }
+ gMarvellTokenSpaceGuid.PcdChip0MppSel1|{ 0x0, 0x0, 0x0, 0x1, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 }
+
+Set pin 6 and 7 to 0xa function:
+ gMarvellTokenSpaceGuid.PcdChip0MppSel0|{ 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0xa, 0xa, 0x0, 0x0 }

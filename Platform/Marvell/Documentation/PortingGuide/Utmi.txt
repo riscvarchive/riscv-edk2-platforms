@@ -1,0 +1,35 @@
+UTMI PHY configuration
+----------------------
+In order to configure UTMI, following PCDs are available:
+
+  gMarvellTokenSpaceGuid.PcdUtmiPhyCount
+
+Indicates how many UTMI PHYs are available on platform.
+
+Next four PCDs are in unicode string format containing settings for all devices
+separated with semicolon.
+
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit
+
+Indicates base address of the UTMI unit.
+
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg
+
+Indicates address of USB Configuration register.
+
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg
+
+Indicates address of external UTMI configuration.
+
+  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort
+
+Indicates type of the connected USB port.
+
+Example
+-------
+#UtmiPhy
+  gMarvellTokenSpaceGuid.PcdUtmiPhyCount|2
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiUnit|L"0xF2580000;0xF2581000"
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUsbCfg|L"0xF2440420;0xF2440420"
+  gMarvellTokenSpaceGuid.PcdUtmiPhyRegUtmiCfg|L"0xF2440440;0xF2440444"
+  gMarvellTokenSpaceGuid.PcdUtmiPhyUtmiPort|L"0x0;0x1"

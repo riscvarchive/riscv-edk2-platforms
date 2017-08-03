@@ -1,0 +1,7 @@
+MarvellResetSystemLib configuration
+-----------------------------------
+This simple library allows to mask given bits in given reg at UEFI 'reset'
+command call. These variables are configurable through PCDs:
+
+  gMarvellTokenSpaceGuid.PcdResetRegAddress
+  gMarvellTokenSpaceGuid.PcdResetRegMask

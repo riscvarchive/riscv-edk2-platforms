@@ -1,0 +1,59 @@
+Pp2Dxe porting guide
+--------------------
+Pp2Dxe is driver supporting PP2 NIC on Marvell platforms. Following PCDs
+are required to operate:
+
+Number of ports/network interfaces:
+  gMarvellTokenSpaceGuid.PcdPp2NumPorts
+
+Addresses of PHY devices:
+  gMarvellTokenSpaceGuid.PcdPhySmiAddresses
+
+Identificators of PP2 ports:
+  gMarvellTokenSpaceGuid.PcdPp2PortIds
+
+Indexes used in GOP operation:
+  gMarvellTokenSpaceGuid.PcdPp2GopIndexes
+
+Set to 0x1 for always-up interface, 0x0 otherwise:
+  gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
+
+Values corresponding to PHY_SPEED enum:
+  gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
+
+PHY_SPEED (in Mbps) is defined as follows:
+  typedef enum {
+  0  NO_SPEED,
+  1  SPEED_10,
+  2  SPEED_100,
+  3  SPEED_1000,
+  4  SPEED_2500,
+  5  SPEED_10000
+  } PHY_SPEED;
+
+Base address of shared register space of PP2:
+  gMarvellTokenSpaceGuid.PcdPp2SharedAddress
+
+Spacing between consecutive GMAC register spaces:
+  gMarvellTokenSpaceGuid.PcdPp2GmacDevSize
+
+Base address of GMAC:
+  gMarvellTokenSpaceGuid.PcdPp2GmacBaseAddress
+
+Spacing between consecutive XLG register spaces:
+  gMarvellTokenSpaceGuid.PcdPp2XlgDevSize
+
+Base address of XLG:
+  gMarvellTokenSpaceGuid.PcdPp2XlgBaseAddress
+
+Base address of RFU1:
+  gMarvellTokenSpaceGuid.PcdPp2Rfu1BaseAddress
+
+Base address of SMI:
+  gMarvellTokenSpaceGuid.PcdPp2SmiBaseAddress
+
+TCLK frequency in Hz:
+  gMarvellTokenSpaceGuid.PcdPp2ClockFrequency
+
+GMAC and XLG addresses are computed as follows:
+  address = base_address + dev_size * gop_index

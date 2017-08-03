@@ -1,0 +1,45 @@
+PHY driver configuration
+------------------------
+MvPhyDxe provides basic initialization and status routines for Marvell PHYs.
+Currently only 1512 series PHYs are supported. Following PCDs are required:
+
+  gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
+  (list of values corresponding to PHY_CONNECTION enum)
+  gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg
+  (boolean - if true, driver waits for autonegotiation on startup)
+  gMarvellTokenSpaceGuid.PcdPhyDeviceIds
+  (list of values corresponding to MV_PHY_DEVICE_ID enum)
+
+PHY_CONNECTION enum type is defined as follows:
+
+  typedef enum {
+0    PHY_CONNECTION_RGMII,
+1    PHY_CONNECTION_RGMII_ID,
+2    PHY_CONNECTION_RGMII_TXID,
+3    PHY_CONNECTION_RGMII_RXID,
+4    PHY_CONNECTION_SGMII,
+5    PHY_CONNECTION_RTBI,
+6    PHY_CONNECTION_XAUI,
+7    PHY_CONNECTION_RXAUI
+  } PHY_CONNECTION;
+
+MV_PHY_DEVICE_ID:
+
+  typedef enum {
+0    MV_PHY_DEVICE_1512,
+  } MV_PHY_DEVICE_ID;
+
+It should be extended when adding support for other PHY
+models.
+
+Thus in order to set RGMII for 1st PHY and SGMII for 2nd, PCD should be:
+
+  gMarvellTokenSpaceGuid.PcdPhyConnectionTypes|{ 0x0, 0x4 }
+
+with disabled autonegotiation:
+
+  gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg|FALSE
+
+assuming, that PHY models are 1512:
+
+  gMarvellTokenSpaceGuid.PcdPhyDeviceIds|{ 0x0, 0x0 }

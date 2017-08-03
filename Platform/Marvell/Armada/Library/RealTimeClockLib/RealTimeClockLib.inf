@@ -1,0 +1,52 @@
+#/** @file
+#
+# Copyright (c) 2006, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2011 - 2014, ARM Ltd. All rights reserved.<BR>
+# Copyright (c) 2017, Marvell International Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+#/**
+#  Derived from:
+#  ArmPlatformPkg/Library/PL031RealTimeClockLib/PL031RealTimeClockLib.inf
+#
+#**/
+
+
+[Defines]
+  INF_VERSION                    = 0x00010019
+  BASE_NAME                      = ArmadaRealTimeClockLib
+  FILE_GUID                      = fa81e889-045b-4c96-9093-742554fd0588
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RealTimeClockLib
+
+[Sources.common]
+  RealTimeClockLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Platform/Marvell/Marvell.dec
+
+[LibraryClasses]
+  DebugLib
+  DxeServicesTableLib
+  IoLib
+  PcdLib
+  TimeBaseLib
+  TimerLib
+  UefiRuntimeLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+
+[Pcd]
+  gMarvellTokenSpaceGuid.PcdRtcEnabled

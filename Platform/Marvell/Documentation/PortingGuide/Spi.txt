@@ -1,0 +1,16 @@
+Spi driver configuration
+------------------------
+Following PCDs are available for configuration of spi driver:
+
+ gMarvellTokenSpaceGuid.PcdSpiClockFrequency
+
+Frequency (in Hz) of SPI clock
+
+ gMarvellTokenSpaceGuid.PcdSpiMaxFrequency
+
+Max SCLK line frequency (in Hz) (max transfer frequency)
+
+ gMarvellTokenSpaceGuid.PcdSpiDefaultMode
+
+default SCLK mode (see SPI_MODE enum in file
+Platform/Marvell/Drivers/Spi/MvSpi.h)

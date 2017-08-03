@@ -1,0 +1,23 @@
+SpiFlash driver configuration
+-----------------------------
+Folowing PCDs for spi flash driver configuration must be set properly:
+
+ gMarvellTokenSpaceGuid.PcdSpiFlashAddressCycles
+
+Size of SPI flash address in bytes (3 or 4)
+
+ gMarvellTokenSpaceGuid.PcdSpiFlashEraseSize
+
+Size of minimal erase block in bytes
+
+ gMarvellTokenSpaceGuid.PcdSpiFlashPageSize
+
+Size of SPI flash page
+
+ gMarvellTokenSpaceGuid.PcdSpiFlashId
+
+Id of SPI flash
+
+ gMarvellTokenSpaceGuid.PcdSpiFlashPollCmd
+
+Spi flash polling flag

@@ -1,0 +1,64 @@
+## @file
+#  SdMmcPciHcDxe driver is used to manage those host controllers which comply with SD
+#  Host Controller Simplified Specifiction version 3.0.
+#
+#  It will produce EFI_SD_MMC_PASS_THRU_PROTOCOL to allow sending SD/MMC/eMMC cmds
+#  to specified devices from upper layer.
+#
+#  Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
+#  Copyright (C) 2016 Marvell International Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010019
+  BASE_NAME                      = XenonDxe
+  MODULE_UNI_FILE                = SdMmcPciHcDxe.uni
+  FILE_GUID                      = 17f56b40-f7c1-435c-ab8d-404872da951e
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = InitializeSdMmcPciHcDxe
+
+[Sources]
+  ComponentName.c
+  EmmcDevice.c
+  SdDevice.c
+  SdMmcPciHcDxe.c
+  SdMmcPciHcDxe.h
+  SdMmcPciHci.c
+  SdMmcPciHci.h
+  XenonSdhci.c
+  XenonSdhci.h
+
+[Packages]
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  DevicePathLib
+  MemoryAllocationLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+
+[Protocols]
+  gEfiDevicePathProtocolGuid                    ## TO_START
+  gEfiPciIoProtocolGuid                         ## TO_START
+  gEfiSdMmcPassThruProtocolGuid                 ## BY_START
+
+# [Event]
+# EVENT_TYPE_PERIODIC_TIMER ## SOMETIMES_CONSUMES
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  SdMmcPciHcDxeExtra.uni
