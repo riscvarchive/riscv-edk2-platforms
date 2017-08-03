@@ -1,0 +1,46 @@
+#/** @file
+#
+#  Copyright (c) 2016 Linaro Ltd.
+#  Copyright (c) 2016 Hisilicon Limited.
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SasV1Dxe
+  FILE_GUID                      = 2b235921-8405-4219-a461-972a3a60969c
+  MODULE_TYPE                    = UEFI_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = SasV1Initialize
+
+
+[Sources.common]
+  SasV1Dxe.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  DmaLib
+  IoLib
+  MemoryAllocationLib
+  PcdLib
+  TimerLib
+  UefiDriverEntryPoint
+  UefiLib
+  UncachedMemoryAllocationLib
+
+[Protocols]
+  gEfiExtScsiPassThruProtocolGuid
+  gPlatformSasProtocolGuid

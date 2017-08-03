@@ -1,0 +1,58 @@
+#/** @file
+#
+#    Copyright (c) 2015, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2015, Linaro Limited. All rights reserved.
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = IoInitDxe
+  FILE_GUID                      = e99c606a-5626-11e5-b09e-bb93f4e4c400
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = IoInitDxeEntry
+
+[Sources.common]
+  IoInitDxe.c
+  Smmu.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPkg/ArmPkg.dec
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  DebugLib
+  BaseLib
+  PcdLib
+  CacheMaintenanceLib
+  SerdesLib
+  PlatformSysCtrlLib
+  MemoryAllocationLib
+
+[Guids]
+
+[Protocols]
+
+[Pcd]
+  gHisiTokenSpaceGuid.PcdM3SmmuBaseAddress|0xa0040000
+  gHisiTokenSpaceGuid.PcdPcieSmmuBaseAddress|0xb0040000
+  gHisiTokenSpaceGuid.PcdDsaSmmuBaseAddress|0xc0040000
+  gHisiTokenSpaceGuid.PcdAlgSmmuBaseAddress|0xd0040000
+
+[Depex]
+  TRUE
+

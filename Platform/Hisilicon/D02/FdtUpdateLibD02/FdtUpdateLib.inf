@@ -1,0 +1,43 @@
+#/** @file
+#
+#    Copyright (c) 2015, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2015, Linaro Limited. All rights reserved.
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = FdtUpdateLib
+  FILE_GUID                      = 02CF1727-E697-47fc-8CC2-5DCB81B26DD9
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = FdtUpdateLib
+
+
+[Sources.common]
+  FdtUpdateLib.c
+
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  OpenPlatformPkg/Chips/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  FdtLib
+  OemAddressMapLib
+
+[Protocols]
+  gHisiBoardNicProtocolGuid
+
+[Pcd]
+

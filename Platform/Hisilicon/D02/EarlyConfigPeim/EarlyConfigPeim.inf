@@ -1,0 +1,53 @@
+#/** @file
+#
+#    Copyright (c) 2015, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2015, Linaro Limited. All rights reserved.
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = EarlyConfigPeim
+  FILE_GUID                      = A181AD33-E64A-4084-A54A-A69DF1FB0ABF
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = EarlyConfigEntry
+
+[Sources.common]
+  EarlyConfigPeim.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  ArmPkg/ArmPkg.dec
+
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  PeimEntryPoint
+  PcdLib
+  DebugLib
+  IoLib
+  CacheMaintenanceLib
+  ArmLib
+
+  PlatformSysCtrlLib
+
+[Pcd]
+  gHisiTokenSpaceGuid.PcdMailBoxAddress
+  gHisiTokenSpaceGuid.PcdPeriSubctrlAddress
+
+[Depex]
+## As we will clean mailbox in this module, need to wait memory init complete
+  gEfiPeiMemoryDiscoveredPpiGuid
+
+[BuildOptions]
+

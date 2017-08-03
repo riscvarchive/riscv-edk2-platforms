@@ -1,0 +1,59 @@
+#/** @file
+#
+#    Copyright (c) 2015, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2015, Linaro Limited. All rights reserved.
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = MemorySubClass
+  FILE_GUID                      = 62194F1A-5A0D-4B33-9EF0-7D05C6CB923A
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = MemorySubClassEntryPoint
+
+[Sources]
+  MemorySubClassStrings.uni
+  MemorySubClass.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  IntelFrameworkPkg/IntelFrameworkPkg.dec
+  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
+
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  HobLib
+  HiiLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  BaseLib
+  DebugLib
+  PrintLib
+  PlatformSysCtrlLib
+  PcdLib
+
+[Protocols]
+  gEfiSmbiosProtocolGuid                       # PROTOCOL ALWAYS_CONSUMED
+
+[Pcd]
+
+[Guids]
+   gHisiEfiMemoryMapGuid
+
+[Depex]
+  gEfiSmbiosProtocolGuid
+
+

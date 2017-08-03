@@ -1,0 +1,48 @@
+/** @file
+*
+*  Copyright (c) 2016, Hisilicon Limited. All rights reserved.
+*  Copyright (c) 2016, Linaro Limited. All rights reserved.
+*
+*  This program and the accompanying materials
+*  are licensed and made available under the terms and conditions of the BSD License
+*  which accompanies this distribution.  The full text of the license may be found at
+*  http://opensource.org/licenses/bsd-license.php
+*
+*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+*
+**/
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SasV1InitDxe
+  FILE_GUID                      = 6e673d64-4801-4cbd-a7c0-20a26a9d5919
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+
+  ENTRY_POINT                    = SasV1InitEntry
+
+[Sources.common]
+  SasV1Init.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  TimerLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Pcd]
+
+[Protocols]
+  gPlatformSasProtocolGuid
+
+[Depex]
+  TRUE
