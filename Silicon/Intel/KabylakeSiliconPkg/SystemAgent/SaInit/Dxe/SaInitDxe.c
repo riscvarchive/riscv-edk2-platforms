@@ -33,15 +33,59 @@ SaInitEntryPointDxe (
   )
 {
   EFI_STATUS                Status;
+  VOID                      *Registration;
 
   DEBUG ((DEBUG_INFO, "SaInitDxe Start\n"));
 
 
   Status = SaAcpiInit (ImageHandle);
 
+  ///
+  /// Create PCI Enumeration Completed callback for SA
+  ///
+  EfiCreateProtocolNotifyEvent (
+    &gEfiPciEnumerationCompleteProtocolGuid,
+    TPL_CALLBACK,
+    SaPciEnumCompleteCallback,
+    NULL,
+    &Registration
+    );
 
   DEBUG ((DEBUG_INFO, "SaInitDxe End\n"));
 
   return EFI_SUCCESS;
+}
+
+/**
+  This function gets registered as a callback to perform SA initialization before EndOfDxe
+
+  @param[in] Event     - A pointer to the Event that triggered the callback.
+  @param[in] Context   - A pointer to private data registered with the callback function.
+**/
+VOID
+EFIAPI
+SaPciEnumCompleteCallback (
+  IN EFI_EVENT    Event,
+  IN VOID         *Context
+  )
+{
+  EFI_STATUS          Status;
+  VOID                *ProtocolPointer;
+
+  DEBUG ((DEBUG_INFO, "SaPciEnumCompleteCallback Start\n"));
+  ///
+  /// Check if this is first time called by EfiCreateProtocolNotifyEvent() or not,
+  /// if it is, we will skip it until real event is triggered
+  ///
+  Status = gBS->LocateProtocol (&gEfiPciEnumerationCompleteProtocolGuid, NULL, (VOID **) &ProtocolPointer);
+  if (EFI_SUCCESS != Status) {
+    return;
+  }
+
+  gBS->CloseEvent (Event);
+
+  UpdateDmarEndOfDxe ();
+
+  return;
 }
 

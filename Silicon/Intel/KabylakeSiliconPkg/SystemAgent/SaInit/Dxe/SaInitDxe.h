@@ -32,6 +32,25 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 extern EFI_GUID gSaSsdtAcpiTableStorageGuid;
 
+///
+/// Function Prototype
+///
+/**
+  This function gets registered as a callback to perform SA initialization before ExitPmAuth
+
+  @param[in] Event     - A pointer to the Event that triggered the callback.
+  @param[in] Context   - A pointer to private data registered with the callback function.
+
+  @retval EFI_SUCCESS   - Always.
+
+**/
+VOID
+EFIAPI
+SaPciEnumCompleteCallback (
+  IN EFI_EVENT Event,
+  IN VOID      *Context
+  );
+
 /**
   <b>System Agent Initialization DXE Driver Entry Point</b>
   - <b>Introduction</b> \n

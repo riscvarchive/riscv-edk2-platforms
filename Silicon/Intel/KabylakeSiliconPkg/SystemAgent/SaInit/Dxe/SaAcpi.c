@@ -209,8 +209,6 @@ SaAcpiEndOfDxeCallback (
 {
   EFI_STATUS          Status;
 
-  UpdateDmarEndOfDxe ();
-
   if (MmioRead16 (MmPciBase (SA_MC_BUS, 2, 0) + R_SA_IGD_VID) != 0xFFFF) {
     Status = GetVBiosVbtEndOfDxe ();
     if (EFI_SUCCESS != Status) {
