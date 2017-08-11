@@ -515,6 +515,8 @@ INF  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
 INF $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
 !endif
 
+INF  IntelSiliconPkg/IntelVTdDxe/IntelVTdDxe.inf
+
 INF ShellBinPkg/UefiShell/UefiShell.inf
 
 [FV.FVMAIN_COMPACT]
