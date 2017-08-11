@@ -15,8 +15,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #include "PolicyInitDxe.h"
 
-#include <KabylakeRvp3Id.h>
-
 /**
   Initialize  DXE Platform Policy
 
