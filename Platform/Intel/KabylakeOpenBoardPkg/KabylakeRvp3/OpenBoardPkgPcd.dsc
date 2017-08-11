@@ -34,6 +34,11 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
 [PcdsFixedAtBuild.common]
+!if gPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+  gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
+!endif
+
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
   gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
@@ -179,6 +184,10 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 [PcdsDynamicHii.X64.DEFAULT]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
   gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
+
+!if gPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
+!endif
 
 [PcdsDynamicDefault]
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFCF0070

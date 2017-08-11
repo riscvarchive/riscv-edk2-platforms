@@ -131,3 +131,6 @@
   !else
     gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
   !endif
+
+    gPlatformModuleTokenSpaceGuid.PcdPerformanceEnable|FALSE
+
