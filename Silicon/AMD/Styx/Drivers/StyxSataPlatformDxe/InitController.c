@@ -109,10 +109,15 @@ InitializeSataController (
 
   SataChPerSerdes = FixedPcdGet8 (PcdSataNumChPerSerdes);
 
-  for (PortNum = 0; PortNum < SataPortCount; PortNum += SataChPerSerdes) {
+  //
+  // SataChPerSerdes must be 2 for the Even/Odd logic in the loop below
+  //
+  ASSERT(SataChPerSerdes == 2);
+
+  for (PortNum = StartPort; PortNum < SataPortCount + StartPort; PortNum += SataChPerSerdes) {
     EvenPort = (UINT32)(FixedPcdGet32 (PcdSataPortMode) >> (PortNum * 2)) & 3;
     OddPort = (UINT32)(FixedPcdGet32 (PcdSataPortMode) >> ((PortNum+1) * 2)) & 3;
-    SataPhyInit ((StartPort + PortNum) / SataChPerSerdes, EvenPort, OddPort);
+    SataPhyInit (PortNum / SataChPerSerdes, EvenPort, OddPort);
   }
 
   //
