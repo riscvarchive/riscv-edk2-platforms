@@ -54,7 +54,7 @@
   gAmdStyxTokenSpaceGuid.PcdSata0CtrlAxiSlvPort|0xE0300000|UINT32|0x00020000
   gAmdStyxTokenSpaceGuid.PcdSata0PortCount|8|UINT8|0x00020001
   gAmdStyxTokenSpaceGuid.PcdSataPi|0xFF|UINT32|0x00020002
-  gAmdStyxTokenSpaceGuid.PcdSataPortMode|0|UINT16|0x00020003
+  gAmdStyxTokenSpaceGuid.PcdSataPortMode|0|UINT32|0x00020003
   gAmdStyxTokenSpaceGuid.PcdSataPortMpsp|TRUE|BOOLEAN|0x00020004
   gAmdStyxTokenSpaceGuid.PcdSataSmpsSupport|FALSE|BOOLEAN|0x00020005
   gAmdStyxTokenSpaceGuid.PcdSataSssSupport|TRUE|BOOLEAN|0x00020006
