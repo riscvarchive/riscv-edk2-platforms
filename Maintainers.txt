@@ -39,9 +39,11 @@ EDK II Packages:
 ----------------
 
 Platform
+M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
 M: Michael D Kinney <michael.d.kinney@intel.com>
 
 Silicon
+M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
 M: Michael D Kinney <michael.d.kinney@intel.com>
