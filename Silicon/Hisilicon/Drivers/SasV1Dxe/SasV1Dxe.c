@@ -26,7 +26,6 @@
 #include <Library/TimerLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
-#include <Library/UncachedMemoryAllocationLib.h>
 
 #include <Protocol/PlatformSasProtocol.h>
 #include <Protocol/ScsiPassThruExt.h>

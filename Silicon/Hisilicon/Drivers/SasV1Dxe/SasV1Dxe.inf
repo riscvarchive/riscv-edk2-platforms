@@ -39,7 +39,6 @@
   TimerLib
   UefiDriverEntryPoint
   UefiLib
-  UncachedMemoryAllocationLib
 
 [Protocols]
   gEfiExtScsiPassThruProtocolGuid
