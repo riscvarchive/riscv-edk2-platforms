@@ -408,6 +408,7 @@
   # Usb Support
   #
   Silicon/Hisilicon/Drivers/VirtualEhciPciIo/VirtualEhciPciIo.inf
+  MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   Platform/Hisilicon/D03/Drivers/OhciDxe/OhciDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf

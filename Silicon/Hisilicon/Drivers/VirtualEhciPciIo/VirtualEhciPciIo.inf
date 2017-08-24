@@ -25,36 +25,14 @@
 
 
 [Sources]
-  VirtualEhciPciIo.h
   VirtualEhciPciIo.c
 
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  ArmPkg/ArmPkg.dec
   Silicon/Hisilicon/HisiPkg.dec
 
-[FeaturePcd]
-
-
 [LibraryClasses]
-  MemoryAllocationLib
-  BaseLib
-  UefiLib
-  UefiBootServicesTableLib
-  UefiDriverEntryPoint
-  BaseMemoryLib
-  DebugLib
-  PcdLib
-  IoLib
-  ReportStatusCodeLib
-  UncachedMemoryAllocationLib
-  ArmLib
-  DxeServicesTableLib
-  CacheMaintenanceLib
+  NonDiscoverableDeviceRegistrationLib
   PlatformSysCtrlLib
-
-[Guids]
-
-[Protocols]
-  gEfiPciIoProtocolGuid                         ## TO_START
+  UefiDriverEntryPoint

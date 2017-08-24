@@ -205,6 +205,7 @@ READ_LOCK_STATUS   = TRUE
   #
 
   INF Silicon/Hisilicon/Drivers/VirtualEhciPciIo/VirtualEhciPciIo.inf
+  INF MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
   INF MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
   INF Platform/Hisilicon/D03/Drivers/OhciDxe/OhciDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
