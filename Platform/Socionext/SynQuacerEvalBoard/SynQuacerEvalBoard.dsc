@@ -114,6 +114,9 @@
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
 
+  HttpLib|MdeModulePkg/Library/DxeHttpLib/DxeHttpLib.inf
+  TcpIoLib|MdeModulePkg/Library/DxeTcpIoLib/DxeTcpIoLib.inf
+
   NULL|ArmPkg/Library/CompilerIntrinsicsLib/CompilerIntrinsicsLib.inf
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
@@ -232,6 +235,22 @@
   #
   gArmTokenSpaceGuid.PcdGenericWatchdogControlBase|0x2a440000
   gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase|0x2a450000
+
+  #
+  # NETSEC Info
+  #
+  gNetsecDxeTokenSpaceGuid.PcdEncTxDescNum|128
+  gNetsecDxeTokenSpaceGuid.PcdDecRxDescNum|128
+  gNetsecDxeTokenSpaceGuid.PcdJumboPacket|0
+  gNetsecDxeTokenSpaceGuid.PcdFlowCtrl|0
+  gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStartThreshold|36
+  gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStopThreshold|48
+  gNetsecDxeTokenSpaceGuid.PcdPauseTime|256
+
+  gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase|0x10000000
+  gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress|1
+
+  gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
 
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumAsciiStringLength|1000000
@@ -490,3 +509,30 @@
   # RNG
   #
   Silicon/Openmoko/ChaosKeyDxe/ChaosKeyDxe.inf
+
+  #
+  # Networking stack
+  #
+  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
+  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
+  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
+  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
+  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
+  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
+  NetworkPkg/TcpDxe/TcpDxe.inf
+  NetworkPkg/Udp6Dxe/Udp6Dxe.inf
+  NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
+  NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
+  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+  NetworkPkg/IScsiDxe/IScsiDxe.inf
+  NetworkPkg/DnsDxe/DnsDxe.inf
+  NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf
+  NetworkPkg/HttpDxe/HttpDxe.inf
+  NetworkPkg/HttpBootDxe/HttpBootDxe.inf
+  Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.inf {
+    <LibraryClasses>
+      DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
+  }
