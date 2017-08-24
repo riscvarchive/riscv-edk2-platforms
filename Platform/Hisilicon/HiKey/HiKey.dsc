@@ -110,8 +110,6 @@
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
   DmaLib|ArmPkg/Library/ArmDmaLib/ArmDmaLib.inf
 
-  UncachedMemoryAllocationLib|ArmPkg/Library/UncachedMemoryAllocationLib/UncachedMemoryAllocationLib.inf
-
   # Network Libraries
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
   NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
