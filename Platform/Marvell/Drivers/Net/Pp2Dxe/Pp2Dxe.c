@@ -175,9 +175,10 @@ Pp2DxeBmPoolInit (
   VOID
   )
 {
-  INTN Index;
-  UINT8 *PoolAddr;
-  UINT32 PoolSize = (sizeof(VOID *) * MVPP2_BM_SIZE) * 2 + MVPP2_BM_POOL_PTR_ALIGN;
+  INTN          Index;
+  UINT8         *PoolAddr;
+  UINT32        PoolSize;
+  EFI_STATUS    Status;
 
   ASSERT(MVPP2_BM_POOL_PTR_ALIGN >= sizeof(UINTN));
 
@@ -194,10 +195,15 @@ Pp2DxeBmPoolInit (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  PoolAddr = UncachedAllocateAlignedZeroPool (PoolSize, MVPP2_BM_POOL_PTR_ALIGN);
-  if (PoolAddr == NULL) {
-    return EFI_OUT_OF_RESOURCES;
+  Status = DmaAllocateAlignedBuffer (EfiBootServicesData,
+                                     EFI_SIZE_TO_PAGES (PoolSize),
+                                     MVPP2_BM_POOL_PTR_ALIGN,
+                                     (VOID **)&PoolAddr);
+  if (EFI_ERROR (Status)) {
+    goto FreePools;
   }
+
+  ZeroMem (PoolAddr, PoolSize);
 
   Mvpp2Shared->BmPools->Id = MVPP2_BM_POOL;
   Mvpp2Shared->BmPools->VirtAddr = (UINT32 *)PoolAddr;
@@ -206,6 +212,10 @@ Pp2DxeBmPoolInit (
   Mvpp2BmPoolHwCreate(Mvpp2Shared, Mvpp2Shared->BmPools, MVPP2_BM_SIZE);
 
   return EFI_SUCCESS;
+
+FreePools:
+  FreePool (Mvpp2Shared->BmPools);
+  return Status;
 }
 
 /* Enable and fill BM pool */
@@ -1169,11 +1179,16 @@ Pp2DxeInitialise (
   Mvpp2Shared->Tclk = PcdGet32 (PcdPp2ClockFrequency);
 
   /* Prepare buffers */
-  BufferSpace = UncachedAllocateAlignedZeroPool (BD_SPACE, MVPP2_BUFFER_ALIGN_SIZE);
-  if (BufferSpace == NULL) {
-    DEBUG((DEBUG_ERROR, "Failed to allocate buffer space\n"));
-    return EFI_OUT_OF_RESOURCES;
+  Status = DmaAllocateAlignedBuffer (EfiBootServicesData,
+                                     EFI_SIZE_TO_PAGES (BD_SPACE),
+                                     MVPP2_BUFFER_ALIGN_SIZE,
+                                     &BufferSpace);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to allocate buffer space\n"));
+    return Status;
   }
+
+  ZeroMem (BufferSpace, BD_SPACE);
 
   BufferLocation.TxDescs = BufferSpace;
   BufferLocation.AggrTxDescs = (MVPP2_TX_DESC *)((UINTN)BufferSpace + MVPP2_MAX_TXD * sizeof(MVPP2_TX_DESC));

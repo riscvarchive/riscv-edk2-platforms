@@ -43,13 +43,14 @@
   Mvpp2Lib.c
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
   Platform/Marvell/Marvell.dec
 
 [LibraryClasses]
+  DmaLib
   IoLib
   PcdLib
   BaseLib
@@ -60,7 +61,6 @@
   UefiDriverEntryPoint
   UefiBootServicesTableLib
   MemoryAllocationLib
-  UncachedMemoryAllocationLib
   CacheMaintenanceLib
 
 [Protocols]
