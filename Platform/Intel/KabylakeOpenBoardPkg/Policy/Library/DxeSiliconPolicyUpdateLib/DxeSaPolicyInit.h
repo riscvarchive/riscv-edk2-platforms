@@ -53,4 +53,18 @@ SaPolicyInitDxe (
   IN EFI_HANDLE           ImageHandle
   );
 
+/**
+  Get data for platform policy from setup options.
+
+  @param[in] SaPolicy                  The pointer to get SA Policy protocol instance
+
+  @retval EFI_SUCCESS                  Operation success.
+
+**/
+EFI_STATUS
+EFIAPI
+UpdateDxeSaPolicy (
+  IN OUT  SA_POLICY_PROTOCOL    *SaPolicy
+  );
+
 #endif

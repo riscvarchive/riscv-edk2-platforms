@@ -477,7 +477,7 @@ APRIORI DXE {
 INF  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
 
 !if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
-INF  $(PLATFORM_BOARD_PACKAGE)/Policy/PolicyInitDxe/PolicyInitDxe.inf
+INF  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
 
 $(SIPKG_DXE_SMM_BIN) $(PLATFORM_SI_PACKAGE)/Pch/PchInit/Dxe/PchInitDxe.inf
 $(SIPKG_DXE_SMM_BIN) $(PLATFORM_SI_PACKAGE)/SystemAgent/SaInit/Dxe/SaInitDxe.inf

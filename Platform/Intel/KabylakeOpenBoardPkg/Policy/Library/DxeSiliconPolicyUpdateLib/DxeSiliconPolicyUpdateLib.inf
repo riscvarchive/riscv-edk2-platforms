@@ -1,5 +1,5 @@
-### @file
-# Module Information file for the PolicyInit DXE driver.
+## @file
+# Component information file for Silicon Update Library
 #
 # Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
 #
@@ -11,33 +11,20 @@
 # THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 # WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #
-###
+##
 
 [Defines]
-  INF_VERSION                    = 0x00010017
-  BASE_NAME                      = KabylakeRvp3PolicyInitDxe
-  FILE_GUID                      = 490D0119-4448-440D-8F5C-F58FB53EE057
-  VERSION_STRING                 = 1.0
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = DxeSiliconUpdateLib
+  FILE_GUID                      = C523609D-E354-416B-B24F-33468D4BD21D
   MODULE_TYPE                    = DXE_DRIVER
-  ENTRY_POINT                    = PolicyInitDxeEntryPoint
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SiliconUpdateLib
 
 [LibraryClasses]
   BaseLib
-  BaseMemoryLib
-  CpuPlatformLib
-  DebugLib
-  DxeServicesTableLib
-  IoLib
-  MemoryAllocationLib
-  DxeSaPolicyLib
-  MmPciLib
   PcdLib
-  PostCodeLib
-  UefiBootServicesTableLib
-  UefiDriverEntryPoint
-  UefiLib
-  UefiRuntimeServicesTableLib
-  ConfigBlockLib
+  DebugLib
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -45,17 +32,14 @@
   MinPlatformPkg/MinPlatformPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
 
+[Sources]
+  DxeSiliconPolicyUpdateLib.c
+  DxeGopPolicyInit.c
+  DxeSaPolicyUpdate.c
+
 [Pcd]
   gBoardModuleTokenSpaceGuid.PcdIntelGopEnable
-
-[Sources]
-  PolicyInitDxe.c
-  PolicyInitDxe.h
-  SaPolicyInitDxe.c
-  SaPolicyInitDxe.h
-  GopPolicyInitDxe.c
-  GopPolicyInitDxe.h
-  DxeSaPolicyUpdate.c
+  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
 
 [Protocols]
   gEfiFirmwareVolume2ProtocolGuid               ## CONSUMES
@@ -65,9 +49,6 @@
 
 [Guids]
   gMiscDxeConfigGuid
-
-[Pcd]
-  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
 
 [Depex]
   gEfiVariableArchProtocolGuid

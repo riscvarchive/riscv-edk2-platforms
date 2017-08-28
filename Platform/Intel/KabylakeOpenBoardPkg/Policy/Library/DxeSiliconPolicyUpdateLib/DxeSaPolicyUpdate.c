@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
 
-#include "SaPolicyInitDxe.h"
+#include "DxeSaPolicyInit.h"
 
 #define SA_VTD_RMRR_USB_LENGTH  0x20000
 

@@ -20,11 +20,11 @@
 ################################################################################
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = PeiFspPolicyUpdateLib
+  BASE_NAME                      = SiliconPolicyUpdateLibFsp
   FILE_GUID                      = 4E83003B-49A9-459E-AAA6-1CA3C6D04FB2
   MODULE_TYPE                    = PEIM
   VERSION_STRING                 = 1.0
-  LIBRARY_CLASS                  = FspPolicyUpdateLib
+  LIBRARY_CLASS                  = SiliconPolicyUpdateLib
 
 
 #
