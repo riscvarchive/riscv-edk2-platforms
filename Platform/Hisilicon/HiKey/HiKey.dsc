@@ -108,7 +108,6 @@
 
   # USB Requirements
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
-  DmaLib|ArmPkg/Library/ArmDmaLib/ArmDmaLib.inf
 
   # Network Libraries
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
