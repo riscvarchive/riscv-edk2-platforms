@@ -1,4 +1,3 @@
-
 #
 #  Copyright (c) 2013-2014, ARM Limited. All rights reserved.
 #  Copyright (c) 2017, Linaro Limited. All rights reserved.
@@ -101,7 +100,6 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
-  INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   INF ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
 
@@ -114,6 +112,13 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Logo/LogoDxe.inf
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+
+  #
+  # Variable services
+  #
+  INF Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf
+  INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+  INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 
   #
   # UEFI applications

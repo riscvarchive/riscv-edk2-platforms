@@ -29,6 +29,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.dec
   Silicon/Socionext/SynQuacer/SynQuacer.dec
 
 [LibraryClasses]
@@ -53,6 +54,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
+  gFip006DxeTokenSpaceGuid.PcdFip006DxeRegBaseAddress
+  gFip006DxeTokenSpaceGuid.PcdFip006DxeMemBaseAddress
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
 
 [Pcd]

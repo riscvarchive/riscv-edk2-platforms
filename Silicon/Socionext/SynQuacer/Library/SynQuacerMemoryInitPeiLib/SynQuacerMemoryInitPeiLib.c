@@ -97,6 +97,18 @@ STATIC CONST ARM_MEMORY_REGION_DESCRIPTOR mVirtualMemoryTable[] = {
                      SYNQUACER_PCI_SEG0_PORTIO_MEMSIZE),
   ARM_DEVICE_REGION (SYNQUACER_PCI_SEG1_PORTIO_MEMBASE,
                      SYNQUACER_PCI_SEG1_PORTIO_MEMSIZE),
+
+  // variable store
+  ARM_DEVICE_REGION (FixedPcdGet32 (PcdFip006DxeRegBaseAddress),
+                     EFI_PAGE_SIZE),
+  ARM_DEVICE_REGION (FixedPcdGet32 (PcdFip006DxeMemBaseAddress),
+                     EFI_PAGE_SIZE),
+  ARM_DEVICE_REGION (FixedPcdGet32 (PcdFlashNvStorageVariableBase),
+                     FixedPcdGet32 (PcdFlashNvStorageVariableSize)),
+  ARM_DEVICE_REGION (FixedPcdGet32 (PcdFlashNvStorageFtwWorkingBase),
+                     FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize)),
+  ARM_DEVICE_REGION (FixedPcdGet32 (PcdFlashNvStorageFtwSpareBase),
+                     FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize)),
 };
 
 STATIC
