@@ -354,6 +354,7 @@
   Silicon/Hisilicon/Pv660/Drivers/PcieInitDxe/PcieInitDxe.inf
   Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf {
      <LibraryClasses>
+       DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
        NULL|Platform/Hisilicon/D02/Library/PlatformPciLib/PlatformPciLib.inf
   }
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
@@ -379,7 +380,10 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
-  Silicon/Hisilicon/Drivers/SasV1Dxe/SasV1Dxe.inf
+  Silicon/Hisilicon/Drivers/SasV1Dxe/SasV1Dxe.inf {
+    <LibraryClasses>
+      DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
+  }
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
   Silicon/Hisilicon/Pv660/Drivers/SasInitDxe/SasV1Init.inf
