@@ -471,9 +471,6 @@
   EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
 !endif
 
-  # ISP1761 USB OTG Controller
-  EmbeddedPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf
-
   #
   # Android Fastboot
   #
@@ -505,3 +502,8 @@
       PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
       BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
   }
+
+[Components.ARM]
+
+  # ISP1761 USB OTG Controller
+  EmbeddedPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf
