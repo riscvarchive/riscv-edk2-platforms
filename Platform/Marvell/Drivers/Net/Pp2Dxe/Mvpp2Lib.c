@@ -2747,7 +2747,7 @@ Mvpp2BmStop (
   UINT32 Val, i;
 
   for (i = 0; i < MVPP2_BM_SIZE; i++) {
-    Mvpp2Read (Priv, MVPP2_BM_PHY_ALLOC_REG(0));
+    Mvpp2Read (Priv, MVPP2_BM_PHY_ALLOC_REG(Pool));
   }
 
   Val = Mvpp2Read (Priv, MVPP2_BM_POOL_CTRL_REG(Pool));

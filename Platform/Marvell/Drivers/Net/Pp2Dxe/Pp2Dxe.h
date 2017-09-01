@@ -56,6 +56,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Mvpp2LibHw.h"
 
+#define MVPP2_MAX_PORT  3
+
 #define PP2DXE_SIGNATURE                    SIGNATURE_32('P', 'P', '2', 'D')
 #define INSTANCE_FROM_SNP(a)                CR((a), PP2DXE_CONTEXT, Snp, PP2DXE_SIGNATURE)
 
@@ -276,7 +278,7 @@ typedef struct {
   MVPP2_TX_QUEUE *AggrTxqs;
 
   /* BM pools */
-  MVPP2_BMS_POOL *BmPools;
+  MVPP2_BMS_POOL *BmPools[MVPP2_MAX_PORT];
 
   /* PRS shadow table */
   MVPP2_PRS_SHADOW *PrsShadow;
@@ -330,10 +332,10 @@ struct Pp2DxePort {
 
 /* Structure for preallocation for buffer */
 typedef struct {
-  MVPP2_TX_DESC *TxDescs;
+  MVPP2_TX_DESC *TxDescs[MVPP2_MAX_PORT];
   MVPP2_TX_DESC *AggrTxDescs;
-  MVPP2_RX_DESC *RxDescs;
-  DmaAddrT RxBuffers;
+  MVPP2_RX_DESC *RxDescs[MVPP2_MAX_PORT];
+  DmaAddrT RxBuffers[MVPP2_MAX_PORT];
 } BUFFER_LOCATION;
 
 typedef struct {
