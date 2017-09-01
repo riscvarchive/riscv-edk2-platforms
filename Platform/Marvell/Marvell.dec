@@ -173,7 +173,7 @@
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes|{ 0x0 }|VOID*|0x3000029
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp|{ 0x0 }|VOID*|0x300002A
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed|{ 0x0 }|VOID*|0x300002B
-  gMarvellTokenSpaceGuid.PcdPp2NumPorts|0|UINT32|0x300002D
+  gMarvellTokenSpaceGuid.PcdPp2Port2Controller|{ 0x0 }|VOID*|0x300002D
   gMarvellTokenSpaceGuid.PcdPp2PortIds|{ 0x0 }|VOID*|0x300002C
 
 #PciEmulation

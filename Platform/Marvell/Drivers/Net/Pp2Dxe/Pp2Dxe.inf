@@ -77,7 +77,7 @@
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
-  gMarvellTokenSpaceGuid.PcdPp2NumPorts
+  gMarvellTokenSpaceGuid.PcdPp2Port2Controller
   gMarvellTokenSpaceGuid.PcdPp2PortIds
 
 [Depex]

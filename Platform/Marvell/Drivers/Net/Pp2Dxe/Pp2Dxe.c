@@ -508,9 +508,7 @@ Pp2DxePhyInitialize (
   )
 {
   EFI_STATUS Status;
-  UINT8 *PhyAddresses;
 
-  PhyAddresses = PcdGetPtr (PcdPhySmiAddresses);
   Status = gBS->LocateProtocol (
                &gMarvellPhyProtocolGuid,
                NULL,
@@ -521,14 +519,14 @@ Pp2DxePhyInitialize (
     return Status;
   }
 
-  if (PhyAddresses[Pp2Context->Instance] == 0xff) {
+  if (Pp2Context->Port.PhyAddr == 0xff) {
     /* PHY iniitalization not required */
     return EFI_SUCCESS;
   }
 
   Status = Pp2Context->Phy->Init(
                Pp2Context->Phy,
-               PhyAddresses[Pp2Context->Instance],
+               Pp2Context->Port.PhyAddr,
                Pp2Context->Port.PhyInterface,
                &Pp2Context->PhyDev
              );
@@ -1145,14 +1143,16 @@ Pp2DxeSnpInstall (
 STATIC
 VOID
 Pp2DxeParsePortPcd (
-  IN PP2DXE_CONTEXT *Pp2Context
+  IN PP2DXE_CONTEXT *Pp2Context,
+  IN INTN Index
   )
 {
-  UINT8 *PortIds, *GopIndexes, *PhyConnectionTypes, *AlwaysUp, *Speed;
+  UINT8 *PortIds, *GopIndexes, *PhyConnectionTypes, *AlwaysUp, *Speed, *PhyAddresses;
 
   PortIds = PcdGetPtr (PcdPp2PortIds);
   GopIndexes = PcdGetPtr (PcdPp2GopIndexes);
   PhyConnectionTypes = PcdGetPtr (PcdPhyConnectionTypes);
+  PhyAddresses = PcdGetPtr (PcdPhySmiAddresses);
   AlwaysUp = PcdGetPtr (PcdPp2InterfaceAlwaysUp);
   Speed = PcdGetPtr (PcdPp2InterfaceSpeed);
 
@@ -1160,17 +1160,20 @@ Pp2DxeParsePortPcd (
   ASSERT (PcdGetSize (PcdPhyConnectionTypes) == PcdGetSize (PcdPp2PortIds));
   ASSERT (PcdGetSize (PcdPp2InterfaceAlwaysUp) == PcdGetSize (PcdPp2PortIds));
   ASSERT (PcdGetSize (PcdPp2InterfaceSpeed) == PcdGetSize (PcdPp2PortIds));
+  ASSERT (PcdGetSize (PcdPhySmiAddresses) == PcdGetSize (PcdPp2PortIds));
 
-  Pp2Context->Port.Id = PortIds[Pp2Context->Instance];
-  Pp2Context->Port.GopIndex = GopIndexes[Pp2Context->Instance];
-  Pp2Context->Port.PhyInterface = PhyConnectionTypes[Pp2Context->Instance];
-  Pp2Context->Port.AlwaysUp = AlwaysUp[Pp2Context->Instance];
-  Pp2Context->Port.Speed = Speed[Pp2Context->Instance];
+  Pp2Context->Port.Id = PortIds[Index];
+  Pp2Context->Port.GopIndex = GopIndexes[Index];
+  Pp2Context->Port.PhyInterface = PhyConnectionTypes[Index];
+  Pp2Context->Port.PhyAddr = PhyAddresses[Index];
+  Pp2Context->Port.AlwaysUp = AlwaysUp[Index];
+  Pp2Context->Port.Speed = Speed[Index];
 }
 
 STATIC
 EFI_STATUS
 Pp2DxeInitialiseController (
+  IN UINT8 ControllerIndex,
   IN MVPP2_SHARED *Mvpp2Shared,
   IN UINTN BaseAddress,
   IN UINTN ClockFrequency
@@ -1179,14 +1182,11 @@ Pp2DxeInitialiseController (
   PP2DXE_CONTEXT *Pp2Context = NULL;
   EFI_STATUS Status;
   INTN Index;
+  INTN PortIndex = 0;
   VOID *BufferSpace;
   UINT32 NetCompConfig = 0;
-  UINT8 NumPorts = PcdGet32 (PcdPp2NumPorts);
-
-  if (NumPorts == 0) {
-    DEBUG((DEBUG_ERROR, "Pp2Dxe: port number set to 0\n"));
-    return EFI_INVALID_PARAMETER;
-  }
+  STATIC UINT8 DeviceInstance;
+  UINT8 *Pp2PortMappingTable;
 
   Mvpp2Shared->Base = BaseAddress;
   Mvpp2Shared->Rfu1Base = Mvpp2Shared->Base + MVPP22_RFU1_OFFSET;
@@ -1265,7 +1265,18 @@ Pp2DxeInitialiseController (
   Mvpp2Shared->AggrTxqs->LogId = 0;
   Mvpp2Shared->AggrTxqs->Size = MVPP2_AGGR_TXQ_SIZE;
 
-  for (Index = 0; Index < NumPorts; Index++) {
+  Pp2PortMappingTable = (UINT8 *)PcdGetPtr (PcdPp2Port2Controller);
+
+  for (Index = 0; Index < PcdGetSize (PcdPp2Port2Controller); Index++) {
+    if (Pp2PortMappingTable[Index] != ControllerIndex) {
+      continue;
+    }
+
+    if (PortIndex++ > MVPP2_MAX_PORT) {
+      DEBUG ((DEBUG_ERROR, "Pp2Dxe: Wrong too many ports for single controller\n"));
+      return EFI_INVALID_PARAMETER;
+    }
+
     Pp2Context = AllocateZeroPool (sizeof (PP2DXE_CONTEXT));
     if (Pp2Context == NULL) {
       /*
@@ -1277,7 +1288,8 @@ Pp2DxeInitialiseController (
     }
 
     /* Instances are enumerated from 0 */
-    Pp2Context->Instance = Index;
+    Pp2Context->Instance = DeviceInstance;
+    DeviceInstance++;
 
     /* Install SNP protocol */
     Status = Pp2DxeSnpInstall(Pp2Context);
@@ -1285,10 +1297,10 @@ Pp2DxeInitialiseController (
       return Status;
     }
 
-    Pp2DxeParsePortPcd(Pp2Context);
+    Pp2DxeParsePortPcd(Pp2Context, Index);
     Pp2Context->Port.TxpNum = 1;
     Pp2Context->Port.Priv = Mvpp2Shared;
-    Pp2Context->Port.FirstRxq = 4 * Pp2Context->Instance;
+    Pp2Context->Port.FirstRxq = 4 * (PortIndex - 1);
     Pp2Context->Port.GmacBase = Mvpp2Shared->Base + MVPP22_GMAC_OFFSET +
                                 MVPP22_GMAC_REG_SIZE * Pp2Context->Port.GopIndex;
     Pp2Context->Port.XlgBase = Mvpp2Shared->Base + MVPP22_XLG_OFFSET +
@@ -1343,6 +1355,12 @@ Pp2DxeInitialise (
     return EFI_INVALID_PARAMETER;
   }
 
+  /* Check amount of declared ports */
+  if (PcdGetSize (PcdPp2Port2Controller) > Desc->Pp2DevCount * MVPP2_MAX_PORT) {
+    DEBUG ((DEBUG_ERROR, "Pp2Dxe: Wrong too many ports declared\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
   /* Initialize enabled chips */
   for (Index = 0; Index < PcdGetSize (PcdPp2Controllers); Index++) {
     if (!MVHW_DEV_ENABLED (Pp2, Index)) {
@@ -1358,6 +1376,7 @@ Pp2DxeInitialise (
     }
 
     Status = Pp2DxeInitialiseController (
+                    Index,
                     Mvpp2Shared,
                     Desc->Pp2BaseAddresses[Index],
                     Desc->Pp2ClockFrequency[Index]
