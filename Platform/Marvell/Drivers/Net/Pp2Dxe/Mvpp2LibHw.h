@@ -965,7 +965,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MVPP2_RXQ_TOTAL_NUM                               (MVPP2_MAX_PORTS * MVPP2_MAX_RXQ)
 
 /* Max number of Rx descriptors */
-#define MVPP2_MAX_RXD                                     32
+#define MVPP2_MAX_RXD                                     64
 
 /* Max number of Tx descriptors */
 #define MVPP2_MAX_TXD                                     32

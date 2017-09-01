@@ -138,7 +138,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MVPP2_BM_SWF_LONG_POOL(Port)       ((Port > 2) ? 2 : Port)
 #define MVPP2_BM_SWF_SHORT_POOL            3
 #define MVPP2_BM_POOL                      0
-#define MVPP2_BM_SIZE                      32
+#define MVPP2_BM_SIZE                      64
 
 /*
  * BM short pool packet Size
