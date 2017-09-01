@@ -1141,10 +1141,6 @@ Pp2DxeParsePortPcd (
   Pp2Context->Port.PhyInterface = PhyConnectionTypes[Pp2Context->Instance];
   Pp2Context->Port.AlwaysUp = AlwaysUp[Pp2Context->Instance];
   Pp2Context->Port.Speed = Speed[Pp2Context->Instance];
-  Pp2Context->Port.GmacBase = PcdGet64 (PcdPp2GmacBaseAddress) +
-                              PcdGet32 (PcdPp2GmacDevSize) * Pp2Context->Port.GopIndex;
-  Pp2Context->Port.XlgBase = PcdGet64 (PcdPp2XlgBaseAddress) +
-                             PcdGet32 (PcdPp2XlgDevSize) * Pp2Context->Port.GopIndex;
 }
 
 EFI_STATUS
@@ -1174,8 +1170,8 @@ Pp2DxeInitialise (
   }
 
   Mvpp2Shared->Base = PcdGet64 (PcdPp2SharedAddress);
-  Mvpp2Shared->Rfu1Base = PcdGet64 (PcdPp2Rfu1BaseAddress);
-  Mvpp2Shared->SmiBase = PcdGet64 (PcdPp2SmiBaseAddress);
+  Mvpp2Shared->Rfu1Base = Mvpp2Shared->Base + MVPP22_RFU1_OFFSET;
+  Mvpp2Shared->SmiBase = Mvpp2Shared->Base + MVPP22_SMI_OFFSET;
   Mvpp2Shared->Tclk = PcdGet32 (PcdPp2ClockFrequency);
 
   /* Prepare buffers */
@@ -1259,6 +1255,10 @@ Pp2DxeInitialise (
     Pp2Context->Port.TxpNum = 1;
     Pp2Context->Port.Priv = Mvpp2Shared;
     Pp2Context->Port.FirstRxq = 4 * Pp2Context->Instance;
+    Pp2Context->Port.GmacBase = Mvpp2Shared->Base + MVPP22_GMAC_OFFSET +
+                                MVPP22_GMAC_REG_SIZE * Pp2Context->Port.GopIndex;
+    Pp2Context->Port.XlgBase = Mvpp2Shared->Base + MVPP22_XLG_OFFSET +
+                               MVPP22_XLG_REG_SIZE * Pp2Context->Port.GopIndex;
 
     /* Gather accumulated configuration data of all ports' MAC's */
     NetCompConfig |= MvpPp2xGop110NetcCfgCreate(&Pp2Context->Port);

@@ -39,6 +39,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define BIT(nr)         (1 << (nr))
 #endif
 
+/* PP2v2 registers offsets */
+#define MVPP22_SMI_OFFSET                                  0x12a200
+#define MVPP22_MPCS_OFFSET                                 0x130000
+#define MVPP22_XPCS_OFFSET                                 0x130400
+#define MVPP22_GMAC_OFFSET                                 0x130e00
+#define MVPP22_GMAC_REG_SIZE                               0x1000
+#define MVPP22_XLG_OFFSET                                  0x130f00
+#define MVPP22_XLG_REG_SIZE                                0x1000
+#define MVPP22_RFU1_OFFSET                                 0x441000
+
 /* RX Fifo Registers */
 #define MVPP2_RX_DATA_FIFO_SIZE_REG(port)                 (0x00 + 4 * (port))
 #define MVPP2_RX_ATTR_FIFO_SIZE_REG(port)                 (0x20 + 4 * (port))

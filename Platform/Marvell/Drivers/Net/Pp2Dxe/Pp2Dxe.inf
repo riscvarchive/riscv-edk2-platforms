@@ -74,18 +74,12 @@
   gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
   gMarvellTokenSpaceGuid.PcdPhySmiAddresses
   gMarvellTokenSpaceGuid.PcdPp2ClockFrequency
-  gMarvellTokenSpaceGuid.PcdPp2GmacBaseAddress
-  gMarvellTokenSpaceGuid.PcdPp2GmacDevSize
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
   gMarvellTokenSpaceGuid.PcdPp2NumPorts
   gMarvellTokenSpaceGuid.PcdPp2PortIds
-  gMarvellTokenSpaceGuid.PcdPp2Rfu1BaseAddress
   gMarvellTokenSpaceGuid.PcdPp2SharedAddress
-  gMarvellTokenSpaceGuid.PcdPp2SmiBaseAddress
-  gMarvellTokenSpaceGuid.PcdPp2XlgBaseAddress
-  gMarvellTokenSpaceGuid.PcdPp2XlgDevSize
 
 [Depex]
   TRUE

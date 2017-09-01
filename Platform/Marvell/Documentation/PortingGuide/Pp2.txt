@@ -34,26 +34,5 @@ PHY_SPEED (in Mbps) is defined as follows:
 Base address of shared register space of PP2:
   gMarvellTokenSpaceGuid.PcdPp2SharedAddress
 
-Spacing between consecutive GMAC register spaces:
-  gMarvellTokenSpaceGuid.PcdPp2GmacDevSize
-
-Base address of GMAC:
-  gMarvellTokenSpaceGuid.PcdPp2GmacBaseAddress
-
-Spacing between consecutive XLG register spaces:
-  gMarvellTokenSpaceGuid.PcdPp2XlgDevSize
-
-Base address of XLG:
-  gMarvellTokenSpaceGuid.PcdPp2XlgBaseAddress
-
-Base address of RFU1:
-  gMarvellTokenSpaceGuid.PcdPp2Rfu1BaseAddress
-
-Base address of SMI:
-  gMarvellTokenSpaceGuid.PcdPp2SmiBaseAddress
-
 TCLK frequency in Hz:
   gMarvellTokenSpaceGuid.PcdPp2ClockFrequency
-
-GMAC and XLG addresses are computed as follows:
-  address = base_address + dev_size * gop_index

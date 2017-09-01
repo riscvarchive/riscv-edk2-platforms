@@ -170,18 +170,12 @@
 #NET
   gMarvellTokenSpaceGuid.PcdPhySmiAddresses|{ 0x0 }|VOID*|0x3000024
   gMarvellTokenSpaceGuid.PcdPp2ClockFrequency|0|UINT32|0x3000026
-  gMarvellTokenSpaceGuid.PcdPp2GmacBaseAddress|0|UINT64|0x3000027
-  gMarvellTokenSpaceGuid.PcdPp2GmacDevSize|0|UINT32|0x3000028
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes|{ 0x0 }|VOID*|0x3000029
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp|{ 0x0 }|VOID*|0x300002A
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed|{ 0x0 }|VOID*|0x300002B
   gMarvellTokenSpaceGuid.PcdPp2NumPorts|0|UINT32|0x300002D
   gMarvellTokenSpaceGuid.PcdPp2PortIds|{ 0x0 }|VOID*|0x300002C
-  gMarvellTokenSpaceGuid.PcdPp2Rfu1BaseAddress|0|UINT64|0x300002E
   gMarvellTokenSpaceGuid.PcdPp2SharedAddress|0|UINT64|0x300002F
-  gMarvellTokenSpaceGuid.PcdPp2SmiBaseAddress|0|UINT64|0x3000030
-  gMarvellTokenSpaceGuid.PcdPp2XlgBaseAddress|0|UINT64|0x3000031
-  gMarvellTokenSpaceGuid.PcdPp2XlgDevSize|0|UINT32|0x3000032
 
 #PciEmulation
   gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x0 }|VOID*|0x3000033
