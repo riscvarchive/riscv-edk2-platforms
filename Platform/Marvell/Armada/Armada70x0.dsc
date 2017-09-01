@@ -118,13 +118,12 @@
 
   #NET
   gMarvellTokenSpaceGuid.PcdPhySmiAddresses|{ 0xff, 0x0, 0x1 }
-  gMarvellTokenSpaceGuid.PcdPp2ClockFrequency|333333333
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes|{ 0x0, 0x2, 0x3 }
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp|{ 0x0, 0x0, 0x0 }
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed|{ 0x5, 0x3, 0x3 }
   gMarvellTokenSpaceGuid.PcdPp2NumPorts|3
   gMarvellTokenSpaceGuid.PcdPp2PortIds|{ 0x0, 0x1, 0x2 }
-  gMarvellTokenSpaceGuid.PcdPp2SharedAddress|0xf2000000
+  gMarvellTokenSpaceGuid.PcdPp2Controllers|{ 0x1 }
 
   #PciEmulation
   gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x1, 0x1, 0x0, 0x0 }

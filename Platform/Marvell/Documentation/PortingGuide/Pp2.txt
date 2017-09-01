@@ -3,6 +3,9 @@ Pp2Dxe porting guide
 Pp2Dxe is driver supporting PP2 NIC on Marvell platforms. Following PCDs
 are required to operate:
 
+Array with used controllers - Set to 0x1 for enabled, 0x0 for disabled:
+  gMarvellTokenSpaceGuid.PcdPp2Controllers
+
 Number of ports/network interfaces:
   gMarvellTokenSpaceGuid.PcdPp2NumPorts
 
@@ -30,9 +33,3 @@ PHY_SPEED (in Mbps) is defined as follows:
   4  SPEED_2500,
   5  SPEED_10000
   } PHY_SPEED;
-
-Base address of shared register space of PP2:
-  gMarvellTokenSpaceGuid.PcdPp2SharedAddress
-
-TCLK frequency in Hz:
-  gMarvellTokenSpaceGuid.PcdPp2ClockFrequency

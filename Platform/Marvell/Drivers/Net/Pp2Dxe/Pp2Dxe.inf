@@ -73,13 +73,12 @@
 [Pcd]
   gMarvellTokenSpaceGuid.PcdPhyConnectionTypes
   gMarvellTokenSpaceGuid.PcdPhySmiAddresses
-  gMarvellTokenSpaceGuid.PcdPp2ClockFrequency
+  gMarvellTokenSpaceGuid.PcdPp2Controllers
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed
   gMarvellTokenSpaceGuid.PcdPp2NumPorts
   gMarvellTokenSpaceGuid.PcdPp2PortIds
-  gMarvellTokenSpaceGuid.PcdPp2SharedAddress
 
 [Depex]
   TRUE

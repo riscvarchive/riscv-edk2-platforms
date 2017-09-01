@@ -262,6 +262,14 @@ typedef struct {
 
 typedef struct Pp2DxePort PP2DXE_PORT;
 
+/* Structure for preallocation for buffer */
+typedef struct {
+  MVPP2_TX_DESC *TxDescs[MVPP2_MAX_PORT];
+  MVPP2_TX_DESC *AggrTxDescs;
+  MVPP2_RX_DESC *RxDescs[MVPP2_MAX_PORT];
+  DmaAddrT RxBuffers[MVPP2_MAX_PORT];
+} BUFFER_LOCATION;
+
 /* Shared Packet Processor resources */
 typedef struct {
   /* Shared registers' base addresses */
@@ -270,6 +278,9 @@ typedef struct {
   UINT64 Rfu1Base;
   UINT64 SmiBase;
   UINT64 XpcsBase;
+
+  /* Preallocated buffers */
+  BUFFER_LOCATION BufferLocation;
 
   /* List of pointers to Port structures */
   PP2DXE_PORT **PortList;
@@ -329,14 +340,6 @@ struct Pp2DxePort {
   /* Index of first Port's physical RXQ */
   UINT8 FirstRxq;
 };
-
-/* Structure for preallocation for buffer */
-typedef struct {
-  MVPP2_TX_DESC *TxDescs[MVPP2_MAX_PORT];
-  MVPP2_TX_DESC *AggrTxDescs;
-  MVPP2_RX_DESC *RxDescs[MVPP2_MAX_PORT];
-  DmaAddrT RxBuffers[MVPP2_MAX_PORT];
-} BUFFER_LOCATION;
 
 typedef struct {
   MAC_ADDR_DEVICE_PATH      Pp2Mac;

@@ -42,6 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/MvHwDescLib.h>
 #include <Library/NetLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -53,8 +54,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define ReturnUnlock(tpl, status) do { gBS->RestoreTPL (tpl); return (status); } while(0)
 
-STATIC MVPP2_SHARED *Mvpp2Shared;
-STATIC BUFFER_LOCATION BufferLocation;
+DECLARE_A7K8K_PP2_TEMPLATE;
+
 STATIC PP2_DEVICE_PATH Pp2DevicePathTemplate = {
   {
     {
@@ -172,7 +173,7 @@ QueueRemove (
 STATIC
 EFI_STATUS
 Pp2DxeBmPoolInit (
-  VOID
+  MVPP2_SHARED *Mvpp2Shared
   )
 {
   INTN          Index;
@@ -233,7 +234,7 @@ FreePools:
 STATIC
 EFI_STATUS
 Pp2DxeBmStart (
-  VOID
+  MVPP2_SHARED *Mvpp2Shared
   )
 {
   UINT8 *Buff, *BuffPhys;
@@ -247,7 +248,7 @@ Pp2DxeBmStart (
 
     /* Fill BM pool with Buffers */
     for (Index = 0; Index < MVPP2_BM_SIZE; Index++) {
-      Buff = (UINT8 *)(BufferLocation.RxBuffers[Pool] + (Index * RX_BUFFER_SIZE));
+      Buff = (UINT8 *)(Mvpp2Shared->BufferLocation.RxBuffers[Pool] + (Index * RX_BUFFER_SIZE));
       if (Buff == NULL) {
         return EFI_OUT_OF_RESOURCES;
       }
@@ -342,6 +343,7 @@ Pp2DxeSetupAggrTxqs (
   )
 {
   MVPP2_TX_QUEUE *AggrTxq;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
 
   AggrTxq = Mvpp2Shared->AggrTxqs;
   AggrTxq->DescsPhys = (DmaAddrT)AggrTxq->Descs;
@@ -361,6 +363,7 @@ Pp2DxeOpen (
   )
 {
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   UINT8 MacBcast[NET_ETHER_ADDR_LEN] = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff };
   UINT8 DevAddr[NET_ETHER_ADDR_LEN];
   INTN Ret;
@@ -412,6 +415,7 @@ Pp2DxeLatePortInitialize (
   )
 {
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   INTN Queue;
 
   Port->TxRingSize = MVPP2_MAX_TXD;
@@ -428,7 +432,7 @@ Pp2DxeLatePortInitialize (
   }
 
   /* Use preallocated area */
-  Port->Txqs[0].Descs = BufferLocation.TxDescs[Port->Id];
+  Port->Txqs[0].Descs = Mvpp2Shared->BufferLocation.TxDescs[Port->Id];
 
   for (Queue = 0; Queue < TxqNumber; Queue++) {
     MVPP2_TX_QUEUE *Txq = &Port->Txqs[Queue];
@@ -444,7 +448,7 @@ Pp2DxeLatePortInitialize (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  Port->Rxqs[0].Descs = BufferLocation.RxDescs[Port->Id];
+  Port->Rxqs[0].Descs = Mvpp2Shared->BufferLocation.RxDescs[Port->Id];
 
   for (Queue = 0; Queue < TxqNumber; Queue++) {
     MVPP2_RX_QUEUE *Rxq = &Port->Rxqs[Queue];
@@ -666,6 +670,7 @@ Pp2DxeHalt (
 {
   PP2DXE_CONTEXT *Pp2Context = Context;
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   STATIC BOOLEAN CommonPartHalted = FALSE;
   INTN Index;
 
@@ -737,6 +742,7 @@ Pp2SnpStationAddress (
   PP2DXE_CONTEXT *Pp2Context = INSTANCE_FROM_SNP(Snp);
   PP2_DEVICE_PATH *Pp2DevicePath = Pp2Context->DevicePath;
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   UINT32 State = Snp->Mode->State;
   EFI_TPL SavedTpl;
   INTN Ret;
@@ -877,6 +883,7 @@ Pp2SnpTransmit (
 {
   PP2DXE_CONTEXT *Pp2Context = INSTANCE_FROM_SNP(This);
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   MVPP2_TX_QUEUE *AggrTxq = Mvpp2Shared->AggrTxqs;
   MVPP2_TX_DESC *TxDesc;
   EFI_STATUS Status;
@@ -1002,6 +1009,7 @@ Pp2SnpReceive (
   INTN ReceivedPackets;
   PP2DXE_CONTEXT *Pp2Context = INSTANCE_FROM_SNP(This);
   PP2DXE_PORT *Port = &Pp2Context->Port;
+  MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
   UINTN PhysAddr, VirtAddr;
   EFI_STATUS Status = EFI_SUCCESS;
   EFI_TPL SavedTpl;
@@ -1160,11 +1168,12 @@ Pp2DxeParsePortPcd (
   Pp2Context->Port.Speed = Speed[Pp2Context->Instance];
 }
 
+STATIC
 EFI_STATUS
-EFIAPI
-Pp2DxeInitialise (
-  IN EFI_HANDLE ImageHandle,
-  IN EFI_SYSTEM_TABLE *SystemTable
+Pp2DxeInitialiseController (
+  IN MVPP2_SHARED *Mvpp2Shared,
+  IN UINTN BaseAddress,
+  IN UINTN ClockFrequency
   )
 {
   PP2DXE_CONTEXT *Pp2Context = NULL;
@@ -1179,19 +1188,12 @@ Pp2DxeInitialise (
     return EFI_INVALID_PARAMETER;
   }
 
-  /* Initialize private data */
-  Mvpp2Shared = AllocateZeroPool (sizeof (MVPP2_SHARED));
-  if (Mvpp2Shared == NULL) {
-    DEBUG((DEBUG_ERROR, "Allocation fail.\n"));
-    return EFI_OUT_OF_RESOURCES;
-  }
-
-  Mvpp2Shared->Base = PcdGet64 (PcdPp2SharedAddress);
+  Mvpp2Shared->Base = BaseAddress;
   Mvpp2Shared->Rfu1Base = Mvpp2Shared->Base + MVPP22_RFU1_OFFSET;
   Mvpp2Shared->XpcsBase = Mvpp2Shared->Base + MVPP22_XPCS_OFFSET;
   Mvpp2Shared->MpcsBase = Mvpp2Shared->Base + MVPP22_MPCS_OFFSET;
   Mvpp2Shared->SmiBase = Mvpp2Shared->Base + MVPP22_SMI_OFFSET;
-  Mvpp2Shared->Tclk = PcdGet32 (PcdPp2ClockFrequency);
+  Mvpp2Shared->Tclk = ClockFrequency;
 
   /* Prepare buffers */
   Status = DmaAllocateAlignedBuffer (EfiBootServicesData,
@@ -1206,21 +1208,21 @@ Pp2DxeInitialise (
   ZeroMem (BufferSpace, BD_SPACE);
 
   for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
-    BufferLocation.TxDescs[Index] = (MVPP2_TX_DESC *)
+    Mvpp2Shared->BufferLocation.TxDescs[Index] = (MVPP2_TX_DESC *)
       (BufferSpace + Index * MVPP2_MAX_TXD * sizeof(MVPP2_TX_DESC));
   }
 
-  BufferLocation.AggrTxDescs = (MVPP2_TX_DESC *)
+  Mvpp2Shared->BufferLocation.AggrTxDescs = (MVPP2_TX_DESC *)
     ((UINTN)BufferSpace + MVPP2_MAX_TXD * MVPP2_MAX_PORT * sizeof(MVPP2_TX_DESC));
 
   for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
-    BufferLocation.RxDescs[Index] = (MVPP2_RX_DESC *)
+    Mvpp2Shared->BufferLocation.RxDescs[Index] = (MVPP2_RX_DESC *)
       ((UINTN)BufferSpace + (MVPP2_MAX_TXD * MVPP2_MAX_PORT + MVPP2_AGGR_TXQ_SIZE) *
       sizeof(MVPP2_TX_DESC) + Index * MVPP2_MAX_RXD * sizeof(MVPP2_RX_DESC));
   }
 
   for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
-    BufferLocation.RxBuffers[Index] = (DmaAddrT)
+    Mvpp2Shared->BufferLocation.RxBuffers[Index] = (DmaAddrT)
       (BufferSpace + (MVPP2_MAX_TXD * MVPP2_MAX_PORT + MVPP2_AGGR_TXQ_SIZE) *
       sizeof(MVPP2_TX_DESC) + MVPP2_MAX_RXD * MVPP2_MAX_PORT * sizeof(MVPP2_RX_DESC) +
       Index * MVPP2_BM_SIZE * RX_BUFFER_SIZE);
@@ -1228,7 +1230,7 @@ Pp2DxeInitialise (
 
   /* Initialize HW */
   Mvpp2AxiConfig(Mvpp2Shared);
-  Pp2DxeBmPoolInit();
+  Pp2DxeBmPoolInit (Mvpp2Shared);
   Mvpp2RxFifoInit(Mvpp2Shared);
 
   Mvpp2Shared->PrsShadow = AllocateZeroPool (sizeof(MVPP2_PRS_SHADOW) * MVPP2_PRS_TCAM_SRAM_SIZE);
@@ -1245,7 +1247,7 @@ Pp2DxeInitialise (
 
   Mvpp2ClsInit(Mvpp2Shared);
 
-  Status = Pp2DxeBmStart();
+  Status = Pp2DxeBmStart (Mvpp2Shared);
   if (EFI_ERROR(Status)) {
     DEBUG((DEBUG_ERROR, "Pp2Dxe: BM start error\n"));
     return Status;
@@ -1258,7 +1260,7 @@ Pp2DxeInitialise (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  Mvpp2Shared->AggrTxqs->Descs = BufferLocation.AggrTxDescs;
+  Mvpp2Shared->AggrTxqs->Descs = Mvpp2Shared->BufferLocation.AggrTxDescs;
   Mvpp2Shared->AggrTxqs->Id = 0;
   Mvpp2Shared->AggrTxqs->LogId = 0;
   Mvpp2Shared->AggrTxqs->Size = MVPP2_AGGR_TXQ_SIZE;
@@ -1313,6 +1315,59 @@ Pp2DxeInitialise (
 
   MvGop110NetcInit(&Pp2Context->Port, NetCompConfig, MV_NETC_FIRST_PHASE);
   MvGop110NetcInit(&Pp2Context->Port, NetCompConfig, MV_NETC_SECOND_PHASE);
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
+Pp2DxeInitialise (
+  IN EFI_HANDLE ImageHandle,
+  IN EFI_SYSTEM_TABLE *SystemTable
+  )
+{
+  MVHW_PP2_DESC *Desc = &mA7k8kPp2DescTemplate;
+  UINT8 *Pp2DeviceTable, Index;
+  MVPP2_SHARED *Mvpp2Shared;
+  EFI_STATUS Status;
+
+  /* Obtain table with enabled Pp2 devices */
+  Pp2DeviceTable = (UINT8 *)PcdGetPtr (PcdPp2Controllers);
+  if (Pp2DeviceTable == NULL) {
+    DEBUG ((DEBUG_ERROR, "Missing PcdPp2Controllers\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  if (PcdGetSize (PcdPp2Controllers) > MVHW_MAX_PP2_DEVS) {
+    DEBUG ((DEBUG_ERROR, "Wrong PcdPp2Controllers format\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  /* Initialize enabled chips */
+  for (Index = 0; Index < PcdGetSize (PcdPp2Controllers); Index++) {
+    if (!MVHW_DEV_ENABLED (Pp2, Index)) {
+      DEBUG ((DEBUG_ERROR, "Skip Pp2 controller %d\n", Index));
+      continue;
+    }
+
+    /* Initialize private data */
+    Mvpp2Shared = AllocateZeroPool (sizeof (MVPP2_SHARED));
+    if (Mvpp2Shared == NULL) {
+      DEBUG ((DEBUG_ERROR, "Pp2Dxe #%d: Mvpp2Shared allocation fail\n", Index));
+      return EFI_OUT_OF_RESOURCES;
+    }
+
+    Status = Pp2DxeInitialiseController (
+                    Mvpp2Shared,
+                    Desc->Pp2BaseAddresses[Index],
+                    Desc->Pp2ClockFrequency[Index]
+                    );
+    if (EFI_ERROR(Status)) {
+      FreePool (Mvpp2Shared);
+      DEBUG ((DEBUG_ERROR, "Pp2Dxe #%d: Controller initialisation fail\n", Index));
+      return Status;
+    }
+  }
 
   return EFI_SUCCESS;
 }

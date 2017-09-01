@@ -169,13 +169,12 @@
 
 #NET
   gMarvellTokenSpaceGuid.PcdPhySmiAddresses|{ 0x0 }|VOID*|0x3000024
-  gMarvellTokenSpaceGuid.PcdPp2ClockFrequency|0|UINT32|0x3000026
+  gMarvellTokenSpaceGuid.PcdPp2Controllers|{ 0x0 }|VOID*|0x3000028
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes|{ 0x0 }|VOID*|0x3000029
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp|{ 0x0 }|VOID*|0x300002A
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed|{ 0x0 }|VOID*|0x300002B
   gMarvellTokenSpaceGuid.PcdPp2NumPorts|0|UINT32|0x300002D
   gMarvellTokenSpaceGuid.PcdPp2PortIds|{ 0x0 }|VOID*|0x300002C
-  gMarvellTokenSpaceGuid.PcdPp2SharedAddress|0|UINT64|0x300002F
 
 #PciEmulation
   gMarvellTokenSpaceGuid.PcdPciEXhci|{ 0x0 }|VOID*|0x3000033
