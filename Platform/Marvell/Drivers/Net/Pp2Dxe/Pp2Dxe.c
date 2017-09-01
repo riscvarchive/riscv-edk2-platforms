@@ -1171,6 +1171,8 @@ Pp2DxeInitialise (
 
   Mvpp2Shared->Base = PcdGet64 (PcdPp2SharedAddress);
   Mvpp2Shared->Rfu1Base = Mvpp2Shared->Base + MVPP22_RFU1_OFFSET;
+  Mvpp2Shared->XpcsBase = Mvpp2Shared->Base + MVPP22_XPCS_OFFSET;
+  Mvpp2Shared->MpcsBase = Mvpp2Shared->Base + MVPP22_MPCS_OFFSET;
   Mvpp2Shared->SmiBase = Mvpp2Shared->Base + MVPP22_SMI_OFFSET;
   Mvpp2Shared->Tclk = PcdGet32 (PcdPp2ClockFrequency);
 

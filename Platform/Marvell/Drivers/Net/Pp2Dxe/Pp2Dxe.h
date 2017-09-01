@@ -116,6 +116,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MV_MODE_RGMII                       PHY_CONNECTION_RGMII
 #define MV_MODE_XAUI                        PHY_CONNECTION_XAUI
 #define MV_MODE_RXAUI                       PHY_CONNECTION_RXAUI
+#define MV_MODE_SFI                         PHY_CONNECTION_SFI
 #define MV_MODE_QSGMII                      100
 #define PP2DXE_MAX_PHY                      2
 
@@ -263,9 +264,10 @@ typedef struct Pp2DxePort PP2DXE_PORT;
 typedef struct {
   /* Shared registers' base addresses */
   UINT64 Base;
+  UINT64 MpcsBase;
   UINT64 Rfu1Base;
   UINT64 SmiBase;
-  VOID *LmsBase;
+  UINT64 XpcsBase;
 
   /* List of pointers to Port structures */
   PP2DXE_PORT **PortList;
