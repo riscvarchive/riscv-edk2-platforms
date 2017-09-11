@@ -39,6 +39,7 @@
   DebugLib
   MemoryAllocationLib
   PeiServicesLib
+  PeiServicesTablePointerLib
 
 [FeaturePcd]
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob
@@ -62,7 +63,8 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase
 
 [Ppis]
+  gPeiCapsulePpiGuid                    ## CONSUMES
   gSynQuacerDramInfoPpiGuid             ## CONSUMES
 
 [Depex]
-  gSynQuacerDramInfoPpiGuid
+  gPeiCapsulePpiGuid AND gSynQuacerDramInfoPpiGuid

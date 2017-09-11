@@ -22,10 +22,12 @@
 #include <Library/HobLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PeiServicesLib.h>
+#include <Library/PeiServicesTablePointerLib.h>
 
 #include <Platform/MemoryMap.h>
 #include <Platform/Pcie.h>
 
+#include <Ppi/Capsule.h>
 #include <Ppi/DramInfo.h>
 
 #define ARM_MEMORY_REGION(Base, Size) \
@@ -177,6 +179,11 @@ MemoryPeim (
 {
   EFI_STATUS                    Status;
   ARM_MEMORY_REGION_DESCRIPTOR  *VirtualMemoryTable;
+  EFI_PEI_SERVICES              **PeiServices;
+  PEI_CAPSULE_PPI               *Capsule;
+  VOID                          *CapsuleBuffer;
+  UINTN                         CapsuleBufferLength;
+  BOOLEAN                       HaveCapsule;
 
   Status = DeclareDram (&VirtualMemoryTable);
   ASSERT_EFI_ERROR (Status);
@@ -184,10 +191,55 @@ MemoryPeim (
     return Status;
   }
 
+  PeiServices = (EFI_PEI_SERVICES **) GetPeiServicesTablePointer ();
+  ASSERT (PeiServices != NULL);
+
+  Status = PeiServicesLocatePpi (&gPeiCapsulePpiGuid, 0, NULL,
+             (VOID **)&Capsule);
+  ASSERT_EFI_ERROR (Status);
+
+  //
+  // Check for persistent capsules
+  //
+  HaveCapsule = FALSE;
+  Status = Capsule->CheckCapsuleUpdate (PeiServices);
+  if (!EFI_ERROR (Status)) {
+
+    //
+    // Coalesce the capsule into unused memory. CreateState() below will copy
+    // it to a properly allocated buffer.
+    //
+    CapsuleBuffer = (VOID *)PcdGet64 (PcdSystemMemoryBase);
+    CapsuleBufferLength = UefiMemoryBase - PcdGet64 (PcdSystemMemoryBase);
+
+    PeiServicesSetBootMode (BOOT_ON_FLASH_UPDATE);
+
+    Status = Capsule->Coalesce (PeiServices, &CapsuleBuffer,
+                           &CapsuleBufferLength);
+    if (!EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_INFO, "%a: Coalesced capsule @ %p (0x%lx)\n",
+        __FUNCTION__, CapsuleBuffer, CapsuleBufferLength));
+      HaveCapsule = TRUE;
+    } else {
+      DEBUG ((DEBUG_WARN, "%a: failed to coalesce() capsule (Status == %r)\n",
+        __FUNCTION__, Status));
+    }
+  }
+
   Status = ArmConfigureMmu (VirtualMemoryTable, NULL, NULL);
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
+  }
+
+  if (HaveCapsule) {
+    Status = Capsule->CreateState (PeiServices, CapsuleBuffer,
+                        CapsuleBufferLength);
+
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: Capsule->CreateState failed (Status == %r)\n",
+        __FUNCTION__, Status));
+    }
   }
 
   if (FeaturePcdGet (PcdPrePiProduceMemoryTypeInformationHob)) {
