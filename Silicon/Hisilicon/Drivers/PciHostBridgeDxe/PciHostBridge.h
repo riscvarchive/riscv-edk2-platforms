@@ -401,6 +401,9 @@ PreprocessController (
 #define EFI_RESOURCE_NONEXISTENT   0xFFFFFFFFFFFFFFFFULL
 #define EFI_RESOURCE_LESS          0xFFFFFFFFFFFFFFFEULL
 
+#define	INVALID_CAPABILITY_00       0x00
+#define	INVALID_CAPABILITY_FF       0xFF
+#define	PCI_CAPABILITY_POINTER_MASK 0xFC
 
 //
 // Driver Instance Data Prototypes
@@ -518,4 +521,8 @@ RootBridgeConstructor (
   IN UINT32                             Seg
   );
 
+VOID
+EnlargeAtuConfig0 (
+  IN EFI_PCI_HOST_BRIDGE_RESOURCE_ALLOCATION_PROTOCOL *This
+  );
 #endif
