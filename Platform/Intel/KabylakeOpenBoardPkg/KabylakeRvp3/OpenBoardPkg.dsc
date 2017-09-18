@@ -267,7 +267,7 @@
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
 !endif
 
-  IntelSiliconPkg/IntelVTdDxe/IntelVTdDxe.inf
+  IntelSiliconPkg/Feature/VTd/IntelVTdDxe/IntelVTdDxe.inf
 
   $(PLATFORM_SI_BIN_PACKAGE)/Microcode/MicrocodeUpdates.inf
   
