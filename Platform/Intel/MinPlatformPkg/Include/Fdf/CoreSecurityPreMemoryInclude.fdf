@@ -13,18 +13,6 @@
 #
 ##
 
-INF MdeModulePkg/Universal/PCD/Pei/Pcd.inf
-INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
-INF  MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf
-
-INF  UefiCpuPkg/CpuIoPei/CpuIoPei.inf
-
-INF  MdeModulePkg/Universal/PcatSingleSegmentPciCfg2Pei/PcatSingleSegmentPciCfg2Pei.inf
-INF  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
-INF  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
-
-INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
-
 !if gPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
 INF  SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf
 INF  SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf
