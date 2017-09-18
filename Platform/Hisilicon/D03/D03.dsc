@@ -170,7 +170,11 @@
   gHisiTokenSpaceGuid.PcdAlgSmmuBaseAddress|0xd0040000
 
 
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Hisilicon D03 UEFI 16.12 Release"
+  !ifdef $(FIRMWARE_VER)
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
+  !else
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build base on Hisilicon D03 UEFI 17.10 Release"
+  !endif
 
   gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"
 
