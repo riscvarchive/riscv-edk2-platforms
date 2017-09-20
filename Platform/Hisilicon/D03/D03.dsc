@@ -418,11 +418,6 @@
 
   Platform/Hisilicon/D03/Drivers/Ipmi/ipmiInterfaceDxe/IpmiInterfaceDxe.inf
 
-  #
-  #network
-  #
-  Platform/Hisilicon/D03/Drivers/Net/SnpPV660Dxe/SnpPV600Dxe.inf
-
   MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
   MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
   MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
