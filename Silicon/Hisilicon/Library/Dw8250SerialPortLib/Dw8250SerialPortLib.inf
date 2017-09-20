@@ -17,7 +17,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = Dw8250SerialPortLib
-  FILE_GUID                      = 16D53E86-7EA6-47bd-861F-511ED9B8ABE0
+  FILE_GUID                      = 78337705-D2A8-4EA7-9C18-27FC4A8A2C6E
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = SerialPortLib

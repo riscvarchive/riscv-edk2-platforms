@@ -16,7 +16,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = EarlyConfigPeim
-  FILE_GUID                      = A181AD33-E64A-4084-A54A-A69DF1FB0ABF
+  FILE_GUID                      = ECAE8400-9CCE-4BA5-9B44-74CAABE4DA79
   MODULE_TYPE                    = PEIM
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = EarlyConfigEntry

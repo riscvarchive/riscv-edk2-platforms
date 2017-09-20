@@ -17,7 +17,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = PcieInitDxe
-  FILE_GUID                      = 2D53A704-A544-4A82-83DF-FFECF4B4AA97
+  FILE_GUID                      = 8EB6E216-BA47-4B30-B68A-2B371F7232A6
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = PcieInitEntry

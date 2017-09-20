@@ -16,7 +16,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = IoInitDxe
-  FILE_GUID                      = e99c606a-5626-11e5-b09e-bb93f4e4c400
+  FILE_GUID                      = 28C9B7DE-AAD6-4E9B-811B-050AD3DAB9A3
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
 

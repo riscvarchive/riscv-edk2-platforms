@@ -16,7 +16,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = I2CLibRuntime
-  FILE_GUID                      = FC5651CA-55D8-4fd2-B6D3-A284D993ABA2
+  FILE_GUID                      = 2E602B32-9203-44A4-BF28-1FF98BD89523
   MODULE_TYPE                    = DXE_RUNTIME_DRIVER
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = I2CLib

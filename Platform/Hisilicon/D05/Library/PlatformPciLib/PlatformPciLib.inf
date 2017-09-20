@@ -16,7 +16,7 @@
 [Defines]
   INF_VERSION                    = 0x00010019
   BASE_NAME                      = PlatformPciLib
-  FILE_GUID                      = 61b7276a-fc67-11e5-82fd-47ea9896dd5d
+  FILE_GUID                      = B94B8A3A-AD7D-4F26-B140-1E699682176B
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
 

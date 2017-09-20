@@ -20,7 +20,7 @@
 [Defines]
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = DS3231RealTimeClockLib
-  FILE_GUID                      = 470DFB96-E205-4515-A75E-2E60F853E79D
+  FILE_GUID                      = 5FD8127D-11E1-488F-8CF1-A143157D6BF0
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = RealTimeClockLib
