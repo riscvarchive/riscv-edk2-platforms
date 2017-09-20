@@ -247,7 +247,8 @@ READ_LOCK_STATUS   = TRUE
   #Network
   #
 
-  INF Platform/Hisilicon/D05/Drivers/Net/SnpPV660Dxe/SnpPV600Dxe.inf
+  INF Platform/Hisilicon/D05/Drivers/Net/SnpPlatform/SnpPlatform.inf
+  INF Platform/Hisilicon/D05/Drivers/Net/SnpPV600Dxe/SnpPV600Dxe.inf
 
   INF MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
   INF MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
@@ -292,6 +293,7 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Platform/Hisilicon/D05/Drivers/Sm750Dxe/UefiSmi.inf
   INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+  INF Platform/Hisilicon/D05/Drivers/SasPlatform/SasPlatform.inf
   INF Platform/Hisilicon/D05/Drivers/Sas/SasDxeDriver.inf
 
   #
