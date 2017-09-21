@@ -2301,8 +2301,19 @@ RootBridgeIoConfiguration (
   PrivateData = DRIVER_INSTANCE_FROM_PCI_ROOT_BRIDGE_IO_THIS (This);
   for (Index = 0; Index < TypeMax; Index++) {
     if (PrivateData->ResAllocNode[Index].Status == ResAllocated) {
-      Configuration.SpaceDesp[Index].AddrRangeMin = PrivateData->ResAllocNode[Index].Base;
-      Configuration.SpaceDesp[Index].AddrRangeMax = PrivateData->ResAllocNode[Index].Base + PrivateData->ResAllocNode[Index].Length - 1;
+      switch (Index) {
+      case TypeIo:
+        Configuration.SpaceDesp[Index].AddrRangeMin = PrivateData->IoBase;
+        break;
+      case TypeBus:
+        Configuration.SpaceDesp[Index].AddrRangeMin = PrivateData->ResAllocNode[Index].Base;
+        break;
+      default:
+      /* PCIE Device bar address should be base on PciRegionBase */
+      Configuration.SpaceDesp[Index].AddrRangeMin = PrivateData->ResAllocNode[Index].Base - PrivateData->MemBase +
+                                                    PrivateData->PciRegionBase;
+      }
+      Configuration.SpaceDesp[Index].AddrRangeMax = Configuration.SpaceDesp[Index].AddrRangeMin + PrivateData->ResAllocNode[Index].Length - 1;
       Configuration.SpaceDesp[Index].AddrLen      = PrivateData->ResAllocNode[Index].Length;
     }
   }

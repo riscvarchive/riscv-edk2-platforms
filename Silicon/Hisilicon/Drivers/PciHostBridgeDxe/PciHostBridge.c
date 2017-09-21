@@ -1410,9 +1410,8 @@ SetResource(
         Ptr->ResType = 1;
         Ptr->GenFlag = 0;
         Ptr->SpecificFlag = 0;
-        /* This is PCIE Device Bus which start address is the low 32bit of mem base*/
-        Ptr->AddrRangeMin = (RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase) +
-                            (RootBridgeInstance->MemBase & 0xFFFFFFFF);
+        /* PCIE Device Iobar address should be based on IoBase */
+        Ptr->AddrRangeMin = RootBridgeInstance->IoBase;
         Ptr->AddrRangeMax = 0;
         Ptr->AddrTranslationOffset = \
              (ResStatus == ResAllocated) ? EFI_RESOURCE_SATISFIED : EFI_RESOURCE_LESS;
@@ -1429,9 +1428,13 @@ SetResource(
         Ptr->GenFlag = 0;
         Ptr->SpecificFlag = 0;
         Ptr->AddrSpaceGranularity = 32;
-        /* This is PCIE Device Bus which start address is the low 32bit of mem base*/
-        Ptr->AddrRangeMin = (RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase) +
-                             (RootBridgeInstance->MemBase & 0xFFFFFFFF);
+        /* PCIE device Bar should be based on PciRegionBase */
+        if (RootBridgeInstance->PciRegionBase > MAX_UINT32) {
+          DEBUG((DEBUG_ERROR, "PCIE Res(TypeMem32) unsupported.\n"));
+          return EFI_UNSUPPORTED;
+        }
+        Ptr->AddrRangeMin = RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase +
+                            RootBridgeInstance->PciRegionBase;
         Ptr->AddrRangeMax = 0;
         Ptr->AddrTranslationOffset = \
              (ResStatus == ResAllocated) ? EFI_RESOURCE_SATISFIED : EFI_RESOURCE_LESS;
@@ -1448,9 +1451,13 @@ SetResource(
         Ptr->GenFlag = 0;
         Ptr->SpecificFlag = 6;
         Ptr->AddrSpaceGranularity = 32;
-        /* This is PCIE Device Bus which start address is the low 32bit of mem base*/
-        Ptr->AddrRangeMin = (RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase) +
-                             (RootBridgeInstance->MemBase & 0xFFFFFFFF);
+        /* PCIE device Bar should be based on PciRegionBase */
+        if (RootBridgeInstance->PciRegionBase > MAX_UINT32) {
+          DEBUG((DEBUG_ERROR, "PCIE Res(TypePMem32) unsupported.\n"));
+          return EFI_UNSUPPORTED;
+        }
+        Ptr->AddrRangeMin = RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase +
+                            RootBridgeInstance->PciRegionBase;
         Ptr->AddrRangeMax = 0;
         Ptr->AddrTranslationOffset = \
              (ResStatus == ResAllocated) ? EFI_RESOURCE_SATISFIED : EFI_RESOURCE_LESS;
@@ -1467,9 +1474,9 @@ SetResource(
         Ptr->GenFlag = 0;
         Ptr->SpecificFlag = 0;
         Ptr->AddrSpaceGranularity = 64;
-        /* This is PCIE Device Bus which start address is the low 32bit of mem base*/
-        Ptr->AddrRangeMin = (RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase) +
-                             (RootBridgeInstance->MemBase & 0xFFFFFFFFFFFFFFFF);
+        /* PCIE device Bar should be based on PciRegionBase */
+        Ptr->AddrRangeMin = RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase +
+                            RootBridgeInstance->PciRegionBase;
         Ptr->AddrRangeMax = 0;
         Ptr->AddrTranslationOffset = \
              (ResStatus == ResAllocated) ? EFI_RESOURCE_SATISFIED : EFI_RESOURCE_LESS;
@@ -1486,9 +1493,9 @@ SetResource(
         Ptr->GenFlag = 0;
         Ptr->SpecificFlag = 6;
         Ptr->AddrSpaceGranularity = 64;
-        /* This is PCIE Device Bus which start address is the low 32bit of mem base*/
-        Ptr->AddrRangeMin = (RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase) +
-                             (RootBridgeInstance->MemBase & 0xFFFFFFFFFFFFFFFF);
+        /* PCIE device Bar should be based on PciRegionBase */
+        Ptr->AddrRangeMin = RootBridgeInstance->ResAllocNode[Index].Base - RootBridgeInstance->MemBase +
+                            RootBridgeInstance->PciRegionBase;
         Ptr->AddrRangeMax = 0;
         Ptr->AddrTranslationOffset = \
              (ResStatus == ResAllocated) ? EFI_RESOURCE_SATISFIED : EFI_RESOURCE_LESS;
