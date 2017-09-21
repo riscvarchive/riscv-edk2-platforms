@@ -50,7 +50,7 @@ del /f %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased*.fd
 cd %WORKSPACE%
 
 if exist %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc attrib -r %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc
-@call python %WORKSPACE_PLATFORM%\%PLATFORM_PACKAGE%\Tools\Fsp\RebaseAndPatchFspBinBaseAddress.py %WORKSPACE_PLATFORM%\%PLATFORM_BOARD_PACKAGE%\Include\Fdf\FlashMapInclude.fdf %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg Fsp.fd %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc 0x70
+@call python %WORKSPACE_PLATFORM%\%PLATFORM_PACKAGE%\Tools\Fsp\RebaseAndPatchFspBinBaseAddress.py %WORKSPACE_PLATFORM%\%PLATFORM_BOARD_PACKAGE%\Include\Fdf\FlashMapInclude.fdf %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg Fsp.fd %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc 0x0
 
 @if %ERRORLEVEL% NEQ 0 (
   @echo !!! ERROR:RebaseAndPatchFspBinBaseAddress failed!!!

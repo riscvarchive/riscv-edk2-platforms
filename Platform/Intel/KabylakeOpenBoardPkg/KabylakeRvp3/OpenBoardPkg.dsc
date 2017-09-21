@@ -58,12 +58,6 @@
   #
   DEFINE BIOS_SIZE_OPTION = SIZE_70
 
-  DEFINE     TRACEHUB     =
-  EDK_GLOBAL TRACEHUB     =
-
-  DEFINE   COV_TOOLS                  = VS2008
-
-
 ################################################################################
 #
 # SKU Identification section - list of all SKU IDs supported by this
@@ -176,8 +170,19 @@
 
 [Components.IA32]
 
+#
+# Common
+#
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
 
+#
+# Silicon
+#
+!include $(PLATFORM_SI_PACKAGE)/SiPkgPei.dsc
+
+#
+# Platform
+#
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
@@ -186,6 +191,7 @@
       NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
 !endif
   }
+  IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
 
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
@@ -195,28 +201,37 @@
       NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPostMemLib.inf
 !endif
   }
-  
-  IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
+
   IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf
+
+#
+# Security
+#
 
 !if gPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
-#
-# Silicon Init Package
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgPei.dsc
+  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
+  IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
 
 [Components.X64]
 
+#
+# Common
+#
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
+  
+  ShellBinPkg/UefiShell/UefiShell.inf
 
 #
-# Silicon Init Package
+# Silicon
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgDxe.dsc
 
+#
+# Platform
+#
   $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf {
     <LibraryClasses>
@@ -225,7 +240,15 @@
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
 !endif
   }
+  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
 
+  $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
+  
+  $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
+
+#
+# OS Boot
+#
 !if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
   $(PLATFORM_PACKAGE)/Acpi/AcpiTables/AcpiPlatform.inf {
     <LibraryClasses>
@@ -256,12 +279,10 @@
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
 !endif
 
-  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
-  $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
-
+#
+# Security
+#
   $(PLATFORM_PACKAGE)/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
-  
-  $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
 
 !if gPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
@@ -269,9 +290,10 @@
 
   IntelSiliconPkg/Feature/VTd/IntelVTdDxe/IntelVTdDxe.inf
 
+#
+# Other
+#
   $(PLATFORM_SI_BIN_PACKAGE)/Microcode/MicrocodeUpdates.inf
-  
-  ShellBinPkg/UefiShell/UefiShell.inf
 
 !include $(PLATFORM_SI_PACKAGE)/SiPkgBuildOption.dsc
 !include OpenBoardPkgBuildOption.dsc

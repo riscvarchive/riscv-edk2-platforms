@@ -52,7 +52,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x5000
   gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxFvSupported|10
+  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxFvSupported|30
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxPeimPerFv|60
 
@@ -117,8 +117,8 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x80
   !endif
 
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFF7F000
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFF20000
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFE5F000
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFE00000
 
   ## Specifies max supported number of Logical Processors.
   # @Prompt Configure max supported number of Logical Processorss
@@ -190,7 +190,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 !endif
 
 [PcdsDynamicDefault]
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFCF0070
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFDA0000
 
 [PcdsDynamicDefault.common.DEFAULT]
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0x0
