@@ -120,6 +120,10 @@
   NULL|ArmPkg/Library/CompilerIntrinsicsLib/CompilerIntrinsicsLib.inf
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
+  BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
+  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLibCrypto.inf
+  IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
+
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
 
 [LibraryClasses.common.SEC]
@@ -157,7 +161,15 @@
   DtPlatformDtbLoaderLib|EmbeddedPkg/Library/DxeDtPlatformDtbLoaderLibDefault/DxeDtPlatformDtbLoaderLibDefault.inf
   SecurityManagementLib|MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.inf
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
+
+  #
+  # Firmware update
+  #
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibFmp/DxeCapsuleLib.inf
+  EdkiiSystemCapsuleLib|SignedCapsulePkg/Library/EdkiiSystemCapsuleLib/EdkiiSystemCapsuleLib.inf
+  FmpAuthenticationLib|SecurityPkg/Library/FmpAuthenticationLibPkcs7/FmpAuthenticationLibPkcs7.inf
+  PlatformFlashAccessLib|Silicon/Socionext/SynQuacer/Library/SynQuacerPlatformFlashAccessLib/SynQuacerPlatformFlashAccessLib.inf
+  IniParsingLib|SignedCapsulePkg/Library/IniParsingLib/IniParsingLib.inf
 
   #
   # PCI
@@ -575,3 +587,11 @@
   # DT support
   #
   Silicon/Socionext/SynQuacer/DeviceTree/SynQuacerEvalBoard.inf
+
+  #
+  # Firmware update
+  #
+  Platform/Socionext/SynQuacerEvalBoard/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
+  MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
+  SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
+  SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
