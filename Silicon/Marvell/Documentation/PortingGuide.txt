@@ -285,11 +285,6 @@ Following PCDs are available for configuration of spi driver:
   - gMarvellTokenSpaceGuid.PcdSpiMaxFrequency
 	(Max SCLK line frequency (in Hz) (max transfer frequency) )
 
-  - gMarvellTokenSpaceGuid.PcdSpiDefaultMode
-	(default SCLK mode (see SPI_MODE enum in file
-	 edk2-platforms/Platform/Marvell/Drivers/Spi/MvSpi.h) )
-
-
 SpiFlash configuration
 ======================
 Folowing PCDs for spi flash driver configuration must be set properly:
@@ -309,6 +304,12 @@ Folowing PCDs for spi flash driver configuration must be set properly:
   - gMarvellTokenSpaceGuid.PcdSpiFlashPollCmd
 	(Spi flash polling flag)
 
+  - gMarvellTokenSpaceGuid.PcdSpiFlashMode
+	(Default SCLK mode (see SPI_MODE enum in file
+	 edk2-platforms/Platform/Marvell/Drivers/Spi/MvSpi.h))
+
+  - gMarvellTokenSpaceGuid.PcdSpiFlashCs
+	(Chip select used for communication with the Flash)
 
 MPP configuration
 =================

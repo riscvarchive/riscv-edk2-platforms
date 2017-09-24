@@ -218,6 +218,7 @@ EFI_STATUS              Status;
   CONST CHAR16          *LengthStr = NULL, *FileStr = NULL;
   BOOLEAN               AddrFlag = FALSE, LengthFlag = TRUE, FileFlag = FALSE;
   UINT8                 Flag = 0, CheckFlag = 0;
+  UINT8                 Mode, Cs;
 
   Status = gBS->LocateProtocol (
     &gMarvellSpiFlashProtocolGuid,
@@ -283,8 +284,11 @@ EFI_STATUS              Status;
     }
   }
 
+  Mode = PcdGet32 (PcdSpiFlashMode);
+  Cs = PcdGet32 (PcdSpiFlashCs);
+
   // Setup new spi device
-  Slave = SpiMasterProtocol->SetupDevice (SpiMasterProtocol, 0, 0);
+  Slave = SpiMasterProtocol->SetupDevice (SpiMasterProtocol, Cs, Mode);
     if (Slave == NULL) {
       Print(L"sf: Cannot allocate SPI device!\n");
       return SHELL_ABORTED;
