@@ -62,6 +62,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CMD_ERASE_64K                   0xd8
 #define CMD_4B_ADDR_ENABLE              0xb7
 
+#define SPI_CMD_LEN                     1
+
 #define STATUS_REG_POLL_WIP             (1 << 0)
 #define STATUS_REG_POLL_PEC             (1 << 7)
 

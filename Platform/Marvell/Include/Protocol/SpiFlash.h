@@ -47,6 +47,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define CMD_ERASE_64K                   0xd8
 #define CMD_4B_ADDR_ENABLE              0xb7
 
+#define NOR_FLASH_MAX_ID_LEN            6
+
 extern EFI_GUID gMarvellSpiFlashProtocolGuid;
 
 typedef struct _MARVELL_SPI_FLASH_PROTOCOL MARVELL_SPI_FLASH_PROTOCOL;

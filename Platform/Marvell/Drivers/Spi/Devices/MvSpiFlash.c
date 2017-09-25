@@ -409,27 +409,34 @@ MvSpiFlashReadId (
   )
 {
   EFI_STATUS Status;
-  UINT8 *DataOut;
+  UINT8 Id[NOR_FLASH_MAX_ID_LEN];
+  UINT8 Cmd;
 
-  DataOut = (UINT8 *) AllocateZeroPool (DataByteCount);
-  if (DataOut == NULL) {
-    DEBUG((DEBUG_ERROR, "SpiFlash: Cannot allocate memory\n"));
-    return EFI_OUT_OF_RESOURCES;
-  }
-  Status = SpiMasterProtocol->Transfer (SpiMasterProtocol, SpiDev,
-    DataByteCount, Buffer, DataOut, SPI_TRANSFER_BEGIN | SPI_TRANSFER_END);
-  if (EFI_ERROR(Status)) {
-    FreePool (DataOut);
-    DEBUG((DEBUG_ERROR, "SpiFlash: Spi transfer error\n"));
+  Cmd = CMD_READ_ID;
+  Status = SpiMasterProtocol->ReadWrite (SpiMasterProtocol,
+                                SpiDev,
+                                &Cmd,
+                                SPI_CMD_LEN,
+                                NULL,
+                                Id,
+                                NOR_FLASH_MAX_ID_LEN);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "ReadId: Spi transfer error\n"));
     return Status;
   }
 
-  // Bytes 1,2 and 3 contain SPI flash ID
-  Buffer[0] = DataOut[1];
-  Buffer[1] = DataOut[2];
-  Buffer[2] = DataOut[3];
-
-  FreePool (DataOut);
+  if (CompareMem (Id, Buffer, DataByteCount) != 0) {
+    Status = EFI_NOT_FOUND;
+  }
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Unrecognized JEDEC Id bytes: 0x%02x%02x%02x\n",
+      __FUNCTION__,
+      Id[0],
+      Id[1],
+      Id[2]));
+    return Status;
+  }
 
   return EFI_SUCCESS;
 }

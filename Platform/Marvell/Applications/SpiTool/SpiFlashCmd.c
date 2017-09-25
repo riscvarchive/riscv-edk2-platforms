@@ -166,37 +166,26 @@ FlashProbe (
   )
 {
   EFI_STATUS Status;
-  UINT8  IdBuffer[4];
-  UINT32 Id, RefId;
+  UINT32     FlashIdLen;
+  UINT8      *FlashId;
 
-  Id = PcdGet32 (PcdSpiFlashId);
+  FlashId = (UINT8 *)PcdGetPtr (PcdSpiFlashId);
+  FlashIdLen = PcdGetSize (PcdSpiFlashId);
 
-  IdBuffer[0] = CMD_READ_ID;
-
-  SpiFlashProtocol->ReadId (
-    Slave,
-    4,
-    IdBuffer
-    );
-
-  RefId = (IdBuffer[0] << 16) + (IdBuffer[1] << 8) + IdBuffer[2];
-
-  if (RefId == Id) {
-    Print (L"sf: Detected supported SPI flash with ID=%3x\n", RefId);
-    Status = SpiFlashProtocol->Init (SpiFlashProtocol, Slave);
-    if (EFI_ERROR(Status)) {
-      Print (L"sf: Cannot initialize flash device\n");
-      return SHELL_ABORTED;
-    }
-    InitFlag = 0;
-    return EFI_SUCCESS;
-  } else if (RefId != 0) {
-    Print (L"sf: Unsupported SPI flash detected with ID=%2x\n", RefId);
+  Status = SpiFlashProtocol->ReadId (Slave, FlashIdLen, FlashId);
+  if (EFI_ERROR (Status)) {
     return SHELL_ABORTED;
   }
 
-  Print (L"sf: No SPI flash detected");
-  return SHELL_ABORTED;
+  Status = SpiFlashProtocol->Init (SpiFlashProtocol, Slave);
+  if (EFI_ERROR (Status)) {
+    Print (L"sf: Cannot initialize flash device\n");
+    return SHELL_ABORTED;
+  }
+
+  InitFlag = 0;
+
+  return SHELL_SUCCESS;
 }
 
 SHELL_STATUS

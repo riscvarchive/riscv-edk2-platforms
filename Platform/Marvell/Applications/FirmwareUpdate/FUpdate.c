@@ -94,27 +94,17 @@ SpiFlashProbe (
   )
 {
   EFI_STATUS       Status;
-  UINT32           IdBuffer, Id, RefId;
+  UINT32           FlashIdLen;
+  UINT8           *FlashId;
 
-  Id = PcdGet32 (PcdSpiFlashId);
-
-  IdBuffer = CMD_READ_ID & 0xff;
+  FlashId = (UINT8 *)PcdGetPtr (PcdSpiFlashId);
+  FlashIdLen = PcdGetSize (PcdSpiFlashId);
 
   // Read SPI flash ID
-  SpiFlashProtocol->ReadId (Slave, sizeof (UINT32), (UINT8 *)&IdBuffer);
-
-  // Swap and extract 3 bytes of the ID
-  RefId = SwapBytes32 (IdBuffer) >> 8;
-
-  if (RefId == 0) {
-    Print (L"%s: No SPI flash detected");
-    return EFI_DEVICE_ERROR;
-  } else if (RefId != Id) {
-    Print (L"%s: Unsupported SPI flash detected with ID=%2x\n", CMD_NAME_STRING, RefId);
-    return EFI_DEVICE_ERROR;
+  Status = SpiFlashProtocol->ReadId (Slave, FlashIdLen, FlashId);
+  if (EFI_ERROR (Status)) {
+    return SHELL_ABORTED;
   }
-
-  Print (L"%s: Detected supported SPI flash with ID=%3x\n", CMD_NAME_STRING, RefId);
 
   Status = SpiFlashProtocol->Init (SpiFlashProtocol, Slave);
   if (EFI_ERROR(Status)) {
