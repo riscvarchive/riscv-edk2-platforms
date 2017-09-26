@@ -1,6 +1,6 @@
 #/** @file
 #
-#  Component description file for HdLcdArmLib module
+#  Component description file for HdLcdArmVExpress module
 #
 #  Copyright (c) 2011-2018, ARM Ltd. All rights reserved.<BR>
 #
@@ -23,8 +23,7 @@
   LIBRARY_CLASS                  = LcdPlatformLib
 
 [Sources.common]
-
-HdLcdArmVExpress.c
+  HdLcdArmVExpress.c
 
 [Packages]
   ArmPlatformPkg/ArmPlatformPkg.dec
