@@ -153,6 +153,9 @@ LcdPlatformGetVram (
   EFI_STATUS              Status;
   EFI_ALLOCATE_TYPE       AllocationType;
 
+  ASSERT (VramBaseAddress != NULL);
+  ASSERT (VramSize != NULL);
+
   // Set the vram size
   *VramSize = LCD_VRAM_SIZE;
 
@@ -171,6 +174,7 @@ LcdPlatformGetVram (
                   VramBaseAddress
                   );
   if (EFI_ERROR (Status)) {
+    ASSERT_EFI_ERROR (Status);
     return Status;
   }
 
@@ -181,8 +185,8 @@ LcdPlatformGetVram (
                   *VramSize,
                   EFI_MEMORY_WC
                   );
-  ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
+    ASSERT_EFI_ERROR (Status);
     gBS->FreePages (*VramBaseAddress, EFI_SIZE_TO_PAGES (*VramSize));
     return Status;
   }
@@ -221,6 +225,7 @@ LcdPlatformSetMode (
   EFI_STATUS            Status;
 
   if (ModeNumber >= LcdPlatformGetMaxMode ()) {
+    ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
 
@@ -279,7 +284,10 @@ LcdPlatformQueryMode (
   OUT EFI_GRAPHICS_OUTPUT_MODE_INFORMATION  *Info
   )
 {
+  ASSERT (Info != NULL);
+
   if (ModeNumber >= LcdPlatformGetMaxMode ()) {
+    ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
 
@@ -343,7 +351,18 @@ LcdPlatformGetTimings (
   OUT UINT32*                             VFrontPorch
   )
 {
+  // One of the pointers is NULL
+  ASSERT (HRes != NULL);
+  ASSERT (HSync != NULL);
+  ASSERT (HBackPorch != NULL);
+  ASSERT (HFrontPorch != NULL);
+  ASSERT (VRes != NULL);
+  ASSERT (VSync != NULL);
+  ASSERT (VBackPorch != NULL);
+  ASSERT (VFrontPorch != NULL);
+
   if (ModeNumber >= LcdPlatformGetMaxMode ()) {
+    ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
 
@@ -376,6 +395,7 @@ LcdPlatformGetBpp (
   )
 {
   if (ModeNumber >= LcdPlatformGetMaxMode ()) {
+    ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
 
