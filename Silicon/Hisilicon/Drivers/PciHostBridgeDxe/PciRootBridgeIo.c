@@ -2316,6 +2316,7 @@ RootBridgeIoConfiguration (
       }
       Configuration.SpaceDesp[Index].AddrRangeMax = Configuration.SpaceDesp[Index].AddrRangeMin + PrivateData->ResAllocNode[Index].Length - 1;
       Configuration.SpaceDesp[Index].AddrLen      = PrivateData->ResAllocNode[Index].Length;
+      Configuration.SpaceDesp[Index].AddrTranslationOffset = PrivateData->MemBase - PrivateData->PciRegionBase;
     }
   }
 
