@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2011-2016, ARM Limited. All rights reserved.
+*  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
 *
 *  This program and the accompanying materials
 *  are licensed and made available under the terms and conditions of the BSD License
@@ -128,17 +128,34 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].Length = 2 * ARM_VE_SMB_PERIPH_SZ;
   VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
-  // VRAM
-  VirtualMemoryTable[++Index].PhysicalBase = PL111_CLCD_VRAM_MOTHERBOARD_BASE;
-  VirtualMemoryTable[Index].VirtualBase = PL111_CLCD_VRAM_MOTHERBOARD_BASE;
-  VirtualMemoryTable[Index].Length = PL111_CLCD_VRAM_MOTHERBOARD_SIZE;
-  //
-  // Map the VRAM region as Normal Non-Cacheable memory and not device memory,
-  // so that we can use the accelerated string routines that may use unaligned
-  // accesses or DC ZVA instructions. The enum identifier is slightly awkward
-  // here, but it maps to a memory type that allows buffering and reordering.
-  //
-  VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+  // Map region for the framebuffer in the system RAM if no VRAM present
+  if (FixedPcdGet32 (PcdArmLcdDdrFrameBufferBase) == 0) {
+    // VRAM
+    VirtualMemoryTable[++Index].PhysicalBase = PL111_CLCD_VRAM_MOTHERBOARD_BASE;
+    VirtualMemoryTable[Index].VirtualBase = PL111_CLCD_VRAM_MOTHERBOARD_BASE;
+    VirtualMemoryTable[Index].Length = PL111_CLCD_VRAM_MOTHERBOARD_SIZE;
+    //
+    // Map the VRAM region as Normal Non-Cacheable memory and not device memory,
+    // so that we can use the accelerated string routines that may use unaligned
+    // accesses or DC ZVA instructions. The enum identifier is slightly awkward
+    // here, but it maps to a memory type that allows buffering and reordering.
+    //
+    VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+
+  } else {
+    ASSERT ((ARM_VE_DRAM_BASE + ARM_VE_DRAM_SZ - 1) <
+            FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase));
+    VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase);
+    VirtualMemoryTable[Index].VirtualBase = FixedPcdGet64 (PcdArmLcdDdrFrameBufferBase);
+    VirtualMemoryTable[Index].Length = FixedPcdGet32 (PcdArmLcdDdrFrameBufferSize);
+    // Map as Normal Non-Cacheable memory, so that we can use the accelerated
+    // SetMem/CopyMem routines that may use unaligned accesses or
+    // DC ZVA instructions. If mapped as device memory, these routine may cause
+    // alignment faults.
+    // NOTE: The attribute value is misleading, it indicates memory map type as
+    // an un-cached, un-buffered but allows buffering and reordering.
+    VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+  }
 
   // Map sparse memory region if present
   if (HasSparseMemory) {
