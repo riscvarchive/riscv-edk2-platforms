@@ -41,6 +41,8 @@ typedef struct {
   UINT32                     VFrontPorch;
 } LCD_RESOLUTION;
 
+/** The display modes supported by the platform.
+**/
 LCD_RESOLUTION mResolutions[] = {
   { // Mode 0 : VGA : 640 x 480 x 24 bpp
     VGA, VGA_H_RES_PIXELS, VGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
@@ -150,6 +152,12 @@ EFI_EDID_ACTIVE_PROTOCOL      mEdidActive = {
   NULL
 };
 
+/** PL111 Platform specific initialization function.
+
+  @param[in] Handle              Handle to the LCD device instance.
+  @retval EFI_SUCCESS            Plaform library initialized successfully.
+  @retval !(EFI_SUCCESS)         Other errors.
+**/
 EFI_STATUS
 LcdPlatformInitializeDisplay (
   IN EFI_HANDLE   Handle
@@ -175,6 +183,18 @@ LcdPlatformInitializeDisplay (
   return Status;
 }
 
+/** Allocate VRAM memory in DRAM for the framebuffer
+  (unless it is reserved already).
+
+  The allocated address can be used to set the framebuffer.
+
+  @param[out] VramBaseAddress     A pointer to the framebuffer address.
+  @param[out] VramSize            A pointer to the size of the framebuffer
+                                  in bytes
+
+  @retval EFI_SUCCESS             Framebuffer memory allocated successfully.
+  @retval !(EFI_SUCCESS)          Other errors.
+**/
 EFI_STATUS
 LcdPlatformGetVram (
   OUT EFI_PHYSICAL_ADDRESS*  VramBaseAddress,
@@ -231,6 +251,13 @@ LcdPlatformGetVram (
   return Status;
 }
 
+/** Return total number of modes supported.
+
+  Note: Valid mode numbers are 0 to MaxMode - 1
+  See Section 12.9 of the UEFI Specification 2.7
+
+  @retval UINT32             Mode Number.
+**/
 UINT32
 LcdPlatformGetMaxMode (VOID)
 {
@@ -246,6 +273,15 @@ LcdPlatformGetMaxMode (VOID)
   return (PcdGet32 (PcdPL111LcdMaxMode));
 }
 
+/** Set the requested display mode.
+
+  @param[in] ModeNumber            Mode Number.
+
+  @retval  EFI_SUCCESS             Mode set successfully.
+  @retval  EFI_INVALID_PARAMETER   Requested mode not found.
+  @retval  EFI_UNSUPPORTED         PLL111 configuration not supported.
+  @retval  !(EFI_SUCCESS)          Other errors.
+**/
 EFI_STATUS
 LcdPlatformSetMode (
   IN UINT32                         ModeNumber
@@ -317,6 +353,16 @@ LcdPlatformSetMode (
   return Status;
 }
 
+/** Return information for the requested mode number.
+
+  @param[in]  ModeNumber         Mode Number.
+  @param[out] Info               Pointer for returned mode information
+                                 (on success).
+
+  @retval EFI_SUCCESS             Mode information for the requested mode
+                                  returned successfully.
+  @retval EFI_INVALID_PARAMETER   Requested mode not found.
+**/
 EFI_STATUS
 LcdPlatformQueryMode (
   IN  UINT32                                ModeNumber,
@@ -357,6 +403,23 @@ LcdPlatformQueryMode (
   return EFI_SUCCESS;
 }
 
+/** Return display timing information for the requested mode number.
+
+  @param[in]  ModeNumber          Mode Number.
+
+  @param[out] HRes                Pointer to horizontal resolution.
+  @param[out] HSync               Pointer to horizontal sync width.
+  @param[out] HBackPorch          Pointer to horizontal back porch.
+  @param[out] HFrontPorch         Pointer to horizontal front porch.
+  @param[out] VRes                Pointer to vertical resolution.
+  @param[out] VSync               Pointer to vertical sync width.
+  @param[out] VBackPorch          Pointer to vertical back porch.
+  @param[out] VFrontPorch         Pointer to vertical front porch.
+
+  @retval EFI_SUCCESS             Display timing information for the requested
+                                  mode returned successfully.
+  @retval EFI_INVALID_PARAMETER   Requested mode not found.
+**/
 EFI_STATUS
 LcdPlatformGetTimings (
   IN  UINT32                              ModeNumber,
@@ -386,6 +449,16 @@ LcdPlatformGetTimings (
   return EFI_SUCCESS;
 }
 
+/** Return bits per pixel information for a mode number.
+
+  @param[in]  ModeNumber          Mode Number.
+
+  @param[out] Bpp                 Pointer to bits per pixel information.
+
+  @retval EFI_SUCCESS             Bits per pixel information for the requested
+                                  mode returned successfully.
+  @retval EFI_INVALID_PARAMETER   Requested mode not found.
+**/
 EFI_STATUS
 LcdPlatformGetBpp (
   IN  UINT32                              ModeNumber,
