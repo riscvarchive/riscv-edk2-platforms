@@ -57,5 +57,8 @@
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferBase
   gArmPlatformTokenSpaceGuid.PcdArmLcdDdrFrameBufferSize
 
+  gArmPlatformTokenSpaceGuid.PcdArmMaliDpBase
+  gArmPlatformTokenSpaceGuid.PcdArmMaliDpMemoryRegionLength
+
 [Ppis]
   gArmMpCoreInfoPpiGuid

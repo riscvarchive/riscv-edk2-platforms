@@ -20,8 +20,10 @@
 #include <Library/MemoryAllocationLib.h>
 #include <ArmPlatform.h>
 
+#define DP_BASE_DESCRIPTOR      ((FixedPcdGet64 (PcdArmMaliDpBase) != 0) ? 1 : 0)
+
 // Number of Virtual Memory Map Descriptors
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          9
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS (9 + DP_BASE_DESCRIPTOR)
 
 // DDR attributes
 #define DDR_ATTRIBUTES_CACHED   ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK
@@ -155,6 +157,14 @@ ArmPlatformGetVirtualMemoryMap (
     // NOTE: The attribute value is misleading, it indicates memory map type as
     // an un-cached, un-buffered but allows buffering and reordering.
     VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+  }
+
+  if (FixedPcdGet64 (PcdArmMaliDpBase) != 0) {
+    // DP500/DP550/DP650 peripheral memory region
+    VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdArmMaliDpBase);
+    VirtualMemoryTable[Index].VirtualBase = FixedPcdGet64 (PcdArmMaliDpBase);
+    VirtualMemoryTable[Index].Length = FixedPcdGet32 (PcdArmMaliDpMemoryRegionLength);
+    VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
   }
 
   // Map sparse memory region if present
