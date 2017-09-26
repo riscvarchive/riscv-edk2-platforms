@@ -32,7 +32,6 @@ typedef struct {
   UINT32                     Mode;
   UINT32                     HorizontalResolution;
   UINT32                     VerticalResolution;
-  LCD_BPP                    Bpp;
   UINT32                     OscFreq;
 
   // These are used by HDLCD
@@ -48,37 +47,37 @@ typedef struct {
 **/
 LCD_RESOLUTION mResolutions[] = {
   { // Mode 0 : VGA : 640 x 480 x 24 bpp
-    VGA, VGA_H_RES_PIXELS, VGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    VGA, VGA_H_RES_PIXELS, VGA_V_RES_PIXELS,
     VGA_OSC_FREQUENCY,
     VGA_H_SYNC, VGA_H_BACK_PORCH, VGA_H_FRONT_PORCH,
     VGA_V_SYNC, VGA_V_BACK_PORCH, VGA_V_FRONT_PORCH
   },
   { // Mode 1 : SVGA : 800 x 600 x 24 bpp
-    SVGA, SVGA_H_RES_PIXELS, SVGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    SVGA, SVGA_H_RES_PIXELS, SVGA_V_RES_PIXELS,
     SVGA_OSC_FREQUENCY,
     SVGA_H_SYNC, SVGA_H_BACK_PORCH, SVGA_H_FRONT_PORCH,
     SVGA_V_SYNC, SVGA_V_BACK_PORCH, SVGA_V_FRONT_PORCH
   },
   { // Mode 2 : XGA : 1024 x 768 x 24 bpp
-    XGA, XGA_H_RES_PIXELS, XGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    XGA, XGA_H_RES_PIXELS, XGA_V_RES_PIXELS,
     XGA_OSC_FREQUENCY,
     XGA_H_SYNC, XGA_H_BACK_PORCH, XGA_H_FRONT_PORCH,
     XGA_V_SYNC, XGA_V_BACK_PORCH, XGA_V_FRONT_PORCH
   },
   { // Mode 3 : SXGA : 1280 x 1024 x 24 bpp
-    SXGA, SXGA_H_RES_PIXELS, SXGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    SXGA, SXGA_H_RES_PIXELS, SXGA_V_RES_PIXELS,
     (SXGA_OSC_FREQUENCY/2),
     SXGA_H_SYNC, SXGA_H_BACK_PORCH, SXGA_H_FRONT_PORCH,
     SXGA_V_SYNC, SXGA_V_BACK_PORCH, SXGA_V_FRONT_PORCH
   },
   { // Mode 4 : UXGA : 1600 x 1200 x 24 bpp
-    UXGA, UXGA_H_RES_PIXELS, UXGA_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    UXGA, UXGA_H_RES_PIXELS, UXGA_V_RES_PIXELS,
     (UXGA_OSC_FREQUENCY/2),
     UXGA_H_SYNC, UXGA_H_BACK_PORCH, UXGA_H_FRONT_PORCH,
     UXGA_V_SYNC, UXGA_V_BACK_PORCH, UXGA_V_FRONT_PORCH
   },
   { // Mode 5 : HD : 1920 x 1080 x 24 bpp
-    HD, HD_H_RES_PIXELS, HD_V_RES_PIXELS, LCD_BITS_PER_PIXEL_24,
+    HD, HD_H_RES_PIXELS, HD_V_RES_PIXELS,
     (HD_OSC_FREQUENCY/2),
     HD_H_SYNC, HD_H_BACK_PORCH, HD_H_FRONT_PORCH,
     HD_V_SYNC, HD_V_BACK_PORCH, HD_V_FRONT_PORCH
@@ -289,27 +288,12 @@ LcdPlatformQueryMode (
   Info->VerticalResolution = mResolutions[ModeNumber].VerticalResolution;
   Info->PixelsPerScanLine = mResolutions[ModeNumber].HorizontalResolution;
 
-  switch (mResolutions[ModeNumber].Bpp) {
-  case LCD_BITS_PER_PIXEL_24:
-    Info->PixelFormat                   = PixelRedGreenBlueReserved8BitPerColor;
-    Info->PixelInformation.RedMask      = LCD_24BPP_RED_MASK;
-    Info->PixelInformation.GreenMask    = LCD_24BPP_GREEN_MASK;
-    Info->PixelInformation.BlueMask     = LCD_24BPP_BLUE_MASK;
-    Info->PixelInformation.ReservedMask = LCD_24BPP_RESERVED_MASK;
-    break;
-
-  case LCD_BITS_PER_PIXEL_16_555:
-  case LCD_BITS_PER_PIXEL_16_565:
-  case LCD_BITS_PER_PIXEL_12_444:
-  case LCD_BITS_PER_PIXEL_8:
-  case LCD_BITS_PER_PIXEL_4:
-  case LCD_BITS_PER_PIXEL_2:
-  case LCD_BITS_PER_PIXEL_1:
-  default:
-    // These are not supported
-    ASSERT (FALSE);
-    break;
-  }
+  /* Bits per Pixel is always LCD_BITS_PER_PIXEL_24 */
+  Info->PixelFormat                   = PixelRedGreenBlueReserved8BitPerColor;
+  Info->PixelInformation.RedMask      = LCD_24BPP_RED_MASK;
+  Info->PixelInformation.GreenMask    = LCD_24BPP_GREEN_MASK;
+  Info->PixelInformation.BlueMask     = LCD_24BPP_BLUE_MASK;
+  Info->PixelInformation.ReservedMask = LCD_24BPP_RESERVED_MASK;
 
   return EFI_SUCCESS;
 }
@@ -392,7 +376,7 @@ LcdPlatformGetBpp (
     return EFI_INVALID_PARAMETER;
   }
 
-  *Bpp = mResolutions[ModeNumber].Bpp;
+  *Bpp = LCD_BITS_PER_PIXEL_24;
 
   return EFI_SUCCESS;
 }
