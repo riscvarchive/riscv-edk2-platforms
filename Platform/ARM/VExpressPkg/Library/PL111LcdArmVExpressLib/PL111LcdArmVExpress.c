@@ -149,7 +149,12 @@ EFI_EDID_ACTIVE_PROTOCOL      mEdidActive = {
 /** PL111 Platform specific initialization function.
 
   @param[in] Handle              Handle to the LCD device instance.
+
   @retval EFI_SUCCESS            Plaform library initialized successfully.
+  @retval EFI_UNSUPPORTED        PcdGopPixelFormat must be
+                                 PixelRedGreenBlueReserved8BitPerColor OR
+                                 PixelBlueGreenRedReserved8BitPerColor
+                                 any other format is not supported
   @retval !(EFI_SUCCESS)         Other errors.
 **/
 EFI_STATUS
@@ -158,6 +163,17 @@ LcdPlatformInitializeDisplay (
   )
 {
   EFI_STATUS  Status;
+  EFI_GRAPHICS_PIXEL_FORMAT PixelFormat;
+
+  // PixelBitMask and PixelBltOnly pixel formats are not supported
+  PixelFormat = FixedPcdGet32 (PcdGopPixelFormat);
+  if (PixelFormat != PixelRedGreenBlueReserved8BitPerColor &&
+      PixelFormat != PixelBlueGreenRedReserved8BitPerColor) {
+
+    ASSERT (PixelFormat == PixelRedGreenBlueReserved8BitPerColor ||
+      PixelFormat == PixelBlueGreenRedReserved8BitPerColor);
+    return EFI_UNSUPPORTED;
+  }
 
   // Set the FPGA multiplexer to select the video output from the motherboard
   // or the daughterboard
@@ -372,27 +388,7 @@ LcdPlatformQueryMode (
   Info->VerticalResolution = mDisplayModes[ModeNumber].Vertical.Resolution;
   Info->PixelsPerScanLine = mDisplayModes[ModeNumber].Horizontal.Resolution;
 
-  switch (mDisplayModes[ModeNumber].Bpp) {
-  case LCD_BITS_PER_PIXEL_24:
-    Info->PixelFormat                   = PixelRedGreenBlueReserved8BitPerColor;
-    Info->PixelInformation.RedMask      = LCD_24BPP_RED_MASK;
-    Info->PixelInformation.GreenMask    = LCD_24BPP_GREEN_MASK;
-    Info->PixelInformation.BlueMask     = LCD_24BPP_BLUE_MASK;
-    Info->PixelInformation.ReservedMask = LCD_24BPP_RESERVED_MASK;
-    break;
-
-  case LCD_BITS_PER_PIXEL_16_555:
-  case LCD_BITS_PER_PIXEL_16_565:
-  case LCD_BITS_PER_PIXEL_12_444:
-  case LCD_BITS_PER_PIXEL_8:
-  case LCD_BITS_PER_PIXEL_4:
-  case LCD_BITS_PER_PIXEL_2:
-  case LCD_BITS_PER_PIXEL_1:
-  default:
-    // These are not supported
-    ASSERT (FALSE);
-    break;
-  }
+  Info->PixelFormat = FixedPcdGet32 (PcdGopPixelFormat);
 
   return EFI_SUCCESS;
 }

@@ -15,7 +15,6 @@
 #include <PiDxe.h>
 
 #include <Library/ArmPlatformSysConfigLib.h>
-#include <Library/IoLib.h>
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DxeServicesTableLib.h>
@@ -93,6 +92,10 @@ EFI_EDID_ACTIVE_PROTOCOL      mEdidActive = {
   @param[in] Handle              Handle to the LCD device instance.
 
   @retval EFI_SUCCESS            Plaform library initialized successfully.
+  @retval EFI_UNSUPPORTED        PcdGopPixelFormat must be
+                                 PixelRedGreenBlueReserved8BitPerColor OR
+                                 PixelBlueGreenRedReserved8BitPerColor
+                                 any other format is not supported.
   @retval !(EFI_SUCCESS)         Other errors.
 **/
 EFI_STATUS
@@ -101,6 +104,17 @@ LcdPlatformInitializeDisplay (
   )
 {
   EFI_STATUS  Status;
+  EFI_GRAPHICS_PIXEL_FORMAT PixelFormat;
+
+  // PixelBitMask and PixelBltOnly pixel formats are not supported
+  PixelFormat = FixedPcdGet32 (PcdGopPixelFormat);
+  if (PixelFormat != PixelRedGreenBlueReserved8BitPerColor &&
+      PixelFormat != PixelBlueGreenRedReserved8BitPerColor) {
+
+    ASSERT (PixelFormat == PixelRedGreenBlueReserved8BitPerColor ||
+      PixelFormat == PixelBlueGreenRedReserved8BitPerColor);
+    return EFI_UNSUPPORTED;
+  }
 
   // Set the FPGA multiplexer to select the video output from the
   // motherboard or the daughterboard
@@ -282,12 +296,7 @@ LcdPlatformQueryMode (
   Info->VerticalResolution = mDisplayModes[ModeNumber].Vertical.Resolution;
   Info->PixelsPerScanLine = mDisplayModes[ModeNumber].Horizontal.Resolution;
 
-  /* Bits per Pixel is always LCD_BITS_PER_PIXEL_24 */
-  Info->PixelFormat                   = PixelRedGreenBlueReserved8BitPerColor;
-  Info->PixelInformation.RedMask      = LCD_24BPP_RED_MASK;
-  Info->PixelInformation.GreenMask    = LCD_24BPP_GREEN_MASK;
-  Info->PixelInformation.BlueMask     = LCD_24BPP_BLUE_MASK;
-  Info->PixelInformation.ReservedMask = LCD_24BPP_RESERVED_MASK;
+  Info->PixelFormat = FixedPcdGet32 (PcdGopPixelFormat);
 
   return EFI_SUCCESS;
 }

@@ -42,3 +42,4 @@
 [FixedPcd]
   gArmVExpressTokenSpaceGuid.PcdPL111LcdMaxMode
   gArmVExpressTokenSpaceGuid.PcdPL111LcdVideoModeOscId
+  gArmPlatformTokenSpaceGuid.PcdGopPixelFormat
