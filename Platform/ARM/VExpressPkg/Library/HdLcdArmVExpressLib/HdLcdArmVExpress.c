@@ -230,25 +230,21 @@ LcdPlatformSetMode (
   }
 
   // Set the video mode oscillator
-  do {
-    Status = ArmPlatformSysConfigSetDevice (
-               SYS_CFG_OSC_SITE1,
-               FixedPcdGet32 (PcdHdLcdVideoModeOscId),
-               mResolutions[ModeNumber].OscFreq
-               );
-  } while (Status == EFI_TIMEOUT);
+  Status = ArmPlatformSysConfigSetDevice (
+             SYS_CFG_OSC_SITE1,
+             FixedPcdGet32 (PcdHdLcdVideoModeOscId),
+             mResolutions[ModeNumber].OscFreq
+             );
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
     return Status;
   }
 
   // Set the DVI into the new mode
-  do {
-    Status = ArmPlatformSysConfigSet (
-               SYS_CFG_DVIMODE,
-               mResolutions[ModeNumber].Mode
-               );
-  } while (Status == EFI_TIMEOUT);
+  Status = ArmPlatformSysConfigSet (
+             SYS_CFG_DVIMODE,
+             mResolutions[ModeNumber].Mode
+             );
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
     return Status;
