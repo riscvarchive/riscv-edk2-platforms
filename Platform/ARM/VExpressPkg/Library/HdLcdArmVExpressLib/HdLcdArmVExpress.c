@@ -233,7 +233,7 @@ LcdPlatformSetMode (
   do {
     Status = ArmPlatformSysConfigSetDevice (
                SYS_CFG_OSC_SITE1,
-               PcdGet32 (PcdHdLcdVideoModeOscId),
+               FixedPcdGet32 (PcdHdLcdVideoModeOscId),
                mResolutions[ModeNumber].OscFreq
                );
   } while (Status == EFI_TIMEOUT);

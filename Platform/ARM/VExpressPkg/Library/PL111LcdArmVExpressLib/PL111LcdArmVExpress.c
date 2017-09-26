@@ -272,7 +272,7 @@ LcdPlatformGetMaxMode (VOID)
   // certain limitations.
 
   // Set the maximum mode allowed
-  return (PcdGet32 (PcdPL111LcdMaxMode));
+  return (FixedPcdGet32 (PcdPL111LcdMaxMode));
 }
 
 /** Set the requested display mode.
@@ -306,7 +306,7 @@ LcdPlatformSetMode (
     break;
   case ARM_VE_DAUGHTERBOARD_1_SITE:
     Function = SYS_CFG_OSC_SITE1;
-    OscillatorId = (UINT32)PcdGet32 (PcdPL111LcdVideoModeOscId);
+    OscillatorId = FixedPcdGet32 (PcdPL111LcdVideoModeOscId);
     break;
   default:
     return EFI_UNSUPPORTED;

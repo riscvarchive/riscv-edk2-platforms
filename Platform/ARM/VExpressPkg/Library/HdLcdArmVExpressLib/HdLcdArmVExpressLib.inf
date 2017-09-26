@@ -39,5 +39,5 @@
   gEfiEdidDiscoveredProtocolGuid                # Produced
   gEfiEdidActiveProtocolGuid                    # Produced
 
-[Pcd]
+[FixedPcd]
   gArmVExpressTokenSpaceGuid.PcdHdLcdVideoModeOscId

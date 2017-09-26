@@ -39,6 +39,6 @@
   gEfiEdidDiscoveredProtocolGuid                # Produced
   gEfiEdidActiveProtocolGuid                    # Produced
 
-[Pcd]
+[FixedPcd]
   gArmVExpressTokenSpaceGuid.PcdPL111LcdMaxMode
   gArmVExpressTokenSpaceGuid.PcdPL111LcdVideoModeOscId
