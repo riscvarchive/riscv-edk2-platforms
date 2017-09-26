@@ -259,10 +259,7 @@ LcdPlatformSetMode (
              SYS_CFG_MUXFPGA,
              ARM_VE_DAUGHTERBOARD_1_SITE
              );
-  if (EFI_ERROR (Status)) {
-    ASSERT_EFI_ERROR (Status);
-    return Status;
-  }
+  ASSERT_EFI_ERROR (Status);
 
   return Status;
 }
