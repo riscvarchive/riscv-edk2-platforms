@@ -30,57 +30,51 @@
 
 typedef struct {
   UINT32                     Mode;
-  UINT32                     HorizontalResolution;
-  UINT32                     VerticalResolution;
   UINT32                     OscFreq;
 
   // These are used by HDLCD
-  UINT32                     HSync;
-  UINT32                     HBackPorch;
-  UINT32                     HFrontPorch;
-  UINT32                     VSync;
-  UINT32                     VBackPorch;
-  UINT32                     VFrontPorch;
-} LCD_RESOLUTION;
+  SCAN_TIMINGS               Horizontal;
+  SCAN_TIMINGS               Vertical;
+} DISPLAY_MODE;
 
 /** The display modes supported by the platform.
 **/
-LCD_RESOLUTION mResolutions[] = {
+STATIC DISPLAY_MODE mDisplayModes[] = {
   { // Mode 0 : VGA : 640 x 480 x 24 bpp
-    VGA, VGA_H_RES_PIXELS, VGA_V_RES_PIXELS,
+    VGA,
     VGA_OSC_FREQUENCY,
-    VGA_H_SYNC, VGA_H_BACK_PORCH, VGA_H_FRONT_PORCH,
-    VGA_V_SYNC, VGA_V_BACK_PORCH, VGA_V_FRONT_PORCH
+    {VGA_H_RES_PIXELS, VGA_H_SYNC, VGA_H_BACK_PORCH, VGA_H_FRONT_PORCH},
+    {VGA_V_RES_PIXELS, VGA_V_SYNC, VGA_V_BACK_PORCH, VGA_V_FRONT_PORCH}
   },
   { // Mode 1 : SVGA : 800 x 600 x 24 bpp
-    SVGA, SVGA_H_RES_PIXELS, SVGA_V_RES_PIXELS,
+    SVGA,
     SVGA_OSC_FREQUENCY,
-    SVGA_H_SYNC, SVGA_H_BACK_PORCH, SVGA_H_FRONT_PORCH,
-    SVGA_V_SYNC, SVGA_V_BACK_PORCH, SVGA_V_FRONT_PORCH
+    {SVGA_H_RES_PIXELS, SVGA_H_SYNC, SVGA_H_BACK_PORCH, SVGA_H_FRONT_PORCH},
+    {SVGA_V_RES_PIXELS, SVGA_V_SYNC, SVGA_V_BACK_PORCH, SVGA_V_FRONT_PORCH}
   },
   { // Mode 2 : XGA : 1024 x 768 x 24 bpp
-    XGA, XGA_H_RES_PIXELS, XGA_V_RES_PIXELS,
+    XGA,
     XGA_OSC_FREQUENCY,
-    XGA_H_SYNC, XGA_H_BACK_PORCH, XGA_H_FRONT_PORCH,
-    XGA_V_SYNC, XGA_V_BACK_PORCH, XGA_V_FRONT_PORCH
+    {XGA_H_RES_PIXELS, XGA_H_SYNC, XGA_H_BACK_PORCH, XGA_H_FRONT_PORCH},
+    {XGA_V_RES_PIXELS, XGA_V_SYNC, XGA_V_BACK_PORCH, XGA_V_FRONT_PORCH}
   },
   { // Mode 3 : SXGA : 1280 x 1024 x 24 bpp
-    SXGA, SXGA_H_RES_PIXELS, SXGA_V_RES_PIXELS,
+    SXGA,
     (SXGA_OSC_FREQUENCY/2),
-    SXGA_H_SYNC, SXGA_H_BACK_PORCH, SXGA_H_FRONT_PORCH,
-    SXGA_V_SYNC, SXGA_V_BACK_PORCH, SXGA_V_FRONT_PORCH
+    {SXGA_H_RES_PIXELS, SXGA_H_SYNC, SXGA_H_BACK_PORCH, SXGA_H_FRONT_PORCH},
+    {SXGA_V_RES_PIXELS, SXGA_V_SYNC, SXGA_V_BACK_PORCH, SXGA_V_FRONT_PORCH}
   },
   { // Mode 4 : UXGA : 1600 x 1200 x 24 bpp
-    UXGA, UXGA_H_RES_PIXELS, UXGA_V_RES_PIXELS,
+    UXGA,
     (UXGA_OSC_FREQUENCY/2),
-    UXGA_H_SYNC, UXGA_H_BACK_PORCH, UXGA_H_FRONT_PORCH,
-    UXGA_V_SYNC, UXGA_V_BACK_PORCH, UXGA_V_FRONT_PORCH
+    {UXGA_H_RES_PIXELS, UXGA_H_SYNC, UXGA_H_BACK_PORCH, UXGA_H_FRONT_PORCH},
+    {UXGA_V_RES_PIXELS, UXGA_V_SYNC, UXGA_V_BACK_PORCH, UXGA_V_FRONT_PORCH}
   },
   { // Mode 5 : HD : 1920 x 1080 x 24 bpp
-    HD, HD_H_RES_PIXELS, HD_V_RES_PIXELS,
+    HD,
     (HD_OSC_FREQUENCY/2),
-    HD_H_SYNC, HD_H_BACK_PORCH, HD_H_FRONT_PORCH,
-    HD_V_SYNC, HD_V_BACK_PORCH, HD_V_FRONT_PORCH
+    {HD_H_RES_PIXELS, HD_H_SYNC, HD_H_BACK_PORCH, HD_H_FRONT_PORCH},
+    {HD_V_RES_PIXELS, HD_V_SYNC, HD_V_BACK_PORCH, HD_V_FRONT_PORCH}
   }
 };
 
@@ -205,7 +199,7 @@ LcdPlatformGetMaxMode (VOID)
 {
   // The following line will report correctly the total number of graphics modes
   // that could be supported by the graphics driver
-  return (sizeof (mResolutions) / sizeof (LCD_RESOLUTION));
+  return (sizeof (mDisplayModes) / sizeof (DISPLAY_MODE));
 }
 
 /** Set the requested display mode.
@@ -232,7 +226,7 @@ LcdPlatformSetMode (
   Status = ArmPlatformSysConfigSetDevice (
              SYS_CFG_OSC_SITE1,
              FixedPcdGet32 (PcdHdLcdVideoModeOscId),
-             mResolutions[ModeNumber].OscFreq
+             mDisplayModes[ModeNumber].OscFreq
              );
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
@@ -242,7 +236,7 @@ LcdPlatformSetMode (
   // Set the DVI into the new mode
   Status = ArmPlatformSysConfigSet (
              SYS_CFG_DVIMODE,
-             mResolutions[ModeNumber].Mode
+             mDisplayModes[ModeNumber].Mode
              );
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
@@ -284,9 +278,9 @@ LcdPlatformQueryMode (
   }
 
   Info->Version = 0;
-  Info->HorizontalResolution = mResolutions[ModeNumber].HorizontalResolution;
-  Info->VerticalResolution = mResolutions[ModeNumber].VerticalResolution;
-  Info->PixelsPerScanLine = mResolutions[ModeNumber].HorizontalResolution;
+  Info->HorizontalResolution = mDisplayModes[ModeNumber].Horizontal.Resolution;
+  Info->VerticalResolution = mDisplayModes[ModeNumber].Vertical.Resolution;
+  Info->PixelsPerScanLine = mDisplayModes[ModeNumber].Horizontal.Resolution;
 
   /* Bits per Pixel is always LCD_BITS_PER_PIXEL_24 */
   Info->PixelFormat                   = PixelRedGreenBlueReserved8BitPerColor;
@@ -302,14 +296,10 @@ LcdPlatformQueryMode (
 
   @param[in]  ModeNumber          Mode Number.
 
-  @param[out] HRes                Pointer to horizontal resolution.
-  @param[out] HSync               Pointer to horizontal sync width.
-  @param[out] HBackPorch          Pointer to horizontal back porch.
-  @param[out] HFrontPorch         Pointer to horizontal front porch.
-  @param[out] VRes                Pointer to vertical resolution.
-  @param[out] VSync               Pointer to vertical sync width.
-  @param[out] VBackPorch          Pointer to vertical back porch.
-  @param[out] VFrontPorch         Pointer to vertical front porch.
+  @param[out] Horizontal          Pointer to horizontal timing parameters.
+                                  (Resolution, Sync, Back porch, Front porch)
+  @param[out] Vertical            Pointer to vertical timing parameters.
+                                  (Resolution, Sync, Back porch, Front porch)
 
   @retval EFI_SUCCESS             Display timing information for the requested
                                   mode returned successfully.
@@ -317,40 +307,22 @@ LcdPlatformQueryMode (
 **/
 EFI_STATUS
 LcdPlatformGetTimings (
-  IN  UINT32                              ModeNumber,
-  OUT UINT32*                             HRes,
-  OUT UINT32*                             HSync,
-  OUT UINT32*                             HBackPorch,
-  OUT UINT32*                             HFrontPorch,
-  OUT UINT32*                             VRes,
-  OUT UINT32*                             VSync,
-  OUT UINT32*                             VBackPorch,
-  OUT UINT32*                             VFrontPorch
+  IN  UINT32                  ModeNumber,
+  OUT SCAN_TIMINGS         ** Horizontal,
+  OUT SCAN_TIMINGS         ** Vertical
   )
 {
   // One of the pointers is NULL
-  ASSERT (HRes != NULL);
-  ASSERT (HSync != NULL);
-  ASSERT (HBackPorch != NULL);
-  ASSERT (HFrontPorch != NULL);
-  ASSERT (VRes != NULL);
-  ASSERT (VSync != NULL);
-  ASSERT (VBackPorch != NULL);
-  ASSERT (VFrontPorch != NULL);
+  ASSERT (Horizontal != NULL);
+  ASSERT (Vertical != NULL);
 
   if (ModeNumber >= LcdPlatformGetMaxMode ()) {
     ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
 
-  *HRes           = mResolutions[ModeNumber].HorizontalResolution;
-  *HSync          = mResolutions[ModeNumber].HSync;
-  *HBackPorch     = mResolutions[ModeNumber].HBackPorch;
-  *HFrontPorch    = mResolutions[ModeNumber].HFrontPorch;
-  *VRes           = mResolutions[ModeNumber].VerticalResolution;
-  *VSync          = mResolutions[ModeNumber].VSync;
-  *VBackPorch     = mResolutions[ModeNumber].VBackPorch;
-  *VFrontPorch    = mResolutions[ModeNumber].VFrontPorch;
+  *Horizontal = &mDisplayModes[ModeNumber].Horizontal;
+  *Vertical   = &mDisplayModes[ModeNumber].Vertical;
 
   return EFI_SUCCESS;
 }
