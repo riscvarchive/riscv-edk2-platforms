@@ -22,12 +22,14 @@
 
   @param[in]  Slot            The slot number of the SD card to send the command to.
   @param[in]  Capability      The buffer to store the capability data.
+  @param[in]  BaseClkFreq     The base clock frequency of host controller in MHz.
 
 **/
 VOID
 DumpCapabilityReg (
   IN UINT8                Slot,
-  IN SD_MMC_HC_SLOT_CAP   *Capability
+  IN SD_MMC_HC_SLOT_CAP   *Capability,
+  IN UINT32               BaseClkFreq
   )
 {
   //
@@ -35,7 +37,10 @@ DumpCapabilityReg (
   //
   DEBUG ((DEBUG_INFO, " == Slot [%d] Capability is 0x%x ==\n", Slot, Capability));
   DEBUG ((DEBUG_INFO, "   Timeout Clk Freq  %d%a\n", Capability->TimeoutFreq, (Capability->TimeoutUnit) ? "MHz" : "KHz"));
-  DEBUG ((DEBUG_INFO, "   Base Clk Freq     %dMHz\n", Capability->BaseClkFreq));
+  if (Capability->BaseClkFreq != BaseClkFreq) {
+    DEBUG ((DEBUG_INFO, "   Controller register value overriden:\n"));
+  }
+  DEBUG ((DEBUG_INFO, "   Base Clk Freq     %dMHz\n", BaseClkFreq));
   DEBUG ((DEBUG_INFO, "   Max Blk Len       %dbytes\n", 512 * (1 << Capability->MaxBlkLen)));
   DEBUG ((DEBUG_INFO, "   8-bit Support     %a\n", Capability->BusWidth8 ? "TRUE" : "FALSE"));
   DEBUG ((DEBUG_INFO, "   ADMA2 Support     %a\n", Capability->Adma2 ? "TRUE" : "FALSE"));
@@ -678,7 +683,7 @@ SdMmcHcStopClock (
   @param[in] PciIo          The PCI IO protocol instance.
   @param[in] Slot           The slot number of the SD card to send the command to.
   @param[in] ClockFreq      The max clock frequency to be set. The unit is KHz.
-  @param[in] Capability     The capability of the slot.
+  @param[in] BaseClkFreq    The base clock frequency of host controller in MHz.
 
   @retval EFI_SUCCESS       The clock is supplied successfully.
   @retval Others            The clock isn't supplied successfully.
@@ -689,11 +694,10 @@ SdMmcHcClockSupply (
   IN EFI_PCI_IO_PROTOCOL    *PciIo,
   IN UINT8                  Slot,
   IN UINT64                 ClockFreq,
-  IN SD_MMC_HC_SLOT_CAP     Capability
+  IN UINT32                 BaseClkFreq
   )
 {
   EFI_STATUS                Status;
-  UINT32                    BaseClkFreq;
   UINT32                    SettingFreq;
   UINT32                    Divisor;
   UINT32                    Remainder;
@@ -703,9 +707,8 @@ SdMmcHcClockSupply (
   //
   // Calculate a divisor for SD clock frequency
   //
-  ASSERT (Capability.BaseClkFreq != 0);
+  ASSERT (BaseClkFreq != 0);
 
-  BaseClkFreq = Capability.BaseClkFreq;
   if (ClockFreq == 0) {
     return EFI_INVALID_PARAMETER;
   }
@@ -896,7 +899,7 @@ SdMmcHcSetBusWidth (
 
   @param[in] PciIo          The PCI IO protocol instance.
   @param[in] Slot           The slot number of the SD card to send the command to.
-  @param[in] Capability     The capability of the slot.
+  @param[in] BaseClkFreq    The base clock frequency of host controller in MHz.
 
   @retval EFI_SUCCESS       The clock is supplied successfully.
   @retval Others            The clock isn't supplied successfully.
@@ -906,7 +909,7 @@ EFI_STATUS
 SdMmcHcInitClockFreq (
   IN EFI_PCI_IO_PROTOCOL    *PciIo,
   IN UINT8                  Slot,
-  IN SD_MMC_HC_SLOT_CAP     Capability
+  IN UINT32                 BaseClkFreq
   )
 {
   EFI_STATUS                Status;
@@ -915,7 +918,7 @@ SdMmcHcInitClockFreq (
   //
   // Calculate a divisor for SD clock frequency
   //
-  if (Capability.BaseClkFreq == 0) {
+  if (BaseClkFreq == 0) {
     //
     // Don't support get Base Clock Frequency information via another method
     //
@@ -925,7 +928,7 @@ SdMmcHcInitClockFreq (
   // Supply 400KHz clock frequency at initialization phase.
   //
   InitFreq = 400;
-  Status = SdMmcHcClockSupply (PciIo, Slot, InitFreq, Capability);
+  Status = SdMmcHcClockSupply (PciIo, Slot, InitFreq, BaseClkFreq);
   return Status;
 }
 
@@ -1024,6 +1027,7 @@ SdMmcHcInitTimeoutCtrl (
   @param[in] PciIo          The PCI IO protocol instance.
   @param[in] Slot           The slot number of the SD card to send the command to.
   @param[in] Capability     The capability of the slot.
+  @param[in] BaseClkFreq    The base clock frequency of host controller in MHz.
 
   @retval EFI_SUCCESS       The host controller is initialized successfully.
   @retval Others            The host controller isn't initialized successfully.
@@ -1033,12 +1037,13 @@ EFI_STATUS
 SdMmcHcInitHost (
   IN EFI_PCI_IO_PROTOCOL    *PciIo,
   IN UINT8                  Slot,
-  IN SD_MMC_HC_SLOT_CAP     Capability
+  IN SD_MMC_HC_SLOT_CAP     Capability,
+  IN UINT32                 BaseClkFreq
   )
 {
   EFI_STATUS       Status;
 
-  Status = SdMmcHcInitClockFreq (PciIo, Slot, Capability);
+  Status = SdMmcHcInitClockFreq (PciIo, Slot, BaseClkFreq);
   if (EFI_ERROR (Status)) {
     return Status;
   }

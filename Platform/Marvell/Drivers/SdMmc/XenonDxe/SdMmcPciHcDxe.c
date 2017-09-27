@@ -291,7 +291,10 @@ SdMmcPciHcEnumerateDevice (
         //
         // Reinitialize slot and restart identification process for the new attached device
         //
-        Status = SdMmcHcInitHost (Private->PciIo, Slot, Private->Capability[Slot]);
+        Status = SdMmcHcInitHost (Private->PciIo,
+                   Slot,
+                   Private->Capability[Slot],
+                   Private->BaseClkFreq[Slot]);
         if (EFI_ERROR (Status)) {
           continue;
         }
@@ -617,11 +620,13 @@ SdMmcPciHcDriverBindingStart (
   Private->Capability[Slot].Sdr50 = 0;
   Private->Capability[Slot].BusWidth8 = 0;
 
-  if (Private->Capability[Slot].BaseClkFreq == 0) {
-    Private->Capability[Slot].BaseClkFreq = 0xff;
-  }
+  //
+  // Override inappropriate base clock frequency from Capabilities Register 1.
+  // Actual clock speed of Xenon controller is 400MHz.
+  //
+  Private->BaseClkFreq[Slot] = XENON_MMC_MAX_CLK / 1000 / 1000;
 
-  DumpCapabilityReg (Slot, &Private->Capability[Slot]);
+  DumpCapabilityReg (Slot, &Private->Capability[Slot], Private->BaseClkFreq[Slot]);
 
   Status = SdMmcHcGetMaxCurrent (PciIo, Slot, &Private->MaxCurrent[Slot]);
   if (EFI_ERROR (Status)) {

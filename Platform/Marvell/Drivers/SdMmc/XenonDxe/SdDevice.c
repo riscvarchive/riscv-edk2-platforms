@@ -972,7 +972,7 @@ SdCardSetBusMode (
     return Status;
   }
 
-  Status = SdMmcHcClockSupply (PciIo, Slot, ClockFreq * 1000, *Capability);
+  Status = SdMmcHcClockSupply (PciIo, Slot, ClockFreq * 1000, Private->BaseClkFreq[Slot]);
   if (EFI_ERROR (Status)) {
     return Status;
   }
@@ -1144,7 +1144,7 @@ SdCardIdentification (
         goto Error;
       }
 
-      SdMmcHcInitClockFreq (PciIo, Slot, Private->Capability[Slot]);
+      SdMmcHcInitClockFreq (PciIo, Slot, Private->BaseClkFreq[Slot]);
 
       gBS->Stall (1000);
 
