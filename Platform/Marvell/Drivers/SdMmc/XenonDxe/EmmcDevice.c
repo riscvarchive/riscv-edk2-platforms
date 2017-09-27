@@ -772,6 +772,8 @@ EmmcSwitchToHighSpeed (
   if (IsDdr) {
     HostCtrl2 = BIT2;
   } else if (ClockFreq == 52) {
+    HostCtrl2 = BIT1;
+  } else if (ClockFreq == 26) {
     HostCtrl2 = BIT0;
   } else {
     HostCtrl2 = 0;
