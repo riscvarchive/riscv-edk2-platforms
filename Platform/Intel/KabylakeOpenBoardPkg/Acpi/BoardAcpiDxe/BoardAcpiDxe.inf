@@ -60,7 +60,7 @@
 
   gBoardModuleTokenSpaceGuid.PcdAcpiSleepState
   gBoardModuleTokenSpaceGuid.PcdAcpiHibernate
-  gPlatformModuleTokenSpaceGuid.PcdLowPowerS0Idle
+  gMinPlatformModuleTokenSpaceGuid.PcdLowPowerS0Idle
   gBoardModuleTokenSpaceGuid.PcdDisableActiveTripPoints
   gBoardModuleTokenSpaceGuid.PcdDisablePassiveTripPoints
   gBoardModuleTokenSpaceGuid.PcdDisableCriticalTripPoints

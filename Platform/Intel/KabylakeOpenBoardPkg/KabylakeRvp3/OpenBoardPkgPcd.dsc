@@ -34,7 +34,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
 [PcdsFixedAtBuild.common]
-!if gPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+!if gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
 !endif
@@ -104,17 +104,17 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddressMask|0xFFFC
 
   !if $(TARGET) == RELEASE
-  gPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
   !else
-  gPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
   !endif
 
 
-  gPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
   !if $(TARGET) == RELEASE
-  gPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x25
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x25
   !else
-  gPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x80
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x80
   !endif
 
   gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFE5F000
@@ -150,7 +150,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   # BIT2: Firmware setting this bit is an indication that it will not allow reconfiguration of system resources via non-architectural mechanisms.
   # BIT3-31: Reserved
   #
-  gPlatformModuleTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
+  gMinPlatformModuleTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
 
   #
   # See HstiFeatureBit.h for the definition
@@ -161,7 +161,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 [PcdsFixedAtBuild.IA32]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|0x0
   gIntelFsp2PkgTokenSpaceGuid.PcdGlobalDataPointerAddress|0xFED00148
-  gPlatformModuleTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
+  gMinPlatformModuleTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
   gIntelFsp2WrapperTokenSpaceGuid.PcdPeiMinMemSize|0x3800000
 
 [PcdsFixedAtBuild.X64]
@@ -185,7 +185,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
   gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
 
-!if gPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+!if gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
 !endif
 

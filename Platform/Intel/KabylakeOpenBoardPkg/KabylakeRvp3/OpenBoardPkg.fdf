@@ -46,7 +46,7 @@ DEFINE SIPKG_PEI_BIN      = INF
 
 # Set FLASH_REGION_FV_RECOVERY_OFFSET to PcdNemCodeCacheBase, because macro expression is not supported.
 # So, PlatformSecLib uses PcdFlashAreaBaseAddress + PcdNemCodeCacheBase to get the real CodeCache base address.
-SET gSiPkgTokenSpaceGuid.PcdNemCodeCacheBase = $(gPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryOffset)
+SET gSiPkgTokenSpaceGuid.PcdNemCodeCacheBase = $(gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryOffset)
 SET gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase = $(gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress) + $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset)
 SET gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize)
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase) + 0x60
@@ -54,13 +54,13 @@ SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(gSiPkgTokenSpac
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress) + $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset)
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize)
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashMicrocodeOffset = 0x60
-SET gPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeBase    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase
-SET gPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeSize    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize
-SET gPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeOffset  = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset
+SET gMinPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeBase    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase
+SET gMinPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeSize    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize
+SET gMinPlatformModuleTokenSpaceGuid.PcdFlashFvMicrocodeOffset  = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashCodeCacheAddress = gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashCodeCacheSize    = gSiPkgTokenSpaceGuid.PcdFlashAreaSize
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress    = gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize           = gSiPkgTokenSpaceGuid.PcdFlashAreaSize
+SET gMinPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress    = gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress
+SET gMinPlatformModuleTokenSpaceGuid.PcdFlashAreaSize           = gSiPkgTokenSpaceGuid.PcdFlashAreaSize
 ################################################################################
 #
 # Following are lists of FD Region layout which correspond to the locations of different
@@ -77,7 +77,7 @@ SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize           = gSiPkgTokenSpaceG
 # Fv Size can be adjusted
 #
 ################################################################################
-gPlatformModuleTokenSpaceGuid.PcdFlashNvStorageVariableOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashNvStorageVariableOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
 #NV_VARIABLE_STORE
 DATA = {
@@ -102,7 +102,7 @@ DATA = {
   #Blockmap[1]: End
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
   ## This is the VARIABLE_STORE_HEADER
-!if gPlatformModuleTokenSpaceGuid.PcdUefiSecureBootEnable == TRUE
+!if gMinPlatformModuleTokenSpaceGuid.PcdUefiSecureBootEnable == TRUE
   #  Signature: gEfiAuthenticatedVariableGuid = { 0xaaf32c78, 0x947b, 0x439a, { 0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92 }}
   0x78, 0x2c, 0xf3, 0xaa, 0x7b, 0x94, 0x9a, 0x43,
   0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92,
@@ -118,7 +118,7 @@ DATA = {
   0x5A, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 }
 
-gPlatformModuleTokenSpaceGuid.PcdFlashNvStorageFtwWorkingOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashNvStorageFtwWorkingOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
 #NV_FTW_WORKING
 DATA = {
@@ -132,28 +132,28 @@ DATA = {
   0xE0, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 }
 
-gPlatformModuleTokenSpaceGuid.PcdFlashNvStorageFtwSpareOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashNvStorageFtwSpareOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 #NV_FTW_SPARE
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedSize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvAdvancedSize
 FV = FvAdvanced
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvSecurityOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvSecuritySize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvSecurityBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvSecuritySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvSecurityOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvSecuritySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvSecurityBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvSecuritySize
 FV = FvSecurity
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootSize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvOsBootSize
 FV = FvOsBoot
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootSize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvUefiBootSize
 FV = FvUefiBoot
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemoryOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemorySize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemoryBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemorySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemoryOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemorySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemoryBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPostMemorySize
 FV = FvPostMemory
 
 gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset|gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize
@@ -161,18 +161,18 @@ gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase|gSiPkgTokenSpaceGuid.PcdFlashMicroc
 #Microcode
 FV = FvMicrocode
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvFspSOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvFspSSize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvFspSBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvFspSSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspSOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspSSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspSBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspSSize
 # FSP_S Section
 FILE = $(PLATFORM_FSP_BIN_PACKAGE)/Fsp_Rebased_S.fd
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTSize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTSize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvFspMTSize
 # FSP_M & T Section
 FILE = $(PLATFORM_FSP_BIN_PACKAGE)/Fsp_Rebased_M_T.fd
 
-gPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryOffset|gPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemorySize
-gPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemorySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryOffset|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemorySize
+gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemoryBase|gMinPlatformModuleTokenSpaceGuid.PcdFlashFvPreMemorySize
 FV = FvPreMemory
 
 ################################################################################
@@ -370,7 +370,7 @@ FvNameGuid         = A0F04529-B715-44C6-BCA4-2DEBDD01EEEC
 
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CoreOsBootInclude.fdf
 
-!if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
 INF  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
 INF  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
 INF  $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
@@ -404,7 +404,7 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = 97F09B89-9E83-4DDC-A3D1-10C4AF539D1E
 
-!if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
 $(SIPKG_DXE_SMM_BIN) $(PLATFORM_SI_PACKAGE)/Pch/PchInit/Dxe/PchInitDxe.inf
 $(SIPKG_DXE_SMM_BIN) $(PLATFORM_SI_PACKAGE)/SystemAgent/SaInit/Dxe/SaInitDxe.inf
 
@@ -498,7 +498,7 @@ FvNameGuid         = 4199E560-54AE-45E5-91A4-F7BC3804E14A
 
 INF  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
 
-!if gPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
+!if gMinPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
 INF $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
@@ -528,17 +528,17 @@ FvNameGuid         = F753FE9A-EEFD-485B-840B-E032D538102C
 
 INF  IntelSiliconPkg/Feature/VTd/IntelVTdDxe/IntelVTdDxe.inf
 
-!if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
 
 INF $(PLATFORM_SI_PACKAGE)/Hsti/Dxe/HstiSiliconDxe.inf
 
 !endif
 
-!if gPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
 
 INF  $(PLATFORM_PACKAGE)/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
 
-!if gPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
+!if gMinPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
 INF  $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
 !endif
 
