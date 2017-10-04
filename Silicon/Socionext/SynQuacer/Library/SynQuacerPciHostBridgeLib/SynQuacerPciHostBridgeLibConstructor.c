@@ -32,10 +32,13 @@
 #define IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_IO           0x2
 #define IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG0         0x4
 #define IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG1         0x5
+#define IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TH                BIT12
 
 #define IATU_REGION_CTRL_2_OFF_OUTBOUND_0                   0x908
 #define IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN         BIT31
 #define IATU_REGION_CTRL_2_OFF_OUTBOUND_0_CFG_SHIFT_MODE    BIT28
+#define IATU_REGION_CTRL_2_OFF_OUTBOUND_0_MSG_CODE_32BIT    0xF
+#define IATU_REGION_CTRL_2_OFF_OUTBOUND_0_MSG_CODE_64BIT    0xFF
 
 #define IATU_LWR_BASE_ADDR_OFF_OUTBOUND_0                   0x90C
 #define IATU_UPPER_BASE_ADDR_OFF_OUTBOUND_0                 0x910
@@ -297,8 +300,9 @@ PciInitController (
     RootBridge->Mem.Base,
     RootBridge->Mem.Base,
     RootBridge->Mem.Limit - RootBridge->Mem.Base + 1,
-    IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM,
-    0);
+    IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM |
+    IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TH,
+    IATU_REGION_CTRL_2_OFF_OUTBOUND_0_MSG_CODE_32BIT);
 
   // Region 1: Type 0 config space
   ConfigureWindow (DbiBase, 1,
