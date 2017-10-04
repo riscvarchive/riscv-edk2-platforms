@@ -570,7 +570,7 @@ EFI_STATUS AssertPciePcsReset(UINT32 HostBridgeNum,UINT32 Port)
   if (pcs_local_status_checked)
         DEBUG((EFI_D_ERROR, "pcs local reset status read failed\n"));
 
-    count = 0;
+  count = 0;
   do {
         MicroSecondDelay(1000);
         count ++;
@@ -583,7 +583,7 @@ EFI_STATUS AssertPciePcsReset(UINT32 HostBridgeNum,UINT32 Port)
   if (hilink_status_checked)
         DEBUG((EFI_D_ERROR, "error:pcs assert reset failed\n"));
 
-    return EFI_SUCCESS;
+  return EFI_SUCCESS;
 }
 
 EFI_STATUS DeassertPciePcsReset(UINT32 HostBridgeNum, UINT32 Port)
@@ -616,7 +616,7 @@ EFI_STATUS DeassertPciePcsReset(UINT32 HostBridgeNum, UINT32 Port)
   if (pcs_local_status_checked)
         DEBUG((EFI_D_ERROR, "pcs deassert reset failed!\n"));
 
-    count = 0;
+  count = 0;
   do {
         MicroSecondDelay(1000);
         RegRead(pcie_subctrl_base[HostBridgeNum] + PCIE_SUBCTRL_SC_PCIE_HILINK_PCS_RESET_ST_REG, hilink_reset_status);
@@ -627,7 +627,7 @@ EFI_STATUS DeassertPciePcsReset(UINT32 HostBridgeNum, UINT32 Port)
   if (hilink_status_checked)
         DEBUG((EFI_D_ERROR, "pcs deassert reset failed!\n"));
 
-    return EFI_SUCCESS;
+  return EFI_SUCCESS;
 }
 
 VOID PcieGen3Config(UINT32 HostBridgeNum, UINT32 Port)
@@ -777,7 +777,7 @@ EFI_STATUS HisiPcieClockCtrl(UINT32 soctype, UINT32 HostBridgeNum, UINT32 Port, 
   if (clock_status_checked)
         DEBUG((EFI_D_ERROR, "clock operation failed!\n"));
 
-    return EFI_SUCCESS;
+  return EFI_SUCCESS;
 }
 
 VOID PcieSpdSet(UINT32 soctype, UINT32 HostBridgeNum, UINT32 Port, UINT8 Spd)

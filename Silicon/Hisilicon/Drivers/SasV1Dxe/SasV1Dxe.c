@@ -497,8 +497,8 @@ STATIC VOID hisi_sas_v1_init(struct hisi_hba *hba, PLATFORM_SAS_PROTOCOL *plat)
         !(dma_rx_status & DMA_RX_STATUS_BUSY))
         break;
 
-        // Wait for status change in polling
-        NanoSecondDelay (100);
+      // Wait for status change in polling
+      NanoSecondDelay (100);
     }
   }
 
