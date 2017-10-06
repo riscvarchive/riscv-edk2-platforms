@@ -103,7 +103,6 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
-  INF MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   INF EmbeddedPkg/EmbeddedMonotonicCounter/EmbeddedMonotonicCounter.inf
   INF MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
   INF EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
@@ -114,6 +113,11 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF Platform/Marvell/Drivers/Spi/MvSpiDxe.inf
   INF Platform/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
   INF Platform/Marvell/Armada/Drivers/Armada70x0RngDxe/Armada70x0RngDxe.inf
+
+  # Variable services
+  INF Platform/Marvell/Drivers/Spi/Variables/MvFvbDxe.inf
+  INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+  INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 
   # Network support
   INF MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
