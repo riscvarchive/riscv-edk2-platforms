@@ -44,20 +44,6 @@ XenonReadVersion (
   SdMmcHcRwMmio (PciIo, SD_BAR_INDEX, SD_MMC_HC_CTRL_VER, TRUE, SDHC_REG_SIZE_2B, ControllerVersion);
 }
 
-STATIC
-VOID
-XenonSetFifo (
-  IN EFI_PCI_IO_PROTOCOL   *PciIo
-  )
-{
-  UINTN Data;
-
-  // Set FIFO_RTC, FIFO_WTC, FIFO_CS and FIFO_PDLVMC
-  Data = SDHC_SLOT_FIFO_DEFAULT_CONFIG;
-
-  SdMmcHcRwMmio (PciIo, SD_BAR_INDEX, SDHC_SLOT_FIFO_CTRL, FALSE, SDHC_REG_SIZE_4B, &Data);
-}
-
 // Auto Clock Gating
 STATIC
 VOID
@@ -633,8 +619,6 @@ XenonInit (
 
   // Read XENON version
   XenonReadVersion (PciIo, &Private->ControllerVersion);
-
-  XenonSetFifo (PciIo);
 
   // Disable auto clock generator
   XenonSetAcg (PciIo, FALSE);
