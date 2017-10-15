@@ -84,7 +84,7 @@ typedef struct {
     },                                                      \
     Base,                                                   \
     Size,                                                   \
-    EFI_ACPI_IORT_SMMUv1v2_MODEL_v1,                        \
+    EFI_ACPI_IORT_SMMUv1v2_MODEL_MMU401,                    \
     EFI_ACPI_IORT_SMMUv1v2_FLAG_COH_WALK,                   \
     FIELD_OFFSET(EFI_ACPI_6_0_IO_REMAPPING_SMMU_NODE,       \
                  SMMU_NSgIrpt),                             \
