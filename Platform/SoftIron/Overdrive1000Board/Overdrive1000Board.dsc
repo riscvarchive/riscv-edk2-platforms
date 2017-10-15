@@ -703,7 +703,7 @@ DEFINE DO_FLASHER   = FALSE
   }
 
 !if $(DO_FLASHER) == TRUE
-  OpenPlatformPkg/Silicon/AMD/Styx/Applications/StyxFlashUefi/StyxFlashUefi.inf {
+  Silicon/AMD/Styx/Applications/StyxFlashUefi/StyxFlashUefi.inf {
     <LibraryClasses>
       ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
   }

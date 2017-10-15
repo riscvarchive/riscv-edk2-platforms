@@ -29,10 +29,10 @@
   StyxFlashUefi.c
 
 [Packages]
-  AmdModulePkg/AmdModulePkg.dec
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
+  Silicon/AMD/Styx/AmdModulePkg/AmdModulePkg.dec
 
 [LibraryClasses]
   BaseMemoryLib
