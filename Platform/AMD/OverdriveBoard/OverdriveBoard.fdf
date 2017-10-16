@@ -249,11 +249,13 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Silicon/AMD/Styx/Drivers/StyxRngDxe/StyxRngDxe.inf
 
+!if $(DO_CAPSULE) == TRUE
   #
   # Firmware update
   #
   INF MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
   INF SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
+!endif
 
 [FV.STYX_EFI]
 FvAlignment        = 16
@@ -283,14 +285,18 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/PCD/Pei/Pcd.inf
   INF MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
   INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
-  INF RuleOverride = FMP_IMAGE_DESC Platform/AMD/OverdriveBoard/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
 
+!if $(DO_CAPSULE) == TRUE
+  INF RuleOverride = FMP_IMAGE_DESC Platform/AMD/OverdriveBoard/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
+!endif
 
   FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
     SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
       SECTION FV_IMAGE = FVMAIN
     }
   }
+
+!if $(DO_CAPSULE) == TRUE
 
 [FV.CapsuleDispatchFv]
 FvAlignment        = 16
@@ -359,6 +365,7 @@ CAPSULE_HEADER_INIT_VERSION = 0x1
 
   FMP_PAYLOAD = FmpPayloadSystemFirmwarePkcs7
 
+!endif
 
 ################################################################################
 #

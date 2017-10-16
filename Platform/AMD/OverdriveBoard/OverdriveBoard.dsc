@@ -23,6 +23,7 @@ DEFINE DO_PSCI      = 1
 DEFINE DO_ISCP      = 1
 DEFINE DO_KCS       = 1
 DEFINE DO_FLASHER   = FALSE
+DEFINE DO_CAPSULE   = FALSE
 
   PLATFORM_NAME                  = Overdrive
   PLATFORM_GUID                  = B2296C02-9DA1-4CD1-BD48-4D4F0F1276EB
@@ -124,6 +125,7 @@ DEFINE DO_FLASHER   = FALSE
   RealTimeClockLib|Silicon/AMD/Styx/Library/RealTimeClockLib/RealTimeClockLib.inf
 
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibFmp/DxeCapsuleLib.inf
+!if $(DO_CAPSULE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLibCrypto.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
@@ -131,6 +133,7 @@ DEFINE DO_FLASHER   = FALSE
   FmpAuthenticationLib|SecurityPkg/Library/FmpAuthenticationLibPkcs7/FmpAuthenticationLibPkcs7.inf
   IniParsingLib|SignedCapsulePkg/Library/IniParsingLib/IniParsingLib.inf
   PlatformFlashAccessLib|Silicon/AMD/Styx/Library/StyxPlatformFlashAccessLib/StyxPlatformFlashAccessLib.inf
+!endif
 
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   PlatformBootManagerLib|ArmPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
@@ -507,6 +510,8 @@ DEFINE DO_FLASHER   = FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase64|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase64|0x0
 
+!if $(DO_CAPSULE) == TRUE
+
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100
 
@@ -515,6 +520,8 @@ DEFINE DO_FLASHER   = FALSE
 
   # d34b3d29-0085-4ab3-8be8-84188cc50489
   gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{0x29, 0x3d, 0x4b, 0xd3, 0x85, 0x0, 0xb3, 0x4a, 0x8b, 0xe8, 0x84, 0x18, 0x8c, 0xc5, 0x04, 0x89}
+
+!endif
 
 [PcdsDynamicHii]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5
@@ -763,6 +770,7 @@ DEFINE DO_FLASHER   = FALSE
   }
 !endif
 
+!if $(DO_CAPSULE) == TRUE
   #
   # Firmware update
   #
@@ -770,3 +778,4 @@ DEFINE DO_FLASHER   = FALSE
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
   Platform/AMD/OverdriveBoard/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
+!endif
