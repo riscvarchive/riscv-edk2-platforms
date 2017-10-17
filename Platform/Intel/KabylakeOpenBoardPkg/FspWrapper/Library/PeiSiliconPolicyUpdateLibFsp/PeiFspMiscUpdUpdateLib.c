@@ -25,7 +25,9 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/MemoryAllocationLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DebugPrintErrorLevelLib.h>
+#include <Library/PciLib.h>
 #include <Guid/MemoryOverwriteControl.h>
+#include <PchAccess.h>
 
 /**
   Performs FSP Misc UPD initialization.
@@ -60,6 +62,14 @@ PeiFspMiscUpdUpdatePreMem (
   DEBUG ((DEBUG_INFO, "Get L\"MemoryConfig\" gFspNonVolatileStorageHobGuid - %r\n", Status));
   DEBUG ((DEBUG_INFO, "MemoryConfig Size - 0x%x\n", VariableSize));
   FspmUpd->FspmArchUpd.NvsBufferPtr = MemorySavedData;
+
+  if (FspmUpd->FspmArchUpd.NvsBufferPtr != NULL) {
+    //
+    // Set the DISB bit in PCH (DRAM Initialization Scratchpad Bit - GEN_PMCON_A[23]),
+    // after memory Data is saved to NVRAM.
+    //
+    PciOr32 ((UINTN)PCI_LIB_ADDRESS (0, PCI_DEVICE_NUMBER_PCH_PMC, PCI_FUNCTION_NUMBER_PCH_PMC, R_PCH_PMC_GEN_PMCON_A), B_PCH_PMC_GEN_PMCON_A_DISB);
+  }
 
   //
   // MOR
