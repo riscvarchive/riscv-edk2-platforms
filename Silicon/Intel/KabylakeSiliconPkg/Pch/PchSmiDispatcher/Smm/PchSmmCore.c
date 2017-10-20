@@ -349,6 +349,7 @@ PchSmmCoreRegister (
   UINT32                      GpiSmiStsRegAddress;
   UINT32                      Data32Or;
   UINT32                      Data32And;
+  UINTN                       ContextSize;
 
   //
   // Initialize NullSourceDesc
@@ -380,6 +381,8 @@ PchSmmCoreRegister (
   ///
   Record->Callback          = DispatchFunction;
 
+  Record->ChildContext      = *DispatchContext;
+
   Qualified                 = QUALIFIED_PROTOCOL_FROM_GENERIC (This);
 
   Record->ProtocolType      = Qualified->Type;
@@ -389,6 +392,7 @@ PchSmmCoreRegister (
   /// Perform linked list housekeeping
   ///
   Record->Signature = DATABASE_RECORD_SIGNATURE;
+  ContextSize = 0;
 
   switch (Qualified->Type) {
     ///
@@ -406,6 +410,7 @@ PchSmmCoreRegister (
 
       MapUsbToSrcDesc (DispatchContext, &(Record->SrcDesc));
       Record->ClearSource = NULL;
+      ContextSize = sizeof(Record->ChildContext.Usb);
       ///
       /// use default clear source function
       ///
@@ -426,6 +431,7 @@ PchSmmCoreRegister (
 
       CopyMem ((VOID *) &(Record->SrcDesc), (VOID *) (&SX_SOURCE_DESC), sizeof (PCH_SMM_SOURCE_DESC));
       Record->ClearSource = NULL;
+      ContextSize = sizeof(Record->ChildContext.Sx);
       ///
       /// use default clear source function
       ///
@@ -458,6 +464,7 @@ PchSmmCoreRegister (
 
       CopyMem ((VOID *) &(Record->SrcDesc), (VOID *) (&SW_SOURCE_DESC), sizeof (PCH_SMM_SOURCE_DESC));
       Record->ClearSource = NULL;
+      ContextSize = sizeof(Record->ChildContext.Sw);
       ///
       /// use default clear source function
       ///
@@ -490,6 +497,7 @@ PchSmmCoreRegister (
       Record->SrcDesc.Sts[0].Reg.Data.raw = GpiSmiStsRegAddress;  // GPI SMI Status register
       Record->SrcDesc.Sts[0].Bit = GpiSmiBitOffset;               // Bit position for selected pad
       Record->ClearSource = NULL;
+      ContextSize = sizeof(Record->ChildContext.Gpi);
       ///
       /// use default clear source function
       ///
@@ -515,6 +523,7 @@ PchSmmCoreRegister (
 
       CopyMem ((VOID *) &(Record->SrcDesc), (VOID *) &POWER_BUTTON_SOURCE_DESC, sizeof (PCH_SMM_SOURCE_DESC));
       Record->ClearSource = NULL;
+      ContextSize = sizeof(Record->ChildContext.PowerButton);
       ///
       /// use default clear source function
       ///
@@ -531,6 +540,7 @@ PchSmmCoreRegister (
 
       MapPeriodicTimerToSrcDesc (DispatchContext, &(Record->SrcDesc));
       Record->ClearSource = PchSmmPeriodicTimerClearSource;
+      ContextSize = sizeof(Record->ChildContext.PeriodicTimer);
       break;
 
     default:
@@ -565,6 +575,9 @@ PchSmmCoreRegister (
   /// Child's handle will be the address linked list link in the record
   ///
   *DispatchHandle = (EFI_HANDLE) (&Record->Link);
+  *DispatchContext = Record->ChildContext;
+
+  SmiHandlerProfileRegisterHandler (Qualified->Guid, DispatchFunction, (UINTN)RETURN_ADDRESS (0), &Record->ChildContext, ContextSize);
 
   return EFI_SUCCESS;
 
@@ -600,7 +613,7 @@ PchSmmCoreUnRegister (
   DATABASE_RECORD *RecordToDelete;
   DATABASE_RECORD *RecordInDb;
   LIST_ENTRY      *LinkInDb;
-
+  PCH_SMM_QUALIFIED_PROTOCOL  *Qualified;
 
   if (DispatchHandle == NULL) {
     return EFI_INVALID_PARAMETER;
@@ -647,6 +660,41 @@ PchSmmCoreUnRegister (
       continue;
     }
     WriteBitDesc (&RecordToDelete->SrcDesc.En[DescIndex], 0, FALSE);
+  }
+
+  if (This != NULL) {
+    UINTN                       ContextSize;
+
+    Qualified = QUALIFIED_PROTOCOL_FROM_GENERIC (This);
+    switch (Qualified->Type) {
+    case UsbType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.Usb);
+      break;
+    case SxType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.Sx);
+      break;
+    case SwType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.Sw);
+      break;
+    case GpiType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.Gpi);
+      break;
+    case PowerButtonType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.PowerButton);
+      break;
+    case PeriodicTimerType:
+      ContextSize = sizeof(RecordToDelete->ChildContext.PeriodicTimer);
+      break;
+    default:
+      ASSERT(FALSE);
+      ContextSize = 0;
+      break;
+    }
+    SmiHandlerProfileUnregisterHandler (Qualified->Guid, RecordToDelete->Callback, &RecordToDelete->ChildContext, ContextSize);
+  } else {
+    if (RecordToDelete->ProtocolGuid != NULL) {
+      SmiHandlerProfileUnregisterHandler (RecordToDelete->ProtocolGuid, (EFI_SMM_HANDLER_ENTRY_POINT2)RecordToDelete->PchSmiCallback, &RecordToDelete->PchSmiType, sizeof(RecordToDelete->PchSmiType));
+    }
   }
 
   Status = gSmst->SmmFreePool (RecordToDelete);

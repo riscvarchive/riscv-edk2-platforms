@@ -14,6 +14,11 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #include "PchSmmEspi.h"
 
+#define PCH_ESPI_SMI_DISPATCH_GUID \
+  {0xcfde92ca, 0xd104, 0x4f75, {0x85, 0xde, 0xab, 0x56, 0x5e, 0x2f, 0x52, 0xf0}}
+
+EFI_GUID gPchEspiSmiDispatchGuid = PCH_ESPI_SMI_DISPATCH_GUID;
+
 GLOBAL_REMOVE_IF_UNREFERENCED ESPI_SMI_INSTANCE mEspiSmiInstance = {
   //
   // Signature
@@ -545,6 +550,7 @@ InsertEspiRecord (
 
   Record->Callback  = DispatchFunction;
   Record->Signature = ESPI_SMI_RECORD_SIGNATURE;
+  Record->EspiSmiType = EspiSmiType;
 
   InsertTailList (&mEspiSmiInstance.CallbackDataBase[EspiSmiType], &Record->Link);
   EspiSmiClearStatus (EspiSmiType);
@@ -553,6 +559,8 @@ InsertEspiRecord (
   ++mEspiSmiInstance.EspiSmiEventCounter[EspiSmiType];
 
   *DispatchHandle = (EFI_HANDLE) (&Record->Link);
+
+  SmiHandlerProfileRegisterHandler (&gPchEspiSmiDispatchGuid, (EFI_SMM_HANDLER_ENTRY_POINT2)DispatchFunction, (UINTN)RETURN_ADDRESS (0), &EspiSmiType, sizeof(EspiSmiType));
 
   return EFI_SUCCESS;
 }
@@ -699,6 +707,7 @@ RegisterBiosWrProtectIfNull (
 
   if (mEspiSmiInstance.PchSmiEspiHandle[EspiBiosWrProtect] == NULL) {
     Status = PchSmiRecordInsert (
+               &gPchTcoSmiDispatchProtocolGuid,
                &mSrcDescEspiBiosWp,
                (PCH_SMI_CALLBACK_FUNCTIONS) EspiSmiCallback,
                PchTcoSmiLpcBiosWpType,
@@ -735,6 +744,7 @@ RegisterSerialIrqIfNull (
 
   if (mEspiSmiInstance.PchSmiEspiHandle[EspiSerialIrq] == NULL) {
     Status = PchSmiRecordInsert (
+               &gPchSmiDispatchProtocolGuid,
                &mSrcDescSerialIrq,
                (PCH_SMI_CALLBACK_FUNCTIONS) EspiSmiCallback,
                PchSmiSerialIrqType,
@@ -1244,6 +1254,7 @@ EspiSlaveSmiRegister (
   //        instead of EspiSmiCallback.
   //
   Status = PchSmiRecordInsert (
+             &gPchEspiSmiDispatchProtocolGuid,
              &mSrcDescEspiSlave,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchEspiSmiEspiSlaveType,
@@ -1337,6 +1348,8 @@ EspiSmiUnRegister (
             EspiSmiDisableSource (EspiSmiType);
           }
         }
+
+        SmiHandlerProfileUnregisterHandler (&gPchEspiSmiDispatchGuid, (EFI_SMM_HANDLER_ENTRY_POINT2)RecordPointer->Callback, &RecordPointer->EspiSmiType, sizeof(RecordPointer->EspiSmiType));
 
         Status = gSmst->SmmFreePool (RecordPointer);
         if (EFI_ERROR (Status)) {

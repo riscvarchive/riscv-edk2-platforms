@@ -45,6 +45,7 @@ GpioLib
 GpioPrivateLib
 S3BootScriptLib
 ConfigBlockLib
+SmiHandlerProfileLib
 
 
 [Packages]

@@ -100,6 +100,10 @@ typedef struct _ESPI_SMI_RECORD {
   UINT32                          Signature;
   LIST_ENTRY                      Link;
   PCH_ESPI_SMI_DISPATCH_CALLBACK  Callback;
+  ///
+  /// Indicate the ESPI SMI types.
+  ///
+  ESPI_SMI_TYPE                   EspiSmiType;
 } ESPI_SMI_RECORD;
 
 /**

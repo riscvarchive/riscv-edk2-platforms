@@ -28,6 +28,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 **/
 EFI_STATUS
 PchSmiRecordInsert (
+  IN  EFI_GUID                          *ProtocolGuid,
   IN  PCH_SMM_SOURCE_DESC               *SrcDesc,
   IN  PCH_SMI_CALLBACK_FUNCTIONS        DispatchFunction,
   IN  PCH_SMI_TYPES                     PchSmiType,
@@ -59,6 +60,7 @@ PchSmiRecordInsert (
   Record->Signature                      = DATABASE_RECORD_SIGNATURE;
   Record->PchSmiCallback                 = DispatchFunction;
   Record->ProtocolType                   = PchSmiDispatchType;
+  Record->ProtocolGuid                   = ProtocolGuid;
   Record->PchSmiType                     = PchSmiType;
 
   Record->ContextFunctions.GetContext    = NULL;
@@ -78,9 +80,20 @@ PchSmiRecordInsert (
   //
   *DispatchHandle = (EFI_HANDLE) (&Record->Link);
 
+  if (ProtocolGuid != NULL) {
+    SmiHandlerProfileRegisterHandler (ProtocolGuid, (EFI_SMM_HANDLER_ENTRY_POINT2)DispatchFunction, (UINTN)RETURN_ADDRESS (0), &PchSmiType, sizeof(PchSmiType));
+  }
+
   return EFI_SUCCESS;
 }
 
+EFI_STATUS
+PchSmiRecordUnRegister (
+  IN EFI_HANDLE                                         DispatchHandle
+  )
+{
+  return PchSmmCoreUnRegister(NULL, DispatchHandle);
+}
 
 //
 // TCO_STS bit that needs to be cleared
@@ -230,6 +243,7 @@ PchTcoSmiMchRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescMch,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiMchType,
@@ -312,6 +326,7 @@ PchTcoSmiTcoTimeoutRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescTcoTimeout,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiTcoTimeoutType,
@@ -394,6 +409,7 @@ PchTcoSmiOsTcoRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescOsTco,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiOsTcoType,
@@ -473,6 +489,7 @@ PchTcoSmiNmiRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescNmi,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiNmiType,
@@ -562,6 +579,7 @@ PchTcoSmiIntruderDetRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescIntruderDet,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiIntruderDetectType,
@@ -721,6 +739,7 @@ PchTcoSmiSpiBiosWpRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescSpiBiosWp,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiSpiBiosWpType,
@@ -816,6 +835,7 @@ PchTcoSmiLpcBiosWpRegister (
 
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescLpcBiosWp,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiLpcBiosWpType,
@@ -918,6 +938,7 @@ PchTcoSmiNewCenturyRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchTcoSmiDispatchProtocolGuid,
              &mSrcDescNewCentury,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchTcoSmiNewCenturyType,
@@ -974,7 +995,7 @@ PchTcoSmiUnRegister (
     //
     return EFI_ACCESS_DENIED;
   }
-  return PchSmmCoreUnRegister (NULL, DispatchHandle);
+  return PchSmiRecordUnRegister (DispatchHandle);
 }
 
 
@@ -1058,6 +1079,7 @@ PchPcieSmiHotPlugRegister (
   PchPcieSmiRpHotPlugTemplate.Sts[0].Reg.Data.pcie.Fields.Fnc = (UINT8) RpFun;
 
   Status = PchSmiRecordInsert (
+             &gPchPcieSmiDispatchProtocolGuid,
              &PchPcieSmiRpHotPlugTemplate,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchPcieSmiRpHotplugType,
@@ -1149,6 +1171,7 @@ PchPcieSmiLinkActiveRegister (
   PchPcieSmiRpLinkActiveTemplate.Sts[0].Reg.Data.pcie.Fields.Fnc = (UINT8) RpFun;
 
   Status = PchSmiRecordInsert (
+             &gPchPcieSmiDispatchProtocolGuid,
              &PchPcieSmiRpLinkActiveTemplate,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchPcieSmiRpLinkActiveType,
@@ -1239,6 +1262,7 @@ PchPcieSmiLinkEqRegister (
   PchPcieSmiRpLinkEqTemplate.Sts[0].Reg.Data.pcie.Fields.Fnc = (UINT8) RpFun;
 
   return PchSmiRecordInsert (
+           &gPchPcieSmiDispatchProtocolGuid,
            &PchPcieSmiRpLinkEqTemplate,
            (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
            PchPcieSmiRpLinkEqType,
@@ -1266,7 +1290,7 @@ PchPcieSmiUnRegister (
   IN  EFI_HANDLE                        DispatchHandle
   )
 {
-  return PchSmmCoreUnRegister (NULL, DispatchHandle);
+  return PchSmiRecordUnRegister (DispatchHandle);
 }
 
 //
@@ -1336,6 +1360,7 @@ PchAcpiSmiPmeRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchAcpiSmiDispatchProtocolGuid,
              &mSrcDescPme,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchAcpiSmiPmeType,
@@ -1414,6 +1439,7 @@ PchAcpiSmiPmeB0Register (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchAcpiSmiDispatchProtocolGuid,
              &mSrcDescPmeB0,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchAcpiSmiPmeB0Type,
@@ -1492,6 +1518,7 @@ PchAcpiSmiRtcAlarmRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchAcpiSmiDispatchProtocolGuid,
              &mSrcDescRtcAlarm,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchAcpiSmiRtcAlarmType,
@@ -1570,6 +1597,7 @@ PchAcpiSmiTmrOverflowRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchAcpiSmiDispatchProtocolGuid,
              &mSrcDescTmrOverflow,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchAcpiSmiTmrOverflowType,
@@ -1601,7 +1629,7 @@ PchAcpiSmiUnRegister (
   IN  EFI_HANDLE                        DispatchHandle
   )
 {
-  return PchSmmCoreUnRegister (NULL, DispatchHandle);
+  return PchSmiRecordUnRegister (DispatchHandle);
 }
 
 //
@@ -1671,6 +1699,7 @@ PchGpioUnlockSmiRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchGpioUnlockSmiDispatchProtocolGuid,
              &mSrcDescGpioUnlock,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchGpioUnlockSmiType,
@@ -1702,7 +1731,7 @@ PchGpioUnlockSmiUnRegister (
   IN  EFI_HANDLE                                  DispatchHandle
   )
 {
-  return PchSmmCoreUnRegister (NULL, DispatchHandle);
+  return PchSmiRecordUnRegister (DispatchHandle);
 }
 
 //
@@ -1765,6 +1794,7 @@ PchSmiSerialIrqRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchSmiDispatchProtocolGuid,
              &mSrcDescSerialIrq,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchSmiSerialIrqType,
@@ -1843,6 +1873,7 @@ PchSmiMcSmiRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchSmiDispatchProtocolGuid,
              &mSrcDescMcSmi,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchSmiMcSmiType,
@@ -1914,6 +1945,7 @@ PchSmiSmbusRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchSmiDispatchProtocolGuid,
              &mSrcDescSmbus,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchSmiSmBusType,
@@ -2064,6 +2096,7 @@ PchSmiSpiAsyncRegister (
   }
 
   Status = PchSmiRecordInsert (
+             &gPchSmiDispatchProtocolGuid,
              &mSrcDescSpiAsyncSmi,
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchSmiSpiAsyncType,
@@ -2121,7 +2154,7 @@ PchSmiUnRegister (
     }
   }
 
-  return PchSmmCoreUnRegister (NULL, DispatchHandle);
+  return PchSmiRecordUnRegister (DispatchHandle);
 }
 
 
@@ -2466,6 +2499,7 @@ PchInternalIoTrapSmiRegister (
   EFI_STATUS                            Status;
 
   Status = PchSmiRecordInsert (
+             NULL,
              &mSrcDescIoTrap[IoTrapIndex],
              (PCH_SMI_CALLBACK_FUNCTIONS) DispatchFunction,
              PchIoTrapSmiType,

@@ -53,6 +53,8 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Protocol/PchEspiSmiDispatch.h>
 #include "IoTrap.h"
 
+#include <Library/SmiHandlerProfileLib.h>
+
 #define EFI_BAD_POINTER          0xAFAFAFAFAFAFAFAFULL
 
 extern BOOLEAN                   mReadyToLock;
@@ -450,6 +452,7 @@ struct _DATABASE_RECORD {
   /// The protocol that this record dispatches
   ///
   PCH_SMM_PROTOCOL_TYPE         ProtocolType;
+  EFI_GUID                      *ProtocolGuid;
 
   ///
   /// Misc data for private usage
@@ -915,6 +918,7 @@ PchInternalEspiSmiUnRegister (
 **/
 EFI_STATUS
 PchSmiRecordInsert (
+  IN  EFI_GUID                          *ProtocolGuid,
   IN  PCH_SMM_SOURCE_DESC               *SrcDesc,
   IN  PCH_SMI_CALLBACK_FUNCTIONS        DispatchFunction,
   IN  PCH_SMI_TYPES                     PchSmiType,

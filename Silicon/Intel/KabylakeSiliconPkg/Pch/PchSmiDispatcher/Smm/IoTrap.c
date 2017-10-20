@@ -457,6 +457,8 @@ IoTrapRegister (
   DEBUG ((DEBUG_INFO, "RegisterContext->Address:%x! \n", RegisterContext->Address));
   DEBUG ((DEBUG_INFO, "RegisterContext->Length:%x! \n", RegisterContext->Length));
 
+  SmiHandlerProfileRegisterHandler (&gEfiSmmIoTrapDispatch2ProtocolGuid, DispatchFunction, (UINTN)RETURN_ADDRESS (0), RegisterContext, sizeof(*RegisterContext));
+
   return EFI_SUCCESS;
 }
 
@@ -583,6 +585,8 @@ IoTrapUnRegister (
       break;
     }
   }
+
+  SmiHandlerProfileUnregisterHandler (&gEfiSmmIoTrapDispatch2ProtocolGuid, RecordToDelete->Callback, &RecordToDelete->Context, sizeof(RecordToDelete->Context));
 
   RemoveEntryList (&RecordToDelete->Link);
   Status = gSmst->SmmFreePool (RecordToDelete);
