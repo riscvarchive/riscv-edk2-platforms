@@ -39,6 +39,10 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
 !endif
 
+!if gMinPlatformModuleTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
+!endif
+
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
   gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000

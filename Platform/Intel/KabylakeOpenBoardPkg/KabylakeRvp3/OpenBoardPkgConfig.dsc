@@ -132,5 +132,10 @@
     gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
   !endif
 
-    gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable|FALSE
+  !if $(TARGET) == DEBUG
+    gMinPlatformModuleTokenSpaceGuid.PcdSmiHandlerProfileEnable|TRUE
+  !else
+    gMinPlatformModuleTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE
+  !endif
 
+    gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable|FALSE
