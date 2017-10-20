@@ -322,6 +322,8 @@ INF  ShellBinPkg/UefiShell/UefiShell.inf
 INF  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
 INF  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
 
+INF  $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
+
 [FV.FvUefiBoot]
 BlockSize          = $(FLASH_BLOCK_SIZE)
 FvAlignment        = 16

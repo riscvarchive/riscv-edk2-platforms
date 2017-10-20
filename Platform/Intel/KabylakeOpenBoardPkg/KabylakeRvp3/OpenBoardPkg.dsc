@@ -245,6 +245,7 @@
 
   $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
   
+  $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
   $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
 
 #
