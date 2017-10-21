@@ -101,12 +101,19 @@ EFI_STATUS
   IN SPI_DEVICE *SpiDev
   );
 
+typedef
+EFI_STATUS
+(EFIAPI *MV_SPI_CONFIG_RT) (
+  IN SPI_DEVICE *SpiDev
+  );
+
 struct _MARVELL_SPI_MASTER_PROTOCOL {
   MV_SPI_INIT         Init;
   MV_SPI_READ_WRITE   ReadWrite;
   MV_SPI_TRANSFER     Transfer;
   MV_SPI_SETUP_DEVICE SetupDevice;
   MV_SPI_FREE_DEVICE  FreeDevice;
+  MV_SPI_CONFIG_RT    ConfigRuntime;
 };
 
 #endif // __MARVELL_SPI_MASTER_PROTOCOL_H__

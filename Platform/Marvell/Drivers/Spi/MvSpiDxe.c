@@ -211,7 +211,9 @@ MvSpiTransfer (
 
   Length = 8 * DataByteCount;
 
-  EfiAcquireLock (&SpiMaster->Lock);
+  if (!EfiAtRuntime ()) {
+    EfiAcquireLock (&SpiMaster->Lock);
+  }
 
   if (Flag & SPI_TRANSFER_BEGIN) {
     SpiActivateCs (Slave);
@@ -254,7 +256,9 @@ MvSpiTransfer (
     SpiDeactivateCs (Slave);
   }
 
-  EfiReleaseLock (&SpiMaster->Lock);
+  if (!EfiAtRuntime ()) {
+    EfiReleaseLock (&SpiMaster->Lock);
+  }
 
   return EFI_SUCCESS;
 }
@@ -338,6 +342,44 @@ MvSpiFreeSlave (
   return EFI_SUCCESS;
 }
 
+EFI_STATUS
+EFIAPI
+MvSpiConfigRuntime (
+  IN SPI_DEVICE *Slave
+  )
+{
+  EFI_STATUS Status;
+  UINTN AlignedAddress;
+
+  //
+  // Host register base may be not aligned to the page size,
+  // which is not accepted when setting memory space attributes.
+  // Add one aligned page of memory space which covers the host
+  // controller registers.
+  //
+  AlignedAddress = Slave->HostRegisterBaseAddress & ~(SIZE_4KB - 1);
+
+  Status = gDS->AddMemorySpace (EfiGcdMemoryTypeMemoryMappedIo,
+                  AlignedAddress,
+                  SIZE_4KB,
+                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Failed to add memory space\n", __FUNCTION__));
+    return Status;
+  }
+
+  Status = gDS->SetMemorySpaceAttributes (AlignedAddress,
+                  SIZE_4KB,
+                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Failed to set memory attributes\n", __FUNCTION__));
+    gDS->RemoveMemorySpace (AlignedAddress, SIZE_4KB);
+    return Status;
+  }
+
+  return EFI_SUCCESS;
+}
+
 STATIC
 EFI_STATUS
 SpiMasterInitProtocol (
@@ -350,6 +392,7 @@ SpiMasterInitProtocol (
   SpiMasterProtocol->FreeDevice  = MvSpiFreeSlave;
   SpiMasterProtocol->Transfer    = MvSpiTransfer;
   SpiMasterProtocol->ReadWrite   = MvSpiReadWrite;
+  SpiMasterProtocol->ConfigRuntime = MvSpiConfigRuntime;
 
   return EFI_SUCCESS;
 }
@@ -363,8 +406,7 @@ SpiMasterEntryPoint (
 {
   EFI_STATUS  Status;
 
-  mSpiMasterInstance = AllocateZeroPool (sizeof (SPI_MASTER));
-
+  mSpiMasterInstance = AllocateRuntimeZeroPool (sizeof (SPI_MASTER));
   if (mSpiMasterInstance == NULL) {
     return EFI_OUT_OF_RESOURCES;
   }

@@ -33,7 +33,7 @@
   INF_VERSION                    = 0x00010005
   BASE_NAME                      = SpiMasterDxe
   FILE_GUID                      = c19dbc8a-f4f9-43b0-aee5-802e3ed03d15
-  MODULE_TYPE                    = DXE_DRIVER
+  MODULE_TYPE                    = DXE_RUNTIME_DRIVER
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = SpiMasterEntryPoint
 
@@ -53,8 +53,10 @@
   TimerLib
   UefiLib
   DebugLib
+  DxeServicesTableLib
   MemoryAllocationLib
   IoLib
+  UefiRuntimeLib
 
 [FixedPcd]
   gMarvellTokenSpaceGuid.PcdSpiRegBase
@@ -65,4 +67,7 @@
   gMarvellSpiMasterProtocolGuid
 
 [Depex]
-  TRUE
+  #
+  # MvSpiDxe must be loaded prior to MvSpiFlash driver
+  #
+  BEFORE gMarvellSpiFlashDxeGuid
