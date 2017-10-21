@@ -33,6 +33,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 #include "MvSpiFlash.h"
 
+STATIC EFI_EVENT            mMvSpiFlashVirtualAddrChangeEvent;
 MARVELL_SPI_MASTER_PROTOCOL *SpiMasterProtocol;
 SPI_FLASH_INSTANCE  *mSpiFlashInstance;
 
@@ -503,6 +504,33 @@ MvSpiFlashInitProtocol (
   return EFI_SUCCESS;
 }
 
+/**
+  Fixup internal data so that EFI can be call in virtual mode.
+  Call the passed in Child Notify event and convert any pointers in
+  lib to virtual mode.
+
+  @param[in]    Event   The Event that is being processed
+  @param[in]    Context Event Context
+**/
+STATIC
+VOID
+EFIAPI
+MvSpiFlashVirtualNotifyEvent (
+  IN EFI_EVENT        Event,
+  IN VOID             *Context
+  )
+{
+  //
+  // Convert SpiMasterProtocol callbacks in MvSpiFlashErase and
+  // MvSpiFlashWrite required by runtime variable support.
+  //
+  EfiConvertPointer (0x0, (VOID**)&SpiMasterProtocol->ReadWrite);
+  EfiConvertPointer (0x0, (VOID**)&SpiMasterProtocol->Transfer);
+  EfiConvertPointer (0x0, (VOID**)&SpiMasterProtocol);
+
+  return;
+}
+
 EFI_STATUS
 EFIAPI
 MvSpiFlashEntryPoint (
@@ -522,8 +550,7 @@ MvSpiFlashEntryPoint (
     return EFI_DEVICE_ERROR;
   }
 
-  mSpiFlashInstance = AllocateZeroPool (sizeof (SPI_FLASH_INSTANCE));
-
+  mSpiFlashInstance = AllocateRuntimeZeroPool (sizeof (SPI_FLASH_INSTANCE));
   if (mSpiFlashInstance == NULL) {
     DEBUG((DEBUG_ERROR, "SpiFlash: Cannot allocate memory\n"));
     return EFI_OUT_OF_RESOURCES;
@@ -540,10 +567,33 @@ MvSpiFlashEntryPoint (
                   NULL
                   );
   if (EFI_ERROR (Status)) {
-    FreePool (mSpiFlashInstance);
     DEBUG((DEBUG_ERROR, "SpiFlash: Cannot install SPI flash protocol\n"));
-    return EFI_DEVICE_ERROR;
+    goto ErrorInstallProto;
   }
+
+  //
+  // Register for the virtual address change event
+  //
+  Status = gBS->CreateEventEx (EVT_NOTIFY_SIGNAL,
+                  TPL_NOTIFY,
+                  MvSpiFlashVirtualNotifyEvent,
+                  NULL,
+                  &gEfiEventVirtualAddressChangeGuid,
+                  &mMvSpiFlashVirtualAddrChangeEvent);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Failed to register VA change event\n", __FUNCTION__));
+    goto ErrorCreateEvent;
+  }
+
+  return EFI_SUCCESS;
+
+ErrorCreateEvent:
+  gBS->UninstallMultipleProtocolInterfaces (&mSpiFlashInstance->Handle,
+    &gMarvellSpiFlashProtocolGuid,
+    NULL);
+
+ErrorInstallProto:
+  FreePool (mSpiFlashInstance);
 
   return EFI_SUCCESS;
 }
