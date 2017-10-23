@@ -210,6 +210,11 @@ READ_LOCK_STATUS   = TRUE
   INF Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.inf
 
   #
+  # Console preference selection
+  #
+  INF EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf
+
+  #
   # DT support
   #
   INF RuleOverride = DTB Silicon/Socionext/SynQuacer/DeviceTree/DeveloperBox.inf

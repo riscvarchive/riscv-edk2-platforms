@@ -600,6 +600,14 @@
   }
 
   #
+  # Console preference selection
+  #
+  EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf {
+    <LibraryClasses>
+      FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
+  }
+
+  #
   # DT support
   #
   Silicon/Socionext/SynQuacer/DeviceTree/DeveloperBox.inf
