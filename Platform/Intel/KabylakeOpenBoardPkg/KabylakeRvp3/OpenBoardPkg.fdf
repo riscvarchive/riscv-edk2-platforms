@@ -481,6 +481,10 @@ FvNameGuid         = 9B7FA59D-71C6-4A36-906E-9725EA6ADD5B
 
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CoreSecurityPreMemoryInclude.fdf
 
+INF  IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
+
+INF  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
+
 [FV.FvSecurityPostMemory]
 BlockSize          = $(FLASH_BLOCK_SIZE)
 FvAlignment        = 16         #FV alignment and FV attributes setting.
@@ -503,14 +507,10 @@ FvNameGuid         = 4199E560-54AE-45E5-91A4-F7BC3804E14A
 
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CoreSecurityPostMemoryInclude.fdf
 
-INF  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
-
 !if gMinPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
 INF $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
-INF  IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
-     
 [FV.FvSecurityLate]
 BlockSize          = $(FLASH_BLOCK_SIZE)
 FvAlignment        = 16
