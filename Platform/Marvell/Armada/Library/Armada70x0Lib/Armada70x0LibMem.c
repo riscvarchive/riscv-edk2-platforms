@@ -50,6 +50,59 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 STATIC ARM_MEMORY_REGION_DESCRIPTOR mVirtualMemoryTable[MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS];
 
+// Obtain DRAM size basing on register values filled by early firmware.
+STATIC
+UINT64
+GetDramSize (
+  IN OUT UINT64 *MemSize
+  )
+{
+  UINT64 BaseAddr;
+  UINT8 RegionCode;
+  UINT8 Cs;
+
+  *MemSize = 0;
+
+  for (Cs = 0; Cs < DRAM_MAX_CS_NUM; Cs++) {
+
+    /* Exit loop on first disabled DRAM CS */
+    if (!DRAM_CS_ENABLED (Cs)) {
+      break;
+    }
+
+    /*
+     * Sanity check for base address of next DRAM block.
+     * Only continuous space will be used.
+     */
+    BaseAddr = GET_DRAM_REGION_BASE (Cs);
+    if (BaseAddr != *MemSize) {
+      DEBUG ((DEBUG_ERROR,
+        "%a: DRAM blocks are not contiguous, limit size to 0x%llx\n",
+        __FUNCTION__,
+        *MemSize));
+      return EFI_SUCCESS;
+    }
+
+    /* Decode area length for current CS from register value */
+    RegionCode = GET_DRAM_REGION_SIZE_CODE (Cs);
+
+    if (DRAM_REGION_SIZE_EVEN (RegionCode)) {
+      *MemSize += GET_DRAM_REGION_SIZE_EVEN (RegionCode);
+    } else if (DRAM_REGION_SIZE_ODD (RegionCode)) {
+      *MemSize += GET_DRAM_REGION_SIZE_ODD (RegionCode);
+    } else {
+      DEBUG ((DEBUG_ERROR,
+        "%a: Invalid memory region code (0x%x) for CS#%d\n",
+        __FUNCTION__,
+        RegionCode,
+        Cs));
+      return EFI_INVALID_PARAMETER;
+    }
+  }
+
+  return EFI_SUCCESS;
+}
+
 /**
   Return the Virtual Memory Map of your platform
 
@@ -72,12 +125,18 @@ ArmPlatformGetVirtualMemoryMap (
   UINT64                        MemHighSize;
   UINT64                        ConfigSpaceBaseAddr;
   EFI_RESOURCE_ATTRIBUTE_TYPE   ResourceAttributes;
+  EFI_STATUS                    Status;
 
   ASSERT (VirtualMemoryMap != NULL);
 
   ConfigSpaceBaseAddr = FixedPcdGet64 (PcdConfigSpaceBaseAddress);
 
-  MemSize = FixedPcdGet64 (PcdSystemMemorySize);
+  // Obtain total memory size from the hardware.
+  Status = GetDramSize (&MemSize);
+  if (EFI_ERROR (Status)) {
+    MemSize = FixedPcdGet64 (PcdSystemMemorySize);
+    DEBUG ((DEBUG_ERROR, "Limit total memory size to %d MB\n", MemSize / 1024 / 1024));
+  }
 
   if (DRAM_REMAP_ENABLED) {
     MemLowSize = MIN (DRAM_REMAP_TARGET, MemSize);
