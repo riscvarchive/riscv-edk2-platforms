@@ -243,9 +243,8 @@ MvI2cClearIflg (
  IN I2C_MASTER_CONTEXT *I2cMasterContext
  )
 {
-  gBS->Stall(I2C_OPERATION_TIMEOUT);
+  MvI2cPollCtrl (I2cMasterContext, I2C_OPERATION_TIMEOUT, I2C_CONTROL_IFLG);
   MvI2cControlClear(I2cMasterContext, I2C_CONTROL_IFLG);
-  gBS->Stall(I2C_OPERATION_TIMEOUT);
 }
 
 /* Timeout is given in us */
@@ -294,9 +293,6 @@ MvI2cLockedStart (
     DEBUG((DEBUG_INFO, "MvI2cDxe: IFLG set, clearing\n"));
     MvI2cClearIflg(I2cMasterContext);
   }
-
-  /* Without this delay we Timeout checking IFLG if the Timeout is 0 */
-  gBS->Stall(I2C_OPERATION_TIMEOUT);
 
   if (MvI2cPollCtrl(I2cMasterContext, Timeout, I2C_CONTROL_IFLG)) {
     DEBUG((DEBUG_ERROR, "MvI2cDxe: Timeout sending %sSTART condition\n",
