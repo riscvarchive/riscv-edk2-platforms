@@ -21,6 +21,9 @@
 #define IRQ_TYPE_LEVEL_HIGH     4
 #define IRQ_TYPE_LEVEL_LOW      8
 
+#define GPIO_ACTIVE_HIGH        0
+#define GPIO_ACTIVE_LOW         1
+
 / {
     #address-cells = <2>;
     #size-cells = <2>;
@@ -510,5 +513,14 @@
 
         msi-map = <0x0 &its 0x10000 0x7f00>;
         dma-coherent;
+    };
+
+    gpio: gpio@51000000 {
+        compatible = "socionext,synquacer-gpio", "fujitsu,mb86s70-gpio";
+        reg = <0x0 0x51000000 0x0 0x100>;
+        gpio-controller;
+        #gpio-cells = <2>;
+        clocks = <&clk_apb>;
+        base = <0>;
     };
 };
