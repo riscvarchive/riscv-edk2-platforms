@@ -121,7 +121,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x80
   !endif
 
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFE5F000
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFE00000
 
   ## Specifies max supported number of Logical Processors.

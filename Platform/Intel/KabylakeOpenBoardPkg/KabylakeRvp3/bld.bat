@@ -60,9 +60,7 @@ if exist %WORKSPACE_PLATFORM%\%PROJECT%\OpenBoardPkgPcd.dsc attrib -r %WORKSPACE
 
 cd %WORKSPACE%
 
-copy /y /b %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_M.fd+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_T.fd %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_M_T.fd
-@REM prefix pad.bin file which adds 0xC bytes of data (Note: Section will add 4 bytes of SECTION Header). This is done to align the FSP Header to 16 bytes
-copy /y /b %WORKSPACE_PLATFORM%\%PLATFORM_PACKAGE%\Tools\Fsp\pad.bin+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_S.fd %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_S_padded.fd
+copy /y /b %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_S.fd+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_M.fd+%WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased_T.fd %WORKSPACE_FSP_BIN%\KabylakeFspBinPkg\Fsp_Rebased.fd
 :SkipPatchFspBinFvsBaseAddress
 
 
