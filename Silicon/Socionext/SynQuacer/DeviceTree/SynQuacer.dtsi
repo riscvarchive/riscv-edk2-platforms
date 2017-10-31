@@ -523,4 +523,13 @@
         clocks = <&clk_apb>;
         base = <0>;
     };
+
+    exiu: interrupt-controller@510c0000 {
+        compatible = "socionext,synquacer-exiu";
+        reg = <0x0 0x510c0000 0x0 0x20>;
+        interrupt-controller;
+        interrupt-parent = <&gic>;
+        #interrupt-cells = <3>;
+        socionext,spi-base = <112>;
+    };
 };
