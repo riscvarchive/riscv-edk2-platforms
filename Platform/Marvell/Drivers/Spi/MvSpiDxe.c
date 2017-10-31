@@ -38,12 +38,13 @@ SPI_MASTER *mSpiMasterInstance;
 STATIC
 EFI_STATUS
 SpiSetBaudRate (
+  IN SPI_DEVICE *Slave,
   IN UINT32 CpuClock,
   IN UINT32 MaxFreq
   )
 {
   UINT32 Spr, BestSpr, Sppr, BestSppr, ClockDivider, Match, Reg, MinBaudDiff;
-  UINTN SpiRegBase = PcdGet32 (PcdSpiRegBase);
+  UINTN SpiRegBase = Slave->HostRegisterBaseAddress;
 
   MinBaudDiff = 0xFFFFFFFF;
   BestSppr = 0;
@@ -93,26 +94,28 @@ SpiSetBaudRate (
 STATIC
 VOID
 SpiSetCs (
-  UINT8 CsId
+  IN SPI_DEVICE *Slave
   )
 {
-  UINT32 Reg, SpiRegBase = PcdGet32 (PcdSpiRegBase);
+  UINT32 Reg;
+  UINTN  SpiRegBase = Slave->HostRegisterBaseAddress;
 
   Reg = MmioRead32 (SpiRegBase + SPI_CTRL_REG);
   Reg &= ~SPI_CS_NUM_MASK;
-  Reg |= (CsId << SPI_CS_NUM_OFFSET);
+  Reg |= (Slave->Cs << SPI_CS_NUM_OFFSET);
   MmioWrite32 (SpiRegBase + SPI_CTRL_REG, Reg);
 }
 
 STATIC
 VOID
 SpiActivateCs (
-  UINT8 IN CsId
+  IN SPI_DEVICE *Slave
   )
 {
-  UINT32  Reg, SpiRegBase = PcdGet32 (PcdSpiRegBase);
+  UINT32 Reg;
+  UINTN  SpiRegBase = Slave->HostRegisterBaseAddress;
 
-  SpiSetCs(CsId);
+  SpiSetCs(Slave);
   Reg = MmioRead32 (SpiRegBase + SPI_CTRL_REG);
   Reg |= SPI_CS_EN_MASK;
   MmioWrite32(SpiRegBase + SPI_CTRL_REG, Reg);
@@ -121,10 +124,11 @@ SpiActivateCs (
 STATIC
 VOID
 SpiDeactivateCs (
-  VOID
+  IN SPI_DEVICE *Slave
   )
 {
-  UINT32  Reg, SpiRegBase = PcdGet32 (PcdSpiRegBase);
+  UINT32 Reg;
+  UINTN  SpiRegBase = Slave->HostRegisterBaseAddress;
 
   Reg = MmioRead32 (SpiRegBase + SPI_CTRL_REG);
   Reg &= ~SPI_CS_EN_MASK;
@@ -139,14 +143,15 @@ SpiSetupTransfer (
   )
 {
   SPI_MASTER *SpiMaster;
-  UINT32 Reg, SpiRegBase, CoreClock, SpiMaxFreq;
+  UINT32 Reg, CoreClock, SpiMaxFreq;
+  UINTN SpiRegBase;
 
   SpiMaster = SPI_MASTER_FROM_SPI_MASTER_PROTOCOL (This);
 
   // Initialize values from PCDs
-  SpiRegBase  = PcdGet32 (PcdSpiRegBase);
-  CoreClock   = PcdGet32 (PcdSpiClockFrequency);
-  SpiMaxFreq  = PcdGet32 (PcdSpiMaxFrequency);
+  SpiRegBase  = Slave->HostRegisterBaseAddress;
+  CoreClock   = Slave->CoreClock;
+  SpiMaxFreq  = Slave->MaxFreq;
 
   EfiAcquireLock (&SpiMaster->Lock);
 
@@ -154,9 +159,9 @@ SpiSetupTransfer (
   Reg |= SPI_BYTE_LENGTH;
   MmioWrite32 (SpiRegBase + SPI_CONF_REG, Reg);
 
-  SpiSetCs(Slave->Cs);
+  SpiSetCs(Slave);
 
-  SpiSetBaudRate (CoreClock, SpiMaxFreq);
+  SpiSetBaudRate (Slave, CoreClock, SpiMaxFreq);
 
   Reg = MmioRead32 (SpiRegBase + SPI_CONF_REG);
   Reg &= ~(SPI_CPOL_MASK | SPI_CPHA_MASK | SPI_TXLSBF_MASK | SPI_RXLSBF_MASK);
@@ -194,21 +199,22 @@ MvSpiTransfer (
 {
   SPI_MASTER *SpiMaster;
   UINT64  Length;
-  UINT32  Iterator, Reg, SpiRegBase;
+  UINT32  Iterator, Reg;
   UINT8   *DataOutPtr = (UINT8 *)DataOut;
   UINT8   *DataInPtr  = (UINT8 *)DataIn;
   UINT8   DataToSend  = 0;
+  UINTN   SpiRegBase;
 
   SpiMaster = SPI_MASTER_FROM_SPI_MASTER_PROTOCOL (This);
 
-  SpiRegBase = PcdGet32 (PcdSpiRegBase);
+  SpiRegBase = Slave->HostRegisterBaseAddress;
 
   Length = 8 * DataByteCount;
 
   EfiAcquireLock (&SpiMaster->Lock);
 
   if (Flag & SPI_TRANSFER_BEGIN) {
-    SpiActivateCs (Slave->Cs);
+    SpiActivateCs (Slave);
   }
 
   // Set 8-bit mode
@@ -245,7 +251,7 @@ MvSpiTransfer (
   }
 
   if (Flag & SPI_TRANSFER_END) {
-    SpiDeactivateCs ();
+    SpiDeactivateCs (Slave);
   }
 
   EfiReleaseLock (&SpiMaster->Lock);
@@ -311,6 +317,10 @@ MvSpiSetupSlave (
     Slave->Cs   = Cs;
     Slave->Mode = Mode;
   }
+
+  Slave->HostRegisterBaseAddress = PcdGet32 (PcdSpiRegBase);
+  Slave->CoreClock = PcdGet32 (PcdSpiClockFrequency);
+  Slave->MaxFreq = PcdGet32 (PcdSpiMaxFrequency);
 
   SpiSetupTransfer (This, Slave);
 

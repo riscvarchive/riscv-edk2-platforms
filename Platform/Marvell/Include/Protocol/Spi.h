@@ -53,6 +53,8 @@ typedef struct {
   SPI_MODE Mode;
   UINT32 AddrSize;
   NOR_FLASH_INFO *Info;
+  UINTN HostRegisterBaseAddress;
+  UINTN CoreClock;
 } SPI_DEVICE;
 
 typedef
