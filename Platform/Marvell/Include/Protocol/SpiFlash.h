@@ -36,17 +36,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <Protocol/Spi.h>
 
-#define CMD_READ_ID                     0x9f
-#define READ_STATUS_REG_CMD             0x0b
-#define CMD_WRITE_ENABLE                0x06
-#define CMD_FLAG_STATUS                 0x70
-#define CMD_WRITE_STATUS_REG            0x01
-#define CMD_READ_ARRAY_FAST             0x0b
-#define CMD_PAGE_PROGRAM                0x02
-#define CMD_BANK_WRITE                  0xc5
-#define CMD_ERASE_64K                   0xd8
-#define CMD_4B_ADDR_ENABLE              0xb7
-
 extern EFI_GUID gMarvellSpiFlashProtocolGuid;
 
 typedef struct _MARVELL_SPI_FLASH_PROTOCOL MARVELL_SPI_FLASH_PROTOCOL;
