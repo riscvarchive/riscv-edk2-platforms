@@ -60,6 +60,7 @@
   MdeModulePkg/MdeModulePkg.dec
   IntelFsp2Pkg/IntelFsp2Pkg.dec
   IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   KabylakeFspBinPkg/KabylakeFspBinPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
@@ -142,4 +143,7 @@
   gFspNonVolatileStorageHobGuid                 ## CONSUMES
   gTianoLogoGuid                                ## CONSUMES
   gEfiMemoryOverwriteControlDataGuid
+
+[Depex]
+  gEdkiiVTdInfoPpiGuid
 
