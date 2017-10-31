@@ -44,6 +44,7 @@
  SpiFlashCmd.uni
 
 [Packages]
+ EmbeddedPkg/EmbeddedPkg.dec
  MdePkg/MdePkg.dec
  ShellPkg/ShellPkg.dec
  MdeModulePkg/MdeModulePkg.dec
@@ -66,7 +67,6 @@
 
 [Pcd]
  gMarvellTokenSpaceGuid.PcdSpiFlashCs
- gMarvellTokenSpaceGuid.PcdSpiFlashId
  gMarvellTokenSpaceGuid.PcdSpiFlashMode
 
 [Protocols]

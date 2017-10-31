@@ -42,10 +42,12 @@
   MvSpiDxe.h
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   Platform/Marvell/Marvell.dec
 
 [LibraryClasses]
+  NorFlashInfoLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
   TimerLib

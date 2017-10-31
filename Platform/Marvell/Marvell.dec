@@ -128,12 +128,6 @@
   gMarvellTokenSpaceGuid.PcdSpiMaxFrequency|0|UINT32|0x30000052
   gMarvellTokenSpaceGuid.PcdSpiClockFrequency|0|UINT32|0x30000053
 
-  gMarvellTokenSpaceGuid.PcdSpiFlashPollCmd|0|UINT32|0x3000052
-  gMarvellTokenSpaceGuid.PcdSpiFlashAddressCycles|0|UINT32|0x3000053
-  gMarvellTokenSpaceGuid.PcdSpiFlashEraseSize|0|UINT64|0x3000054
-  gMarvellTokenSpaceGuid.PcdSpiFlashPageSize|0|UINT32|0x3000055
-  gMarvellTokenSpaceGuid.PcdSpiFlashSectorSize|65536|UINT64|0x3000059
-  gMarvellTokenSpaceGuid.PcdSpiFlashId|{ 0x0 }|VOID*|0x3000056
   gMarvellTokenSpaceGuid.PcdSpiFlashCs|0|UINT32|0x3000057
   gMarvellTokenSpaceGuid.PcdSpiFlashMode|0|UINT32|0x3000058
 

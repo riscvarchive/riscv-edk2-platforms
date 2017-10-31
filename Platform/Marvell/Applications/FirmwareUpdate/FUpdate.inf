@@ -44,6 +44,7 @@
   FUpdate.uni
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Platform/Marvell/Marvell.dec
@@ -63,9 +64,6 @@
   UefiLib
   UefiLib
   UefiRuntimeServicesTableLib
-
-[Pcd]
- gMarvellTokenSpaceGuid.PcdSpiFlashId
 
 [Protocols]
  gMarvellSpiFlashProtocolGuid

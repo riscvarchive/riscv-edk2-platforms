@@ -34,6 +34,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __MARVELL_SPI_MASTER_PROTOCOL_H__
 #define __MARVELL_SPI_MASTER_PROTOCOL_H__
 
+#include <Library/NorFlashInfoLib.h>
+
 extern EFI_GUID gMarvellSpiMasterProtocolGuid;
 
 typedef struct _MARVELL_SPI_MASTER_PROTOCOL MARVELL_SPI_MASTER_PROTOCOL;
@@ -49,6 +51,8 @@ typedef struct {
   INTN Cs;
   INTN MaxFreq;
   SPI_MODE Mode;
+  UINT32 AddrSize;
+  NOR_FLASH_INFO *Info;
 } SPI_DEVICE;
 
 typedef

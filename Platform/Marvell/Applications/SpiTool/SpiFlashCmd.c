@@ -166,13 +166,8 @@ FlashProbe (
   )
 {
   EFI_STATUS Status;
-  UINT32     FlashIdLen;
-  UINT8      *FlashId;
 
-  FlashId = (UINT8 *)PcdGetPtr (PcdSpiFlashId);
-  FlashIdLen = PcdGetSize (PcdSpiFlashId);
-
-  Status = SpiFlashProtocol->ReadId (Slave, FlashIdLen, FlashId);
+  Status = SpiFlashProtocol->ReadId (Slave, FALSE);
   if (EFI_ERROR (Status)) {
     return SHELL_ABORTED;
   }
