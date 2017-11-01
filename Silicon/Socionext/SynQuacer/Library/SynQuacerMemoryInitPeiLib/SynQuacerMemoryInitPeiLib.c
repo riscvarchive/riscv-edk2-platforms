@@ -170,6 +170,44 @@ DeclareDram (
   return EFI_SUCCESS;
 }
 
+STATIC
+BOOLEAN
+CheckCapsule (
+  IN  EFI_PEI_SERVICES              **PeiServices,
+  IN  PEI_CAPSULE_PPI               *Capsule,
+  IN  EFI_PHYSICAL_ADDRESS          UefiMemoryBase,
+  OUT VOID                          **CapsuleBuffer,
+  OUT UINTN                         *CapsuleBufferLength
+  )
+{
+  EFI_STATUS        Status;
+
+  Status = Capsule->CheckCapsuleUpdate (PeiServices);
+  if (!EFI_ERROR (Status)) {
+
+    //
+    // Coalesce the capsule into unused memory. CreateState() below will copy
+    // it to a properly allocated buffer.
+    //
+    *CapsuleBuffer = (VOID *)PcdGet64 (PcdSystemMemoryBase);
+    *CapsuleBufferLength = UefiMemoryBase - PcdGet64 (PcdSystemMemoryBase);
+
+    PeiServicesSetBootMode (BOOT_ON_FLASH_UPDATE);
+
+    Status = Capsule->Coalesce (PeiServices, CapsuleBuffer,
+                        CapsuleBufferLength);
+    if (!EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_INFO, "%a: Coalesced capsule @ %p (0x%lx)\n",
+        __FUNCTION__, *CapsuleBuffer, *CapsuleBufferLength));
+      return TRUE;
+    } else {
+      DEBUG ((DEBUG_WARN, "%a: failed to coalesce() capsule (Status == %r)\n",
+        __FUNCTION__, Status));
+    }
+  }
+  return FALSE;
+}
+
 EFI_STATUS
 EFIAPI
 MemoryPeim (
@@ -184,6 +222,7 @@ MemoryPeim (
   VOID                          *CapsuleBuffer;
   UINTN                         CapsuleBufferLength;
   BOOLEAN                       HaveCapsule;
+  EFI_BOOT_MODE                 BootMode;
 
   Status = DeclareDram (&VirtualMemoryTable);
   ASSERT_EFI_ERROR (Status);
@@ -199,31 +238,15 @@ MemoryPeim (
   ASSERT_EFI_ERROR (Status);
 
   //
-  // Check for persistent capsules
+  // Check for persistent capsules, unless we are booting with default
+  // settings.
   //
-  HaveCapsule = FALSE;
-  Status = Capsule->CheckCapsuleUpdate (PeiServices);
-  if (!EFI_ERROR (Status)) {
-
-    //
-    // Coalesce the capsule into unused memory. CreateState() below will copy
-    // it to a properly allocated buffer.
-    //
-    CapsuleBuffer = (VOID *)PcdGet64 (PcdSystemMemoryBase);
-    CapsuleBufferLength = UefiMemoryBase - PcdGet64 (PcdSystemMemoryBase);
-
-    PeiServicesSetBootMode (BOOT_ON_FLASH_UPDATE);
-
-    Status = Capsule->Coalesce (PeiServices, &CapsuleBuffer,
-                           &CapsuleBufferLength);
-    if (!EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_INFO, "%a: Coalesced capsule @ %p (0x%lx)\n",
-        __FUNCTION__, CapsuleBuffer, CapsuleBufferLength));
-      HaveCapsule = TRUE;
-    } else {
-      DEBUG ((DEBUG_WARN, "%a: failed to coalesce() capsule (Status == %r)\n",
-        __FUNCTION__, Status));
-    }
+  Status = PeiServicesGetBootMode (&BootMode);
+  if (!EFI_ERROR (Status) && BootMode != BOOT_WITH_DEFAULT_SETTINGS) {
+    HaveCapsule = CheckCapsule (PeiServices, Capsule, UefiMemoryBase,
+                    &CapsuleBuffer, &CapsuleBufferLength);
+  } else {
+    HaveCapsule = FALSE;
   }
 
   Status = ArmConfigureMmu (VirtualMemoryTable, NULL, NULL);
