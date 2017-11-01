@@ -21,7 +21,10 @@
 #include <Library/PeiServicesLib.h>
 #include <Platform/DramInfo.h>
 #include <Ppi/DramInfo.h>
+#include <Ppi/EmbeddedGpio.h>
 #include <Ppi/MemoryDiscovered.h>
+
+#define CLEAR_SETTINGS_GPIO_NOT_IMPLEMENTED   MAX_UINT8
 
 STATIC
 CONST DRAM_INFO *mDramInfo = (VOID *)(UINTN)FixedPcdGet64 (PcdDramInfoBase);
@@ -103,9 +106,34 @@ PlatformPeim (
   VOID
   )
 {
-  EFI_STATUS      Status;
+  EMBEDDED_GPIO_PPI   *Gpio;
+  EFI_STATUS          Status;
+  UINTN               Value;
+  UINT8               Pin;
 
   ASSERT (mDramInfo->NumRegions > 0);
+
+  Pin = FixedPcdGet8 (PcdClearSettingsGpioPin);
+  if (Pin != CLEAR_SETTINGS_GPIO_NOT_IMPLEMENTED) {
+    Status = PeiServicesLocatePpi (&gEdkiiEmbeddedGpioPpiGuid, 0, NULL,
+               (VOID **)&Gpio);
+    ASSERT_EFI_ERROR (Status);
+
+    Status = Gpio->Set (Gpio, Pin, GPIO_MODE_INPUT);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: failed to set GPIO as input - %r\n",
+        __FUNCTION__, Status));
+    } else {
+      Status = Gpio->Get (Gpio, Pin, &Value);
+      if (EFI_ERROR (Status)) {
+        DEBUG ((DEBUG_WARN, "%a: failed to get GPIO state - %r\n",
+          __FUNCTION__, Status));
+      } else if (Value > 0) {
+        DEBUG ((DEBUG_INFO, "%a: clearing NVRAM\n", __FUNCTION__));
+        PeiServicesSetBootMode (BOOT_WITH_DEFAULT_SETTINGS);
+      }
+    }
+  }
 
   //
   // Record the first region into PcdSystemMemoryBase and PcdSystemMemorySize.

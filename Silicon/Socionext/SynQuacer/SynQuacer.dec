@@ -30,3 +30,6 @@
 
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase|0|UINT32|0x00000002
   gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress|0|UINT8|0x00000003
+
+  # GPIO pin index [0 .. 31] or MAX_UINT8 for not implemented
+  gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0xFF|UINT8|0x00000004

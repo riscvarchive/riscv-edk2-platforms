@@ -381,6 +381,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorId|0x4f524e4c # LNRO
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorRevision|1
 
+  # set DIP switch DSW3-PIN1 (GPIO pin PD[0] on the SoC) to clear the varstore
+  gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0
+
 [PcdsPatchableInModule]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|0
@@ -418,6 +421,7 @@
   MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
   MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
   MdeModulePkg/Universal/CapsulePei/CapsulePei.inf
+  Silicon/Socionext/SynQuacer/Drivers/SynQuacerGpioPei/SynQuacerGpioPei.inf
   MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf

@@ -248,6 +248,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
   INF MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
   INF MdeModulePkg/Universal/CapsulePei/CapsulePei.inf
+  INF Silicon/Socionext/SynQuacer/Drivers/SynQuacerGpioPei/SynQuacerGpioPei.inf
   INF RuleOverride = FMP_IMAGE_DESC Platform/Socionext/SynQuacerEvalBoard/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
   INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 
