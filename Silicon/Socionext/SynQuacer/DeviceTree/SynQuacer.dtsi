@@ -532,4 +532,31 @@
         #interrupt-cells = <3>;
         socionext,spi-base = <112>;
     };
+
+    clk_alw_b_0: bclk200 {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <200000000>;
+        clock-output-names = "sd_bclk";
+    };
+
+    clk_alw_c_0: sd4clk800 {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <800000000>;
+        clock-output-names = "sd_sd4clk";
+    };
+
+    sdhci: sdhci@52300000 {
+        compatible = "socionext,synquacer-sdhci", "fujitsu,mb86s70-sdhci-3.0";
+        reg = <0 0x52300000 0x0 0x1000>;
+        interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_HIGH>,
+                     <GIC_SPI 153 IRQ_TYPE_LEVEL_HIGH>;
+        bus-width = <8>;
+        cap-mmc-highspeed;
+        fujitsu,cmd-dat-delay-select;
+        clocks = <&clk_alw_c_0 &clk_alw_b_0>;
+        clock-names = "core", "iface";
+        status = "disabled";
+    };
 };

@@ -30,3 +30,7 @@
                       "NC",         "NC",         "PEC-PD26",     "PEC-PD27",
                       "PEC-PD28",   "PEC-PD29",   "PEC-PD30",     "PEC-PD31";
 };
+
+&sdhci {
+    status = "okay";
+};
