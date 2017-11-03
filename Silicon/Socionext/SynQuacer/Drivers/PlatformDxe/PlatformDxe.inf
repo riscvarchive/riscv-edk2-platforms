@@ -29,6 +29,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.dec
   Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.dec
   Silicon/Socionext/SynQuacer/SynQuacer.dec
 
@@ -43,9 +44,12 @@
 [Guids]
   gFdtTableGuid
   gNetsecNonDiscoverableDeviceGuid
+  gSynQuacerNonDiscoverableI2cMasterGuid
+  gSynQuacerNonDiscoverableRuntimeI2cMasterGuid
 
 [Protocols]
-  gEdkiiNonDiscoverableDeviceProtocolGuid     ## PRODUCES
+  gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
+  gPcf8563RealTimeClockLibI2cMasterProtolGuid     ## PRODUCES
 
 [FixedPcd]
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase

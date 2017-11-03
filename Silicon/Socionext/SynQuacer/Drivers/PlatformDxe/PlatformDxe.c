@@ -62,27 +62,61 @@ STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mNetsecDesc[] = {
   }
 };
 
+STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mI2c0Desc[] = {
+  {
+    ACPI_ADDRESS_SPACE_DESCRIPTOR,                    // Desc
+    sizeof (EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR) - 3,   // Len
+    ACPI_ADDRESS_SPACE_TYPE_MEM,                      // ResType
+    0,                                                // GenFlag
+    0,                                                // SpecificFlag
+    32,                                               // AddrSpaceGranularity
+    SYNQUACER_I2C0_BASE,                              // AddrRangeMin
+    SYNQUACER_I2C0_BASE + SYNQUACER_I2C0_SIZE - 1,    // AddrRangeMax
+    0,                                                // AddrTranslationOffset
+    SYNQUACER_I2C0_SIZE,                              // AddrLen
+  }, {
+    ACPI_END_TAG_DESCRIPTOR                           // Desc
+  }
+};
+
+STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mI2c1Desc[] = {
+  {
+    ACPI_ADDRESS_SPACE_DESCRIPTOR,                    // Desc
+    sizeof (EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR) - 3,   // Len
+    ACPI_ADDRESS_SPACE_TYPE_MEM,                      // ResType
+    0,                                                // GenFlag
+    0,                                                // SpecificFlag
+    32,                                               // AddrSpaceGranularity
+    SYNQUACER_I2C1_BASE,                              // AddrRangeMin
+    SYNQUACER_I2C1_BASE + SYNQUACER_I2C1_SIZE - 1,    // AddrRangeMax
+    0,                                                // AddrTranslationOffset
+    SYNQUACER_I2C1_SIZE,                              // AddrLen
+  }, {
+    ACPI_END_TAG_DESCRIPTOR                           // Desc
+  }
+};
+
 STATIC
 EFI_STATUS
-RegisterNetsec (
-  VOID
+RegisterDevice (
+  IN  EFI_GUID                            *TypeGuid,
+  IN  EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR   *Desc,
+  OUT EFI_HANDLE                          *Handle
   )
 {
   NON_DISCOVERABLE_DEVICE             *Device;
   EFI_STATUS                          Status;
-  EFI_HANDLE                          Handle;
 
   Device = (NON_DISCOVERABLE_DEVICE *)AllocateZeroPool (sizeof (*Device));
   if (Device == NULL) {
     return EFI_OUT_OF_RESOURCES;
   }
 
-  Device->Type = &gNetsecNonDiscoverableDeviceGuid;
+  Device->Type = TypeGuid;
   Device->DmaType = NonDiscoverableDeviceDmaTypeNonCoherent;
-  Device->Resources = mNetsecDesc;
+  Device->Resources = Desc;
 
-  Handle = NULL;
-  Status = gBS->InstallMultipleProtocolInterfaces (&Handle,
+  Status = gBS->InstallMultipleProtocolInterfaces (Handle,
                   &gEdkiiNonDiscoverableDeviceProtocolGuid, Device,
                   NULL);
   if (EFI_ERROR (Status)) {
@@ -106,6 +140,7 @@ PlatformDxeEntryPoint (
   EFI_STATUS                      Status;
   VOID                            *Dtb;
   UINTN                           DtbSize;
+  EFI_HANDLE                      Handle;
 
   Dtb = NULL;
   Status = DtPlatformLoadDtb (&Dtb, &DtbSize);
@@ -118,5 +153,30 @@ PlatformDxeEntryPoint (
       Status));
   }
 
-  return RegisterNetsec ();
+  Handle = NULL;
+  Status = RegisterDevice (&gNetsecNonDiscoverableDeviceGuid, mNetsecDesc,
+             &Handle);
+  ASSERT_EFI_ERROR (Status);
+
+  Handle = NULL;
+  Status = RegisterDevice (&gSynQuacerNonDiscoverableRuntimeI2cMasterGuid,
+             mI2c0Desc, &Handle);
+  ASSERT_EFI_ERROR (Status);
+
+  //
+  // Install the PCF8563 I2C Master protocol on this handle so the RTC driver
+  // can identify it as the I2C master it can invoke directly, rather than
+  // through the I2C driver stack (which cannot be used at runtime)
+  //
+  Status = gBS->InstallProtocolInterface (&Handle,
+                  &gPcf8563RealTimeClockLibI2cMasterProtolGuid,
+                  EFI_NATIVE_INTERFACE, NULL);
+  ASSERT_EFI_ERROR (Status);
+
+  Handle = NULL;
+  Status = RegisterDevice (&gSynQuacerNonDiscoverableI2cMasterGuid, mI2c1Desc,
+             &Handle);
+  ASSERT_EFI_ERROR (Status);
+
+  return EFI_SUCCESS;
 }

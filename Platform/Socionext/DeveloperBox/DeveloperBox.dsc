@@ -446,8 +446,7 @@
   MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf {
     <LibraryClasses>
-      ## TODO
-      RealTimeClockLib|EmbeddedPkg/Library/TemplateRealTimeClockLib/TemplateRealTimeClockLib.inf
+      RealTimeClockLib|Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.inf
   }
   MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
@@ -623,3 +622,8 @@
   MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
+
+  #
+  # I2C
+  #
+  Silicon/Socionext/SynQuacer/Drivers/SynQuacerI2cDxe/SynQuacerI2cDxe.inf

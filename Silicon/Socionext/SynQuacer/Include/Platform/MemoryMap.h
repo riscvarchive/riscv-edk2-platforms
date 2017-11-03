@@ -42,6 +42,14 @@
 #define SYNQUACER_GPIO_BASE             0x51000000
 #define SYNQUACER_GPIO_SIZE             SIZE_4KB
 
+// I2C0 block
+#define SYNQUACER_I2C0_BASE             0x51200000
+#define SYNQUACER_I2C0_SIZE             SIZE_4KB
+
+// I2C1 block
+#define SYNQUACER_I2C1_BASE             0x51210000
+#define SYNQUACER_I2C1_SIZE             SIZE_4KB
+
 // eMMC(SDH30)
 #define SYNQUACER_EMMC_BASE             0x52300000
 #define SYNQUACER_EMMC_BASE_SZ          SIZE_4KB

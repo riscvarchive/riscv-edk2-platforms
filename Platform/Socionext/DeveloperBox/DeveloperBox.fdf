@@ -229,6 +229,11 @@ READ_LOCK_STATUS   = TRUE
      SECTION UI = "Pkcs7TestRoot"
   }
 
+  #
+  # I2C
+  #
+  INF Silicon/Socionext/SynQuacer/Drivers/SynQuacerI2cDxe/SynQuacerI2cDxe.inf
+
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16
 BlockSize          = 0x10000
