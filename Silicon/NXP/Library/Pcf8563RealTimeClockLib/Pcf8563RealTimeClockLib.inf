@@ -1,0 +1,52 @@
+#/** @file
+#
+#  Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+#**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Pcf8563RealTimeClockLib
+  FILE_GUID                      = 1e3d33f3-a671-4116-bd81-6b435296c1e0
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = RealTimeClockLib
+
+[Sources.common]
+  Pcf8563RealTimeClockLib.c
+
+[Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.dec
+
+[LibraryClasses]
+  BaseMemoryLib
+  DebugLib
+  IoLib
+  UefiBootServicesTableLib
+  UefiLib
+  UefiRuntimeLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+
+[Protocols]
+  gEfiDriverBindingProtocolGuid                   ## CONSUMES
+  gEfiI2cMasterProtocolGuid                       ## CONSUMES
+  gPcf8563RealTimeClockLibI2cMasterProtolGuid     ## CONSUMES
+
+[FixedPcd]
+  gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cSlaveAddress
+  gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cBusFrequency
+
+[Depex]
+  gPcf8563RealTimeClockLibI2cMasterProtolGuid
