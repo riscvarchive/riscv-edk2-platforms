@@ -62,6 +62,14 @@ formset
         option text = STRING_TOKEN(STR_PCIE_MAX_SPEED_GEN1), value = PCIE_MAX_SPEED_GEN1, flags = 0;
     endoneof;
 
+    oneof varid = SynQuacerPlatformSettings.EnableEmmc,
+        prompt      = STRING_TOKEN(STR_EMMC_ENABLE_PROMPT),
+        help        = STRING_TOKEN(STR_EMMC_ENABLE_HELP),
+        flags       = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
+        option text = STRING_TOKEN(STR_EMMC_DISABLED), value = EMMC_DISABLED, flags = DEFAULT;
+        option text = STRING_TOKEN(STR_EMMC_ENABLED), value = EMMC_ENABLED, flags = 0;
+    endoneof;
+
     subtitle text = STRING_TOKEN(STR_NULL_STRING);
 
   endform;

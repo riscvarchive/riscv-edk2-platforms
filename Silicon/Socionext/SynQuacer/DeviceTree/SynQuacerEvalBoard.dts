@@ -31,10 +31,6 @@
                       "PEC-PD28",   "PEC-PD29",   "PEC-PD30",     "PEC-PD31";
 };
 
-&sdhci {
-    status = "okay";
-};
-
 &mdio_netsec {
     phy_netsec: ethernet-phy@1 {
         compatible = "ethernet-phy-ieee802.3-c22";

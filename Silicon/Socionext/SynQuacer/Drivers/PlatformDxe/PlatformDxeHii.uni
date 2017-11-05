@@ -27,3 +27,9 @@
 
 #string STR_PCIE_MAX_SPEED_UNLIMITED   #language en-US "Unlimited"
 #string STR_PCIE_MAX_SPEED_GEN1        #language en-US "Gen1 (2.5 GT/s)"
+
+#string STR_EMMC_ENABLE_PROMPT         #language en-US "Enable on-board eMMC"
+#string STR_EMMC_ENABLE_HELP           #language en-US "Enable the on-board eMMC for booting and for use by the OS."
+
+#string STR_EMMC_DISABLED              #language en-US "Disabled"
+#string STR_EMMC_ENABLED               #language en-US "Enabled"

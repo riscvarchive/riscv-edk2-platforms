@@ -19,8 +19,9 @@
 #include <Library/DebugLib.h>
 #include <Library/DxeServicesLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Platform/VarStore.h>
 
-// add enough space for two instances of 'status = "disabled"'
+// add enough space for three instances of 'status = "disabled"'
 #define DTB_PADDING               64
 
 STATIC
@@ -65,12 +66,14 @@ DtPlatformLoadDtb (
   OUT   UINTN       *DtbSize
   )
 {
-  EFI_STATUS      Status;
-  VOID            *OrigDtb;
-  VOID            *CopyDtb;
-  UINTN           OrigDtbSize;
-  UINTN           CopyDtbSize;
-  INT32           Rc;
+  EFI_STATUS                        Status;
+  VOID                              *OrigDtb;
+  VOID                              *CopyDtb;
+  UINTN                             OrigDtbSize;
+  UINTN                             CopyDtbSize;
+  INT32                             Rc;
+  UINT64                            SettingsVal;
+  SYNQUACER_PLATFORM_VARSTORE_DATA  *Settings;
 
   Status = GetSectionFromAnyFv (&gDtPlatformDefaultDtbFileGuid,
              EFI_SECTION_RAW, 0, &OrigDtb, &OrigDtbSize);
@@ -96,6 +99,12 @@ DtPlatformLoadDtb (
   }
   if (!(PcdGet8 (PcdPcieEnableMask) & BIT1)) {
     DisableDtNode (CopyDtb, "/pcie@70000000");
+  }
+
+  SettingsVal = PcdGet64 (PcdPlatformSettings);
+  Settings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&SettingsVal;
+  if (Settings->EnableEmmc == EMMC_DISABLED) {
+    DisableDtNode (CopyDtb, "/sdhci@52300000");
   }
 
   *Dtb = CopyDtb;

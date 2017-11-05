@@ -19,6 +19,7 @@
 #include <Guid/SynQuacerPlatformFormSet.h>
 #include <IndustryStandard/Pci.h>
 #include <Library/ArmGenericTimerCounterLib.h>
+#include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DevicePathLib.h>
@@ -26,6 +27,7 @@
 #include <Library/HiiLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/NonDiscoverableDeviceRegistrationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
@@ -35,6 +37,7 @@
 #include <Platform/VarStore.h>
 #include <Protocol/NonDiscoverableDevice.h>
 #include <Protocol/PciIo.h>
+#include <Protocol/SdMmcOverride.h>
 
 extern UINT8                             PlatformDxeHiiBin[];
 extern UINT8                             PlatformDxeStrings[];
@@ -45,6 +48,12 @@ extern SYNQUACER_PLATFORM_VARSTORE_DATA  *mHiiSettings;
 EFI_STATUS
 EFIAPI
 RegisterPcieNotifier (
+  VOID
+  );
+
+EFI_STATUS
+EFIAPI
+RegisterEmmc (
   VOID
   );
 

@@ -37,6 +37,7 @@
 
 [Pcd]
   gSynQuacerTokenSpaceGuid.PcdPcieEnableMask
+  gSynQuacerTokenSpaceGuid.PcdPlatformSettings
 
 [Guids]
   gDtPlatformDefaultDtbFileGuid

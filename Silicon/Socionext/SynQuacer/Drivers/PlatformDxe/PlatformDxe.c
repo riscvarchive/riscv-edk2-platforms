@@ -322,5 +322,10 @@ PlatformDxeEntryPoint (
   Status = EnableSettingsForm ();
   ASSERT_EFI_ERROR (Status);
 
+  if (mHiiSettings->EnableEmmc == EMMC_ENABLED) {
+    Status = RegisterEmmc ();
+    ASSERT_EFI_ERROR (Status);
+  }
+
   return EFI_SUCCESS;
 }

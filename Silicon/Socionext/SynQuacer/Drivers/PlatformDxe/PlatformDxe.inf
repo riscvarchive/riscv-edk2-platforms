@@ -23,6 +23,7 @@
   ENTRY_POINT                    = PlatformDxeEntryPoint
 
 [Sources]
+  Emmc.c
   Pci.c
   PlatformDxe.c
   PlatformDxeHii.uni
@@ -39,6 +40,7 @@
 
 [LibraryClasses]
   ArmGenericTimerCounterLib
+  BaseLib
   BaseMemoryLib
   DebugLib
   DevicePathLib
@@ -46,6 +48,7 @@
   HiiLib
   IoLib
   MemoryAllocationLib
+  NonDiscoverableDeviceRegistrationLib
   PcdLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
@@ -62,6 +65,7 @@
 
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
+  gEdkiiSdMmcOverrideProtocolGuid                 ## PRODUCES
   gEfiPciIoProtocolGuid                           ## CONSUMES
   gPcf8563RealTimeClockLibI2cMasterProtocolGuid   ## PRODUCES
 

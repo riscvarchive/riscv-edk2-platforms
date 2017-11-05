@@ -148,6 +148,13 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
   #
+  # eMMC support
+  #
+  INF MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
+  INF MdeModulePkg/Bus/Pci/SdMmcPciHcDxe/SdMmcPciHcDxe.inf
+  INF MdeModulePkg/Bus/Sd/EmmcDxe/EmmcDxe.inf
+
+  #
   # AHCI Support
   #
   INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
