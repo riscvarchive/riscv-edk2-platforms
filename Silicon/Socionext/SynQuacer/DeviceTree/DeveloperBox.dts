@@ -15,9 +15,23 @@
 
 #include "SynQuacer.dtsi"
 
+#define KEY_POWER     116
+
 / {
     model = "Socionext Developer Box";
     compatible = "socionext,developer-box", "socionext,synquacer";
+
+    gpio-keys {
+        compatible = "gpio-keys";
+        interrupt-parent = <&exiu>;
+
+        power {
+            label = "Power Button";
+            linux,code = <KEY_POWER>;
+            interrupts = <GIC_SPI 120 IRQ_TYPE_EDGE_FALLING>;
+            wakeup-source;
+        };
+    };
 };
 
 &gpio {
