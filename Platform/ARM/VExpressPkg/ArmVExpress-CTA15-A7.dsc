@@ -52,7 +52,6 @@
 
   LcdPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/HdLcdArmVExpressLib/HdLcdArmVExpressLib.inf
 
-  TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
