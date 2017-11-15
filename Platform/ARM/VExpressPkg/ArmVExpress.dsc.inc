@@ -234,20 +234,10 @@
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
 !endif
-
-[LibraryClasses.ARM]
-  #
-  # PSCI support in EL3 may not be available if we are not running under a PSCI
-  # compliant secure firmware. Assume PSCI on AARCH64, and fall back to the
-  # syscfg MMIO register implementation on ARM.
-  # This will not work at actual runtime.
-  #
-  ResetSystemLib|ArmPlatformPkg/ArmVExpressPkg/Library/ResetSystemLib/ResetSystemLib.inf
 
 [LibraryClasses.ARM, LibraryClasses.AARCH64]
   #

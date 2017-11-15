@@ -208,7 +208,7 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   #
   # Juno platform driver
   #
-  INF ArmPlatformPkg/ArmJunoPkg/Drivers/ArmJunoDxe/ArmJunoDxe.inf
+  INF Platform/ARM/JunoPkg/Drivers/ArmJunoDxe/ArmJunoDxe.inf
 
   #
   # SMBIOS/DMI

@@ -61,6 +61,9 @@
 
   DtPlatformDtbLoaderLib|Platform/ARM/VExpressPkg/Library/ArmVExpressDtPlatformDtbLoaderLib/ArmVExpressDtPlatformDtbLoaderLib.inf
 
+[LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
+
 [LibraryClasses.common.SEC]
   ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLibSec.inf
 

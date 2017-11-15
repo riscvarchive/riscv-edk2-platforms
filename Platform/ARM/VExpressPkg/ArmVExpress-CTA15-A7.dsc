@@ -55,6 +55,18 @@
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
+[LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
+
+[LibraryClasses.ARM]
+  #
+  # PSCI support in EL3 may not be available if we are not running under a PSCI
+  # compliant secure firmware. Assume PSCI on AARCH64, and fall back to the
+  # syscfg MMIO register implementation on ARM.
+  # This will not work at actual runtime.
+  #
+  ResetSystemLib|ArmPlatformPkg/ArmVExpressPkg/Library/ResetSystemLib/ResetSystemLib.inf
+
 [BuildOptions]
 !ifdef ARM_BIGLITTLE_TC2
   *_*_ARM_ARCHCC_FLAGS  = -DARM_BIGLITTLE_TC2=1

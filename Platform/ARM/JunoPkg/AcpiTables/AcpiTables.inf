@@ -33,11 +33,10 @@
 [Packages]
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
-  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressPkg.dec
-  ArmPlatformPkg/ArmJunoPkg/ArmJuno.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  Platform/ARM/JunoPkg/ArmJuno.dec
 
 [FixedPcd]
   gArmPlatformTokenSpaceGuid.PcdCoreCount

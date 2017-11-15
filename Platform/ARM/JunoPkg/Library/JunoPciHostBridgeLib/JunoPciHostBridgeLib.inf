@@ -35,10 +35,10 @@
   XPressRich3.c
 
 [Packages]
-  ArmPlatformPkg/ArmJunoPkg/ArmJuno.dec
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/ARM/JunoPkg/ArmJuno.dec
 
 [LibraryClasses]
   BaseLib

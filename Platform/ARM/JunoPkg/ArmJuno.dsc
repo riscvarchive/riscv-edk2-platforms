@@ -36,11 +36,10 @@
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
-  ArmPlatformLib|ArmPlatformPkg/ArmJunoPkg/Library/ArmJunoLib/ArmJunoLib.inf
+  ArmPlatformLib|Platform/ARM/JunoPkg/Library/ArmJunoLib/ArmJunoLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
-  NorFlashPlatformLib|ArmPlatformPkg/ArmJunoPkg/Library/NorFlashJunoLib/NorFlashJunoLib.inf
+  NorFlashPlatformLib|Platform/ARM/JunoPkg/Library/NorFlashJunoLib/NorFlashJunoLib.inf
 
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
@@ -71,7 +70,6 @@
   PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
 
 [BuildOptions]
-  *_*_*_PLATFORM_FLAGS = -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include -I$(WORKSPACE)/ArmPlatformPkg/ArmJunoPkg/Include
   GCC:*_*_ARM_PLATFORM_FLAGS = -march=armv8-a
 
 ################################################################################
@@ -333,7 +331,7 @@
   #
   # Juno platform driver
   #
-  ArmPlatformPkg/ArmJunoPkg/Drivers/ArmJunoDxe/ArmJunoDxe.inf
+  Platform/ARM/JunoPkg/Drivers/ArmJunoDxe/ArmJunoDxe.inf
 
   #
   # SMBIOS/DMI
