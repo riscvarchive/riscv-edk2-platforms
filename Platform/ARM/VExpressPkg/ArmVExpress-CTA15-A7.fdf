@@ -128,7 +128,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
   # Versatile Express FileSystem
-  INF ArmPlatformPkg/FileSystem/BootMonFs/BootMonFs.inf
+  INF Platform/ARM/Drivers/BootMonFs/BootMonFs.inf
 
   #
   # USB support

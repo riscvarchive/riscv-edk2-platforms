@@ -28,6 +28,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  Platform/ARM/ARM.dec
   Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.dec
   Platform/ARM/JunoPkg/ArmJuno.dec
 

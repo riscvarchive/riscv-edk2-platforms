@@ -119,7 +119,7 @@
 
   # RunAxf support via Dynamic Shell Command protocol
   # It uses the Shell libraries.
-  ArmShellCmdRunAxfLib|ArmPlatformPkg/Library/ArmShellCmdRunAxf/ArmShellCmdRunAxf.inf
+  ArmShellCmdRunAxfLib|Platform/ARM/Library/ArmShellCmdRunAxf/ArmShellCmdRunAxf.inf
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
@@ -370,7 +370,7 @@
   #
 
   # List of Device Paths that support BootMonFs
-  gArmPlatformTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
+  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
 
   #
   # ARM OS Loader
@@ -434,7 +434,7 @@
   }
 
   # Versatile Express FileSystem
-  ArmPlatformPkg/FileSystem/BootMonFs/BootMonFs.inf
+  Platform/ARM/Drivers/BootMonFs/BootMonFs.inf
 
   #
   # Networking stack
