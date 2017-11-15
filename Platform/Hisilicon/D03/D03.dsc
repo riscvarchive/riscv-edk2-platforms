@@ -286,14 +286,6 @@
   gHisiTokenSpaceGuid.PcdHb0Rb2IoSize|0xffff #64K
 
   gHisiTokenSpaceGuid.Pcdsoctype|0x1610
-  ## SP804 DualTimer
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerFrequencyInMHz|200
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPeriodicInterruptNum|0xb0
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPeriodicBase|0x40060000
-  ## TODO: need to confirm the base for Performance and Metronome base for PV660
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPerformanceBase|0x40060000
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerMetronomeBase|0x40060000
-
 
 ################################################################################
 #

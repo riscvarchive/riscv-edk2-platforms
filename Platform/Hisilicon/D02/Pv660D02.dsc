@@ -201,14 +201,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|FALSE
   gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdShellFile|{ 0x83, 0xA5, 0x04, 0x7C, 0x3E, 0x9E, 0x1C, 0x4F, 0xAD, 0x65, 0xE0, 0x52, 0x68, 0xD0, 0xB4, 0xD1 }
 
-  ## SP804 DualTimer
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerFrequencyInMHz|200
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPeriodicInterruptNum|304
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPeriodicBase|0x80060000
-  ## TODO: need to confirm the base for Performance and Metronome base for PV660
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerPerformanceBase|0x80060000
-  gArmPlatformTokenSpaceGuid.PcdSP804TimerMetronomeBase|0x80060000
-
   gHisiTokenSpaceGuid.PcdPcieRootBridgeMask|0x6 # bit0:HB0RB0,bit1:HB0RB1,bit2:HB0RB2,bit3:HB0RB3,bit4:HB1RB0,bit5:HB1RB1,bit6:HB1RB2,bit7:HB1RB3
   gHisiTokenSpaceGuid.PcdHb1BaseAddress|0x400000000000 # 4T
 
