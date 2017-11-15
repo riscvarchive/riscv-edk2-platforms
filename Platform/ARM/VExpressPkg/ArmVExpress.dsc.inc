@@ -79,12 +79,12 @@
 
   # Versatile Express Specific Libraries
   PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
-  NorFlashPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/NorFlashArmVExpressLib/NorFlashArmVExpressLib.inf
+  ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
+  NorFlashPlatformLib|Platform/ARM/VExpressPkg/Library/NorFlashArmVExpressLib/NorFlashArmVExpressLib.inf
   ResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
 !ifdef EDK2_ENABLE_PL111
   # ARM PL111 Lcd Driver
-  LcdPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/PL111LcdArmVExpressLib/PL111LcdArmVExpressLib.inf
+  LcdPlatformLib|Platform/ARM/VExpressPkg/Library/PL111LcdArmVExpressLib/PL111LcdArmVExpressLib.inf
 !endif
   # ARM PL031 RTC Driver
   RealTimeClockLib|ArmPlatformPkg/Library/PL031RealTimeClockLib/PL031RealTimeClockLib.inf
@@ -460,7 +460,7 @@
   #
   EmbeddedPkg/Application/AndroidFastboot/AndroidFastbootApp.inf
   EmbeddedPkg/Drivers/AndroidFastbootTransportUsbDxe/FastbootTransportUsbDxe.inf
-  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressFastBootDxe/ArmVExpressFastBootDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/ArmVExpressFastBootDxe/ArmVExpressFastBootDxe.inf
 
   # FV Filesystem
   MdeModulePkg/Universal/FvSimpleFileSystemDxe/FvSimpleFileSystemDxe.inf

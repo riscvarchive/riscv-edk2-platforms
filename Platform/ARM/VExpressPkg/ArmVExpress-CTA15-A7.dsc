@@ -40,22 +40,21 @@
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
-  ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibCTA15-A7/ArmVExpressLib.inf
+  ArmPlatformLib|Platform/ARM/VExpressPkg/Library/ArmVExpressLibCTA15-A7/ArmVExpressLib.inf
 
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
-  NorFlashPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/NorFlashArmVExpressLib/NorFlashArmVExpressLib.inf
+  ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
 
-  #DebugAgentTimerLib|ArmPlatformPkg/ArmVExpressPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  #DebugAgentTimerLib|Platform/ARM/VExpressPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
   # ARM General Interrupt Driver in Secure and Non-secure
   ArmGicLib|ArmPkg/Drivers/ArmGic/ArmGicLib.inf
 
-  LcdPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/HdLcdArmVExpressLib/HdLcdArmVExpressLib.inf
+  LcdPlatformLib|Platform/ARM/VExpressPkg/Library/HdLcdArmVExpressLib/HdLcdArmVExpressLib.inf
 
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
+  ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
 
 [LibraryClasses.ARM]
   #
@@ -64,7 +63,7 @@
   # syscfg MMIO register implementation on ARM.
   # This will not work at actual runtime.
   #
-  ResetSystemLib|ArmPlatformPkg/ArmVExpressPkg/Library/ResetSystemLib/ResetSystemLib.inf
+  ResetSystemLib|Platform/ARM/VExpressPkg/Library/ResetSystemLib/ResetSystemLib.inf
 
 [BuildOptions]
 !ifdef ARM_BIGLITTLE_TC2
@@ -72,11 +71,11 @@
   *_*_ARM_PP_FLAGS  = -DARM_BIGLITTLE_TC2=1
 !endif
 
-  RVCT:*_*_ARM_PLATFORM_FLAGS == --cpu Cortex-A15 -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include/Platform/CTA15-A7
+  RVCT:*_*_ARM_PLATFORM_FLAGS == --cpu Cortex-A15 -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/CTA15-A7
 
-  GCC:*_*_ARM_PLATFORM_FLAGS == -mcpu=cortex-a15 -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include/Platform/CTA15-A7
+  GCC:*_*_ARM_PLATFORM_FLAGS == -mcpu=cortex-a15 -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/CTA15-A7
 
-  XCODE:*_*_ARM_PLATFORM_FLAGS = -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include/Platform/CTA15-A7
+  XCODE:*_*_ARM_PLATFORM_FLAGS = -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/CTA15-A7
 
 ################################################################################
 #
@@ -156,8 +155,8 @@
 
 !ifdef ARM_BIGLITTLE_TC2
   ## PL111 Lcd & HdLcd
-  gArmPlatformTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
-  gArmPlatformTokenSpaceGuid.PcdArmHdLcdBase|0x2B000000
+  gArmVExpressTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
+  gArmVExpressTokenSpaceGuid.PcdArmHdLcdBase|0x2B000000
   gArmVExpressTokenSpaceGuid.PcdHdLcdVideoModeOscId|5
 !endif
 
@@ -206,7 +205,7 @@
   #
   ArmPlatformPkg/PrePi/PeiMPCore.inf {
     <LibraryClasses>
-      ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibCTA15-A7/ArmVExpressLib.inf
+      ArmPlatformLib|Platform/ARM/VExpressPkg/Library/ArmVExpressLibCTA15-A7/ArmVExpressLib.inf
   }
 
   #
@@ -245,7 +244,7 @@
 
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
-  #ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/PL111LcdGraphicsOutputDxe.inf
+  #ArmplatformPkg/Drivers/LcdGraphicsOutputDxe/PL111LcdGraphicsOutputDxe.inf
   ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/HdLcdGraphicsOutputDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   ArmPlatformPkg/Drivers/SP805WatchdogDxe/SP805WatchdogDxe.inf
@@ -253,7 +252,7 @@
   #
   # Platform
   #
-  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmHwDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/ArmVExpressDxe/ArmHwDxe.inf
 
   #
   # Filesystems

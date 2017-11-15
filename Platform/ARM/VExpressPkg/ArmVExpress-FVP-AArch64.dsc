@@ -41,13 +41,12 @@
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
-  ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLib.inf
+  ArmPlatformLib|Platform/ARM/VExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
 
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
-  NorFlashPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/NorFlashArmVExpressLib/NorFlashArmVExpressLib.inf
+  ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigLib/ArmVExpressSysConfigLib.inf
 !ifdef EDK2_ENABLE_PL111
-  LcdPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/PL111LcdArmVExpressLib/PL111LcdArmVExpressLib.inf
+  LcdPlatformLib|Platform/ARM/VExpressPkg/Library/PL111LcdArmVExpressLib/PL111LcdArmVExpressLib.inf
 !endif
 
   # Virtio Support
@@ -60,16 +59,16 @@
   DtPlatformDtbLoaderLib|Platform/ARM/VExpressPkg/Library/ArmVExpressDtPlatformDtbLoaderLib/ArmVExpressDtPlatformDtbLoaderLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
-  ArmPlatformSysConfigLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
+  ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
 
 [LibraryClasses.common.SEC]
-  ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLibSec.inf
+  ArmPlatformLib|Platform/ARM/VExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLibSec.inf
 
 [LibraryClasses.common.UEFI_DRIVER, LibraryClasses.common.UEFI_APPLICATION, LibraryClasses.common.DXE_RUNTIME_DRIVER, LibraryClasses.common.DXE_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
 
 [BuildOptions]
-  GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include -I$(WORKSPACE)/ArmPlatformPkg/ArmVExpressPkg/Include/Platform/RTSM
+  GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/RTSM
 
 
 ################################################################################
@@ -141,7 +140,7 @@
 
 !ifdef EDK2_ENABLE_PL111
   ## PL111 Versatile Express Motherboard controller
-  gArmPlatformTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
+  gArmVExpressTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
 !endif
 
   ## PL180 MMC/SD card controller
@@ -193,7 +192,7 @@
   # UEFI is placed in RAM by bootloader
   ArmPlatformPkg/PrePi/PeiUniCore.inf {
     <LibraryClasses>
-      ArmPlatformLib|ArmPlatformPkg/ArmVExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLib.inf
+      ArmPlatformLib|Platform/ARM/VExpressPkg/Library/ArmVExpressLibRTSM/ArmVExpressLib.inf
   }
 !else
   # UEFI lives in FLASH and copies itself to RAM
@@ -295,7 +294,7 @@
   #
   # Platform Driver
   #
-  ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmFvpDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/ArmVExpressDxe/ArmFvpDxe.inf
   OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 
   #

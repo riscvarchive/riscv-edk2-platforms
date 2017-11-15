@@ -145,7 +145,7 @@ FvNameGuid         = 87940482-fc81-41c3-87e6-399cf85ac8a0
   #
   # Platform Driver
   #
-  INF ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmFvpDxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/ArmVExpressDxe/ArmFvpDxe.inf
   INF OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 
 !ifdef EDK2_ENABLE_SMSC_91X

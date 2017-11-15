@@ -104,7 +104,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
   # Platform
   #
-  INF ArmPlatformPkg/ArmVExpressPkg/ArmVExpressDxe/ArmHwDxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/ArmVExpressDxe/ArmHwDxe.inf
 
   #
   # Multimedia Card Interface
@@ -140,7 +140,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
   INF EmbeddedPkg/Application/AndroidFastboot/AndroidFastbootApp.inf
   INF EmbeddedPkg/Drivers/AndroidFastbootTransportUsbDxe/FastbootTransportUsbDxe.inf
-  INF ArmPlatformPkg/ArmVExpressPkg/ArmVExpressFastBootDxe/ArmVExpressFastBootDxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/ArmVExpressFastBootDxe/ArmVExpressFastBootDxe.inf
 
   # ACPI Support
   INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
@@ -178,7 +178,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
 
   # Example to add a Device Tree to the Firmware Volume
   #FILE FREEFORM = PCD(gArmVExpressTokenSpaceGuid.PcdFdtVExpressHwA15x2A7x3) {
-  #  SECTION RAW = ArmPlatformPkg/ArmVExpressPkg/Fdts/vexpress-v2p-ca15_a7.dtb
+  #  SECTION RAW = Platform/ARM/VExpressPkg/Fdts/vexpress-v2p-ca15_a7.dtb
   #}
 
 [FV.FVMAIN_COMPACT]
