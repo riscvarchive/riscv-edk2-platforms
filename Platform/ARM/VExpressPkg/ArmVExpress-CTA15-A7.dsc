@@ -95,7 +95,6 @@
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"ARM Versatile Express"
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"ArmVExpress-CTA15-A7"
 
   gArmPlatformTokenSpaceGuid.PcdCoreCount|5
 

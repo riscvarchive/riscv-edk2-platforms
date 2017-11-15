@@ -254,7 +254,6 @@
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"ARM Versatile Express"
 
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"VExpress"
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|44
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|0
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000

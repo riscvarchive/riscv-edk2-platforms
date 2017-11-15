@@ -88,7 +88,6 @@
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"ARM Juno"
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"ArmJuno"
 
   #
   # NV Storage PCDs. Use base of 0x08000000 for NOR0

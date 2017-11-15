@@ -109,8 +109,6 @@
   gHisiTokenSpaceGuid.PcdIsItsSupported|TRUE
 
 [PcdsFixedAtBuild.common]
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"D03"
-
   gArmPlatformTokenSpaceGuid.PcdCoreCount|8
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000

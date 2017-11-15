@@ -272,7 +272,6 @@
 
   gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"hikey"
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Alpha"
-  gEmbeddedTokenSpaceGuid.PcdEmbeddedPrompt|"HiKey"
 
   #
   # NV Storage PCDs.
