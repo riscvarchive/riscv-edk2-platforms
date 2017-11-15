@@ -1129,6 +1129,7 @@ NorFlashCreateInstance (
 {
   EFI_STATUS Status;
   NOR_FLASH_INSTANCE* Instance;
+  NOR_FLASH_INFO *FlashInfo;
   UINT8 JedecId[3];
 
   ASSERT(NorFlashInstance != NULL);
@@ -1157,23 +1158,15 @@ NorFlashCreateInstance (
   NorFlashReset (Instance);
 
   NorFlashReadID (Instance, JedecId);
+  Status = NorFlashGetInfo (JedecId, &FlashInfo, FALSE);
+  if (EFI_ERROR (Status)) {
+    goto FreeInstance;
+  }
 
-  DEBUG_CODE_BEGIN ();
-    {
-      NOR_FLASH_INFO    *FlashInfo;
-
-      Status = NorFlashGetInfo (JedecId, &FlashInfo, FALSE);
-      if (EFI_ERROR (Status)) {
-        goto FreeInstance;
-      }
-
-      NorFlashPrintInfo (FlashInfo);
-      FreePool (FlashInfo);
-    }
-  DEBUG_CODE_END ();
+  NorFlashPrintInfo (FlashInfo);
 
   Instance->Flags = 0;
-  if (JedecId[0] == NOR_FLASH_ID_STMICRO) {
+  if (FlashInfo->Flags & NOR_FLASH_WRITE_FSR) {
     Instance->Flags = NOR_FLASH_POLL_FSR;
   }
 
@@ -1198,6 +1191,7 @@ NorFlashCreateInstance (
   }
 
   *NorFlashInstance = Instance;
+  FreePool (FlashInfo);
   return EFI_SUCCESS;
 
 FreeInstance:
