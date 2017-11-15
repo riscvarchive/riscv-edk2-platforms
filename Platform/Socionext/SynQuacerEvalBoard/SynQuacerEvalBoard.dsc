@@ -546,6 +546,7 @@
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
   MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
+  MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
   #
   # AHCI Support
@@ -606,6 +607,11 @@
     <LibraryClasses>
       DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf
   }
+
+  #
+  # Console preference selection
+  #
+  EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf
 
   #
   # DT support
