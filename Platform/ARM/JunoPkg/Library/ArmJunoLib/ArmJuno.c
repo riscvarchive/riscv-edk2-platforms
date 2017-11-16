@@ -12,12 +12,11 @@
 *
 **/
 
-#include <Drivers/PL011Uart.h>
-
 #include <Library/IoLib.h>
 #include <Library/ArmPlatformLib.h>
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
+#include <Library/PL011UartLib.h>
 
 #include <Ppi/ArmMpCoreInfo.h>
 
