@@ -185,7 +185,7 @@
   #
   # Define the device path to the FDT for the platform
   #
-  gEmbeddedTokenSpaceGuid.PcdFdtDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59)/ca15a7"
+  gFdtPlatformDxeTokenSpaceGuid.PcdFdtDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59)/ca15a7"
 
   #
   # ARM Architectural Timer Frequency
@@ -298,7 +298,7 @@
   #
   # FDT installation
   #
-  EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf {
+  Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf {
     <LibraryClasses>
-      BdsLib|ArmPkg/Library/BdsLib/BdsLib.inf
+      BdsLib|Platform/ARM/Library/BdsLib/BdsLib.inf
   }

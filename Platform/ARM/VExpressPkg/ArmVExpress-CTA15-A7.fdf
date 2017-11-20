@@ -183,7 +183,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
   # The UEFI driver is at the end of the list of the driver to be dispatched
   # after the device drivers (eg: Ethernet) to ensure we have support for them.
-  INF EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
+  INF Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
 
   # Example to add a Device Tree to the Firmware Volume
   #FILE FREEFORM = PCD(gArmVExpressTokenSpaceGuid.PcdFdtVExpressHwA15x2A7x3) {
