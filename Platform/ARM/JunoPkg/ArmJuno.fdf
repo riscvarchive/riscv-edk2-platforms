@@ -230,7 +230,7 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   #
   # The UEFI driver is at the end of the list of the driver to be dispatched
   # after the device drivers (eg: Ethernet) to ensure we have support for them.
-  INF EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
+  INF Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf
 
 !if $(ARCH) == AARCH64
   #

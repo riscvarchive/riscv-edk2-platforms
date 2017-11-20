@@ -28,6 +28,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.dec
   Platform/ARM/JunoPkg/ArmJuno.dec
 
 [LibraryClasses]
@@ -80,7 +81,7 @@
   gArmTokenSpaceGuid.PcdPciBusMax
 
 [Pcd]
-  gEmbeddedTokenSpaceGuid.PcdFdtDevicePaths
+  gFdtPlatformDxeTokenSpaceGuid.PcdFdtDevicePaths
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciDisableBusEnumeration
 
 [Depex]

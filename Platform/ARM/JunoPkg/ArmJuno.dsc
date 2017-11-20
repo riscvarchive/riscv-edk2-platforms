@@ -202,7 +202,7 @@
   # character "empty" string, to allow to be able to set FDT text device paths
   # up to 128 characters long.
   #
-  gEmbeddedTokenSpaceGuid.PcdFdtDevicePaths|L"                                                                                                                                "
+  gFdtPlatformDxeTokenSpaceGuid.PcdFdtDevicePaths|L"                                                                                                                                "
 
   # Not all Juno platforms support PCI. This dynamic PCD disables or enable
   # PCI support.
@@ -354,9 +354,9 @@
   #
   # FDT installation
   #
-  EmbeddedPkg/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf {
+  Platform/ARM/Drivers/FdtPlatformDxe/FdtPlatformDxe.inf {
     <LibraryClasses>
-      BdsLib|ArmPkg/Library/BdsLib/BdsLib.inf
+      BdsLib|Platform/ARM/Library/BdsLib/BdsLib.inf
   }
 
 [Components.AARCH64]
