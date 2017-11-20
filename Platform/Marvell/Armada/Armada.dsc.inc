@@ -269,7 +269,7 @@
   gEmbeddedTokenSpaceGuid.PcdMetronomeTickPeriod|1000
 
   # ARM SBSA Watchdog
-  gArmTokenSpaceGuid.PcdGenericWatchdogControlBase|0xF0620000
+  gArmTokenSpaceGuid.PcdGenericWatchdogControlBase|0xF0610000
   gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase|0xF0600000
   gArmTokenSpaceGuid.PcdGenericWatchdogEl2IntrNum|34
 
