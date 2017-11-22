@@ -1,0 +1,45 @@
+#  @file
+#
+#  Copyright 2017-2019 NXP
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = SocLib
+  FILE_GUID                      = e868c5ca-9729-43ae-bff4-438c67de8c68
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = SocLib
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/NXP/NxpQoriqLs.dec
+  Silicon/NXP/LS1043A/LS1043A.dec
+
+[LibraryClasses]
+  ArmSmcLib
+  BaseLib
+  DebugLib
+  IoAccessLib
+  SerialPortLib
+
+[Sources.common]
+  Chassis.c
+  Chassis2/Soc.c
+  SerDes.c
+
+[BuildOptions]
+  GCC:*_*_*_CC_FLAGS = -DCHASSIS2
+
+[FixedPcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
+  gNxpQoriqLsTokenSpaceGuid.PcdClkBaseAddr
+  gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian
+  gNxpQoriqLsTokenSpaceGuid.PcdGutsBaseAddr
+  gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv
+  gNxpQoriqLsTokenSpaceGuid.PcdScfgBaseAddr
+  gNxpQoriqLsTokenSpaceGuid.PcdSerdes2Enabled
