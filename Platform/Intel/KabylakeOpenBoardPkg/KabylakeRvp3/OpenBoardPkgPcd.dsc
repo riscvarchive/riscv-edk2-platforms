@@ -116,9 +116,9 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 
   gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
   !if $(TARGET) == RELEASE
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x25
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
   !else
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x80
+  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
   !endif
 
   gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
