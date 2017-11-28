@@ -45,12 +45,6 @@
 extern EFI_GUID gAmdStyxMpCoreInfoGuid;
 
 
-UINTN
-ArmGetCpuCountPerCluster (
-  VOID
-  );
-
-
 /**
   Return the current Boot Mode
 

@@ -29,12 +29,6 @@ ASM_FUNC(ArmPlatformGetPrimaryCoreMpId)
   MOV32 (w0, FixedPcdGet32(PcdArmPrimaryCore))
   ret
 
-# IN None
-# OUT x0 = number of cores present in the system
-ASM_FUNC(ArmGetCpuCountPerCluster)
-  MOV32 (w0, FixedPcdGet32(PcdCoreCount))
-  ret
-
 //UINTN
 //ArmPlatformIsPrimaryCore (
 //  IN UINTN MpId

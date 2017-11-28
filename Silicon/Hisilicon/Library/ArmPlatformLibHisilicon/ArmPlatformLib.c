@@ -23,11 +23,6 @@
 
 #include <Ppi/ArmMpCoreInfo.h>
 
-UINTN
-ArmGetCpuCountPerCluster (
-  VOID
-  );
-
 extern  EFI_STATUS MemInitEntry (VOID);
 
 /**
