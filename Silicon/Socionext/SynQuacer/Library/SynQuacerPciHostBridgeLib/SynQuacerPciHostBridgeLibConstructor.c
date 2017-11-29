@@ -113,6 +113,9 @@
 #define PROGRAM_INTERFACE             0x0000FF00
 #define PROGRAM_INTERFACE_VALUE       0x00
 
+#define GEN2_CONTROL_OFF              0x80c
+#define DIRECT_SPEED_CHANGE           BIT17
+
 #define MISC_CONTROL_1_OFF            0x8BC
 #define DBI_RO_WR_EN                  BIT0
 
@@ -294,6 +297,9 @@ PciInitController (
   MmioOr32 (DbiBase + PCI_COMMAND_OFFSET, EFI_PCI_COMMAND_IO_SPACE |
                                           EFI_PCI_COMMAND_MEMORY_SPACE |
                                           EFI_PCI_COMMAND_BUS_MASTER);
+
+  // Force link speed change to Gen2 at link up
+  MmioOr32 (DbiBase + GEN2_CONTROL_OFF, DIRECT_SPEED_CHANGE);
 
   // Region 0: MMIO32 range
   ConfigureWindow (DbiBase, 0,
