@@ -46,75 +46,75 @@
 #define IATU_LWR_TARGET_ADDR_OFF_OUTBOUND_0                 0x918
 #define IATU_UPPER_TARGET_ADDR_OFF_OUTBOUND_0               0x91C
 
-#define CORE_CONTROL       0x000
-#define   APP_LTSSM_ENABLE    BIT4
-#define   DEVICE_TYPE         (BIT3 | BIT2 | BIT1 | BIT0)
+#define CORE_CONTROL                  0x000
+#define APP_LTSSM_ENABLE              BIT4
+#define DEVICE_TYPE                   (BIT3 | BIT2 | BIT1 | BIT0)
 
-#define AXI_CLK_STOP       0x004
-#define   DBI_ACLK_STOP       BIT8
-#define   SLV_ACLK_STOP       BIT4
-#define   MSTR_ACLK_STOP      BIT0
-#define   DBI_CSYSREQ_REG     BIT9
-#define   SLV_CSYSREQ_REG     BIT5
-#define   MSTR_CSYSREQ_REG    BIT1
+#define AXI_CLK_STOP                  0x004
+#define DBI_ACLK_STOP                 BIT8
+#define SLV_ACLK_STOP                 BIT4
+#define MSTR_ACLK_STOP                BIT0
+#define DBI_CSYSREQ_REG               BIT9
+#define SLV_CSYSREQ_REG               BIT5
+#define MSTR_CSYSREQ_REG              BIT1
 
-#define RESET_CONTROL_1    0x00C
-#define   PERST_N_O_REG       BIT5
-#define   PERST_N_I_REG       BIT4
-#define   BUTTON_RST_N_REG    BIT1
-#define   PWUP_RST_N_REG      BIT0
+#define RESET_CONTROL_1               0x00C
+#define PERST_N_O_REG                 BIT5
+#define PERST_N_I_REG                 BIT4
+#define BUTTON_RST_N_REG              BIT1
+#define PWUP_RST_N_REG                BIT0
 
-#define RESET_CONTROL_2    0x010
+#define RESET_CONTROL_2               0x010
 
-#define RESET_SELECT_1     0x014
-#define   SQU_RST_SEL         BIT29
-#define   PHY_RST_SEL         BIT28
-#define   PWR_RST_SEL         BIT24
-#define   STI_RST_SEL         BIT20
-#define   N_STI_RST_SEL       BIT16
-#define   CORE_RST_SEL        BIT12
-#define   PERST_SEL           BIT4
-#define   BUTTON_RST_SEL      BIT1
-#define   PWUP_RST_SEL        BIT0
+#define RESET_SELECT_1                0x014
+#define SQU_RST_SEL                   BIT29
+#define PHY_RST_SEL                   BIT28
+#define PWR_RST_SEL                   BIT24
+#define STI_RST_SEL                   BIT20
+#define N_STI_RST_SEL                 BIT16
+#define CORE_RST_SEL                  BIT12
+#define PERST_SEL                     BIT4
+#define BUTTON_RST_SEL                BIT1
+#define PWUP_RST_SEL                  BIT0
 
-#define RESET_SELECT_2     0x018
-#define   DBI_ARST_SEL        BIT8
-#define   SLV_ARST_SEL        BIT4
-#define   MSTR_ARST_SEL       BIT0
+#define RESET_SELECT_2                0x018
+#define DBI_ARST_SEL                  BIT8
+#define SLV_ARST_SEL                  BIT4
+#define MSTR_ARST_SEL                 BIT0
 
-#define EM_CONTROL 0x030
-#define   PRE_DET_STT_REG     BIT4
+#define EM_CONTROL                    0x030
+#define PRE_DET_STT_REG               BIT4
 
-#define EM_SELECT 0x034
-#define   PRE_DET_STT_SEL     BIT4
+#define EM_SELECT                     0x034
+#define PRE_DET_STT_SEL               BIT4
 
-#define PM_CONTROL_2       0x050
-#define   SYS_AUX_PWR_DET     BIT8
+#define PM_CONTROL_2                  0x050
+#define SYS_AUX_PWR_DET               BIT8
 
-#define PHY_CONFIG_COM_6   0x114
-#define   PIPE_PORT_SEL       (BIT1 | BIT0)
+#define PHY_CONFIG_COM_6              0x114
+#define PIPE_PORT_SEL                 (BIT1 | BIT0)
 
-#define LINK_MONITOR       0x210
-#define   SMLH_LINK_UP        BIT0
+#define LINK_MONITOR                  0x210
+#define SMLH_LINK_UP                  BIT0
 
-#define LINK_CAPABILITIES_REG 0x07C
-#define   PCIE_CAP_MAX_LINK_WIDTH (BIT7 | BIT6 | BIT5 | BIT4)
-#define   PCIE_CAP_MAX_LINK_SPEED (BIT3 | BIT2 | BIT1 | BIT0)
+#define LINK_CAPABILITIES_REG         0x07C
+#define PCIE_CAP_MAX_LINK_WIDTH       (BIT7 | BIT6 | BIT5 | BIT4)
+#define PCIE_CAP_MAX_LINK_SPEED       (BIT3 | BIT2 | BIT1 | BIT0)
 
-#define LINK_CONTROL_LINK_STATUS_REG 0x080
-#define   PCIE_CAP_NEGO_LINK_WIDTH (BIT23 | BIT22 | BIT21 | BIT20)
-#define   PCIE_CAP_LINK_SPEED      (BIT19 | BIT18 | BIT17 | BIT16)
+#define LINK_CONTROL_LINK_STATUS_REG  0x080
+#define PCIE_CAP_NEGO_LINK_WIDTH      (BIT23 | BIT22 | BIT21 | BIT20)
+#define PCIE_CAP_LINK_SPEED           (BIT19 | BIT18 | BIT17 | BIT16)
 
-#define TYPE1_CLASS_CODE_REV_ID_REG 0x008
-#define   BASE_CLASS_CODE             0xFF000000
-#define     BASE_CLASS_CODE_VALUE       0x06
-#define   SUBCLASS_CODE               0x00FF0000
-#define     SUBCLASS_CODE_VALUE         0x04
-#define   PROGRAM_INTERFACE           0x0000FF00
-#define     PROGRAM_INTERFACE_VALUE     0x00
+#define TYPE1_CLASS_CODE_REV_ID_REG   0x008
+#define BASE_CLASS_CODE               0xFF000000
+#define BASE_CLASS_CODE_VALUE         0x06
+#define SUBCLASS_CODE                 0x00FF0000
+#define SUBCLASS_CODE_VALUE           0x04
+#define PROGRAM_INTERFACE             0x0000FF00
+#define PROGRAM_INTERFACE_VALUE       0x00
 
-#define MISC_CONTROL_1_OFF 0x8BC
-#define   DBI_RO_WR_EN       BIT0
+#define MISC_CONTROL_1_OFF            0x8BC
+#define DBI_RO_WR_EN                  BIT0
 
 STATIC
 VOID
