@@ -300,6 +300,9 @@ READ_LOCK_STATUS   = TRUE
   # Build Shell from latest source code instead of prebuilt binary
   #
   INF ShellPkg/Application/Shell/Shell.inf
+!ifdef $(INCLUDE_TFTP_COMMAND)
+  INF ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
+!endif #$(INCLUDE_TFTP_COMMAND)
 
   #
   # Bds

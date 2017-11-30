@@ -647,12 +647,12 @@
 !ifdef $(INCLUDE_DP)
       NULL|ShellPkg/Library/UefiDpLib/UefiDpLib.inf
 !endif #$(INCLUDE_DP)
-!ifdef $(INCLUDE_TFTP_COMMAND)
-      NULL|ShellPkg/Library/UefiShellTftpCommandLib/UefiShellTftpCommandLib.inf
-!endif #$(INCLUDE_TFTP_COMMAND)
 
     <PcdsFixedAtBuild>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0xFF
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
+!ifdef $(INCLUDE_TFTP_COMMAND)
+  ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
+!endif #$(INCLUDE_TFTP_COMMAND)
