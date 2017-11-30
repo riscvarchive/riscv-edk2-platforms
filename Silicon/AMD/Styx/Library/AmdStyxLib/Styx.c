@@ -84,21 +84,6 @@ ArmPlatformInitialize (
 }
 
 
-/**
-  Initialize the system (or sometimes called permanent) memory
-
-  This memory is generally represented by the DRAM.
-
-**/
-VOID
-ArmPlatformInitializeSystemMemory (
-  VOID
-  )
-{
-  // Nothing to do here
-}
-
-
 //
 // Return list of cores in the system
 //

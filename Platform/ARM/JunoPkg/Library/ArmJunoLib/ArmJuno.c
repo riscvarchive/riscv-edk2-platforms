@@ -146,19 +146,6 @@ ArmPlatformInitialize (
   return Status;
 }
 
-/**
-  Initialize the system (or sometimes called permanent) memory
-
-  This memory is generally represented by the DRAM.
-
-**/
-VOID
-ArmPlatformInitializeSystemMemory (
-  VOID
-  )
-{
-}
-
 EFI_STATUS
 PrePeiCoreGetMpCoreInfo (
   OUT UINTN                   *CoreCount,
