@@ -489,7 +489,6 @@
       NULL|ShellPkg/Library/UefiShellDebug1CommandsLib/UefiShellDebug1CommandsLib.inf
       NULL|ShellPkg/Library/UefiShellInstall1CommandsLib/UefiShellInstall1CommandsLib.inf
       NULL|ShellPkg/Library/UefiShellNetwork1CommandsLib/UefiShellNetwork1CommandsLib.inf
-      NULL|ShellPkg/Library/UefiShellTftpCommandLib/UefiShellTftpCommandLib.inf
       NULL|Platform/Marvell/Applications/EepromCmd/EepromCmd.inf
       NULL|Platform/Marvell/Applications/SpiTool/SpiFlashCmd.inf
       NULL|Platform/Marvell/Applications/FirmwareUpdate/FUpdate.inf
