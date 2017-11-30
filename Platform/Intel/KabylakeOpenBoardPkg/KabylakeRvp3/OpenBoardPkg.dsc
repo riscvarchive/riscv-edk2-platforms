@@ -192,8 +192,11 @@
       NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
 !endif
   }
-  IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
-
+  IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPreMemSiliconPolicyInitLibDependency.inf
+  }
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
@@ -203,7 +206,11 @@
 !endif
   }
 
-  IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf
+  IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPostMemSiliconPolicyInitLibDependency.inf
+  }
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
 
 #
 # Security

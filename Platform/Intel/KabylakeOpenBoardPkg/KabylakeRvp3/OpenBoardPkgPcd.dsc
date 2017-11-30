@@ -219,6 +219,10 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 
 [PcdsDynamicDefault]
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFDA0000
+  # Platform will pre-allocate UPD buffer and pass it to FspWrapper
+  # Those dummy address will be patched before FspWrapper executing
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress|0xFFFFFFFF
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsUpdDataAddress|0xFFFFFFFF
 
 [PcdsDynamicDefault.common.DEFAULT]
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0x0

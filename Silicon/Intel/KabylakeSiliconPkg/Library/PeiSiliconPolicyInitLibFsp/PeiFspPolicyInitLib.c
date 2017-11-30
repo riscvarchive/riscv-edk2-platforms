@@ -13,7 +13,9 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 **/
 
 #include <PeiFspPolicyInitLib.h>
-
+#include <Library/FspWrapperApiLib.h>
+#include <Library/BaseMemoryLib.h>
+#include <Library/MemoryAllocationLib.h>
 /**
   Performs silicon pre-mem policy initialization.
 
@@ -43,9 +45,35 @@ SiliconPolicyInitPreMem (
 {
   FSPM_UPD              *FspmUpdDataPtr;
   EFI_STATUS            Status;
+  UINTN                 *SourceData;
+  FSP_INFO_HEADER       *FspmHeaderPtr;
 
-  FspmUpdDataPtr = FspmUpd;
-
+  if (FspmUpd == NULL) {
+    //
+    // Allocate and initialize UPD buffer, copy default FSP-M UPD data
+    //
+    FspmHeaderPtr = (FSP_INFO_HEADER *) FspFindFspHeader (PcdGet32 (PcdFspmBaseAddress));
+    ASSERT (FspmHeaderPtr != NULL);
+    if (FspmHeaderPtr != NULL) {
+      DEBUG ((DEBUG_INFO, "FspmHeaderPtr - 0x%x\n", FspmHeaderPtr));
+      FspmUpdDataPtr = (FSPM_UPD *) AllocateZeroPool ((UINTN) FspmHeaderPtr->CfgRegionSize);
+      ASSERT (FspmUpdDataPtr != NULL);
+      if (FspmUpdDataPtr != NULL) {
+        SourceData = (UINTN *) ((UINTN) FspmHeaderPtr->ImageBase + (UINTN) FspmHeaderPtr->CfgRegionOffset);
+        CopyMem (FspmUpdDataPtr, SourceData, (UINTN) FspmHeaderPtr->CfgRegionSize);
+        PcdSet32S (PcdFspmUpdDataAddress, (UINT32) FspmUpdDataPtr);
+      }
+    }
+  } else {
+    FspmUpdDataPtr = FspmUpd;
+  }
+  //
+  // Return NULL pointer as error occurried and do not continue rest of the steps.
+  //
+  if (FspmUpdDataPtr == NULL) {
+    return NULL;
+  }
+  DEBUG ((DEBUG_INFO, "FspmUpdDataPtr - 0x%x\n", FspmUpdDataPtr));
   //
   // Initialize Intel PEI Platform Policy
   //
@@ -97,7 +125,7 @@ SiliconPolicyInitPreMem (
   //
   Status = PeiFspMiscUpdInitPreMem (FspmUpdDataPtr);
 
-  return FspmUpd;
+  return FspmUpdDataPtr;
 }
 
 /*
@@ -148,9 +176,35 @@ SiliconPolicyInitPostMem (
 {
   FSPS_UPD              *FspsUpdDataPtr;
   EFI_STATUS            Status;
+  FSP_INFO_HEADER       *FspsHeaderPtr;
+  UINTN                 *SourceData;
 
-  FspsUpdDataPtr = FspsUpd;
-
+  if (FspsUpd == NULL) {
+    //
+    // Allocate and initialize UPD buffer, copy default FSP-S UPD data
+    //
+    FspsHeaderPtr = (FSP_INFO_HEADER *) FspFindFspHeader (PcdGet32 (PcdFspsBaseAddress));
+    ASSERT (FspsHeaderPtr != NULL);
+    if (FspsHeaderPtr != NULL) {
+      DEBUG ((DEBUG_INFO, "FspsHeaderPtr - 0x%x\n", FspsHeaderPtr));
+      FspsUpdDataPtr = (FSPS_UPD *) AllocateZeroPool ((UINTN) FspsHeaderPtr->CfgRegionSize);
+      ASSERT (FspsUpdDataPtr != NULL);
+      if (FspsUpdDataPtr != NULL) {
+        SourceData = (UINTN *) ((UINTN) FspsHeaderPtr->ImageBase + (UINTN) FspsHeaderPtr->CfgRegionOffset);
+        CopyMem (FspsUpdDataPtr, SourceData, (UINTN) FspsHeaderPtr->CfgRegionSize);
+        PcdSet32S (PcdFspsUpdDataAddress, (UINT32) FspsUpdDataPtr);
+      }
+    }
+  } else {
+    FspsUpdDataPtr = FspsUpd;
+  }
+  //
+  // Return NULL pointer as error occurried and do not continue rest of the steps.
+  //
+  if (FspsUpdDataPtr == NULL) {
+    return NULL;
+  }
+  DEBUG ((DEBUG_INFO, "FspsUpdDataPtr - 0x%x\n", FspsUpdDataPtr));
   //
   // Initialize Intel PEI Platform Policy
   //
@@ -189,7 +243,7 @@ SiliconPolicyInitPostMem (
     DEBUG ((DEBUG_WARN, "ERROR - CPU Pei Fsp Policy Initialization fail, Status = %r\n", Status));
   }
 
-  return FspsUpd;
+  return FspsUpdDataPtr;
 }
 
 /*

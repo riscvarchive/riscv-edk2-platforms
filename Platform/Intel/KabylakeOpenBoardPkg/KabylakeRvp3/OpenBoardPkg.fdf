@@ -237,6 +237,7 @@ FvNameGuid         = FC8FE6B5-CD9B-411E-BD8F-31824D0CDE3D
 
 INF $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf
 INF IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
+INF $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
 
 [FV.FvPostMemoryUncompact]
 BlockSize          = $(FLASH_BLOCK_SIZE)
@@ -263,6 +264,7 @@ FvNameGuid         = 7C4DCFC6-AECA-4707-85B9-FD4B2EEA49E7
 # Init Board Config PCD
 INF $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf
 INF IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf
+INF $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
 
 !if gSiPkgTokenSpaceGuid.PcdPeiDisplayEnable == TRUE
 FILE FREEFORM = 4ad46122-ffeb-4a52-bfb0-518cfca02db0 {

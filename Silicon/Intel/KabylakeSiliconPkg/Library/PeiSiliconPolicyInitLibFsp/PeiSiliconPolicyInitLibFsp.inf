@@ -62,6 +62,7 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   IntelFsp2Pkg/IntelFsp2Pkg.dec
+  IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   KabylakeFspBinPkg/KabylakeFspBinPkg.dec
 
@@ -76,6 +77,7 @@
   ConfigBlockLib
   MemoryAllocationLib
   DebugPrintErrorLevelLib
+  FspWrapperApiLib
 
 [Pcd]
   gSiPkgTokenSpaceGuid.PcdTsegSize                    ## CONSUMES
@@ -84,7 +86,11 @@
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize      ## CONSUMES
   gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize   ## CONSUMES
   gIntelFsp2PkgTokenSpaceGuid.PcdFspReservedBufferSize ## CONSUMES
-
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress ## CONSUMES
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress    ## CONSUMES
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsUpdDataAddress ## CONSUMES
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress    ## CONSUMES
+ 
 [Ppis]
   gSiPolicyPpiGuid                              ## CONSUMES
   gSiPreMemPolicyPpiGuid                        ## CONSUMES
