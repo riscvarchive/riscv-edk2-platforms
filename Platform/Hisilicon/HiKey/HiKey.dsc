@@ -411,10 +411,7 @@
   #
   # Fastboot
   #
-  EmbeddedPkg/Application/AndroidFastboot/AndroidFastbootApp.inf {
-    <LibraryClasses>
-      BdsLib|ArmPkg/Library/BdsLib/BdsLib.inf
-  }
+  EmbeddedPkg/Application/AndroidFastboot/AndroidFastbootApp.inf
 
 
   #
