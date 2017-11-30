@@ -86,7 +86,6 @@
 
 [PcdsFeatureFlag.common]
   gArmTokenSpaceGuid.PcdNormalMemoryNonshareableOverride|TRUE
-  gArmPlatformTokenSpaceGuid.PcdSystemMemoryInitializeInSec|TRUE
   gArmPlatformTokenSpaceGuid.PcdSendSgiToBringUpSecondaryCores|TRUE
 
   ## If TRUE, Graphics Output Protocol will be installed on virtual handle created by ConsplitterDxe.

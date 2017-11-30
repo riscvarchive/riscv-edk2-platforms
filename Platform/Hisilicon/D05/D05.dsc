@@ -113,7 +113,6 @@
 [PcdsFeatureFlag.common]
 
 !if $(EDK2_SKIP_PEICORE) == 1
-  gArmPlatformTokenSpaceGuid.PcdSystemMemoryInitializeInSec|TRUE
   gArmPlatformTokenSpaceGuid.PcdSendSgiToBringUpSecondaryCores|TRUE
 !endif
 
