@@ -114,7 +114,7 @@ FvNameGuid         = 87940482-fc81-41c3-87e6-399cf85ac8a0
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
 !ifdef EDK2_ENABLE_PL111
-  INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/PL111LcdGraphicsOutputDxe.inf
+  INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 !endif
   INF ArmPlatformPkg/Drivers/SP805WatchdogDxe/SP805WatchdogDxe.inf
 
