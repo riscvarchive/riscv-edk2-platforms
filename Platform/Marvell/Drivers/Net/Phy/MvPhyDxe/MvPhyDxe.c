@@ -328,7 +328,7 @@ MvPhyInit1512 (
 
     DEBUG((DEBUG_ERROR, "MvPhyDxe: Waiting for PHY auto negotiation... "));
     for (i = 0; !(Data & BMSR_ANEGCOMPLETE); i++) {
-      if (i > PHY_ANEG_TIMEOUT) {
+      if (i > PHY_AUTONEGOTIATE_TIMEOUT) {
         DEBUG((DEBUG_ERROR, "timeout\n"));
         PhyDev->LinkUp = FALSE;
         return EFI_TIMEOUT;
