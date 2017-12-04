@@ -330,7 +330,7 @@ SynQuacerI2cStartRequest (
     Status = WaitForInterrupt (I2c);
     if (EFI_ERROR (Status)) {
         BOOTTIME_DEBUG ((DEBUG_WARN, "%a: Timeout waiting for interrupt - %r\n",
-        Status));
+          __FUNCTION__, Status));
       break;
     }
 
