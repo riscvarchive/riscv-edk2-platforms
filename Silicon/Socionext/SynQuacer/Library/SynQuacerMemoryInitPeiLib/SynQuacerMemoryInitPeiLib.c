@@ -115,6 +115,9 @@ STATIC CONST ARM_MEMORY_REGION_DESCRIPTOR mVirtualMemoryTable[] = {
                      FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize)),
   ARM_DEVICE_REGION (FixedPcdGet32 (PcdFlashNvStorageFtwSpareBase),
                      FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize)),
+
+  // NETSEC/eMMC SMMU
+  ARM_DEVICE_REGION (SYNQUACER_SCB_SMMU_BASE, SYNQUACER_SCB_SMMU_SIZE),
 };
 
 STATIC

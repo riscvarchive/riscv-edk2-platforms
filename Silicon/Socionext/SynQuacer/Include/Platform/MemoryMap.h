@@ -65,4 +65,8 @@
 #define SYNQUACER_PCIE_BASE             0x58200000
 #define SYNQUACER_PCIE_SIZE             0x00200000
 
+// SCB SMMU
+#define SYNQUACER_SCB_SMMU_BASE         0x52E00000
+#define SYNQUACER_SCB_SMMU_SIZE         SIZE_64KB
+
 #endif

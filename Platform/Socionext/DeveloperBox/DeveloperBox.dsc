@@ -599,7 +599,7 @@
   NetworkPkg/HttpBootDxe/HttpBootDxe.inf
   Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.inf {
     <LibraryClasses>
-      DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
+      DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf
   }
 
   #

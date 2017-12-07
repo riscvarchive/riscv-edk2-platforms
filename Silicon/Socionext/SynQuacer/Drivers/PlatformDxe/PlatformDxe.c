@@ -130,6 +130,27 @@ FreeDevice:
   return Status;
 }
 
+#define SMMU_SCR0                         0x0
+#define SMMU_SCR0_SHCFG_INNER             (0x2 << 22)
+#define SMMU_SCR0_MTCFG                   (0x1 << 20)
+#define SMMU_SCR0_MEMATTR_INNER_OUTER_WB  (0xf << 16)
+
+STATIC
+VOID
+SmmuEnableCoherentDma (
+  VOID
+  )
+{
+  //
+  // The SCB SMMU (MMU-500) is shared between the NETSEC and eMMC devices, and
+  // is configured in passthrough mode by default. Let's set the global memory
+  // type override as well, so that all memory accesses by these devices are
+  // inner shareable inner/outer writeback cacheable.
+  //
+  MmioOr32 (SYNQUACER_SCB_SMMU_BASE + SMMU_SCR0,
+    SMMU_SCR0_SHCFG_INNER | SMMU_SCR0_MTCFG | SMMU_SCR0_MEMATTR_INNER_OUTER_WB);
+}
+
 EFI_STATUS
 EFIAPI
 PlatformDxeEntryPoint (
@@ -177,6 +198,8 @@ PlatformDxeEntryPoint (
   Status = RegisterDevice (&gSynQuacerNonDiscoverableI2cMasterGuid, mI2c1Desc,
              &Handle);
   ASSERT_EFI_ERROR (Status);
+
+  SmmuEnableCoherentDma ();
 
   return EFI_SUCCESS;
 }

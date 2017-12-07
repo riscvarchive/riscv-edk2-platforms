@@ -456,6 +456,7 @@
             max-speed = <1000>;
             max-frame-size = <9000>;
             phy-handle = <&ethphy0>;
+            dma-coherent;
 
             #address-cells = <1>;
             #size-cells = <0>;
@@ -557,6 +558,7 @@
         fujitsu,cmd-dat-delay-select;
         clocks = <&clk_alw_c_0 &clk_alw_b_0>;
         clock-names = "core", "iface";
+        dma-coherent;
         status = "disabled";
     };
 };
