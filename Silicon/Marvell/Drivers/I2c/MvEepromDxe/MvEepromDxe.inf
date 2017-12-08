@@ -31,35 +31,35 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = MvEeprom
+  BASE_NAME                      = MvEepromDxe
   FILE_GUID                      = 59fc3843-d8d4-40aa-ae07-38967138509c
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = MvEepromInitialise
 
 [Sources.common]
-  MvEeprom.c
+  MvEepromDxe.c
 
 [Packages]
-  MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
-  ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
-  IoLib
-  PcdLib
   BaseLib
   BaseMemoryLib
   DebugLib
-  UefiLib
-  UefiDriverEntryPoint
+  IoLib
+  PcdLib
   UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
 
 [Protocols]
-  gEfiI2cIoProtocolGuid
   gEfiDriverBindingProtocolGuid
+  gEfiI2cIoProtocolGuid
   gMarvellEepromProtocolGuid
 
 [Pcd]

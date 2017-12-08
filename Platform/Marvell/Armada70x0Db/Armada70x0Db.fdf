@@ -109,7 +109,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
   INF Silicon/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
   INF MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
-  INF Silicon/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
+  INF Silicon/Marvell/Drivers/I2c/MvEepromDxe/MvEepromDxe.inf
   INF Silicon/Marvell/Drivers/Spi/MvSpiOrionDxe/MvSpiOrionDxe.inf
   INF Silicon/Marvell/Drivers/Spi/MvSpiFlashDxe/MvSpiFlashDxe.inf
   INF Silicon/Marvell/Armada7k8k/Drivers/Armada7k8kRngDxe/Armada7k8kRngDxe.inf

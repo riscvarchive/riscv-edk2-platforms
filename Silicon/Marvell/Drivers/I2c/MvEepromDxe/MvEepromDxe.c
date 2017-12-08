@@ -47,7 +47,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <Pi/PiI2c.h>
 
-#include "MvEeprom.h"
+#include "MvEepromDxe.h"
 
 #define I2C_DEVICE_INDEX(bus, address) (((address) & 0xffff) | (bus) << 16)
 
