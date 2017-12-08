@@ -440,8 +440,8 @@
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
-  # PciEmulation
-  Silicon/Marvell/PciEmulation/PciEmulation.inf
+  # NonDiscoverableDevices
+  Silicon/Marvell/Drivers/NonDiscoverableDxe/NonDiscoverableDxe.inf
   MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   # SCSI

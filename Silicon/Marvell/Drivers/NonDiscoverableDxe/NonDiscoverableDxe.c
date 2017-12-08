@@ -55,7 +55,7 @@ STATIC UINT8 * CONST SdhciDeviceTable = FixedPcdGetPtr (PcdPciESdhci);
 //
 STATIC
 EFI_STATUS
-PciEmulationInitXhci (
+NonDiscoverableInitXhci (
   )
 {
   MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
@@ -63,7 +63,7 @@ PciEmulationInitXhci (
   UINT8 i;
 
   if (PcdGetSize (PcdPciEXhci) < Desc->XhciDevCount) {
-    DEBUG((DEBUG_ERROR, "PciEmulation: Wrong PcdPciEXhci format\n"));
+    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciEXhci format\n"));
     return EFI_INVALID_PARAMETER;
   }
 
@@ -82,7 +82,7 @@ PciEmulationInitXhci (
                    );
 
     if (EFI_ERROR(Status)) {
-      DEBUG((DEBUG_ERROR, "PciEmulation: Cannot install Xhci device %d\n", i));
+      DEBUG((DEBUG_ERROR, "NonDiscoverable: Cannot install Xhci device %d\n", i));
       return Status;
     }
   }
@@ -92,7 +92,7 @@ PciEmulationInitXhci (
 
 STATIC
 EFI_STATUS
-PciEmulationInitAhci (
+NonDiscoverableInitAhci (
   )
 {
   MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
@@ -100,7 +100,7 @@ PciEmulationInitAhci (
   UINT8 i;
 
   if (PcdGetSize (PcdPciEAhci) < Desc->AhciDevCount) {
-    DEBUG((DEBUG_ERROR, "PciEmulation: Wrong PcdPciEAhci format\n"));
+    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciEAhci format\n"));
     return EFI_INVALID_PARAMETER;
   }
 
@@ -119,7 +119,7 @@ PciEmulationInitAhci (
                    );
 
     if (EFI_ERROR(Status)) {
-      DEBUG((DEBUG_ERROR, "PciEmulation: Cannot install Ahci device %d\n", i));
+      DEBUG((DEBUG_ERROR, "NonDiscoverable: Cannot install Ahci device %d\n", i));
       return Status;
     }
   }
@@ -129,7 +129,7 @@ PciEmulationInitAhci (
 
 STATIC
 EFI_STATUS
-PciEmulationInitSdhci (
+NonDiscoverableInitSdhci (
   )
 {
   MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
@@ -137,7 +137,7 @@ PciEmulationInitSdhci (
   UINT8 i;
 
   if (PcdGetSize (PcdPciESdhci) < Desc->SdhciDevCount) {
-    DEBUG((DEBUG_ERROR, "PciEmulation: Wrong PcdPciESdhci format\n"));
+    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciESdhci format\n"));
     return EFI_INVALID_PARAMETER;
   }
 
@@ -156,7 +156,7 @@ PciEmulationInitSdhci (
                    );
 
     if (EFI_ERROR(Status)) {
-      DEBUG((DEBUG_ERROR, "PciEmulation: Cannot install Sdhci device %d\n", i));
+      DEBUG((DEBUG_ERROR, "NonDiscoverable: Cannot install Sdhci device %d\n", i));
       return Status;
     }
   }
@@ -169,24 +169,24 @@ PciEmulationInitSdhci (
 //
 EFI_STATUS
 EFIAPI
-PciEmulationEntryPoint (
+NonDiscoverableEntryPoint (
   IN EFI_HANDLE       ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable
   )
 {
   EFI_STATUS Status;
 
-  Status = PciEmulationInitXhci();
+  Status = NonDiscoverableInitXhci();
   if (EFI_ERROR(Status)) {
     return Status;
   }
 
-  Status = PciEmulationInitAhci();
+  Status = NonDiscoverableInitAhci();
   if (EFI_ERROR(Status)) {
     return Status;
   }
 
-  Status = PciEmulationInitSdhci();
+  Status = NonDiscoverableInitSdhci();
   if (EFI_ERROR(Status)) {
     return Status;
   }

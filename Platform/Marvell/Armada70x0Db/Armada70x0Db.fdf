@@ -135,8 +135,8 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF Silicon/Marvell/Drivers/Net/MvPhyDxe/MvPhyDxe.inf
   INF Silicon/Marvell/Drivers/Net/Pp2Dxe/Pp2Dxe.inf
 
-  # PciEmulation
-  INF Silicon/Marvell/PciEmulation/PciEmulation.inf
+  # NonDiscoverableDevices
+  INF Silicon/Marvell/Drivers/NonDiscoverableDxe/NonDiscoverableDxe.inf
   INF MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   # SCSI

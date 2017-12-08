@@ -32,15 +32,15 @@
 
 [Defines]
   INF_VERSION                     = 0x00010019
-  BASE_NAME                       = PciEmulation
+  BASE_NAME                       = NonDiscoverableDxe
   FILE_GUID                       = 3dfa08da-923b-4841-9435-c77a604d7493
   MODULE_TYPE                     = DXE_DRIVER
   VERSION_STRING                  = 1.0
 
-  ENTRY_POINT                     = PciEmulationEntryPoint
+  ENTRY_POINT                     = NonDiscoverableEntryPoint
 
 [Sources.common]
-  PciEmulation.c
+  NonDiscoverableDxe.c
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
@@ -53,9 +53,9 @@
   UefiDriverEntryPoint
 
 [Pcd]
-  gMarvellTokenSpaceGuid.PcdPciEXhci
   gMarvellTokenSpaceGuid.PcdPciEAhci
   gMarvellTokenSpaceGuid.PcdPciESdhci
+  gMarvellTokenSpaceGuid.PcdPciEXhci
 
 [Depex]
   TRUE
