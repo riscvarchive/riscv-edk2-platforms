@@ -428,7 +428,7 @@
   MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
   MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
   Silicon/Marvell/Drivers/Net/MvMdioDxe/MvMdioDxe.inf
-  Silicon/Marvell/Drivers/Net/Phy/MvPhyDxe/MvPhyDxe.inf
+  Silicon/Marvell/Drivers/Net/MvPhyDxe/MvPhyDxe.inf
   Silicon/Marvell/Drivers/Net/Pp2Dxe/Pp2Dxe.inf
 
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf

@@ -132,7 +132,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
   INF MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
   INF Silicon/Marvell/Drivers/Net/MvMdioDxe/MvMdioDxe.inf
-  INF Silicon/Marvell/Drivers/Net/Phy/MvPhyDxe/MvPhyDxe.inf
+  INF Silicon/Marvell/Drivers/Net/MvPhyDxe/MvPhyDxe.inf
   INF Silicon/Marvell/Drivers/Net/Pp2Dxe/Pp2Dxe.inf
 
   # PciEmulation
