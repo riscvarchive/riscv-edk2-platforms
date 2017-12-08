@@ -87,7 +87,7 @@ STATIC EFI_PHYSICAL_ADDRESS                     mTrngBaseAddress;
 STATIC
 EFI_STATUS
 EFIAPI
-Armada70x0RngGetInfo (
+Armada7k8kRngGetInfo (
   IN      EFI_RNG_PROTOCOL        *This,
   IN OUT  UINTN                   *RNGAlgorithmListSize,
   OUT     EFI_RNG_ALGORITHM       *RNGAlgorithmList
@@ -171,7 +171,7 @@ GetTrngData (
 STATIC
 EFI_STATUS
 EFIAPI
-Armada70x0RngGetRNG (
+Armada7k8kRngGetRNG (
   IN EFI_RNG_PROTOCOL            *This,
   IN EFI_RNG_ALGORITHM           *RNGAlgorithm, OPTIONAL
   IN UINTN                       RNGValueLength,
@@ -207,9 +207,9 @@ Armada70x0RngGetRNG (
   return EFI_SUCCESS;
 }
 
-STATIC EFI_RNG_PROTOCOL mArmada70x0RngProtocol = {
-  Armada70x0RngGetInfo,
-  Armada70x0RngGetRNG
+STATIC EFI_RNG_PROTOCOL mArmada7k8kRngProtocol = {
+  Armada7k8kRngGetInfo,
+  Armada7k8kRngGetRNG
 };
 
 //
@@ -217,7 +217,7 @@ STATIC EFI_RNG_PROTOCOL mArmada70x0RngProtocol = {
 //
 EFI_STATUS
 EFIAPI
-Armada70x0RngDxeEntryPoint (
+Armada7k8kRngDxeEntryPoint (
   IN EFI_HANDLE       ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable
   )
@@ -249,7 +249,7 @@ Armada70x0RngDxeEntryPoint (
   return SystemTable->BootServices->InstallMultipleProtocolInterfaces (
                                       &ImageHandle,
                                       &gEfiRngProtocolGuid,
-                                      &mArmada70x0RngProtocol,
+                                      &mArmada7k8kRngProtocol,
                                       NULL
                                       );
 }

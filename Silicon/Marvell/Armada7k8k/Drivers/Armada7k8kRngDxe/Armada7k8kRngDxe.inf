@@ -15,14 +15,14 @@
 
 [Defines]
   INF_VERSION                    = 0x00010019
-  BASE_NAME                      = Armada70x0RngDxe
+  BASE_NAME                      = Armada7k8kRngDxe
   FILE_GUID                      = dd87096a-cae5-4328-bec1-2ddb755f2e08
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
-  ENTRY_POINT                    = Armada70x0RngDxeEntryPoint
+  ENTRY_POINT                    = Armada7k8kRngDxeEntryPoint
 
 [Sources]
-  Armada70x0RngDxe.c
+  Armada7k8kRngDxe.c
 
 [Packages]
   MdePkg/MdePkg.dec

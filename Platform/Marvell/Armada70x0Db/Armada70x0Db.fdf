@@ -112,7 +112,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF Silicon/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
   INF Silicon/Marvell/Drivers/Spi/MvSpiDxe.inf
   INF Silicon/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
-  INF Silicon/Marvell/Armada7k8k/Drivers/Armada70x0RngDxe/Armada70x0RngDxe.inf
+  INF Silicon/Marvell/Armada7k8k/Drivers/Armada7k8kRngDxe/Armada7k8kRngDxe.inf
 
   # Variable services
   INF Silicon/Marvell/Drivers/Spi/Variables/MvFvbDxe.inf

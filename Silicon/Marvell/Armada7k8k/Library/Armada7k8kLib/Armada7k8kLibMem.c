@@ -39,7 +39,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
 
-#include "Armada70x0LibMem.h"
+#include "Armada7k8kLibMem.h"
 
 // The total number of descriptors, including the final "end-of-table" descriptor.
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 16

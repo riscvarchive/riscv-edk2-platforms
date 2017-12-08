@@ -32,17 +32,17 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = Armada7040Lib
+  BASE_NAME                      = Armada7k8kLib
   FILE_GUID                      = 3f29b642-4a49-4dfd-8f4a-205dd38432bb
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = ArmPlatformLib
 
 [Packages]
-  MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
@@ -54,8 +54,8 @@
   UtmiPhyLib
 
 [Sources.common]
-  Armada70x0Lib.c
-  Armada70x0LibMem.c
+  Armada7k8kLib.c
+  Armada7k8kLibMem.c
 
 [Sources.AArch64]
   AArch64/ArmPlatformHelper.S

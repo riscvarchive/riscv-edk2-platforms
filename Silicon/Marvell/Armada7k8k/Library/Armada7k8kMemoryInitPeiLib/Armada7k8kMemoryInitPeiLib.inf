@@ -15,14 +15,14 @@
 
 [Defines]
   INF_VERSION                    = 0x00010019
-  BASE_NAME                      = Armada70x0MemoryInitPeiLib
+  BASE_NAME                      = Armada7k8kMemoryInitPeiLib
   FILE_GUID                      = abc4e8a7-89a7-4aea-92bc-0e9421c4a473
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = MemoryInitPeiLib|SEC PEIM
 
 [Sources]
-  Armada70x0MemoryInitPeiLib.c
+  Armada7k8kMemoryInitPeiLib.c
 
 [Packages]
   ArmPkg/ArmPkg.dec

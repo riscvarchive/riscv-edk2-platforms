@@ -32,7 +32,7 @@
 #SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 [LibraryClasses.common]
-  ArmPlatformLib|Silicon/Marvell/Armada7k8k/Library/Armada70x0Lib/Armada70x0Lib.inf
+  ArmPlatformLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kLib/Armada7k8kLib.inf
   ComPhyLib|Silicon/Marvell/Library/ComPhyLib/ComPhyLib.inf
   MppLib|Silicon/Marvell/Library/MppLib/MppLib.inf
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
@@ -149,7 +149,7 @@
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
 
 [LibraryClasses.common.SEC, LibraryClasses.common.PEIM]
-  MemoryInitPeiLib|Silicon/Marvell/Armada7k8k/Library/Armada70x0MemoryInitPeiLib/Armada70x0MemoryInitPeiLib.inf
+  MemoryInitPeiLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kMemoryInitPeiLib/Armada7k8kMemoryInitPeiLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
 
 [LibraryClasses.common.DXE_CORE]
@@ -413,7 +413,7 @@
   Silicon/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
   Silicon/Marvell/Drivers/Spi/MvSpiDxe.inf
   Silicon/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
-  Silicon/Marvell/Armada7k8k/Drivers/Armada70x0RngDxe/Armada70x0RngDxe.inf
+  Silicon/Marvell/Armada7k8k/Drivers/Armada7k8kRngDxe/Armada7k8kRngDxe.inf
 
   # Network support
   MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf

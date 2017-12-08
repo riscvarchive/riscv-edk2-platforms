@@ -17,7 +17,7 @@
 #include <Library/ArmPlatformLib.h>
 #include <Ppi/ArmMpCoreInfo.h>
 
-ARM_CORE_INFO mArmada7040MpCoreInfoTable[] = {
+ARM_CORE_INFO mArmada7k8kMpCoreInfoTable[] = {
   {
     // Cluster 0, Core 0
     0x0, 0x0,
@@ -96,8 +96,8 @@ PrePeiCoreGetMpCoreInfo (
   )
 {
   if (ArmIsMpCore()) {
-    *CoreCount    = sizeof(mArmada7040MpCoreInfoTable) / sizeof(ARM_CORE_INFO);
-    *ArmCoreTable = mArmada7040MpCoreInfoTable;
+    *CoreCount    = sizeof(mArmada7k8kMpCoreInfoTable) / sizeof(ARM_CORE_INFO);
+    *ArmCoreTable = mArmada7k8kMpCoreInfoTable;
     return EFI_SUCCESS;
   } else {
     return EFI_UNSUPPORTED;
