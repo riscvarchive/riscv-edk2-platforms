@@ -155,8 +155,8 @@
 
 !ifdef ARM_BIGLITTLE_TC2
   ## PL111 Lcd & HdLcd
-  gArmVExpressTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
-  gArmVExpressTokenSpaceGuid.PcdArmHdLcdBase|0x2B000000
+  gArmPlatformTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
+  gArmPlatformTokenSpaceGuid.PcdArmHdLcdBase|0x2B000000
   gArmVExpressTokenSpaceGuid.PcdHdLcdVideoModeOscId|5
 !endif
 

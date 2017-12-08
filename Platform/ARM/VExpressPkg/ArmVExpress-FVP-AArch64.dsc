@@ -140,7 +140,7 @@
 
 !ifdef EDK2_ENABLE_PL111
   ## PL111 Versatile Express Motherboard controller
-  gArmVExpressTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
+  gArmPlatformTokenSpaceGuid.PcdPL111LcdBase|0x1C1F0000
 !endif
 
   ## PL180 MMC/SD card controller

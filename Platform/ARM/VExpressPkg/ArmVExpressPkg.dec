@@ -47,11 +47,9 @@
   #
   # For a list of mode numbers look in LcdArmVExpress.c
   #
-  gArmVExpressTokenSpaceGuid.PcdPL111LcdBase|0x0|UINT32|0x00000001
   gArmVExpressTokenSpaceGuid.PcdPL111LcdMaxMode|3|UINT32|0x00000002
   gArmVExpressTokenSpaceGuid.PcdPL111LcdVideoModeOscId|1|UINT32|0x00000003
 
-  gArmVExpressTokenSpaceGuid.PcdArmHdLcdBase|0x0|UINT32|0x00000004
   gArmVExpressTokenSpaceGuid.PcdHdLcdVideoModeOscId|0|UINT32|0x00000005
 
   #
