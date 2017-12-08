@@ -116,7 +116,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   INF MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
-  INF MdeModulePkg/Logo/LogoDxe.inf
+  INF Platform/Socionext/DeveloperBox/Logo/LogoDxe.inf
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
 
   #

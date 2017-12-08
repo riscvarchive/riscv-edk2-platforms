@@ -504,7 +504,7 @@
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
-  MdeModulePkg/Logo/LogoDxe.inf
+  Platform/Socionext/DeveloperBox/Logo/LogoDxe.inf
 
   MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
     <LibraryClasses>
