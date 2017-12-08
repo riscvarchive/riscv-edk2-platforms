@@ -73,9 +73,6 @@
 
   gArmJunoTokenSpaceGuid.PcdJunoFdtDevicePath
 
-  gArmPlatformTokenSpaceGuid.PcdDefaultBootDevicePath
-  gArmPlatformTokenSpaceGuid.PcdDefaultBootArgument
-
   # PCI Root complex specific PCDs
   gArmJunoTokenSpaceGuid.PcdPciConfigurationSpaceBaseAddress
   gArmTokenSpaceGuid.PcdPciBusMin

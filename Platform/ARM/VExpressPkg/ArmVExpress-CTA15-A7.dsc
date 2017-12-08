@@ -109,19 +109,6 @@
 
   gArmTokenSpaceGuid.PcdVFPEnabled|1
 
-  # Stacks for MPCores in Secure World
-  # SRAM (CS1) is only available between 0x14000000 and 0x14001000 on the model
-  # ZBT SRAM is available between 0x2E000000 and 0x2E010000 on the model
-!ifdef ARM_BIGLITTLE_TC2
-  gArmPlatformTokenSpaceGuid.PcdCPUCoresSecStackBase|0x17000000
-!else
-  gArmPlatformTokenSpaceGuid.PcdCPUCoresSecStackBase|0x2E000000
-!endif
-  gArmPlatformTokenSpaceGuid.PcdCPUCoreSecPrimaryStackSize|0x8000
-  gArmPlatformTokenSpaceGuid.PcdCPUCoreSecSecondaryStackSize|0x1000
-  # Share Monitor stacks with Secure World
-  gArmPlatformTokenSpaceGuid.PcdCPUCoreSecMonStackSize|0
-
   # System Memory (1GB) - An additional 1GB will be added if UEFI is running on a 2GB Test Chip
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x80000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x40000000

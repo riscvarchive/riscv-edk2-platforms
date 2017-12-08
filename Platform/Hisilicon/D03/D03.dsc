@@ -112,14 +112,6 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
 
-  # Stacks for MPCores in Secure World
-  gArmPlatformTokenSpaceGuid.PcdCPUCoresSecStackBase|0x81000000
-  gArmPlatformTokenSpaceGuid.PcdCPUCoreSecPrimaryStackSize|0x10000
-
-  # Stacks for MPCores in Monitor Mode
-  gArmPlatformTokenSpaceGuid.PcdCPUCoresSecMonStackBase|0x8100FF00
-  gArmPlatformTokenSpaceGuid.PcdCPUCoreSecMonStackSize|0x100
-
   # Stacks for MPCores in Normal World
   gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0x81000000
   gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0xFF00
@@ -185,18 +177,6 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x4D000000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xFE000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x4D100000
-
-  #
-  # ARM OS Loader
-  #
-  # Versatile Express machine type (ARM VERSATILE EXPRESS = 2272) required for ARM Linux:
-  gArmPlatformTokenSpaceGuid.PcdDefaultBootDescription|L"Linux from SATA"
-  gArmPlatformTokenSpaceGuid.PcdDefaultBootDevicePath|L"EFI\GRUB2\grubaa64.efi"
-  gArmPlatformTokenSpaceGuid.PcdDefaultBootArgument|""
-
-  # Use the serial console (ConIn & ConOut) and the Graphic driver (ConOut)
-  gArmPlatformTokenSpaceGuid.PcdDefaultConOutPaths|L"VenHw(D3987D4B-971A-435F-8CAF-4967EB627241)/Uart(115200,8,N,1)/VenPcAnsi();VenHw(407B4008-BF5B-11DF-9547-CF16E0D72085)"
-  gArmPlatformTokenSpaceGuid.PcdDefaultConInPaths|L"VenHw(D3987D4B-971A-435F-8CAF-4967EB627241)/Uart(115200,8,N,1)/VenPcAnsi()"
 
   #
   # ARM Architectual Timer Frequency

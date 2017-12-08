@@ -51,7 +51,6 @@
 
 [FeaturePcd]
   gEmbeddedTokenSpaceGuid.PcdCacheEnable
-  gArmPlatformTokenSpaceGuid.PcdNorFlashRemapping
 
 [Ppis]
   gArmMpCoreInfoPpiGuid
