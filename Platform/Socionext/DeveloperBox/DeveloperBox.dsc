@@ -26,6 +26,7 @@
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Platform/Socionext/DeveloperBox/DeveloperBox.fdf
+  BUILD_NUMBER                   = 1
 
 [BuildOptions]
   RELEASE_*_*_CC_FLAGS  = -DMDEPKG_NDEBUG -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
@@ -222,7 +223,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
 [PcdsFixedAtBuild.common]
-  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"Linaro"
+!ifdef $(FIRMWARE_VENDOR)
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"$(FIRMWARE_VENDOR)"
+!endif
 
   # non-secure SRAM
   gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0x2E000000
@@ -383,6 +386,11 @@
 
   # set DIP switch DSW3-PIN1 (GPIO pin PD[0] on the SoC) to clear the varstore
   gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0
+
+!if $(BUILD_NUMBER) > 1
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(BUILD_NUMBER)"
+!endif
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision|$(BUILD_NUMBER)
 
 [PcdsPatchableInModule]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0

@@ -21,8 +21,10 @@
 #define PACKAGE_VERSION                     0xFFFFFFFF
 #define PACKAGE_VERSION_STRING              L"Unknown"
 
-#define CURRENT_FIRMWARE_VERSION            0x00000001
-#define CURRENT_FIRMWARE_VERSION_STRING     L"0x00000001"
+#define __BUILD_STRING(x)                   L ## #x
+#define BUILD_STRING(x)                     L"build #" __BUILD_STRING(x)
+#define CURRENT_FIRMWARE_VERSION            FixedPcdGet32 (PcdFirmwareRevision)
+#define CURRENT_FIRMWARE_VERSION_STRING     BUILD_STRING (FixedPcdGet32 (PcdFirmwareRevision))
 #define LOWEST_SUPPORTED_FIRMWARE_VERSION   0x00000001
 
 #define IMAGE_ID                            SIGNATURE_64('S', 'N', 'I', 'S', 'Y', 'N', 'Q', 'U')
