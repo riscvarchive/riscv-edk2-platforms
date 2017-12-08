@@ -31,15 +31,15 @@
 
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = SpiMasterDxe
+  BASE_NAME                      = MvSpiOrionDxe
   FILE_GUID                      = c19dbc8a-f4f9-43b0-aee5-802e3ed03d15
   MODULE_TYPE                    = DXE_RUNTIME_DRIVER
   VERSION_STRING                 = 1.0
-  ENTRY_POINT                    = SpiMasterEntryPoint
+  ENTRY_POINT                    = MvSpiOrionEntryPoint
 
 [Sources]
-  MvSpiDxe.c
-  MvSpiDxe.h
+  MvSpiOrionDxe.c
+  MvSpiOrionDxe.h
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
@@ -47,21 +47,21 @@
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
-  NorFlashInfoLib
-  UefiBootServicesTableLib
-  UefiDriverEntryPoint
-  TimerLib
-  UefiLib
   DebugLib
   DxeServicesTableLib
-  MemoryAllocationLib
   IoLib
+  MemoryAllocationLib
+  NorFlashInfoLib
+  TimerLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
   UefiRuntimeLib
 
 [FixedPcd]
-  gMarvellTokenSpaceGuid.PcdSpiRegBase
   gMarvellTokenSpaceGuid.PcdSpiClockFrequency
   gMarvellTokenSpaceGuid.PcdSpiMaxFrequency
+  gMarvellTokenSpaceGuid.PcdSpiRegBase
 
 [Protocols]
   gMarvellSpiMasterProtocolGuid

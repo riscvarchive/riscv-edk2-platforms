@@ -411,8 +411,8 @@
   Silicon/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
   MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
   Silicon/Marvell/Drivers/I2c/Devices/MvEeprom/MvEeprom.inf
-  Silicon/Marvell/Drivers/Spi/MvSpiDxe.inf
-  Silicon/Marvell/Drivers/Spi/Devices/MvSpiFlash.inf
+  Silicon/Marvell/Drivers/Spi/MvSpiOrionDxe/MvSpiOrionDxe.inf
+  Silicon/Marvell/Drivers/Spi/MvSpiFlashDxe/MvSpiFlashDxe.inf
   Silicon/Marvell/Armada7k8k/Drivers/Armada7k8kRngDxe/Armada7k8kRngDxe.inf
 
   # Network support
@@ -493,7 +493,7 @@
   #
   # Variable services
   #
-  Silicon/Marvell/Drivers/Spi/Variables/MvFvbDxe.inf
+  Silicon/Marvell/Drivers/Spi/MvFvbDxe/MvFvbDxe.inf
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>

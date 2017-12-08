@@ -31,7 +31,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
-#include "MvSpiFlash.h"
+#include "MvSpiFlashDxe.h"
 
 STATIC EFI_EVENT            mMvSpiFlashVirtualAddrChangeEvent;
 MARVELL_SPI_MASTER_PROTOCOL *SpiMasterProtocol;

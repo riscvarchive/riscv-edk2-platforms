@@ -31,7 +31,7 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
-#include "MvSpiDxe.h"
+#include "MvSpiOrionDxe.h"
 
 SPI_MASTER *mSpiMasterInstance;
 
@@ -399,7 +399,7 @@ SpiMasterInitProtocol (
 
 EFI_STATUS
 EFIAPI
-SpiMasterEntryPoint (
+MvSpiOrionEntryPoint (
   IN EFI_HANDLE       ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable
   )
