@@ -45,6 +45,7 @@
   DebugLib
   DevicePathLib
   MemoryAllocationLib
+  UefiBootServicesTableLib
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdPciIoTranslation

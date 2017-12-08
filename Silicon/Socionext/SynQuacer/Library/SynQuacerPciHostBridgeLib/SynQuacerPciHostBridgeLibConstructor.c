@@ -19,6 +19,7 @@
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/PciHostBridgeLib.h>
+#include <Library/UefiBootServicesTableLib.h>
 #include <Platform/Pcie.h>
 #include <Protocol/PciHostBridgeResourceAllocation.h>
 
@@ -176,6 +177,8 @@ SnPcieSetData (
   }
 
   MmioWrite32 (Base + Offset, Data);
+
+  ArmDataMemoryBarrier ();
 }
 
 STATIC
@@ -193,6 +196,8 @@ SnPcieReadData (
     Mask >>= 1;
     Shift++;
   }
+
+  ArmDataMemoryBarrier ();
 
   return (MmioRead32 (Base + Offset) >> Shift) & Mask;
 }
@@ -219,12 +224,8 @@ SnDbiRoWrEn (
 
 STATIC
 VOID
-PciInitController (
-  IN  EFI_PHYSICAL_ADDRESS    ExsBase,
-  IN  EFI_PHYSICAL_ADDRESS    DbiBase,
-  IN  EFI_PHYSICAL_ADDRESS    ConfigBase,
-  IN  EFI_PHYSICAL_ADDRESS    IoMemBase,
-  IN  CONST PCI_ROOT_BRIDGE   *RootBridge
+PciInitControllerPre (
+  IN  EFI_PHYSICAL_ADDRESS    ExsBase
   )
 {
   SnPcieSetData (ExsBase, EM_SELECT, PRE_DET_STT_SEL, 0);
@@ -256,7 +257,18 @@ PciInitController (
 
   // 3: Set device_type (RC)
   SnPcieSetData (ExsBase, CORE_CONTROL, DEVICE_TYPE, 4);
+}
 
+STATIC
+VOID
+PciInitControllerPost (
+  IN  EFI_PHYSICAL_ADDRESS    ExsBase,
+  IN  EFI_PHYSICAL_ADDRESS    DbiBase,
+  IN  EFI_PHYSICAL_ADDRESS    ConfigBase,
+  IN  EFI_PHYSICAL_ADDRESS    IoMemBase,
+  IN  CONST PCI_ROOT_BRIDGE   *RootBridge
+  )
+{
   // 4: Set Bifurcation  1=disable  4=able
   // 5: Supply Reference (It has executed)
   // 6: Wait for 10usec (Reference Clocks is stable)
@@ -389,11 +401,23 @@ SynQuacerPciHostBridgeLibConstructor (
   }
 
   for (Idx = 0; Idx < Count; Idx++) {
-    PciInitController (mBaseAddresses[Idx].ExsBase,
-                       mBaseAddresses[Idx].DbiBase,
-                       mBaseAddresses[Idx].ConfigBase,
-                       mBaseAddresses[Idx].IoMemBase,
-                       &RootBridges[Idx]);
+    PciInitControllerPre (mBaseAddresses[Idx].ExsBase);
+  }
+
+  //
+  // The PCIe spec requires that PERST# is asserted for at least 100 ms after
+  // the power and clocks have become stable. So let's give a bit or margin,
+  // and stall for 150 ms between asserting PERST# on both controllers and
+  // de-asserting it again.
+  //
+  gBS->Stall (150 * 1000);
+
+  for (Idx = 0; Idx < Count; Idx++) {
+    PciInitControllerPost (mBaseAddresses[Idx].ExsBase,
+                           mBaseAddresses[Idx].DbiBase,
+                           mBaseAddresses[Idx].ConfigBase,
+                           mBaseAddresses[Idx].IoMemBase,
+                           &RootBridges[Idx]);
   }
 
   return EFI_SUCCESS;
