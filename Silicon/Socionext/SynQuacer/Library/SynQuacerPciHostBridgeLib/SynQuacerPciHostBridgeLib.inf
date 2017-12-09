@@ -49,3 +49,6 @@
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdPciIoTranslation
+
+[Pcd]
+  gSynQuacerTokenSpaceGuid.PcdPcieEnableMask

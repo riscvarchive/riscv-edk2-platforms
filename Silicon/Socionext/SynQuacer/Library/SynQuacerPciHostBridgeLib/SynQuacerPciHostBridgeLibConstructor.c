@@ -120,6 +120,8 @@
 #define MISC_CONTROL_1_OFF            0x8BC
 #define DBI_RO_WR_EN                  BIT0
 
+extern PCI_ROOT_BRIDGE                mPciRootBridges[];
+
 STATIC
 VOID
 ConfigureWindow (
@@ -390,18 +392,12 @@ SynQuacerPciHostBridgeLibConstructor (
   IN EFI_SYSTEM_TABLE *SystemTable
   )
 {
-  PCI_ROOT_BRIDGE     *RootBridges;
-  UINTN               Count;
   UINTN               Idx;
 
-  RootBridges = PciHostBridgeGetRootBridges (&Count);
-  ASSERT (Count == ARRAY_SIZE(mBaseAddresses));
-  if (Count != ARRAY_SIZE(mBaseAddresses)) {
-    return EFI_INVALID_PARAMETER;
-  }
-
-  for (Idx = 0; Idx < Count; Idx++) {
-    PciInitControllerPre (mBaseAddresses[Idx].ExsBase);
+  for (Idx = 0; Idx < ARRAY_SIZE (mBaseAddresses); Idx++) {
+    if (PcdGet8 (PcdPcieEnableMask) & (1 << Idx)) {
+      PciInitControllerPre (mBaseAddresses[Idx].ExsBase);
+    }
   }
 
   //
@@ -412,12 +408,14 @@ SynQuacerPciHostBridgeLibConstructor (
   //
   gBS->Stall (150 * 1000);
 
-  for (Idx = 0; Idx < Count; Idx++) {
-    PciInitControllerPost (mBaseAddresses[Idx].ExsBase,
-                           mBaseAddresses[Idx].DbiBase,
-                           mBaseAddresses[Idx].ConfigBase,
-                           mBaseAddresses[Idx].IoMemBase,
-                           &RootBridges[Idx]);
+  for (Idx = 0; Idx < ARRAY_SIZE (mBaseAddresses); Idx++) {
+    if (PcdGet8 (PcdPcieEnableMask) & (1 << Idx)) {
+      PciInitControllerPost (mBaseAddresses[Idx].ExsBase,
+                             mBaseAddresses[Idx].DbiBase,
+                             mBaseAddresses[Idx].ConfigBase,
+                             mBaseAddresses[Idx].IoMemBase,
+                             &mPciRootBridges[Idx]);
+    }
   }
 
   return EFI_SUCCESS;

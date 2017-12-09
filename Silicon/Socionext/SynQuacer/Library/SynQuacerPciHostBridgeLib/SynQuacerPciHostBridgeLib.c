@@ -92,7 +92,7 @@ CHAR16 *mPciHostBridgeLibAcpiAddressSpaceTypeStr[] = {
 #define PCI_ALLOCATION_ATTRIBUTES       EFI_PCI_HOST_BRIDGE_COMBINE_MEM_PMEM
 #endif
 
-STATIC PCI_ROOT_BRIDGE mPciRootBridges[] = {
+PCI_ROOT_BRIDGE mPciRootBridges[] = {
   {
     0,                                      // Segment
     0,                                      // Supports
@@ -149,9 +149,20 @@ PciHostBridgeGetRootBridges (
   OUT UINTN     *Count
   )
 {
-  *Count = ARRAY_SIZE (mPciRootBridges);
-
-  return mPciRootBridges;
+  switch (PcdGet8 (PcdPcieEnableMask)) {
+  default:
+      ASSERT (FALSE);
+  case 0x0:
+    *Count = 0;
+    return NULL;
+  case 0x1:
+  case 0x2:
+    *Count = 1;
+    return &mPciRootBridges[PcdGet8 (PcdPcieEnableMask) - 1];
+  case 0x3:
+    *Count = ARRAY_SIZE (mPciRootBridges);
+    return mPciRootBridges;
+  }
 }
 
 /**

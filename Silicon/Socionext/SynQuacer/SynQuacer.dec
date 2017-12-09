@@ -38,3 +38,7 @@
   gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0xFF|UINT8|0x00000004
 
   gSynQuacerTokenSpaceGuid.PcdI2cReferenceClock|62500000|UINT32|0x00000005
+
+[PcdsPatchableInModule, PcdsDynamic]
+  # Enable both RC #0 and RC #1 by default
+  gSynQuacerTokenSpaceGuid.PcdPcieEnableMask|0x3|UINT8|0x00000007
