@@ -160,7 +160,8 @@
   PerformanceLib|MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
-  DtPlatformDtbLoaderLib|EmbeddedPkg/Library/DxeDtPlatformDtbLoaderLibDefault/DxeDtPlatformDtbLoaderLibDefault.inf
+  DtPlatformDtbLoaderLib|Silicon/Socionext/SynQuacer/Library/SynQuacerDtbLoaderLib/SynQuacerDtbLoaderLib.inf
+  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
   SecurityManagementLib|MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.inf
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
 
@@ -613,10 +614,7 @@
   #
   # Console preference selection
   #
-  EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf {
-    <LibraryClasses>
-      FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
-  }
+  EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf
 
   #
   # DT support

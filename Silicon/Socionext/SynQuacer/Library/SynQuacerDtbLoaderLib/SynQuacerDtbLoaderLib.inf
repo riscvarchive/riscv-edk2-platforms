@@ -1,0 +1,42 @@
+/** @file
+*
+*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*
+*  This program and the accompanying materials
+*  are licensed and made available under the terms and conditions of the BSD License
+*  which accompanies this distribution.  The full text of the license may be found at
+*  http://opensource.org/licenses/bsd-license.php
+*
+*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+*
+**/
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = SynQuacerDtbLoaderLib
+  FILE_GUID                      = 59df69c4-8724-4e49-8974-d0691364338c
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = DtPlatformDtbLoaderLib|DXE_DRIVER
+
+[Sources]
+  SynQuacerDtbLoaderLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/Socionext/SynQuacer/SynQuacer.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  DxeServicesLib
+  FdtLib
+  MemoryAllocationLib
+
+[Pcd]
+  gSynQuacerTokenSpaceGuid.PcdPcieEnableMask
+
+[Guids]
+  gDtPlatformDefaultDtbFileGuid

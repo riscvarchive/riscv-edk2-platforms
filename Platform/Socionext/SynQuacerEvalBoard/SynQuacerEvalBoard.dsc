@@ -159,7 +159,8 @@
   PerformanceLib|MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
-  DtPlatformDtbLoaderLib|EmbeddedPkg/Library/DxeDtPlatformDtbLoaderLibDefault/DxeDtPlatformDtbLoaderLibDefault.inf
+  DtPlatformDtbLoaderLib|Silicon/Socionext/SynQuacer/Library/SynQuacerDtbLoaderLib/SynQuacerDtbLoaderLib.inf
+  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
   SecurityManagementLib|MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.inf
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
 
