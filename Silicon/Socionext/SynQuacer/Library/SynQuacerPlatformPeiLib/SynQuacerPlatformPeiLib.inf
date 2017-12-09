@@ -43,6 +43,7 @@
   gArmTokenSpaceGuid.PcdFvSize
   gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin
   gSynQuacerTokenSpaceGuid.PcdDramInfoBase
+  gSynQuacerTokenSpaceGuid.PcdPcie0PresenceDetectGpioPin
 
 [Ppis]
   gEdkiiEmbeddedGpioPpiGuid             ## CONSUMES
@@ -51,6 +52,7 @@
 [Pcd]
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize
+  gSynQuacerTokenSpaceGuid.PcdPcieEnableMask
 
 [Depex]
   gEdkiiEmbeddedGpioPpiGuid

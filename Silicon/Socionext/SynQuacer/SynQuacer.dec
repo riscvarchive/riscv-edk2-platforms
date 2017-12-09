@@ -36,6 +36,7 @@
 
   # GPIO pin index [0 .. 31] or MAX_UINT8 for not implemented
   gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0xFF|UINT8|0x00000004
+  gSynQuacerTokenSpaceGuid.PcdPcie0PresenceDetectGpioPin|0xFF|UINT8|0x00000006
 
   gSynQuacerTokenSpaceGuid.PcdI2cReferenceClock|62500000|UINT32|0x00000005
 

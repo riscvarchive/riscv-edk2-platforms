@@ -376,6 +376,10 @@
   # set DIP switch DSW3-PIN1 (GPIO pin PD[0] on the SoC) to clear the varstore
   gSynQuacerTokenSpaceGuid.PcdClearSettingsGpioPin|0
 
+  # On the EVB, PCIe RC #0 should not be enabled from software if no card
+  # was inserted, or the boot will hang.
+  gSynQuacerTokenSpaceGuid.PcdPcie0PresenceDetectGpioPin|15
+
 !if $(BUILD_NUMBER) > 1
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(BUILD_NUMBER)"
 !endif
@@ -396,6 +400,9 @@
 [PcdsDynamicDefault]
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x0000000000000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0xFFFFFFFFFFFFFFFF
+
+  # enable RC #1 only by default, RC #0 will be enabled if an endpoint is detected
+  gSynQuacerTokenSpaceGuid.PcdPcieEnableMask|0x2
 
 ################################################################################
 #
