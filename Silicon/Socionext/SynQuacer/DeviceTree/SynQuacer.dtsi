@@ -440,6 +440,15 @@
         clock-names = "uartclk", "apb_pclk";
     };
 
+    fuart: fuart@51040000 {
+        compatible = "snps,dw-apb-uart";
+        reg = <0x0 0x51040000 0x0 0x1000>;
+        interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
+        clock-frequency = <62500000>;
+        reg-io-width = <4>;
+        reg-shift = <2>;
+    };
+
     clk_netsec: refclk125mhz {
         compatible = "fixed-clock";
         clock-frequency = <125000000>;
