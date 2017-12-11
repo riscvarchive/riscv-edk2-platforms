@@ -23,6 +23,7 @@
   ENTRY_POINT                    = PlatformDxeEntryPoint
 
 [Sources]
+  Asmedia118x.c
   PlatformDxe.c
 
 [Packages]
@@ -41,6 +42,7 @@
   MemoryAllocationLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
+  UefiLib
 
 [Guids]
   gFdtTableGuid
@@ -50,6 +52,7 @@
 
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
+  gEfiPciIoProtocolGuid                           ## CONSUMES
   gPcf8563RealTimeClockLibI2cMasterProtolGuid     ## PRODUCES
 
 [FixedPcd]
