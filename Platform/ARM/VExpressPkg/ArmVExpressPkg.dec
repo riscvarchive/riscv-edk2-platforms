@@ -56,3 +56,4 @@
   # Device path of block device on which Fastboot will flash partitions
   #
   gArmVExpressTokenSpaceGuid.PcdAndroidFastbootNvmDevicePath|""|VOID*|0x00000006
+  gArmVExpressTokenSpaceGuid.PcdAndroidFastbootProductName|""|VOID*|0x00000007

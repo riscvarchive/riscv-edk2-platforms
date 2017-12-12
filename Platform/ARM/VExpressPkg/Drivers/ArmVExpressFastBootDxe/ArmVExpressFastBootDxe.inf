@@ -48,4 +48,4 @@
 
 [Pcd]
   gArmVExpressTokenSpaceGuid.PcdAndroidFastbootNvmDevicePath
-  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor
+  gArmVExpressTokenSpaceGuid.PcdAndroidFastbootProductName

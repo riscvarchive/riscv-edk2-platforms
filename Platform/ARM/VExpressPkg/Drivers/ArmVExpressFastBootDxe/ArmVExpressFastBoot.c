@@ -446,7 +446,7 @@ ArmFastbootPlatformGetVar (
   )
 {
   if (AsciiStrCmp (Name, "product")) {
-    AsciiStrCpyS (Value, 61, FixedPcdGetPtr (PcdFirmwareVendor));
+    AsciiStrCpyS (Value, 61, FixedPcdGetPtr (PcdAndroidFastbootProductName));
   } else {
     *Value = '\0';
   }

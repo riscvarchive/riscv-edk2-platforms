@@ -93,7 +93,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
 
 [PcdsFixedAtBuild.common]
-  gArmPlatformTokenSpaceGuid.PcdFirmwareVendor|"ARM Versatile Express"
+  gArmVExpressTokenSpaceGuid.PcdAndroidFastbootProductName|"ARM Versatile Express"
 
   gArmPlatformTokenSpaceGuid.PcdCoreCount|5
 
