@@ -40,5 +40,4 @@
   gEfiEdidActiveProtocolGuid                    # Produced
 
 [Pcd]
-  gArmVExpressTokenSpaceGuid.PcdPL111LcdMaxMode
   gArmVExpressTokenSpaceGuid.PcdHdLcdVideoModeOscId
