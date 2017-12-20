@@ -216,7 +216,7 @@
 # Security
 #
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
@@ -252,7 +252,7 @@
 #
 # OS Boot
 #
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   $(PLATFORM_PACKAGE)/Acpi/AcpiTables/AcpiPlatform.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
@@ -287,7 +287,7 @@
 #
   $(PLATFORM_PACKAGE)/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdTpm2Enable == TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
 !endif
 

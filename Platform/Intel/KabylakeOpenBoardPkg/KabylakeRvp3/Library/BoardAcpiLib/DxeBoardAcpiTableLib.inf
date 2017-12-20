@@ -42,9 +42,9 @@
 
 [Pcd]
   gBoardModuleTokenSpaceGuid.PcdPs2KbMsEnable
-  gMinPlatformModuleTokenSpaceGuid.PcdPciExpNative
-  gMinPlatformModuleTokenSpaceGuid.PcdNativeAspmEnable
-  gMinPlatformModuleTokenSpaceGuid.PcdLowPowerS0Idle
+  gMinPlatformPkgTokenSpaceGuid.PcdPciExpNative
+  gMinPlatformPkgTokenSpaceGuid.PcdNativeAspmEnable
+  gMinPlatformPkgTokenSpaceGuid.PcdLowPowerS0Idle
   gBoardModuleTokenSpaceGuid.PcdAcpiGnvsAddress
   
 [Sources]

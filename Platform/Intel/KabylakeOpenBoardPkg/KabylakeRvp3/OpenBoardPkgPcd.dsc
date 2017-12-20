@@ -34,12 +34,12 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
 [PcdsFixedAtBuild.common]
-!if gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
 !endif
 
@@ -108,17 +108,17 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddressMask|0xFFFC
 
   !if $(TARGET) == RELEASE
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
   !else
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
   !endif
 
 
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
   !if $(TARGET) == RELEASE
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
   !else
-  gMinPlatformModuleTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
   !endif
 
   gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
@@ -154,7 +154,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   # BIT2: Firmware setting this bit is an indication that it will not allow reconfiguration of system resources via non-architectural mechanisms.
   # BIT3-31: Reserved
   #
-  gMinPlatformModuleTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
+  gMinPlatformPkgTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
 
   #
   # See HstiFeatureBit.h for the definition
@@ -162,34 +162,34 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gSiPkgTokenSpaceGuid.PcdHstiIhvFeature1|0xF2
   gSiPkgTokenSpaceGuid.PcdHstiIhvFeature2|0x07
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage == 1
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 1
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage == 2
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 2
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage == 3
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 3
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage == 4
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x1F, 0x00, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 4
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x1F, 0x00, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage == 5
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 5
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdBootStage >= 6
-  gMinPlatformModuleTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 6
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
 [PcdsFixedAtBuild.IA32]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|0x0
   gIntelFsp2PkgTokenSpaceGuid.PcdGlobalDataPointerAddress|0xFED00148
-  gMinPlatformModuleTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
+  gMinPlatformPkgTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
   gIntelFsp2WrapperTokenSpaceGuid.PcdPeiMinMemSize|0x3800000
 
 [PcdsFixedAtBuild.X64]
@@ -213,7 +213,7 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
   gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
 
-!if gMinPlatformModuleTokenSpaceGuid.PcdPerformanceEnable == TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
 !endif
 

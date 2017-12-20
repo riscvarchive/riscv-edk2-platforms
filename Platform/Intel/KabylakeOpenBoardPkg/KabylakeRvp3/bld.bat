@@ -16,7 +16,7 @@
 :: 1) /s = Redirects all output to a file called EDK2.log(Prep.log must be existed), which will be located at the root.
 :: 2) /f = Defines the passing in of a single override to a feature PCD that is used in the platform
 ::    DSC file.  If this parameter is used, it is to be followed immediately after by both the feature
-::    pcd name and value. FeaturePcd is the full PCD name, like gMinPlatformModuleTokenSpaceGuid.PcdOptimizeCompilerEnable
+::    pcd name and value. FeaturePcd is the full PCD name, like gMinPlatformPkgTokenSpaceGuid.PcdOptimizeCompilerEnable
 :: 3) /r = Useful for faster rebuilds when no changes have been made to .inf files. Passes -u to
 ::    build.exe to skip the generation of makefiles.
 :: 4) rom = Build Bios.rom only and building SPIs will be skipped.
