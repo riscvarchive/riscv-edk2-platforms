@@ -42,11 +42,11 @@
 [Protocols]
   gEfiDriverBindingProtocolGuid                   ## CONSUMES
   gEfiI2cMasterProtocolGuid                       ## CONSUMES
-  gPcf8563RealTimeClockLibI2cMasterProtolGuid     ## CONSUMES
+  gPcf8563RealTimeClockLibI2cMasterProtocolGuid   ## CONSUMES
 
 [FixedPcd]
   gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cSlaveAddress
   gPcf8563RealTimeClockLibTokenSpaceGuid.PcdI2cBusFrequency
 
 [Depex]
-  gPcf8563RealTimeClockLibI2cMasterProtolGuid
+  gPcf8563RealTimeClockLibI2cMasterProtocolGuid

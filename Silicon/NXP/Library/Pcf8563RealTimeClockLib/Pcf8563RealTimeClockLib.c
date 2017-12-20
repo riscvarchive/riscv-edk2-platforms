@@ -373,7 +373,7 @@ LibRtcInitialize (
   //
   BufferSize = sizeof (EFI_HANDLE);
   Status = gBS->LocateHandle (ByProtocol,
-                  &gPcf8563RealTimeClockLibI2cMasterProtolGuid, NULL,
+                  &gPcf8563RealTimeClockLibI2cMasterProtocolGuid, NULL,
                   &BufferSize, &mI2cMasterHandle);
   ASSERT_EFI_ERROR (Status);
 

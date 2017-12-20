@@ -183,7 +183,7 @@ PlatformDxeEntryPoint (
   // through the I2C driver stack (which cannot be used at runtime)
   //
   Status = gBS->InstallProtocolInterface (&Handle,
-                  &gPcf8563RealTimeClockLibI2cMasterProtolGuid,
+                  &gPcf8563RealTimeClockLibI2cMasterProtocolGuid,
                   EFI_NATIVE_INTERFACE, NULL);
   ASSERT_EFI_ERROR (Status);
 

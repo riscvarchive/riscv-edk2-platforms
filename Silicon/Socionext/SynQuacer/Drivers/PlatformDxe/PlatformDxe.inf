@@ -53,7 +53,7 @@
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
   gEfiPciIoProtocolGuid                           ## CONSUMES
-  gPcf8563RealTimeClockLibI2cMasterProtolGuid     ## PRODUCES
+  gPcf8563RealTimeClockLibI2cMasterProtocolGuid   ## PRODUCES
 
 [FixedPcd]
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
