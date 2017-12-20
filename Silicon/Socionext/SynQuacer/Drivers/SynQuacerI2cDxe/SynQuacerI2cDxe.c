@@ -335,7 +335,7 @@ SynQuacerI2cStartRequest (
     }
 
     if (MmioRead8 (I2c->MmioBase + F_I2C_REG_BSR) & F_I2C_BSR_LRB) {
-      BOOTTIME_DEBUG ((DEBUG_WARN, "%a: No ack received - %r\n", __FUNCTION__));
+      BOOTTIME_DEBUG ((DEBUG_WARN, "%a: No ack received\n", __FUNCTION__));
       Status = EFI_DEVICE_ERROR;
       break;
     }
