@@ -40,7 +40,6 @@
   gEfiEventVirtualAddressChangeGuid
 
 [Protocols]
-  gEfiDriverBindingProtocolGuid                   ## CONSUMES
   gEfiI2cMasterProtocolGuid                       ## CONSUMES
   gPcf8563RealTimeClockLibI2cMasterProtocolGuid   ## CONSUMES
 

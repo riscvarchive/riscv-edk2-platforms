@@ -41,7 +41,7 @@
 #define EPOCH_BASE                2000
 
 STATIC EFI_HANDLE                 mI2cMasterHandle;
-STATIC VOID                       *mDriverEventRegistration;
+STATIC VOID                       *mI2cMasterEventRegistration;
 STATIC EFI_I2C_MASTER_PROTOCOL    *mI2cMaster;
 STATIC EFI_EVENT                  mRtcVirtualAddrChangeEvent;
 
@@ -263,12 +263,12 @@ LibSetWakeupTime (
 
 STATIC
 VOID
-DriverRegistrationEvent (
+I2cMasterRegistrationEvent (
   IN  EFI_EVENT       Event,
   IN  VOID            *Context
   )
 {
-  EFI_HANDLE                Handle[2];
+  EFI_HANDLE                Handle;
   UINTN                     BufferSize;
   EFI_STATUS                Status;
   EFI_I2C_MASTER_PROTOCOL   *I2cMaster;
@@ -280,10 +280,10 @@ DriverRegistrationEvent (
   do {
     BufferSize = sizeof (EFI_HANDLE);
     Status = gBS->LocateHandle (ByRegisterNotify,
-                                &gEfiDriverBindingProtocolGuid,
-                                mDriverEventRegistration,
+                                &gEfiI2cMasterProtocolGuid,
+                                mI2cMasterEventRegistration,
                                 &BufferSize,
-                                Handle);
+                                &Handle);
     if (EFI_ERROR (Status)) {
       if (Status != EFI_NOT_FOUND) {
         DEBUG ((DEBUG_WARN, "%a: gBS->LocateHandle () returned %r\n",
@@ -292,12 +292,7 @@ DriverRegistrationEvent (
       break;
     }
 
-    //
-    // Check if we can connect our handle to this driver.
-    //
-    Handle[1] = NULL;
-    Status = gBS->ConnectController (mI2cMasterHandle, Handle, NULL, FALSE);
-    if (EFI_ERROR (Status)) {
+    if (Handle != mI2cMasterHandle) {
       continue;
     }
 
@@ -378,16 +373,16 @@ LibRtcInitialize (
   ASSERT_EFI_ERROR (Status);
 
   //
-  // Register a protocol registration notification callback on the driver
-  // binding protocol so we can attempt to connect our I2C master to it
-  // as soon as it appears.
+  // Register a protocol registration notification callback on the I2C master
+  // protocol. This will notify us even if the protocol instance we are looking
+  // for has already been installed.
   //
   EfiCreateProtocolNotifyEvent (
-    &gEfiDriverBindingProtocolGuid,
+    &gEfiI2cMasterProtocolGuid,
     TPL_CALLBACK,
-    DriverRegistrationEvent,
+    I2cMasterRegistrationEvent,
     NULL,
-    &mDriverEventRegistration);
+    &mI2cMasterEventRegistration);
 
   //
   // Register for the virtual address change event
