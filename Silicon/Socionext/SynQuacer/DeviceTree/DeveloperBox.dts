@@ -44,3 +44,10 @@
                       "GPIO-K",     "GPIO-L",     "PEC-PD26",     "PEC-PD27",
                       "PEC-PD28",   "PEC-PD29",   "PEC-PD30",     "PEC-PD31";
 };
+
+&mdio_netsec {
+    phy_netsec: ethernet-phy@7 {
+        compatible = "ethernet-phy-ieee802.3-c22";
+        reg = <7>;
+    };
+};
