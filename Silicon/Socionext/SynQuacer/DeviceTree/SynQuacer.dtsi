@@ -32,6 +32,7 @@
 
     aliases {
         serial0 = &soc_uart0;
+        serial1 = &fuart;
     };
 
     chosen {
@@ -436,15 +437,16 @@
         compatible = "arm,pl011", "arm,primecell";
         reg = <0x0 0x2a400000 0x0 0x1000>;
         interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
-        clocks = <&clk_uart &clk_apb>;
+        clocks = <&clk_uart>, <&clk_apb>;
         clock-names = "uartclk", "apb_pclk";
     };
 
-    fuart: fuart@51040000 {
+    fuart: uart@51040000 {
         compatible = "snps,dw-apb-uart";
         reg = <0x0 0x51040000 0x0 0x1000>;
         interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
-        clock-frequency = <62500000>;
+        clocks = <&clk_uart>, <&clk_apb>;
+        clock-names = "baudclk", "apb_pclk";
         reg-io-width = <4>;
         reg-shift = <2>;
     };
