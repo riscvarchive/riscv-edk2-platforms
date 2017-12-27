@@ -17,7 +17,7 @@
 [Defines]
   INF_VERSION                    = 0x0001001A
   BASE_NAME                      = PlatformDxe
-  FILE_GUID                      = ac422cc1-d916-489a-b165-536fdfc633c2
+  FILE_GUID                      = ac422cc1-d916-489a-b165-536fdfc633c2 # gSynQuacerPlatformDxeFileGuid
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = PlatformDxeEntryPoint

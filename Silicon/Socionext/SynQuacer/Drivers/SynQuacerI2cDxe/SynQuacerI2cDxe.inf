@@ -56,4 +56,4 @@
   gSynQuacerTokenSpaceGuid.PcdI2cReferenceClock
 
 [Depex]
-  TRUE
+  BEFORE gSynQuacerPlatformDxeFileGuid
