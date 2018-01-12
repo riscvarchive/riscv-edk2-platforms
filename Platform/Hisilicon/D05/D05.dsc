@@ -537,6 +537,8 @@
 
   Platform/Hisilicon/D05/Drivers/Ipmi/IpmiInterfaceDxe/IpmiInterfaceDxe.inf
 
+  Silicon/Hisilicon/Drivers/SnpPlatform/SnpPlatform.inf
+
   MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
   MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
   MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf

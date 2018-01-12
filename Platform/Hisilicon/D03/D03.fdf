@@ -242,7 +242,7 @@ READ_LOCK_STATUS   = TRUE
   #Network
   #
 
-  INF Platform/Hisilicon/D03/Drivers/Net/SnpPlatform/SnpPlatform.inf
+  INF Silicon/Hisilicon/Drivers/SnpPlatform/SnpPlatform.inf
   INF Platform/Hisilicon/D03/Drivers/Net/SnpPV600Dxe/SnpPV600Dxe.inf
 
   INF MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
