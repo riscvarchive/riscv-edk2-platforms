@@ -76,6 +76,15 @@
     }
   }
 
+[Rule.Common.PEIM.FMP_IMAGE_DESC]
+  FILE PEIM = $(NAMED_GUID) {
+     RAW BIN                  |.acpi
+     PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
+     PE32      PE32      Align=4K        $(INF_OUTPUT)/$(MODULE_NAME).efi
+     UI        STRING="$(MODULE_NAME)"   Optional
+     VERSION   STRING="$(INF_VERSION)"   Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
 [Rule.Common.DXE_CORE]
   FILE DXE_CORE = $(NAMED_GUID) {
     PE32     PE32                       $(INF_OUTPUT)/$(MODULE_NAME).efi

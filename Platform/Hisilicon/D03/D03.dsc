@@ -65,7 +65,6 @@
   OemAddressMapLib|Platform/Hisilicon/D03/Library/OemAddressMap2P/OemAddressMap2PHi1610.inf
   PlatformSysCtrlLib|Silicon/Hisilicon/Hi1610/Library/PlatformSysCtrlLibHi1610/PlatformSysCtrlLibHi1610.inf
 
-  CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
   PlatformBdsLib|Silicon/Hisilicon/Library/PlatformIntelBdsLib/PlatformIntelBdsLib.inf
   BmcConfigBootLib|Silicon/Hisilicon/Library/BmcConfigBootLib/BmcConfigBootLib.inf
@@ -114,6 +113,11 @@
   #  It could be set FALSE to save size.
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
   gHisiTokenSpaceGuid.PcdIsItsSupported|TRUE
+
+[PcdsDynamicExDefault.common.DEFAULT]
+  gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{0x29, 0x3d, 0x4b, 0xd3, 0x85, 0x00, 0xb3, 0x4a, 0x8b, 0xe8, 0x84, 0x18, 0x8c, 0xc5, 0x04, 0x89}
+  gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareFileGuid|{0xcf, 0x4f, 0x2e, 0x64, 0xf7, 0x2d, 0x15, 0x44, 0x8b, 0x70, 0xa0, 0x39, 0x09, 0xc5, 0x7b, 0x55}
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdCoreCount|8
@@ -305,6 +309,8 @@
   Platform/Hisilicon/D03/EarlyConfigPeim/EarlyConfigPeimD03.inf
   Silicon/Hisilicon/Drivers/VersionInfoPeim/VersionInfoPeim.inf
 
+  Platform/Hisilicon/D03/Drivers/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
+
   MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf {
     <LibraryClasses>
       NULL|IntelFrameworkModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
@@ -405,6 +411,9 @@
 
   Platform/Hisilicon/D03/Drivers/Sas/SasDxeDriver.inf
 
+  SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
+  MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
+
   #
   # FAT filesystem + GPT/MBR partitioning
   #
@@ -472,6 +481,12 @@
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
   MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+  SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf {
+    <LibraryClasses>
+      FmpAuthenticationLib|SecurityPkg/Library/FmpAuthenticationLibPkcs7/FmpAuthenticationLibPkcs7.inf
+  }
+
+  MdeModulePkg/Application/CapsuleApp/CapsuleApp.inf
 
   #
   # UEFI application (Shell Embedded Boot Loader)
