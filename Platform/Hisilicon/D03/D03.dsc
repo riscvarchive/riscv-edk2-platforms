@@ -468,6 +468,7 @@
   Silicon/Hisilicon/Drivers/Smbios/AddSmbiosType9/AddSmbiosType9.inf
   Platform/Hisilicon/D03/Drivers/Sm750Dxe/UefiSmi.inf
 
+  Silicon/Hisilicon/Drivers/SasPlatform/SasPlatform.inf
   Silicon/Hisilicon/Drivers/Smbios/MemorySubClassDxe/MemorySubClassDxe.inf
 
 

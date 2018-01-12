@@ -294,7 +294,7 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Platform/Hisilicon/D05/Drivers/Sm750Dxe/UefiSmi.inf
   INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
-  INF Platform/Hisilicon/D05/Drivers/SasPlatform/SasPlatform.inf
+  INF Silicon/Hisilicon/Drivers/SasPlatform/SasPlatform.inf
   INF Platform/Hisilicon/D05/Drivers/Sas/SasDxeDriver.inf
 
   INF SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
