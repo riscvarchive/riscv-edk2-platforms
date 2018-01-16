@@ -168,7 +168,7 @@
   !ifdef $(FIRMWARE_VER)
     gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
   !else
-    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build base on Hisilicon D03 UEFI 17.10 Release"
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 18.02 for Hisilicon D03"
   !endif
 
   gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"
