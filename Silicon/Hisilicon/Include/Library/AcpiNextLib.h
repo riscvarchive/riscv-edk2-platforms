@@ -39,6 +39,13 @@
      ACPIProcessorUID,  Flags,  ClockDomain                                                     \
   }
 
+#define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_INIT(                                               \
+    ProximityDomain, ItsId)                                                                     \
+  {                                                                                             \
+    4, sizeof (EFI_ACPI_6_2_GIC_ITS_AFFINITY_STRUCTURE), ProximityDomain,                           \
+    {EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE}, ItsId                                                               \
+  }
+
 #define EFI_ACPI_6_1_MEMORY_AFFINITY_STRUCTURE_INIT(                                              \
     ProximityDomain, AddressBaseLow, AddressBaseHigh, LengthLow, LengthHigh, Flags)               \
   {                                                                                               \
@@ -70,12 +77,13 @@
 //
 #define EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT  64
 #define EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT                10
-
+#define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT               8
 
 typedef struct {
   EFI_ACPI_6_0_SYSTEM_RESOURCE_AFFINITY_TABLE_HEADER          Header;
   EFI_ACPI_6_0_MEMORY_AFFINITY_STRUCTURE                      Memory[EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT];
   EFI_ACPI_6_0_GICC_AFFINITY_STRUCTURE                        Gicc[EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT];
+  EFI_ACPI_6_2_GIC_ITS_AFFINITY_STRUCTURE                     Its[EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT];
 } EFI_ACPI_STATIC_RESOURCE_AFFINITY_TABLE;
 
 #pragma pack()
