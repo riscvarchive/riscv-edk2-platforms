@@ -88,7 +88,10 @@ Scope(_SB)
       Store(0x7ffff, CLK)
       Sleep(1)
     }
-
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x00)
+    }
 	Method (_STA, 0, NotSerialized)
 	{
 	  Return (0x0)
@@ -169,8 +172,15 @@ Scope(_SB)
       Store(0x7ffff, CLK)
       Sleep(1)
     }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x00)
+    }
+    Method (_STA, 0, NotSerialized)
+    {
+      Return(0x0F)
+    }
   }
-
   Device(SAS2) {
     Name(_HID, "HISI0162")
     Name(_CCA, 1)
@@ -244,7 +254,10 @@ Scope(_SB)
       Store(0x7ffff, CLK)
       Sleep(1)
     }
-
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x00)
+    }
 	Method (_STA, 0, NotSerialized)
 	{
 	  Return (0x0)

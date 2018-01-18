@@ -233,6 +233,15 @@ Scope(_SB)
       }
     })
 
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x00)
+    }
+    Method (_STA, 0, NotSerialized)
+    {
+      Return(0x0F)
+    }
+
     //reset XGE port
     //Arg0 : XGE port index in dsaf
     //Arg1 : 0 reset, 1 cancle reset

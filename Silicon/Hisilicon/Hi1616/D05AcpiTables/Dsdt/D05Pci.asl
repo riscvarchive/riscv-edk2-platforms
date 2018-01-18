@@ -141,7 +141,10 @@ Scope(_SB)
     {
       Return (0xf)
     }
-
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x00)
+    }
   } // Device(PCI2)
 
   Device (RES2)
@@ -240,7 +243,10 @@ Scope(_SB)
     {
       Return (RBYV())
     }
-
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x01)
+    }
   } // Device(PCI4)
   Device (RES4)
   {
@@ -337,6 +343,10 @@ Scope(_SB)
     Method (_STA, 0x0, NotSerialized)
     {
       Return (RBYV())
+    }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x01)
     }
   } // Device(PCI5)
   Device (RES5)
@@ -435,6 +445,10 @@ Scope(_SB)
     {
       Return (RBYV())
     }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x01)
+    }
   } // Device(PCI6)
   Device (RES6)
   {
@@ -530,6 +544,10 @@ Scope(_SB)
     Method (_STA, 0x0, NotSerialized)
     {
       Return (RBYV())
+    }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x01)
     }
   } // Device(PCI7)
   Device (RES7)
@@ -690,6 +708,10 @@ Scope(_SB)
     {
       Return (0xf)
     }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x02)
+    }
   } // Device(PCIa)
   Device (RESa)
   {
@@ -810,6 +832,10 @@ Scope(_SB)
     {
       Return (RBYV())
     }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x03)
+    }
   } // Device(PCIc)
 
   Device (RESc)
@@ -906,6 +932,10 @@ Scope(_SB)
     Method (_STA, 0x0, NotSerialized)
     {
       Return (RBYV())
+    }
+    Method (_PXM, 0, NotSerialized)
+    {
+      Return(0x03)
     }
   } // Device(PCId)
   Device (RESd)
