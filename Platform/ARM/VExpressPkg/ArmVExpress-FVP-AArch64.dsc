@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2017, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -161,6 +161,11 @@
 
   # the entire FVP address space can be covered by 36 bit VAs
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|36
+
+  #
+  # ACPI Table Version
+  #
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
 
 ################################################################################
 #
