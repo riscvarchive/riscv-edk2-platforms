@@ -27,7 +27,6 @@ ExitBootServicesEventSmmu (
   IN VOID       *Context
   )
 {
-  SmmuConfigForOS ();
   DEBUG((EFI_D_INFO,"SMMU ExitBootServicesEvent\n"));
 }
 
@@ -43,7 +42,7 @@ IoInitDxeEntry (
 
   (VOID) EfiSerdesInitWrap ();
 
-  SmmuConfigForBios ();
+  SmmuConfigForOS ();
 
   Status = gBS->CreateEvent (
       EVT_SIGNAL_EXIT_BOOT_SERVICES,

@@ -26,7 +26,7 @@ EhciVirtualPciIoInitialize (
 {
   return RegisterNonDiscoverableMmioDevice (
            NonDiscoverableDeviceTypeEhci,
-           NonDiscoverableDeviceDmaTypeNonCoherent,
+           NonDiscoverableDeviceDmaTypeCoherent,
            NULL,
            NULL,
            1,
