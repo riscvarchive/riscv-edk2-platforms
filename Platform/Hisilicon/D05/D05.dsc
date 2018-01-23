@@ -506,6 +506,7 @@
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
 
   Silicon/Hisilicon/Hi1616/D05AcpiTables/AcpiTablesHi1616.inf
+  Silicon/Hisilicon/Hi1616/Pptt/Pptt.inf
   Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
 
   #

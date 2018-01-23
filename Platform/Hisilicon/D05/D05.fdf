@@ -241,6 +241,7 @@ READ_LOCK_STATUS   = TRUE
   INF Silicon/Hisilicon/Drivers/HisiAcpiPlatformDxe/AcpiPlatformDxe.inf
 
   INF RuleOverride=ACPITABLE Silicon/Hisilicon/Hi1616/D05AcpiTables/AcpiTablesHi1616.inf
+  INF Silicon/Hisilicon/Hi1616/Pptt/Pptt.inf
   INF Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
 
   #
