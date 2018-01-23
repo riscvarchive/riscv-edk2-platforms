@@ -70,7 +70,7 @@ MdioCheckParam (
 STATIC
 EFI_STATUS
 MdioWaitReady (
-  UINT32 MdioBase
+  UINTN MdioBase
   )
 {
   UINT32 Timeout = MVEBU_SMI_TIMEOUT;
@@ -92,7 +92,7 @@ MdioWaitReady (
 STATIC
 EFI_STATUS
 MdioWaitValid (
-  UINT32 MdioBase
+  UINTN MdioBase
   )
 {
   UINT32 Timeout = MVEBU_SMI_TIMEOUT;
@@ -122,7 +122,7 @@ MdioOperation (
   IN OUT UINT32 *Data
   )
 {
-  UINT32 MdioBase = This->BaseAddresses[MdioIndex];
+  UINTN MdioBase = This->BaseAddresses[MdioIndex];
   UINT32 MdioReg;
   EFI_STATUS Status;
 
