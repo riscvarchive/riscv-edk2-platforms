@@ -2,7 +2,7 @@
 *  Multiple APIC Description Table (MADT)
 *
 *  Copyright (c) 2012 - 2014, ARM Limited. All rights reserved.
-*  Copyright (c) 2015 - 2016, Hisilicon Limited. All rights reserved.
+*  Copyright (c) 2015 - 2018, Hisilicon Limited. All rights reserved.
 *  Copyright (c) 2015 - 2016, Linaro Limited. All rights reserved.
 *
 *  This program and the accompanying materials
@@ -26,27 +26,6 @@
 #include <Library/ArmLib.h>
 #include <Library/PcdLib.h>
 #include "Hi1616Platform.h"
-
-// Differs from Juno, we have another affinity level beyond cluster and core
-// 0x20000 is only for socket 0
-#define PLATFORM_GET_MPID_TA(ClusterId, CoreId)   (0x10000 | ((ClusterId) << 8) | (CoreId))
-#define PLATFORM_GET_MPID_TB(ClusterId, CoreId)   (0x30000 | ((ClusterId) << 8) | (CoreId))
-#define PLATFORM_GET_MPID_TA_2(ClusterId, CoreId)   (0x50000 | ((ClusterId) << 8) | (CoreId))
-#define PLATFORM_GET_MPID_TB_2(ClusterId, CoreId)   (0x70000 | ((ClusterId) << 8) | (CoreId))
-
-//
-// Multiple APIC Description Table
-//
-#pragma pack (1)
-
-typedef struct {
-  EFI_ACPI_6_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER   Header;
-  EFI_ACPI_6_1_GIC_STRUCTURE                            GicInterfaces[64];
-  EFI_ACPI_6_1_GIC_DISTRIBUTOR_STRUCTURE                GicDistributor;
-  EFI_ACPI_6_1_GIC_ITS_STRUCTURE                      GicITS[8];
-} EFI_ACPI_6_1_MULTIPLE_APIC_DESCRIPTION_TABLE;
-
-#pragma pack ()
 
 EFI_ACPI_6_1_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
   {
