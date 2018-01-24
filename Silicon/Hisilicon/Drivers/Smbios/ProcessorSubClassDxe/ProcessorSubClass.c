@@ -125,7 +125,7 @@ SMBIOS_TABLE_TYPE4   mSmbiosProcessorTable[] = {
         },
         1,                                              //Socket
         CentralProcessor,                               //ProcessorType
-        ProcessorFamilyOther,                           //ProcessorFamily
+        ProcessorFamilyIndicatorFamily2,                //ProcessorFamily
         2,                                              //ProcessorManufacture
         {                                               //ProcessorId
             {                                               //Signature
@@ -172,7 +172,7 @@ SMBIOS_TABLE_TYPE4   mSmbiosProcessorTable[] = {
         },
         1,                                              //Socket
         CentralProcessor,                               //ProcessorType
-        ProcessorFamilyOther,                           //ProcessorFamily
+        ProcessorFamilyIndicatorFamily2,                //ProcessorFamily
         2,                                              //ProcessorManufacture
         {                                               //ProcessorId
             {                                               //Signature
