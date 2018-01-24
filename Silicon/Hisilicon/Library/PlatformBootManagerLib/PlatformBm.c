@@ -17,6 +17,7 @@
 
 #include <IndustryStandard/Pci22.h>
 #include <Library/BootLogoLib.h>
+#include <Library/BmcConfigBootLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootManagerLib.h>
@@ -502,6 +503,10 @@ PlatformBootManagerBeforeConsole (
     Status = EsrtManagement->SyncEsrtFmp ();
   }
 
+  // restore BootOrder variable if previous BMC boot override attempt
+  // left it in a modified state
+  RestoreBootOrder ();
+
   UpdateMemory ();
 
   //
@@ -601,6 +606,8 @@ PlatformBootManagerAfterConsole (
   PlatformRegisterFvBootOption (
     PcdGetPtr (PcdShellFile), L"UEFI Shell", LOAD_OPTION_ACTIVE
     );
+
+  HandleBmcBootType ();
 }
 
 /**

@@ -42,6 +42,7 @@
   BaseLib
   BaseMemoryLib
   BootLogoLib
+  BmcConfigBootLib
   DebugLib
   DevicePathLib
   DxeServicesLib

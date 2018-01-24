@@ -84,6 +84,7 @@
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
   PlatformBdsLib|Silicon/Hisilicon/Library/PlatformIntelBdsLib/PlatformIntelBdsLib.inf
+  BmcConfigBootLib|Silicon/Hisilicon/Library/BmcConfigBootLib/BmcConfigBootLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
