@@ -15,8 +15,11 @@
 #include "PlatformDxe.h"
 
 #define ASMEDIA_VID                         0x1b21
+#define ASM1061_PID                         0x0612
 #define ASM1182E_PID                        0x1182
 #define ASM1184E_PID                        0x1184
+
+#define ASM1061_SSC_OFFSET                  0xA10
 
 #define ASM118x_PCIE_CAPABILITY_OFFSET      0x80
 #define ASM118x_PCIE_LINK_CONTROL_OFFSET    (ASM118x_PCIE_CAPABILITY_OFFSET + \
@@ -39,23 +42,9 @@ RetrainAsm1184eDownstreamPort (
   IN  EFI_PCI_IO_PROTOCOL   *PciIo
   )
 {
-  UINT16                    PciVidPid[2];
   EFI_STATUS                Status;
   PCIE_CAP                  Cap;
   PCI_REG_PCIE_LINK_CONTROL LinkControl;
-
-  Status = PciIo->Pci.Read (PciIo, EfiPciIoWidthUint16, PCI_VENDOR_ID_OFFSET,
-                        ARRAY_SIZE (PciVidPid), &PciVidPid);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_WARN, "%a: failed to read PCI vendor/product ID - %r\n",
-      __FUNCTION__, Status));
-    return;
-  }
-
-  if (PciVidPid[0] != ASMEDIA_VID ||
-      (PciVidPid[1] != ASM1182E_PID && PciVidPid[1] != ASM1184E_PID)) {
-    return;
-  }
 
   //
   // The upstream and downstream ports share the same PID/VID, so check
@@ -91,6 +80,34 @@ RetrainAsm1184eDownstreamPort (
 
 STATIC
 VOID
+EnableAsm1061SpreadSpectrum (
+  IN  EFI_PCI_IO_PROTOCOL   *PciIo
+  )
+{
+  EFI_STATUS  Status;
+  UINT8       SscVal;
+
+  DEBUG ((DEBUG_INFO, "%a: enabling spread spectrum mode 0 for ASM1061\n",
+    __FUNCTION__));
+
+  // SSC mode 0~-4000 ppm, 1:1 modulation
+
+  SscVal = 0;
+  Status = PciIo->Pci.Write (PciIo, EfiPciIoWidthUint8, ASM1061_SSC_OFFSET, 1,
+                        &SscVal);
+  ASSERT_EFI_ERROR (Status);
+
+  MemoryFence ();
+  gBS->Stall (1); // delay at least 100 ns between writes of the same register
+
+  SscVal = 1;
+  Status = PciIo->Pci.Write (PciIo, EfiPciIoWidthUint8, ASM1061_SSC_OFFSET, 1,
+                        &SscVal);
+  ASSERT_EFI_ERROR (Status);
+}
+
+STATIC
+VOID
 EFIAPI
 OnPciIoProtocolNotify (
   IN EFI_EVENT      Event,
@@ -101,6 +118,7 @@ OnPciIoProtocolNotify (
   EFI_STATUS                Status;
   EFI_HANDLE                HandleBuffer;
   UINTN                     BufferSize;
+  UINT16                    PciVidPid[2];
 
   while (TRUE) {
     BufferSize = sizeof (EFI_HANDLE);
@@ -114,12 +132,37 @@ OnPciIoProtocolNotify (
                     (VOID **)&PciIo);
     ASSERT_EFI_ERROR (Status);
 
-    //
-    // The ASM1184E 4-port PCIe switch on the DeveloperBox board (and its
-    // 2-port sibling of which samples were used in development) needs a
-    // little nudge to get it to train the downstream links at Gen2 speed.
-    //
-    RetrainAsm1184eDownstreamPort (PciIo);
+    Status = PciIo->Pci.Read (PciIo, EfiPciIoWidthUint16, PCI_VENDOR_ID_OFFSET,
+                          ARRAY_SIZE (PciVidPid), &PciVidPid);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: failed to read PCI vendor/product ID - %r\n",
+        __FUNCTION__, Status));
+      continue;
+    }
+
+    if (PciVidPid[0] != ASMEDIA_VID) {
+      continue;
+    }
+
+    switch (PciVidPid[1]) {
+    case ASM1061_PID:
+      //
+      // The ASM1061 SATA controller as integrated into the DeveloperBox design
+      // emits too much electromagnetic radiation. So enable spread spectrum
+      // mode.
+      //
+      EnableAsm1061SpreadSpectrum (PciIo);
+      break;
+    case ASM1182E_PID:
+    case ASM1184E_PID:
+      //
+      // The ASM1184E 4-port PCIe switch on the DeveloperBox board (and its
+      // 2-port sibling of which samples were used in development) needs a
+      // little nudge to get it to train the downstream links at Gen2 speed.
+      //
+      RetrainAsm1184eDownstreamPort (PciIo);
+      break;
+    }
   }
 }
 

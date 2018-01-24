@@ -23,7 +23,7 @@
   ENTRY_POINT                    = PlatformDxeEntryPoint
 
 [Sources]
-  Asmedia118x.c
+  Pci.c
   PlatformDxe.c
 
 [Packages]
