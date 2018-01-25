@@ -25,6 +25,8 @@
 [Sources]
   Pci.c
   PlatformDxe.c
+  PlatformDxeHii.uni
+  PlatformDxeHii.vfr
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
@@ -37,18 +39,24 @@
 [LibraryClasses]
   BaseMemoryLib
   DebugLib
+  DevicePathLib
   DtPlatformDtbLoaderLib
+  HiiLib
   IoLib
   MemoryAllocationLib
+  PcdLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
   UefiLib
+  UefiRuntimeServicesTableLib
 
 [Guids]
+  gEfiHiiPlatformSetupFormsetGuid
   gFdtTableGuid
   gNetsecNonDiscoverableDeviceGuid
   gSynQuacerNonDiscoverableI2cMasterGuid
   gSynQuacerNonDiscoverableRuntimeI2cMasterGuid
+  gSynQuacerPlatformFormSetGuid
 
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
@@ -58,6 +66,9 @@
 [FixedPcd]
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
   gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress
+
+[Pcd]
+  gSynQuacerTokenSpaceGuid.PcdPlatformSettings
 
 [Depex]
   TRUE

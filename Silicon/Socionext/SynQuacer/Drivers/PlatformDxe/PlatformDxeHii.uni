@@ -1,0 +1,29 @@
+/** @file
+*
+*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*
+*  This program and the accompanying materials are licensed and made available
+*  under the terms and conditions of the BSD License which accompanies this
+*  distribution.  The full text of the license may be found at
+*  http://opensource.org/licenses/bsd-license.php
+*
+*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+*
+**/
+
+#langdef en-US  "English"
+
+#string STR_FORM_SET_TITLE             #language en-US "SynQuacer Platform Settings"
+#string STR_FORM_SET_TITLE_HELP        #language en-US "Press <Enter> to set platform specific options."
+
+#string STR_MAIN_FORM_TITLE            #language en-US "SynQuacer Platform Settings"
+#string STR_NULL_STRING                #language en-US ""
+
+#string STR_PCIE0_MAX_SPEED_PROMPT     #language en-US "PCIe x4 slot max speed"
+#string STR_PCIE1_MAX_SPEED_PROMPT     #language en-US "PCIe x1 slot 1 max speed"
+#string STR_PCIE2_MAX_SPEED_PROMPT     #language en-US "PCIe x1 slot 2 max speed"
+#string STR_PCIE_MAX_SPEED_HELP        #language en-US "The maximum speed the PCIe downstream port is allowed to negotiate"
+
+#string STR_PCIE_MAX_SPEED_UNLIMITED   #language en-US "Unlimited"
+#string STR_PCIE_MAX_SPEED_GEN1        #language en-US "Gen1 (2.5 GT/s)"

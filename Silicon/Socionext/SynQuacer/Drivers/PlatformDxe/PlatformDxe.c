@@ -14,6 +14,36 @@
 
 #include "PlatformDxe.h"
 
+UINT64                            mHiiSettingsVal;
+SYNQUACER_PLATFORM_VARSTORE_DATA  *mHiiSettings;
+
+typedef struct {
+  VENDOR_DEVICE_PATH              VendorDevicePath;
+  EFI_DEVICE_PATH_PROTOCOL        End;
+} HII_VENDOR_DEVICE_PATH;
+
+STATIC HII_VENDOR_DEVICE_PATH     mPlatformDxeHiiVendorDevicePath = {
+  {
+    {
+      HARDWARE_DEVICE_PATH,
+      HW_VENDOR_DP,
+      {
+        (UINT8) (sizeof (VENDOR_DEVICE_PATH)),
+        (UINT8) ((sizeof (VENDOR_DEVICE_PATH)) >> 8)
+      }
+    },
+    SYNQUACER_PLATFORM_FORMSET_GUID
+  },
+  {
+    END_DEVICE_PATH_TYPE,
+    END_ENTIRE_DEVICE_PATH_SUBTYPE,
+    {
+      (UINT8) (END_DEVICE_PATH_LENGTH),
+      (UINT8) ((END_DEVICE_PATH_LENGTH) >> 8)
+    }
+  }
+};
+
 STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mNetsecDesc[] = {
   {
     ACPI_ADDRESS_SPACE_DESCRIPTOR,                    // Desc
@@ -144,6 +174,77 @@ SmmuEnableCoherentDma (
     SMMU_SCR0_SHCFG_INNER | SMMU_SCR0_MTCFG | SMMU_SCR0_MEMATTR_INNER_OUTER_WB);
 }
 
+STATIC
+EFI_STATUS
+InstallHiiPages (
+  VOID
+  )
+{
+  EFI_STATUS                      Status;
+  EFI_HII_HANDLE                  HiiHandle;
+  EFI_HANDLE                      DriverHandle;
+
+  DriverHandle = NULL;
+  Status = gBS->InstallMultipleProtocolInterfaces (&DriverHandle,
+                  &gEfiDevicePathProtocolGuid,
+                  &mPlatformDxeHiiVendorDevicePath,
+                  NULL);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  HiiHandle = HiiAddPackages (&gSynQuacerPlatformFormSetGuid,
+                              DriverHandle,
+                              PlatformDxeStrings,
+                              PlatformDxeHiiBin,
+                              NULL);
+
+  if (HiiHandle == NULL) {
+    gBS->UninstallMultipleProtocolInterfaces (DriverHandle,
+           &gEfiDevicePathProtocolGuid,
+           &mPlatformDxeHiiVendorDevicePath,
+           NULL);
+    return EFI_OUT_OF_RESOURCES;
+  }
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
+EnableSettingsForm (
+  VOID
+  )
+{
+  EFI_STATUS                        Status;
+  UINTN                             VarSize;
+  SYNQUACER_PLATFORM_VARSTORE_DATA  Settings;
+
+  VarSize = sizeof (Settings);
+  Status = gRT->GetVariable (SYNQUACER_PLATFORM_VARIABLE_NAME,
+                  &gSynQuacerPlatformFormSetGuid, NULL, &VarSize, &Settings);
+  if (Status == EFI_NOT_FOUND) {
+    //
+    // Variable does not exist yet - create it
+    //
+    SetMem (&Settings, sizeof (Settings), 0);
+    Status = gRT->SetVariable (SYNQUACER_PLATFORM_VARIABLE_NAME,
+                    &gSynQuacerPlatformFormSetGuid,
+                    EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS,
+                    sizeof (Settings), &Settings);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: EfiSetVariable failed - %r\n", __FUNCTION__,
+        Status));
+      return Status;
+    }
+  } else if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_WARN, "%a: EfiGetVariable failed - %r\n", __FUNCTION__,
+      Status));
+    return Status;
+  }
+
+  return InstallHiiPages ();
+}
+
 EFI_STATUS
 EFIAPI
 PlatformDxeEntryPoint (
@@ -155,6 +256,9 @@ PlatformDxeEntryPoint (
   VOID                            *Dtb;
   UINTN                           DtbSize;
   EFI_HANDLE                      Handle;
+
+  mHiiSettingsVal = PcdGet64 (PcdPlatformSettings);
+  mHiiSettings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&mHiiSettingsVal;
 
   Dtb = NULL;
   Status = DtPlatformLoadDtb (&Dtb, &DtbSize);
@@ -195,6 +299,9 @@ PlatformDxeEntryPoint (
   SmmuEnableCoherentDma ();
 
   Status = RegisterPcieNotifier ();
+  ASSERT_EFI_ERROR (Status);
+
+  Status = EnableSettingsForm ();
   ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;

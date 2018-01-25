@@ -397,6 +397,8 @@
 [PcdsDynamicHii]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|30
 
+  gSynQuacerTokenSpaceGuid.PcdPlatformSettings|L"SynQuacerPlatformSettings"|gSynQuacerPlatformFormSetGuid|0x0|0x0|NV,BS
+
 [PcdsDynamicDefault]
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x0000000000000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0xFFFFFFFFFFFFFFFF

@@ -18,9 +18,11 @@
 #include <Library/ArmLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
+#include <Library/PcdLib.h>
 #include <Library/PciHostBridgeLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Platform/Pcie.h>
+#include <Platform/VarStore.h>
 #include <Protocol/PciHostBridgeResourceAllocation.h>
 
 #define IATU_VIEWPORT_OFF                                   0x900
@@ -268,7 +270,8 @@ PciInitControllerPost (
   IN  EFI_PHYSICAL_ADDRESS    DbiBase,
   IN  EFI_PHYSICAL_ADDRESS    ConfigBase,
   IN  EFI_PHYSICAL_ADDRESS    IoMemBase,
-  IN  CONST PCI_ROOT_BRIDGE   *RootBridge
+  IN  CONST PCI_ROOT_BRIDGE   *RootBridge,
+  IN  BOOLEAN                 EnableGen2Speed
   )
 {
   // 4: Set Bifurcation  1=disable  4=able
@@ -312,8 +315,10 @@ PciInitControllerPost (
                                           EFI_PCI_COMMAND_MEMORY_SPACE |
                                           EFI_PCI_COMMAND_BUS_MASTER);
 
-  // Force link speed change to Gen2 at link up
-  MmioOr32 (DbiBase + GEN2_CONTROL_OFF, DIRECT_SPEED_CHANGE);
+  if (EnableGen2Speed) {
+    // Force link speed change to Gen2 at link up
+    MmioOr32 (DbiBase + GEN2_CONTROL_OFF, DIRECT_SPEED_CHANGE);
+  }
 
   // Region 0: MMIO32 range
   ConfigureWindow (DbiBase, 0,
@@ -392,7 +397,13 @@ SynQuacerPciHostBridgeLibConstructor (
   IN EFI_SYSTEM_TABLE *SystemTable
   )
 {
-  UINTN               Idx;
+  UINTN                             Idx;
+  UINT64                            SettingsVal;
+  SYNQUACER_PLATFORM_VARSTORE_DATA  *Settings;
+  UINT8                             MaxSpeed;
+
+  SettingsVal = PcdGet64 (PcdPlatformSettings);
+  Settings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&SettingsVal;
 
   for (Idx = 0; Idx < ARRAY_SIZE (mBaseAddresses); Idx++) {
     if (PcdGet8 (PcdPcieEnableMask) & (1 << Idx)) {
@@ -409,12 +420,31 @@ SynQuacerPciHostBridgeLibConstructor (
   gBS->Stall (150 * 1000);
 
   for (Idx = 0; Idx < ARRAY_SIZE (mBaseAddresses); Idx++) {
+    //
+    // Check whether this root port is described by any of our 'slot'
+    // definitions, and get the maximum speed if this is the case.
+    //
+    switch (SYNQUACER_PCI_LOCATION (Idx, 0, 0)) {
+    case SYNQUACER_PCI_SLOT0_LOCATION:
+      MaxSpeed = Settings->PcieSlot0MaxSpeed;
+      break;
+    case SYNQUACER_PCI_SLOT1_LOCATION:
+      MaxSpeed = Settings->PcieSlot1MaxSpeed;
+      break;
+    case SYNQUACER_PCI_SLOT2_LOCATION:
+      MaxSpeed = Settings->PcieSlot2MaxSpeed;
+      break;
+    default:
+      MaxSpeed = PCIE_MAX_SPEED_UNLIMITED;
+    }
+
     if (PcdGet8 (PcdPcieEnableMask) & (1 << Idx)) {
       PciInitControllerPost (mBaseAddresses[Idx].ExsBase,
                              mBaseAddresses[Idx].DbiBase,
                              mBaseAddresses[Idx].ConfigBase,
                              mBaseAddresses[Idx].IoMemBase,
-                             &mPciRootBridges[Idx]);
+                             &mPciRootBridges[Idx],
+                             (MaxSpeed != PCIE_MAX_SPEED_GEN1));
     }
   }
 

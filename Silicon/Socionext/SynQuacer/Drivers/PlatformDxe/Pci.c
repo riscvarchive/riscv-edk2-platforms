@@ -45,6 +45,11 @@ RetrainAsm1184eDownstreamPort (
   EFI_STATUS                Status;
   PCIE_CAP                  Cap;
   PCI_REG_PCIE_LINK_CONTROL LinkControl;
+  UINTN                     SegmentNumber;
+  UINTN                     BusNumber;
+  UINTN                     DeviceNumber;
+  UINTN                     FunctionNumber;
+  UINT8                     MaxSpeed;
 
   //
   // The upstream and downstream ports share the same PID/VID, so check
@@ -64,8 +69,34 @@ RetrainAsm1184eDownstreamPort (
     return;
   }
 
-  DEBUG ((DEBUG_INFO, "%a: retraining ASM118x downstream PCIe port\n",
-    __FUNCTION__));
+  Status = PciIo->GetLocation (PciIo, &SegmentNumber, &BusNumber, &DeviceNumber,
+                    &FunctionNumber);
+  ASSERT_EFI_ERROR (Status);
+
+  //
+  // Check whether this downstream port is described by any of our 'slot'
+  // definitions, and get the maximum speed if this is the case.
+  //
+  switch (SYNQUACER_PCI_LOCATION (SegmentNumber, BusNumber, DeviceNumber)) {
+  case SYNQUACER_PCI_SLOT0_LOCATION:
+    MaxSpeed = mHiiSettings->PcieSlot0MaxSpeed;
+    break;
+  case SYNQUACER_PCI_SLOT1_LOCATION:
+    MaxSpeed = mHiiSettings->PcieSlot1MaxSpeed;
+    break;
+  case SYNQUACER_PCI_SLOT2_LOCATION:
+    MaxSpeed = mHiiSettings->PcieSlot2MaxSpeed;
+    break;
+  default:
+    MaxSpeed = PCIE_MAX_SPEED_UNLIMITED;
+  }
+  if (MaxSpeed == PCIE_MAX_SPEED_GEN1) {
+    return;
+  }
+
+  DEBUG ((DEBUG_INFO,
+    "%a: retraining ASM118x downstream PCIe port at %04x:%02x:%02x to Gen2\n",
+    __FUNCTION__, SegmentNumber, BusNumber, DeviceNumber));
 
   Status = PciIo->Pci.Read (PciIo, EfiPciIoWidthUint16,
                         ASM118x_PCIE_LINK_CONTROL_OFFSET, 1, &LinkControl);

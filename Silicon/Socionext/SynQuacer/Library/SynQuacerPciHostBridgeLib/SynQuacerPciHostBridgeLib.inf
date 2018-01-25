@@ -45,6 +45,7 @@
   DebugLib
   DevicePathLib
   MemoryAllocationLib
+  PcdLib
   UefiBootServicesTableLib
 
 [FixedPcd]
@@ -52,3 +53,4 @@
 
 [Pcd]
   gSynQuacerTokenSpaceGuid.PcdPcieEnableMask
+  gSynQuacerTokenSpaceGuid.PcdPlatformSettings
