@@ -86,6 +86,7 @@ I2C_Enable (
 {
   I2C0_ENABLE_U           I2cEnableReg;
   I2C0_ENABLE_STATUS_U    I2cEnableStatusReg;
+  UINT32                  TimeCnt = I2C_READ_TIMEOUT;
 
   UINTN Base = GetI2cBase (Socket, Port);
 
@@ -93,13 +94,18 @@ I2C_Enable (
   I2cEnableReg.bits.enable = 1;
   I2C_REG_WRITE (Base + I2C_ENABLE_OFFSET, I2cEnableReg.Val32);
 
+  do {
+    // This is a empirical value for I2C delay. MemoryFence is no need here.
+    I2C_Delay (10000);
 
-  I2C_REG_READ (Base + I2C_ENABLE_STATUS_OFFSET, I2cEnableStatusReg.Val32);
-  if (I2cEnableStatusReg.bits.ic_en == 1) {
-    return EFI_SUCCESS;
-  } else {
-    return EFI_DEVICE_ERROR;
-  }
+    TimeCnt--;
+    I2C_REG_READ (Base + I2C_ENABLE_STATUS_OFFSET, I2cEnableStatusReg.Val32);
+    if (TimeCnt == 0) {
+      return EFI_DEVICE_ERROR;
+    }
+  } while (I2cEnableStatusReg.bits.ic_en == 0);
+
+  return EFI_SUCCESS;
 }
 
 VOID
@@ -252,7 +258,7 @@ CheckI2CTimeOut (
   if (Transfer == I2CTx) {
     Fifo = I2C_GetTxStatus (Socket, Port);
     while (Fifo != 0) {
-      // This is a empirical value for I2C delay. MemoryFance is no need here.
+      // This is a empirical value for I2C delay. MemoryFence is no need here.
       I2C_Delay (2);
       if (++Times > I2C_READ_TIMEOUT) {
         (VOID)I2C_Disable (Socket, Port);
@@ -263,7 +269,7 @@ CheckI2CTimeOut (
   } else {
     Fifo = I2C_GetRxStatus (Socket, Port);
     while (Fifo == 0) {
-      // This is a empirical value for I2C delay. MemoryFance is no need here.
+      // This is a empirical value for I2C delay. MemoryFence is no need here.
       I2C_Delay (2);
       if (++Times > I2C_READ_TIMEOUT) {
         (VOID)I2C_Disable (Socket, Port);
