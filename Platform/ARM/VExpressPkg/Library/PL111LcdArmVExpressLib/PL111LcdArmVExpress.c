@@ -259,12 +259,12 @@ LcdPlatformSetMode (
   }
 
   // The FVP foundation model does not have an LCD.
-  // On the FVP models the GIC variant in encoded in bits [15:12].
+  // On the FVP models, the build variant is encoded in bits [15:12].
   // Note: The DVI Mode is not modelled by RTSM or FVP models.
   SysId = MmioRead32 (ARM_VE_SYS_ID_REG);
   if (SysId != ARM_RTSM_SYS_ID) {
-    // Take out the FVP GIC variant to reduce the permutations.
-    SysId &= ~ARM_FVP_SYS_ID_VARIANT_MASK;
+    // Ignore build variant and revision.
+    SysId &= ~(ARM_FVP_SYS_ID_VARIANT_MASK | ARM_FVP_SYS_ID_REV_MASK);
     if (SysId != ARM_FVP_BASE_BOARD_SYS_ID) {
       // Set the DVI into the new mode
       Status = ArmPlatformSysConfigSet (SYS_CFG_DVIMODE, mResolutions[ModeNumber].Mode);
