@@ -174,6 +174,23 @@ SmmuEnableCoherentDma (
     SMMU_SCR0_SHCFG_INNER | SMMU_SCR0_MTCFG | SMMU_SCR0_MEMATTR_INNER_OUTER_WB);
 }
 
+#define MMIO_TIMER_CNTFRQ_OFFSET          0x10
+
+STATIC
+VOID
+SetMmioTimerFrequency (
+  VOID
+  )
+{
+  //
+  // Initialize the CNTFRQ field of the first non-secure MMIO timer frame.
+  // This field should be a read-only alias of the global frequency register
+  // but in reality, it is a separate field that needs to be set explicitly.
+  //
+  MmioWrite32 (SYNQUACER_MMIO_TIMER_CNT_BASE0 + MMIO_TIMER_CNTFRQ_OFFSET,
+    ArmGenericTimerGetTimerFreq ());
+}
+
 STATIC
 EFI_STATUS
 InstallHiiPages (
@@ -297,6 +314,7 @@ PlatformDxeEntryPoint (
   ASSERT_EFI_ERROR (Status);
 
   SmmuEnableCoherentDma ();
+  SetMmioTimerFrequency ();
 
   Status = RegisterPcieNotifier ();
   ASSERT_EFI_ERROR (Status);

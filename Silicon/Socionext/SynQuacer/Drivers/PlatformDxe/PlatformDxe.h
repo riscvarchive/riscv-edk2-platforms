@@ -18,6 +18,7 @@
 #include <PiDxe.h>
 #include <Guid/SynQuacerPlatformFormSet.h>
 #include <IndustryStandard/Pci.h>
+#include <Library/ArmGenericTimerCounterLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DevicePathLib.h>
