@@ -22,9 +22,7 @@
 
 #include <Protocol/AmdIscpDxeProtocol.h>
 
-STATIC CONST UINT64 mFlashOffset = FixedPcdGet64 (PcdFvBaseAddress) -
-                                   FixedPcdGet64 (PcdFdBaseAddress);
-STATIC CONST UINT64 mFlashMaxSize = FixedPcdGet64 (PcdFvSize);
+STATIC CONST UINT64 mFlashMaxSize = FixedPcdGet64 (PcdFdSize);
 
 STATIC CONST UINTN mBlockSize = SIZE_64KB;
 
@@ -77,12 +75,10 @@ PerformFlashWrite (
     return EFI_INVALID_PARAMETER;
   }
 
-  if (FlashAddress < mFlashOffset ||
-      (FlashAddress + Length) > (mFlashOffset + mFlashMaxSize)) {
+  if ((FlashAddress + Length) > mFlashMaxSize) {
     DEBUG ((DEBUG_ERROR,
-      "%a: updated region [0x%lx, 0x%lx) outside of FV region [0x%lx, 0x%lx)\n",
-      __FUNCTION__, FlashAddress, FlashAddress + Length, mFlashOffset,
-      mFlashOffset + mFlashMaxSize));
+      "%a: updated region [0x%lx, 0x%lx) outside of FV region [0x0, 0x%lx)\n",
+      __FUNCTION__, FlashAddress, FlashAddress + Length, mFlashMaxSize));
     return EFI_INVALID_PARAMETER;
   }
 
