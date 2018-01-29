@@ -16,11 +16,13 @@
 #include <PiDxe.h>
 
 #include <Library/BaseMemoryLib.h>
+#include <Library/BootLogoLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DxeServicesTableLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PlatformFlashAccessLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiLib.h>
 
 #include <Protocol/FirmwareVolumeBlock.h>
 
@@ -145,6 +147,17 @@ PerformFlashWrite (
   EFI_LBA                             Lba;
   EFI_PHYSICAL_ADDRESS                FvbBaseAddress;
   UINTN                               NumBytes;
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
+  EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION White;
+  UINTN                               Resolution;
+  UINTN                               Progress;
+  BOOLEAN                             HaveBootGraphics;
+
+  Black.Raw = 0x00000000;
+  White.Raw = 0x00FFFFFF;
+
+  Status = BootLogoEnableLogo ();
+  HaveBootGraphics = !EFI_ERROR (Status);
 
   if (FlashAddressType != FlashAddressTypeAbsoluteAddress) {
     DEBUG ((DEBUG_ERROR, "%a: only FlashAddressTypeAbsoluteAddress supported\n",
@@ -213,6 +226,16 @@ PerformFlashWrite (
     return Status;
   }
 
+  if (HaveBootGraphics) {
+    Resolution = (BlockSize * 100) / Length + 1;
+    Progress = 0;
+
+    Status = BootLogoUpdateProgress (White.Pixel, Black.Pixel,
+               L"Updating firmware - please wait", Black.Pixel, 100, 0);
+  } else {
+    Print (L"Updating firmware - please wait ");
+  }
+
   //
   // Erase the region
   //
@@ -242,9 +265,21 @@ PerformFlashWrite (
         __FUNCTION__, Lba, Status, NumBytes));
     }
 
+    if (HaveBootGraphics) {
+      Status = BootLogoUpdateProgress (White.Pixel, Black.Pixel,
+                L"Updating firmware - please wait", White.Pixel,
+                Progress + Resolution, Progress);
+      Progress += Resolution;
+    } else {
+      Print (L".");
+    }
+
     Buffer += BlockSize;
     Length -= BlockSize;
     Lba++;
+  }
+  if (!HaveBootGraphics) {
+    Print (L"\n");
   }
 
   return EFI_SUCCESS;

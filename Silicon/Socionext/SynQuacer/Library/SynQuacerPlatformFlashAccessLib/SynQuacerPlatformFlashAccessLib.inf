@@ -24,6 +24,7 @@
   SynQuacerPlatformFlashAccessLib.c
 
 [Packages]
+  MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   SignedCapsulePkg/SignedCapsulePkg.dec
 
@@ -32,7 +33,9 @@
 
 [LibraryClasses]
   BaseMemoryLib
+  BootLogoLib
   DebugLib
   DxeServicesTableLib
   UefiBootServicesTableLib
+  UefiLib
 
