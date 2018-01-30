@@ -58,6 +58,7 @@
 
 [Guids]
   g96BoardsI2c0MasterGuid
+  gEdkiiPlatformHasAcpiGuid
   gEfiHiiPlatformSetupFormsetGuid
   gFdtTableGuid
   gNetsecNonDiscoverableDeviceGuid

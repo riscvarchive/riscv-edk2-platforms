@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*  Copyright (c) 2017 - 2018, Linaro, Ltd. All rights reserved.
 *
 *  This program and the accompanying materials are licensed and made available
 *  under the terms and conditions of the BSD License which accompanies this
@@ -68,6 +68,14 @@ formset
         flags       = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
         option text = STRING_TOKEN(STR_EMMC_DISABLED), value = EMMC_DISABLED, flags = DEFAULT;
         option text = STRING_TOKEN(STR_EMMC_ENABLED), value = EMMC_ENABLED, flags = 0;
+    endoneof;
+
+    oneof varid = SynQuacerPlatformSettings.AcpiPref,
+        prompt      = STRING_TOKEN(STR_DT_ACPI_SELECT_PROMPT),
+        help        = STRING_TOKEN(STR_DT_ACPI_SELECT_HELP),
+        flags       = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
+        option text = STRING_TOKEN(STR_DT_ACPI_SELECT_DT), value = ACPIPREF_DT, flags = DEFAULT;
+        option text = STRING_TOKEN(STR_DT_ACPI_SELECT_ACPI), value = ACPIPREF_ACPI, flags = 0;
     endoneof;
 
     subtitle text = STRING_TOKEN(STR_NULL_STRING);

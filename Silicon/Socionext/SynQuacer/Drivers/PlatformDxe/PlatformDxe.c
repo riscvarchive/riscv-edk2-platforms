@@ -277,15 +277,29 @@ PlatformDxeEntryPoint (
   mHiiSettingsVal = PcdGet64 (PcdPlatformSettings);
   mHiiSettings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&mHiiSettingsVal;
 
-  Dtb = NULL;
-  Status = DtPlatformLoadDtb (&Dtb, &DtbSize);
-  if (!EFI_ERROR (Status)) {
-    Status = gBS->InstallConfigurationTable (&gFdtTableGuid, Dtb);
-  }
-  if (EFI_ERROR (Status)) {
-     DEBUG ((DEBUG_ERROR,
-      "%a: failed to install FDT configuration table - %r\n", __FUNCTION__,
-      Status));
+  if (mHiiSettings->AcpiPref == ACPIPREF_DT) {
+    Dtb = NULL;
+    Status = DtPlatformLoadDtb (&Dtb, &DtbSize);
+    if (!EFI_ERROR (Status)) {
+      Status = gBS->InstallConfigurationTable (&gFdtTableGuid, Dtb);
+    }
+    if (EFI_ERROR (Status)) {
+       DEBUG ((DEBUG_ERROR,
+        "%a: failed to install FDT configuration table - %r\n", __FUNCTION__,
+        Status));
+    }
+  } else {
+    //
+    // ACPI was selected: install the gEdkiiPlatformHasAcpiGuid GUID as a
+    // NULL protocol to unlock dispatch of ACPI related drivers.
+    //
+    Status = gBS->InstallMultipleProtocolInterfaces (&ImageHandle,
+                    &gEdkiiPlatformHasAcpiGuid, NULL, NULL);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR,
+        "%a: failed to install gEdkiiPlatformHasAcpiGuid as a protocol\n",
+        __FUNCTION__));
+    }
   }
 
   Handle = NULL;

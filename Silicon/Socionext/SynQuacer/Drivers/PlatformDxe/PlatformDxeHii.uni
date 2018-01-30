@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2017, Linaro, Ltd. All rights reserved.
+*  Copyright (c) 2017 - 2018, Linaro, Ltd. All rights reserved.
 *
 *  This program and the accompanying materials are licensed and made available
 *  under the terms and conditions of the BSD License which accompanies this
@@ -33,3 +33,9 @@
 
 #string STR_EMMC_DISABLED              #language en-US "Disabled"
 #string STR_EMMC_ENABLED               #language en-US "Enabled"
+
+#string STR_DT_ACPI_SELECT_PROMPT      #language en-US "O/S Hardware Description"
+#string STR_DT_ACPI_SELECT_HELP        #language en-US "Select the hardware description that will be exposed to the O/S."
+
+#string STR_DT_ACPI_SELECT_DT          #language en-US "Device Tree"
+#string STR_DT_ACPI_SELECT_ACPI        #language en-US "ACPI"
