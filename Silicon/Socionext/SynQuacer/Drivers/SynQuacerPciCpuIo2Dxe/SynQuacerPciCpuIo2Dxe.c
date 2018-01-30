@@ -25,7 +25,8 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#define MAX_IO_PORT_ADDRESS   SYNQUACER_PCI_SEG1_PORTIO_MAX
+#define MAX_IO_PORT_ADDRESS   (SYNQUACER_PCI_SEG1_PORTIO_MAX + \
+                               SYNQUACER_PCI_SEG1_PORTIO_OFFSET)
 
 //
 // Handle for the CPU I/O 2 Protocol
@@ -414,12 +415,18 @@ CpuIoServiceRead (
     return Status;
   }
 
-  if ((Address >= SYNQUACER_PCI_SEG0_PORTIO_MIN) &&
-      (Address <= SYNQUACER_PCI_SEG0_PORTIO_MAX)) {
-    Address += SYNQUACER_PCI_SEG0_PORTIO_MEMBASE;
-  } else if ((Address >= SYNQUACER_PCI_SEG1_PORTIO_MIN) &&
-             (Address <= SYNQUACER_PCI_SEG1_PORTIO_MAX)) {
-    Address += SYNQUACER_PCI_SEG1_PORTIO_MEMBASE;
+  if ((Address >= (SYNQUACER_PCI_SEG0_PORTIO_MIN +
+                   SYNQUACER_PCI_SEG0_PORTIO_OFFSET)) &&
+      (Address <= (SYNQUACER_PCI_SEG0_PORTIO_MAX +
+                   SYNQUACER_PCI_SEG0_PORTIO_OFFSET))) {
+    Address += SYNQUACER_PCI_SEG0_PORTIO_MEMBASE -
+               SYNQUACER_PCI_SEG0_PORTIO_OFFSET;
+  } else if ((Address >= (SYNQUACER_PCI_SEG1_PORTIO_MIN +
+                          SYNQUACER_PCI_SEG1_PORTIO_OFFSET)) &&
+             (Address <= (SYNQUACER_PCI_SEG1_PORTIO_MAX +
+                          SYNQUACER_PCI_SEG1_PORTIO_OFFSET))) {
+    Address += SYNQUACER_PCI_SEG1_PORTIO_MEMBASE -
+               SYNQUACER_PCI_SEG1_PORTIO_OFFSET;
 
   } else {
     ASSERT (FALSE);
