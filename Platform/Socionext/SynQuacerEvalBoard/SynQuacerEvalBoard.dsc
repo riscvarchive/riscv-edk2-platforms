@@ -638,3 +638,5 @@
   MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
+
+!include Silicon/Socionext/SynQuacer/Acpi.dsc.inc

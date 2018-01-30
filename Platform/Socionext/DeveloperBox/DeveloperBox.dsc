@@ -683,3 +683,5 @@
   #
   Silicon/Socionext/SynQuacer/Drivers/SynQuacerI2cDxe/SynQuacerI2cDxe.inf
   MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
+
+!include Silicon/Socionext/SynQuacer/Acpi.dsc.inc
