@@ -49,8 +49,11 @@ NumBlocks     = 0x500
 #
 ################################################################################
 
-0x00000000|0x00200000
-FILE = Platform/LeMaker/CelloBoard/PreUefiFirmware.bin
+0x00000000|0x0004b300
+FILE = Platform/LeMaker/CelloBoard/ScpFirmware.bin
+
+0x0004b300|0x00020000
+FILE = Silicon/AMD/Styx/ArmTrustedFirmware.bin
 
 0x00200000|0x00260000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
