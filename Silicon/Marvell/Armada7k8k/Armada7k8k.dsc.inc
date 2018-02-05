@@ -32,6 +32,7 @@
 #SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 [LibraryClasses.common]
+  ArmadaSoCDescLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kSoCDescLib/Armada7k8kSoCDescLib.inf
   ArmPlatformLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kLib/Armada7k8kLib.inf
   ComPhyLib|Silicon/Marvell/Library/ComPhyLib/ComPhyLib.inf
   MppLib|Silicon/Marvell/Library/MppLib/MppLib.inf
@@ -449,6 +450,7 @@
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
   # Platform Initialization
+  Silicon/Marvell/Drivers/BoardDesc/MvBoardDescDxe.inf
   Silicon/Marvell/Armada7k8k/Drivers/PlatInitDxe/PlatInitDxe.inf
 
   # Platform drivers

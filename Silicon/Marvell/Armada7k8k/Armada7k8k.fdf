@@ -106,6 +106,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   #
   # Platform Initialization
   #
+  INF Silicon/Marvell/Drivers/BoardDesc/MvBoardDescDxe.inf
   INF Silicon/Marvell/Armada7k8k/Drivers/PlatInitDxe/PlatInitDxe.inf
 
   # PI DXE Drivers producing Architectural Protocols (EFI Services)
