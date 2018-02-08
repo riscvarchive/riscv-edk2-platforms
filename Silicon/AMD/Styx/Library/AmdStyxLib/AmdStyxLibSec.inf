@@ -49,9 +49,6 @@
 [Guids]
   gAmdStyxMpCoreInfoGuid               ## CONSUMER
 
-[FeaturePcd]
-  gEmbeddedTokenSpaceGuid.PcdCacheEnable
-
 [Ppis]
   gArmMpCoreInfoPpiGuid
 

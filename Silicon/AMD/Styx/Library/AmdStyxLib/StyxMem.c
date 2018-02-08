@@ -78,11 +78,7 @@ ArmPlatformGetVirtualMemoryMap (
       return;
   }
 
-  if (FeaturePcdGet(PcdCacheEnable) == TRUE) {
-      CacheAttributes = DDR_ATTRIBUTES_CACHED;
-  } else {
-      CacheAttributes = DDR_ATTRIBUTES_UNCACHED;
-  }
+  CacheAttributes = DDR_ATTRIBUTES_CACHED;
 
   DEBUG ((EFI_D_ERROR, " Memory Map\n------------------------------------------------------------------------\n"));
   DEBUG ((EFI_D_ERROR, "Description                    :        START       -        END         [        SIZE        ]    {              ATTR             }\n"));
