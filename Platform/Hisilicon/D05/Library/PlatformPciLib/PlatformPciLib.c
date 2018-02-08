@@ -29,6 +29,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
  {// HostBridge 0
   /* Port 0 */
   {
+      0,                    //Segment
       PCI_HB0RB0_ECAM_BASE, //ecam
       0x80,  //BusBase
       0x87, //BusLimit
@@ -44,6 +45,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 1 */
   {
+      1,                   //Segment
       PCI_HB0RB1_ECAM_BASE,//ecam
       0x90,  //BusBase
       0x97, //BusLimit
@@ -59,6 +61,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 2 */
   {
+      2,                   //Segment
       PCI_HB0RB2_ECAM_BASE,
       0xF8,  //BusBase
       0xFF, //BusLimit
@@ -75,6 +78,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
 
   /* Port 3 */
   {
+      3,                   //Segment
       PCI_HB0RB3_ECAM_BASE,
       0xb0,  //BusBase
       0xb7, //BusLimit
@@ -90,6 +94,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 4 */
   {
+      4,                   //Segment
       PCI_HB0RB4_ECAM_BASE, //ecam
       0x88,  //BusBase
       0x8f, //BusLimit
@@ -105,6 +110,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 5 */
   {
+      5,                   //Segment
       PCI_HB0RB5_ECAM_BASE,//ecam
       0x78,  //BusBase
       0x7F, //BusLimit
@@ -120,6 +126,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 6 */
   {
+      6,                   //Segment
       PCI_HB0RB6_ECAM_BASE,
       0xC0,  //BusBase
       0xC7, //BusLimit
@@ -136,6 +143,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
 
   /* Port 7 */
   {
+      7,                   //Segment
       PCI_HB0RB7_ECAM_BASE,
       0x90,  //BusBase
       0x97, //BusLimit
@@ -153,6 +161,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
 {// HostBridge 1
   /* Port 0 */
   {
+      8,                   //Segment
       PCI_HB1RB0_ECAM_BASE,
       0x80,  //BusBase
       0x87, //BusLimit
@@ -168,6 +177,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 1 */
   {
+      9,                   //Segment
       PCI_HB1RB1_ECAM_BASE,
       0x90,  //BusBase
       0x97, //BusLimit
@@ -183,6 +193,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 2 */
   {
+      0xa,                  //Segment
       PCI_HB1RB2_ECAM_BASE,
       0x10,  //BusBase
       0x1f, //BusLimit
@@ -199,6 +210,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
 
   /* Port 3 */
   {
+      0xb,                  //Segment
       PCI_HB1RB3_ECAM_BASE,
       0xb0,  //BusBase
       0xb7, //BusLimit
@@ -214,6 +226,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 4 */
   {
+      0xc,                  //Segment
       PCI_HB1RB4_ECAM_BASE,
       0x20,  //BusBase
       0x2f, //BusLimit
@@ -229,6 +242,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 5 */
   {
+      0xd,                  //Segment
       PCI_HB1RB5_ECAM_BASE,
       0x30,  //BusBase
       0x3f, //BusLimit
@@ -244,6 +258,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   },
   /* Port 6 */
   {
+      0xe,                  //Segment
       PCI_HB1RB6_ECAM_BASE,
       0xa8,  //BusBase
       0xaf, //BusLimit
@@ -260,6 +275,7 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
 
   /* Port 7 */
   {
+      0xf,                  //Segment
       PCI_HB1RB7_ECAM_BASE,
       0xb8,  //BusBase
       0xbf, //BusLimit

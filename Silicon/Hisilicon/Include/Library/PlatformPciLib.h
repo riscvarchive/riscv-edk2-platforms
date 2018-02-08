@@ -190,6 +190,7 @@ extern UINT64 PCIE_ITS_1610[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_ROOTBRIDGE];
 
 
 typedef struct {
+  UINT32          Segment;
   UINT64          Ecam;
   UINT64          BusBase;
   UINT64          BusLimit;
