@@ -43,9 +43,6 @@
 [Sources.ARM]
   Arm/ArmJunoHelper.S     | GCC
 
-[FeaturePcd]
-  gEmbeddedTokenSpaceGuid.PcdCacheEnable
-
 [FixedPcd]
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize

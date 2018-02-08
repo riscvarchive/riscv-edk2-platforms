@@ -90,9 +90,7 @@ ArmPlatformGetVirtualMemoryMap (
     return;
   }
 
-  CacheAttributes = (FeaturePcdGet(PcdCacheEnable))
-                    ? DDR_ATTRIBUTES_CACHED
-                    : DDR_ATTRIBUTES_UNCACHED;
+  CacheAttributes = DDR_ATTRIBUTES_CACHED;
 
   // ReMap (Either NOR Flash or DRAM)
   VirtualMemoryTable[Index].PhysicalBase = ARM_VE_REMAP_BASE;

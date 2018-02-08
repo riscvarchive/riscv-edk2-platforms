@@ -40,9 +40,6 @@
   CTA15-A7Helper.asm | RVCT
   CTA15-A7Helper.S   | GCC
 
-[FeaturePcd]
-  gEmbeddedTokenSpaceGuid.PcdCacheEnable
-
 [FixedPcd]
   gArmPlatformTokenSpaceGuid.PcdCoreCount
 

@@ -53,11 +53,7 @@ ArmPlatformGetVirtualMemoryMap (
     return;
   }
 
-  if (FeaturePcdGet(PcdCacheEnable) == TRUE) {
-    CacheAttributes = DDR_ATTRIBUTES_CACHED;
-  } else {
-    CacheAttributes = DDR_ATTRIBUTES_UNCACHED;
-  }
+  CacheAttributes = DDR_ATTRIBUTES_CACHED;
 
 #ifdef ARM_BIGLITTLE_TC2
   // Secure NOR0 Flash
