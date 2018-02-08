@@ -52,6 +52,7 @@
 #define SYNQUACER_CLOCK_CTRL_VAL  0xBC01
 
 #define SD_HC_CAP_SDR104          BIT33
+#define SD_HC_CAP_DDR50           BIT34
 
 #define ESD_CONTROL_RESET_DELAY   (20 * 1000)
 #define IO_CONTROL2_SETTLE_US     3000
@@ -93,9 +94,11 @@ SynQuacerSdMmcCapability (
   //
   // Clear the SDR104 capability bit. This avoids the need for a HS200 tuning
   // quirk that is difficult to support using the generic driver.
+  // Clear the DDR50 bit as well to work around an issue with the Kingston
+  // EMMC08G-M325-A52 part that was fitted on 96board DeveloperBox samples.
   //
   Capability = ReadUnaligned64 (SdMmcHcSlotCapability);
-  Capability &= ~(UINT64)SD_HC_CAP_SDR104;
+  Capability &= ~(UINT64)(SD_HC_CAP_SDR104 | SD_HC_CAP_DDR50);
   WriteUnaligned64 (SdMmcHcSlotCapability, Capability);
 
   return EFI_SUCCESS;
