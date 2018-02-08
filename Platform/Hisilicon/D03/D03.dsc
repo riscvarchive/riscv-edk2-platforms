@@ -458,7 +458,7 @@
     <LibraryClasses>
       NULL|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   }
-  Platform/Hisilicon/D03/Drivers/PciPlatform/PciPlatform.inf
+  Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf
   Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf {
     <LibraryClasses>
       DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf

@@ -263,7 +263,7 @@ READ_LOCK_STATUS   = TRUE
   # PCI Support
   #
   INF Silicon/Hisilicon/Hi1610/Drivers/PcieInit1610/PcieInitDxe.inf
-  INF Platform/Hisilicon/D03/Drivers/PciPlatform/PciPlatform.inf
+  INF Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf
   INF Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf
   INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
