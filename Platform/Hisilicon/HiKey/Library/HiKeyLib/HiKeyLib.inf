@@ -41,9 +41,6 @@
 [Sources.AARCH64]
   HiKeyHelper.S
 
-[FeaturePcd]
-  gEmbeddedTokenSpaceGuid.PcdCacheEnable
-
 [FixedPcd]
   gArmTokenSpaceGuid.PcdArmPrimaryCore
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
