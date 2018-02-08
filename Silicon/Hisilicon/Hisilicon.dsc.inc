@@ -254,7 +254,11 @@
 
 [PcdsFixedAtBuild.common]
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|44
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|0
+  #
+  # IO is mapped to memory space, so we use the same size of
+  # PcdPrePiCpuMemorySize
+  #
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|44
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumAsciiStringLength|1000000
   gEfiMdePkgTokenSpaceGuid.PcdMaximumLinkedListLength|1000000

@@ -161,6 +161,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+  INF ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
   INF Platform/Hisilicon/D05/Drivers/SFC/SfcDxeDriver.inf
 
   INF Platform/Hisilicon/D03/Drivers/OemNicConfig2PHi1610/OemNicConfig2P.inf
@@ -286,7 +287,7 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Silicon/Hisilicon/Hi1610/Drivers/PcieInit1610/PcieInitDxe.inf
   INF Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf
-  INF Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
   INF Platform/Hisilicon/D05/Drivers/ReportPciePlugDidVidToBmc/ReportPciePlugDidVidToBmc.inf

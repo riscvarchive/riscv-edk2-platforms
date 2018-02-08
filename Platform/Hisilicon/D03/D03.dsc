@@ -81,7 +81,11 @@
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
 
   LpcLib|Silicon/Hisilicon/Hi1610/Library/LpcLib/LpcLib.inf
+  PlatformPciLib|Platform/Hisilicon/D05/Library/PlatformPciLib/PlatformPciLib.inf
   SerialPortLib|Silicon/Hisilicon/Hi1610/Library/Uart/LpcSerialPortLib/LpcSerialPortLib.inf
+  PciHostBridgeLib|Platform/Hisilicon/Library/PciHostBridgeLib/PciHostBridgeLib.inf
+  PciSegmentLib|Silicon/Hisilicon/Hi1610/Library/Hi161xPciSegmentLib/Hi161xPciSegmentLib.inf
+  PciPlatformLib|Silicon/Hisilicon/Hi1610/Library/Hi161xPciPlatformLib/Hi161xPciPlatformLib.inf
 
 ## GIC on D02/D03 is not fully ARM GIC compatible: IRQ cannot be cancelled when
 ## input signal is de-asserted, except for virtual timer interrupt IRQ #27.
@@ -122,6 +126,7 @@
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdCoreCount|8
+  gArmTokenSpaceGuid.PcdPciIoTranslation|0
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
 
@@ -337,6 +342,7 @@
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
   Platform/Hisilicon/D03/Drivers/OemNicConfig2PHi1610/OemNicConfig2P.inf
 
   Platform/Hisilicon/D03/Drivers/SFC/SfcDxeDriver.inf
@@ -458,10 +464,12 @@
     <LibraryClasses>
       NULL|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   }
-  Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf
-  Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf {
+  Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf {
     <LibraryClasses>
-      DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf
+      NULL|Platform/Hisilicon/D05/Library/PlatformPciLib/PlatformPciLib.inf
+  }
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf {
+    <LibraryClasses>
       NULL|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   }
 
