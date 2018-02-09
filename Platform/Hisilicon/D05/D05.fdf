@@ -425,7 +425,7 @@ CERTIFICATE_GUID          = 4AAFD29D-68DF-49EE-8AA9-347D375665A7 # PKCS7
 
   FV = SystemFirmwareUpdateCargo
 
-[Capsule.StyxFirmwareUpdateCapsuleFmpPkcs7]
+[Capsule.D05FirmwareUpdateCapsuleFmpPkcs7]
 CAPSULE_GUID                = 6dcbd5ed-e82d-4c44-bda1-7194199ad92a # gEfiFmpCapsuleGuid
 CAPSULE_HEADER_SIZE         = 0x20
 CAPSULE_HEADER_INIT_VERSION = 0x1
