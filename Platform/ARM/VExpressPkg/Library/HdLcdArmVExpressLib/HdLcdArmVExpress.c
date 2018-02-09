@@ -176,7 +176,7 @@ LcdPlatformGetVram (
   }
   Status = gBS->AllocatePages (
                   AllocationType,
-                  EfiBootServicesData,
+                  EfiReservedMemoryType,
                   EFI_SIZE_TO_PAGES (((UINTN)LCD_VRAM_SIZE)),
                   VramBaseAddress
                   );
