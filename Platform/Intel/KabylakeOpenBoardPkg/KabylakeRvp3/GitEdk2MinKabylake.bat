@@ -43,8 +43,27 @@ if not exist %WORKSPACE%\Conf (
 set PACKAGES_PATH=%WORKSPACE%\edk2-platforms\Platform\Intel;%WORKSPACE%\edk2-platforms\Silicon\Intel;%WORKSPACE%\edk2-non-osi\Silicon\Intel;%WORKSPACE%\FSP;%WORKSPACE%\edk2;%WORKSPACE%
 set EDK_TOOLS_BIN=%WORKSPACE%\edk2-BaseTools-win32
 
-@REM Call edksetup.bat in the edk2 repository.
-call %WORKSPACE%\edk2\edksetup.bat
+@if not defined PYTHON_HOME (
+  @if exist C:\Python27 (
+    set PYTHON_HOME=C:\Python27
+  )
+)
+
+set EDK_SETUP_OPTION=
+@rem if python is installed, disable the binary base tools.
+if defined PYTHON_HOME (
+  set EDK_TOOLS_BIN=
+  set EDK_SETUP_OPTION=--nt32
+)
+pushd %WORKSPACE%\edk2
+call edksetup.bat %EDK_SETUP_OPTION%
+popd
+pushd %WORKSPACE%
+@rem if python is installed, nmake BaseTools source and enable BaseTools source build
+@if defined PYTHON_HOME (
+  nmake -f %BASE_TOOLS_PATH%\Makefile
+)
+popd
 
 set openssl_path=%WORKSPACE%
 

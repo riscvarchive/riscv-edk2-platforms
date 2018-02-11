@@ -109,7 +109,7 @@ goto BUILD_FLAGS_LOOP
 
 @if %SILENT_MODE% EQU TRUE goto BldSilent
 
-build -n %NUMBER_OF_PROCESSORS% %REBUILD_MODE% %EXT_BUILD_FLAGS%
+call build -n %NUMBER_OF_PROCESSORS% %REBUILD_MODE% %EXT_BUILD_FLAGS%
 
 @if %ERRORLEVEL% NEQ 0 goto BldFail
 @echo.
@@ -128,7 +128,7 @@ call %WORKSPACE_PLATFORM%\%PROJECT%\postbuild.bat %BUILD_ROM_ONLY%
 @echo ************************************************************************ >> Build.log
 @echo. >> Build.log
 
-build -n %NUMBER_OF_PROCESSORS% %REBUILD_MODE% %EXT_BUILD_FLAGS% 1>>Build.log 2>&1
+call build -n %NUMBER_OF_PROCESSORS% %REBUILD_MODE% %EXT_BUILD_FLAGS% 1>>Build.log 2>&1
 
 @if %ERRORLEVEL% NEQ 0 goto BldFail
 @echo. >> Build.log
