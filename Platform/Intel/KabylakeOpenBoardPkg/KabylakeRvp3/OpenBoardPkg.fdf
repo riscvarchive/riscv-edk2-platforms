@@ -233,6 +233,8 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = FC8FE6B5-CD9B-411E-BD8F-31824D0CDE3D
 
+INF  UefiCpuPkg/SecCore/SecCore.inf
+INF  MdeModulePkg/Core/Pei/PeiMain.inf
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CorePreMemoryInclude.fdf
 
 INF $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf
@@ -324,6 +326,14 @@ FvNameGuid         = A881D567-6CB0-4eee-8435-2E72D33E45B5
 
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CoreUefiBootInclude.fdf
 
+INF  UefiCpuPkg/CpuDxe/CpuDxe.inf
+INF  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+INF  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+INF  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+INF  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
+
 INF  ShellBinPkg/UefiShell/UefiShell.inf
 
 INF  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
@@ -378,6 +388,8 @@ READ_LOCK_STATUS   = TRUE
 FvNameGuid         = A0F04529-B715-44C6-BCA4-2DEBDD01EEEC
 
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CoreOsBootInclude.fdf
+
+INF  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
 INF  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf

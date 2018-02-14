@@ -139,3 +139,4 @@
   !endif
 
     gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
+

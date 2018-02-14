@@ -34,6 +34,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
 [PcdsFixedAtBuild.common]
+  gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode|TRUE
+
 !if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
@@ -42,6 +44,10 @@
 !if gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
 !endif
+
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuThreadCount|2
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuCoreCount|8
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
   gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000

@@ -176,6 +176,15 @@
 #
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
 
+  #
+  # FSP wrapper SEC Core
+  #
+  UefiCpuPkg/SecCore/SecCore.inf {
+    <LibraryClasses>
+      #PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+  }
+  
 #
 # Silicon
 #
@@ -230,6 +239,14 @@
 #
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
   
+  UefiCpuPkg/CpuDxe/CpuDxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
+
   ShellBinPkg/UefiShell/UefiShell.inf
 
 #
@@ -280,6 +297,9 @@
 
   $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
+
+  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
+
 !endif
 
 #

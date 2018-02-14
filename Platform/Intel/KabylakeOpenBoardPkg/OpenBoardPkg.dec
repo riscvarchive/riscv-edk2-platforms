@@ -238,11 +238,13 @@ gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize|0|UINT16|0x000000112
 # Misc
 gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent|FALSE|BOOLEAN|0x000000EC
 
-gBoardModuleTokenSpaceGuid.PcdPs2KbMsEnable|1|UINT8|0x40000009
-
+  gBoardModuleTokenSpaceGuid.PcdPs2KbMsEnable|1|UINT8|0x40000009
 
   gBoardModuleTokenSpaceGuid.PcdAcpiSleepState|1|UINT8|0x40000002
   gBoardModuleTokenSpaceGuid.PcdAcpiHibernate|1|UINT8|0x40000003
+  gBoardModuleTokenSpaceGuid.PcdLowPowerS0Idle|0|UINT8|0x40000004
+  gBoardModuleTokenSpaceGuid.PcdPciExpNative|0|UINT8|0x40000005
+  gBoardModuleTokenSpaceGuid.PcdNativeAspmEnable|1|UINT8|0x40000006
   gBoardModuleTokenSpaceGuid.PcdDisableActiveTripPoints|1|UINT8|0x4000000A
   gBoardModuleTokenSpaceGuid.PcdDisablePassiveTripPoints|0|UINT8|0x4000000B
   gBoardModuleTokenSpaceGuid.PcdDisableCriticalTripPoints|1|UINT8|0x4000000C
