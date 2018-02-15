@@ -538,4 +538,22 @@
         clock-names = "core", "iface";
         dma-coherent;
     };
+
+    clk_alw_1_8: spi_ihclk {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <125000000>;
+        clock-output-names = "iHCLK";
+    };
+
+    spi: spi@54810000 {
+        compatible = "socionext,synquacer-spi";
+        reg = <0x0 0x54810000 0x0 0x1000>;
+        clocks = <&clk_alw_1_8>;
+        clock-names = "iHCLK";
+        socionext,use-rtm;
+        socionext,set-aces;
+        #address-cells = <1>;
+        #size-cells = <0>;
+    };
 };
