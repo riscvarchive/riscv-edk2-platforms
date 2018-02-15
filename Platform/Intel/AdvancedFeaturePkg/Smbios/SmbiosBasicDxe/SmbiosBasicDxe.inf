@@ -1,0 +1,96 @@
+#
+# This file contains a 'Sample Driver' and is licensed as such
+# under the terms of your license agreement with Intel or your
+# vendor.  This file may be modified by the user, subject to
+# the additional terms of the license agreement
+#
+#
+## @file
+# Component description file for Smbios Misc module.
+#
+# Copyright (c) 2006 - 2015, Intel Corporation. All rights reserved.<BR>
+#
+#  This software and associated documentation (if any) is furnished
+#  under a license and may only be used or copied in accordance
+#  with the terms of the license. Except as permitted by such
+#  license, no part of this software or documentation may be
+#  reproduced, stored in a retrieval system, or transmitted in any
+#  form or by any means without the express written consent of
+#  Intel Corporation.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = SmbiosBasic
+  FILE_GUID                      = 03ADF4A1-A27A-45E3-B211-3177C6C2E7ED
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = SmbiosBasicEntryPoint
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]
+  SmbiosBasicEntryPoint.c
+  Type0BiosVendorFunction.c
+  Type1SystemManufacturerFunction.c
+  Type2BaseBoardManufacturerFunction.c
+  Type3ChassisManufacturerFunction.c
+  Type32BootInformationFunction.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  AdvancedFeaturePkg/AdvancedFeaturePkg.dec
+
+[LibraryClasses]
+  PcdLib
+  MemoryAllocationLib
+  DevicePathLib
+  BaseMemoryLib
+  BaseLib
+  DebugLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  HobLib
+
+[Protocols]
+  gEfiSmbiosProtocolGuid                       # PROTOCOL ALWAYS_CONSUMED
+  gEfiVariableArchProtocolGuid
+  
+[Pcd]
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType0BiosInformation
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringVendor
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosVersion
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosReleaseDate
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1SystemInformation
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringManufacturer
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringProductName
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringVersion
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringSerialNumber
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringSKUNumber
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringFamily
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2BaseBoardInformation
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringManufacturer
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringProductName
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringVersion
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringSerialNumber
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringAssetTag
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringLocationInChassis
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3SystemEnclosureChassis
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringManufacturer
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringVersion
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringSerialNumber
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringAssetTag
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringSKUNumber
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosType32SystemBootInformation
+
+[Depex]
+  gEfiSmbiosProtocolGuid            AND
+  gEfiVariableArchProtocolGuid
