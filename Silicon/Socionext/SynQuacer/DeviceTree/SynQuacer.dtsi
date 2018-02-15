@@ -556,4 +556,22 @@
         #address-cells = <1>;
         #size-cells = <0>;
     };
+
+    clk_i2c: i2c_pclk {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <62500000>;
+        clock-output-names = "pclk";
+    };
+
+    i2c: i2c@51210000 {
+        compatible = "socionext,synquacer-i2c";
+        reg = <0x0 0x51210000 0x0 0x1000>;
+        interrupts = <GIC_SPI 165 IRQ_TYPE_LEVEL_HIGH>;
+        clocks = <&clk_i2c>;
+        clock-names = "pclk";
+        clock-frequency = <400000>;
+        #address-cells = <1>;
+        #size-cells = <0>;
+    };
 };
