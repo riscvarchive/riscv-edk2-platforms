@@ -80,6 +80,7 @@
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
   I2CLib|Silicon/Hisilicon/Library/I2CLib/I2CLibRuntime.inf
+  SerialPortLib|Silicon/Hisilicon/Library/Dw8250SerialPortRuntimeLib/Dw8250SerialPortRuntimeLib.inf
 
 [BuildOptions]
   GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/Silicon/Hisilicon/Pv660/Include

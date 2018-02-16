@@ -26,6 +26,8 @@
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Platform/Hisilicon/HiKey/HiKey.fdf
 
+  DEFINE CONFIG_NO_DEBUGLIB      = TRUE
+
 [LibraryClasses.common]
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
