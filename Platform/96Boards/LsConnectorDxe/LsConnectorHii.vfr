@@ -1,0 +1,45 @@
+/** @file
+
+  Copyright (c) 2018, Linaro, Ltd. All rights reserved.
+
+  This program and the accompanying materials are licensed and made available
+  under the terms and conditions of the BSD License which accompanies this
+  distribution.  The full text of the license may be found at
+  http://opensource.org/licenses/bsd-license.php
+
+  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+**/
+
+#include "LsConnectorDxe.h"
+
+#include <Uefi/UefiMultiPhase.h>
+
+formset
+  guid      = NINETY_SIX_BOARDS_FORMSET_GUID,
+  title     = STRING_TOKEN(STR_FORM_SET_TITLE),
+  help      = STRING_TOKEN(STR_FORM_SET_TITLE_HELP),
+  classguid = EFI_HII_PLATFORM_SETUP_FORMSET_GUID,
+
+  efivarstore NINETY_SIX_BOARDS_CONFIG_DATA,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,  // EFI variable attributes
+    name  = NinetySixBoardsConfig,
+    guid  = NINETY_SIX_BOARDS_FORMSET_GUID;
+
+  form formid = 0x1000,
+    title  = STRING_TOKEN(STR_MAIN_FORM_TITLE);
+
+    oneof varid = NinetySixBoardsConfig.MezzanineType,
+        prompt      = STRING_TOKEN(STR_MEZZANINE_SELECT_PROMPT),
+        help        = STRING_TOKEN(STR_MEZZANINE_SELECT_HELP),
+        flags       = NUMERIC_SIZE_1 | INTERACTIVE | RESET_REQUIRED,
+        option text = STRING_TOKEN(STR_MEZZANINE_NONE), value = MEZZANINE_NONE, flags = DEFAULT;
+        option text = STRING_TOKEN(STR_MEZZANINE_SECURE96), value = MEZZANINE_SECURE96, flags = 0;
+    endoneof;
+
+    subtitle text = STRING_TOKEN(STR_NULL_STRING);
+
+  endform;
+
+endformset;
