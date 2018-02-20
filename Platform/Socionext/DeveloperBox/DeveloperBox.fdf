@@ -237,9 +237,18 @@ READ_LOCK_STATUS   = TRUE
   }
 
   #
+  # 96board mezzanine support
+  #
+  INF Platform/96Boards/Secure96Dxe/Secure96Dxe.inf
+  INF Platform/96Boards/96BoardsI2cDxe/96BoardsI2cDxe.inf
+  INF Silicon/Atmel/AtSha204a/AtSha204aDxe.inf
+  INF Platform/96Boards/LsConnectorDxe/LsConnectorDxe.inf
+
+  #
   # I2C
   #
   INF Silicon/Socionext/SynQuacer/Drivers/SynQuacerI2cDxe/SynQuacerI2cDxe.inf
+  INF MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
 
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16
@@ -421,6 +430,7 @@ CAPSULE_HEADER_INIT_VERSION = 0x1
     DXE_DEPEX    DXE_DEPEX              Optional $(INF_OUTPUT)/$(MODULE_NAME).depex
     PE32         PE32                   $(INF_OUTPUT)/$(MODULE_NAME).efi
     UI           STRING="$(MODULE_NAME)" Optional
+    RAW          BIN                    Optional    |.dtb
   }
 
 [Rule.Common.DXE_RUNTIME_DRIVER]

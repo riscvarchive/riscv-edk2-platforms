@@ -31,6 +31,9 @@
 [BuildOptions]
   RELEASE_*_*_CC_FLAGS  = -DMDEPKG_NDEBUG -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0
 
+  # add ample padding to the DTC so we can apply 96boards mezzanine overlays
+  *_*_*_DTC_FLAGS = -p 1024
+
 [BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
 
@@ -396,6 +399,28 @@
 !endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision|$(BUILD_NUMBER)
 
+  #
+  # 96boards mezzanine support
+  #
+  g96BoardsTokenSpaceGuid.PcdI2c0Parent|"/i2c@51210000"
+  g96BoardsTokenSpaceGuid.PcdI2c0BusFrequencyHz|100000
+  g96BoardsTokenSpaceGuid.PcdSpiParent|"/spi@54810000"
+  g96BoardsTokenSpaceGuid.PcdGpioParent|"/gpio@51000000"
+  g96BoardsTokenSpaceGuid.PcdGpioPolarity|0
+
+  g96BoardsTokenSpaceGuid.PcdGpioPinA|10
+  g96BoardsTokenSpaceGuid.PcdGpioPinB|11
+  g96BoardsTokenSpaceGuid.PcdGpioPinC|12
+  g96BoardsTokenSpaceGuid.PcdGpioPinD|13
+  g96BoardsTokenSpaceGuid.PcdGpioPinE|18
+  g96BoardsTokenSpaceGuid.PcdGpioPinF|19
+  g96BoardsTokenSpaceGuid.PcdGpioPinG|20
+  g96BoardsTokenSpaceGuid.PcdGpioPinH|21
+  g96BoardsTokenSpaceGuid.PcdGpioPinI|22
+  g96BoardsTokenSpaceGuid.PcdGpioPinJ|23
+  g96BoardsTokenSpaceGuid.PcdGpioPinK|24
+  g96BoardsTokenSpaceGuid.PcdGpioPinL|25
+
 [PcdsPatchableInModule]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|0
@@ -642,6 +667,15 @@
   SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
 
   #
+  # 96board mezzanine support
+  #
+  Platform/96Boards/Secure96Dxe/Secure96Dxe.inf
+  Silicon/Atmel/AtSha204a/AtSha204aDxe.inf
+  Platform/96Boards/96BoardsI2cDxe/96BoardsI2cDxe.inf
+  Platform/96Boards/LsConnectorDxe/LsConnectorDxe.inf
+
+  #
   # I2C
   #
   Silicon/Socionext/SynQuacer/Drivers/SynQuacerI2cDxe/SynQuacerI2cDxe.inf
+  MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf

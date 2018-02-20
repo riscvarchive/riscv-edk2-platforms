@@ -34,6 +34,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/96Boards/96Boards.dec
   Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.dec
   Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.dec
   Silicon/Socionext/SynQuacer/SynQuacer.dec
@@ -56,6 +57,7 @@
   UefiRuntimeServicesTableLib
 
 [Guids]
+  g96BoardsI2c0MasterGuid
   gEfiHiiPlatformSetupFormsetGuid
   gFdtTableGuid
   gNetsecNonDiscoverableDeviceGuid

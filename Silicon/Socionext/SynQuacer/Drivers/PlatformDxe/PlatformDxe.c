@@ -313,6 +313,15 @@ PlatformDxeEntryPoint (
              &Handle);
   ASSERT_EFI_ERROR (Status);
 
+  //
+  // Install the g96BoardsI2c0MasterGuid GUID onto the same handle,
+  // identifying I2C #1 on our SoC as I2C #0 on the 96boards low speed connector
+  //
+  Status = gBS->InstallProtocolInterface (&Handle,
+                  &g96BoardsI2c0MasterGuid,
+                  EFI_NATIVE_INTERFACE, NULL);
+  ASSERT_EFI_ERROR (Status);
+
   SmmuEnableCoherentDma ();
   SetMmioTimerFrequency ();
 
