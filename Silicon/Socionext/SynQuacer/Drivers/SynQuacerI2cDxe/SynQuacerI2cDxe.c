@@ -324,7 +324,7 @@ SynQuacerI2cStartRequest (
 
     Status = SynQuacerI2cMasterStart (I2c, SlaveAddress, Op);
     if (EFI_ERROR (Status)) {
-      return Status;
+      break;
     }
 
     Status = WaitForInterrupt (I2c);
@@ -397,7 +397,7 @@ SynQuacerI2cStartRequest (
     } while (BufIdx < Op->LengthInBytes);
   }
 
-  // Stop the transfer
+  // Force bus state to idle, terminating any ongoing transfer
   MmioWrite8 (I2c->MmioBase + F_I2C_REG_BCR, 0);
 
   if (!AtRuntime) {
