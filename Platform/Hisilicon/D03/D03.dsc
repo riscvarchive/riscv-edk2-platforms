@@ -460,7 +460,7 @@
   Platform/Hisilicon/D03/Drivers/PciPlatform/PciPlatform.inf
   Silicon/Hisilicon/Drivers/PciHostBridgeDxe/PciHostBridgeDxe.inf {
     <LibraryClasses>
-      DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
+      DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf
       NULL|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   }
 
