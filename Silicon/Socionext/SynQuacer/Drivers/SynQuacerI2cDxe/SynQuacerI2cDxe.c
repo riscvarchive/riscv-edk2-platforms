@@ -13,8 +13,6 @@
 
 #include "SynQuacerI2cDxe.h"
 
-#define BOOTTIME_DEBUG(x)       do { if (!EfiAtRuntime()) DEBUG (x); } while (0)
-
 //
 // We cannot use Stall () or timer events at runtime, so we need to busy-wait
 // for the controller to signal the completion interrupts. This value was
@@ -168,27 +166,27 @@ SynQuacerI2cMasterStart (
     MmioWrite8 (I2c->MmioBase + F_I2C_REG_DAR, SlaveAddress << 1);
   }
 
-  BOOTTIME_DEBUG ((DEBUG_INFO, "%a: slave:0x%02x\n", __FUNCTION__,
+  DEBUG ((DEBUG_INFO, "%a: slave:0x%02x\n", __FUNCTION__,
     SlaveAddress));
 
   Bsr = MmioRead8 (I2c->MmioBase + F_I2C_REG_BSR);
   Bcr = MmioRead8 (I2c->MmioBase + F_I2C_REG_BCR);
 
   if ((Bsr & F_I2C_BSR_BB) && !(Bcr & F_I2C_BCR_MSS)) {
-    BOOTTIME_DEBUG ((DEBUG_INFO, "%a: bus is busy\n", __FUNCTION__));
+    DEBUG ((DEBUG_INFO, "%a: bus is busy\n", __FUNCTION__));
     return EFI_ALREADY_STARTED;
   }
 
   if (Bsr & F_I2C_BSR_BB) { // Bus is busy
-    BOOTTIME_DEBUG ((DEBUG_INFO, "%a: Continuous Start\n", __FUNCTION__));
+    DEBUG ((DEBUG_INFO, "%a: Continuous Start\n", __FUNCTION__));
     MmioWrite8 (I2c->MmioBase + F_I2C_REG_BCR, Bcr | F_I2C_BCR_SCC);
   } else {
     if (Bcr & F_I2C_BCR_MSS) {
-      BOOTTIME_DEBUG ((DEBUG_WARN,
+      DEBUG ((DEBUG_WARN,
         "%a: is not in master mode\n", __FUNCTION__));
       return EFI_DEVICE_ERROR;
     }
-    BOOTTIME_DEBUG ((DEBUG_INFO, "%a: Start Condition\n", __FUNCTION__));
+    DEBUG ((DEBUG_INFO, "%a: Start Condition\n", __FUNCTION__));
     MmioWrite8 (I2c->MmioBase + F_I2C_REG_BCR,
                 Bcr | F_I2C_BCR_MSS | F_I2C_BCR_INTE | F_I2C_BCR_BEIE);
   }
@@ -329,13 +327,13 @@ SynQuacerI2cStartRequest (
 
     Status = WaitForInterrupt (I2c);
     if (EFI_ERROR (Status)) {
-        BOOTTIME_DEBUG ((DEBUG_WARN, "%a: Timeout waiting for interrupt - %r\n",
+        DEBUG ((DEBUG_WARN, "%a: Timeout waiting for interrupt - %r\n",
           __FUNCTION__, Status));
       break;
     }
 
     if (MmioRead8 (I2c->MmioBase + F_I2C_REG_BSR) & F_I2C_BSR_LRB) {
-      BOOTTIME_DEBUG ((DEBUG_WARN, "%a: No ack received\n", __FUNCTION__));
+      DEBUG ((DEBUG_WARN, "%a: No ack received\n", __FUNCTION__));
       Status = EFI_DEVICE_ERROR;
       break;
     }
@@ -346,13 +344,13 @@ SynQuacerI2cStartRequest (
       Bcr = MmioRead8 (I2c->MmioBase + F_I2C_REG_BCR);
 
       if (Bcr & F_I2C_BCR_BER) {
-        BOOTTIME_DEBUG ((DEBUG_WARN, "%a: Bus error detected\n", __FUNCTION__));
+        DEBUG ((DEBUG_WARN, "%a: Bus error detected\n", __FUNCTION__));
         Status = EFI_DEVICE_ERROR;
         break;
       }
 
       if ((Bsr & F_I2C_BSR_AL) || !(Bcr & F_I2C_BCR_MSS)) {
-        BOOTTIME_DEBUG ((DEBUG_WARN, "%a: Arbitration lost\n", __FUNCTION__));
+        DEBUG ((DEBUG_WARN, "%a: Arbitration lost\n", __FUNCTION__));
         Status = EFI_DEVICE_ERROR;
         break;
       }
@@ -368,7 +366,7 @@ SynQuacerI2cStartRequest (
 
         Status = WaitForInterrupt (I2c);
         if (EFI_ERROR (Status)) {
-          BOOTTIME_DEBUG ((DEBUG_WARN,
+          DEBUG ((DEBUG_WARN,
             "%a: Timeout waiting for interrupt - %r\n", __FUNCTION__, Status));
           break;
         }
@@ -383,13 +381,13 @@ SynQuacerI2cStartRequest (
 
         Status = WaitForInterrupt (I2c);
         if (EFI_ERROR (Status)) {
-          BOOTTIME_DEBUG ((DEBUG_WARN,
+          DEBUG ((DEBUG_WARN,
             "%a: Timeout waiting for interrupt - %r\n", __FUNCTION__, Status));
           break;
         }
 
         if (MmioRead8 (I2c->MmioBase + F_I2C_REG_BSR) & F_I2C_BSR_LRB) {
-          BOOTTIME_DEBUG ((DEBUG_WARN, "%a: No ack received\n", __FUNCTION__));
+          DEBUG ((DEBUG_WARN, "%a: No ack received\n", __FUNCTION__));
           Status = EFI_DEVICE_ERROR;
           break;
         }
@@ -486,7 +484,7 @@ SynQuacerI2cInit (
                     Dev->Resources[0].AddrLen,
                     EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
     if (EFI_ERROR (Status)) {
-      BOOTTIME_DEBUG ((DEBUG_WARN, "%a: failed to add memory space - %r\n",
+      DEBUG ((DEBUG_WARN, "%a: failed to add memory space - %r\n",
         __FUNCTION__, Status));
     }
 
