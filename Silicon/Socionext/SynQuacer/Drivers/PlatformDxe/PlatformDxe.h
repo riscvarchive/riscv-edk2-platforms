@@ -24,6 +24,7 @@
 #include <Library/DebugLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/DtPlatformDtbLoaderLib.h>
+#include <Library/DxeServicesLib.h>
 #include <Library/HiiLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
@@ -35,9 +36,12 @@
 #include <Platform/MemoryMap.h>
 #include <Platform/Pcie.h>
 #include <Platform/VarStore.h>
+#include <Protocol/AcpiTable.h>
 #include <Protocol/NonDiscoverableDevice.h>
 #include <Protocol/PciIo.h>
 #include <Protocol/SdMmcOverride.h>
+
+#define EMMC_TABLE_ID     SIGNATURE_64('S','y','n','Q','e','M','M','C')
 
 extern UINT8                             PlatformDxeHiiBin[];
 extern UINT8                             PlatformDxeStrings[];

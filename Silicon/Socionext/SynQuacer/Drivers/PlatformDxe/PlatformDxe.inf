@@ -23,6 +23,7 @@
   ENTRY_POINT                    = PlatformDxeEntryPoint
 
 [Sources]
+  Emmc.asl
   Emmc.c
   Pci.c
   PlatformDxe.c
@@ -46,6 +47,7 @@
   DebugLib
   DevicePathLib
   DtPlatformDtbLoaderLib
+  DxeServicesLib
   HiiLib
   IoLib
   MemoryAllocationLib
@@ -69,10 +71,12 @@
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid         ## PRODUCES
   gEdkiiSdMmcOverrideProtocolGuid                 ## PRODUCES
+  gEfiAcpiTableProtocolGuid                       ## CONSUMES
   gEfiPciIoProtocolGuid                           ## CONSUMES
   gPcf8563RealTimeClockLibI2cMasterProtocolGuid   ## PRODUCES
 
 [FixedPcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemRevision
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
   gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress
 

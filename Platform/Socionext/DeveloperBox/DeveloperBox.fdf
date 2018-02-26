@@ -441,6 +441,7 @@ CAPSULE_HEADER_INIT_VERSION = 0x1
     PE32         PE32                   $(INF_OUTPUT)/$(MODULE_NAME).efi
     UI           STRING="$(MODULE_NAME)" Optional
     RAW          BIN                    Optional    |.dtb
+    RAW          ASL                    Optional    |.aml
   }
 
 [Rule.Common.DXE_RUNTIME_DRIVER]
