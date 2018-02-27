@@ -50,8 +50,11 @@ NumBlocks     = 0x28
 #
 ################################################################################
 
-0x00000000|0x00080000
+0x00000000|0x00078000
 FILE = Platform/Socionext/DeveloperBox/fip_all_arm_tf.bin
+
+0x00078000|0x00008000
+FILE = $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/$(ARCH)/Silicon/Socionext/SynQuacer/Stage2Tables/Stage2Tables/OUTPUT/Stage2Tables.bin
 
 0x00080000|0x00200000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize

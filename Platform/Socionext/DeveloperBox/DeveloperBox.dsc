@@ -578,6 +578,7 @@
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
   MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
+  Silicon/Socionext/SynQuacer/Stage2Tables/Stage2Tables.inf
 
   #
   # eMMC support

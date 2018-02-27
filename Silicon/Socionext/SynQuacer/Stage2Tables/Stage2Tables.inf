@@ -1,0 +1,31 @@
+## @file
+#
+#  Copyright (c) 2018, Linaro, Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Stage2Tables
+  FILE_GUID                      = e11cbca5-8f82-41a7-8441-02b48acc13a7
+  MODULE_TYPE                    = USER_DEFINED
+  VERSION_STRING                 = 1.0
+  CUSTOM_MAKEFILE                = GCC|GNUmakefile
+
+[Sources]
+  Stage2Tables.S
+
+[BuildOptions]
+  *_*_*_OBJCOPY_PATH == objcopy
+  *_*_*_OBJCOPY_FLAGS == -I elf64-little -O binary -j .rodata
+  *_*_*_ASM_FLAGS == -nostdlib -Wl,-e,0x81f8000,--section-start=.rodata=0x81f8000
+  *_CLANG35_*_ASM_FLAGS = -no-integrated-as
+  *_CLANG38_*_ASM_FLAGS = -no-integrated-as
