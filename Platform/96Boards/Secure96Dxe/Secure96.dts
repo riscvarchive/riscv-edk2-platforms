@@ -22,7 +22,6 @@
 #define GPIO_PARENT_PLACEHOLDER_PHANDLE     0x0
 
 /dts-v1/;
-/plugin/;
 
 / {
     fragment@0 {
