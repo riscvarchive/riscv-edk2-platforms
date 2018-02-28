@@ -31,6 +31,26 @@ DefinitionBlock ("SsdtPci.aml", "SSDT", 1, "SNI", "SYNQUACR",
         Name (_BBN, Zero)                // PCI Base Bus Number
         Name (_CCA, 1)                   // Cache Coherency Attribute
 
+        OperationRegion (BDF1, SystemMemory, SYNQUACER_PCI_SEG0_CONFIG_BASE, 0x10000)
+        Field (BDF1, DWordAcc, NoLock, Preserve) {
+            Offset (0x8000),
+            VPID, 16,
+        }
+
+        Method (_STA, 0x0, Serialized) {
+            //
+            // Check whether the VID/PID of device #1 on bus #0 equals 0xffff.
+            // If this is not the case, we are dealing with a ghost device,
+            // which means we are running with outdated SCP firmware and we
+            // should keep this PCIe RC disabled.
+            //
+            Store (VPID, local1)
+            If (!LEqual (local1, 0xffff)) {
+                Return (0x0)
+            }
+            Return (0xf)
+        }
+
         // PCI Routing Table
         Name (_PRT, Package () {
             Package () { 0xFFFF, 0, Zero, 222 },   // INTA
@@ -148,6 +168,26 @@ DefinitionBlock ("SsdtPci.aml", "SSDT", 1, "SNI", "SYNQUACR",
         Name (_SEG, 1)                   // PCI Segment Group number
         Name (_BBN, Zero)                // PCI Base Bus Number
         Name (_CCA, 1)                   // Cache Coherency Attribute
+
+        OperationRegion (BDF1, SystemMemory, SYNQUACER_PCI_SEG1_CONFIG_BASE, 0x10000)
+        Field (BDF1, DWordAcc, NoLock, Preserve) {
+            Offset (0x8000),
+            VPID, 16,
+        }
+
+        Method (_STA, 0x0, Serialized) {
+            //
+            // Check whether the VID/PID of device #1 on bus #0 equals 0xffff.
+            // If this is not the case, we are dealing with a ghost device,
+            // which means we are running with outdated SCP firmware and we
+            // should keep this PCIe RC disabled.
+            //
+            Store (VPID, local1)
+            If (!LEqual (local1, 0xffff)) {
+                Return (0x0)
+            }
+            Return (0xf)
+        }
 
         // PCI Routing Table
         Name (_PRT, Package () {
