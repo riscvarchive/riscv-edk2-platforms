@@ -62,3 +62,4 @@
 
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
   gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress
+  gSynQuacerTokenSpaceGuid.PcdPcie0PresenceDetectGpioPin

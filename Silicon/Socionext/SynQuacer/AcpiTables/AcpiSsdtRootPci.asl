@@ -14,6 +14,7 @@
 
 **/
 
+#include <Platform/MemoryMap.h>
 #include <Platform/Pcie.h>
 
 #include "AcpiTables.h"
@@ -37,7 +38,21 @@ DefinitionBlock ("SsdtPci.aml", "SSDT", 1, "SNI", "SYNQUACR",
             VPID, 16,
         }
 
+        OperationRegion (GPIO, SystemMemory, SYNQUACER_GPIO_BASE, 8)
+        Field (GPIO, DWordAcc, NoLock, Preserve) {
+          , 39,
+          PRDT, 1,
+          , 24,
+        }
+
         Method (_STA, 0x0, Serialized) {
+            If (!LEqual (FixedPcdGet8 (PcdPcie0PresenceDetectGpioPin), 0xff)) {
+                Store (PRDT, local0)
+                If (!LEqual (local0, 0x0)) {
+                    Return (0x0)
+                }
+            }
+
             //
             // Check whether the VID/PID of device #1 on bus #0 equals 0xffff.
             // If this is not the case, we are dealing with a ghost device,
