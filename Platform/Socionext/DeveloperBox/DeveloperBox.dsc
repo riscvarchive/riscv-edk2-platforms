@@ -685,3 +685,16 @@
   MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
 
 !include Silicon/Socionext/SynQuacer/Acpi.dsc.inc
+
+  #
+  # SMBIOS/DMI support
+  #
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf {
+    <PcdsFixedAtBuild>
+      # expose SMBIOS 3.0 64-bit entrypoint only
+      gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosEntryPointProvideMethod|0x2
+  }
+  Platform/Socionext/DeveloperBox/SmbiosPlatformDxe/SmbiosPlatformDxe.inf {
+    <BuildOptions>
+      *_*_*_CC_FLAGS = -DFIRMWARE_VENDOR=\"$(FIRMWARE_VENDOR)\" -DBUILD_NUMBER=\"$(BUILD_NUMBER)\"
+  }

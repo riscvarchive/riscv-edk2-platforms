@@ -260,6 +260,12 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   INF RuleOverride = ACPITABLE Silicon/Socionext/SynQuacer/AcpiTables/AcpiTables.inf
 
+  #
+  # SMBIOS/DMI support
+  #
+  INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  INF Platform/Socionext/DeveloperBox/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
+
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16
 BlockSize          = 0x10000
