@@ -99,8 +99,15 @@
   UefiCpuLib|UefiCpuPkg/Library/BaseUefiCpuLib/BaseUefiCpuLib.inf
 
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+  ReportStatusCodeLib|MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull.inf  
 
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+
+  TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
+
+  IpmiPlatformHookLib|AdvancedFeaturePkg/Ipmi/Library/IpmiPlatformHookLibNull/IpmiPlatformHookLibNull.inf
+  IpmiLib|AdvancedFeaturePkg/Ipmi/Library/IpmiLibNull/IpmiLibNull.inf
+  IpmiCommandLib|AdvancedFeaturePkg/Ipmi/Library/IpmiCommandLib/IpmiCommandLib.inf
 
 [LibraryClasses.common.SEC,LibraryClasses.common.PEI_CORE,LibraryClasses.common.PEIM]
   PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
@@ -111,6 +118,9 @@
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+
+[LibraryClasses.common.DXE_SMM_DRIVER,LibraryClasses.common.SMM_CORE]
+  SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
 
 ###################################################################################################
 #
@@ -134,3 +144,14 @@
 [Components]
 
   AdvancedFeaturePkg/Smbios/SmbiosBasicDxe/SmbiosBasicDxe.inf
+
+  AdvancedFeaturePkg/Ipmi/IpmiInit/PeiIpmiInit.inf
+  AdvancedFeaturePkg/Ipmi/IpmiInit/DxeIpmiInit.inf
+  AdvancedFeaturePkg/Ipmi/Frb/FrbPei.inf
+  AdvancedFeaturePkg/Ipmi/Frb/FrbDxe.inf
+  AdvancedFeaturePkg/Ipmi/OsWdt/OsWdt.inf
+  AdvancedFeaturePkg/Ipmi/SolStatus/SolStatus.inf
+  AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
+  AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
+  AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
+
