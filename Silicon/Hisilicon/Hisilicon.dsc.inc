@@ -249,7 +249,7 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
-  gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|TRUE
+  gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|FALSE
 
 [PcdsFixedAtBuild.common]
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|44
