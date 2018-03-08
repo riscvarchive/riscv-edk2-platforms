@@ -28,6 +28,7 @@ EFI_ACPI_DESCRIPTION_HEADER *Dbg2Header (void);
 EFI_ACPI_DESCRIPTION_HEADER *SpcrHeader (void);
 EFI_ACPI_DESCRIPTION_HEADER *CsrtHeader (void);
 EFI_ACPI_DESCRIPTION_HEADER *IortHeader (void);
+EFI_ACPI_DESCRIPTION_HEADER *PpttHeader (void);
 
 #define EFI_ACPI_AMD_OEM_ID_ARRAY        {'A','M','D','I','N','C'}
 #define EFI_ACPI_AMD_OEM_TABLE_ID        SIGNATURE_64('S','E','A','T','T','L','E',' ')

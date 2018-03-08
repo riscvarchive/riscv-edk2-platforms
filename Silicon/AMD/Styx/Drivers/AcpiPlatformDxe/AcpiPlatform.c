@@ -27,7 +27,7 @@
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#define MAX_ACPI_TABLES    12
+#define MAX_ACPI_TABLES    16
 
 EFI_ACPI_DESCRIPTION_HEADER *AcpiTableList[MAX_ACPI_TABLES];
 
@@ -69,6 +69,7 @@ AcpiPlatformEntryPoint (
   if (PcdGetBool (PcdEnableSmmus)) {
     AcpiTableList[TableIndex++] = IortHeader();
   }
+  AcpiTableList[TableIndex++] = PpttHeader();
   AcpiTableList[TableIndex++] = NULL;
 
   DEBUG((DEBUG_INFO, "%a(): ACPI Table installer\n", __FUNCTION__));
