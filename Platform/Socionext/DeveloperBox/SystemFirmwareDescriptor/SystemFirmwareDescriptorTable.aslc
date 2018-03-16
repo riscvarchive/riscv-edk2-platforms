@@ -25,7 +25,7 @@
 #define BUILD_STRING(x)                     L"build #" __BUILD_STRING(x)
 #define CURRENT_FIRMWARE_VERSION            FixedPcdGet32 (PcdFirmwareRevision)
 #define CURRENT_FIRMWARE_VERSION_STRING     BUILD_STRING (FixedPcdGet32 (PcdFirmwareRevision))
-#define LOWEST_SUPPORTED_FIRMWARE_VERSION   0x00000001
+#define LOWEST_SUPPORTED_FIRMWARE_VERSION   FixedPcdGet32 (PcdLowestSupportedFirmwareVersion)
 
 #define IMAGE_ID                            SIGNATURE_64('S', 'N', 'D', 'E', 'V', 'B', 'O', 'X')
 #define IMAGE_ID_STRING                     L"Socionext Developer Box"

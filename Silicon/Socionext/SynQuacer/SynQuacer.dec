@@ -44,6 +44,9 @@
 
   gSynQuacerTokenSpaceGuid.PcdI2cReferenceClock|62500000|UINT32|0x00000005
 
+  # for capsule update
+  gSynQuacerTokenSpaceGuid.PcdLowestSupportedFirmwareVersion|1|UINT32|0x00000009
+
 [PcdsPatchableInModule, PcdsDynamic]
   # Enable both RC #0 and RC #1 by default
   gSynQuacerTokenSpaceGuid.PcdPcieEnableMask|0x3|UINT8|0x00000007

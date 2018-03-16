@@ -39,6 +39,7 @@
 [FixedPcd]
   gArmTokenSpaceGuid.PcdFdSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision
+  gEfiSignedCapsulePkgTokenSpaceGuid.PcdLowestSupportedFirmwareVersion
 
 [Pcd]
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor
