@@ -116,6 +116,35 @@ GetFvbByAddress (
 }
 
 /**
+  Check whether a buffer has any data in it, i.e., bytes with value != 0xff
+
+  @param[in] Buffer       Address of the buffer
+  @param[in] Length       Size of the buffer
+
+  @retval TRUE            A non-0xff byte was found
+  @retval FALSE           Buffer has 0xff bytes only
+
+**/
+STATIC
+BOOLEAN
+BufferHasData (
+  IN  VOID      *Buffer,
+  IN  UINTN     Length
+  )
+{
+  UINT8   *Data;
+  UINTN   Index;
+
+  Data = Buffer;
+  for (Index = 0; Index < Length; Index++) {
+    if (Data[Index] != 0xff) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
   Perform flash write operation.
 
   @param[in] FirmwareType      The type of firmware.
@@ -257,11 +286,13 @@ PerformFlashWrite (
       __FUNCTION__, BlockSize, Lba));
 
     NumBytes = BlockSize;
-    Status = Fvb->Write (Fvb, Lba, 0, &NumBytes, Buffer);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR,
-        "%a: write of LBA 0x%lx failed - %r (NumBytes == 0x%lx)\n",
-        __FUNCTION__, Lba, Status, NumBytes));
+    if (BufferHasData (Buffer, NumBytes)) {
+      Status = Fvb->Write (Fvb, Lba, 0, &NumBytes, Buffer);
+      if (EFI_ERROR (Status)) {
+        DEBUG ((DEBUG_ERROR,
+          "%a: write of LBA 0x%lx failed - %r (NumBytes == 0x%lx)\n",
+          __FUNCTION__, Lba, Status, NumBytes));
+      }
     }
 
     if (HaveBootGraphics) {
