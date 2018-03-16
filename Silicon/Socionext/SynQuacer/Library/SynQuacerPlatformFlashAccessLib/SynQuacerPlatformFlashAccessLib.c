@@ -53,7 +53,6 @@ GetFvbByAddress (
   UINTN                               HandleCount;
   UINTN                               Index;
   EFI_FIRMWARE_VOLUME_BLOCK_PROTOCOL  *Fvb;
-  EFI_FIRMWARE_VOLUME_HEADER          *FwVolHeader;
   EFI_FVB_ATTRIBUTES_2                Attributes;
 
   //
@@ -103,8 +102,7 @@ GetFvbByAddress (
       continue;
     }
 
-    FwVolHeader = (EFI_FIRMWARE_VOLUME_HEADER *) ((UINTN) *FvbBaseAddress);
-    if ((Address >= *FvbBaseAddress) && (Address <= (*FvbBaseAddress + FwVolHeader->FvLength))) {
+    if (Address == *FvbBaseAddress) {
       *OutFvb  = Fvb;
       Status   = EFI_SUCCESS;
       break;
