@@ -99,6 +99,7 @@ GetFvbByAddress (
       DEBUG ((DEBUG_INFO,
         "%a: ignoring read-only FVB protocol implementation\n",
         __FUNCTION__));
+      Status = EFI_NOT_FOUND;
       continue;
     }
 
