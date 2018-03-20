@@ -194,8 +194,6 @@ typedef struct {
   UINT64          Ecam;
   UINT64          BusBase;
   UINT64          BusLimit;
-  UINT64          MemBase;
-  UINT64          MemLimit;
   UINT64          IoBase;
   UINT64          IoLimit;
   UINT64          CpuMemRegionBase;
