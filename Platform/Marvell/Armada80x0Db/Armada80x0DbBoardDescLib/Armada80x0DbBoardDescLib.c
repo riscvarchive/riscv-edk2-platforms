@@ -19,7 +19,37 @@
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/MvGpioLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+
+//
+// GPIO Expanders
+//
+STATIC MV_GPIO_EXPANDER mGpioExpanders[] = {
+  {
+    PCA9555_ID,
+    0x21,
+    0x0,
+  },
+  {
+    PCA9555_ID,
+    0x25,
+    0x0,
+  },
+};
+
+EFI_STATUS
+EFIAPI
+ArmadaBoardGpioExpanderGet (
+  IN OUT MV_GPIO_EXPANDER **GpioExpanders,
+  IN OUT UINTN             *GpioExpanderCount
+  )
+{
+  *GpioExpanderCount = ARRAY_SIZE (mGpioExpanders);
+  *GpioExpanders = mGpioExpanders;
+
+  return EFI_SUCCESS;
+}
 
 //
 // Order of devices in SdMmcDescTemplate has to be in par with ArmadaSoCDescLib
