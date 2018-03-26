@@ -127,19 +127,6 @@ typedef struct {
 } MVHW_RTC_DESC;
 
 //
-// UTMI PHY's description template definition
-//
-
-typedef struct {
-  UINT8 UtmiDevCount;
-  UINT32 UtmiPhyId[MVHW_MAX_XHCI_DEVS];
-  UINTN UtmiBaseAddresses[MVHW_MAX_XHCI_DEVS];
-  UINTN UtmiConfigAddresses[MVHW_MAX_XHCI_DEVS];
-  UINTN UtmiUsbConfigAddresses[MVHW_MAX_XHCI_DEVS];
-  UINTN UtmiMuxBitCount[MVHW_MAX_XHCI_DEVS];
-} MVHW_UTMI_DESC;
-
-//
 // Platform description of CommonPhy devices
 //
 #define MVHW_CP0_COMPHY_BASE       0xF2441000
@@ -251,40 +238,6 @@ MVHW_RTC_DESC mA7k8kRtcDescTemplate = {\
   2,\
   { MVHW_CP0_RTC0_BASE, MVHW_CP1_RTC0_BASE },\
   { SIZE_4KB, SIZE_4KB }\
-}
-
-//
-// Platform description of UTMI PHY's
-//
-#define MVHW_CP0_UTMI0_BASE            0xF2580000
-#define MVHW_CP0_UTMI0_CFG_BASE        0xF2440440
-#define MVHW_CP0_UTMI0_USB_CFG_BASE    0xF2440420
-#define MVHW_CP0_UTMI0_ID              0x0
-#define MVHW_CP0_UTMI1_BASE            0xF2581000
-#define MVHW_CP0_UTMI1_CFG_BASE        0xF2440444
-#define MVHW_CP0_UTMI1_USB_CFG_BASE    0xF2440420
-#define MVHW_CP0_UTMI1_ID              0x1
-#define MVHW_CP1_UTMI0_BASE            0xF4580000
-#define MVHW_CP1_UTMI0_CFG_BASE        0xF4440440
-#define MVHW_CP1_UTMI0_USB_CFG_BASE    0xF4440420
-#define MVHW_CP1_UTMI0_ID              0x0
-#define MVHW_CP1_UTMI1_BASE            0xF4581000
-#define MVHW_CP1_UTMI1_CFG_BASE        0xF4440444
-#define MVHW_CP1_UTMI1_USB_CFG_BASE    0xF4440420
-#define MVHW_CP1_UTMI1_ID              0x1
-
-#define DECLARE_A7K8K_UTMI_TEMPLATE \
-STATIC \
-MVHW_UTMI_DESC mA7k8kUtmiDescTemplate = {\
-  4,\
-  { MVHW_CP0_UTMI0_ID, MVHW_CP0_UTMI1_ID,\
-    MVHW_CP1_UTMI0_ID, MVHW_CP1_UTMI1_ID },\
-  { MVHW_CP0_UTMI0_BASE, MVHW_CP0_UTMI1_BASE,\
-    MVHW_CP1_UTMI0_BASE, MVHW_CP1_UTMI1_BASE },\
-  { MVHW_CP0_UTMI0_CFG_BASE, MVHW_CP0_UTMI1_CFG_BASE,\
-    MVHW_CP1_UTMI0_CFG_BASE, MVHW_CP1_UTMI1_CFG_BASE },\
-  { MVHW_CP0_UTMI0_USB_CFG_BASE, MVHW_CP0_UTMI1_USB_CFG_BASE,\
-    MVHW_CP1_UTMI0_USB_CFG_BASE, MVHW_CP1_UTMI1_USB_CFG_BASE }\
 }
 
 #endif /* __MVHWDESCLIB_H__ */

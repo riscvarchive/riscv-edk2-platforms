@@ -51,11 +51,10 @@
   IoLib
   MemoryAllocationLib
   PcdLib
+  UefiBootServicesTableLib
+
+[Protocols]
+  gMarvellBoardDescProtocolGuid  ## CONSUMES
 
 [Sources.common]
   UtmiPhyLib.c
-
-[Pcd]
-  gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled
-  gMarvellTokenSpaceGuid.PcdUtmiPortType
-  gMarvellTokenSpaceGuid.PcdPciEXhci

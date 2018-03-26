@@ -51,7 +51,6 @@
   DebugLib
   MemoryAllocationLib
   MppLib
-  UtmiPhyLib
 
 [Sources.common]
   Armada7k8kLib.c

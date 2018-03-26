@@ -33,9 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #include "UtmiPhyLib.h"
-#include <Library/MvHwDescLib.h>
-
-DECLARE_A7K8K_UTMI_TEMPLATE;
 
 typedef struct {
   EFI_PHYSICAL_ADDRESS UtmiBaseAddr;
@@ -288,67 +285,47 @@ UtmiPhyInit (
   VOID
   )
 {
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_UTMI_DESC *BoardDesc;
   UTMI_PHY_DATA UtmiData;
-  UINT8 *UtmiDeviceTable, *XhciDeviceTable, *UtmiPortType, Index;
-  MVHW_UTMI_DESC *Desc = &mA7k8kUtmiDescTemplate;
+  EFI_STATUS Status;
+  UINTN Index;
 
-  /* Obtain table with enabled Utmi PHY's*/
-  UtmiDeviceTable = (UINT8 *)PcdGetPtr (PcdUtmiControllersEnabled);
-  if (UtmiDeviceTable == NULL) {
-    /* No UTMI PHY on platform */
-    return EFI_SUCCESS;
+  /* Obtain board description */
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
-  if (PcdGetSize (PcdUtmiControllersEnabled) > MVHW_MAX_XHCI_DEVS) {
-    DEBUG ((DEBUG_ERROR, "UTMI: Wrong PcdUtmiControllersEnabled format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  /* Make sure XHCI controllers table is present */
-  XhciDeviceTable = (UINT8 *)PcdGetPtr (PcdPciEXhci);
-  if (XhciDeviceTable == NULL) {
-    DEBUG ((DEBUG_ERROR, "UTMI: Missing PcdPciEXhci\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  /* Obtain port type table */
-  UtmiPortType = (UINT8 *)PcdGetPtr (PcdUtmiPortType);
-  if (UtmiPortType == NULL ||
-      PcdGetSize (PcdUtmiPortType) != PcdGetSize (PcdUtmiControllersEnabled)) {
-    DEBUG ((DEBUG_ERROR, "UTMI: Wrong PcdUtmiPortType format\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = BoardDescProtocol->BoardDescUtmiGet (BoardDescProtocol, &BoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
   /* Initialize enabled chips */
-  for (Index = 0; Index < PcdGetSize (PcdUtmiControllersEnabled); Index++) {
-    if (!MVHW_DEV_ENABLED (Utmi, Index)) {
-      continue;
-    }
-
-    /* UTMI PHY without enabled XHCI controller is useless */
-    if (!MVHW_DEV_ENABLED (Xhci, Index)) {
-      DEBUG ((DEBUG_ERROR, "UTMI: Disabled Xhci controller %d\n", Index));
-      return EFI_INVALID_PARAMETER;
-    }
-
+  for (Index = 0; Index < BoardDesc->UtmiDevCount; Index++) {
     /* Get base address of UTMI phy */
-    UtmiData.UtmiBaseAddr = Desc->UtmiBaseAddresses[Index];
+    UtmiData.UtmiBaseAddr = BoardDesc[Index].SoC->UtmiBaseAddress;
 
     /* Get usb config address */
-    UtmiData.UsbCfgAddr = Desc->UtmiUsbConfigAddresses[Index];
+    UtmiData.UsbCfgAddr = BoardDesc[Index].SoC->UsbConfigAddress;
 
     /* Get UTMI config address */
-    UtmiData.UtmiCfgAddr = Desc->UtmiConfigAddresses[Index];
+    UtmiData.UtmiCfgAddr = BoardDesc[Index].SoC->UtmiConfigAddress;
 
     /* Get UTMI PHY ID */
-    UtmiData.PhyId = Desc->UtmiPhyId[Index];
+    UtmiData.PhyId = BoardDesc[Index].SoC->UtmiPhyId;
 
     /* Get the usb port type */
-    UtmiData.UtmiPhyPort = UtmiPortType[Index];
+    UtmiData.UtmiPhyPort = BoardDesc[Index].UtmiPortType;
 
     /* Currently only Cp110 is supported */
     Cp110UtmiPhyInit (&UtmiData);
   }
+
+  BoardDescProtocol->BoardDescFree (BoardDesc);
 
   return EFI_SUCCESS;
 }
