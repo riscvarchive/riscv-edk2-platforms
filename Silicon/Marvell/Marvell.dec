@@ -60,6 +60,7 @@
   gMarvellSpiFlashDxeGuid = { 0x49d7fb74, 0x306d, 0x42bd, { 0x94, 0xc8, 0xc0, 0xc5, 0x4b, 0x18, 0x1d, 0xd7 } }
 
 [LibraryClasses]
+  ArmadaBoardDescLib|Include/Library/ArmadaBoardDescLib.h
   ArmadaSoCDescLib|Include/Library/ArmadaSoCDescLib.h
   SampleAtResetLib|Include/Library/SampleAtResetLib.h
 
