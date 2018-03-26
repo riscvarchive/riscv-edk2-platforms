@@ -49,7 +49,7 @@
   gEfiEventVirtualAddressChangeGuid
 
 [Pcd]
-  gMarvellTokenSpaceGuid.PcdRtcEnabled
+  gMarvellTokenSpaceGuid.PcdRtcBaseAddress
 
 [Depex.common.DXE_RUNTIME_DRIVER]
   gEfiCpuArchProtocolGuid

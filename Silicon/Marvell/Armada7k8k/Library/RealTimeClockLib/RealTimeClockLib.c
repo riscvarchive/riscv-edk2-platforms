@@ -26,7 +26,6 @@
 #include <Library/DxeServicesTableLib.h>
 #include <Library/TimeBaseLib.h>
 #include <Library/IoLib.h>
-#include <Library/MvHwDescLib.h>
 #include <Library/RealTimeClockLib.h>
 #include <Library/TimerLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -34,7 +33,6 @@
 #include <Protocol/RealTimeClock.h>
 #include "RealTimeClockLib.h"
 
-DECLARE_A7K8K_RTC_TEMPLATE;
 STATIC EFI_EVENT              mRtcVirtualAddrChangeEvent;
 STATIC UINTN                  mArmadaRtcBase;
 
@@ -216,28 +214,13 @@ LibRtcInitialize (
   IN EFI_SYSTEM_TABLE                      *SystemTable
   )
 {
-  MVHW_RTC_DESC *Desc = &mA7k8kRtcDescTemplate;
-  UINT8         *RtcDeviceTable, Index;
   EFI_HANDLE    Handle;
   EFI_STATUS    Status;
 
-  // Pick RTC device and initialize its data
-  RtcDeviceTable = (UINT8 *) PcdGetPtr (PcdRtcEnabled);
-  if (RtcDeviceTable == NULL) {
-    DEBUG ((DEBUG_ERROR, "RTC: Missing PcdRtcEnabled\n"));
-    return EFI_INVALID_PARAMETER;
-  }
+  // Obtain RTC device base address
+  mArmadaRtcBase = PcdGet64 (PcdRtcBaseAddress);
 
-  // Initialize only first of enabled controllers
-  for (Index = 0; Index < PcdGetSize (PcdRtcEnabled); Index++) {
-    if (MVHW_DEV_ENABLED (Rtc, Index)) {
-      DEBUG ((DEBUG_ERROR, "RTC: Initialize controller %d\n", Index));
-      mArmadaRtcBase = Desc->RtcBaseAddresses[Index];
-      break;
-    }
-  }
-
-  // Check if any of the controllers can be initialized
+  // Check if the controller can be initialized
   if (mArmadaRtcBase == 0) {
     DEBUG ((DEBUG_ERROR, "RTC: None of controllers enabled\n"));
     return EFI_INVALID_PARAMETER;
@@ -247,7 +230,7 @@ LibRtcInitialize (
   Status = gDS->AddMemorySpace (
                   EfiGcdMemoryTypeMemoryMappedIo,
                   mArmadaRtcBase,
-                  Desc->RtcMemSize[Index],
+                  SIZE_4KB,
                   EFI_MEMORY_UC | EFI_MEMORY_RUNTIME
                   );
   if (EFI_ERROR (Status)) {
@@ -257,7 +240,7 @@ LibRtcInitialize (
 
   Status = gDS->SetMemorySpaceAttributes (
                   mArmadaRtcBase,
-                  Desc->RtcMemSize[Index],
+                  SIZE_4KB,
                   EFI_MEMORY_UC | EFI_MEMORY_RUNTIME
                   );
   if (EFI_ERROR (Status)) {
@@ -304,7 +287,7 @@ LibRtcInitialize (
 ErrEvent:
   gBS->UninstallProtocolInterface (Handle, &gEfiRealTimeClockArchProtocolGuid, NULL);
 ErrSetMem:
-  gDS->RemoveMemorySpace (mArmadaRtcBase, Desc->RtcMemSize[Index]);
+  gDS->RemoveMemorySpace (mArmadaRtcBase, SIZE_4KB);
 
   return Status;
 }

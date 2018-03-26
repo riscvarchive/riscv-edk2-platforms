@@ -195,7 +195,7 @@
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x0 }|VOID*|0x3000035
 
 #RTC
-  gMarvellTokenSpaceGuid.PcdRtcEnabled|{ 0x0 }|VOID*|0x40000052
+  gMarvellTokenSpaceGuid.PcdRtcBaseAddress|0x0|UINT64|0x40000052
 
 #TRNG
   gMarvellTokenSpaceGuid.PcdEip76TrngBaseAddress|0x0|UINT64|0x50000053

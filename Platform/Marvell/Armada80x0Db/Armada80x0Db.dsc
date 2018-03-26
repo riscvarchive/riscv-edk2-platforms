@@ -155,4 +155,4 @@
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x1, 0x1 }
 
   #RTC
-  gMarvellTokenSpaceGuid.PcdRtcEnabled|{ 0x0, 0x1 }
+  gMarvellTokenSpaceGuid.PcdRtcBaseAddress|0xF4284000

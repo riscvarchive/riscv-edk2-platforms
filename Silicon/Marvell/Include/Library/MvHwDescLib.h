@@ -116,17 +116,6 @@ typedef struct {
 } MVHW_PP2_DESC;
 
 //
-// RealTimeClock devices description template definition
-//
-#define MVHW_MAX_RTC_DEVS         2
-
-typedef struct {
-  UINT8 RtcDevCount;
-  UINTN RtcBaseAddresses[MVHW_MAX_RTC_DEVS];
-  UINTN RtcMemSize[MVHW_MAX_RTC_DEVS];
-} MVHW_RTC_DESC;
-
-//
 // Platform description of CommonPhy devices
 //
 #define MVHW_CP0_COMPHY_BASE       0xF2441000
@@ -224,20 +213,6 @@ MVHW_PP2_DESC mA7k8kPp2DescTemplate = {\
   2,\
   { MVHW_CP0_PP2_BASE, MVHW_CP1_PP2_BASE },\
   { MVHW_PP2_CLK_FREQ, MVHW_PP2_CLK_FREQ } \
-}
-
-//
-// Platform description of RealTimeClock devices
-//
-#define MVHW_CP0_RTC0_BASE       0xF2284000
-#define MVHW_CP1_RTC0_BASE       0xF4284000
-
-#define DECLARE_A7K8K_RTC_TEMPLATE \
-STATIC \
-MVHW_RTC_DESC mA7k8kRtcDescTemplate = {\
-  2,\
-  { MVHW_CP0_RTC0_BASE, MVHW_CP1_RTC0_BASE },\
-  { SIZE_4KB, SIZE_4KB }\
 }
 
 #endif /* __MVHWDESCLIB_H__ */
