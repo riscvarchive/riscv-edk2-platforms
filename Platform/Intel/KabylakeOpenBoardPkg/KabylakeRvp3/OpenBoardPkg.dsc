@@ -107,6 +107,11 @@
   BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/BoardInitLibNull/BoardInitLibNull.inf
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
 
+# Tbt
+!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+  TbtCommonLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiDxeSmmTbtCommonLib/TbtCommonLib.inf
+  DxeTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/DxeTbtPolicyLib/DxeTbtPolicyLib.inf
+!endif
 #
 # Silicon Init Package
 #
@@ -124,6 +129,11 @@
   MultiBoardInitSupportLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
   BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
 
+# Tbt
+!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+  PeiTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiTbtPolicyLib/PeiTbtPolicyLib.inf
+  PeiDTbtInitLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/Private/PeiDTbtInitLib/PeiDTbtInitLib.inf
+!endif
 #
 # Silicon Init Package
 #
@@ -232,6 +242,11 @@
   IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
   IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
 
+# Tbt
+!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
+!endif
+
 [Components.X64]
 
 #
@@ -253,6 +268,13 @@
 # Silicon
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgDxe.dsc
+
+# Tbt
+!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Smm/TbtSmm.inf
+  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf
+  $(PLATFORM_BOARD_PACKAGE)/Features/PciHotPlug/PciHotPlug.inf
+!endif
 
 #
 # Platform

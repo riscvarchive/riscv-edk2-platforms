@@ -25,6 +25,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
   External(\_SB.PCI0.PEG1.HPME, MethodObj)
   External(\_SB.PCI0.PEG2.HPME, MethodObj)
   External(\_GPE.AL6F, MethodObj)
+  External(\_SB.THDR, MethodObj)
   External(\_GPE.P0L6, MethodObj)
   External(\_GPE.P1L6, MethodObj)
   External(\_GPE.P2L6, MethodObj)
@@ -34,6 +35,9 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
   External(P0WK)
   External(P1WK)
   External(P2WK)
+  External(\CPG0)
+  External(\RPS0)
+  External(\RPT0)
   External(\_PR.HWPI, IntObj)
   External(\_PR.DTSI, IntObj)
 
@@ -841,5 +845,12 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
       \_SB.PCI0.GFX0.GSCI() // Handle the SWSCI
     }
   }
-
+  //
+  // BIOS Needs to implement appropriate handler based on CIO_PLUG_EVENT GPIO
+  // This is generic 2-tier GPIO handler
+  //
+  Method(_L6F)
+  {
+    \_SB.THDR(\CPG0,\RPS0,\RPT0) // Check for TBT Hotplug Handler event (2-tier GPI GPE event architecture)
+  }
 }

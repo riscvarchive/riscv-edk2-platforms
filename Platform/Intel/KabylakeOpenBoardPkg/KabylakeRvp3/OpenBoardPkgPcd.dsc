@@ -249,4 +249,35 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gEfiSecurityPkgTokenSpaceGuid.PcdTcg2HashAlgorithmBitmap|0
   gEfiSecurityPkgTokenSpaceGuid.PcdTpm2HashMask|0x0000001F
   gEfiSecurityPkgTokenSpaceGuid.PcdTpmInitializationPolicy|1
+  
+# Tbt
+gBoardModuleTokenSpaceGuid.PcdDTbtControllerEn | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtControllerType | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieRpNumber | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtGpioAccessType | 0x2
+gBoardModuleTokenSpaceGuid.PcdExpander | 0x0
+gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad | 13
+gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad | 0x02010011
+gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignature | 0
+gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignaturePorting | 0
+gBoardModuleTokenSpaceGuid.PcdDTbtSecurityMode | 0x1
+#gBoardModuleTokenSpaceGuid.PcdDTbtGpio5Filter | 0x0
+gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport | 0x0
+gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq| 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtAspm | 0x0
+gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch | 0x0
+gBoardModuleTokenSpaceGuid.PcdRtd3Tbt | 0x1
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq | 0x1
+gBoardModuleTokenSpaceGuid.PcdDTbtWin10Support | 0x0
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReqDelay | 0x0
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtOffDelay | 5000
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieExtraBusRsvd | 56
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemRsvd | 100
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax | 26
+gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd | 100
+gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax | 28
+gBoardModuleTokenSpaceGuid.PcdPchPcieRootPortHpe| 0x00000001
 

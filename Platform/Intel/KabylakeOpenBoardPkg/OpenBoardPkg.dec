@@ -27,6 +27,7 @@ PACKAGE_GUID = 0A8BA6E8-C8AC-4AC1-87AC-52772FA6AE5E
 [Includes]
 Include
 KabylakeRvp3\Include
+Features\Tbt\Include
 
 [Guids]
 
@@ -34,9 +35,18 @@ gBoardModuleTokenSpaceGuid            =  {0x72d1fff7, 0xa42a, 0x4219, {0xb9, 0x9
 
 gTianoLogoGuid                        =  {0x7BB28B99, 0x61BB, 0x11D5, {0x9A, 0x5D, 0x00, 0x90, 0x27, 0x3F, 0xC1, 0x4D}}
 
+gTbtInfoHobGuid                       =  {0x74a81eaa, 0x033c, 0x4783, {0xbe, 0x2b, 0x84, 0x85, 0x74, 0xa6, 0x97, 0xb7}}
+
+gPlatformModuleTokenSpaceGuid         =  {0x69d13bf0, 0xaf91, 0x4d96, {0xaa, 0x9f, 0x21, 0x84, 0xc5, 0xce, 0x3b, 0xc0}}
+
+
 [Protocols]
+gTbtNvsAreaProtocolGuid               =  {0x4d6a54d1, 0xcd56, 0x47f3, {0x93, 0x6e, 0x7e, 0x51, 0xd9, 0x31, 0x15, 0x4f}}
+gDxeTbtPolicyProtocolGuid             =  {0x196bf9e3, 0x20d7, 0x4b7b, {0x89, 0xf9, 0x31, 0xc2, 0x72, 0x08, 0xc9, 0xb9}}
 
 [Ppis]
+gPeiTbtPolicyPpiGuid                  =  {0xd7e7e1e6, 0xcbec, 0x4f5f, {0xae, 0xd3, 0xfd, 0xc0, 0xa8, 0xb0, 0x7e, 0x25}}
+gPeiTbtPolicyBoardInitDonePpiGuid     =  {0x970f9c60, 0x8547, 0x49d7, { 0xa4, 0xb, 0x1e, 0xc4, 0xbc, 0x4e, 0xe8, 0x9b}}
 
 [LibraryClasses]
 
@@ -56,8 +66,8 @@ gBoardModuleTokenSpaceGuid.PcdSioBaseAddress|0x0680|UINT16|0x9000001D
 gBoardModuleTokenSpaceGuid.PcdLpcSioIndexDefaultPort|0x164E|UINT16|0x90000021
 gBoardModuleTokenSpaceGuid.PcdLpcSioDataDefaultPort|0x164F|UINT16|0x90000022
 
-
-
+## Tbt SW_SMI_DTBT_ENUMERATEgSetupVariableGuid
+gBoardModuleTokenSpaceGuid.PcdSwSmiDTbtEnumerate|0xF7|UINT8|0x000000110
 
 gBoardModuleTokenSpaceGuid.PcdSmcExtSmiBitPosition|0x01|UINT8|0x90000015
 
@@ -231,6 +241,45 @@ gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort7|0|UINT8|0x000000E6
 gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort8|0|UINT8|0x000000E7
 gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort9|0|UINT8|0x000000E8
 
+# TBT
+gBoardModuleTokenSpaceGuid.PcdDTbtBootOn |0|UINT8|0x000000E9
+gBoardModuleTokenSpaceGuid.PcdDTbtUsbOn |0|UINT8|0x000000EA
+gBoardModuleTokenSpaceGuid.PcdDTbtGpio3ForcePwr |0|UINT8|0x000000EB
+gBoardModuleTokenSpaceGuid.PcdDTbtGpio3ForcePwrDly |0|UINT16|0x000000ED
+gBoardModuleTokenSpaceGuid.PcdDTbtControllerEn |0|UINT8|0x000000EE
+gBoardModuleTokenSpaceGuid.PcdDTbtControllerType |0|UINT8|0x000000EF
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieRpNumber |0|UINT8|0x000000F0
+gBoardModuleTokenSpaceGuid.PcdDTbtGpioAccessType |0|UINT8|0x000000F1
+gBoardModuleTokenSpaceGuid.PcdExpander |0|UINT8|0x000000F2
+gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel |0|BOOLEAN|0x000000F3
+gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad |0|UINT32|0x000000F4
+gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad |0|UINT32|0x000000F5
+gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignature |0|UINT32|0x000000F6
+gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignaturePorting |0|BOOLEAN|0x000000F7
+gBoardModuleTokenSpaceGuid.PcdDTbtSecurityMode |0|UINT8|0x000000F8
+gBoardModuleTokenSpaceGuid.PcdDTbtGpio5Filter |0|UINT8|0x000000F9
+gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport |0|UINT8|0x000000FA
+gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI |0|UINT8|0x000000FB
+gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify |0|UINT8|0x000000FC
+gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq|0|UINT8|0x000000FD
+gBoardModuleTokenSpaceGuid.PcdDTbtAspm |0|UINT8|0x000000FE
+gBoardModuleTokenSpaceGuid.PcdDTbtLtr | 0 | UINT8| 0x00000116
+gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch |0|UINT8|0x000000FF
+gBoardModuleTokenSpaceGuid.PcdRtd3Tbt |0|UINT8|0x00000100
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq |0|UINT8|0x0000010A
+gBoardModuleTokenSpaceGuid.PcdDTbtWin10Support |0|UINT8|0x000000102
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReqDelay |0|UINT16|0x00000103
+gBoardModuleTokenSpaceGuid.PcdRtd3TbtOffDelay |0|UINT16|0x00000104
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieExtraBusRsvd |0|UINT8|0x00000105
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemRsvd |0|UINT16|0x00000106
+gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax |0|UINT8|0x00000107
+gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd |0|UINT16|0x00000108
+gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax |0|UINT8|0x00000109
+gBoardModuleTokenSpaceGuid.PcdPchPcieRootPortHpe|0|UINT32|0x00000117
+
+
+
+
 # UCMC GPIO Table
 gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTable|0|UINT32|0x000000111
 gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize|0|UINT16|0x000000112
@@ -267,3 +316,5 @@ gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent|FALSE|BOOLEAN|0x000000EC
   gBoardModuleTokenSpaceGuid.PcdIntelGopEnable      |TRUE|BOOLEAN|0xF0000062
 
   gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport   |TRUE|BOOLEAN|0xF0000000
+
+  gBoardModuleTokenSpaceGuid.PcdTbtEnable           |FALSE|BOOLEAN|0x000000115
