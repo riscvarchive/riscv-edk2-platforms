@@ -67,11 +67,11 @@
   gEfiSimpleNetworkProtocolGuid
   gEfiDevicePathProtocolGuid
   gEfiCpuArchProtocolGuid
+  gMarvellBoardDescProtocolGuid
   gMarvellMdioProtocolGuid
   gMarvellPhyProtocolGuid
 
 [Pcd]
-  gMarvellTokenSpaceGuid.PcdPp2Controllers
   gMarvellTokenSpaceGuid.PcdPp2GopIndexes
   gMarvellTokenSpaceGuid.PcdPp2InterfaceAlwaysUp
   gMarvellTokenSpaceGuid.PcdPp2InterfaceSpeed

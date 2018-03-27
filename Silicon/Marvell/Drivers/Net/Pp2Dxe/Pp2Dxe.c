@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
+#include <Protocol/BoardDesc.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/DriverBinding.h>
 #include <Protocol/SimpleNetwork.h>
@@ -42,7 +43,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/MvHwDescLib.h>
 #include <Library/NetLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -53,8 +53,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "Pp2Dxe.h"
 
 #define ReturnUnlock(tpl, status) do { gBS->RestoreTPL (tpl); return (status); } while(0)
-
-DECLARE_A7K8K_PP2_TEMPLATE;
 
 STATIC PP2_DEVICE_PATH Pp2DevicePathTemplate = {
   {
@@ -1343,35 +1341,28 @@ Pp2DxeInitialise (
   IN EFI_SYSTEM_TABLE *SystemTable
   )
 {
-  MVHW_PP2_DESC *Desc = &mA7k8kPp2DescTemplate;
-  UINT8 *Pp2DeviceTable, Index;
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_PP2_DESC *Pp2BoardDesc;
   MVPP2_SHARED *Mvpp2Shared;
   EFI_STATUS Status;
+  UINTN Index;
 
   /* Obtain table with enabled Pp2 devices */
-  Pp2DeviceTable = (UINT8 *)PcdGetPtr (PcdPp2Controllers);
-  if (Pp2DeviceTable == NULL) {
-    DEBUG ((DEBUG_ERROR, "Missing PcdPp2Controllers\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
-  if (PcdGetSize (PcdPp2Controllers) > MVHW_MAX_PP2_DEVS) {
-    DEBUG ((DEBUG_ERROR, "Wrong PcdPp2Controllers format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  /* Check amount of declared ports */
-  if (PcdGetSize (PcdPp2Port2Controller) > Desc->Pp2DevCount * MVPP2_MAX_PORT) {
-    DEBUG ((DEBUG_ERROR, "Pp2Dxe: Wrong too many ports declared\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = BoardDescProtocol->BoardDescPp2Get (BoardDescProtocol,
+                                &Pp2BoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
   /* Initialize enabled chips */
-  for (Index = 0; Index < PcdGetSize (PcdPp2Controllers); Index++) {
-    if (!MVHW_DEV_ENABLED (Pp2, Index)) {
-      DEBUG ((DEBUG_ERROR, "Skip Pp2 controller %d\n", Index));
-      continue;
-    }
+  for (Index = 0; Index < Pp2BoardDesc->Pp2DevCount; Index++) {
 
     /* Initialize private data */
     Mvpp2Shared = AllocateZeroPool (sizeof (MVPP2_SHARED));
@@ -1383,8 +1374,8 @@ Pp2DxeInitialise (
     Status = Pp2DxeInitialiseController (
                     Index,
                     Mvpp2Shared,
-                    Desc->Pp2BaseAddresses[Index],
-                    Desc->Pp2ClockFrequency[Index]
+                    Pp2BoardDesc[Index].SoC->Pp2BaseAddress,
+                    Pp2BoardDesc[Index].SoC->Pp2ClockFrequency
                     );
     if (EFI_ERROR(Status)) {
       FreePool (Mvpp2Shared);
@@ -1392,6 +1383,8 @@ Pp2DxeInitialise (
       return Status;
     }
   }
+
+  BoardDescProtocol->BoardDescFree (Pp2BoardDesc);
 
   return EFI_SUCCESS;
 }

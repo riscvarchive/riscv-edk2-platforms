@@ -105,17 +105,6 @@ typedef struct {
 } MVHW_NONDISCOVERABLE_DESC;
 
 //
-// PP2 NIC devices description template definition
-//
-#define MVHW_MAX_PP2_DEVS         4
-
-typedef struct {
-  UINT8 Pp2DevCount;
-  UINTN Pp2BaseAddresses[MVHW_MAX_PP2_DEVS];
-  UINTN Pp2ClockFrequency[MVHW_MAX_PP2_DEVS];
-} MVHW_PP2_DESC;
-
-//
 // Platform description of CommonPhy devices
 //
 #define MVHW_CP0_COMPHY_BASE       0xF2441000
@@ -198,21 +187,6 @@ MVHW_NONDISCOVERABLE_DESC mA7k8kNonDiscoverableDescTemplate = {\
   { MVHW_AP0_SDHCI0_BASE, MVHW_CP0_SDHCI0_BASE },\
   { SIZE_1KB, SIZE_1KB },\
   { NonDiscoverableDeviceDmaTypeCoherent, NonDiscoverableDeviceDmaTypeCoherent }\
-}
-
-//
-// Platform description of Pp2 NIC devices
-//
-#define MVHW_CP0_PP2_BASE       0xF2000000
-#define MVHW_CP1_PP2_BASE       0xF4000000
-#define MVHW_PP2_CLK_FREQ       333333333
-
-#define DECLARE_A7K8K_PP2_TEMPLATE \
-STATIC \
-MVHW_PP2_DESC mA7k8kPp2DescTemplate = {\
-  2,\
-  { MVHW_CP0_PP2_BASE, MVHW_CP1_PP2_BASE },\
-  { MVHW_PP2_CLK_FREQ, MVHW_PP2_CLK_FREQ } \
 }
 
 #endif /* __MVHWDESCLIB_H__ */
