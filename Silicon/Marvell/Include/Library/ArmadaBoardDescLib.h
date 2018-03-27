@@ -17,6 +17,14 @@
 #include <Library/ArmadaSoCDescLib.h>
 
 //
+// PP2 NIC devices per-board description
+//
+typedef struct {
+  MV_SOC_PP2_DESC *SoC;
+  UINT8            Pp2DevCount;
+} MV_BOARD_PP2_DESC;
+
+//
 // UTMI PHY devices per-board description
 //
 typedef struct {

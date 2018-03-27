@@ -58,6 +58,7 @@
 
 [Pcd]
   gMarvellTokenSpaceGuid.PcdPciEXhci
+  gMarvellTokenSpaceGuid.PcdPp2Controllers
   gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled
   gMarvellTokenSpaceGuid.PcdUtmiPortType
 
