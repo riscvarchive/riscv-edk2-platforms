@@ -35,20 +35,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <PiDxe.h>
 
 #include <Library/DebugLib.h>
-#include <Library/MvHwDescLib.h>
 #include <Library/NonDiscoverableDeviceRegistrationLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
+#include <Protocol/BoardDesc.h>
 #include <Protocol/EmbeddedExternalDevice.h>
-
-DECLARE_A7K8K_NONDISCOVERABLE_TEMPLATE;
-
-//
-// Tables with used devices
-//
-STATIC UINT8 * CONST XhciDeviceTable = FixedPcdGetPtr (PcdPciEXhci);
-STATIC UINT8 * CONST AhciDeviceTable = FixedPcdGetPtr (PcdPciEAhci);
-STATIC UINT8 * CONST SdhciDeviceTable = FixedPcdGetPtr (PcdPciESdhci);
 
 //
 // NonDiscoverable devices registration
@@ -56,29 +47,21 @@ STATIC UINT8 * CONST SdhciDeviceTable = FixedPcdGetPtr (PcdPciESdhci);
 STATIC
 EFI_STATUS
 NonDiscoverableInitXhci (
+  IN MV_BOARD_XHCI_DESC *Desc
   )
 {
-  MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
   EFI_STATUS Status;
   UINT8 i;
 
-  if (PcdGetSize (PcdPciEXhci) < Desc->XhciDevCount) {
-    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciEXhci format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
   for (i = 0; i < Desc->XhciDevCount; i++) {
-    if (!MVHW_DEV_ENABLED (Xhci, i)) {
-      continue;
-    }
-
     Status = RegisterNonDiscoverableMmioDevice (
                      NonDiscoverableDeviceTypeXhci,
-                     Desc->XhciDmaType[i],
+                     Desc[i].SoC->XhciDmaType,
                      NULL,
                      NULL,
                      1,
-                     Desc->XhciBaseAddresses[i], Desc->XhciMemSize[i]
+                     Desc[i].SoC->XhciBaseAddress,
+                     Desc[i].SoC->XhciMemSize
                    );
 
     if (EFI_ERROR(Status)) {
@@ -93,29 +76,21 @@ NonDiscoverableInitXhci (
 STATIC
 EFI_STATUS
 NonDiscoverableInitAhci (
+  IN MV_BOARD_AHCI_DESC *Desc
   )
 {
-  MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
   EFI_STATUS Status;
   UINT8 i;
 
-  if (PcdGetSize (PcdPciEAhci) < Desc->AhciDevCount) {
-    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciEAhci format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
   for (i = 0; i < Desc->AhciDevCount; i++) {
-    if (!MVHW_DEV_ENABLED (Ahci, i)) {
-      continue;
-    }
-
     Status = RegisterNonDiscoverableMmioDevice (
                      NonDiscoverableDeviceTypeAhci,
-                     Desc->AhciDmaType[i],
+                     Desc[i].SoC->AhciDmaType,
                      NULL,
                      NULL,
                      1,
-                     Desc->AhciBaseAddresses[i], Desc->AhciMemSize[i]
+                     Desc[i].SoC->AhciBaseAddress,
+                     Desc[i].SoC->AhciMemSize
                    );
 
     if (EFI_ERROR(Status)) {
@@ -130,29 +105,21 @@ NonDiscoverableInitAhci (
 STATIC
 EFI_STATUS
 NonDiscoverableInitSdhci (
+  IN MV_BOARD_SDMMC_DESC *Desc
   )
 {
-  MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
   EFI_STATUS Status;
   UINT8 i;
 
-  if (PcdGetSize (PcdPciESdhci) < Desc->SdhciDevCount) {
-    DEBUG((DEBUG_ERROR, "NonDiscoverable: Wrong PcdPciESdhci format\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  for (i = 0; i < Desc->SdhciDevCount; i++) {
-    if (!MVHW_DEV_ENABLED (Sdhci, i)) {
-      continue;
-    }
-
+  for (i = 0; i < Desc->SdMmcDevCount; i++) {
     Status = RegisterNonDiscoverableMmioDevice (
                      NonDiscoverableDeviceTypeSdhci,
-                     Desc->SdhciDmaType[i],
+                     Desc[i].SoC->SdMmcDmaType,
                      NULL,
                      NULL,
                      1,
-                     Desc->SdhciBaseAddresses[i], Desc->SdhciMemSize[i]
+                     Desc[i].SoC->SdMmcBaseAddress,
+                     Desc[i].SoC->SdMmcMemSize
                    );
 
     if (EFI_ERROR(Status)) {
@@ -174,22 +141,55 @@ NonDiscoverableEntryPoint (
   IN EFI_SYSTEM_TABLE *SystemTable
   )
 {
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_SDMMC_DESC *SdMmcBoardDesc;
+  MV_BOARD_AHCI_DESC *AhciBoardDesc;
+  MV_BOARD_XHCI_DESC *XhciBoardDesc;
   EFI_STATUS Status;
 
-  Status = NonDiscoverableInitXhci();
-  if (EFI_ERROR(Status)) {
+  /* Obtain list of available controllers */
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
     return Status;
   }
 
-  Status = NonDiscoverableInitAhci();
+  /* Xhci */
+  Status = BoardDescProtocol->BoardDescXhciGet (BoardDescProtocol,
+                                &XhciBoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+  Status = NonDiscoverableInitXhci (XhciBoardDesc);
   if (EFI_ERROR(Status)) {
     return Status;
   }
+  BoardDescProtocol->BoardDescFree (XhciBoardDesc);
 
-  Status = NonDiscoverableInitSdhci();
+  /* Ahci */
+  Status = BoardDescProtocol->BoardDescAhciGet (BoardDescProtocol,
+                                &AhciBoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+  Status = NonDiscoverableInitAhci (AhciBoardDesc);
   if (EFI_ERROR(Status)) {
     return Status;
   }
+  BoardDescProtocol->BoardDescFree (AhciBoardDesc);
+
+  /* SdMmc */
+  Status = BoardDescProtocol->BoardDescSdMmcGet (BoardDescProtocol,
+                                &SdMmcBoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+  Status = NonDiscoverableInitSdhci (SdMmcBoardDesc);
+  if (EFI_ERROR(Status)) {
+    return Status;
+  }
+  BoardDescProtocol->BoardDescFree (SdMmcBoardDesc);
 
   return EFI_SUCCESS;
 }

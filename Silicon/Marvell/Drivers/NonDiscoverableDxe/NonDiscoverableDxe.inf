@@ -52,10 +52,8 @@
   NonDiscoverableDeviceRegistrationLib
   UefiDriverEntryPoint
 
-[Pcd]
-  gMarvellTokenSpaceGuid.PcdPciEAhci
-  gMarvellTokenSpaceGuid.PcdPciESdhci
-  gMarvellTokenSpaceGuid.PcdPciEXhci
+[Protocols]
+  gMarvellBoardDescProtocolGuid
 
 [Depex]
   TRUE
