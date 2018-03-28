@@ -14,7 +14,27 @@
 #ifndef __ARMADA_SOC_DESC_LIB_H__
 #define __ARMADA_SOC_DESC_LIB_H__
 
+#include <Library/MvComPhyLib.h>
 #include <Library/NonDiscoverableDeviceRegistrationLib.h>
+
+//
+// ComPhy SoC description
+//
+typedef struct {
+  UINTN ComPhyId;
+  UINTN ComPhyBaseAddress;
+  UINTN ComPhyHpipe3BaseAddress;
+  UINTN ComPhyLaneCount;
+  UINTN ComPhyMuxBitCount;
+  MV_COMPHY_CHIP_TYPE ComPhyChipType;
+} MV_SOC_COMPHY_DESC;
+
+EFI_STATUS
+EFIAPI
+ArmadaSoCDescComPhyGet (
+  IN OUT MV_SOC_COMPHY_DESC  **ComPhyDesc,
+  IN OUT UINTN                *DescCount
+  );
 
 //
 // NonDiscoverable devices SoC description

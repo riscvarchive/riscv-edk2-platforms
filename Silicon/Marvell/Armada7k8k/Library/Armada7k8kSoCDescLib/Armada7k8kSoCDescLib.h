@@ -30,6 +30,14 @@
 #define MV_SOC_AHCI_ID(Cp)               ((Cp) % 2)
 
 //
+// Platform description of ComPhy controllers
+//
+#define MV_SOC_COMPHY_BASE(Cp)           (MV_SOC_CP_BASE (Cp) + 0x441000)
+#define MV_SOC_HPIPE3_BASE(Cp)           (MV_SOC_CP_BASE (Cp) + 0x120000)
+#define MV_SOC_COMPHY_LANE_COUNT         6
+#define MV_SOC_COMPHY_MUX_BITS           4
+
+//
 // Platform description of PP2 NIC
 //
 #define MV_SOC_PP2_BASE(Cp)              MV_SOC_CP_BASE (Cp)

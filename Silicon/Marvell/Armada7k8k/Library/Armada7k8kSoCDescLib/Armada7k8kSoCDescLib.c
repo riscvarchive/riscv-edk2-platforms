@@ -30,6 +30,39 @@
 
 EFI_STATUS
 EFIAPI
+ArmadaSoCDescComPhyGet (
+  IN OUT MV_SOC_COMPHY_DESC  **ComPhyDesc,
+  IN OUT UINTN                *DescCount
+  )
+{
+  MV_SOC_COMPHY_DESC *Desc;
+  UINTN CpCount, CpIndex;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  Desc = AllocateZeroPool (CpCount * sizeof (MV_SOC_COMPHY_DESC));
+  if (Desc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    Desc[CpIndex].ComPhyBaseAddress = MV_SOC_COMPHY_BASE (CpIndex);
+    Desc[CpIndex].ComPhyHpipe3BaseAddress = MV_SOC_HPIPE3_BASE (CpIndex);
+    Desc[CpIndex].ComPhyLaneCount = MV_SOC_COMPHY_LANE_COUNT;
+    Desc[CpIndex].ComPhyMuxBitCount = MV_SOC_COMPHY_MUX_BITS;
+    Desc[CpIndex].ComPhyChipType = MvComPhyTypeCp110;
+    Desc[CpIndex].ComPhyId = CpIndex;
+  }
+
+  *ComPhyDesc = Desc;
+  *DescCount = CpCount;
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 ArmadaSoCDescAhciGet (
   IN OUT MV_SOC_AHCI_DESC  **AhciDesc,
   IN OUT UINTN              *DescCount
