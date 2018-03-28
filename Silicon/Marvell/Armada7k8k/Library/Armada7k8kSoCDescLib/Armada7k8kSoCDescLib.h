@@ -24,10 +24,22 @@
 #define MV_SOC_CP_BASE(Cp)               (0xF2000000 + ((Cp) * 0x2000000))
 
 //
+// Platform description of AHCI controllers
+//
+#define MV_SOC_AHCI_BASE(Cp)             (MV_SOC_CP_BASE (Cp) + 0x540000)
+#define MV_SOC_AHCI_ID(Cp)               ((Cp) % 2)
+
+//
 // Platform description of PP2 NIC
 //
 #define MV_SOC_PP2_BASE(Cp)              MV_SOC_CP_BASE (Cp)
 #define MV_SOC_PP2_CLK_FREQ              333333333
+
+//
+// Platform description of SDMMC controllers
+//
+#define MV_SOC_MAX_SDMMC_COUNT           2
+#define MV_SOC_SDMMC_BASE(Index)         ((Index) == 0 ? 0xF06E0000 : 0xF2780000)
 
 //
 // Platform description of UTMI PHY's
@@ -37,5 +49,11 @@
 #define MV_SOC_UTMI_BASE(Utmi)           (0x580000 + ((Utmi) * 0x1000))
 #define MV_SOC_UTMI_CFG_BASE             0x440440
 #define MV_SOC_UTMI_USB_CFG_BASE         0x440420
+
+//
+// Platform description of XHCI controllers
+//
+#define MV_SOC_XHCI_PER_CP_COUNT         2
+#define MV_SOC_XHCI_BASE(Xhci)           (0x500000 + ((Xhci) * 0x10000))
 
 #endif
