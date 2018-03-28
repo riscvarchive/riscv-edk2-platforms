@@ -57,6 +57,8 @@
   gMarvellBoardDescProtocolGuid
 
 [Pcd]
+  gMarvellTokenSpaceGuid.PcdPciEAhci
+  gMarvellTokenSpaceGuid.PcdPciESdhci
   gMarvellTokenSpaceGuid.PcdPciEXhci
   gMarvellTokenSpaceGuid.PcdPp2Controllers
   gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled

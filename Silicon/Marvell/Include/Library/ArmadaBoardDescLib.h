@@ -17,6 +17,34 @@
 #include <Library/ArmadaSoCDescLib.h>
 
 //
+// NonDiscoverableDevices per-board description
+//
+
+//
+// AHCI devices per-board description
+//
+typedef struct {
+  MV_SOC_AHCI_DESC *SoC;
+  UINTN             AhciDevCount;
+} MV_BOARD_AHCI_DESC;
+
+//
+// SDMMC devices per-board description
+//
+typedef struct {
+  MV_SOC_SDMMC_DESC *SoC;
+  UINTN              SdMmcDevCount;
+} MV_BOARD_SDMMC_DESC;
+
+//
+// XHCI devices per-board description
+//
+typedef struct {
+  MV_SOC_XHCI_DESC *SoC;
+  UINTN             XhciDevCount;
+} MV_BOARD_XHCI_DESC;
+
+//
 // PP2 NIC devices per-board description
 //
 typedef struct {
