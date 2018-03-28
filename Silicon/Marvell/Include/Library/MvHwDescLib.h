@@ -35,28 +35,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __MVHWDESCLIB_H__
 #define __MVHWDESCLIB_H__
 
-#include <Library/MvComPhyLib.h>
-
 //
 // Helper macros
 //
 
 // Check if device is enabled - it expects PCD to be read to '<type>DeviceTable' array
 #define MVHW_DEV_ENABLED(type, index) (type ## DeviceTable[index])
-
-//
-// CommonPhy devices description template definition
-//
-#define MVHW_MAX_COMPHY_DEVS       4
-
-typedef struct {
-  UINT8 ComPhyDevCount;
-  UINTN ComPhyBaseAddresses[MVHW_MAX_COMPHY_DEVS];
-  UINTN ComPhyHpipe3BaseAddresses[MVHW_MAX_COMPHY_DEVS];
-  UINTN ComPhyLaneCount[MVHW_MAX_COMPHY_DEVS];
-  UINTN ComPhyMuxBitCount[MVHW_MAX_COMPHY_DEVS];
-  MV_COMPHY_CHIP_TYPE ComPhyChipType[MVHW_MAX_COMPHY_DEVS];
-} MVHW_COMPHY_DESC;
 
 //
 // I2C devices description template definition
@@ -77,29 +61,6 @@ typedef struct {
   UINT8 MdioDevCount;
   UINTN MdioBaseAddresses[MVHW_MAX_MDIO_DEVS];
 } MVHW_MDIO_DESC;
-
-//
-// Platform description of CommonPhy devices
-//
-#define MVHW_CP0_COMPHY_BASE       0xF2441000
-#define MVHW_CP0_HPIPE3_BASE       0xF2120000
-#define MVHW_CP0_COMPHY_LANES      6
-#define MVHW_CP0_COMPHY_MUX_BITS   4
-#define MVHW_CP1_COMPHY_BASE       0xF4441000
-#define MVHW_CP1_HPIPE3_BASE       0xF4120000
-#define MVHW_CP1_COMPHY_LANES      6
-#define MVHW_CP1_COMPHY_MUX_BITS   4
-
-#define DECLARE_A7K8K_COMPHY_TEMPLATE \
-STATIC \
-MVHW_COMPHY_DESC mA7k8kComPhyDescTemplate = {\
-  2,\
-  { MVHW_CP0_COMPHY_BASE, MVHW_CP1_COMPHY_BASE },\
-  { MVHW_CP0_HPIPE3_BASE, MVHW_CP1_HPIPE3_BASE },\
-  { MVHW_CP0_COMPHY_LANES, MVHW_CP1_COMPHY_LANES },\
-  { MVHW_CP0_COMPHY_MUX_BITS, MVHW_CP1_COMPHY_MUX_BITS },\
-  { MvComPhyTypeCp110, MvComPhyTypeCp110 }\
-}
 
 //
 // Platform description of I2C devices

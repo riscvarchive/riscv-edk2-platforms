@@ -34,9 +34,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ComPhyLib.h"
 #include <Library/MvComPhyLib.h>
-#include <Library/MvHwDescLib.h>
-
-DECLARE_A7K8K_COMPHY_TEMPLATE;
 
 CHAR16 * TypeStringTable [] = {L"unconnected", L"PCIE0", L"PCIE1", L"PCIE2",
                            L"PCIE3", L"SATA0", L"SATA1", L"SATA2", L"SATA3",
@@ -182,22 +179,20 @@ VOID
 InitComPhyConfig (
   IN  OUT  CHIP_COMPHY_CONFIG *ChipConfig,
   IN  OUT  PCD_LANE_MAP       *LaneData,
-  IN       UINT8               Id
+  IN       MV_BOARD_COMPHY_DESC *Desc
   )
 {
-  MVHW_COMPHY_DESC *Desc = &mA7k8kComPhyDescTemplate;
-
-  ChipConfig->ChipType = Desc->ComPhyChipType[Id];
-  ChipConfig->ComPhyBaseAddr = Desc->ComPhyBaseAddresses[Id];
-  ChipConfig->Hpipe3BaseAddr = Desc->ComPhyHpipe3BaseAddresses[Id];
-  ChipConfig->LanesCount = Desc->ComPhyLaneCount[Id];
-  ChipConfig->MuxBitCount = Desc->ComPhyMuxBitCount[Id];
-  ChipConfig->ChipId = Id;
+  ChipConfig->ChipType = Desc->SoC->ComPhyChipType;
+  ChipConfig->ComPhyBaseAddr = Desc->SoC->ComPhyBaseAddress;
+  ChipConfig->Hpipe3BaseAddr = Desc->SoC->ComPhyHpipe3BaseAddress;
+  ChipConfig->LanesCount = Desc->SoC->ComPhyLaneCount;
+  ChipConfig->MuxBitCount = Desc->SoC->ComPhyMuxBitCount;
+  ChipConfig->ChipId = Desc->SoC->ComPhyId;
 
   /*
    * Below macro contains variable name concatenation (used to form PCD's name).
    */
-  switch (Id) {
+  switch (ChipConfig->ChipId) {
   case 0:
     GetComPhyPcd (LaneData, 0);
     break;
@@ -219,32 +214,49 @@ MvComPhyInit (
   )
 {
   EFI_STATUS Status;
-  CHIP_COMPHY_CONFIG ChipConfig[MVHW_MAX_COMPHY_DEVS], *PtrChipCfg;
-  PCD_LANE_MAP LaneData[MVHW_MAX_COMPHY_DEVS];
+  CHIP_COMPHY_CONFIG *ChipConfig, *PtrChipCfg;
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_COMPHY_DESC *ComPhyBoardDesc;
+  PCD_LANE_MAP *LaneData;
   UINT32 Lane, MaxComphyCount;
-  UINT8 *ComPhyDeviceTable, Index;
+  UINTN Index;
 
   /* Obtain table with enabled ComPhy devices */
-  ComPhyDeviceTable = (UINT8 *)PcdGetPtr (PcdComPhyDevices);
-  if (ComPhyDeviceTable == NULL) {
-    DEBUG ((DEBUG_ERROR, "Missing PcdComPhyDevices\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
-  if (PcdGetSize (PcdComPhyDevices) > MVHW_MAX_COMPHY_DEVS) {
-    DEBUG ((DEBUG_ERROR, "Wrong PcdComPhyDevices format\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = BoardDescProtocol->BoardDescComPhyGet (BoardDescProtocol,
+                                &ComPhyBoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  ChipConfig = AllocateZeroPool (ComPhyBoardDesc->ComPhyDevCount *
+                                 sizeof (CHIP_COMPHY_CONFIG));
+  if (ChipConfig == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    BoardDescProtocol->BoardDescFree (ComPhyBoardDesc);
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  LaneData = AllocateZeroPool (ComPhyBoardDesc->ComPhyDevCount *
+                               sizeof (PCD_LANE_MAP));
+  if (ChipConfig == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    BoardDescProtocol->BoardDescFree (ComPhyBoardDesc);
+    FreePool (ChipConfig);
+    return EFI_OUT_OF_RESOURCES;
   }
 
   /* Initialize enabled chips */
-  for (Index = 0; Index < PcdGetSize (PcdComPhyDevices); Index++) {
-    if (!MVHW_DEV_ENABLED (ComPhy, Index)) {
-      DEBUG ((DEBUG_ERROR, "Skip ComPhy chip %d\n", Index));
-      continue;
-    }
+  for (Index = 0; Index < ComPhyBoardDesc->ComPhyDevCount; Index++) {
 
     PtrChipCfg = &ChipConfig[Index];
-    InitComPhyConfig(PtrChipCfg, LaneData, Index);
+    InitComPhyConfig (PtrChipCfg, LaneData, &ComPhyBoardDesc[Index]);
 
     /* Get the count of the SerDes of the specific chip */
     MaxComphyCount = PtrChipCfg->LanesCount;
@@ -274,6 +286,10 @@ MvComPhyInit (
     /* PHY power UP sequence */
     PtrChipCfg->Init (PtrChipCfg);
   }
+
+  BoardDescProtocol->BoardDescFree (ComPhyBoardDesc);
+  FreePool (ChipConfig);
+  FreePool (LaneData);
 
   return EFI_SUCCESS;
 }
