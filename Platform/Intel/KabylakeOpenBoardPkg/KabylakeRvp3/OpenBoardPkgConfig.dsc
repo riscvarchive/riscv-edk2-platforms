@@ -52,7 +52,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|TRUE
 !endif
   
-  gBoardModuleTokenSpaceGuid.PcdTbtEnable|TRUE
+  gBoardModuleTokenSpaceGuid.PcdTbtEnable|FALSE
   #
   # More fine granularity control below:
   #
