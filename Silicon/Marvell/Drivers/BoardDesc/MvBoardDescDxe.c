@@ -37,6 +37,69 @@ MV_BOARD_DESC *mBoardDescInstance;
 
 STATIC
 EFI_STATUS
+MvBoardDescComPhyGet (
+  IN MARVELL_BOARD_DESC_PROTOCOL  *This,
+  IN OUT MV_BOARD_COMPHY_DESC    **ComPhyDesc
+  )
+{
+  UINT8 *ComPhyDeviceEnabled;
+  UINTN ComPhyCount, ComPhyDeviceTableSize, ComPhyIndex, Index;
+  MV_BOARD_COMPHY_DESC *BoardDesc;
+  MV_SOC_COMPHY_DESC *SoCDesc;
+  EFI_STATUS Status;
+
+  /* Get SoC data about all available ComPhy controllers */
+  Status = ArmadaSoCDescComPhyGet (&SoCDesc, &ComPhyCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /*
+   * Obtain table with enabled ComPhy controllers
+   * which is represented as an array of UINT8 values
+   * (0x0 - disabled, 0x1 enabled).
+   */
+  ComPhyDeviceEnabled = PcdGetPtr (PcdComPhyDevices);
+  if (ComPhyDeviceEnabled == NULL) {
+    /* No ComPhy controllers declared */
+    return EFI_NOT_FOUND;
+  }
+
+  ComPhyDeviceTableSize = PcdGetSize (PcdComPhyDevices);
+
+  /* Check if PCD with ComPhy is correctly defined */
+  if (ComPhyDeviceTableSize > ComPhyCount) {
+    DEBUG ((DEBUG_ERROR, "%a: Wrong PcdComPhyDevices format\n", __FUNCTION__));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  /* Allocate and fill board description */
+  BoardDesc = AllocateZeroPool (ComPhyDeviceTableSize * sizeof (MV_BOARD_COMPHY_DESC));
+  if (BoardDesc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  ComPhyIndex = 0;
+  for (Index = 0; Index < ComPhyDeviceTableSize; Index++) {
+    if (!ComPhyDeviceEnabled[Index]) {
+      DEBUG ((DEBUG_ERROR, "%a: Skip ComPhy controller %d\n", __FUNCTION__, Index));
+      continue;
+    }
+
+    BoardDesc[ComPhyIndex].SoC = &SoCDesc[Index];
+    ComPhyIndex++;
+  }
+
+  BoardDesc->ComPhyDevCount = ComPhyIndex;
+
+  *ComPhyDesc = BoardDesc;
+
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
 MvBoardDescAhciGet (
   IN MARVELL_BOARD_DESC_PROTOCOL  *This,
   IN OUT MV_BOARD_AHCI_DESC      **AhciDesc
@@ -392,6 +455,7 @@ MvBoardDescInitProtocol (
   )
 {
   BoardDescProtocol->BoardDescAhciGet = MvBoardDescAhciGet;
+  BoardDescProtocol->BoardDescComPhyGet = MvBoardDescComPhyGet;
   BoardDescProtocol->BoardDescPp2Get = MvBoardDescPp2Get;
   BoardDescProtocol->BoardDescSdMmcGet = MvBoardDescSdMmcGet;
   BoardDescProtocol->BoardDescUtmiGet = MvBoardDescUtmiGet;

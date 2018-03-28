@@ -57,6 +57,7 @@
   gMarvellBoardDescProtocolGuid
 
 [Pcd]
+  gMarvellTokenSpaceGuid.PcdComPhyDevices
   gMarvellTokenSpaceGuid.PcdPciEAhci
   gMarvellTokenSpaceGuid.PcdPciESdhci
   gMarvellTokenSpaceGuid.PcdPciEXhci

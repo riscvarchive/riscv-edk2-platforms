@@ -17,6 +17,14 @@
 #include <Library/ArmadaSoCDescLib.h>
 
 //
+// COMPHY controllers per-board description
+//
+typedef struct {
+  MV_SOC_COMPHY_DESC *SoC;
+  UINTN               ComPhyDevCount;
+} MV_BOARD_COMPHY_DESC;
+
+//
 // NonDiscoverableDevices per-board description
 //
 
