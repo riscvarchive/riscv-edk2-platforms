@@ -60,6 +60,7 @@
   UefiLib
 
 [Protocols]
+  gMarvellBoardDescProtocolGuid
   gMarvellMdioProtocolGuid
 
 [Depex]

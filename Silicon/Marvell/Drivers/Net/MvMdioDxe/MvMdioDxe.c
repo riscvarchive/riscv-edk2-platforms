@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
+#include <Protocol/BoardDesc.h>
 #include <Protocol/DriverBinding.h>
 #include <Protocol/Mdio.h>
 
@@ -45,8 +46,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiLib.h>
 
 #include "MvMdioDxe.h"
-
-DECLARE_A7K8K_MDIO_TEMPLATE;
 
 STATIC
 EFI_STATUS
@@ -216,11 +215,26 @@ MvMdioDxeInitialise (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  MVHW_MDIO_DESC *Desc = &mA7k8kMdioDescTemplate;
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_MDIO_DESC *MdioBoardDesc;
   UINT8 Index;
   MARVELL_MDIO_PROTOCOL *Mdio;
   EFI_STATUS Status;
   EFI_HANDLE Handle = NULL;
+
+  /* Obtain list of available controllers */
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  Status = BoardDescProtocol->BoardDescMdioGet (BoardDescProtocol,
+                                &MdioBoardDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
 
   Mdio = AllocateZeroPool (sizeof (MARVELL_MDIO_PROTOCOL));
   if (Mdio == NULL) {
@@ -228,12 +242,19 @@ MvMdioDxeInitialise (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  /* Obtain base addresses of all possible controllers */
-  for (Index = 0; Index < Desc->MdioDevCount; Index++) {
-    Mdio->BaseAddresses[Index] = Desc->MdioBaseAddresses[Index];
+  Mdio->BaseAddresses = AllocateZeroPool (MdioBoardDesc->MdioDevCount *
+                                          sizeof (UINTN));
+  if (Mdio->BaseAddresses == NULL) {
+    DEBUG ((DEBUG_ERROR, "MdioDxe: Protocol allocation failed\n"));
+    return EFI_OUT_OF_RESOURCES;
   }
 
-  Mdio->ControllerCount = Desc->MdioDevCount;
+  /* Obtain base addresses of all possible controllers */
+  for (Index = 0; Index < MdioBoardDesc->MdioDevCount; Index++) {
+    Mdio->BaseAddresses[Index] = MdioBoardDesc[Index].SoC->MdioBaseAddress;
+  }
+
+  Mdio->ControllerCount = MdioBoardDesc->MdioDevCount;
   Mdio->Read = MvMdioRead;
   Mdio->Write = MvMdioWrite;
 
@@ -247,6 +268,8 @@ MvMdioDxeInitialise (
     DEBUG((DEBUG_ERROR, "Failed to install interfaces\n"));
     return Status;
   }
+
+  BoardDescProtocol->BoardDescFree (MdioBoardDesc);
 
   return EFI_SUCCESS;
 }
