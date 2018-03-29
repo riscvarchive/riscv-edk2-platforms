@@ -25,6 +25,14 @@ typedef struct {
 } MV_BOARD_COMPHY_DESC;
 
 //
+// MDIO devices per-board description
+//
+typedef struct {
+  MV_SOC_MDIO_DESC *SoC;
+  UINTN             MdioDevCount;
+} MV_BOARD_MDIO_DESC;
+
+//
 // NonDiscoverableDevices per-board description
 //
 
