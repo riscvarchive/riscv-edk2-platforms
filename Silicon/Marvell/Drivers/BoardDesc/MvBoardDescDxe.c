@@ -100,6 +100,71 @@ MvBoardDescComPhyGet (
 
 STATIC
 EFI_STATUS
+MvBoardDescI2cGet (
+  IN MARVELL_BOARD_DESC_PROTOCOL  *This,
+  IN OUT MV_BOARD_I2C_DESC       **I2cDesc
+  )
+{
+  UINT8 *I2cDeviceEnabled;
+  UINTN I2cCount, I2cDeviceEnabledSize, I2cIndex, Index;
+  MV_BOARD_I2C_DESC *BoardDesc;
+  MV_SOC_I2C_DESC *SoCDesc;
+  EFI_STATUS Status;
+
+  /* Get SoC data about all available I2C controllers */
+  Status = ArmadaSoCDescI2cGet (&SoCDesc, &I2cCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /*
+   * Obtain table with enabled I2C controllers
+   * which is represented as an array of UINT8 values
+   * (0x0 - disabled, 0x1 enabled).
+   */
+  I2cDeviceEnabled = PcdGetPtr (PcdI2cControllersEnabled);
+  if (I2cDeviceEnabled == NULL) {
+    /* No I2C on platform */
+    return EFI_SUCCESS;
+  }
+
+  I2cDeviceEnabledSize = PcdGetSize (PcdI2cControllersEnabled);
+
+  /* Check if PCD with I2C controllers is correctly defined */
+  if (I2cDeviceEnabledSize > I2cCount) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Wrong PcdI2cControllersEnabled format\n",
+      __FUNCTION__));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  /* Allocate and fill board description */
+  BoardDesc = AllocateZeroPool (I2cDeviceEnabledSize * sizeof (MV_BOARD_I2C_DESC));
+  if (BoardDesc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  I2cIndex = 0;
+  for (Index = 0; Index < I2cDeviceEnabledSize; Index++) {
+    if (!I2cDeviceEnabled[Index]) {
+      DEBUG ((DEBUG_INFO, "%a: Skip I2c controller %d\n", __FUNCTION__, Index));
+      continue;
+    }
+
+    BoardDesc[I2cIndex].SoC = &SoCDesc[Index];
+    I2cIndex++;
+  }
+
+  BoardDesc->I2cDevCount = I2cIndex;
+
+  *I2cDesc = BoardDesc;
+
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
 MvBoardDescMdioGet (
   IN MARVELL_BOARD_DESC_PROTOCOL  *This,
   IN OUT MV_BOARD_MDIO_DESC      **MdioDesc
@@ -491,6 +556,7 @@ MvBoardDescInitProtocol (
 {
   BoardDescProtocol->BoardDescAhciGet = MvBoardDescAhciGet;
   BoardDescProtocol->BoardDescComPhyGet = MvBoardDescComPhyGet;
+  BoardDescProtocol->BoardDescI2cGet = MvBoardDescI2cGet;
   BoardDescProtocol->BoardDescMdioGet = MvBoardDescMdioGet;
   BoardDescProtocol->BoardDescPp2Get = MvBoardDescPp2Get;
   BoardDescProtocol->BoardDescSdMmcGet = MvBoardDescSdMmcGet;

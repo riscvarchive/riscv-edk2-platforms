@@ -58,6 +58,7 @@
 
 [Pcd]
   gMarvellTokenSpaceGuid.PcdComPhyDevices
+  gMarvellTokenSpaceGuid.PcdI2cControllersEnabled
   gMarvellTokenSpaceGuid.PcdPciEAhci
   gMarvellTokenSpaceGuid.PcdPciESdhci
   gMarvellTokenSpaceGuid.PcdPciEXhci

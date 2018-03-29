@@ -25,6 +25,14 @@ typedef struct {
 } MV_BOARD_COMPHY_DESC;
 
 //
+// I2C devices per-board description
+//
+typedef struct {
+  MV_SOC_I2C_DESC *SoC;
+  UINTN            I2cDevCount;
+} MV_BOARD_I2C_DESC;
+
+//
 // MDIO devices per-board description
 //
 typedef struct {
