@@ -622,7 +622,7 @@
 
   Platform/Hisilicon/D05/Drivers/ReportPciePlugDidVidToBmc/ReportPciePlugDidVidToBmc.inf
   Silicon/Hisilicon/Drivers/Smbios/AddSmbiosType9/AddSmbiosType9.inf
-  Platform/Hisilicon/D05/Drivers/Sm750Dxe/UefiSmi.inf
+  Platform/Hisilicon/Drivers/Sm750Dxe/UefiSmi.inf
   Silicon/Hisilicon/Drivers/SasPlatform/SasPlatform.inf
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
   Silicon/Hisilicon/Drivers/Smbios/MemorySubClassDxe/MemorySubClassDxe.inf
