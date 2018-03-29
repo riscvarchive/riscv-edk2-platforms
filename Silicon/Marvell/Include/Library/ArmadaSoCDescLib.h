@@ -37,6 +37,21 @@ ArmadaSoCDescComPhyGet (
   );
 
 //
+// I2C
+//
+typedef struct {
+  UINTN I2cId;
+  UINTN I2cBaseAddress;
+} MV_SOC_I2C_DESC;
+
+EFI_STATUS
+EFIAPI
+ArmadaSoCDescI2cGet (
+  IN OUT MV_SOC_I2C_DESC  **I2cDesc,
+  IN OUT UINTN             *DescCount
+  );
+
+//
 // MDIO
 //
 typedef struct {

@@ -38,6 +38,12 @@
 #define MV_SOC_COMPHY_MUX_BITS           4
 
 //
+// Platform description of I2C controllers
+//
+#define MV_SOC_I2C_PER_CP_COUNT          2
+#define MV_SOC_I2C_BASE(I2c)             (0x701000 + ((I2c) * 0x100))
+
+//
 // Platform description of MDIO controllers
 //
 #define MV_SOC_MDIO_BASE(Cp)             (MV_SOC_CP_BASE (Cp) + 0x12A200)

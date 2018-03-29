@@ -63,6 +63,37 @@ ArmadaSoCDescComPhyGet (
 
 EFI_STATUS
 EFIAPI
+ArmadaSoCDescI2cGet (
+  IN OUT MV_SOC_I2C_DESC  **I2cDesc,
+  IN OUT UINTN             *DescCount
+  )
+{
+  MV_SOC_I2C_DESC *Desc;
+  UINTN CpCount, CpIndex, Index;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  *DescCount = CpCount * MV_SOC_I2C_PER_CP_COUNT;
+  Desc = AllocateZeroPool (*DescCount * sizeof (MV_SOC_I2C_DESC));
+  if (Desc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  *I2cDesc = Desc;
+
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    for (Index = 0; Index < MV_SOC_I2C_PER_CP_COUNT; Index++) {
+      Desc->I2cBaseAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_I2C_BASE (Index);
+      Desc++;
+    }
+  }
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 ArmadaSoCDescMdioGet (
   IN OUT MV_SOC_MDIO_DESC  **MdioDesc,
   IN OUT UINTN              *DescCount
