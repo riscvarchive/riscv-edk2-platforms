@@ -38,6 +38,12 @@
 #define MV_SOC_COMPHY_MUX_BITS           4
 
 //
+// Platform description of MDIO controllers
+//
+#define MV_SOC_MDIO_BASE(Cp)             (MV_SOC_CP_BASE (Cp) + 0x12A200)
+#define MV_SOC_MDIO_ID(Cp)               (Cp)
+
+//
 // Platform description of PP2 NIC
 //
 #define MV_SOC_PP2_BASE(Cp)              MV_SOC_CP_BASE (Cp)

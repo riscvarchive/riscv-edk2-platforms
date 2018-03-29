@@ -63,6 +63,35 @@ ArmadaSoCDescComPhyGet (
 
 EFI_STATUS
 EFIAPI
+ArmadaSoCDescMdioGet (
+  IN OUT MV_SOC_MDIO_DESC  **MdioDesc,
+  IN OUT UINTN              *DescCount
+  )
+{
+  MV_SOC_MDIO_DESC *Desc;
+  UINTN CpCount, CpIndex;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  Desc = AllocateZeroPool (CpCount * sizeof (MV_SOC_MDIO_DESC));
+  if (Desc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    Desc[CpIndex].MdioId = MV_SOC_MDIO_ID (CpIndex);
+    Desc[CpIndex].MdioBaseAddress = MV_SOC_MDIO_BASE (CpIndex);
+  }
+
+  *MdioDesc = Desc;
+  *DescCount = CpCount;
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 ArmadaSoCDescAhciGet (
   IN OUT MV_SOC_AHCI_DESC  **AhciDesc,
   IN OUT UINTN              *DescCount
