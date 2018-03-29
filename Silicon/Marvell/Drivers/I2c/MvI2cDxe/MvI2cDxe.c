@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
+#include <Protocol/BoardDesc.h>
 #include <Protocol/I2cMaster.h>
 #include <Protocol/I2cEnumerate.h>
 #include <Protocol/I2cBusConfigurationManagement.h>
@@ -43,12 +44,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/PcdLib.h>
 #include <Library/UefiLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/MvHwDescLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
 #include "MvI2cDxe.h"
-
-DECLARE_A7K8K_I2C_TEMPLATE;
 
 STATIC MV_I2C_BAUD_RATE baud_rate;
 
@@ -174,37 +172,36 @@ MvI2cInitialise (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  MVHW_I2C_DESC *Desc = &mA7k8kI2cDescTemplate;
-  UINT8 *I2cDeviceTable, Index;
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_I2C_DESC *Desc;
   EFI_STATUS Status;
+  UINTN Index;
 
-  /* Obtain table with enabled I2c devices */
-  I2cDeviceTable = (UINT8 *)PcdGetPtr (PcdI2cControllersEnabled);
-  if (I2cDeviceTable == NULL) {
-    DEBUG ((DEBUG_ERROR, "Missing PcdI2cControllersEnabled\n"));
-    return EFI_INVALID_PARAMETER;
+  /* Obtain list of available controllers */
+  Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&BoardDescProtocol);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
-  if (PcdGetSize (PcdI2cControllersEnabled) > MVHW_MAX_I2C_DEVS) {
-    DEBUG ((DEBUG_ERROR, "Wrong PcdI2cControllersEnabled format\n"));
-    return EFI_INVALID_PARAMETER;
+  Status = BoardDescProtocol->BoardDescI2cGet (BoardDescProtocol, &Desc);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
   /* Initialize enabled chips */
-  for (Index = 0; Index < PcdGetSize (PcdI2cControllersEnabled); Index++) {
-    if (!MVHW_DEV_ENABLED (I2c, Index)) {
-      DEBUG ((DEBUG_ERROR, "Skip I2c chip %d\n", Index));
-      continue;
-    }
-
+  for (Index = 0; Index < Desc->I2cDevCount; Index++) {
     Status = MvI2cInitialiseController(
         ImageHandle,
         SystemTable,
-        Desc->I2cBaseAddresses[Index]
+        Desc[Index].SoC->I2cBaseAddress
         );
     if (EFI_ERROR(Status))
       return Status;
   }
+
+  BoardDescProtocol->BoardDescFree (Desc);
 
   return EFI_SUCCESS;
 }

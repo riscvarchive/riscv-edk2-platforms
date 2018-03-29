@@ -61,6 +61,7 @@
   gEfiDevicePathProtocolGuid
   gEfiI2cEnumerateProtocolGuid
   gEfiI2cBusConfigurationManagementProtocolGuid
+  gMarvellBoardDescProtocolGuid
 
 [Pcd]
   gMarvellTokenSpaceGuid.PcdI2cSlaveAddresses
