@@ -41,7 +41,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/MvHwDescLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
@@ -380,7 +379,8 @@ MvPhyInit (
   MdioIndex = Phy2MdioController[PhyIndex];
 
   /* Verify correctness of PHY <-> MDIO assignment */
-  if (!MVHW_DEV_ENABLED (Mdio, MdioIndex) || MdioIndex >= Mdio->ControllerCount) {
+  if ((MdioDeviceTable[MdioIndex] == 0) ||
+      (MdioIndex >= Mdio->ControllerCount)) {
     DEBUG ((DEBUG_ERROR, "MvPhyDxe: Incorrect Mdio controller assignment for PHY#%d", PhyIndex));
     return EFI_INVALID_PARAMETER;
   }
