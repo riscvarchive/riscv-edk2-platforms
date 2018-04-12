@@ -134,7 +134,7 @@ pfdep_alloc_pkt_buf (
       return PFDEP_ERR_ALLOC;
     }
 
-    (*pkt_handle_p)->Buffer = ALIGN_POINTER (*pkt_handle_p,
+    (*pkt_handle_p)->Buffer = ALIGN_POINTER (*pkt_handle_p + 1,
                                              mCpu->DmaBufferAlignment);
   }
 
