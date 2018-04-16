@@ -25,7 +25,7 @@
   FILE_GUID                      = fa81e889-045b-4c96-9093-742554fd0588
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
-  LIBRARY_CLASS                  = RealTimeClockLib
+  LIBRARY_CLASS                  = RealTimeClockLib|DXE_RUNTIME_DRIVER
 
 [Sources.common]
   RealTimeClockLib.c
@@ -50,3 +50,6 @@
 
 [Pcd]
   gMarvellTokenSpaceGuid.PcdRtcEnabled
+
+[Depex.common.DXE_RUNTIME_DRIVER]
+  gEfiCpuArchProtocolGuid
