@@ -63,6 +63,7 @@
   UefiRuntimeServicesTableLib
 
 [Guids]
+  gEdkiiNvVarStoreFormattedGuid
   gEfiAuthenticatedVariableGuid
   gEfiEventVirtualAddressChangeGuid
   gEfiSystemNvDataFvGuid
@@ -84,8 +85,4 @@
   gMarvellTokenSpaceGuid.PcdSpiMemoryBase
 
 [Depex]
-  #
-  # MvFvbDxe must be loaded before VariableRuntimeDxe in case empty
-  # flash needs populating with default values.
-  #
-  BEFORE gVariableRuntimeDxeFileGuid
+  gEfiCpuArchProtocolGuid
