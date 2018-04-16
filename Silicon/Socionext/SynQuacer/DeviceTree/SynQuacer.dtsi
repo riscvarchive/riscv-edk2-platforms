@@ -420,9 +420,9 @@
         reg-shift = <2>;
     };
 
-    clk_netsec: refclk125mhz {
+    clk_netsec: refclk250mhz {
         compatible = "fixed-clock";
-        clock-frequency = <125000000>;
+        clock-frequency = <250000000>;
         #clock-cells = <0>;
     };
 

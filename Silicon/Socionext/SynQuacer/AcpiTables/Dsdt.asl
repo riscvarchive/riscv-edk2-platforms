@@ -162,7 +162,7 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
           Package (2) { "phy-channel", FixedPcdGet32 (PcdNetsecPhyAddress) },
           Package (2) { "max-speed", 1000 },
           Package (2) { "max-frame-size", 9000 },
-          Package (2) { "socionext,phy-clock-frequency", 125000000 },
+          Package (2) { "socionext,phy-clock-frequency", 250000000 },
         }
       })
     }
