@@ -1142,9 +1142,9 @@ ErrorSetMemAttr:
   gDS->RemoveMemorySpace (RegionBaseAddress, RuntimeMmioRegionSize);
 
 ErrorAddSpace:
-  gBS->UninstallProtocolInterface (&gImageHandle,
-                  &gEdkiiNvVarStoreFormattedGuid,
-                  NULL);
+  gBS->UninstallProtocolInterface (gImageHandle,
+         &gEdkiiNvVarStoreFormattedGuid,
+         NULL);
 
 ErrorInstallNvVarStoreFormatted:
   gBS->UninstallMultipleProtocolInterfaces (&mFvbDevice->Handle,
