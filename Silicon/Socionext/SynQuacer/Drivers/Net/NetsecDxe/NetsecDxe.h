@@ -71,6 +71,8 @@ typedef struct {
 
   EFI_EVENT                         ExitBootEvent;
 
+  EFI_EVENT                         PhyStatusEvent;
+
   NON_DISCOVERABLE_DEVICE           *Dev;
 
   NETSEC_DEVICE_PATH                DevicePath;
@@ -114,5 +116,7 @@ NetsecRelease (
 
 #define RXINT_TMR_CNT_US            0
 #define RXINT_PKTCNT                1
+
+#define  NETSEC_PHY_STATUS_POLL_INTERVAL     (EFI_TIMER_PERIOD_MILLISECONDS (1000))
 
 #endif

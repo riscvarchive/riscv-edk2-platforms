@@ -161,6 +161,10 @@ SnpStop (
 
   gBS->CloseEvent (LanDriver->ExitBootEvent);
 
+  gBS->SetTimer (LanDriver->PhyStatusEvent, TimerCancel, 0);
+  gBS->CloseEvent (LanDriver->PhyStatusEvent);
+  LanDriver->PhyStatusEvent = NULL;
+
   // Change the state
   Snp->Mode->State = EfiSimpleNetworkStopped;
   Status = EFI_SUCCESS;
@@ -406,6 +410,99 @@ NotifyExitBoot (
   gBS->CloseEvent (Event);
 }
 
+/**
+  Polling function to check the physical link status with GMAC
+
+  @param[in]  Timer              Event
+  @param[in]  Context            Pointer to the Snp structure
+
+**/
+STATIC
+VOID
+EFIAPI
+NetsecPollPhyStatus (
+  IN EFI_EVENT    Timer,
+  IN VOID         *Context
+  )
+{
+  EFI_SIMPLE_NETWORK_PROTOCOL   *Snp;
+  NETSEC_DRIVER                 *LanDriver;
+  ogma_phy_link_status_t        phy_link_status;
+  ogma_gmac_mode_t              ogma_gmac_mode;
+  ogma_err_t                    ogma_err;
+  BOOLEAN                       ValidFlag;
+  ogma_gmac_mode_t              GmacMode;
+  BOOLEAN                       RxRunningFlag;
+  BOOLEAN                       TxRunningFlag;
+
+  Snp = (EFI_SIMPLE_NETWORK_PROTOCOL *)Context;
+  if (Snp == NULL) {
+    DEBUG((DEBUG_ERROR, "NETSEC: PollPhyStatus() invalid Snp\n"));
+    return;
+  }
+
+  LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
+
+  // Update the media status
+  ogma_err = ogma_get_phy_link_status (LanDriver->Handle, LanDriver->PhyAddress,
+               &phy_link_status);
+  if (ogma_err != OGMA_ERR_OK) {
+    DEBUG ((DEBUG_ERROR,
+      "NETSEC: ogma_get_phy_link_status failed with error code: %d\n",
+      (INT32)ogma_err));
+    return;
+  }
+
+  // Update the GMAC status
+  ogma_err = ogma_get_gmac_status (LanDriver->Handle, &ValidFlag, &GmacMode,
+               &RxRunningFlag, &TxRunningFlag);
+  if (ogma_err != OGMA_ERR_OK) {
+    DEBUG ((DEBUG_ERROR,
+      "NETSEC: ogma_get_gmac_status failed with error code: %d\n",
+      (INT32)ogma_err));
+    return;
+  }
+
+  // Stop GMAC when GMAC is running and physical link is down
+  if (RxRunningFlag && TxRunningFlag && !phy_link_status.up_flag) {
+    ogma_err = ogma_stop_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_stop_gmac() failed with error status %d\n",
+        ogma_err));
+      return;
+    }
+  }
+
+  // Start GMAC when GMAC is stopped and physical link is up
+  if (!RxRunningFlag && !TxRunningFlag && phy_link_status.up_flag) {
+    ZeroMem (&ogma_gmac_mode, sizeof (ogma_gmac_mode_t));
+    ogma_gmac_mode.link_speed = phy_link_status.link_speed;
+    ogma_gmac_mode.half_duplex_flag = (ogma_bool)phy_link_status.half_duplex_flag;
+    if (!phy_link_status.half_duplex_flag && FixedPcdGet8 (PcdFlowCtrl)) {
+      ogma_gmac_mode.flow_ctrl_enable_flag     = FixedPcdGet8 (PcdFlowCtrl);
+      ogma_gmac_mode.flow_ctrl_start_threshold = FixedPcdGet16 (PcdFlowCtrlStartThreshold);
+      ogma_gmac_mode.flow_ctrl_stop_threshold  = FixedPcdGet16 (PcdFlowCtrlStopThreshold);
+      ogma_gmac_mode.pause_time                = FixedPcdGet16 (PcdPauseTime);
+    }
+
+    ogma_err = ogma_set_gmac_mode (LanDriver->Handle, &ogma_gmac_mode);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_set_gmac() failed with error status %d\n",
+        (INT32)ogma_err));
+      return;
+    }
+
+    ogma_err = ogma_start_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_start_gmac() failed with error status %d\n",
+        (INT32)ogma_err));
+    }
+  }
+}
+
 /*
  *  UEFI Start() function
  */
@@ -448,6 +545,17 @@ SnpStart (
 
   Status = gBS->CreateEvent (EVT_SIGNAL_EXIT_BOOT_SERVICES, TPL_CALLBACK,
                   NotifyExitBoot, Snp, &LanDriver->ExitBootEvent);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = gBS->CreateEvent (EVT_TIMER | EVT_NOTIFY_SIGNAL, TPL_CALLBACK,
+                  NetsecPollPhyStatus, Snp, &LanDriver->PhyStatusEvent);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = gBS->SetTimer (
+                  LanDriver->PhyStatusEvent,
+                  TimerPeriodic,
+                  NETSEC_PHY_STATUS_POLL_INTERVAL
+                  );
   ASSERT_EFI_ERROR (Status);
 
   // Change state
