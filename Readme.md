@@ -246,6 +246,9 @@ For more information, see the
 ## Socionext
 * [SynQuacer](Platform/Socionext/DeveloperBox)
 
+## NXP
+* [LS1043aRdb](Platform/NXP/LS1043aRdbPkg)
+
 # Maintainers
 
 See [Maintainers.txt](Maintainers.txt).
