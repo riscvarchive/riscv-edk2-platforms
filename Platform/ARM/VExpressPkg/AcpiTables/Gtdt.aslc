@@ -108,7 +108,7 @@ FVP_GENERIC_TIMER_DESCRIPTION_TABLES Gtdt = {
     FVP_GTDT_GTIMER_FLAGS,                                // UINT32  NonSecurePL2TimerFlags
     FVP_CNT_READ_BASE_ADDRESS,                            // UINT64  CntReadBasePhysicalAddress
     FVP_PLATFORM_TIMER_COUNT,                             // UINT32  PlatformTimerCount
-#if (FVP_WATCHDOG_COUNT != 0)
+#if (FVP_PLATFORM_TIMER_COUNT != 0)
     sizeof (EFI_ACPI_6_1_GENERIC_TIMER_DESCRIPTION_TABLE) // UINT32  PlatfromTimerOffset
 #else
     0
