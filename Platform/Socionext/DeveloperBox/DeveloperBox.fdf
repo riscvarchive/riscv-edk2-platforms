@@ -149,6 +149,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
   INF MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
+  INF MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
 
   #
   # eMMC support
