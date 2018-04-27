@@ -84,4 +84,4 @@
   gSynQuacerTokenSpaceGuid.PcdPlatformSettings
 
 [Depex]
-  TRUE
+  gEfiVariableArchProtocolGuid
