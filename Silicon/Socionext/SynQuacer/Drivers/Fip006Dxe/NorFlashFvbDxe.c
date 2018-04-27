@@ -814,6 +814,21 @@ NorFlashFvbInitialize (
   }
 
   //
+  // The driver implementing the variable read service can now be dispatched;
+  // the varstore headers are in place.
+  //
+  Status = gBS->InstallProtocolInterface (&gImageHandle,
+                  &gEdkiiNvVarStoreFormattedGuid,
+                  EFI_NATIVE_INTERFACE,
+                  NULL);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Failed to install gEdkiiNvVarStoreFormattedGuid\n",
+      __FUNCTION__));
+      return Status;
+  }
+
+  //
   // Declare the Non-Volatile storage as EFI_MEMORY_RUNTIME
   //
   RuntimeMmioRegionSize = Instance->Size;

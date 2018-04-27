@@ -53,6 +53,7 @@
   UefiRuntimeServicesTableLib
 
 [Guids]
+  gEdkiiNvVarStoreFormattedGuid
   gEfiAuthenticatedVariableGuid
   gEfiEventVirtualAddressChangeGuid
   gEfiSystemNvDataFvGuid
@@ -75,7 +76,4 @@
   gFip006DxeTokenSpaceGuid.PcdFip006DxeMemBaseAddress
 
 [Depex]
-  #
-  # NorFlashDxe must be loaded before VariableRuntimeDxe in case empty flash needs populating with default values
-  #
-  BEFORE gVariableRuntimeDxeFileGuid
+  gEfiCpuArchProtocolGuid
