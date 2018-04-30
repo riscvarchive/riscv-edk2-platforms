@@ -12,6 +12,8 @@
 
 # Per-board additional content of the DXE phase firmware volume
 
+  INF Silicon/Marvell/Drivers/Gpio/MvGpioDxe/MvGpioDxe.inf
+
   # DTB
   INF RuleOverride = DTB Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
 

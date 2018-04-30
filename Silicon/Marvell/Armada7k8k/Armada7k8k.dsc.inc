@@ -454,6 +454,8 @@
   Silicon/Marvell/Armada7k8k/Drivers/PlatInitDxe/PlatInitDxe.inf
 
   # Platform drivers
+  Silicon/Marvell/Drivers/Gpio/MvGpioDxe/MvGpioDxe.inf
+  Silicon/Marvell/Drivers/Gpio/MvPca95xxDxe/MvPca95xxDxe.inf
   Silicon/Marvell/Drivers/I2c/MvI2cDxe/MvI2cDxe.inf
   MdeModulePkg/Bus/I2c/I2cDxe/I2cDxe.inf
   Silicon/Marvell/Drivers/I2c/MvEepromDxe/MvEepromDxe.inf
