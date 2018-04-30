@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -353,8 +353,6 @@
   # List of Device Paths that support BootMonFs
   gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
 
-  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|10
-
   # RunAxf support via Dynamic Shell Command protocol
   # We want to use the Shell Libraries but don't want it to initialise
   # automatically. We initialise the libraries when the command is called by the
@@ -398,6 +396,9 @@
   # Enable the non-executable DXE stack. (This gets set up by DxeIpl)
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
+
+[PcdsDynamicHii.common.DEFAULT]
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|10
 
 [Components.common]
   MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
