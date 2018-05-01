@@ -156,7 +156,7 @@ typedef struct {
   }                                                                           \
 }
 
-STATIC STYX_PPTT_TABLE mSynQuacerPpttTable = {
+STATIC STYX_PPTT_TABLE mStyxPpttTable = {
   {
     AMD_ACPI_HEADER(EFI_ACPI_6_2_PROCESSOR_PROPERTIES_TOPOLOGY_TABLE_STRUCTURE_SIGNATURE,
                     STYX_PPTT_TABLE,
@@ -221,5 +221,5 @@ PpttHeader (
   VOID
   )
 {
-  return (EFI_ACPI_DESCRIPTION_HEADER *)&mSynQuacerPpttTable.Pptt.Header;
+  return (EFI_ACPI_DESCRIPTION_HEADER *)&mStyxPpttTable.Pptt.Header;
 }
