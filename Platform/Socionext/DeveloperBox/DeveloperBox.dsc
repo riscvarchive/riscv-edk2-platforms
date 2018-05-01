@@ -434,7 +434,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{0xe5, 0x4c, 0xb9, 0x50, 0x63, 0x8b, 0x49, 0x48, 0x8a, 0xf4, 0xea, 0x47, 0x93, 0x56, 0xf0, 0xe3}
 
 [PcdsDynamicHii]
-  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|30
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5
 
   gSynQuacerTokenSpaceGuid.PcdPlatformSettings|L"SynQuacerPlatformSettings"|gSynQuacerPlatformFormSetGuid|0x0|0x0|NV,BS
 
