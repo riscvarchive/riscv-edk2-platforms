@@ -19,6 +19,9 @@
 #include <Uefi.h>
 #include <Library/IoLib.h>
 
+// The HNS I2C port 5 is under I2C extender
+#define I2C_EXTENDER_PORT_HNS        5
+
 #define I2C_READ_TIMEOUT             500
 #define I2C_DRV_ONCE_WRITE_BYTES_NUM 8
 #define I2C_DRV_ONCE_READ_BYTES_NUM  8

@@ -258,8 +258,13 @@ CheckI2CTimeOut (
   if (Transfer == I2CTx) {
     Fifo = I2C_GetTxStatus (Socket, Port);
     while (Fifo != 0) {
-      // This is a empirical value for I2C delay. MemoryFence is no need here.
-      I2C_Delay (2);
+      if (Port == I2C_EXTENDER_PORT_HNS) {
+        // This is a empirical value for I2C delay. MemoryFence is no need here.
+        I2C_Delay (1000);
+      } else {
+        // This is a empirical value for I2C delay. MemoryFence is no need here.
+        I2C_Delay (2);
+      }
       if (++Times > I2C_READ_TIMEOUT) {
         (VOID)I2C_Disable (Socket, Port);
         return EFI_TIMEOUT;
@@ -269,8 +274,13 @@ CheckI2CTimeOut (
   } else {
     Fifo = I2C_GetRxStatus (Socket, Port);
     while (Fifo == 0) {
-      // This is a empirical value for I2C delay. MemoryFence is no need here.
-      I2C_Delay (2);
+      if (Port == I2C_EXTENDER_PORT_HNS) {
+        // This is a empirical value for I2C delay. MemoryFence is no need here.
+        I2C_Delay (1000);
+      } else {
+        // This is a empirical value for I2C delay. MemoryFence is no need here.
+        I2C_Delay (2);
+      }
       if (++Times > I2C_READ_TIMEOUT) {
         (VOID)I2C_Disable (Socket, Port);
         return EFI_TIMEOUT;
@@ -369,7 +379,8 @@ I2CWrite(
     Times = 0;
     Fifo = I2C_GetTxStatus (I2cInfo->Socket, I2cInfo->Port);
     while (Fifo > I2C_TXRX_THRESHOLD) {
-      I2C_Delay (2);
+      // This is a empirical value for I2C delay. MemoryFence is no need here.
+      I2C_Delay (1000);
       if (++Times > I2C_READ_TIMEOUT) {
         (VOID)I2C_Disable (I2cInfo->Socket, I2cInfo->Port);
         return EFI_TIMEOUT;
