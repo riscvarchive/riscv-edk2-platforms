@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2012-2017, ARM Limited. All rights reserved.
+#  Copyright (c) 2012-2018, ARM Limited. All rights reserved.
 #  Copyright (c) 2015, Intel Corporation. All rights reserved.<BR>
 #
 #  This program and the accompanying materials
@@ -156,7 +156,7 @@
 
 
   #
-  # ARM General Interrupt Controller
+  # ARM Generic Interrupt Controller
   #
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x2C001000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x2C002000

@@ -147,7 +147,7 @@
   gArmPlatformTokenSpaceGuid.PcdPL180MciBaseAddress|0x1C050000
 
   #
-  # ARM General Interrupt Controller
+  # ARM Generic Interrupt Controller
   #
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x2f000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x2f100000

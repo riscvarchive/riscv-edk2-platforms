@@ -150,7 +150,7 @@
   gEmbeddedTokenSpaceGuid.PcdLan9118DefaultNegotiationTimeout|40000
 
   #
-  # ARM General Interrupt Controller
+  # ARM Generic Interrupt Controller
   #
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x2C010000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x2C02F000
