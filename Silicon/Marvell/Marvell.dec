@@ -59,6 +59,9 @@
   gMarvellFvbDxeGuid = { 0x42903750, 0x7e61, 0x4aaf, { 0x83, 0x29, 0xbf, 0x42, 0x36, 0x4e, 0x24, 0x85 } }
   gMarvellSpiFlashDxeGuid = { 0x49d7fb74, 0x306d, 0x42bd, { 0x94, 0xc8, 0xc0, 0xc5, 0x4b, 0x18, 0x1d, 0xd7 } }
 
+[LibraryClasses]
+  SampleAtResetLib|Include/Library/SampleAtResetLib.h
+
 [Protocols]
   # installed as a protocol by PlatInitDxe to force ordering between DXE drivers
   # that depend on the lowlevel platform initialization having been completed
