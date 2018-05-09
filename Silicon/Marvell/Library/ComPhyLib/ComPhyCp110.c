@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ComPhyLib.h"
 #include <Library/MvHwDescLib.h>
+#include <Library/SampleAtResetLib.h>
 
 #define SD_LANE_ADDR_WIDTH          0x1000
 #define HPIPE_ADDR_OFFSET           0x800
@@ -41,6 +42,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define SD_ADDR(base, Lane)         (base + SD_LANE_ADDR_WIDTH * Lane)
 #define HPIPE_ADDR(base, Lane)      (SD_ADDR(base, Lane) + HPIPE_ADDR_OFFSET)
 #define COMPHY_ADDR(base, Lane)     (base + COMPHY_ADDR_LANE_WIDTH * Lane)
+
+#define CP110_PCIE_REF_CLK_TYPE0    0
+#define CP110_PCIE_REF_CLK_TYPE12   1
 
 DECLARE_A7K8K_NONDISCOVERABLE_TEMPLATE;
 
@@ -99,10 +103,25 @@ COMPHY_MUX_DATA Cp110ComPhyPipeMuxData[] = {
 STATIC
 VOID
 ComPhyPcieRFUConfiguration (
+  IN UINT32 Lane,
+  IN UINT32 PcieWidth,
   IN EFI_PHYSICAL_ADDRESS ComPhyAddr
 )
 {
   UINT32 Mask, Data;
+
+  /* Enable PCIe by4 and by2 */
+  if (Lane == 0) {
+    if (PcieWidth == 4) {
+      RegSet (ComPhyAddr + COMMON_PHY_SD_CTRL1,
+        COMMON_PHY_SD_CTRL1_PCIE_X4_EN,
+        COMMON_PHY_SD_CTRL1_PCIE_X4_EN_MASK);
+    } else if (PcieWidth == 2) {
+      RegSet (ComPhyAddr + COMMON_PHY_SD_CTRL1,
+        COMMON_PHY_SD_CTRL1_PCIE_X2_EN,
+        COMMON_PHY_SD_CTRL1_PCIE_X2_EN_MASK);
+    }
+  }
 
   /* RFU configurations - hard reset ComPhy */
   Mask = COMMON_PHY_CFG1_PWR_UP_MASK;
@@ -132,11 +151,14 @@ ComPhyPcieRFUConfiguration (
 STATIC
 VOID
 ComPhyPciePhyConfiguration (
+  IN UINT32 Lane,
+  IN UINT32 PcieWidth,
+  IN UINT32 PcieClk,
   IN EFI_PHYSICAL_ADDRESS ComPhyAddr,
   IN EFI_PHYSICAL_ADDRESS HpipeAddr
 )
 {
-  UINT32 Mask, Data, PcieClk = 0;
+  UINT32 Mask, Data;
 
   /* Set PIPE soft reset */
   Mask = HPIPE_RST_CLK_CTRL_PIPE_RST_MASK;
@@ -156,13 +178,31 @@ ComPhyPciePhyConfiguration (
   RegSet (HpipeAddr + HPIPE_RST_CLK_CTRL_REG, Data, Mask);
 
   /* Set PLL ready delay for 0x2 */
-  RegSet (HpipeAddr + HPIPE_CLK_SRC_LO_REG,
-    0x2 << HPIPE_CLK_SRC_LO_PLL_RDY_DL_OFFSET,
-    HPIPE_CLK_SRC_LO_PLL_RDY_DL_MASK);
+  Data = HPIPE_CLK_SRC_LO_PLL_RDY_DL_DEFAULT;
+  Mask = HPIPE_CLK_SRC_LO_PLL_RDY_DL_MASK;
+  if (PcieWidth != 1) {
+    Data |= HPIPE_CLK_SRC_LO_BUNDLE_PERIOD_SEL_DEFAULT |
+            HPIPE_CLK_SRC_LO_BUNDLE_PERIOD_SCALE_DEFAULT;
+    Mask |= HPIPE_CLK_SRC_LO_BUNDLE_PERIOD_SEL_MASK |
+            HPIPE_CLK_SRC_LO_BUNDLE_PERIOD_SCALE_MASK;
+  }
+  RegSet (HpipeAddr + HPIPE_CLK_SRC_LO_REG, Data, Mask);
 
   /* Set PIPE mode interface to PCIe3 - 0x1 */
-  RegSet (HpipeAddr + HPIPE_CLK_SRC_HI_REG,
-    0x1 << HPIPE_CLK_SRC_HI_MODE_PIPE_OFFSET, HPIPE_CLK_SRC_HI_MODE_PIPE_MASK);
+  Data = HPIPE_CLK_SRC_HI_MODE_PIPE_EN;
+  Mask = HPIPE_CLK_SRC_HI_MODE_PIPE_MASK;
+  if (PcieWidth != 1) {
+    Mask |= HPIPE_CLK_SRC_HI_LANE_STRT_MASK |
+            HPIPE_CLK_SRC_HI_LANE_MASTER_MASK |
+            HPIPE_CLK_SRC_HI_LANE_BREAK_MASK;
+    if (Lane == 0) {
+      Data |= HPIPE_CLK_SRC_HI_LANE_STRT_EN |
+              HPIPE_CLK_SRC_HI_LANE_MASTER_EN;
+    } else if (Lane == (PcieWidth - 1)) {
+      Data |= HPIPE_CLK_SRC_HI_LANE_BREAK_EN;
+    }
+  }
+  RegSet (HpipeAddr + HPIPE_CLK_SRC_HI_REG, Data, Mask);
 
   /* Config update polarity equalization */
   RegSet (HpipeAddr + HPIPE_LANE_EQ_CFG1_REG,
@@ -172,19 +212,21 @@ ComPhyPciePhyConfiguration (
   RegSet (HpipeAddr + HPIPE_DFE_CTRL_28_REG,
     0x1 << HPIPE_DFE_CTRL_28_PIPE4_OFFSET, HPIPE_DFE_CTRL_28_PIPE4_MASK);
 
-  /* Enable PIN clock 100M_125M */
-  Mask = HPIPE_MISC_CLK100M_125M_MASK;
-  Data = 0x1 << HPIPE_MISC_CLK100M_125M_OFFSET;
-
   /* Set PIN_TXDCLK_2X Clock Frequency Selection for outputs 500MHz clock */
-  Mask |= HPIPE_MISC_TXDCLK_2X_MASK;
-  Data |= 0x0 << HPIPE_MISC_TXDCLK_2X_OFFSET;
+  Mask = HPIPE_MISC_TXDCLK_2X_MASK;
+  Data = HPIPE_MISC_TXDCLK_2X_500MHZ;
 
   /* Enable 500MHz Clock */
   Mask |= HPIPE_MISC_CLK500_EN_MASK;
   Data |= 0x1 << HPIPE_MISC_CLK500_EN_OFFSET;
 
   if (PcieClk) {
+    /*
+     * Enable PIN clock 100M_125M
+     * Only if clock is output, configure the clock-source mux
+     */
+    Mask |= HPIPE_MISC_CLK100M_125M_MASK;
+    Data |= HPIPE_MISC_CLK100M_125M_EN;
     /* Set reference clock comes from group 1 */
     Mask |= HPIPE_MISC_REFCLK_SEL_MASK;
     Data |= 0x0 << HPIPE_MISC_REFCLK_SEL_OFFSET;
@@ -213,6 +255,13 @@ ComPhyPciePhyConfiguration (
   Mask |= HPIPE_PWR_PLL_PHY_MODE_MASK;
   Data |= 0x3 << HPIPE_PWR_PLL_PHY_MODE_OFFSET;
   RegSet (HpipeAddr + HPIPE_PWR_PLL_REG, Data, Mask);
+
+  /* Ref clock alignment */
+  if (PcieWidth != 1) {
+    RegSet (HpipeAddr + HPIPE_LANE_ALIGN_REG,
+      HPIPE_LANE_ALIGN_OFF,
+      HPIPE_LANE_ALIGN_OFF_MASK);
+  }
 
   /*
    * Set the amount of time spent in the LoZ state - set
@@ -396,7 +445,7 @@ ComPhyPcieSetAnalogParameters (
          HPIPE_LANE_CFG_FOM_PRESET_VECTOR_MASK;
   Data = (0x1 << HPIPE_LANE_CFG_FOM_DIRN_OVERRIDE_OFFSET) |
          (0x1 << HPIPE_LANE_CFG_FOM_ONLY_MODE_OFFFSET) |
-         (0x2 << HPIPE_LANE_CFG_FOM_PRESET_VECTOR_OFFSET);
+         (HPIPE_LANE_CFG_FOM_PRESET_VECTOR_DEFAULT);
   MmioAndThenOr32 (HpipeAddr + HPIPE_LANE_EQ_REMOTE_SETTING_REG, ~Mask, Data);
 
   /* Set phy in root complex mode */
@@ -404,37 +453,82 @@ ComPhyPcieSetAnalogParameters (
 }
 
 STATIC
-VOID
-ComPhyPciePhyPowerUp (
-  IN EFI_PHYSICAL_ADDRESS HpipeAddr
-)
-{
-  /* Release from PIPE soft reset */
-  RegSet (HpipeAddr + HPIPE_RST_CLK_CTRL_REG,
-    0x0 << HPIPE_RST_CLK_CTRL_PIPE_RST_OFFSET,
-    HPIPE_RST_CLK_CTRL_PIPE_RST_MASK);
-
-  /* Wait 15ms - for ComPhy calibration done */
-  MicroSecondDelay (15000);
-  MemoryFence ();
-}
-
-STATIC
 EFI_STATUS
-ComPhyPcieCheckPll (
-  IN EFI_PHYSICAL_ADDRESS HpipeAddr
+ComPhyPciePhyPowerUp (
+  IN UINT32 Lane,
+  IN UINT32 PcieWidth,
+  IN EFI_PHYSICAL_ADDRESS ComPhyBase,
+  IN EFI_PHYSICAL_ADDRESS HpipeBase
 )
 {
   EFI_STATUS Status = EFI_SUCCESS;
+  UINT8 StartLane, EndLane, Loop;
   UINT32 Data;
 
-  /* Read Lane status */
-  Data = MmioRead32 (HpipeAddr + HPIPE_LANE_STATUS0_REG);
-  if ((Data & HPIPE_LANE_STATUS0_PCLK_EN_MASK) == 0) {
-    DEBUG((DEBUG_INFO, "ComPhy: Read from reg = %p - value = 0x%x\n",
-      HpipeAddr + HPIPE_LANE_STATUS0_REG, Data));
-    DEBUG((DEBUG_INFO, "ComPhy: HPIPE_LANE_STATUS0_PCLK_EN_MASK is 0\n"));
-    Status = EFI_D_ERROR;
+  /*
+   * For PCIe by4 or by2 - release from reset only after finish to
+   * configure all lanes
+   */
+  if ((PcieWidth == 1) || (Lane == (PcieWidth - 1))) {
+    if (PcieWidth != 1) {
+      /* Allows writing to all lanes in one write */
+      RegSet (ComPhyBase + COMMON_PHY_SD_CTRL1,
+        COMMON_PHY_SD_CTRL1_COMPHY_0_4_PORT_WR_ENABLE,
+        COMMON_PHY_SD_CTRL1_COMPHY_0_4_PORT_MASK);
+      StartLane = 0;
+      EndLane = PcieWidth;
+
+      /*
+       * Release from PIPE soft reset
+       * for PCIe by4 or by2 - release from soft reset
+       * all lanes - can't use read modify write
+       */
+      RegSet (HPIPE_ADDR (HpipeBase, 0) + HPIPE_RST_CLK_CTRL_REG,
+        HPIPE_RST_CLK_CTRL_FIXED_PCLK_WIDTH_8 | HPIPE_RST_CLK_CTRL_MODE_REFDIV_4,
+        HPIPE_RST_CLK_CTRL_CLR_ALL_MASK);
+    } else {
+      StartLane = Lane;
+      EndLane = Lane + 1;
+
+      /*
+       * Release from PIPE soft reset
+       * for PCIe by4 or by2 - release from soft reset
+       * all lanes
+       */
+      RegSet (HPIPE_ADDR (HpipeBase, Lane) + HPIPE_RST_CLK_CTRL_REG,
+        HPIPE_RST_CLK_CTRL_PIPE_RST_DISABLE,
+        HPIPE_RST_CLK_CTRL_PIPE_RST_MASK);
+    }
+
+    if (PcieWidth != 1) {
+      /* Disable writing to all lanes with one write */
+      RegSet (ComPhyBase + COMMON_PHY_SD_CTRL1,
+        COMMON_PHY_SD_CTRL1_COMPHY_0_4_PORT_WR_DISABLE,
+        COMMON_PHY_SD_CTRL1_COMPHY_0_4_PORT_MASK);
+    }
+    MemoryFence ();
+
+    /* Wait 20ms until status of all lanes stabilize */
+    MicroSecondDelay (20000);
+
+    /* Make sure all lanes are UP */
+    for (Loop = StartLane; Loop < EndLane; Loop++) {
+      Data = MmioRead32 (HPIPE_ADDR (HpipeBase, Loop) + HPIPE_LANE_STATUS0_REG);
+
+      if ((Data & HPIPE_LANE_STATUS0_PCLK_EN_MASK) == 0) {
+        DEBUG ((DEBUG_ERROR,
+          "%a: Read from lane%d, reg = %p - value = 0x%x\n",
+          __FUNCTION__,
+          Loop,
+          HPIPE_ADDR (HpipeBase, Loop) + HPIPE_LANE_STATUS0_REG,
+          Data));
+        DEBUG ((DEBUG_ERROR,
+          "%a: HPIPE_LANE_STATUS1_PCLK_EN_MASK is 0\n",
+          __FUNCTION__));
+        Status = EFI_D_ERROR;
+        break;
+      }
+    }
   }
 
   return Status;
@@ -443,8 +537,9 @@ ComPhyPcieCheckPll (
 STATIC
 EFI_STATUS
 ComPhyPciePowerUp (
+  IN UINT8 ChipId,
   IN UINT32 Lane,
-  IN UINT32 PcieBy4,
+  IN UINT32 PcieWidth,
   IN EFI_PHYSICAL_ADDRESS HpipeBase,
   IN EFI_PHYSICAL_ADDRESS ComPhyBase
   )
@@ -452,26 +547,36 @@ ComPhyPciePowerUp (
   EFI_STATUS Status = EFI_SUCCESS;
   EFI_PHYSICAL_ADDRESS HpipeAddr = HPIPE_ADDR(HpipeBase, Lane);
   EFI_PHYSICAL_ADDRESS ComPhyAddr = COMPHY_ADDR(ComPhyBase, Lane);
+  UINT32 PcieClk;
+
+  /*
+   * Obtain clock direction from sample-at-reset configuration.
+   * 4th and 5th SerDes lanes can belong only to PCIE Port1 and
+   * Port2, which use different clock type specifier than Port0.
+   */
+  if (Lane == 4 || Lane == 5) {
+    PcieClk = SampleAtResetGetPcieClockDirection (ChipId, CP110_PCIE_REF_CLK_TYPE12);
+  } else {
+    PcieClk = SampleAtResetGetPcieClockDirection (ChipId, CP110_PCIE_REF_CLK_TYPE0);
+  }
+
+  DEBUG ((DEBUG_INFO, "%a: ChipId: %d PcieClk:%d\n", __FUNCTION__, ChipId, PcieClk));
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: RFU configurations - hard reset ComPhy\n"));
 
-  ComPhyPcieRFUConfiguration (ComPhyAddr);
+  ComPhyPcieRFUConfiguration (Lane, PcieWidth, ComPhyAddr);
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: ComPhy configuration\n"));
 
-  ComPhyPciePhyConfiguration (ComPhyAddr, HpipeAddr);
+  ComPhyPciePhyConfiguration (Lane, PcieWidth, PcieClk, ComPhyAddr, HpipeAddr);
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: Set analog paramters\n"));
 
   ComPhyPcieSetAnalogParameters (HpipeAddr);
 
-  DEBUG((DEBUG_INFO, "ComPhy: stage: ComPhy power up\n"));
+  DEBUG ((DEBUG_INFO, "%a: stage: ComPhy power up and check PLL\n", __FUNCTION__));
 
-  ComPhyPciePhyPowerUp (HpipeAddr);
-
-  DEBUG((DEBUG_INFO, "ComPhy: stage: Check PLL\n"));
-
-  Status = ComPhyPcieCheckPll (HpipeAddr);
+  Status = ComPhyPciePhyPowerUp (Lane, PcieWidth, ComPhyBase, HpipeBase);
 
   return Status;
 }
@@ -1780,12 +1885,14 @@ ComPhyCp110Init (
   COMPHY_MAP *PtrComPhyMap, *SerdesMap;
   EFI_PHYSICAL_ADDRESS ComPhyBaseAddr, HpipeBaseAddr;
   UINT32 ComPhyMaxCount, Lane;
-  UINT32 PcieBy4 = 1; // Indicating if first 4 lanes set to PCIE
+  UINT32 PcieWidth = 0;
+  UINT8 ChipId;
 
   ComPhyMaxCount = PtrChipCfg->LanesCount;
   ComPhyBaseAddr = PtrChipCfg->ComPhyBaseAddr;
   HpipeBaseAddr = PtrChipCfg->Hpipe3BaseAddr;
   SerdesMap = PtrChipCfg->MapData;
+  ChipId = PtrChipCfg->ChipId;
 
   /* Config Comphy mux configuration */
   ComPhyMuxCp110(PtrChipCfg, SerdesMap);
@@ -1793,15 +1900,21 @@ ComPhyCp110Init (
   /* Check if the first 4 Lanes configured as By-4 */
   for (Lane = 0, PtrComPhyMap = SerdesMap; Lane < 4; Lane++, PtrComPhyMap++) {
     if (PtrComPhyMap->Type != COMPHY_TYPE_PCIE0) {
-      PcieBy4 = 0;
       break;
     }
+    PcieWidth++;
   }
 
   for (Lane = 0, PtrComPhyMap = SerdesMap; Lane < ComPhyMaxCount;
        Lane++, PtrComPhyMap++) {
     DEBUG((DEBUG_INFO, "ComPhy: Initialize serdes number %d\n", Lane));
     DEBUG((DEBUG_INFO, "ComPhy: Serdes Type = 0x%x\n", PtrComPhyMap->Type));
+
+    if (Lane >= 4) {
+      /* PCIe lanes above the first 4 lanes, can be only by1 */
+      PcieWidth = 1;
+    }
+
     switch (PtrComPhyMap->Type) {
     case COMPHY_TYPE_UNCONNECTED:
       continue;
@@ -1810,7 +1923,7 @@ ComPhyCp110Init (
     case COMPHY_TYPE_PCIE1:
     case COMPHY_TYPE_PCIE2:
     case COMPHY_TYPE_PCIE3:
-      Status = ComPhyPciePowerUp(Lane, PcieBy4, HpipeBaseAddr, ComPhyBaseAddr);
+      Status = ComPhyPciePowerUp (ChipId, Lane, PcieWidth, HpipeBaseAddr, ComPhyBaseAddr);
       break;
     case COMPHY_TYPE_SATA0:
     case COMPHY_TYPE_SATA1:

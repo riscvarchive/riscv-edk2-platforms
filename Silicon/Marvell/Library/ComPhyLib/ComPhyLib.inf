@@ -50,6 +50,7 @@
   DebugLib
   MemoryAllocationLib
   PcdLib
+  SampleAtResetLib
   IoLib
 
 [Sources.common]

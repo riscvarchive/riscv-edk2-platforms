@@ -192,6 +192,7 @@ InitComPhyConfig (
   ChipConfig->Hpipe3BaseAddr = Desc->ComPhyHpipe3BaseAddresses[Id];
   ChipConfig->LanesCount = Desc->ComPhyLaneCount[Id];
   ChipConfig->MuxBitCount = Desc->ComPhyMuxBitCount[Id];
+  ChipConfig->ChipId = Id;
 
   /*
    * Below macro contains variable name concatenation (used to form PCD's name).

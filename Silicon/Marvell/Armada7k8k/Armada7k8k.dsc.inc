@@ -36,6 +36,7 @@
   ComPhyLib|Silicon/Marvell/Library/ComPhyLib/ComPhyLib.inf
   MppLib|Silicon/Marvell/Library/MppLib/MppLib.inf
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
+  SampleAtResetLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kSampleAtResetLib/Armada7k8kSampleAtResetLib.inf
   UtmiPhyLib|Silicon/Marvell/Library/UtmiPhyLib/UtmiPhyLib.inf
 
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
