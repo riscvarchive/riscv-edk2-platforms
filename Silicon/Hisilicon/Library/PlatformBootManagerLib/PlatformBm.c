@@ -20,6 +20,7 @@
 #include <Library/BmcConfigBootLib.h>
 #include <Library/DevicePathLib.h>
 #include <Library/PcdLib.h>
+#include <Library/TimerLib.h>
 #include <Library/UefiBootManagerLib.h>
 #include <Library/UefiLib.h>
 #include <Protocol/DevicePath.h>
@@ -29,6 +30,7 @@
 #include <Protocol/LoadedImage.h>
 #include <Protocol/PciIo.h>
 #include <Protocol/PciRootBridgeIo.h>
+#include <Protocol/PlatformSasNotify.h>
 #include <Guid/EventGroup.h>
 #include <Guid/TtyTerm.h>
 
@@ -554,6 +556,40 @@ PlatformBootManagerBeforeConsole (
   PlatformRegisterOptionsAndKeys ();
 }
 
+STATIC
+VOID
+WaitForDiskReady (
+  VOID
+  )
+{
+  EFI_STATUS                Status;
+  UINT32                    Index;
+  PLATFORM_SAS_NOTIFY       *SasNotify;
+
+  Status = gBS->LocateProtocol (
+                  &gPlatformSasNotifyProtocolGuid,
+                  NULL,
+                  (VOID **)&SasNotify);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_INFO, "Locate SasPlatformNotify:%r\n", Status));
+    return;
+  }
+
+  // Wait for 30 seconds at most.
+  for (Index = 0; Index < 30; Index++) {
+    Status = gBS->CheckEvent (SasNotify->WaitDiskEvent);
+    if (!EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_INFO, "WaitDiskEvent is signaled.\n"));
+      EfiBootManagerConnectAll ();
+      break;
+    }
+    DEBUG ((DEBUG_ERROR, "%a", Index == 0 ? "Wait for disk." : "."));
+    MicroSecondDelay (1000 * 1000);
+  }
+
+  return;
+}
+
 /**
   Do the platform specific action after the console is ready
   Possible things that can be done in PlatformBootManagerAfterConsole:
@@ -583,6 +619,7 @@ PlatformBootManagerAfterConsole (
   // Connect the rest of the devices.
   //
   EfiBootManagerConnectAll ();
+  WaitForDiskReady ();
 
   //
   // Enumerate all possible boot options.
