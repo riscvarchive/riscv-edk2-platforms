@@ -223,11 +223,6 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
   #
-  # MP-Boot: ACPI[Parking Protocol] + FDT[Spin-Table]
-  #
-  INF Silicon/AMD/Styx/Drivers/MpBootDxe/MpBootDxe.inf
-
-  #
   # SMBIOS Support
   #
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf

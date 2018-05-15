@@ -564,11 +564,6 @@ DEFINE DO_FLASHER   = FALSE
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
   #
-  # MP-Boot: ACPI[Parking Protocol] + FDT[Spin-Table]
-  #
-  Silicon/AMD/Styx/Drivers/MpBootDxe/MpBootDxe.inf
-
-  #
   # AHCI Support
   #
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
