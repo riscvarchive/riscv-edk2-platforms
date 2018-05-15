@@ -60,10 +60,6 @@ LibGetTime (
   ISCP_RTC_INFO  RtcInfo;
   EFI_STATUS     Status;
 
-  if (!FixedPcdGetBool (PcdIscpSupport)) {
-    return EFI_DEVICE_ERROR;
-  }
-
   if (mRtcIscpDxeProtocol == NULL) {
       DEBUG((EFI_D_ERROR, "RTC: ISCP DXE Protocol is NULL!\n"));
       return EFI_DEVICE_ERROR;
@@ -110,10 +106,6 @@ LibSetTime (
 {
   EFI_STATUS     Status;
   ISCP_RTC_INFO  RtcInfo;
-
-  if (!FixedPcdGetBool (PcdIscpSupport)) {
-    return EFI_DEVICE_ERROR;
-  }
 
   //
   // Use Time, to set the time in your RTC hardware
@@ -213,10 +205,6 @@ LibRtcInitialize (
 {
   EFI_STATUS    Status;
 
-  if (!FixedPcdGetBool (PcdIscpSupport)) {
-    return EFI_SUCCESS;
-  }
-
   //
   // Do some initialization if required to turn on the RTC
   //
@@ -268,9 +256,7 @@ LibRtcVirtualNotifyEvent (
   // to virtual address. After the OS transistions to calling in virtual mode, all future
   // runtime calls will be made in virtual mode.
   //
-  if (FixedPcdGetBool (PcdIscpSupport)) {
-    EfiConvertPointer (0x0, (VOID**)&mRtcIscpDxeProtocol);
-  }
+  EfiConvertPointer (0x0, (VOID**)&mRtcIscpDxeProtocol);
 }
 
 

@@ -52,7 +52,6 @@
 [FixedPcd]
   gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport
 
 [Depex]
   gEfiSmbiosProtocolGuid AND

@@ -67,7 +67,6 @@
   gAmdStyxTokenSpaceGuid.PcdEthMacB
 
 [FixedPcd]
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport
   gAmdStyxTokenSpaceGuid.PcdCpuIdRegister
 
 [Depex]

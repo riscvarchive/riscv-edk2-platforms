@@ -41,9 +41,6 @@
   UefiRuntimeLib
   DxeServicesTableLib
 
-[FixedPcd]
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport
-
 [Guids]
   gEfiEventVirtualAddressChangeGuid
 

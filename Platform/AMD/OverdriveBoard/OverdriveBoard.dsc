@@ -19,7 +19,6 @@
 
 DEFINE DO_XGBE      = 1
 DEFINE NUM_CORES    = 8
-DEFINE DO_ISCP      = 1
 DEFINE DO_KCS       = 1
 DEFINE DO_FLASHER   = FALSE
 DEFINE DO_CAPSULE   = FALSE
@@ -455,12 +454,6 @@ DEFINE DO_CAPSULE   = FALSE
   # (i.e., GRUB) may assume that its contents are executable.
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdDxeNxMemoryProtectionPolicy|0xC000000000007FD1
-
-!if $(DO_ISCP)
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport|TRUE
-!else
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport|FALSE
-!endif
 
   # SMBIOS 3.0 only
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosEntryPointProvideMethod|0x2

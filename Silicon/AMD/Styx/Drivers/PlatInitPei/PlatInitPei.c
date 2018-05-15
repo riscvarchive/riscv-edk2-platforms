@@ -140,64 +140,56 @@ PlatInitPeiEntryPoint (
     mAmdCoreCount = PcdGet32 (PcdSocCoreCount);
   }
 
-  if (FixedPcdGetBool (PcdIscpSupport)) {
-    Status = PeiServicesLocatePpi (&gPeiIscpPpiGuid, 0, NULL, (VOID**)&PeiIscpPpi);
-    ASSERT_EFI_ERROR (Status);
+  Status = PeiServicesLocatePpi (&gPeiIscpPpiGuid, 0, NULL, (VOID**)&PeiIscpPpi);
+  ASSERT_EFI_ERROR (Status);
 
-    // Get fuse information from ISCP
-    Status = PeiIscpPpi->ExecuteFuseTransaction (PeiServices, &IscpFuseInfo);
-    ASSERT_EFI_ERROR (Status);
+  // Get fuse information from ISCP
+  Status = PeiIscpPpi->ExecuteFuseTransaction (PeiServices, &IscpFuseInfo);
+  ASSERT_EFI_ERROR (Status);
 
-    CpuMap = IscpFuseInfo.SocConfiguration.CpuMap;
-    CpuCoreCount = IscpFuseInfo.SocConfiguration.CpuCoreCount;
-    CpuMapSize = sizeof (IscpFuseInfo.SocConfiguration.CpuMap) * 8;
+  CpuMap = IscpFuseInfo.SocConfiguration.CpuMap;
+  CpuCoreCount = IscpFuseInfo.SocConfiguration.CpuCoreCount;
+  CpuMapSize = sizeof (IscpFuseInfo.SocConfiguration.CpuMap) * 8;
 
-    ASSERT (CpuMap != 0);
-    ASSERT (CpuCoreCount != 0);
-    ASSERT (CpuCoreCount <= CpuMapSize);
+  ASSERT (CpuMap != 0);
+  ASSERT (CpuCoreCount != 0);
+  ASSERT (CpuCoreCount <= CpuMapSize);
 
-    // Update core count based on fusing
-    if (mAmdCoreCount > CpuCoreCount) {
-      mAmdCoreCount = CpuCoreCount;
-    }
+  // Update core count based on fusing
+  if (mAmdCoreCount > CpuCoreCount) {
+    mAmdCoreCount = CpuCoreCount;
   }
 
   //
   // Update per-core information from ISCP
+  // Walk CPU map to enumerate active cores
   //
-  if (!FixedPcdGetBool (PcdIscpSupport)) {
-    DEBUG ((EFI_D_ERROR, "Warning: Could not get CPU info via ISCP, using default values.\n"));
-  } else {
-    //
-    // Walk CPU map to enumerate active cores
-    //
-    for (CoreNum = 0, Index = 0; CoreNum < CpuMapSize && Index < mAmdCoreCount; ++CoreNum) {
-      if (CpuMap & 1) {
-        CpuResetInfo.CoreNum = CoreNum;
-        Status = PeiIscpPpi->ExecuteCpuRetrieveIdTransaction (
-                   PeiServices, &CpuResetInfo );
-        ASSERT_EFI_ERROR (Status);
-        ASSERT (CpuResetInfo.CoreStatus.Status != CPU_CORE_DISABLED);
-        ASSERT (CpuResetInfo.CoreStatus.Status != CPU_CORE_UNDEFINED);
+  for (CoreNum = 0, Index = 0; CoreNum < CpuMapSize && Index < mAmdCoreCount; ++CoreNum) {
+    if (CpuMap & 1) {
+      CpuResetInfo.CoreNum = CoreNum;
+      Status = PeiIscpPpi->ExecuteCpuRetrieveIdTransaction (
+                 PeiServices, &CpuResetInfo );
+      ASSERT_EFI_ERROR (Status);
+      ASSERT (CpuResetInfo.CoreStatus.Status != CPU_CORE_DISABLED);
+      ASSERT (CpuResetInfo.CoreStatus.Status != CPU_CORE_UNDEFINED);
 
-        mAmdMpCoreInfoTable[Index].ClusterId = CpuResetInfo.CoreStatus.ClusterId;
-        mAmdMpCoreInfoTable[Index].CoreId = CpuResetInfo.CoreStatus.CoreId;
+      mAmdMpCoreInfoTable[Index].ClusterId = CpuResetInfo.CoreStatus.ClusterId;
+      mAmdMpCoreInfoTable[Index].CoreId = CpuResetInfo.CoreStatus.CoreId;
 
-        DEBUG ((EFI_D_ERROR, "Core[%d]: ClusterId = %d   CoreId = %d\n",
-          Index, mAmdMpCoreInfoTable[Index].ClusterId,
-          mAmdMpCoreInfoTable[Index].CoreId));
+      DEBUG ((EFI_D_ERROR, "Core[%d]: ClusterId = %d   CoreId = %d\n",
+        Index, mAmdMpCoreInfoTable[Index].ClusterId,
+        mAmdMpCoreInfoTable[Index].CoreId));
 
-        // Next core in Table
-        ++Index;
-      }
-      // Next core in Map
-      CpuMap >>= 1;
+      // Next core in Table
+      ++Index;
     }
+    // Next core in Map
+    CpuMap >>= 1;
+  }
 
-    // Update core count based on CPU map
-    if (mAmdCoreCount > Index) {
-      mAmdCoreCount = Index;
-    }
+  // Update core count based on CPU map
+  if (mAmdCoreCount > Index) {
+    mAmdCoreCount = Index;
   }
 
   // Update SocCoreCount on Dynamic PCD
@@ -212,14 +204,12 @@ PlatInitPeiEntryPoint (
 
   // Get SystemMemorySize from ISCP
   IscpMemDescriptor.Size0 = 0;
-  if (FixedPcdGetBool (PcdIscpSupport)) {
-    Status = PeiIscpPpi->ExecuteMemoryTransaction (PeiServices, &IscpMemDescriptor);
-    ASSERT_EFI_ERROR (Status);
+  Status = PeiIscpPpi->ExecuteMemoryTransaction (PeiServices, &IscpMemDescriptor);
+  ASSERT_EFI_ERROR (Status);
 
-    // Update SystemMemorySize on Dynamic PCD
-    if (IscpMemDescriptor.Size0) {
-      PcdSet64 (PcdSystemMemorySize, IscpMemDescriptor.Size0);
-    }
+  // Update SystemMemorySize on Dynamic PCD
+  if (IscpMemDescriptor.Size0) {
+    PcdSet64 (PcdSystemMemorySize, IscpMemDescriptor.Size0);
   }
   if (IscpMemDescriptor.Size0 == 0) {
     DEBUG ((EFI_D_ERROR, "Warning: Could not get SystemMemorySize via ISCP, using default value.\n"));
@@ -229,19 +219,17 @@ PlatInitPeiEntryPoint (
 
 #if DO_XGBE == 1
   // Get MAC Address from ISCP
-  if (FixedPcdGetBool (PcdIscpSupport)) {
-    Status = PeiIscpPpi->ExecuteGetMacAddressTransaction (
-               PeiServices, &MacAddrInfo );
-    ASSERT_EFI_ERROR (Status);
+  Status = PeiIscpPpi->ExecuteGetMacAddressTransaction (
+             PeiServices, &MacAddrInfo );
+  ASSERT_EFI_ERROR (Status);
 
-    MacAddr0 = MacAddr1 = 0;
-    for (Index = 0; Index < 6; ++Index) {
-      MacAddr0 |= (UINT64)MacAddrInfo.MacAddress0[Index] << (Index * 8);
-      MacAddr1 |= (UINT64)MacAddrInfo.MacAddress1[Index] << (Index * 8);
-    }
-    PcdSet64 (PcdEthMacA, MacAddr0);
-    PcdSet64 (PcdEthMacB, MacAddr1);
+  MacAddr0 = MacAddr1 = 0;
+  for (Index = 0; Index < 6; ++Index) {
+    MacAddr0 |= (UINT64)MacAddrInfo.MacAddress0[Index] << (Index * 8);
+    MacAddr1 |= (UINT64)MacAddrInfo.MacAddress1[Index] << (Index * 8);
   }
+  PcdSet64 (PcdEthMacA, MacAddr0);
+  PcdSet64 (PcdEthMacB, MacAddr1);
 
   DEBUG ((EFI_D_ERROR, "EthMacA = 0x%lX\n", PcdGet64 (PcdEthMacA)));
   DEBUG ((EFI_D_ERROR, "EthMacB = 0x%lX\n", PcdGet64 (PcdEthMacB)));

@@ -88,9 +88,6 @@
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemoryBase|0x8000000000|UINT64|0x00060001
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemorySize|0xE80000|UINT64|0x0006002
 
-  # ISCP
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport|TRUE|BOOLEAN|0x00070000
-
   # Cores Per cluster
   gAmdStyxTokenSpaceGuid.PcdSocCoresPerCluster|2|UINT32|0x00090000
 

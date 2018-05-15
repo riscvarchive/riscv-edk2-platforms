@@ -72,8 +72,6 @@
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemoryBase
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemorySize
 
-  gAmdStyxTokenSpaceGuid.PcdIscpSupport
-
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize

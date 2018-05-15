@@ -455,16 +455,7 @@ STATIC SMBIOS_TABLE_TYPE17 mMemDevInfoType17 = {
   0,          // ConfiguredMemoryClockSpeed;
 };
 
-#if (FixedPcdGetBool (PcdIscpSupport))
 STATIC CHAR8 CONST *mMemDevInfoType17Strings[ 7 ] = {0};
-#else
-STATIC CHAR8 CONST * CONST mMemDevInfoType17Strings[] = {
-  "OS Virtual Memory",
-  "malloc",
-  "OSV",
-  NULL
-};
-#endif
 
 /***********************************************************************
         SMBIOS data definition  TYPE19  Memory Array Mapped Address Information
@@ -648,7 +639,6 @@ ProcessorInfoUpdateSmbiosType4 (
   VOID
   )
 {
-#if (FixedPcdGetBool (PcdIscpSupport))
   ISCP_TYPE4_SMBIOS_INFO *SmbiosT4 = &mSmbiosInfo.SmbiosCpuBuffer.T4[0];
 
   DEBUG ((EFI_D_ERROR, "Logging SmbiosType4 from ISCP.\n"));
@@ -671,22 +661,6 @@ ProcessorInfoUpdateSmbiosType4 (
            &SmbiosT4->T4ProcId.ProcIDMsd, sizeof(UINT32));
   CopyMem (&mProcessorInfoType4.Voltage,
            &SmbiosT4->T4Voltage, sizeof(UINT8));
-#else
-  mProcessorInfoType4.ProcessorType = CentralProcessor;
-  mProcessorInfoType4.ProcessorFamily = ProcessorFamilyIndicatorFamily2;
-  mProcessorInfoType4.ProcessorFamily2 = ProcessorFamilyARM;
-  #ifdef ARM_CPU_AARCH64
-    mProcessorInfoType4.ProcessorCharacteristics = 0x6C;
-  #else
-    mProcessorInfoType4.ProcessorCharacteristics = 0x68;
-  #endif
-  mProcessorInfoType4.MaxSpeed = PcdGet32(PcdArmArchTimerFreqInHz)/1000000;        // In MHz
-  mProcessorInfoType4.CurrentSpeed = PcdGet32(PcdArmArchTimerFreqInHz)/1000000;    // In MHz
-  mProcessorInfoType4.CoreCount = PcdGet32(PcdCoreCount);
-  mProcessorInfoType4.EnabledCoreCount = PcdGet32(PcdCoreCount);
-  mProcessorInfoType4.ThreadCount = PcdGet32(PcdCoreCount);
-  mProcessorInfoType4.ProcessorUpgrade = ProcessorUpgradeDaughterBoard;
-#endif
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&mProcessorInfoType4, mProcessorInfoType4Strings);
 }
@@ -700,7 +674,6 @@ CacheInfoUpdateSmbiosType7 (
   VOID
   )
 {
-#if (FixedPcdGetBool (PcdIscpSupport))
   ISCP_TYPE7_SMBIOS_INFO *SmbiosT7;
   SMBIOS_TABLE_TYPE7 dstType7 = {{0}};
 
@@ -756,9 +729,6 @@ CacheInfoUpdateSmbiosType7 (
   dstType7.SystemCacheType     = SmbiosT7->T7SystemCacheType;
   dstType7.Associativity       = SmbiosT7->T7Associativity;
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&dstType7, mCacheInfoType7Strings);
-#else
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&mCacheInfoType7, mCacheInfoType7Strings);
-#endif
 }
 
 /***********************************************************************
@@ -782,7 +752,6 @@ PhyMemArrayInfoUpdateSmbiosType16 (
   VOID
   )
 {
-#if (FixedPcdGetBool (PcdIscpSupport))
   ISCP_TYPE16_SMBIOS_INFO *SmbiosT16 = &mSmbiosInfo.SmbiosMemBuffer.T16;
 
   DEBUG ((EFI_D_ERROR, "Logging SmbiosType16 from ISCP.\n"));
@@ -791,7 +760,6 @@ PhyMemArrayInfoUpdateSmbiosType16 (
   mPhyMemArrayInfoType16.Use = SmbiosT16->Use;
   mPhyMemArrayInfoType16.MemoryErrorCorrection = SmbiosT16->MemoryErrorCorrection;
   mPhyMemArrayInfoType16.NumberOfMemoryDevices = SmbiosT16->NumberOfMemoryDevices;
-#endif
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&mPhyMemArrayInfoType16, mPhyMemArrayInfoType16Strings);
 }
@@ -805,7 +773,6 @@ MemDevInfoUpdatedstType17 (
   VOID
   )
 {
-#if (FixedPcdGetBool (PcdIscpSupport))
   SMBIOS_TABLE_TYPE17 dstType17 = {{0}};
   ISCP_TYPE17_SMBIOS_INFO *srcType17;
   UINTN i, j, StrIndex, LastIndex;
@@ -874,9 +841,6 @@ MemDevInfoUpdatedstType17 (
       LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&dstType17, mMemDevInfoType17Strings);
     }
   }
-#else
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&mMemDevInfoType17, mMemDevInfoType17Strings);
-#endif
 }
 
 /***********************************************************************
@@ -888,7 +852,6 @@ MemArrMapInfoUpdateSmbiosType19 (
   VOID
   )
 {
-#if (FixedPcdGetBool (PcdIscpSupport))
   ISCP_TYPE19_SMBIOS_INFO *SmbiosT19 = &mSmbiosInfo.SmbiosMemBuffer.T19;
 
   DEBUG ((EFI_D_ERROR, "Logging SmbiosType19 from ISCP.\n"));
@@ -899,7 +862,6 @@ MemArrMapInfoUpdateSmbiosType19 (
   mMemArrMapInfoType19.PartitionWidth = SmbiosT19->PartitionWidth;
   mMemArrMapInfoType19.ExtendedStartingAddress = SmbiosT19->ExtStartingAddr;
   mMemArrMapInfoType19.ExtendedEndingAddress = SmbiosT19->ExtEndingAddr;
-#endif
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER *)&mMemArrMapInfoType19, mMemArrMapInfoType19Strings);
 }
@@ -946,7 +908,6 @@ PlatformSmbiosDriverEntryPoint (
     return Status;
   }
 
-#if (FixedPcdGetBool (PcdIscpSupport))
   Status = gBS->LocateProtocol (
                &gAmdIscpDxeProtocolGuid,
                NULL,
@@ -966,7 +927,6 @@ PlatformSmbiosDriverEntryPoint (
     DEBUG ((EFI_D_ERROR, "Failed to get SMBIOS data via ISCP"));
     return Status;
   }
-#endif
 
   BIOSInfoUpdateSmbiosType0();
 
