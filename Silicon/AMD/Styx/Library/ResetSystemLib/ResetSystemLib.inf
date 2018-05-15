@@ -42,6 +42,3 @@
   PcdLib
   BaseLib
   ArmSmcLib
-
-[FixedPcd]
-  gAmdStyxTokenSpaceGuid.PcdTrustedFWSupport

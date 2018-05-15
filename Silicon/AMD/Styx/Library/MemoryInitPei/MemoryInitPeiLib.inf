@@ -69,7 +69,6 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderCode
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData
 
-  gAmdStyxTokenSpaceGuid.PcdTrustedFWSupport
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemoryBase
   gAmdStyxTokenSpaceGuid.PcdTrustedFWMemorySize
 

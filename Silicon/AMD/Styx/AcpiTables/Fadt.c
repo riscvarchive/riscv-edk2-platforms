@@ -73,7 +73,7 @@ STATIC EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE AcpiFadt = {
   FADT_FLAGS,                                                               // UINT32     Flags
   NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  ResetReg
   0,                                                                        // UINT8      ResetValue
-  0,                                                                        // UINT16     ArmBootArch
+  EFI_ACPI_5_1_ARM_PSCI_COMPLIANT,                                          // UINT16     ArmBootArch
   1,                                                                        // UINT8      MinorVersion
   0,                                                                        // UINT64     XFirmwareCtrl
   0,                                                                        // UINT64     XDsdt
@@ -96,9 +96,6 @@ FadtTable (
   VOID
   )
 {
-  if (FixedPcdGetBool (PcdPsciOsSupport) && FixedPcdGetBool (PcdTrustedFWSupport)) {
-    AcpiFadt.ArmBootArch = EFI_ACPI_5_1_ARM_PSCI_COMPLIANT;
-  }
   return (EFI_ACPI_DESCRIPTION_HEADER *) &AcpiFadt;
 }
 

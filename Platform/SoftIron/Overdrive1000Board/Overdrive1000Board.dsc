@@ -18,7 +18,6 @@
 [Defines]
 
 DEFINE NUM_CORES    = 4
-DEFINE DO_PSCI      = 1
 DEFINE DO_ISCP      = 1
 DEFINE DO_KCS       = 1
 DEFINE DO_FLASHER   = FALSE
@@ -427,12 +426,6 @@ DEFINE DO_FLASHER   = FALSE
 
   ## ACPI (no tables < 4GB)
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
-
-!if $(DO_PSCI)
-  gAmdStyxTokenSpaceGuid.PcdPsciOsSupport|TRUE
-!else
-  gAmdStyxTokenSpaceGuid.PcdPsciOsSupport|FALSE
-!endif
 
 !if $(DO_ISCP)
   gAmdStyxTokenSpaceGuid.PcdIscpSupport|TRUE

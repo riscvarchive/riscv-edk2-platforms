@@ -33,7 +33,6 @@
 
 
 STATIC AMD_MP_CORE_INFO_PROTOCOL  mAmdMpCoreInfoProtocol = { 0 };
-STATIC AMD_MP_BOOT_PROTOCOL       mAmdMpBootProtocol = { 0 };
 STATIC AMD_MP_BOOT_INFO           mAmdMpBootInfo = { 0 };
 
 
@@ -54,13 +53,6 @@ STATIC
 EFI_PHYSICAL_ADDRESS
 AmdStyxGetMpParkingBase (
   OUT UINTN  *MpParkingSize
-  );
-
-STATIC
-VOID
-AmdStyxParkSecondaryCore (
-  ARM_CORE_INFO         *ArmCoreInfo,
-  EFI_PHYSICAL_ADDRESS  SecondaryEntry
   );
 
 
@@ -94,8 +86,6 @@ PlatInitDxeEntryPoint (
   )
 {
   EFI_STATUS                Status;
-  EFI_PHYSICAL_ADDRESS      MpParkingBase;
-  UINTN                     MpParkingSize;
   ARM_CORE_INFO             *ArmCoreInfoTable;
   UINTN                     ArmCoreCount;
   EFI_HANDLE                Handle = NULL;
@@ -119,39 +109,6 @@ PlatInitDxeEntryPoint (
                   (VOID *)&mAmdMpCoreInfoProtocol
                   );
   ASSERT_EFI_ERROR (Status);
-
-  // Install MP-Boot Protocol
-  if (!FixedPcdGetBool (PcdPsciOsSupport) &&
-      FixedPcdGetBool (PcdTrustedFWSupport)) {
-    // Allocate Parking area (4KB-aligned, 4KB per core) as Reserved memory
-    MpParkingBase = 0;
-    MpParkingSize = ArmCoreCount * SIZE_4KB;
-    Status = gBS->AllocatePages (AllocateAnyPages, EfiReservedMemoryType,
-                    EFI_SIZE_TO_PAGES (MpParkingSize),
-                    &MpParkingBase);
-    if (EFI_ERROR (Status) || MpParkingBase == 0) {
-      DEBUG ((EFI_D_ERROR, "Warning: Failed to allocate MpParkingBase."));
-    } else {
-      mAmdMpBootInfo.MpParkingBase = MpParkingBase;
-      mAmdMpBootInfo.MpParkingSize = MpParkingSize;
-      mAmdMpBootInfo.ArmCoreInfoTable = ArmCoreInfoTable;
-      mAmdMpBootInfo.ArmCoreCount = ArmCoreCount;
-
-      mAmdMpBootProtocol.ParkSecondaryCore = AmdStyxParkSecondaryCore;
-      mAmdMpBootProtocol.MpBootInfo = &mAmdMpBootInfo;
-
-      Status = gBS->InstallProtocolInterface (
-                      &Handle,
-                      &gAmdMpBootProtocolGuid,
-                      EFI_NATIVE_INTERFACE,
-                      (VOID *)&mAmdMpBootProtocol
-                      );
-      if (EFI_ERROR (Status)) {
-        DEBUG ((EFI_D_ERROR, "Warning: Failed to install MP-Boot Protocol."));
-        gBS->FreePages (MpParkingBase, EFI_SIZE_TO_PAGES (MpParkingSize));
-      }
-    }
-  }
 
   return Status;
 }
@@ -207,31 +164,4 @@ AmdStyxGetMpParkingBase (
 
   *MpParkingSize = mAmdMpBootInfo.MpParkingBase;
   return mAmdMpBootInfo.MpParkingBase;
-}
-
-
-STATIC
-VOID
-AmdStyxParkSecondaryCore (
-  ARM_CORE_INFO         *ArmCoreInfo,
-  EFI_PHYSICAL_ADDRESS  SecondaryEntry
-  )
-{
-  ARM_SMC_ARGS  SmcRegs = {0};
-  UINTN         MpId;
-
-  MpId = GET_MPID (ArmCoreInfo->ClusterId, ArmCoreInfo->CoreId);
-
-  SmcRegs.Arg0 = ARM_SMC_ID_PSCI_CPU_ON_AARCH64;
-  SmcRegs.Arg1 = MpId;
-  SmcRegs.Arg2 = SecondaryEntry;
-  SmcRegs.Arg3 = FixedPcdGet64 (PcdPsciCpuOnContext);
-  ArmCallSmc (&SmcRegs);
-
-  if (SmcRegs.Arg0 == ARM_SMC_PSCI_RET_SUCCESS ||
-      SmcRegs.Arg0 == ARM_SMC_PSCI_RET_ALREADY_ON) {
-    DEBUG ((EFI_D_ERROR, "CPU[MpId] = 0x%X at RUN state.\n", MpId));
-  } else {
-    DEBUG ((EFI_D_ERROR, "Warning: Could not transition CPU[MpId] = 0x%X to RUN state.\n", MpId));
-  }
 }

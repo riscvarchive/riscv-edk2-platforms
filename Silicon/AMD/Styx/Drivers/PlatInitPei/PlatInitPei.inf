@@ -68,7 +68,6 @@
 
 [FixedPcd]
   gAmdStyxTokenSpaceGuid.PcdIscpSupport
-  gAmdStyxTokenSpaceGuid.PcdTrustedFWSupport
   gAmdStyxTokenSpaceGuid.PcdCpuIdRegister
 
 [Depex]

@@ -51,12 +51,6 @@
 
 [Protocols]
   gAmdMpCoreInfoProtocolGuid         ## PRODUCER
-  gAmdMpBootProtocolGuid             ## PRODUCER
-
-[FixedPcd]
-  gAmdStyxTokenSpaceGuid.PcdPsciOsSupport
-  gAmdStyxTokenSpaceGuid.PcdPsciCpuOnContext
-  gAmdStyxTokenSpaceGuid.PcdTrustedFWSupport
 
 [Depex]
   TRUE

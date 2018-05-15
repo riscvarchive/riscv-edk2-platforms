@@ -127,36 +127,34 @@ MemoryPeim (
 
   Base = PcdGet64 (PcdSystemMemoryBase);
   Size = PcdGet64 (PcdSystemMemorySize);
-  if (FixedPcdGetBool (PcdTrustedFWSupport)) {
 
-    //
-    // For now, we assume that the trusted firmware region is at the base of
-    // system memory, since that is much easier to deal with.
-    //
-    ASSERT (Base == PcdGet64 (PcdTrustedFWMemoryBase));
+  //
+  // For now, we assume that the trusted firmware region is at the base of
+  // system memory, since that is much easier to deal with.
+  //
+  ASSERT (Base == PcdGet64 (PcdTrustedFWMemoryBase));
 
-    Base += PcdGet64 (PcdTrustedFWMemorySize);
-    Size -= PcdGet64 (PcdTrustedFWMemorySize);
+  Base += PcdGet64 (PcdTrustedFWMemorySize);
+  Size -= PcdGet64 (PcdTrustedFWMemorySize);
 
-    // Reserved Trusted Firmware region
-    BuildResourceDescriptorHob (
-        EFI_RESOURCE_SYSTEM_MEMORY,
-      ( EFI_RESOURCE_ATTRIBUTE_PRESENT |
-        EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-        EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-        EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-        EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-        EFI_RESOURCE_ATTRIBUTE_TESTED ),
-        PcdGet64 (PcdTrustedFWMemoryBase),
-        PcdGet64 (PcdTrustedFWMemorySize)
-      );
+  // Reserved Trusted Firmware region
+  BuildResourceDescriptorHob (
+      EFI_RESOURCE_SYSTEM_MEMORY,
+    ( EFI_RESOURCE_ATTRIBUTE_PRESENT |
+      EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+      EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+      EFI_RESOURCE_ATTRIBUTE_TESTED ),
+      PcdGet64 (PcdTrustedFWMemoryBase),
+      PcdGet64 (PcdTrustedFWMemorySize)
+    );
 
-      BuildMemoryAllocationHob (
-        PcdGet64 (PcdTrustedFWMemoryBase),
-        PcdGet64 (PcdTrustedFWMemorySize),
-        EfiReservedMemoryType
-      );
-  }
+  BuildMemoryAllocationHob (
+    PcdGet64 (PcdTrustedFWMemoryBase),
+    PcdGet64 (PcdTrustedFWMemorySize),
+    EfiReservedMemoryType
+  );
 
   // Declare system memory
   BuildResourceDescriptorHob (

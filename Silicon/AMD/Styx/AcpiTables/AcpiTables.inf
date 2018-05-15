@@ -82,8 +82,6 @@
   gAmdStyxTokenSpaceGuid.PcdSbsaWakeUpGSIV
   gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogGSIV
   gAmdStyxTokenSpaceGuid.PcdSocCoresPerCluster
-  gAmdStyxTokenSpaceGuid.PcdPsciOsSupport
-  gAmdStyxTokenSpaceGuid.PcdTrustedFWSupport
   gAmdStyxTokenSpaceGuid.PcdParkingProtocolVersion
   gAmdStyxTokenSpaceGuid.PcdSata1PortCount
 

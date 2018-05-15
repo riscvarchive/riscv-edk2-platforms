@@ -437,7 +437,6 @@ DEFINE DO_FLASHER   = FALSE
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdDxeNxMemoryProtectionPolicy|0xC000000000007FD1
 
-  gAmdStyxTokenSpaceGuid.PcdPsciOsSupport|TRUE
   gAmdStyxTokenSpaceGuid.PcdIscpSupport|TRUE
 
   # SMBIOS 3.0 only
