@@ -29,11 +29,9 @@
 #include <Guid/ArmMpCoreInfo.h>
 
 #include <Protocol/AmdMpCoreInfo.h>
-#include <Protocol/AmdMpBoot.h>
 
 
 STATIC AMD_MP_CORE_INFO_PROTOCOL  mAmdMpCoreInfoProtocol = { 0 };
-STATIC AMD_MP_BOOT_INFO           mAmdMpBootInfo = { 0 };
 
 
 STATIC
@@ -47,12 +45,6 @@ EFI_STATUS
 AmdStyxGetPmuSpiFromMpId (
   IN  UINT32  MpId,
   OUT UINT32  *PmuSpi
-  );
-
-STATIC
-EFI_PHYSICAL_ADDRESS
-AmdStyxGetMpParkingBase (
-  OUT UINTN  *MpParkingSize
   );
 
 
@@ -101,7 +93,6 @@ PlatInitDxeEntryPoint (
   // Install CoreInfo Protocol
   mAmdMpCoreInfoProtocol.GetArmCoreInfoTable = AmdStyxGetArmCoreInfoTable;
   mAmdMpCoreInfoProtocol.GetPmuSpiFromMpId = AmdStyxGetPmuSpiFromMpId;
-  mAmdMpCoreInfoProtocol.GetMpParkingBase = AmdStyxGetMpParkingBase;
   Status = gBS->InstallProtocolInterface (
                   &Handle,
                   &gAmdMpCoreInfoProtocolGuid,
@@ -153,15 +144,3 @@ AmdStyxGetPmuSpiFromMpId (
   return EFI_INVALID_PARAMETER;
 }
 
-
-STATIC
-EFI_PHYSICAL_ADDRESS
-AmdStyxGetMpParkingBase (
-  OUT UINTN  *MpParkingSize
-  )
-{
-  ASSERT (MpParkingSize != NULL);
-
-  *MpParkingSize = mAmdMpBootInfo.MpParkingBase;
-  return mAmdMpBootInfo.MpParkingBase;
-}

@@ -28,7 +28,6 @@
   gAmdStyxPlatInitPpiGuid    = { 0xcbff429c, 0xd3e3, 0x4c50, { 0xac, 0x1a, 0x1c, 0xd2, 0xfe, 0x15, 0x1a, 0xd7 } }
 
 [Protocols]
-  gAmdMpBootProtocolGuid     = { 0xe21eac84, 0x9fbf, 0x4808, { 0x83, 0x93, 0xe1, 0x93, 0x97, 0x23, 0x48, 0xab } }
   gAmdMpCoreInfoProtocolGuid = { 0x0dba25f8, 0x2da1, 0x4ec5, { 0x89, 0x5d, 0x32, 0x1e, 0xd6, 0x1e, 0x3f, 0x43 } }
 
 [Guids]
@@ -97,9 +96,6 @@
 
   # UEFI entry point
   gAmdStyxTokenSpaceGuid.PcdUefiEntryAddress|0x8000E80000|UINT64|0x000a0000
-
-  # Parking Protocol
-  gAmdStyxTokenSpaceGuid.PcdParkingProtocolVersion|1|UINT32|0x000b0000
 
   # The original offset in memory of the NV store firmware volume, before
   # relocating it to a dynamically allocated buffer. We need this to correlate

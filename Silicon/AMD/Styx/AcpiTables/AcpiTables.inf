@@ -82,7 +82,6 @@
   gAmdStyxTokenSpaceGuid.PcdSbsaWakeUpGSIV
   gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogGSIV
   gAmdStyxTokenSpaceGuid.PcdSocCoresPerCluster
-  gAmdStyxTokenSpaceGuid.PcdParkingProtocolVersion
   gAmdStyxTokenSpaceGuid.PcdSata1PortCount
 
 [Depex]

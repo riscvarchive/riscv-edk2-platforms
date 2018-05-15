@@ -57,12 +57,7 @@ AMD_MP_CORE_INFO_PROTOCOL  *mAmdMpCoreInfoProtocol = NULL;
   #define MSI_TYPER_FLAG                     ( 0 ) // Use TYPER register and ignore Count/Base fields
 #endif
 
-#define PARKING_PROTOCOL_VERSION             (FixedPcdGet32 (PcdParkingProtocolVersion))
-#define PARKED_OFFSET                        ( 4096 )
-
 #define CORES_PER_CLUSTER                    (FixedPcdGet32 (PcdSocCoresPerCluster))
-#define PARKED_ADDRESS(Base, ClusterId, CoreId) \
-        ((Base) + (CORES_PER_CLUSTER * ClusterId + CoreId) * PARKED_OFFSET)
 
 
 /* Macro to populate EFI_ACPI_5_1_GIC_STRUCTURE */
@@ -73,7 +68,7 @@ AMD_MP_CORE_INFO_PROTOCOL  *mAmdMpCoreInfoProtocol = NULL;
   CpuNum,                               /* UINT32 CPUInterfaceNumber */       \
   (ClusterId << 8) | CoreId,            /* UINT32 AcpiProcessorUid */         \
   EFI_ACPI_5_1_GIC_ENABLED,             /* UINT32 Flags */                    \
-  PARKING_PROTOCOL_VERSION,             /* UINT32 ParkingProtocolVersion */   \
+  0,                                    /* UINT32 ParkingProtocolVersion */   \
   PerfInt,                              /* UINT32 PerformanceInterruptGsiv */ \
   0,                                    /* UINT64 ParkedAddress */            \
   GIC_BASE,                             /* UINT64 PhysicalBaseAddress */      \
@@ -194,8 +189,7 @@ BuildGicC (
   EFI_ACPI_5_1_GIC_STRUCTURE *GicC,
   UINT32 CpuNum,
   UINT32 ClusterId,
-  UINT32 CoreId,
-  EFI_PHYSICAL_ADDRESS MpParkingBase
+  UINT32 CoreId
   )
 {
   UINT32 MpId, PmuSpi;
@@ -212,8 +206,6 @@ BuildGicC (
   GicC->CPUInterfaceNumber = CpuNum;
   GicC->AcpiProcessorUid = MpId;
   GicC->Flags = EFI_ACPI_5_1_GIC_ENABLED;
-  GicC->ParkingProtocolVersion = PARKING_PROTOCOL_VERSION;
-  GicC->ParkedAddress = PARKED_ADDRESS(MpParkingBase, ClusterId, CoreId);
   GicC->PhysicalBaseAddress = GIC_BASE;
   GicC->GICV = GICV_BASE;
   GicC->GICH = GICH_BASE;
@@ -281,8 +273,6 @@ MadtHeader (
   ARM_CORE_INFO                          *ArmCoreInfoTable;
   UINTN                                  CoreCount, CpuNum;
   EFI_STATUS                             Status;
-  EFI_PHYSICAL_ADDRESS                   MpParkingBase;
-  UINTN                                  MpParkingSize;
 
   Status = gBS->LocateProtocol (
                &gAmdMpCoreInfoProtocolGuid,
@@ -299,13 +289,6 @@ MadtHeader (
   ASSERT (CoreCount <= NUM_CORES);
   ASSERT (CoreCount <= PcdGet32(PcdSocCoreCount));
 
-  MpParkingSize = 0;
-  MpParkingBase =  mAmdMpCoreInfoProtocol->GetMpParkingBase(&MpParkingSize);
-  if (MpParkingBase && MpParkingSize < (CoreCount * SIZE_4KB)) {
-    DEBUG ((EFI_D_ERROR, "MADT: Parking Protocol not supported.\n"));
-    MpParkingBase = 0;
-  }
-
   GicC = (EFI_ACPI_5_1_GIC_STRUCTURE *)&AcpiMadt.GicC[0];
   AcpiMadt.Header.Header.Length = sizeof (EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER);
 
@@ -315,8 +298,7 @@ MadtHeader (
 
     Status = BuildGicC (GicC, CpuNum,
                 ArmCoreInfoTable[CpuNum].ClusterId,
-                ArmCoreInfoTable[CpuNum].CoreId,
-                MpParkingBase
+                ArmCoreInfoTable[CpuNum].CoreId
                 );
     ASSERT_EFI_ERROR (Status);
 

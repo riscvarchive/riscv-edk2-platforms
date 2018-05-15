@@ -30,16 +30,9 @@ EFI_STATUS
   OUT UINT32  *PmuSpi
   );
 
-typedef
-EFI_PHYSICAL_ADDRESS
-(EFIAPI *GET_MP_PARKING_BASE) (
-  OUT UINTN  *MpParkingSize
-  );
-
 typedef struct _AMD_MP_CORE_INFO_PROTOCOL {
   GET_ARM_CORE_INFO_TABLE  GetArmCoreInfoTable;
   GET_PMU_SPI_FROM_MPID    GetPmuSpiFromMpId;
-  GET_MP_PARKING_BASE      GetMpParkingBase;
 } AMD_MP_CORE_INFO_PROTOCOL;
 
 #endif // _AMD_MP_CORE_INFO_H_
