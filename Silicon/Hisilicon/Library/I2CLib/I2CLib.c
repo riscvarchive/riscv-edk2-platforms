@@ -28,6 +28,9 @@
 #include "I2CLibInternal.h"
 #include "I2CHw.h"
 
+#define I2C_100KB_SPEED 0x1
+#define I2C_400KB_SPEED 0x2
+
 VOID
 I2C_Delay (
   UINT32 Count
@@ -158,7 +161,11 @@ I2CInit (
 
   I2C_REG_READ (Base + I2C_CON_OFFSET, I2cControlReg.Val32);
   I2cControlReg.bits.master = 1;
-  I2cControlReg.bits.Speed = 0x1;
+  if(SpeedMode == Normal) {
+    I2cControlReg.bits.Speed = I2C_100KB_SPEED;
+  } else {
+    I2cControlReg.bits.Speed = I2C_400KB_SPEED;
+  }
   I2cControlReg.bits.restart_en = 1;
   I2cControlReg.bits.slave_disable = 1;
   I2C_REG_WRITE (Base + I2C_CON_OFFSET, I2cControlReg.Val32);
