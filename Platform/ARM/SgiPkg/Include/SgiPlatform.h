@@ -27,6 +27,10 @@
 #define SGI_EXP_SMC_CS1_BASE                      0x0C000000
 #define SGI_EXP_SMC_CS1_SZ                        SIZE_64MB
 
+// Expansion AXI - SMSC 91C111 (Ethernet)
+#define SGI_EXP_SMSC91X_BASE                      0x18000000
+#define SGI_EXP_SMSC91X_SZ                        SIZE_64MB
+
 // Expansion AXI - System peripherals
 #define SGI_EXP_SYS_PERIPH_BASE                   0x1C000000
 #define SGI_EXP_SYS_PERIPH_SZ                     SIZE_2MB

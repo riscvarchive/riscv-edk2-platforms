@@ -150,6 +150,9 @@
   gArmPlatformTokenSpaceGuid.PcdCoreCount|4
   gArmPlatformTokenSpaceGuid.PcdClusterCount|2
 
+  # Ethernet
+  gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform
@@ -248,3 +251,6 @@
       NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
+
+  # SMSC LAN 91C111
+  EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
