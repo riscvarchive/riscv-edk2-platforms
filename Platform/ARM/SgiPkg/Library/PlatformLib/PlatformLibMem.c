@@ -22,7 +22,7 @@
 #include <SgiPlatform.h>
 
 // Total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  9
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  10
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -99,6 +99,14 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].Length          = PcdGet64 (PcdSystemMemorySize);
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+
+  // PCI Configuration Space
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdPciExpressBaseAddress);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdPciExpressBaseAddress);
+  VirtualMemoryTable[Index].Length          = (FixedPcdGet32 (PcdPciBusMax) -
+                                               FixedPcdGet32 (PcdPciBusMin) + 1) *
+                                               SIZE_1MB;
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // End of Table
   VirtualMemoryTable[++Index].PhysicalBase  = 0;

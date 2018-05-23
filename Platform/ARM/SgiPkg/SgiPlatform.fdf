@@ -108,6 +108,26 @@ READ_LOCK_STATUS   = TRUE
   INF RuleOverride=ACPITABLE Platform/ARM/SgiPkg/AcpiTables/Sgi575/AcpiTables.inf
   INF MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
+  # Required by PCI
+  INF ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+
+  #
+  # PCI Support
+  #
+  INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+  #
+  # AHCI Support
+  #
+  INF MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+
+  #
+  # SATA Controller
+  #
+  INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+
   #
   # Multiple Console IO support
   #

@@ -76,6 +76,10 @@
 
 [LibraryClasses.common.DXE_DRIVER]
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
+  PciHostBridgeLib|Platform/ARM/SgiPkg/Library/PciHostBridgeLib/PciHostBridgeLib.inf
+  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
+  PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
@@ -119,6 +123,24 @@
   # GIC Base Addresses
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x30000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x300C0000
+
+  #
+  # PCIe
+  #
+  gArmTokenSpaceGuid.PcdPciBusMin|0
+  gArmTokenSpaceGuid.PcdPciBusMax|255
+  gArmTokenSpaceGuid.PcdPciIoBase|0x0
+  gArmTokenSpaceGuid.PcdPciIoSize|0x00800000
+  gArmTokenSpaceGuid.PcdPciIoTranslation|0x77800000
+  gArmTokenSpaceGuid.PcdPciMmio32Base|0x70000000
+  gArmTokenSpaceGuid.PcdPciMmio32Size|0x07800000
+  gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
+  gArmTokenSpaceGuid.PcdPciMmio64Base|0x500000000
+  gArmTokenSpaceGuid.PcdPciMmio64Size|0x300000000
+  gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x60000000
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|40
 
   ## PL011 - Serial Terminal
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x7FF80000
@@ -254,3 +276,28 @@
 
   # SMSC LAN 91C111
   EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+
+  #
+  # Required by PCI
+  #
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+
+  #
+  # PCI Support
+  #
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf {
+    <PcdsFixedAtBuild>
+      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x8010004F
+  }
+
+  #
+  # AHCI Support
+  #
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+
+  #
+  # SATA Controller
+  #
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf

@@ -49,3 +49,7 @@
   gArmTokenSpaceGuid.PcdGicRedistributorsBase
   gArmTokenSpaceGuid.PcdGenericWatchdogControlBase
   gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase
+  gArmTokenSpaceGuid.PcdPciBusMin
+  gArmTokenSpaceGuid.PcdPciBusMax
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
