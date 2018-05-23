@@ -54,3 +54,8 @@
 [Pcd]
   gSynQuacerTokenSpaceGuid.PcdPcieEnableMask
   gSynQuacerTokenSpaceGuid.PcdPlatformSettings
+
+[Depex]
+  # gSynQuacerTokenSpaceGuid.PcdPlatformSettings may be of the dynamic HII
+  # variety, which are backed by EFI variables
+  gEfiVariableArchProtocolGuid
