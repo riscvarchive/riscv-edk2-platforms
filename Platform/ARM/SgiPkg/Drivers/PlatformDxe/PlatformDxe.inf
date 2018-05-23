@@ -20,12 +20,18 @@
 
 [Sources.common]
   PlatformDxe.c
+  VirtioBlockIo.c
 
 [Packages]
   MdePkg/MdePkg.dec
+  OvmfPkg/OvmfPkg.dec
 
 [LibraryClasses]
   UefiDriverEntryPoint
+  VirtioMmioDeviceLib
+
+[FeaturePcd]
+  gArmSgiTokenSpaceGuid.PcdVirtioSupported
 
 [Depex]
   TRUE

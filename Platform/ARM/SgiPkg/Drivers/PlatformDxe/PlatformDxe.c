@@ -15,11 +15,27 @@
 #include <Library/DebugLib.h>
 
 EFI_STATUS
+InitVirtioBlockIo (
+  IN EFI_HANDLE         ImageHandle
+  );
+
+EFI_STATUS
 EFIAPI
 ArmSgiPkgEntryPoint (
   IN EFI_HANDLE         ImageHandle,
   IN EFI_SYSTEM_TABLE   *SystemTable
   )
 {
-  return EFI_SUCCESS;
+  EFI_STATUS              Status;
+
+  Status = EFI_REQUEST_UNLOAD_IMAGE;
+  if (FeaturePcdGet (PcdVirtioSupported)) {
+    Status = InitVirtioBlockIo (ImageHandle);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a: Failed to install Virtio Block device\n",
+        __FUNCTION__));
+    }
+  }
+
+  return Status;
 }
