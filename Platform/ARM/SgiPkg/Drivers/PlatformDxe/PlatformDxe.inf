@@ -23,12 +23,18 @@
   VirtioBlockIo.c
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   OvmfPkg/OvmfPkg.dec
+  Platform/ARM/SgiPkg/SgiPlatform.dec
 
 [LibraryClasses]
+  AcpiLib
   UefiDriverEntryPoint
   VirtioMmioDeviceLib
+
+[Guids]
+  gSgi575AcpiTablesiFileGuid
 
 [FeaturePcd]
   gArmSgiTokenSpaceGuid.PcdVirtioSupported
