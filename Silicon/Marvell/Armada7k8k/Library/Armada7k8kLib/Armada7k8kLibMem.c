@@ -32,8 +32,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 *******************************************************************************/
 
-#include <Base.h>
+#include <Uefi.h>
+
+#include <IndustryStandard/ArmStdSmc.h>
+#include <IndustryStandard/MvSmc.h>
+
+#include <Library/ArmadaSoCDescLib.h>
 #include <Library/ArmPlatformLib.h>
+#include <Library/ArmSmcLib.h>
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
 #include <Library/IoLib.h>
@@ -57,48 +63,18 @@ GetDramSize (
   IN OUT UINT64 *MemSize
   )
 {
-  UINT64 BaseAddr;
-  UINT8 RegionCode;
-  UINT8 Cs;
+  ARM_SMC_ARGS SmcRegs = {0};
+  EFI_STATUS Status;
 
-  *MemSize = 0;
-
-  for (Cs = 0; Cs < DRAM_MAX_CS_NUM; Cs++) {
-
-    /* Exit loop on first disabled DRAM CS */
-    if (!DRAM_CS_ENABLED (Cs)) {
-      break;
-    }
-
-    /*
-     * Sanity check for base address of next DRAM block.
-     * Only continuous space will be used.
-     */
-    BaseAddr = GET_DRAM_REGION_BASE (Cs);
-    if (BaseAddr != *MemSize) {
-      DEBUG ((DEBUG_ERROR,
-        "%a: DRAM blocks are not contiguous, limit size to 0x%llx\n",
-        __FUNCTION__,
-        *MemSize));
-      return EFI_SUCCESS;
-    }
-
-    /* Decode area length for current CS from register value */
-    RegionCode = GET_DRAM_REGION_SIZE_CODE (Cs);
-
-    if (DRAM_REGION_SIZE_EVEN (RegionCode)) {
-      *MemSize += GET_DRAM_REGION_SIZE_EVEN (RegionCode);
-    } else if (DRAM_REGION_SIZE_ODD (RegionCode)) {
-      *MemSize += GET_DRAM_REGION_SIZE_ODD (RegionCode);
-    } else {
-      DEBUG ((DEBUG_ERROR,
-        "%a: Invalid memory region code (0x%x) for CS#%d\n",
-        __FUNCTION__,
-        RegionCode,
-        Cs));
-      return EFI_INVALID_PARAMETER;
-    }
+  SmcRegs.Arg0 = MV_SMC_ID_DRAM_SIZE;
+  Status = ArmadaSoCAp8xxBaseGet (&SmcRegs.Arg1, 0);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
+
+  ArmCallSmc (&SmcRegs);
+
+  *MemSize = SmcRegs.Arg0;
 
   return EFI_SUCCESS;
 }

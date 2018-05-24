@@ -19,5 +19,6 @@
 #define MV_SMC_ID_COMPHY_POWER_ON         0x82000001
 #define MV_SMC_ID_COMPHY_POWER_OFF        0x82000002
 #define MV_SMC_ID_COMPHY_PLL_LOCK         0x82000003
+#define MV_SMC_ID_DRAM_SIZE               0x82000010
 
 #endif //__MV_SMC_H__

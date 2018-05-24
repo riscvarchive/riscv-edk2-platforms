@@ -46,28 +46,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
           (MmioRead32 (CCU_MC_RCR_REG) & REMAP_SIZE_MASK) + SIZE_1MB
 #define DRAM_REMAP_TARGET \
           (MmioRead32 (CCU_MC_RTBR_REG) << TARGET_BASE_OFFS)
-
-#define DRAM_CH0_MMAP_LOW_REG(cs)       (0xf0020200 + (cs) * 0x8)
-#define DRAM_CS_VALID_ENABLED_MASK      0x1
-#define DRAM_AREA_LENGTH_OFFS           16
-#define DRAM_AREA_LENGTH_MASK           (0x1f << DRAM_AREA_LENGTH_OFFS)
-#define DRAM_START_ADDRESS_L_OFFS       23
-#define DRAM_START_ADDRESS_L_MASK       (0x1ff << DRAM_START_ADDRESS_L_OFFS)
-#define DRAM_CH0_MMAP_HIGH_REG(cs)      (0xf0020204 + (cs) * 0x8)
-#define DRAM_START_ADDR_HTOL_OFFS       32
-
-#define DRAM_MAX_CS_NUM                 8
-
-#define DRAM_CS_ENABLED(Cs) \
-          (MmioRead32 (DRAM_CH0_MMAP_LOW_REG (Cs)) & DRAM_CS_VALID_ENABLED_MASK)
-#define GET_DRAM_REGION_BASE(Cs) \
-          ((UINT64)MmioRead32 (DRAM_CH0_MMAP_HIGH_REG ((Cs))) << \
-           DRAM_START_ADDR_HTOL_OFFS) | \
-          (MmioRead32 (DRAM_CH0_MMAP_LOW_REG (Cs)) & DRAM_START_ADDRESS_L_MASK);
-#define GET_DRAM_REGION_SIZE_CODE(Cs) \
-          (MmioRead32 (DRAM_CH0_MMAP_LOW_REG ((Cs))) & \
-           DRAM_AREA_LENGTH_MASK) >> DRAM_AREA_LENGTH_OFFS
-#define DRAM_REGION_SIZE_EVEN(C)        (((C) >= 7) && ((C) <= 26))
-#define GET_DRAM_REGION_SIZE_EVEN(C)    ((UINT64)1 << ((C) + 16))
-#define DRAM_REGION_SIZE_ODD(C)         ((C) <= 4)
-#define GET_DRAM_REGION_SIZE_ODD(C)     ((UINT64)0x18000000 << (C))
