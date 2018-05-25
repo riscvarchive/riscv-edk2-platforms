@@ -359,8 +359,9 @@ PciInitControllerPost (
       RootBridge->MemAbove4G.Base,
       RootBridge->MemAbove4G.Base,
       RootBridge->MemAbove4G.Limit - RootBridge->MemAbove4G.Base + 1,
-      IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM,
-      0);
+      IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM |
+      IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TH,
+      IATU_REGION_CTRL_2_OFF_OUTBOUND_0_MSG_CODE_32BIT);
   }
 
   // enable link
