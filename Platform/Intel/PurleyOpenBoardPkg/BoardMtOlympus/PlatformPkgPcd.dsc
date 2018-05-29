@@ -233,8 +233,6 @@
   gMinPlatformPkgTokenSpaceGuid.PcdAcpiGpe0BlockAddress|0x580
   gMinPlatformPkgTokenSpaceGuid.PcdAcpiGpe1BlockAddress|0
 
-  gMinPlatformPkgTokenSpaceGuid.PcdHpetTimerBlockId|0x8086A701
-
 [PcdsPatchableInModule.common]
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000042
 
