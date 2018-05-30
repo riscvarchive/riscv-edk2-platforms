@@ -20,15 +20,17 @@
  *   the SoC.
  */
 
-#define TT_S2_CONT_SHIFT          52
-#define TT_S2_AF                  (0x1 << 10)
-#define TT_S2_SH_NON_SHAREABLE    (0x0 << 8)
-#define TT_S2_AP_RW               (0x3 << 6)
-#define TT_S2_MEMATTR_DEVICE_nGRE (0x2 << 2)
-#define TT_S2_MEMATTR_MEMORY_WB   (0xf << 2)
-#define TT_S2_TABLE               (0x3 << 0)
-#define TT_S2_L3_PAGE             (0x1 << 1)
-#define TT_S2_VALID               (0x1 << 0)
+#define TT_S2_CONT_SHIFT            52
+#define TT_S2_AF                    (0x1 << 10)
+#define TT_S2_SH_NON_SHAREABLE      (0x0 << 8)
+#define TT_S2_AP_RO                 (0x1 << 6)
+#define TT_S2_AP_RW                 (0x3 << 6)
+#define TT_S2_MEMATTR_DEVICE_nGRE   (0x2 << 2)
+#define TT_S2_MEMATTR_DEVICE_nGnRE  (0x1 << 2)
+#define TT_S2_MEMATTR_MEMORY_WB     (0xf << 2)
+#define TT_S2_TABLE                 (0x3 << 0)
+#define TT_S2_L3_PAGE               (0x1 << 1)
+#define TT_S2_VALID                 (0x1 << 0)
 
   .altmacro
   .macro    for, start, count, do, arg2, arg3, arg4
@@ -56,6 +58,12 @@
   .quad     ((\base << 12) + \offset) | TT_S2_AF | TT_S2_AP_RW | \
             TT_S2_SH_NON_SHAREABLE | TT_S2_MEMATTR_MEMORY_WB | \
             TT_S2_L3_PAGE | TT_S2_VALID | (\cont << TT_S2_CONT_SHIFT)
+  .endm
+
+  .macro    smmu_l3_entry, base, offset=0, ignore=0
+  .quad     ((\base << 12) + \offset) | TT_S2_AF | TT_S2_AP_RO | \
+            TT_S2_SH_NON_SHAREABLE | TT_S2_MEMATTR_DEVICE_nGnRE | \
+            TT_S2_L3_PAGE | TT_S2_VALID
   .endm
 
   .section  ".rodata", "a", %progbits
@@ -86,3 +94,12 @@
 3:for     0,   8, s2_l3_entry, 0x70000000
   for     0,   8, s2_l3_entry, 0x70010000  /* hide device #1 */
   for     0, 496, s2_l3_entry, 0x70010000, 1
+
+  /* level 3 for north SMMU */
+  .org    0x6000
+  for     0,   8, smmu_l3_entry, 0xc00060000000
+  for     0,   8, smmu_l3_entry, 0xc00060010000  /* hide device #1 */
+  for     0, 496, smmu_l3_entry, 0xc00060010000
+  for     0,   8, smmu_l3_entry, 0x800070000000
+  for     0,   8, smmu_l3_entry, 0x800070010000  /* hide device #1 */
+  for     0, 496, smmu_l3_entry, 0x800070010000
