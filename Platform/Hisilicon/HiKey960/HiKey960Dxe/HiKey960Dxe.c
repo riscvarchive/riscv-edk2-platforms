@@ -28,6 +28,8 @@
 
 #include "HiKey960Dxe.h"
 
+STATIC EMBEDDED_GPIO   *mGpio;
+
 STATIC
 VOID
 InitSdCard (
@@ -172,6 +174,94 @@ OnEndOfDxe (
 
 EFI_STATUS
 EFIAPI
+VirtualKeyboardRegister (
+  IN VOID
+  )
+{
+  EFI_STATUS           Status;
+
+  Status = gBS->LocateProtocol (
+                  &gEmbeddedGpioProtocolGuid,
+                  NULL,
+                  (VOID **) &mGpio
+                  );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
+VirtualKeyboardReset (
+  IN VOID
+  )
+{
+  EFI_STATUS           Status;
+
+  if (mGpio == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
+  //
+  // Configure GPIO68 as GPIO function
+  //
+  MmioWrite32 (0xe896c108, 0);
+  Status = mGpio->Set (mGpio, DETECT_SW_FASTBOOT, GPIO_MODE_INPUT);
+  return Status;
+}
+
+BOOLEAN
+EFIAPI
+VirtualKeyboardQuery (
+  IN VIRTUAL_KBD_KEY             *VirtualKey
+  )
+{
+  EFI_STATUS           Status;
+  UINTN                Value = 0;
+
+  if ((VirtualKey == NULL) || (mGpio == NULL)) {
+    return FALSE;
+  }
+  if (MmioRead32 (ADB_REBOOT_ADDRESS) == ADB_REBOOT_BOOTLOADER) {
+    goto Done;
+  } else {
+    Status = mGpio->Get (mGpio, DETECT_SW_FASTBOOT, &Value);
+    if (EFI_ERROR (Status) || (Value != 0)) {
+      return FALSE;
+    }
+  }
+Done:
+  VirtualKey->Signature = VIRTUAL_KEYBOARD_KEY_SIGNATURE;
+  VirtualKey->Key.ScanCode = SCAN_NULL;
+  VirtualKey->Key.UnicodeChar = L'f';
+  return TRUE;
+}
+
+EFI_STATUS
+EFIAPI
+VirtualKeyboardClear (
+  IN VIRTUAL_KBD_KEY            *VirtualKey
+  )
+{
+  if (VirtualKey == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
+  if (MmioRead32 (ADB_REBOOT_ADDRESS) == ADB_REBOOT_BOOTLOADER) {
+    MmioWrite32 (ADB_REBOOT_ADDRESS, ADB_REBOOT_NONE);
+    WriteBackInvalidateDataCacheRange ((VOID *)ADB_REBOOT_ADDRESS, 4);
+  }
+  return EFI_SUCCESS;
+}
+
+PLATFORM_VIRTUAL_KBD_PROTOCOL mVirtualKeyboard = {
+  VirtualKeyboardRegister,
+  VirtualKeyboardReset,
+  VirtualKeyboardQuery,
+  VirtualKeyboardClear
+};
+
+EFI_STATUS
+EFIAPI
 HiKey960EntryPoint (
   IN EFI_HANDLE         ImageHandle,
   IN EFI_SYSTEM_TABLE   *SystemTable
@@ -200,5 +290,12 @@ HiKey960EntryPoint (
   if (EFI_ERROR (Status)) {
     return Status;
   }
+
+  Status = gBS->InstallProtocolInterface (
+                  &ImageHandle,
+                  &gPlatformVirtualKeyboardProtocolGuid,
+                  EFI_NATIVE_INTERFACE,
+                  &mVirtualKeyboard
+                  );
   return Status;
 }
