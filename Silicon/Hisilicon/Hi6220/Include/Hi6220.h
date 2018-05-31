@@ -23,6 +23,12 @@
 #define HI6220_PERIPH_BASE                      0xF4000000
 #define HI6220_PERIPH_SZ                        0x05800000
 
+#define IOMG_BASE                               0xF7010000
+#define IOMG_080_REG                            (IOMG_BASE + 0x140)
+
+#define IOCG_BASE                               0xF7010800
+#define IOCG_084_REG                            (IOCG_BASE + 0x150)
+
 #define PERI_CTRL_BASE                          0xF7030000
 #define SC_PERIPH_CTRL4                         0x00C
 #define CTRL4_FPGA_EXT_PHY_SEL                  BIT3

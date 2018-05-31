@@ -120,7 +120,10 @@ READ_LOCK_STATUS   = TRUE
   #
   # GPIO
   #
+  INF Platform/Hisilicon/HiKey/HiKeyGpioDxe/HiKeyGpioDxe.inf
   INF ArmPlatformPkg/Drivers/PL061GpioDxe/PL061GpioDxe.inf
+
+  INF Platform/Hisilicon/HiKey/HiKeyDxe/HiKeyDxe.inf
 
   #
   # Multimedia Card Interface

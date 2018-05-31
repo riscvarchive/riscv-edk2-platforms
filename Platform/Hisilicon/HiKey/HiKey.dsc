@@ -189,7 +189,10 @@
   #
   # GPIO
   #
+  Platform/Hisilicon/HiKey/HiKeyGpioDxe/HiKeyGpioDxe.inf
   ArmPlatformPkg/Drivers/PL061GpioDxe/PL061GpioDxe.inf
+
+  Platform/Hisilicon/HiKey/HiKeyDxe/HiKeyDxe.inf
 
   #
   # MMC/SD
