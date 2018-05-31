@@ -120,6 +120,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # GPIO
   #
+  INF Platform/Hisilicon/HiKey960/HiKey960GpioDxe/HiKey960GpioDxe.inf
   INF ArmPlatformPkg/Drivers/PL061GpioDxe/PL061GpioDxe.inf
 
   #
