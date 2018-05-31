@@ -28,10 +28,15 @@
   MdePkg/MdePkg.dec
 
 [LibraryClasses]
+  CacheMaintenanceLib
   DebugLib
   IoLib
   UefiLib
   UefiDriverEntryPoint
+
+[Protocols]
+  gEmbeddedGpioProtocolGuid
+  gPlatformVirtualKeyboardProtocolGuid
 
 [Guids]
   gEfiEndOfDxeEventGroupGuid

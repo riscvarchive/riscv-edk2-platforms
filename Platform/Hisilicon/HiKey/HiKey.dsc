@@ -192,6 +192,11 @@
   Platform/Hisilicon/HiKey/HiKeyGpioDxe/HiKeyGpioDxe.inf
   ArmPlatformPkg/Drivers/PL061GpioDxe/PL061GpioDxe.inf
 
+  #
+  # Virtual Keyboard
+  #
+  EmbeddedPkg/Drivers/VirtualKeyboardDxe/VirtualKeyboardDxe.inf
+
   Platform/Hisilicon/HiKey/HiKeyDxe/HiKeyDxe.inf
 
   #
