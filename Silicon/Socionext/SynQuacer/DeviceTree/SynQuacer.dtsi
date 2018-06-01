@@ -340,7 +340,7 @@
               <0x0 0x30400000 0x0 0x300000>,     // GICR
               <0x0 0x2c000000 0x0 0x2000>,       // GICC
               <0x0 0x2c010000 0x0 0x1000>,       // GICH
-              <0x0 0x2c020000 0x0 0x2000>;       // GICV
+              <0x0 0x2c020000 0x0 0x10000>;      // GICV
         #interrupt-cells = <3>;
         #address-cells = <2>;
         #size-cells = <2>;
