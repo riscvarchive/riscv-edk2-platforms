@@ -182,6 +182,8 @@
   Platform/Hisilicon/HiKey960/HiKey960GpioDxe/HiKey960GpioDxe.inf
   ArmPlatformPkg/Drivers/PL061GpioDxe/PL061GpioDxe.inf
 
+  Platform/Hisilicon/HiKey960/HiKey960Dxe/HiKey960Dxe.inf
+
   #
   # USB Host Support
   #
