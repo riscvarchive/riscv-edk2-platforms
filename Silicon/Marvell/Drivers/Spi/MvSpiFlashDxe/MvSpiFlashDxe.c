@@ -397,6 +397,65 @@ MvSpiFlashUpdate (
 }
 
 EFI_STATUS
+MvSpiFlashUpdateWithProgress (
+  IN SPI_DEVICE                                    *Slave,
+  IN UINT32                                         Offset,
+  IN UINTN                                          ByteCount,
+  IN UINT8                                         *Buffer,
+  IN EFI_FIRMWARE_MANAGEMENT_UPDATE_IMAGE_PROGRESS  Progress,        OPTIONAL
+  IN UINTN                                          StartPercentage,
+  IN UINTN                                          EndPercentage
+  )
+{
+  EFI_STATUS Status;
+  UINTN SectorSize;
+  UINTN SectorNum;
+  UINTN ToUpdate;
+  UINTN Index;
+  UINT8 *TmpBuf;
+
+  SectorSize = Slave->Info->SectorSize;
+  SectorNum = ByteCount / SectorSize;
+  ToUpdate = SectorSize;
+
+  TmpBuf = (UINT8 *)AllocateZeroPool (SectorSize);
+  if (TmpBuf == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  for (Index = 0; Index < SectorNum; Index++) {
+    if (Progress != NULL) {
+      Progress (StartPercentage +
+                ((Index * (EndPercentage - StartPercentage)) / SectorNum));
+    }
+
+    // In the last chunk update only an actual number of remaining bytes.
+    if (Index + 1 == SectorNum) {
+      ToUpdate = ByteCount % SectorSize;
+    }
+
+    Status = MvSpiFlashUpdateBlock (Slave,
+               Offset + Index * SectorSize,
+               ToUpdate,
+               Buffer + Index * SectorSize,
+               TmpBuf,
+               SectorSize);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a: Error while updating\n", __FUNCTION__));
+      return Status;
+    }
+  }
+  FreePool (TmpBuf);
+
+  if (Progress != NULL) {
+    Progress (EndPercentage);
+  }
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
 EFIAPI
 MvSpiFlashReadId (
   IN     SPI_DEVICE *SpiDev,
@@ -500,6 +559,7 @@ MvSpiFlashInitProtocol (
   SpiFlashProtocol->Write = MvSpiFlashWrite;
   SpiFlashProtocol->Erase = MvSpiFlashErase;
   SpiFlashProtocol->Update = MvSpiFlashUpdate;
+  SpiFlashProtocol->UpdateWithProgress = MvSpiFlashUpdateWithProgress;
 
   return EFI_SUCCESS;
 }

@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __MV_SPI_FLASH__
 #define __MV_SPI_FLASH__
 
+#include <Protocol/FirmwareManagement.h>
 #include <Protocol/Spi.h>
 
 extern EFI_GUID gMarvellSpiFlashProtocolGuid;
@@ -89,6 +90,18 @@ EFI_STATUS
   IN UINT8      *Buffer
   );
 
+typedef
+EFI_STATUS
+(EFIAPI *MV_SPI_FLASH_UPDATE_WITH_PROGRESS) (
+  IN SPI_DEVICE                                    *Slave,
+  IN UINT32                                         Offset,
+  IN UINTN                                          ByteCount,
+  IN UINT8                                         *Buffer,
+  IN EFI_FIRMWARE_MANAGEMENT_UPDATE_IMAGE_PROGRESS  Progress,        OPTIONAL
+  IN UINTN                                          StartPercentage,
+  IN UINTN                                          EndPercentage
+  );
+
 struct _MARVELL_SPI_FLASH_PROTOCOL {
   MV_SPI_FLASH_INIT    Init;
   MV_SPI_FLASH_READ_ID ReadId;
@@ -96,6 +109,7 @@ struct _MARVELL_SPI_FLASH_PROTOCOL {
   MV_SPI_FLASH_WRITE   Write;
   MV_SPI_FLASH_ERASE   Erase;
   MV_SPI_FLASH_UPDATE  Update;
+  MV_SPI_FLASH_UPDATE_WITH_PROGRESS  UpdateWithProgress;
 };
 
 #endif // __MV_SPI_FLASH__
