@@ -49,7 +49,21 @@ NumBlocks     = 0x400
 #
 ################################################################################
 
-0x00000000|0x00100000
+#
+# UEFI has trouble dealing with FVs that reside at physical address 0x0.
+# So instead, put a hardcoded 'jump to 0x1000' at offset 0x0, and put the
+# real FV at offset 0x1000
+#
+0x00000000|0x00001000
+DATA = {
+!if $(ARCH) == AARCH64
+  0x00, 0x04, 0x00, 0x14   # 'b 0x1000' in AArch64 ASM
+!else
+  0xfe, 0x03, 0x00, 0xea   # 'b 0x1000' in AArch32 ASM
+!endif
+}
+
+0x00001000|0x000ff000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
 FV = FVMAIN_COMPACT
 
@@ -191,7 +205,6 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
 # PEI phase firmware volume
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 8
-FvForceRebase      = TRUE
 ERASE_POLARITY     = 1
 MEMORY_MAPPED      = TRUE
 STICKY_WRITE       = TRUE
