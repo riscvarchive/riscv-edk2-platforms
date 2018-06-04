@@ -25,6 +25,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/Hisilicon/HiKey960/HiKey960.dec
   Silicon/Hisilicon/Hi3660/Hi3660.dec
 
 [LibraryClasses]
@@ -34,12 +35,22 @@
   IoLib
   PcdLib
   TimerLib
+  UefiBootManagerLib
   UefiDriverEntryPoint
   UefiLib
 
 [Protocols]
+  gEfiDevicePathFromTextProtocolGuid
+  gEfiLoadedImageProtocolGuid
   gEmbeddedGpioProtocolGuid
+  gPlatformBootManagerProtocolGuid
   gPlatformVirtualKeyboardProtocolGuid
+
+[Pcd]
+  gHiKey960TokenSpaceGuid.PcdAndroidBootDevicePath
+  gHiKey960TokenSpaceGuid.PcdAndroidBootFile
+  gHiKey960TokenSpaceGuid.PcdAndroidFastbootFile
+  gHiKey960TokenSpaceGuid.PcdSdBootDevicePath
 
 [Guids]
   gEfiEndOfDxeEventGroupGuid
