@@ -21,4 +21,6 @@
 #define ADB_REBOOT_BOOTLOADER            0x77665500
 #define ADB_REBOOT_NONE                  0x77665501
 
+#define HIKEY_BOOT_OPTION_NUM            4
+
 #endif /* __HIKEYDXE_H__ */

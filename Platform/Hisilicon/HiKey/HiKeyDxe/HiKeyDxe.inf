@@ -26,17 +26,28 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/Hisilicon/HiKey/HiKey.dec
 
 [LibraryClasses]
   CacheMaintenanceLib
   DebugLib
   IoLib
+  UefiBootManagerLib
   UefiLib
   UefiDriverEntryPoint
 
 [Protocols]
+  gEfiDevicePathFromTextProtocolGuid
+  gEfiLoadedImageProtocolGuid
   gEmbeddedGpioProtocolGuid
+  gPlatformBootManagerProtocolGuid
   gPlatformVirtualKeyboardProtocolGuid
+
+[Pcd]
+  gHiKeyTokenSpaceGuid.PcdAndroidBootDevicePath
+  gHiKeyTokenSpaceGuid.PcdAndroidBootFile
+  gHiKeyTokenSpaceGuid.PcdAndroidFastbootFile
+  gHiKeyTokenSpaceGuid.PcdSdBootDevicePath
 
 [Guids]
   gEfiEndOfDxeEventGroupGuid
