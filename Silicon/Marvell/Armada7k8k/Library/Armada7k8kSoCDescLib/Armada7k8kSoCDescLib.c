@@ -28,6 +28,40 @@
 
 #include "Armada7k8kSoCDescLib.h"
 
+/**
+
+Routine Description:
+
+  Get base address of the SoC North Bridge.
+
+Arguments:
+
+  ApBase  - Base address of the North Bridge.
+  ApIndex - Index of the North Bridge.
+
+Returns:
+
+  EFI_SUCCESS           - Proper base address is returned.
+  EFI_INVALID_PARAMETER - The index is out of range.
+
+**/
+EFI_STATUS
+EFIAPI
+ArmadaSoCAp8xxBaseGet (
+  IN OUT EFI_PHYSICAL_ADDRESS  *ApBase,
+  IN UINTN                      ApIndex
+  )
+{
+  if (ApIndex != ARMADA7K8K_AP806_INDEX) {
+    DEBUG ((DEBUG_ERROR, "%a: Only one AP806 in A7K/A8K SoC\n", __FUNCTION__));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  *ApBase = MV_SOC_AP806_BASE;
+
+  return EFI_SUCCESS;
+}
+
 EFI_STATUS
 EFIAPI
 ArmadaSoCDescComPhyGet (

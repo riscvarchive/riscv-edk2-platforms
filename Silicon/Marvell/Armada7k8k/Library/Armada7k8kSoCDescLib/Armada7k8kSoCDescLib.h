@@ -22,7 +22,13 @@
 // Common macros
 //
 #define MV_SOC_CP_BASE(Cp)               (0xF2000000 + ((Cp) * 0x2000000))
+#define MV_SOC_AP806_BASE                0xF0000000
 #define MV_SOC_AP806_COUNT               1
+
+//
+// Armada7k8k default North Bridge index
+//
+#define ARMADA7K8K_AP806_INDEX           0
 
 //
 // Platform description of AHCI controllers

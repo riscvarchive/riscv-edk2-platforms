@@ -20,6 +20,34 @@
 #include <Protocol/EmbeddedGpio.h>
 
 //
+// North Bridge description
+//
+
+/**
+
+Routine Description:
+
+  Get base address of the SoC North Bridge.
+
+Arguments:
+
+  ApBase  - Base address of the North Bridge.
+  ApIndex - Index of the North Bridge.
+
+Returns:
+
+  EFI_SUCCESS           - Proper base address is returned.
+  EFI_INVALID_PARAMETER - The index is out of range.
+
+**/
+EFI_STATUS
+EFIAPI
+ArmadaSoCAp8xxBaseGet (
+  IN OUT EFI_PHYSICAL_ADDRESS  *ApBase,
+  IN UINTN                      ApIndex
+  );
+
+//
 // ComPhy SoC description
 //
 typedef struct {
