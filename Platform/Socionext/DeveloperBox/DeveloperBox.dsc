@@ -225,11 +225,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutUgaSupport|FALSE
   gEfiMdePkgTokenSpaceGuid.PcdUgaConsumeSupport|FALSE
 
-  #
-  # This requires support in ARM Trusted Firmware and SCP for warm reset,
-  # so disable for now
-  #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|FALSE
+  gArmTokenSpaceGuid.PcdArmReenterPeiForCapsuleWarmReboot|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|TRUE
 
   # needed for NFIT tables installed by RamDiskDxe
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
