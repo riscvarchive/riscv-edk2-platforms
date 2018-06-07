@@ -45,8 +45,10 @@ STATIC
 EFI_STATUS
 GetFvbByAddress (
   IN  EFI_PHYSICAL_ADDRESS                Address,
+  IN  UINTN                               Length,
   OUT EFI_FIRMWARE_VOLUME_BLOCK_PROTOCOL  **OutFvb,
-  OUT EFI_PHYSICAL_ADDRESS                *FvbBaseAddress
+  OUT EFI_LBA                             *Lba,
+  OUT UINTN                               *BlockSize
   )
 {
   EFI_STATUS                          Status;
@@ -55,6 +57,8 @@ GetFvbByAddress (
   UINTN                               Index;
   EFI_FIRMWARE_VOLUME_BLOCK_PROTOCOL  *Fvb;
   EFI_FVB_ATTRIBUTES_2                Attributes;
+  EFI_PHYSICAL_ADDRESS                FvbBaseAddress;
+  UINTN                               NumberOfBlocks;
 
   //
   // Locate all handles with Firmware Volume Block protocol
@@ -85,7 +89,7 @@ GetFvbByAddress (
     //
     // Checks if the address range of this handle contains parameter Address
     //
-    Status = Fvb->GetPhysicalAddress (Fvb, FvbBaseAddress);
+    Status = Fvb->GetPhysicalAddress (Fvb, &FvbBaseAddress);
     if (EFI_ERROR (Status)) {
       continue;
     }
@@ -103,9 +107,27 @@ GetFvbByAddress (
       continue;
     }
 
-    if (Address == *FvbBaseAddress) {
+    Status = Fvb->GetBlockSize (Fvb, 0, BlockSize, &NumberOfBlocks);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_INFO, "%a: failed to get FVB blocksize - %r, ignoring\n",
+        __FUNCTION__, Status));
+      continue;
+    }
+
+    if ((Length % *BlockSize) != 0) {
+      DEBUG ((DEBUG_INFO,
+        "%a: Length 0x%lx is not a multiple of the blocksize 0x%lx, ignoring\n",
+        __FUNCTION__, Length, *BlockSize));
+      Status = EFI_INVALID_PARAMETER;
+      continue;
+    }
+
+    if ((Address >= FvbBaseAddress) &&
+        ((Address + Length) <=
+         (FvbBaseAddress + (*BlockSize * NumberOfBlocks)))) {
       *OutFvb  = Fvb;
-      Status   = EFI_SUCCESS;
+      *Lba = (Address - FvbBaseAddress) / *BlockSize;
+      Status = EFI_SUCCESS;
       break;
     }
 
@@ -191,9 +213,7 @@ PerformFlashWriteWithProgress (
   EFI_FIRMWARE_VOLUME_BLOCK_PROTOCOL  *Fvb;
   EFI_STATUS                          Status;
   UINTN                               BlockSize;
-  UINTN                               NumberOfBlocks;
   EFI_LBA                             Lba;
-  EFI_PHYSICAL_ADDRESS                FvbBaseAddress;
   UINTN                               NumBytes;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION Black;
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION White;
@@ -227,34 +247,12 @@ PerformFlashWriteWithProgress (
   // that covers the system firmware
   //
   Fvb = NULL;
-  Status = GetFvbByAddress (FlashAddress, &Fvb, &FvbBaseAddress);
+  Status = GetFvbByAddress (FlashAddress, Length, &Fvb, &Lba, &BlockSize);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR,
       "%a: failed to locate FVB handle for address 0x%llx - %r\n",
       __FUNCTION__, FlashAddress, Status));
     return Status;
-  }
-
-  Status = Fvb->GetBlockSize(Fvb, 0, &BlockSize, &NumberOfBlocks);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to get FVB blocksize - %r\n",
-      __FUNCTION__, Status));
-    return Status;
-  }
-
-  if ((Length % BlockSize) != 0) {
-    DEBUG ((DEBUG_ERROR,
-      "%a: Length 0x%lx is not a multiple of the blocksize 0x%lx\n",
-      __FUNCTION__, Length, BlockSize));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  Lba = (FlashAddress - FvbBaseAddress) / BlockSize;
-  if (Lba > NumberOfBlocks - 1) {
-    DEBUG ((DEBUG_ERROR,
-      "%a: flash device with non-uniform blocksize not supported\n",
-      __FUNCTION__));
-    return EFI_UNSUPPORTED;
   }
 
   //
