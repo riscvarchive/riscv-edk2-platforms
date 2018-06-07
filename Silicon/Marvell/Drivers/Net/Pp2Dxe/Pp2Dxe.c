@@ -258,6 +258,8 @@ Pp2DxeBmStart (
     }
   }
 
+  Mvpp2Shared->BmEnabled = TRUE;
+
   return EFI_SUCCESS;
 }
 
@@ -669,15 +671,14 @@ Pp2DxeHalt (
   PP2DXE_CONTEXT *Pp2Context = Context;
   PP2DXE_PORT *Port = &Pp2Context->Port;
   MVPP2_SHARED *Mvpp2Shared = Pp2Context->Port.Priv;
-  STATIC BOOLEAN CommonPartHalted = FALSE;
   INTN Index;
 
-  if (!CommonPartHalted) {
+  if (Mvpp2Shared->BmEnabled) {
     for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
       Mvpp2BmStop(Mvpp2Shared, Index);
     }
 
-    CommonPartHalted = TRUE;
+    Mvpp2Shared->BmEnabled = FALSE;
   }
 
   Mvpp2TxqDrainSet(Port, 0, TRUE);

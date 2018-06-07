@@ -290,6 +290,7 @@ typedef struct {
 
   /* BM pools */
   MVPP2_BMS_POOL *BmPools[MVPP2_MAX_PORT];
+  BOOLEAN BmEnabled;
 
   /* PRS shadow table */
   MVPP2_PRS_SHADOW *PrsShadow;
