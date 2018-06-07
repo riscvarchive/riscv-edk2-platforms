@@ -19,12 +19,20 @@
 
 #include <Platform/MemoryMap.h>
 
+#define FW_CODE_REGION_BASE SYNQUACER_SPI_NOR_BASE
+#define FW_CODE_REGION_SIZE (FW_ENV_REGION_BASE - FW_CODE_REGION_BASE)
+
+#define FW_ENV_REGION_BASE  FixedPcdGet32 (PcdFlashNvStorageVariableBase)
+#define FW_ENV_REGION_SIZE  (FixedPcdGet32 (PcdFlashNvStorageVariableSize) + \
+                             FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize) + \
+                             FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize))
+
 STATIC NOR_FLASH_DESCRIPTION mNorFlashDevices[] = {
   {
     // UEFI code region
     SYNQUACER_SPI_NOR_BASE,                             // device base
-    FixedPcdGet64 (PcdFdBaseAddress),                   // region base
-    FixedPcdGet32 (PcdFdSize),                          // region size
+    FW_CODE_REGION_BASE,                                // region base
+    FW_CODE_REGION_SIZE,                                // region size
     SIZE_64KB,                                          // block size
     {
       0x19c118b0, 0xc423, 0x42be, { 0xb8, 0x0f, 0x70, 0x6f, 0x1f, 0xcb, 0x59, 0x9a }
@@ -33,10 +41,8 @@ STATIC NOR_FLASH_DESCRIPTION mNorFlashDevices[] = {
   {
     // Environment variable region
     SYNQUACER_SPI_NOR_BASE,                             // device base
-    FixedPcdGet32 (PcdFlashNvStorageVariableBase),      // region base
-    FixedPcdGet32 (PcdFlashNvStorageVariableSize) +
-    FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize) +
-    FixedPcdGet32 (PcdFlashNvStorageFtwSpareSize),      // region size
+    FW_ENV_REGION_BASE,                                 // region base
+    FW_ENV_REGION_SIZE,                                 // region size
     SIZE_64KB,                                          // block size
     {
       0x3105bd7a, 0x82c3, 0x486f, { 0xb1, 0x03, 0x1e, 0x09, 0x54, 0xec, 0x85, 0x75 }
