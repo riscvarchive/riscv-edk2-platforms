@@ -33,7 +33,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *******************************************************************************/
 
 #include "ComPhyLib.h"
-#include <Library/MvHwDescLib.h>
 #include <Library/SampleAtResetLib.h>
 
 #define SD_LANE_ADDR_WIDTH          0x1000
@@ -45,8 +44,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define CP110_PCIE_REF_CLK_TYPE0    0
 #define CP110_PCIE_REF_CLK_TYPE12   1
-
-DECLARE_A7K8K_NONDISCOVERABLE_TEMPLATE;
 
 /*
  * For CP-110 we have 2 Selector registers "PHY Selectors"
@@ -1138,36 +1135,23 @@ ComPhySataCheckPll (
 STATIC
 UINTN
 ComPhySataPowerUp (
+  IN UINTN ChipId,
   IN UINT32 Lane,
   IN EFI_PHYSICAL_ADDRESS HpipeBase,
   IN EFI_PHYSICAL_ADDRESS ComPhyBase,
-  IN UINT8 SataHostId
+  IN MV_BOARD_AHCI_DESC *Desc
   )
 {
   EFI_STATUS Status;
-  UINT8 *SataDeviceTable;
-  MVHW_NONDISCOVERABLE_DESC *Desc = &mA7k8kNonDiscoverableDescTemplate;
   EFI_PHYSICAL_ADDRESS HpipeAddr = HPIPE_ADDR(HpipeBase, Lane);
   EFI_PHYSICAL_ADDRESS SdIpAddr = SD_ADDR(HpipeBase, Lane);
   EFI_PHYSICAL_ADDRESS ComPhyAddr = COMPHY_ADDR(ComPhyBase, Lane);
-
-  SataDeviceTable = (UINT8 *) PcdGetPtr (PcdPciEAhci);
-
-  if (SataDeviceTable == NULL || SataHostId >= PcdGetSize (PcdPciEAhci)) {
-    DEBUG ((DEBUG_ERROR, "ComPhySata: Sata host %d is undefined\n", SataHostId));
-    return EFI_INVALID_PARAMETER;
-  }
-
-  if (!MVHW_DEV_ENABLED (Sata, SataHostId)) {
-    DEBUG ((DEBUG_ERROR, "ComPhySata: Sata host %d is disabled\n", SataHostId));
-    return EFI_INVALID_PARAMETER;
-  }
 
   DEBUG ((DEBUG_INFO, "ComPhySata: Initialize SATA PHYs\n"));
 
   DEBUG((DEBUG_INFO, "ComPhySataPowerUp: stage: MAC configuration - power down ComPhy\n"));
 
-  ComPhySataMacPowerDown (Desc->AhciBaseAddresses[SataHostId]);
+  ComPhySataMacPowerDown (Desc[ChipId].SoC->AhciBaseAddress);
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: RFU configurations - hard reset ComPhy\n"));
 
@@ -1183,7 +1167,7 @@ ComPhySataPowerUp (
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: ComPhy power up\n"));
 
-  ComPhySataPhyPowerUp (Desc->AhciBaseAddresses[SataHostId]);
+  ComPhySataPhyPowerUp (Desc[ChipId].SoC->AhciBaseAddress);
 
   DEBUG((DEBUG_INFO, "ComPhy: stage: Check PLL\n"));
 
@@ -1884,6 +1868,8 @@ ComPhyCp110Init (
   EFI_STATUS Status;
   COMPHY_MAP *PtrComPhyMap, *SerdesMap;
   EFI_PHYSICAL_ADDRESS ComPhyBaseAddr, HpipeBaseAddr;
+  MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  MV_BOARD_AHCI_DESC *AhciBoardDesc;
   UINT32 ComPhyMaxCount, Lane;
   UINT32 PcieWidth = 0;
   UINT8 ChipId;
@@ -1927,11 +1913,29 @@ ComPhyCp110Init (
       break;
     case COMPHY_TYPE_SATA0:
     case COMPHY_TYPE_SATA1:
-      Status = ComPhySataPowerUp (Lane, HpipeBaseAddr, ComPhyBaseAddr, MVHW_CP0_AHCI0_ID);
-      break;
     case COMPHY_TYPE_SATA2:
     case COMPHY_TYPE_SATA3:
-      Status = ComPhySataPowerUp (Lane, HpipeBaseAddr, ComPhyBaseAddr, MVHW_CP1_AHCI0_ID);
+      /* Obtain AHCI board description */
+      Status = gBS->LocateProtocol (&gMarvellBoardDescProtocolGuid,
+                      NULL,
+                      (VOID **)&BoardDescProtocol);
+      if (EFI_ERROR (Status)) {
+        break;
+      }
+
+      Status = BoardDescProtocol->BoardDescAhciGet (BoardDescProtocol,
+                                    &AhciBoardDesc);
+      if (EFI_ERROR (Status)) {
+        break;
+      }
+
+      Status = ComPhySataPowerUp (ChipId,
+                 Lane,
+                 HpipeBaseAddr,
+                 ComPhyBaseAddr,
+                 AhciBoardDesc);
+
+      BoardDescProtocol->BoardDescFree (AhciBoardDesc);
       break;
     case COMPHY_TYPE_USB3_HOST0:
     case COMPHY_TYPE_USB3_HOST1:
