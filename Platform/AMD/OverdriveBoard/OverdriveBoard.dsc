@@ -106,6 +106,7 @@ DEFINE DO_CAPSULE   = FALSE
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 
   # ARM PL011 UART Driver
+  PL011UartClockLib|ArmPlatformPkg/Library/PL011UartClockLib/PL011UartClockLib.inf
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
 
