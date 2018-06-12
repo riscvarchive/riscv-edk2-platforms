@@ -24,7 +24,7 @@
 #
 ################################################################################
 
-[FD.Armada70x0Db_EFI]
+[FD.Armada_EFI]
 BaseAddress   = 0x00000000|gArmTokenSpaceGuid.PcdFdBaseAddress  # The base address of the Firmware in NOR Flash.
 Size          = 0x00400000|gArmTokenSpaceGuid.PcdFdSize         # The size in bytes of the FLASH Device
 ErasePolarity = 1

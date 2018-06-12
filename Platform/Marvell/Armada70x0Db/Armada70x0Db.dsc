@@ -43,7 +43,7 @@
   SUPPORTED_ARCHITECTURES        = AARCH64|ARM
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
-  FLASH_DEFINITION               = Platform/Marvell/Armada70x0Db/Armada70x0Db.fdf
+  FLASH_DEFINITION               = Silicon/Marvell/Armada7k8k/Armada7k8k.fdf
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
 
