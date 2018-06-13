@@ -1,0 +1,443 @@
+#
+#  Copyright (c) 2011-2012, ARM Limited. All rights reserved.
+#  Copyright (c) 2018, Hisilicon Limited. All rights reserved.
+#  Copyright (c) 2018, Linaro Limited. All rights reserved.
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution.  The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+
+################################################################################
+#
+# Defines Section - statements that will be processed to create a Makefile.
+#
+################################################################################
+[Defines]
+  PLATFORM_NAME                  = D06
+  PLATFORM_GUID                  = D0D445F1-B2CA-4101-9986-1B23525CBEA6
+  PLATFORM_VERSION               = 0.1
+  DSC_SPECIFICATION              = 0x0001001A
+  OUTPUT_DIRECTORY               = Build/$(PLATFORM_NAME)
+  SUPPORTED_ARCHITECTURES        = AARCH64
+  BUILD_TARGETS                  = DEBUG|NOOPT|RELEASE
+  SKUID_IDENTIFIER               = DEFAULT
+  FLASH_DEFINITION               = Platform/Hisilicon/$(PLATFORM_NAME)/$(PLATFORM_NAME).fdf
+  DEFINE NETWORK_IP6_ENABLE      = FALSE
+  DEFINE HTTP_BOOT_ENABLE        = FALSE
+  DEFINE SECURE_BOOT_ENABLE      = FALSE
+
+!include Silicon/Hisilicon/Hisilicon.dsc.inc
+
+[LibraryClasses.common]
+  ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
+  ArmPlatformLib|Silicon/Hisilicon/Library/ArmPlatformLibHisilicon/ArmPlatformLib.inf
+
+
+  TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
+  NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
+  DpcLib|MdeModulePkg/Library/DxeDpcLib/DxeDpcLib.inf
+  HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
+  UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
+  UdpIoLib|MdeModulePkg/Library/DxeUdpIoLib/DxeUdpIoLib.inf
+  IpIoLib|MdeModulePkg/Library/DxeIpIoLib/DxeIpIoLib.inf
+  OrderedCollectionLib|MdePkg/Library/BaseOrderedCollectionRedBlackTreeLib/BaseOrderedCollectionRedBlackTreeLib.inf
+  ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+  DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+  BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
+  SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
+
+!if $(NETWORK_IP6_ENABLE) == TRUE
+  TcpIoLib|MdeModulePkg/Library/DxeTcpIoLib/DxeTcpIoLib.inf
+!endif
+
+!if $(HTTP_BOOT_ENABLE) == TRUE
+  HttpLib|MdeModulePkg/Library/DxeHttpLib/DxeHttpLib.inf
+!endif
+
+  CpldIoLib|Silicon/Hisilicon/Library/CpldIoLib/CpldIoLib.inf
+
+  TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
+
+  CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
+  GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
+  UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
+  SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
+  ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
+  DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+  CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
+
+  # USB Requirements
+  UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
+
+  SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+!endif
+  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+  PciPlatformLib|Silicon/Hisilicon/Hi1620/Library/Hi1620PciPlatformLib/Hi1620PciPlatformLib.inf
+
+[LibraryClasses.common.SEC]
+  ArmPlatformLib|Silicon/Hisilicon/Library/ArmPlatformLibHisilicon/ArmPlatformLibSec.inf
+
+
+[LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
+
+[BuildOptions]
+  GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/Silicon/Hisilicon/Hi1620/Include
+
+################################################################################
+#
+# Pcd Section - list of all EDK II PCD Entries defined by this Platform
+#
+################################################################################
+
+[PcdsFeatureFlag.common]
+
+  ## If TRUE, Graphics Output Protocol will be installed on virtual handle created by ConsplitterDxe.
+  #  It could be set FALSE to save size.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutGopSupport|TRUE
+  gHisiTokenSpaceGuid.PcdIsItsSupported|TRUE
+  gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdHiiOsRuntimeSupport|FALSE
+
+[PcdsFixedAtBuild.common]
+  gArmPlatformTokenSpaceGuid.PcdCoreCount|48
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|48
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
+
+
+  # Stacks for MPCores in Normal World
+  gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0xA0E88000
+  gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0x40000
+
+  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x00000000
+  gArmTokenSpaceGuid.PcdSystemMemorySize|0x3FC00000
+
+  # Size of the region used by UEFI in permanent memory (Reserved 64MB)
+  gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x10000000
+
+  gHisiTokenSpaceGuid.PcdSerDesFlowCtrlFlag|1
+
+  gHisiTokenSpaceGuid.PcdSlotPerChannelNum|0x2
+
+  ## Serial Terminal
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x94080000
+  gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase|0x400094080000
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
+
+  gArmPlatformTokenSpaceGuid.PL011UartClkInHz|200000000
+
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultDataBits|8
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultParity|1
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultStopBits|1
+
+  gHisiTokenSpaceGuid.PcdIsMPBoot|1
+  gHisiTokenSpaceGuid.PcdSocketMask|0x3
+  !ifdef $(FIRMWARE_VER)
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
+  !else
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Hisilicon D06 UEFI RC0 - B308 (V0.38)"
+  !endif
+
+  gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"
+
+  gHisiTokenSpaceGuid.PcdBiosVersionForBmc|L"0.38"
+
+  gHisiTokenSpaceGuid.PcdSystemProductName|L"D06"
+  gHisiTokenSpaceGuid.PcdSystemVersion|L"VER.A"
+  gHisiTokenSpaceGuid.PcdBaseBoardProductName|L"D06"
+  gHisiTokenSpaceGuid.PcdBaseBoardVersion|L"Estuary"
+
+  gHisiTokenSpaceGuid.PcdCPUInfo|L"Hisilicon 1620"
+
+  # TA
+  gHisiTokenSpaceGuid.PcdArmPrimaryCoreTemp|0x80010000
+  gArmTokenSpaceGuid.PcdGicDistributorBase|0xAE000000
+  gArmTokenSpaceGuid.PcdGicRedistributorsBase|0xAE100000
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xFE000000
+
+
+
+  #
+  # ARM Architectual Timer Frequency
+  #
+  # Set it to 0 so that the code will read frequency from register and be
+  # adapted to 100M and 50M boards
+  gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|0
+  gEmbeddedTokenSpaceGuid.PcdTimerPeriod|10000
+
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|FALSE
+  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdShellFile|{ 0x83, 0xA5, 0x04, 0x7C, 0x3E, 0x9E, 0x1C, 0x4F, 0xAD, 0x65, 0xE0, 0x52, 0x68, 0xD0, 0xB4, 0xD1 }
+  gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
+  gHisiTokenSpaceGuid.PcdSysControlBaseAddress|0x94010000
+  gHisiTokenSpaceGuid.PcdMailBoxAddress|0x0000FFF8
+
+  gHisiTokenSpaceGuid.PcdCpldBaseAddress|0x80000000
+  gHisiTokenSpaceGuid.PcdSFCMEM0BaseAddress|0x204000000
+
+  gHisiTokenSpaceGuid.PcdPeriSubctrlAddress|0x94000000
+
+  ## 2+1
+  gHisiTokenSpaceGuid.PcdPlatformDefaultPackageType|0x1
+
+  gHisiTokenSpaceGuid.PcdTopOfLowMemory|0x40000000
+
+  gHisiTokenSpaceGuid.PcdBottomOfHighMemory|0x1000000000
+
+  gHisiTokenSpaceGuid.PcdNORFlashBase|0x80000000
+  gHisiTokenSpaceGuid.PcdNORFlashCachableSize|0x8000000
+
+  gHisiTokenSpaceGuid.PcdTrustedFirmwareEnable|0x1
+  gHisiTokenSpaceGuid.PcdMacAddress|0xA47E0000
+
+  # PCIe ECAM Access BaseAddress
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xD0000000
+  gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|16
+
+  gHisiTokenSpaceGuid.Pcdsoctype|0x1620
+
+  # SMBIOS 3.0 only
+  #  BIT0 set indicates 32-bit entry point and table are produced.<BR>
+  #  BIT1 set indicates 64-bit entry point and table are produced.<BR>
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosEntryPointProvideMethod|0x2
+
+  #
+  # ACPI Table Version
+  #
+  #   BIT 1 - EFI_ACPI_TABLE_VERSION_1_0B.<BR>
+  #   BIT 2 - EFI_ACPI_TABLE_VERSION_2_0.<BR>
+  #   BIT 3 - EFI_ACPI_TABLE_VERSION_3_0.<BR>
+  #   BIT 4 - EFI_ACPI_TABLE_VERSION_4_0.<BR>
+  #   BIT 5 - EFI_ACPI_TABLE_VERSION_5_0.<BR>
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
+  gArmTokenSpaceGuid.PcdPciIoTranslation|0x0
+
+################################################################################
+#
+# Components Section - list of all EDK II Modules needed by this Platform
+#
+################################################################################
+[Components.common]
+
+  #
+  # SEC
+  #
+
+  #
+  # PEI Phase modules
+  #
+  ArmPlatformPkg/PrePeiCore/PrePeiCoreMPCore.inf
+  MdeModulePkg/Core/Pei/PeiMain.inf
+  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+
+  ArmPlatformPkg/PlatformPei/PlatformPeim.inf
+
+  ArmPkg/Drivers/CpuPei/CpuPei.inf
+  IntelFrameworkModulePkg/Universal/StatusCode/Pei/StatusCodePei.inf
+  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
+  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
+
+  Silicon/Hisilicon/Drivers/VersionInfoPeim/VersionInfoPeim.inf
+
+  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+  }
+
+  #
+  # DXE
+  #
+  MdeModulePkg/Core/Dxe/DxeMain.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
+  }
+  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
+
+
+  #
+  # Architectural Protocols
+  #
+  ArmPkg/Drivers/CpuDxe/CpuDxe.inf
+  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
+
+
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf {
+    <LibraryClasses>
+      NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
+  }
+  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+!else
+  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+!endif
+  Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
+  MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
+      BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
+  }
+  MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
+  MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+
+  MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
+  MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
+  EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
+
+  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+  MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
+
+  MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
+
+  ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
+
+  ArmPkg/Drivers/TimerDxe/TimerDxe.inf
+
+  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+  IntelFrameworkModulePkg/Universal/StatusCode/RuntimeDxe/StatusCodeRuntimeDxe.inf
+  #
+  #ACPI
+  #
+  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+  Silicon/Hisilicon/Drivers/HisiAcpiPlatformDxe/AcpiPlatformDxe.inf
+
+  Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
+
+  #
+  # Usb Support
+  #
+  MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
+  MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
+  MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
+  MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
+  MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
+  MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
+
+  #
+  #network
+  #
+  MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
+
+  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
+  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
+  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
+  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
+  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
+  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
+  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+!if $(NETWORK_IP6_ENABLE) == TRUE
+  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
+  NetworkPkg/TcpDxe/TcpDxe.inf
+  NetworkPkg/Udp6Dxe/Udp6Dxe.inf
+  NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
+  NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
+  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+!else
+  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
+  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
+!endif
+  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
+!if $(HTTP_BOOT_ENABLE) == TRUE
+  NetworkPkg/DnsDxe/DnsDxe.inf
+  NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf
+  NetworkPkg/HttpDxe/HttpDxe.inf
+  NetworkPkg/HttpBootDxe/HttpBootDxe.inf
+!endif
+
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+  #
+  # FAT filesystem + GPT/MBR partitioning
+  #
+
+  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
+  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
+  FatPkg/EnhancedFatDxe/Fat.inf
+  MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
+
+  MdeModulePkg/Application/UiApp/UiApp.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
+      NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
+  }
+  #
+  # Bds
+  #
+  MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+
+  #PCIe Support
+  Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf {
+    <LibraryClasses>
+      PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
+      PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+      PciHostBridgeLib|MdeModulePkg/Library/PciHostBridgeLibNull/PciHostBridgeLibNull.inf
+  }
+
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+
+  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+
+  #
+  # Memory test
+  #
+  MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
+  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
+  MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+
+  #
+  # UEFI application (Shell Embedded Boot Loader)
+  #
+  ShellPkg/Application/Shell/Shell.inf {
+    <LibraryClasses>
+      ShellCommandLib|ShellPkg/Library/UefiShellCommandLib/UefiShellCommandLib.inf
+      NULL|ShellPkg/Library/UefiShellLevel2CommandsLib/UefiShellLevel2CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellLevel1CommandsLib/UefiShellLevel1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellLevel3CommandsLib/UefiShellLevel3CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellDriver1CommandsLib/UefiShellDriver1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellDebug1CommandsLib/UefiShellDebug1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellInstall1CommandsLib/UefiShellInstall1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellNetwork1CommandsLib/UefiShellNetwork1CommandsLib.inf
+      HandleParsingLib|ShellPkg/Library/UefiHandleParsingLib/UefiHandleParsingLib.inf
+      PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
+      BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
+!if $(NETWORK_IP6_ENABLE) == TRUE
+      NULL|ShellPkg/Library/UefiShellNetwork2CommandsLib/UefiShellNetwork2CommandsLib.inf
+!endif
+
+!if $(INCLUDE_DP) == TRUE
+      NULL|ShellPkg/Library/UefiDpLib/UefiDpLib.inf
+!endif #$(INCLUDE_DP)
+
+    <PcdsFixedAtBuild>
+      gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0xFF
+      gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+      gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
+  }
+!if $(INCLUDE_TFTP_COMMAND) == TRUE
+  ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf {
+    <PcdsFixedAtBuild>
+      gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+  }
+!endif #$(INCLUDE_TFTP_COMMAND)
+
