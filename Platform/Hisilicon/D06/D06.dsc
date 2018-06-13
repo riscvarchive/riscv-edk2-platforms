@@ -64,6 +64,7 @@
   CpldIoLib|Silicon/Hisilicon/Library/CpldIoLib/CpldIoLib.inf
 
   TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
+  RealTimeClockLib|Silicon/Hisilicon/Library/M41T83RealTimeClockLib/M41T83RealTimeClockLib.inf
 
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
