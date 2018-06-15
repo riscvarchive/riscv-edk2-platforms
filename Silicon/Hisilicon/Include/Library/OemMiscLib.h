@@ -22,7 +22,11 @@
 #include <PlatformArch.h>
 #include <Library/I2CLib.h>
 
-#define PCIEDEVICE_REPORT_MAX      4
+#define PCIEDEVICE_REPORT_MAX      8
+#define MAX_PROCESSOR_SOCKETS      MAX_SOCKET
+#define MAX_MEMORY_CHANNELS        MAX_CHANNEL
+#define MAX_DIMM_PER_CHANNEL       MAX_DIMM
+
 typedef struct _REPORT_PCIEDIDVID2BMC{
     UINTN   Bus;
     UINTN   Device;
