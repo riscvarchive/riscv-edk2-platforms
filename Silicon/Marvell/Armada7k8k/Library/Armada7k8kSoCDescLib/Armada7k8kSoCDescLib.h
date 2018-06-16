@@ -24,6 +24,12 @@
 #define MV_SOC_CP_BASE(Cp)               (0xF2000000 + ((Cp) * 0x2000000))
 
 //
+// Platform description of PP2 NIC
+//
+#define MV_SOC_PP2_BASE(Cp)              MV_SOC_CP_BASE (Cp)
+#define MV_SOC_PP2_CLK_FREQ              333333333
+
+//
 // Platform description of UTMI PHY's
 //
 #define MV_SOC_UTMI_PER_CP_COUNT         2

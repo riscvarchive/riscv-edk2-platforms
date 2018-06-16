@@ -30,6 +30,35 @@
 
 EFI_STATUS
 EFIAPI
+ArmadaSoCDescPp2Get (
+  IN OUT MV_SOC_PP2_DESC  **Pp2Desc,
+  IN OUT UINTN             *DescCount
+  )
+{
+  MV_SOC_PP2_DESC *Desc;
+  UINTN CpCount, CpIndex;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  Desc = AllocateZeroPool (CpCount * sizeof (MV_SOC_PP2_DESC));
+  if (Desc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    Desc[CpIndex].Pp2BaseAddress = MV_SOC_PP2_BASE (CpIndex);
+    Desc[CpIndex].Pp2ClockFrequency = MV_SOC_PP2_CLK_FREQ;
+  }
+
+  *Pp2Desc = Desc;
+  *DescCount = CpCount;
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 ArmadaSoCDescUtmiGet (
   IN OUT MV_SOC_UTMI_DESC  **UtmiDesc,
   IN OUT UINTN              *DescCount

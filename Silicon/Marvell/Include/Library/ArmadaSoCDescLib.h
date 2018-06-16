@@ -15,6 +15,21 @@
 #define __ARMADA_SOC_DESC_LIB_H__
 
 //
+// PP2 NIC devices SoC description
+//
+typedef struct {
+  UINTN Pp2BaseAddress;
+  UINTN Pp2ClockFrequency;
+} MV_SOC_PP2_DESC;
+
+EFI_STATUS
+EFIAPI
+ArmadaSoCDescPp2Get (
+  IN OUT MV_SOC_PP2_DESC  **Pp2Desc,
+  IN OUT UINTN             *DescCount
+  );
+
+//
 // UTMI PHY devices SoC description
 //
 typedef struct {
