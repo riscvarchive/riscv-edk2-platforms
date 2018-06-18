@@ -199,6 +199,7 @@
     <LibraryClasses>
       NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
   }
+  Platform/ARM/SgiPkg/Library/SgiPlatformPei/SgiPlatformPei.inf
 
   #
   # DXE

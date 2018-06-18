@@ -14,6 +14,8 @@
 
 #include <Library/AcpiLib.h>
 #include <Library/DebugLib.h>
+#include <Library/HobLib.h>
+#include <SgiPlatform.h>
 
 EFI_STATUS
 InitVirtioBlockIo (
@@ -28,11 +30,32 @@ ArmSgiPkgEntryPoint (
   )
 {
   EFI_STATUS              Status;
+  VOID                    *PlatformIdHob;
+  SGI_PLATFORM_DESCRIPTOR *HobData;
+  UINT32                  ConfigId;
+  UINT32                  PartNum;
 
-  Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesiFileGuid);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: Failed to install ACPI tables\n", __FUNCTION__));
-    return Status;
+  PlatformIdHob = GetFirstGuidHob (&gArmSgiPlatformIdDescriptorGuid);
+  if (PlatformIdHob == NULL) {
+    DEBUG ((DEBUG_ERROR, "Platform ID HOB is NULL\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  HobData = (SGI_PLATFORM_DESCRIPTOR *)GET_GUID_HOB_DATA (PlatformIdHob);
+
+  PartNum = HobData->PlatformId & SGI_PART_NUM_MASK;
+  ConfigId = (HobData->PlatformId >> SGI_CONFIG_SHIFT) & SGI_CONFIG_MASK;
+
+  if ((PartNum == SGI575_PART_NUM) && (ConfigId == SGI575_CONF_NUM)) {
+    Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesiFileGuid);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a: Failed to install ACPI tables\n",
+        __FUNCTION__));
+      return Status;
+    }
+  } else {
+    DEBUG ((DEBUG_ERROR, "PlatformDxe: Unsupported Platform Id\n"));
+    return EFI_UNSUPPORTED;
   }
 
   Status = EFI_REQUEST_UNLOAD_IMAGE;
