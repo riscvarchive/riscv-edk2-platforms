@@ -47,7 +47,7 @@ ArmSgiPkgEntryPoint (
   ConfigId = (HobData->PlatformId >> SGI_CONFIG_SHIFT) & SGI_CONFIG_MASK;
 
   if ((PartNum == SGI575_PART_NUM) && (ConfigId == SGI575_CONF_NUM)) {
-    Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesiFileGuid);
+    Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesFileGuid);
     if (EFI_ERROR (Status)) {
       DEBUG ((DEBUG_ERROR, "%a: Failed to install ACPI tables\n",
         __FUNCTION__));

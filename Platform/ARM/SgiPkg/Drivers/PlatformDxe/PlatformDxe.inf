@@ -36,7 +36,7 @@
 
 [Guids]
   gArmSgiPlatformIdDescriptorGuid
-  gSgi575AcpiTablesiFileGuid
+  gSgi575AcpiTablesFileGuid
 
 [FeaturePcd]
   gArmSgiTokenSpaceGuid.PcdVirtioSupported
