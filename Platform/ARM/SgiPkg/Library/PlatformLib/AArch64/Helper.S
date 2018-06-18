@@ -22,15 +22,20 @@ GCC_ASM_EXPORT(ArmPlatformPeiBootAction)
 GCC_ASM_EXPORT(ArmPlatformGetCorePosition)
 GCC_ASM_EXPORT(ArmPlatformGetPrimaryCoreMpId)
 GCC_ASM_EXPORT(ArmPlatformIsPrimaryCore)
+GCC_ASM_IMPORT(HwConfigDtBlob)
 
 //
 // First platform specific function to be called in the PEI phase
 //
-// This function is actually the first function called by the PrePi
-// or PrePeiCore modules. It allows to retrieve arguments passed to
-// the UEFI firmware through the CPU registers.
-//
+// The trusted firmware passed the hw config DT blob in x1 register.
+// Keep a copy of it in a global variable.
+//VOID
+//ArmPlatformPeiBootAction (
+//  VOID
+//  );
 ASM_PFX(ArmPlatformPeiBootAction):
+  adr  x10, HwConfigDtBlob
+  str  x1, [x10]
   ret
 
 //UINTN

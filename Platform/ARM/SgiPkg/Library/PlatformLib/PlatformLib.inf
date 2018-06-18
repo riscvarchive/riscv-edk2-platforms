@@ -61,7 +61,10 @@
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
 
 [Guids]
+  gArmSgiPlatformIdDescriptorGuid
   gEfiHobListGuid          ## CONSUMES  ## SystemTable
+  gFdtTableGuid
 
 [Ppis]
   gArmMpCoreInfoPpiGuid
+  gHwConfigDtInfoPpiGuid

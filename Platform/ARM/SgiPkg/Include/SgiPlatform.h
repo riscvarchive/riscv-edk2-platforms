@@ -68,4 +68,17 @@
 #define SGI_SYSPH_SYS_REG_FLASH                   0x4C
 #define SGI_SYSPH_SYS_REG_FLASH_RWEN              0x1
 
+// SGI575_VERSION values
+#define SGI575_CONF_NUM                           0x3
+#define SGI575_PART_NUM                           0x783
+
+#define SGI_CONFIG_MASK                           0x0F
+#define SGI_CONFIG_SHIFT                          0x1C
+#define SGI_PART_NUM_MASK                         0xFFF
+
+// ARM platform description data.
+typedef struct {
+  UINTN  PlatformId;
+} SGI_PLATFORM_DESCRIPTOR;
+
 #endif // __SGI_PLATFORM_H__

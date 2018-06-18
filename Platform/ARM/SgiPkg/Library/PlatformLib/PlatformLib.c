@@ -15,6 +15,10 @@
 #include <Library/ArmPlatformLib.h>
 #include <Library/BaseLib.h>
 #include <Ppi/ArmMpCoreInfo.h>
+#include <Ppi/SgiPlatformId.h>
+
+UINT64 HwConfigDtBlob;
+STATIC SGI_HW_CONFIG_INFO_PPI mHwConfigDtInfoPpi;
 
 STATIC ARM_CORE_INFO mCoreInfoTable[] = {
   {
@@ -36,6 +40,7 @@ ArmPlatformInitialize (
   IN  UINTN                     MpId
   )
 {
+  mHwConfigDtInfoPpi.HwConfigDtAddr = HwConfigDtBlob;
   return RETURN_SUCCESS;
 }
 
@@ -59,6 +64,11 @@ EFI_PEI_PPI_DESCRIPTOR gPlatformPpiTable[] = {
     EFI_PEI_PPI_DESCRIPTOR_PPI,
     &gArmMpCoreInfoPpiGuid,
     &mMpCoreInfoPpi
+  },
+  {
+    EFI_PEI_PPI_DESCRIPTOR_PPI,
+    &gHwConfigDtInfoPpiGuid,
+    &mHwConfigDtInfoPpi
   }
 };
 
