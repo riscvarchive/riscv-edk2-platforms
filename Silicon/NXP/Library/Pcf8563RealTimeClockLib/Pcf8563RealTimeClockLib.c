@@ -24,6 +24,7 @@
 #define SLAVE_ADDRESS             (FixedPcdGet8 (PcdI2cSlaveAddress))
 #define PCF8563_DATA_REG_OFFSET   0x2
 
+#define PCF8563_CLOCK_INVALID     0x80
 #define PCF8563_SECONDS_MASK      0x7f
 #define PCF8563_MINUTES_MASK      0x7f
 #define PCF8563_HOURS_MASK        0x3f
@@ -122,15 +123,24 @@ LibGetTime (
     return EFI_DEVICE_ERROR;
   }
 
-  Time->Second  = BcdToDecimal8 (DateTime.VL_seconds & PCF8563_SECONDS_MASK);
-  Time->Minute  = BcdToDecimal8 (DateTime.Minutes & PCF8563_MINUTES_MASK);
-  Time->Hour    = BcdToDecimal8 (DateTime.Hours & PCF8563_HOURS_MASK);
-  Time->Day     = BcdToDecimal8 (DateTime.Days & PCF8563_DAYS_MASK);
-  Time->Month   = BcdToDecimal8 (DateTime.Century_months & PCF8563_MONTHS_MASK);
-  Time->Year    = BcdToDecimal8 (DateTime.Years) + EPOCH_BASE;
+  if ((DateTime.VL_seconds & PCF8563_CLOCK_INVALID) != 0) {
+      Time->Second  = 0;
+      Time->Minute  = 0;
+      Time->Hour    = 0;
+      Time->Day     = 1;
+      Time->Month   = 1;
+      Time->Year    = EPOCH_BASE;
+  } else {
+      Time->Second  = BcdToDecimal8 (DateTime.VL_seconds & PCF8563_SECONDS_MASK);
+      Time->Minute  = BcdToDecimal8 (DateTime.Minutes & PCF8563_MINUTES_MASK);
+      Time->Hour    = BcdToDecimal8 (DateTime.Hours & PCF8563_HOURS_MASK);
+      Time->Day     = BcdToDecimal8 (DateTime.Days & PCF8563_DAYS_MASK);
+      Time->Month   = BcdToDecimal8 (DateTime.Century_months & PCF8563_MONTHS_MASK);
+      Time->Year    = BcdToDecimal8 (DateTime.Years) + EPOCH_BASE;
 
-  if (DateTime.Century_months & PCF8563_CENTURY_MASK) {
-    Time->Year += 100;
+      if (DateTime.Century_months & PCF8563_CENTURY_MASK) {
+          Time->Year += 100;
+      }
   }
 
   if (Capabilities != NULL) {
