@@ -219,6 +219,9 @@ they will be documented with the platform.
 ## Marvell
 * [Armada 70x0](Platform/Marvell/Armada)
 
+## Socionext
+* [SynQuacer](Platform/Socionext/DeveloperBox)
+
 # Maintainers
 
 See [Maintainers.txt](Maintainers.txt).
