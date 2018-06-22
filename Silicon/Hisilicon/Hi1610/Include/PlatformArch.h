@@ -30,6 +30,12 @@
 // Max NUMA node number for each node type
 #define MAX_NUM_PER_TYPE 8
 
+// for acpi
+#define NODE_IN_SOCKET                                  2
+#define CORE_NUM_PER_SOCKET                             32
+#define EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT        10
+#define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT       8
+
 #define S1_BASE               0x40000000000
 
 #define RASC_BASE                (0x5000)

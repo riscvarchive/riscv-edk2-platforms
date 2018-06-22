@@ -19,6 +19,21 @@
 #ifndef __ACPI_NEXT_LIB_H__
 #define __ACPI_NEXT_LIB_H__
 
+#include <PlatformArch.h>
+
+///
+/// ITS Affinity Structure Definition
+///
+#pragma pack(1)
+typedef struct {
+  UINT8   Type;
+  UINT8   Length;
+  UINT32  ProximityDomain;
+  UINT16  Reserved;
+  UINT32  ItsHwId;
+} EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE;
+#pragma pack()
+
 #define EFI_ACPI_6_1_GIC_ITS_INIT(GicITSHwId, GicITSBase) \
   { \
     EFI_ACPI_6_1_GIC_ITS, sizeof (EFI_ACPI_6_1_GIC_ITS_STRUCTURE), EFI_ACPI_RESERVED_WORD, \
@@ -42,8 +57,8 @@
 #define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_INIT(                                               \
     ProximityDomain, ItsId)                                                                     \
   {                                                                                             \
-    4, sizeof (EFI_ACPI_6_2_GIC_ITS_AFFINITY_STRUCTURE), ProximityDomain,                           \
-    {EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE}, ItsId                                                               \
+    4, sizeof (EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE), ProximityDomain,                           \
+    EFI_ACPI_RESERVED_WORD, ItsId                                                               \
   }
 
 #define EFI_ACPI_6_1_MEMORY_AFFINITY_STRUCTURE_INIT(                                              \
@@ -75,15 +90,13 @@
 // Define the number of each table type.
 // This is where the table layout is modified.
 //
-#define EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT  64
-#define EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT                10
-#define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT               8
+#define EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT  (MAX_SOCKET*CORE_NUM_PER_SOCKET)
 
 typedef struct {
-  EFI_ACPI_6_0_SYSTEM_RESOURCE_AFFINITY_TABLE_HEADER          Header;
-  EFI_ACPI_6_0_MEMORY_AFFINITY_STRUCTURE                      Memory[EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT];
-  EFI_ACPI_6_0_GICC_AFFINITY_STRUCTURE                        Gicc[EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT];
-  EFI_ACPI_6_2_GIC_ITS_AFFINITY_STRUCTURE                     Its[EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT];
+  EFI_ACPI_6_2_SYSTEM_RESOURCE_AFFINITY_TABLE_HEADER          Header;
+  EFI_ACPI_6_2_MEMORY_AFFINITY_STRUCTURE                      Memory[EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT];
+  EFI_ACPI_6_2_GICC_AFFINITY_STRUCTURE                        Gicc[EFI_ACPI_PROCESSOR_LOCAL_GICC_AFFINITY_STRUCTURE_COUNT];
+  EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE                         Its[EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT];
 } EFI_ACPI_STATIC_RESOURCE_AFFINITY_TABLE;
 
 #pragma pack()

@@ -20,8 +20,6 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 
-#define CORE_NUM_PER_SOCKET  32
-#define NODE_IN_SOCKET       2
 #define CORECOUNT(X) ((X) * CORE_NUM_PER_SOCKET)
 
 STATIC
