@@ -322,7 +322,7 @@ PciInitControllerPost (
 
   // Region 0: MMIO32 range
   ConfigureWindow (DbiBase, 0,
-    RootBridge->Mem.Base,
+    RootBridge->Mem.Base - RootBridge->Mem.Translation,
     RootBridge->Mem.Base,
     RootBridge->Mem.Limit - RootBridge->Mem.Base + 1,
     IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM |

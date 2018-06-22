@@ -86,14 +86,14 @@ DefinitionBlock ("SsdtPci.aml", "SSDT", 1, "SNI", "SYNQUACR",
                     SYNQUACER_PCI_SEG0_BUSNUM_RANGE // RangeLength - # of Busses
                 )
 
-                DWordMemory ( // 32-bit BAR Windows
+                QWordMemory ( // 32-bit BAR Windows
                     ResourceProducer, PosDecode,
                     MinFixed, MaxFixed,
                     Cacheable, ReadWrite,
                     0x00000000,                         // Granularity
                     SYNQUACER_PCI_SEG0_MMIO32_MIN,      // Min Base Address
                     SYNQUACER_PCI_SEG0_MMIO32_MAX,      // Max Base Address
-                    0x00000000,                         // Translate
+                    SYNQUACER_PCI_SEG0_MMIO32_XLATE,    // Translate
                     SYNQUACER_PCI_SEG0_MMIO32_SIZE      // Length
                 )
 
@@ -224,14 +224,14 @@ DefinitionBlock ("SsdtPci.aml", "SSDT", 1, "SNI", "SYNQUACR",
                     SYNQUACER_PCI_SEG1_BUSNUM_RANGE // RangeLength - # of Busses
                 )
 
-                DWordMemory ( // 32-bit BAR Windows
+                QWordMemory ( // 32-bit BAR Windows
                     ResourceProducer, PosDecode,
                     MinFixed, MaxFixed,
                     Cacheable, ReadWrite,
                     0x00000000,                         // Granularity
                     SYNQUACER_PCI_SEG1_MMIO32_MIN,      // Min Base Address
                     SYNQUACER_PCI_SEG1_MMIO32_MAX,      // Max Base Address
-                    0x00000000,                         // Translate
+                    SYNQUACER_PCI_SEG1_MMIO32_XLATE,    // Translate
                     SYNQUACER_PCI_SEG1_MMIO32_SIZE      // Length
                 )
 
