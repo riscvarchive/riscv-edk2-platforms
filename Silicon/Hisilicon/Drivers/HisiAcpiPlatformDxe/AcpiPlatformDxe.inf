@@ -56,7 +56,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiTableStorageFile    ## CONSUMES
 
 [Depex]
-  gEfiAcpiTableProtocolGuid
+  gEfiAcpiTableProtocolGuid AND gEfiVariableWriteArchProtocolGuid
 
 [UserExtensions.TianoCore."ExtraFiles"]
   AcpiPlatformExtra.uni

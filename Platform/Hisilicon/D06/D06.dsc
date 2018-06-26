@@ -331,7 +331,10 @@
   #ACPI
   #
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-  Silicon/Hisilicon/Drivers/HisiAcpiPlatformDxe/AcpiPlatformDxe.inf
+  Silicon/Hisilicon/Drivers/HisiAcpiPlatformDxe/AcpiPlatformDxe.inf {
+    <LibraryClasses>
+    NULL|Silicon/Hisilicon/Hi1620/Hi1620OemConfigUiLib/OemConfigUiLib.inf
+  }
 
   Silicon/Hisilicon/Hi1620/Hi1620AcpiTables/AcpiTablesHi1620.inf
   Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
