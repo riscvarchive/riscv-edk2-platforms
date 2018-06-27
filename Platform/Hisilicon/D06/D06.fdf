@@ -304,6 +304,9 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 
   INF Silicon/Hisilicon/Hi1620/Drivers/Pl011DebugSerialPortInitDxe/Pl011DebugSerialPortInitDxe.inf
+  INF SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareReportDxe.inf
+  INF MdeModulePkg/Universal/EsrtDxe/EsrtDxe.inf
+
   #
   # Build Shell from latest source code instead of prebuilt binary
   #
@@ -359,11 +362,79 @@ READ_LOCK_STATUS   = TRUE
 
   INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 
+  INF RuleOverride = FMP_IMAGE_DESC Platform/Hisilicon/D06/Drivers/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
   FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
     SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
       SECTION FV_IMAGE = FVMAIN
     }
   }
+[FV.CapsuleDispatchFv]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+  INF SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
+
+[FV.SystemFirmwareUpdateCargo]
+FvAlignment        = 16
+ERASE_POLARITY     = 1
+MEMORY_MAPPED      = TRUE
+STICKY_WRITE       = TRUE
+LOCK_CAP           = TRUE
+LOCK_STATUS        = TRUE
+WRITE_DISABLED_CAP = TRUE
+WRITE_ENABLED_CAP  = TRUE
+WRITE_STATUS       = TRUE
+WRITE_LOCK_CAP     = TRUE
+WRITE_LOCK_STATUS  = TRUE
+READ_DISABLED_CAP  = TRUE
+READ_ENABLED_CAP   = TRUE
+READ_STATUS        = TRUE
+READ_LOCK_CAP      = TRUE
+READ_LOCK_STATUS   = TRUE
+
+  FILE RAW = 642e4fcf-2df7-4415-8b70-a03909c57b55 { # PcdEdkiiSystemFirmwareFileGuid
+    FD = D06
+  }
+
+  FILE RAW = ce57b167-b0e4-41e8-a897-5f4feb781d40 { # gEdkiiSystemFmpCapsuleDriverFvFileGuid
+    FV = CapsuleDispatchFv
+  }
+
+  FILE RAW = 812136D3-4D3A-433A-9418-29BB9BF78F6E { # gEdkiiSystemFmpCapsuleConfigFileGuid
+    Platform/Hisilicon/D06/Capsule/SystemFirmwareUpdateConfig/SystemFirmwareUpdateConfig.ini
+  }
+
+[FmpPayload.FmpPayloadSystemFirmwarePkcs7]
+IMAGE_HEADER_INIT_VERSION = 0x02
+IMAGE_TYPE_ID             = df8fe8d1-e937-45b8-9691-c4b5e183874e # PcdSystemFmpCapsuleImageTypeIdGuid
+IMAGE_INDEX               = 0x1
+HARDWARE_INSTANCE         = 0x0
+MONOTONIC_COUNT           = 0x1
+CERTIFICATE_GUID          = 4AAFD29D-68DF-49EE-8AA9-347D375665A7 # PKCS7
+
+  FV = SystemFirmwareUpdateCargo
+
+[Capsule.D06FirmwareUpdateCapsuleFmpPkcs7]
+CAPSULE_GUID                = 6dcbd5ed-e82d-4c44-bda1-7194199ad92a # gEfiFmpCapsuleGuid
+CAPSULE_HEADER_SIZE         = 0x20
+CAPSULE_HEADER_INIT_VERSION = 0x1
+
+  FMP_PAYLOAD = FmpPayloadSystemFirmwarePkcs7
+
 
 !include Silicon/Hisilicon/Hisilicon.fdf.inc
 
