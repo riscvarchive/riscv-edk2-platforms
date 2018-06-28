@@ -174,7 +174,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   INF Platform/Hisilicon/D06/Drivers/SFC/SfcDxeDriver.inf
 
-
+  INF Platform/Hisilicon/D06/Drivers/OemNicConfig2PHi1620/OemNicConfig2P.inf
   INF Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf

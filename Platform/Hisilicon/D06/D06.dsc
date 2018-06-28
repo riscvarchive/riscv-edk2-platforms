@@ -286,7 +286,7 @@
   #
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
-
+  Platform/Hisilicon/D06/Drivers/OemNicConfig2PHi1620/OemNicConfig2P.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf {
