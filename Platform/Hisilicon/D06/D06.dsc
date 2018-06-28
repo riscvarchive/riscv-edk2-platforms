@@ -90,6 +90,7 @@
 
   LpcLib|Silicon/Hisilicon/Hi1620/Library/LpcLibHi1620/LpcLib.inf
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
+  OemNicLib|Platform/Hisilicon/D06/Library/OemNicLib/OemNicLib.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
 !endif
