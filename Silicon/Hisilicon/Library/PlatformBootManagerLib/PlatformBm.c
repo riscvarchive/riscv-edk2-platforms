@@ -19,6 +19,8 @@
 #include <Library/BootLogoLib.h>
 #include <Library/BmcConfigBootLib.h>
 #include <Library/DevicePathLib.h>
+#include <Library/IpmiCmdLib.h>
+#include <Library/OemConfigData.h>
 #include <Library/PcdLib.h>
 #include <Library/TimerLib.h>
 #include <Library/UefiBootManagerLib.h>
@@ -609,6 +611,8 @@ PlatformBootManagerAfterConsole (
 {
   EFI_STATUS Status;
   ESRT_MANAGEMENT_PROTOCOL           *EsrtManagement = NULL;
+  OEM_CONFIG_DATA                    SetupData;
+  UINTN                              DataSize = sizeof (OEM_CONFIG_DATA);
 
   //
   // Show the splash screen.
@@ -645,6 +649,24 @@ PlatformBootManagerAfterConsole (
     );
 
   HandleBmcBootType ();
+
+  //Disable POST Watch Dog before attempting boot
+  Status = gRT->GetVariable (
+                  OEM_CONFIG_NAME,
+                  &gOemConfigGuid,
+                  NULL,
+                  &DataSize,
+                  &SetupData
+                  );
+
+  if (!EFI_ERROR (Status)) {
+    if (SetupData.BmcWdtEnable) {
+      Status = IpmiCmdStopWatchdogTimer (EfiBiosPost);
+      if (EFI_ERROR (Status)) {
+        DEBUG ((DEBUG_ERROR, "%a:%r\n", __FUNCTION__, Status));
+      }
+    }
+  }
 }
 
 /**

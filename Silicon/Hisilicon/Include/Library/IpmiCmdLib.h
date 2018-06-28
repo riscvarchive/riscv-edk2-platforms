@@ -20,6 +20,17 @@
 #define BOOT_OPTION_BOOT_FLAG_INVALID       0
 
 typedef enum {
+  EfiReserved,
+  EfiBiosFrb2,
+  EfiBiosPost,
+  EfiOsLoad,
+  EfiSmsOs,
+  EfiOem,
+  EfiFrbReserved1,
+  EfiFrbReserved2
+} EFI_WDT_USER_TYPE;
+
+typedef enum {
   NoOverride = 0x0,
   ForcePxe,
   ForceDefaultHardDisk,
@@ -89,6 +100,11 @@ EFI_STATUS
 EFIAPI
 IpmiCmdGetSysBootOptions (
   IN IPMI_GET_BOOT_OPTION   *BootOption
+  );
+
+EFI_STATUS
+IpmiCmdStopWatchdogTimer (
+  IN EFI_WDT_USER_TYPE  UserType
   );
 
 #endif
