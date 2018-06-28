@@ -31,4 +31,11 @@ form formid = MISC_CONFIG_FORM_ID,
       option text = STRING_TOKEN(STR_ENABLED), value = 1, flags = 0;
     endoneof;
 
+    oneof varid   = OEM_CONFIG_DATA.EnableGOP,
+      prompt      = STRING_TOKEN(STR_ENABLE_GOP_FRAME_BUFFER),
+      help        = STRING_TOKEN(STR_ENABLE_GOP_FRAME_BUFFER_HELP),
+      option text = STRING_TOKEN(STR_DISABLED), value = 0, flags = DEFAULT;
+      option text = STRING_TOKEN(STR_ENABLED), value = 1, flags = 0;
+    endoneof;
+
 endform;

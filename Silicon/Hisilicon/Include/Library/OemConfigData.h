@@ -60,6 +60,7 @@ typedef struct {
   /*Misc Config*/
   UINT8         EnableSmmu;
   UINT8         EnableFdtTable;
+  UINT8         EnableGOP;
   /*RAS Config*/
   UINT8         EnRasSupport;
   UINT8         EnPoison;
