@@ -34,7 +34,7 @@ extern REPORT_PCIEDIDVID2BMC PcieDeviceToReport[PCIEDEVICE_REPORT_MAX];
 BOOLEAN OemIsSocketPresent (UINTN Socket);
 VOID CoreSelectBoot(VOID);
 VOID OemPcieResetAndOffReset(void);
-extern I2C_DEVICE gDS3231RtcDevice;
+extern I2C_DEVICE gRtcDevice;
 
 UINTN OemGetSocketNumber(VOID);
 UINTN OemGetDdrChannel (VOID);

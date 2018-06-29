@@ -25,7 +25,7 @@
 #include <Library/I2CLib.h>
 #include <Library/HiiLib.h>
 
-I2C_DEVICE gDS3231RtcDevice = {
+I2C_DEVICE gRtcDevice = {
     .Socket = 0,
     .Port = 6,
     .DeviceType = DEVICE_TYPE_SPD,

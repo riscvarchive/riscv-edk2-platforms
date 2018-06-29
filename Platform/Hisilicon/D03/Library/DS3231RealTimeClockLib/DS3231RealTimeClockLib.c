@@ -41,7 +41,7 @@
 #include <Library/CpldD03.h>
 #include <Library/CpldIoLib.h>
 
-extern I2C_DEVICE gDS3231RtcDevice;
+extern I2C_DEVICE gRtcDevice;
 
 STATIC BOOLEAN       mDS3231Initialized = FALSE;
 
@@ -117,7 +117,7 @@ InitializeDS3231 (
   // Prepare the hardware
   (VOID)IdentifyDS3231();
 
-  (VOID) CopyMem(&Dev, &gDS3231RtcDevice, sizeof(Dev));
+  (VOID) CopyMem (&Dev, &gRtcDevice, sizeof(Dev));
 
   Status = I2CInit(Dev.Socket,Dev.Port,Normal);
   if (EFI_ERROR (Status)) {
@@ -199,7 +199,7 @@ LibGetTime (
     }
   }
 
-  (VOID) CopyMem(&Dev, &gDS3231RtcDevice, sizeof(Dev));
+  (VOID) CopyMem (&Dev, &gRtcDevice, sizeof(Dev));
 
   Status |= I2CRead(&Dev,DS3231_REGADDR_MONTH,1,&Temp);
 
@@ -299,7 +299,7 @@ LibSetTime (
     }
   }
 
-  (VOID) CopyMem(&Dev, &gDS3231RtcDevice, sizeof(Dev));
+  (VOID) CopyMem (&Dev, &gRtcDevice, sizeof(Dev));
 
   Temp = ((Time->Second/10)<<4) | (Time->Second%10);
   MicroSecondDelay(1000);
