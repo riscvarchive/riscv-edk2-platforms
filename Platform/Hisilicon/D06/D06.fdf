@@ -248,6 +248,8 @@ READ_LOCK_STATUS   = TRUE
   INF RuleOverride=ACPITABLE Silicon/Hisilicon/Hi1620/Hi1620AcpiTables/AcpiTablesHi1620.inf
   INF Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
 
+  INF Silicon/Hisilicon/Hi1620/Pptt/Pptt.inf
+
   #
   #Network
   #

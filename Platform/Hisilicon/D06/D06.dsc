@@ -339,6 +339,7 @@
   Silicon/Hisilicon/Hi1620/Hi1620AcpiTables/AcpiTablesHi1620.inf
   Silicon/Hisilicon/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
 
+  Silicon/Hisilicon/Hi1620/Pptt/Pptt.inf
   #
   # Usb Support
   #
