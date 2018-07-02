@@ -354,6 +354,7 @@ READ_LOCK_STATUS   = TRUE
   INF ArmPkg/Drivers/CpuPei/CpuPei.inf
   INF MdeModulePkg/Universal/PCD/Pei/Pcd.inf
   INF IntelFrameworkModulePkg/Universal/StatusCode/Pei/StatusCodePei.inf
+  INF Platform/Hisilicon/D06/EarlyConfigPeim/EarlyConfigPeimD06.inf
 
   INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 

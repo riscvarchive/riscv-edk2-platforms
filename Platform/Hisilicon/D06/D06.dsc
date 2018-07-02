@@ -264,6 +264,7 @@
   MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
   MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
 
+  Platform/Hisilicon/D06/EarlyConfigPeim/EarlyConfigPeimD06.inf
   Silicon/Hisilicon/Drivers/VersionInfoPeim/VersionInfoPeim.inf
 
   MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf {

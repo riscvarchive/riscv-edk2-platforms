@@ -16,6 +16,8 @@
 #ifndef _OEM_ADDRESS_MAP_LIB_H_
 #define _OEM_ADDRESS_MAP_LIB_H_
 
+#include <PlatformArch.h>
+
 typedef struct _DDRC_BASE_ID{
     UINTN  Base;
     UINTN  Id;
