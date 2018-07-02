@@ -15,6 +15,7 @@
 
 #include <Uefi.h>
 
+#include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/TimerLib.h>
@@ -30,6 +31,37 @@ REPORT_PCIEDIDVID2BMC  PcieDeviceToReport[PCIEDEVICE_REPORT_MAX] = {
       {0xFFFF,0xFFFF,0xFFFF,0xFFFF},
       {0xFFFF,0xFFFF,0xFFFF,0xFFFF}
 };
+
+REPORT_PCIEDIDVID2BMC PcieDeviceToReport2P[PCIEDEVICE_REPORT_MAX] = {
+  {0x79,0,0,0},
+  {0xFF,0xFF,0xFF,1},
+  {0xC1,0,0,2},
+  {0xF9,0,0,3},
+  {0xFF,0xFF,0xFF,4},
+  {0x11,0,0,5},
+  {0x31,0,0,6},
+  {0x21,0,0,7}
+};
+
+VOID
+GetPciDidVid (
+  REPORT_PCIEDIDVID2BMC *Report
+  )
+{
+  if (OemIsMpBoot ()) {
+    (VOID)CopyMem (
+            (VOID *)Report,
+            (VOID *)PcieDeviceToReport2P,
+            sizeof (PcieDeviceToReport2P)
+            );
+  } else {
+    (VOID)CopyMem (
+            (VOID *)Report,
+            (VOID *)PcieDeviceToReport,
+            sizeof (PcieDeviceToReport)
+            );
+  }
+}
 
 // Right now we only support 1P
 BOOLEAN OemIsSocketPresent (UINTN Socket)

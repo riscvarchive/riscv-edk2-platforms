@@ -29,6 +29,8 @@
 #define CPLD_LOGIC_COMPILE_DAY           (0x3)
 
 #define CPLD_RISER_PRSNT_FLAG             0x40
+#define CPU1_RISER_PRESENT                BIT6
+#define CPU0_RISER_PRESENT                BIT7
 #define CPLD_RISER2_BOARD_ID              0x44
 
 #define CPLD_X8_X8_X8_BOARD_ID            0x92

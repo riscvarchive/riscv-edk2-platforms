@@ -30,9 +30,13 @@
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/Hisilicon/D06/D06.dec
   Silicon/Hisilicon/HisiPkg.dec
 
 [LibraryClasses]
+  BaseMemoryLib
+  CpldIoLib
+  IoLib
   PcdLib
   TimerLib
 

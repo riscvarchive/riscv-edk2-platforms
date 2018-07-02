@@ -34,6 +34,7 @@ typedef struct _REPORT_PCIEDIDVID2BMC{
     UINTN   Slot;
 }REPORT_PCIEDIDVID2BMC;
 extern REPORT_PCIEDIDVID2BMC PcieDeviceToReport[PCIEDEVICE_REPORT_MAX];
+extern VOID GetPciDidVid (REPORT_PCIEDIDVID2BMC *Report);
 
 BOOLEAN OemIsSocketPresent (UINTN Socket);
 VOID CoreSelectBoot(VOID);

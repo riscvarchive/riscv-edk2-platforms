@@ -18,12 +18,6 @@
 extern SMBIOS_TABLE_TYPE9 gPcieSlotInfo[];
 extern UINT8 OemGetPcieSlotNumber ();
 
-REPORT_PCIEDIDVID2BMC  PcieDeviceToReport_2P[PCIEDEVICE_REPORT_MAX] = {
-      {67,0,0,0},
-      {225,0,0,3},
-      {0xFFFF,0xFFFF,0xFFFF,0xFFFF},
-      {0xFFFF,0xFFFF,0xFFFF,0xFFFF}
-};
 VOID
 EFIAPI
 UpdateSmbiosType9Info(
@@ -41,11 +35,9 @@ UpdateSmbiosType9Info(
     UINTN                              FunctionNumber;
     UINTN                              Index;
     REPORT_PCIEDIDVID2BMC              ReportPcieDidVid[PCIEDEVICE_REPORT_MAX];
-    if(OemIsMpBoot()){
-        (VOID)CopyMem((VOID *)ReportPcieDidVid,(VOID *)PcieDeviceToReport_2P,sizeof(PcieDeviceToReport_2P));
-    } else {
-        (VOID)CopyMem((VOID *)ReportPcieDidVid,(VOID *)PcieDeviceToReport,sizeof(PcieDeviceToReport));
-    }
+
+    GetPciDidVid ((VOID *) ReportPcieDidVid);
+
     Status = gBS->LocateHandleBuffer (
                                       ByProtocol,
                                       &gEfiPciIoProtocolGuid,

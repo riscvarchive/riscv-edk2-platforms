@@ -33,6 +33,7 @@
   Silicon/Hisilicon/HisiPkg.dec
 
 [LibraryClasses]
+  BaseMemoryLib
   PcdLib
   TimerLib
 

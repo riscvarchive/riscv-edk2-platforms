@@ -1,7 +1,7 @@
 /** @file
 *
-*  Copyright (c) 2016, Hisilicon Limited. All rights reserved.
-*  Copyright (c) 2016, Linaro Limited. All rights reserved.
+*  Copyright (c) 2016 - 2018, Hisilicon Limited. All rights reserved.
+*  Copyright (c) 2016 - 2018, Linaro Limited. All rights reserved.
 *
 *  This program and the accompanying materials
 *  are licensed and made available under the terms and conditions of the BSD License
@@ -16,6 +16,7 @@
 #include <PlatformArch.h>
 #include <Uefi.h>
 
+#include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/LpcLib.h>
@@ -37,6 +38,28 @@ REPORT_PCIEDIDVID2BMC  PcieDeviceToReport[PCIEDEVICE_REPORT_MAX] = {
   {0xFFFF,0xFFFF,0xFFFF,0xFFFF}
 };
 
+REPORT_PCIEDIDVID2BMC PcieDeviceToReport_2P[PCIEDEVICE_REPORT_MAX] = {
+  {0x79,0,0,0},
+  {0xFF,0xFF,0xFF,1},
+  {0xC1,0,0,2},
+  {0xF9,0,0,3},
+  {0xFF,0xFF,0xFF,4},
+  {0x11,0,0,5},
+  {0x31,0,0,6},
+  {0x21,0,0,7}
+};
+
+VOID
+GetPciDidVid (
+  REPORT_PCIEDIDVID2BMC *Report
+  )
+{
+  if (OemIsMpBoot ()) {
+    (VOID)CopyMem ((VOID *)Report, (VOID *)PcieDeviceToReport_2P, sizeof (PcieDeviceToReport_2P));
+  } else {
+    (VOID)CopyMem ((VOID *)Report, (VOID *)PcieDeviceToReport, sizeof (PcieDeviceToReport));
+  }
+}
 
 BOOLEAN OemIsSocketPresent (UINTN Socket)
 {
