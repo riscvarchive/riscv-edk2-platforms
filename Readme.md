@@ -171,10 +171,10 @@ $ git clone https://git.linaro.org/uefi/uefi-tools.git
 $ ./uefi-tools/edk2-build.sh juno
 ...
 ------------------------------------------------------------
-                         aarch64 Juno (AARCH64) RELEASE	pass
+                         aarch64 Juno (AARCH64) RELEASE pass
 ------------------------------------------------------------
-pass	1
-fail	0
+pass   1
+fail   0
 ```
 The build finishes with a summary of which platforms/targets were built, which
 succeeded and which failed (and the total number of either).
