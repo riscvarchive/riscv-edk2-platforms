@@ -30,6 +30,18 @@
 // Max NUMA node number for each node type
 #define MAX_NUM_PER_TYPE 8
 
+#define RASC_BASE                (0x5000)
+/* configuration register for Rank statistical information */
+#define RASC_CFG_INFOIDX_REG     (RASC_BASE + 0x5C)
+/* configuration register for Sparing level */
+#define RASC_CFG_SPLVL_REG       (RASC_BASE + 0xB8)
+
+// for acpi
+#define NODE_IN_SOCKET                                  2
+#define CORE_NUM_PER_SOCKET                             32
+#define EFI_ACPI_MEMORY_AFFINITY_STRUCTURE_COUNT        10
+#define EFI_ACPI_6_2_ITS_AFFINITY_STRUCTURE_COUNT       8
+
 #define S1_BASE               0x40000000000
 
 //
