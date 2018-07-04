@@ -376,12 +376,20 @@
 
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|36
 
-  gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0x41F0000
+  gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0x43F0000
   gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0x10000
 
-  # Secure region reservation
-  gMarvellTokenSpaceGuid.PcdSecureRegionBase|0x4000000
-  gMarvellTokenSpaceGuid.PcdSecureRegionSize|0x0200000
+  # ARM-TF region reservation
+  gMarvellTokenSpaceGuid.PcdArmTFRegionBase|0x4000000
+  gMarvellTokenSpaceGuid.PcdArmTFRegionSize|0x200000
+
+  # Additional region reservation (e.g. for PEI stack base)
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionBase|0x4200000
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionSize|0x200000
+
+  # OP-TEE region reservation
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionBase|0x4400000
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionSize|0x1000000
 
   # TRNG
   gMarvellTokenSpaceGuid.PcdEip76TrngBaseAddress|0xF2760000

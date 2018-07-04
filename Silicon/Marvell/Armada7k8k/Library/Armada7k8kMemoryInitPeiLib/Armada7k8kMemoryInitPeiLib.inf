@@ -42,5 +42,9 @@
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob
 
 [FixedPcd]
-  gMarvellTokenSpaceGuid.PcdSecureRegionBase
-  gMarvellTokenSpaceGuid.PcdSecureRegionSize
+  gMarvellTokenSpaceGuid.PcdArmTFRegionBase
+  gMarvellTokenSpaceGuid.PcdArmTFRegionSize
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionBase
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionSize
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionBase
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionSize

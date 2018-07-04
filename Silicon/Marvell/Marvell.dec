@@ -211,8 +211,12 @@
   # normal world. These PCDs describe such a region, which will be converted
   # to 'reserved' memory before DXE is entered.
   #
-  gMarvellTokenSpaceGuid.PcdSecureRegionBase|0x0|UINT64|0x50000000
-  gMarvellTokenSpaceGuid.PcdSecureRegionSize|0x0|UINT32|0x50000001
+  gMarvellTokenSpaceGuid.PcdArmTFRegionBase|0x0|UINT64|0x50000000
+  gMarvellTokenSpaceGuid.PcdArmTFRegionSize|0x0|UINT32|0x50000001
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionBase|0x0|UINT64|0x50000002
+  gMarvellTokenSpaceGuid.PcdAuxiliaryReservedRegionSize|0x0|UINT32|0x50000003
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionBase|0x0|UINT64|0x50000004
+  gMarvellTokenSpaceGuid.PcdOpTeeRegionSize|0x0|UINT32|0x50000005
 
 [Protocols]
   gMarvellBoardDescProtocolGuid            = { 0xebed8738, 0xd4a6, 0x4001, { 0xa9, 0xc9, 0x52, 0xb0, 0xcb, 0x7d, 0xdb, 0xf9 }}

@@ -167,10 +167,22 @@ MemoryPeim (
   // Get Virtual Memory Map from the Platform Library
   ArmPlatformGetVirtualMemoryMap (&MemoryTable);
 
-  // Reserve memory region for secure firmware
+  // Reserve memory region for ARM-TF
   ReserveMemoryRegion (
-    (EFI_PHYSICAL_ADDRESS)FixedPcdGet64 (PcdSecureRegionBase),
-    FixedPcdGet32 (PcdSecureRegionSize)
+    (EFI_PHYSICAL_ADDRESS)FixedPcdGet64 (PcdArmTFRegionBase),
+    FixedPcdGet32 (PcdArmTFRegionSize)
+    );
+
+  // Reserve additional memory region (e.g. for PEI stack)
+  ReserveMemoryRegion (
+    (EFI_PHYSICAL_ADDRESS)FixedPcdGet64 (PcdAuxiliaryReservedRegionBase),
+    FixedPcdGet32 (PcdAuxiliaryReservedRegionSize)
+    );
+
+  // Reserve memory region for OP-TEE
+  ReserveMemoryRegion (
+    (EFI_PHYSICAL_ADDRESS)FixedPcdGet64 (PcdOpTeeRegionBase),
+    FixedPcdGet32 (PcdOpTeeRegionSize)
     );
 
   // Build Memory Allocation Hob
