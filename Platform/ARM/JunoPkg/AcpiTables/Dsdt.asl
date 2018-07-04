@@ -1,7 +1,7 @@
 /** @file
   Differentiated System Description Table Fields (DSDT)
 
-  Copyright (c) 2014-2015, ARM Ltd. All rights reserved.<BR>
+  Copyright (c) 2014-2018, ARM Ltd. All rights reserved.<BR>
     This program and the accompanying materials
   are licensed and made available under the terms and conditions of the BSD License
   which accompanies this distribution.  The full text of the license may be found at
@@ -65,7 +65,7 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-JUNO", EFI_ACPI_ARM_O
       })
       Name(PLPI, Package() {
         0, // Version
-        1, // Level Index
+        0, // Level Index
         2, // Count
         Package() { // WFI for CPU
           1, // Min residency (uS)
@@ -157,7 +157,7 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-JUNO", EFI_ACPI_ARM_O
       })
       Name(PLPI, Package() {
         0, // Version
-        1, // Level Index
+        0, // Level Index
         2, // Count
         Package() { // WFI for CPU
           1, // Min residency (uS)
