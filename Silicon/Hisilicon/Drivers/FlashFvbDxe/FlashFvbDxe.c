@@ -28,8 +28,8 @@ FLASH_DESCRIPTION mFlashDevices[FLASH_DEVICE_COUNT] =
 {
     {
         // UEFI Variable Services non-volatile storage
-        0xa4000000,
-        FixedPcdGet32(PcdFlashNvStorageVariableBase),
+        FixedPcdGet64 (PcdSFCMEM0BaseAddress),
+        FixedPcdGet64 (PcdFlashNvStorageVariableBase64),
         0x20000,
         SIZE_64KB,
         {0xCC2CBF29, 0x1498, 0x4CDD, {0x81, 0x71, 0xF8, 0xB6, 0xB4, 0x1D, 0x09, 0x09}}
@@ -145,8 +145,8 @@ InitializeFvAndVariableStoreHeaders (
     Headers = AllocateZeroPool(HeadersLength);
 
     // FirmwareVolumeHeader->FvLength is declared to have the Variable area AND the FTW working area AND the FTW Spare contiguous.
-    ASSERT(PcdGet32(PcdFlashNvStorageVariableBase) + PcdGet32(PcdFlashNvStorageVariableSize) == PcdGet32(PcdFlashNvStorageFtwWorkingBase));
-    ASSERT(PcdGet32(PcdFlashNvStorageFtwWorkingBase) + PcdGet32(PcdFlashNvStorageFtwWorkingSize) == PcdGet32(PcdFlashNvStorageFtwSpareBase));
+    ASSERT(PcdGet64(PcdFlashNvStorageVariableBase64) + PcdGet32(PcdFlashNvStorageVariableSize) == PcdGet64(PcdFlashNvStorageFtwWorkingBase64));
+    ASSERT(PcdGet64(PcdFlashNvStorageFtwWorkingBase64) + PcdGet32(PcdFlashNvStorageFtwWorkingSize) == PcdGet64(PcdFlashNvStorageFtwSpareBase64));
 
     // Check if the size of the area is at least one block size
     ASSERT((PcdGet32(PcdFlashNvStorageVariableSize) > 0) && ((UINT32)PcdGet32(PcdFlashNvStorageVariableSize) / Instance->Media.BlockSize > 0));
@@ -154,9 +154,9 @@ InitializeFvAndVariableStoreHeaders (
     ASSERT((PcdGet32(PcdFlashNvStorageFtwSpareSize) > 0) && ((UINT32)PcdGet32(PcdFlashNvStorageFtwSpareSize) / Instance->Media.BlockSize > 0));
 
     // Ensure the Variable area Base Addresses are aligned on a block size boundaries
-    ASSERT((UINT32)PcdGet32(PcdFlashNvStorageVariableBase) % Instance->Media.BlockSize == 0);
-    ASSERT((UINT32)PcdGet32(PcdFlashNvStorageFtwWorkingBase) % Instance->Media.BlockSize == 0);
-    ASSERT((UINT32)PcdGet32(PcdFlashNvStorageFtwSpareBase) % Instance->Media.BlockSize == 0);
+    ASSERT((UINT32)PcdGet64(PcdFlashNvStorageVariableBase64) % Instance->Media.BlockSize == 0);
+    ASSERT((UINT32)PcdGet64(PcdFlashNvStorageFtwWorkingBase64) % Instance->Media.BlockSize == 0);
+    ASSERT((UINT32)PcdGet64(PcdFlashNvStorageFtwSpareBase64) % Instance->Media.BlockSize == 0);
 
     //
     // EFI_FIRMWARE_VOLUME_HEADER
@@ -855,10 +855,10 @@ FvbInitialize (
     UINT32      FvbNumLba;
 
     Instance->Initialized = TRUE;
-    mFlashNvStorageVariableBase = FixedPcdGet32 (PcdFlashNvStorageVariableBase);
+    mFlashNvStorageVariableBase = FixedPcdGet64 (PcdFlashNvStorageVariableBase64);
 
     // Set the index of the first LBA for the FVB
-    Instance->StartLba = (PcdGet32 (PcdFlashNvStorageVariableBase) - Instance->RegionBaseAddress) / Instance->Media.BlockSize;
+    Instance->StartLba = (PcdGet64 (PcdFlashNvStorageVariableBase64) - Instance->RegionBaseAddress) / Instance->Media.BlockSize;
 
     // Determine if there is a valid header at the beginning of the Flash
     Status = ValidateFvHeader (Instance);
@@ -1208,8 +1208,8 @@ FlashFvbInitialize (
     {
         // Check if this Flash device contain the variable storage region
         ContainVariableStorage =
-            (FlashDevices[Index].RegionBaseAddress <= (UINT32)PcdGet32 (PcdFlashNvStorageVariableBase)) &&
-            ((UINT32)(PcdGet32 (PcdFlashNvStorageVariableBase) + PcdGet32 (PcdFlashNvStorageVariableSize)) <= FlashDevices[Index].RegionBaseAddress + FlashDevices[Index].Size);
+             (FlashDevices[Index].RegionBaseAddress <= PcdGet64 (PcdFlashNvStorageVariableBase64)) &&
+             ((PcdGet64 (PcdFlashNvStorageVariableBase64) + PcdGet32 (PcdFlashNvStorageVariableSize)) <= FlashDevices[Index].RegionBaseAddress + FlashDevices[Index].Size);
 
         Status = FlashCreateInstance (
                      FlashDevices[Index].DeviceBaseAddress,
