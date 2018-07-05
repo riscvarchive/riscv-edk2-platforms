@@ -419,7 +419,7 @@
     <LibraryClasses>
       PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
       PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
-      PciHostBridgeLib|MdeModulePkg/Library/PciHostBridgeLibNull/PciHostBridgeLibNull.inf
+      PciHostBridgeLib|Platform/Hisilicon/D06/Library/PciHostBridgeLib/PciHostBridgeLib.inf
   }
 
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
