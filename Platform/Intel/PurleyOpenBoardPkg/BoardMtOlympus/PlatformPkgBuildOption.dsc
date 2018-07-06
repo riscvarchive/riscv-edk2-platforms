@@ -76,7 +76,7 @@
 #
 # Override the existing iasl path in tools_def.template
 #
-  MSFT:*_*_*_ASL_PATH == c:/Iasl/iasl.exe
+#  MSFT:*_*_*_ASL_PATH == c:/Iasl/iasl.exe
 
 #
 # Override the VFR compile flags to speed the build time

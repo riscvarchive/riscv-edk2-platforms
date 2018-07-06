@@ -105,18 +105,8 @@ set TOOL_CHAIN_TAG=
   )
 )
 
-echo ..WinDDK
-set CHECK_PATH_WINDDK=C:\WINDDK\3790.1830
-if not exist %CHECK_PATH_WINDDK%\bin\bin16\link16.exe (
-  echo.
-  echo !!! ERROR !!! Could not find 16-bit linker at %CHECK_PATH_WINDDK%\bin\bin16\link16.exe. !!!
-  echo.
-  set SCRIPT_ERROR=1
-)
-set CHECK_PATH_WINDDK=
-
 echo ..iASL
-set CHECK_PATH_IASL=c:\Iasl
+set CHECK_PATH_IASL=%IASL_PREFIX%
 if not exist %CHECK_PATH_IASL%\iasl.exe (
   echo.
   echo !!! ERROR !!! Could not find iASL compiler at %CHECK_PATH_IASL%\iasl.exe. !!!
