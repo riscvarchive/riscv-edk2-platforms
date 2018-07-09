@@ -53,20 +53,20 @@ Returns:
   //
   Status = IpmiGetDeviceId (&ControllerInfo);
   if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "!!! IpmiFru  IpmiGetDeviceId Status=%x\n", Status));
+    DEBUG((DEBUG_ERROR, "!!! IpmiFru  IpmiGetDeviceId Status=%x\n", Status));
     return Status;
   }
 
-  DEBUG((EFI_D_ERROR, "!!! IpmiFru  FruInventorySupport %x\n", ControllerInfo.FruInventorySupport));
+  DEBUG((DEBUG_ERROR, "!!! IpmiFru  FruInventorySupport %x\n", ControllerInfo.FruInventorySupport));
 
   if (ControllerInfo.FruInventorySupport) {
     GetFruInventoryAreaInfoRequest.DeviceId = 0;
     Status = IpmiGetFruInventoryAreaInfo (&GetFruInventoryAreaInfoRequest, &GetFruInventoryAreaInfoResponse);
     if (EFI_ERROR (Status)) {
-      DEBUG((EFI_D_ERROR, "!!! IpmiFru  IpmiGetFruInventoryAreaInfo Status=%x\n", Status));
+      DEBUG((DEBUG_ERROR, "!!! IpmiFru  IpmiGetFruInventoryAreaInfo Status=%x\n", Status));
       return Status;
     }
-    DEBUG((EFI_D_ERROR, "!!! IpmiFru  InventoryAreaSize=%x\n", GetFruInventoryAreaInfoResponse.InventoryAreaSize));
+    DEBUG((DEBUG_ERROR, "!!! IpmiFru  InventoryAreaSize=%x\n", GetFruInventoryAreaInfoResponse.InventoryAreaSize));
   }
 
   return EFI_SUCCESS;
