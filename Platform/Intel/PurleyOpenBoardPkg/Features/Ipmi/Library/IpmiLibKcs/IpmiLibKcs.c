@@ -21,7 +21,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/IpmiPlatformHookLib.h>
 
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 #include "KcsBmc.h"
 
@@ -142,7 +141,7 @@ UpdateBmcStatusOnResponse (
       IpmiInstance->BmcStatus = EFI_BMC_HARDFAIL;
     } else {
       BmcInfo = (VOID *)IpmiResponse->ResponseData;
-      if (BmcInfo->UpdateMode) {
+      if (BmcInfo->FirmwareRev1.Bits.UpdateMode) {
         IpmiInstance->BmcStatus = EFI_BMC_UPDATE_IN_PROGRESS;
       }
     }
