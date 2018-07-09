@@ -21,7 +21,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/PcdLib.h>
 #include <Library/IpmiCommandLib.h>
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 EFI_STATUS
 EfiDisableFrb (
@@ -56,7 +55,7 @@ EfiDisableFrb (
   //
   // Check if timer is still running, if not abort disable routine.
   //
-  if (GetWatchdogTimer.TimerUse.TimerRunning == 0) {
+  if (GetWatchdogTimer.TimerUse.Bits.TimerRunning == 0) {
     return EFI_ABORTED;
   }
 
@@ -64,8 +63,8 @@ EfiDisableFrb (
   //
   // Just flip the Timer Use bit. This should release the timer.
   //
-  SetWatchdogTimer.TimerUse.TimerRunning         = 0;
-  SetWatchdogTimer.TimerUse.TimerUse             = IPMI_WATCHDOG_TIMER_BIOS_FRB2;
+  SetWatchdogTimer.TimerUse.Bits.TimerRunning    = 0;
+  SetWatchdogTimer.TimerUse.Bits.TimerUse        = IPMI_WATCHDOG_TIMER_BIOS_FRB2;
   SetWatchdogTimer.TimerUseExpirationFlagsClear &= ~BIT2;
   SetWatchdogTimer.TimerUseExpirationFlagsClear |= BIT1 | BIT4;
 
@@ -150,7 +149,7 @@ CheckForAndReportErrors(
   SetWatchdogTimer.PretimeoutInterval             = GetWatchdogTimer.PretimeoutInterval;
   SetWatchdogTimer.TimerUseExpirationFlagsClear   = GetWatchdogTimer.TimerUseExpirationFlagsClear;
   SetWatchdogTimer.InitialCountdownValue          = GetWatchdogTimer.InitialCountdownValue;
-  SetWatchdogTimer.TimerUse.TimerRunning          = 1;
+  SetWatchdogTimer.TimerUse.Bits.TimerRunning     = 1;
   SetWatchdogTimer.TimerUseExpirationFlagsClear  |= BIT1 | BIT2 | BIT3;
 
   Status = IpmiSetWatchdogTimer (&SetWatchdogTimer, &CompletionCode);
@@ -192,7 +191,7 @@ ReportFrb2Status (
   //
   // Check if timer is running, report status to DEBUG_MODE output.
   //
-  if (GetWatchdogTimer.TimerUse.TimerRunning == 1) {
+  if (GetWatchdogTimer.TimerUse.Bits.TimerRunning == 1) {
     DEBUG ((DEBUG_INFO, "FRB2 Timer is running.\n"));
   } else {
     DEBUG ((DEBUG_INFO, "FRB2 Timer is not running.\n"));

@@ -104,8 +104,14 @@ Returns:
     }
   } while (TRUE);
 
-  DEBUG((DEBUG_INFO, "[IPMI] BMC Device ID: 0x%02X, firmware version: %d.%02X\n", BmcInfo.DeviceId, BmcInfo.MajorFirmwareRev, BmcInfo.MinorFirmwareRev));
-  *UpdateMode = (BOOLEAN)BmcInfo.UpdateMode;
+  DEBUG((
+    DEBUG_INFO,
+    "[IPMI] BMC Device ID: 0x%02X, firmware version: %d.%02X\n",
+    BmcInfo.DeviceId,
+    BmcInfo.FirmwareRev1.Bits.MajorFirmwareRev,
+    BmcInfo.MinorFirmwareRev
+    ));
+  *UpdateMode = (BOOLEAN)BmcInfo.FirmwareRev1.Bits.UpdateMode;
   return Status;
 }
 

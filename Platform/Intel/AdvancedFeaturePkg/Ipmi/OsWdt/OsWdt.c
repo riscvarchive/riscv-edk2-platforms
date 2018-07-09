@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/IpmiCommandLib.h>
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 BOOLEAN mOsWdtFlag = FALSE;
 
@@ -71,9 +70,9 @@ Returns:
   //
   // Just flip the Timer Use bit. This should release the timer.
   //
-  SetWatchdogTimer.TimerUse.TimerRunning         = 1;
-  SetWatchdogTimer.TimerUse.TimerUse             = IPMI_WATCHDOG_TIMER_OS_LOADER;
-  SetWatchdogTimer.TimerActions                  = IPMI_WATCHDOG_TIMER_ACTION_HARD_RESET;
+  SetWatchdogTimer.TimerUse.Bits.TimerRunning    = 1;
+  SetWatchdogTimer.TimerUse.Bits.TimerUse        = IPMI_WATCHDOG_TIMER_OS_LOADER;
+  SetWatchdogTimer.TimerActions.Uint8            = IPMI_WATCHDOG_TIMER_ACTION_HARD_RESET;
   SetWatchdogTimer.TimerUseExpirationFlagsClear &= ~BIT4;
   SetWatchdogTimer.TimerUseExpirationFlagsClear |= BIT1 | BIT2;
   SetWatchdogTimer.InitialCountdownValue         = 600; // 100ms / count

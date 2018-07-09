@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/IpmiLib.h>
 
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 
 EFI_STATUS
@@ -242,19 +241,19 @@ IpmiSetSelTime (
 EFI_STATUS
 EFIAPI
 IpmiGetSdrRepositoryInfo (
-  OUT IPMI_GET_SDR_REPOSITORY_INFO  *GetSdrRepositoryInfo
+  OUT IPMI_GET_SDR_REPOSITORY_INFO_RESPONSE  *GetSdrRepositoryInfoResp
   )
 {
   EFI_STATUS                   Status;
   UINT32                       DataSize;
 
-  DataSize = sizeof(*GetSdrRepositoryInfo);
+  DataSize = sizeof(*GetSdrRepositoryInfoResp);
   Status = IpmiSubmitCommand (
              IPMI_NETFN_STORAGE,
              IPMI_STORAGE_GET_SDR_REPOSITORY_INFO,
              NULL,
              0,
-             (VOID *)GetSdrRepositoryInfo,
+             (VOID *)GetSdrRepositoryInfoResp,
              &DataSize
              );
   return Status;

@@ -130,7 +130,7 @@ Returns:
   }
 
   if (EnableElog == NULL) {
-    *ElogStatus = GetBmcGlobalEnables.SystemEventLogging;
+    *ElogStatus = GetBmcGlobalEnables.GetEnables.Bits.SystemEventLogging;
   } else {
     if (Status == EFI_SUCCESS) {
       if (*EnableElog) {
@@ -138,7 +138,7 @@ Returns:
       }
 
       CopyMem (&SetBmcGlobalEnables, (UINT8 *)&GetBmcGlobalEnables + sizeof(UINT8), sizeof(UINT8));
-      SetBmcGlobalEnables.EnableSystemEventLogging = ElogStat;
+      SetBmcGlobalEnables.SetEnables.Bits.SystemEventLogging = ElogStat;
 
       Status = IpmiSetBmcGlobalEnables (&SetBmcGlobalEnables, &CompletionCode);
     }

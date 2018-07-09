@@ -17,7 +17,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #include <Uefi.h>
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 //
 // NetFnApp
@@ -228,7 +227,7 @@ IpmiSetSelTime (
 EFI_STATUS
 EFIAPI
 IpmiGetSdrRepositoryInfo (
-  OUT IPMI_GET_SDR_REPOSITORY_INFO  *GetSdrRepositoryInfo
+  OUT IPMI_GET_SDR_REPOSITORY_INFO_RESPONSE  *GetSdrRepositoryInfoResp
   );
 
 EFI_STATUS

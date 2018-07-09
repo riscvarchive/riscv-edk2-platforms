@@ -19,7 +19,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/BaseMemoryLib.h>
 #include <Library/IpmiCommandLib.h>
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 EFI_STATUS
 InitializeFru (
@@ -57,9 +56,9 @@ Returns:
     return Status;
   }
 
-  DEBUG((DEBUG_ERROR, "!!! IpmiFru  FruInventorySupport %x\n", ControllerInfo.FruInventorySupport));
+  DEBUG((DEBUG_ERROR, "!!! IpmiFru  FruInventorySupport %x\n", ControllerInfo.DeviceSupport.Bits.FruInventorySupport));
 
-  if (ControllerInfo.FruInventorySupport) {
+  if (ControllerInfo.DeviceSupport.Bits.FruInventorySupport) {
     GetFruInventoryAreaInfoRequest.DeviceId = 0;
     Status = IpmiGetFruInventoryAreaInfo (&GetFruInventoryAreaInfoRequest, &GetFruInventoryAreaInfoResponse);
     if (EFI_ERROR (Status)) {

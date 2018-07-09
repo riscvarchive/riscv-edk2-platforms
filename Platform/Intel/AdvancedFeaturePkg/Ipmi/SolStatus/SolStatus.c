@@ -21,7 +21,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/IpmiCommandLib.h>
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 #define SOL_CMD_RETRY_COUNT           10
 
@@ -55,8 +54,8 @@ GetSOLStatus (
 
   for (RetryCount = 0; RetryCount < SOL_CMD_RETRY_COUNT; RetryCount++) {
     ZeroMem (&GetConfigurationParametersRequest, sizeof(GetConfigurationParametersRequest));
-    GetConfigurationParametersRequest.ChannelNumber     = Channel;
-    GetConfigurationParametersRequest.ParameterSelector = ParamSel;
+    GetConfigurationParametersRequest.ChannelNumber.Bits.ChannelNumber = Channel;
+    GetConfigurationParametersRequest.ParameterSelector                = ParamSel;
 
     ZeroMem (&GetConfigurationParametersResponse, sizeof(GetConfigurationParametersResponse));
 
@@ -110,9 +109,9 @@ SetSOLParams (
 
   for (RetryCount = 0; RetryCount < SOL_CMD_RETRY_COUNT; RetryCount++) {
     ZeroMem (&SetConfigurationParametersRequest, sizeof(SetConfigurationParametersRequest));
-    SetConfigurationParametersRequest.ChannelNumber     = Channel;
-    SetConfigurationParametersRequest.ParameterSelector = ParamSel;
-    SetConfigurationParametersRequest.ParameterData[0]  = Data;
+    SetConfigurationParametersRequest.ChannelNumber.Bits.ChannelNumber = Channel;
+    SetConfigurationParametersRequest.ParameterSelector                = ParamSel;
+    SetConfigurationParametersRequest.ParameterData[0]                 = Data;
 
     CompletionCode = 0;
 

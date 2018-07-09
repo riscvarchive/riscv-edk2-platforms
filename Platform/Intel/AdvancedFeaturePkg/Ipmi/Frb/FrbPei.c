@@ -20,7 +20,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/IpmiCommandLib.h>
 
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 VOID
 SetWatchDogTimer (
@@ -40,9 +39,9 @@ SetWatchDogTimer (
   if (Frb2Enabled) {
     ZeroMem (&FrbTimer, sizeof(FrbTimer));
     //Byte 1
-    FrbTimer.TimerUse.TimerUse = IPMI_WATCHDOG_TIMER_BIOS_FRB2;
+    FrbTimer.TimerUse.Bits.TimerUse = IPMI_WATCHDOG_TIMER_BIOS_FRB2;
     //Byte 2 
-    FrbTimer.TimerActions = 0;    //NormalBoot, NoTimeOutInterrupt. i.e no action when BMC watchdog timeout
+    FrbTimer.TimerActions.Uint8 = 0;    //NormalBoot, NoTimeOutInterrupt. i.e no action when BMC watchdog timeout
     //Byte 3
     FrbTimer.PretimeoutInterval = 0;
     //Byte 4

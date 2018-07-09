@@ -16,7 +16,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/DebugLib.h>
 
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 /**
   This service enables submitting commands via Ipmi.

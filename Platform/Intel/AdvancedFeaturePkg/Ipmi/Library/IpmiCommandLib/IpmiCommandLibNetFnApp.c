@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <Library/IpmiLib.h>
 
 #include <IndustryStandard/Ipmi.h>
-#include <IpmiEx.h>
 
 EFI_STATUS
 EFIAPI
