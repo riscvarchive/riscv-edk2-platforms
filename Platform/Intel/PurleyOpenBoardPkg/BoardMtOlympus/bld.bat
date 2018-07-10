@@ -111,13 +111,13 @@ echo.
 echo --------------------------------------------------------------------
 echo.
 call postbuild.bat
+if %ERRORLEVEL% NEQ 0 EXIT /b %ERRORLEVEL%
 timeout 1
 echo --------------------------------------------------------------------
 echo.
 echo                          PostBuild End
 echo.
 echo --------------------------------------------------------------------
-if %ERRORLEVEL% NEQ 0 EXIT /b %ERRORLEVEL%
 
 echo %date%  %time%
 echo.
@@ -128,7 +128,6 @@ echo                                Purley Build End
 echo.
 echo --------------------------------------------------------------------------------------------
 
-if %ERRORLEVEL% NEQ 0 EXIT /b %ERRORLEVEL%
 :done
 endlocal & EXIT /b %SCRIPT_ERROR%
 
