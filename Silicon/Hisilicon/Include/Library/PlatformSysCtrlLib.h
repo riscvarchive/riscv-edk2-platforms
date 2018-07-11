@@ -106,4 +106,7 @@ VOID DisableClusterClock(UINTN CpuClusterBase);
 VOID EnableClusterClock(UINTN CpuClusterBase);
 VOID DisableSocketClock (UINT8 Skt);
 
+EFI_STATUS EFIAPI HandleI2CException (UINT32 Socket, UINT32 Port);
+EFI_STATUS EFIAPI HandleI2CExceptionBySocket (UINT32 Socket);
+
 #endif
