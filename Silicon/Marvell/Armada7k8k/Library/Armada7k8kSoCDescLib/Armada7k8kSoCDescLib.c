@@ -103,6 +103,45 @@ ArmadaSoCDescI2cGet (
   return EFI_SUCCESS;
 }
 
+//
+// Allocate the MSI address per interrupt Group,
+// unsupported Groups get NULL address.
+//
+STATIC
+MV_SOC_ICU_DESC mA7k8kIcuDescTemplate = {
+  ICU_GIC_MAPPING_OFFSET,
+  {
+    /* Non secure interrupts */
+    { IcuGroupNsr,  ICU_NSR_SET_SPI_BASE,  ICU_NSR_CLEAR_SPI_BASE },
+    /* Secure interrupts */
+    { IcuGroupSr,   ICU_GROUP_UNSUPPORTED, ICU_GROUP_UNSUPPORTED },
+    /* LPI interrupts */
+    { IcuGroupLpi,  ICU_GROUP_UNSUPPORTED, ICU_GROUP_UNSUPPORTED },
+    /* Virtual LPI interrupts */
+    { IcuGroupVlpi, ICU_GROUP_UNSUPPORTED, ICU_GROUP_UNSUPPORTED },
+    /* System error interrupts */
+    { IcuGroupSei,  ICU_SEI_SET_SPI_BASE,  ICU_SEI_CLEAR_SPI_BASE },
+    /* RAM error interrupts */
+    { IcuGroupRei,  ICU_REI_SET_SPI_BASE,  ICU_REI_CLEAR_SPI_BASE },
+  }
+};
+
+EFI_STATUS
+EFIAPI
+ArmadaSoCDescIcuGet (
+  IN OUT MV_SOC_ICU_DESC  **IcuDesc
+  )
+{
+  *IcuDesc = AllocateCopyPool (sizeof (mA7k8kIcuDescTemplate),
+               &mA7k8kIcuDescTemplate);
+  if (*IcuDesc == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  return EFI_SUCCESS;
+}
+
 EFI_STATUS
 EFIAPI
 ArmadaSoCDescMdioGet (

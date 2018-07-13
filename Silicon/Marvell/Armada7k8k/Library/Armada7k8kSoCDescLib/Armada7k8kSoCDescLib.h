@@ -44,6 +44,18 @@
 #define MV_SOC_I2C_BASE(I2c)             (0x701000 + ((I2c) * 0x100))
 
 //
+// Platform description of ICU (Interrupt Consolidation Unit) controllers
+//
+#define ICU_GIC_MAPPING_OFFSET           0
+#define ICU_NSR_SET_SPI_BASE             0xf03f0040
+#define ICU_NSR_CLEAR_SPI_BASE           0xf03f0048
+#define ICU_SEI_SET_SPI_BASE             0xf03f0230
+#define ICU_SEI_CLEAR_SPI_BASE           0xf03f0230
+#define ICU_REI_SET_SPI_BASE             0xf03f0270
+#define ICU_REI_CLEAR_SPI_BASE           0xf03f0270
+#define ICU_GROUP_UNSUPPORTED            0x0
+
+//
 // Platform description of MDIO controllers
 //
 #define MV_SOC_MDIO_BASE(Cp)             (MV_SOC_CP_BASE (Cp) + 0x12A200)

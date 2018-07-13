@@ -61,6 +61,36 @@ ArmadaSoCDescI2cGet (
   );
 
 //
+// ICU (Interrupt Consolidation Unit)
+//
+typedef enum {
+  IcuGroupNsr  = 0,
+  IcuGroupSr   = 1,
+  IcuGroupLpi  = 2,
+  IcuGroupVlpi = 3,
+  IcuGroupSei  = 4,
+  IcuGroupRei  = 5,
+  IcuGroupMax,
+} ICU_GROUP;
+
+typedef struct {
+  ICU_GROUP Group;
+  UINTN     SetSpiAddr;
+  UINTN     ClrSpiAddr;
+} ICU_MSI;
+
+typedef struct {
+  UINTN    IcuSpiBase;
+  ICU_MSI  IcuMsi[IcuGroupMax];
+} MV_SOC_ICU_DESC;
+
+EFI_STATUS
+EFIAPI
+ArmadaSoCDescIcuGet (
+  IN OUT MV_SOC_ICU_DESC  **IcuDesc
+  );
+
+//
 // MDIO
 //
 typedef struct {
