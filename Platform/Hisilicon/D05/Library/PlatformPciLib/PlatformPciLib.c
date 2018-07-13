@@ -60,8 +60,8 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   /* Port 2 */
   {
       PCI_HB0RB2_ECAM_BASE,
-      0x80,  //BusBase
-      0x87, //BusLimit
+      0xF8,  //BusBase
+      0xFF, //BusLimit
       PCI_HB0RB2_CPUMEMREGIONBASE ,//MemBase
       PCI_HB0RB2_CPUMEMREGIONBASE + PCI_HB0RB2_PCIREGION_SIZE - 1, //MemLimit
       (PCI_HB0RB2_IO_BASE),  //IOBase
@@ -106,8 +106,8 @@ PCI_ROOT_BRIDGE_RESOURCE_APPETURE  mResAppeture[PCIE_MAX_HOSTBRIDGE][PCIE_MAX_RO
   /* Port 5 */
   {
       PCI_HB0RB5_ECAM_BASE,//ecam
-      0x0,  //BusBase
-      0x7, //BusLimit
+      0x78,  //BusBase
+      0x7F, //BusLimit
       PCI_HB0RB5_CPUMEMREGIONBASE, //Membase
       PCI_HB0RB5_CPUMEMREGIONBASE + PCI_HB0RB5_PCIREGION_SIZE - 1, //MemLimit
       (PCI_HB0RB5_IO_BASE),  //IoBase

@@ -89,15 +89,15 @@ Scope(_SB)
     Name (_HID, "PNP0A08") // PCI Express Root Bridge
     Name (_CID, "PNP0A03") // Compatible PCI Root Bridge
     Name(_SEG, 2) // Segment of this Root complex
-    Name(_BBN, 0x80) // Base Bus Number
+    Name(_BBN, 0xF8) // Base Bus Number
     Name(_CCA, 1)
     Method (_CRS, 0, Serialized) { // Root complex resources
       Name (RBUF, ResourceTemplate () {
         WordBusNumber ( // Bus numbers assigned to this root
           ResourceProducer, MinFixed, MaxFixed, PosDecode,
           0, // AddressGranularity
-          0x80, // AddressMinimum - Minimum Bus Number
-          0x87, // AddressMaximum - Maximum Bus Number
+          0xF8, // AddressMinimum - Minimum Bus Number
+          0xFF, // AddressMaximum - Maximum Bus Number
           0, // AddressTranslation - Set to 0
           0x8 // RangeLength - Number of Busses
         )
@@ -109,8 +109,8 @@ Scope(_SB)
           Cacheable,
           ReadWrite,
           0x0, // Granularity
-          0xa8800000, // Min Base Address
-          0xaffeffff, // Max Base Address
+          0xa8000000, // Min Base Address
+          0xaf7effff, // Max Base Address
           0x0, // Translate
           0x77f0000 // Length
         )
@@ -123,7 +123,7 @@ Scope(_SB)
           0x0, // Granularity
           0x0, // Min Base Address
           0xffff, // Max Base Address
-          0xafff0000, // Translate
+          0xaf7f0000, // Translate
           0x10000 // Length
         )
       }) // Name(RBUF)
@@ -165,7 +165,7 @@ Scope(_SB)
   {
     Name (_HID, "PNP0C02")  // Motherboard reserved resource
     Name (_CRS, ResourceTemplate (){
-      Memory32Fixed (ReadWrite, 0xa8000000 , 0x800000) //ECAM space for [bus 80-87]
+      Memory32Fixed (ReadWrite, 0xaf800000 , 0x800000) //ECAM space for [bus f8-ff]
     })
     Method (_STA, 0x0, NotSerialized)
     {
@@ -280,15 +280,15 @@ Scope(_SB)
     Name (_HID, "PNP0A08") // PCI Express Root Bridge
     Name (_CID, "PNP0A03") // Compatible PCI Root Bridge
     Name(_SEG, 5) // Segment of this Root complex
-    Name(_BBN, 0x0) // Base Bus Number
+    Name(_BBN, 0x78) // Base Bus Number
     Name(_CCA, 1)
     Method (_CRS, 0, Serialized) { // Root complex resources
       Name (RBUF, ResourceTemplate () {
         WordBusNumber ( // Bus numbers assigned to this root
           ResourceProducer, MinFixed, MaxFixed, PosDecode,
           0, // AddressGranularity
-          0x0, // AddressMinimum - Minimum Bus Number
-          0x7, // AddressMaximum - Maximum Bus Number
+          0x78, // AddressMinimum - Minimum Bus Number
+          0x7f, // AddressMaximum - Maximum Bus Number
           0, // AddressTranslation - Set to 0
           0x8 // RangeLength - Number of Busses
         )
@@ -300,8 +300,8 @@ Scope(_SB)
           Cacheable,
           ReadWrite,
           0x0, // Granularity
-          0xb0800000, // Min Base Address
-          0xb7feffff, // Max Base Address
+          0xb0000000, // Min Base Address
+          0xb77effff, // Max Base Address
           0x800000000, // Translate
           0x77f0000 // Length
         )
@@ -314,7 +314,7 @@ Scope(_SB)
           0x0, // Granularity
           0x0, // Min Base Address
           0xffff, // Max Base Address
-          0x8b7ff0000, // Translate
+          0x8b77f0000, // Translate
           0x10000 // Length
         )
       }) // Name(RBUF)
@@ -593,7 +593,7 @@ Scope(_SB)
         0x0, // Translate
         0x800000 // Length
       )
-      QwordMemory ( //ECAM space for [bus 0-7]
+      QwordMemory ( //ECAM space for [bus 78-7f]
         ResourceConsumer,
         PosDecode,
         MinFixed,
@@ -601,8 +601,8 @@ Scope(_SB)
         NonCacheable,
         ReadWrite,
         0x0, // Granularity
-        0x8b0000000, // Min Base Address
-        0x8b07fffff, // Max Base Address
+        0x8b7800000, // Min Base Address
+        0x8b7ffffff, // Max Base Address
         0x0, // Translate
         0x800000 // Length
       )

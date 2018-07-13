@@ -412,9 +412,9 @@
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000002
 
-[0004]                         Input base : 00008000
+[0004]                         Input base : 0000f800
 [0004]                           ID Count : 00000800
-[0004]                        Output Base : 00008000
+[0004]                        Output Base : 0000f800
 [0004]                   Output Reference : 00000064
 [0004]              Flags (decoded below) : 00000000
                            Single Mapping : 0
@@ -469,9 +469,9 @@
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000005
 
-[0004]                         Input base : 00000000
+[0004]                         Input base : 00007800
 [0004]                           ID Count : 00000800
-[0004]                        Output Base : 00000000
+[0004]                        Output Base : 00007800
 [0004]                   Output Reference : 0000007c
 [0004]              Flags (decoded below) : 00000000
                            Single Mapping : 0
