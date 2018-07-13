@@ -666,7 +666,7 @@ void SetAtuConfig1RW (
     )
 {
     UINTN RbPciBase = Private->RbPciBar;
-    UINT64 MemLimit = GetPcieCfgAddress (Private->Ecam, Private->BusLimit + 1, 0, 0, 0) - 1;
+    UINT64 MemLimit = GetPcieCfgAddress (Private->Ecam, Private->BusLimit, 0x1F, 0x07, 0xFFF);
     UINT64 Cfg1Base = GetPcieCfgAddress (Private->Ecam, Private->BusBase + 2, 0, 0, 0);
 
     MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, Index);
