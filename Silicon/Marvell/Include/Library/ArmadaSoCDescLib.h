@@ -37,6 +37,15 @@ ArmadaSoCDescComPhyGet (
   );
 
 //
+// South Bridge description
+//
+EFI_PHYSICAL_ADDRESS
+EFIAPI
+ArmadaSoCDescCpBaseGet (
+  IN UINTN  CpIndex
+  );
+
+//
 // I2C
 //
 typedef struct {

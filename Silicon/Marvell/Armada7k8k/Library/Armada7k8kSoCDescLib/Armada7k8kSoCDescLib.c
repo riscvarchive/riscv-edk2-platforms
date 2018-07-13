@@ -61,6 +61,17 @@ ArmadaSoCDescComPhyGet (
   return EFI_SUCCESS;
 }
 
+EFI_PHYSICAL_ADDRESS
+EFIAPI
+ArmadaSoCDescCpBaseGet (
+  IN UINTN  CpIndex
+  )
+{
+  ASSERT (CpIndex < FixedPcdGet8 (PcdMaxCpCount));
+
+  return MV_SOC_CP_BASE (CpIndex);
+}
+
 EFI_STATUS
 EFIAPI
 ArmadaSoCDescI2cGet (
