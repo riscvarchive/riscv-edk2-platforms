@@ -86,7 +86,6 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
         TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_VERSION);
         HiiSetString (mHiiHandle, TokenToUpdate, pVersion, NULL);
     }
-    UpdateSmbiosInfo(mHiiHandle, STRING_TOKEN (STR_MISC_SYSTEM_PRODUCT_NAME), ProductNameType01);
     UpdateSmbiosInfo(mHiiHandle, STRING_TOKEN (STR_MISC_SYSTEM_SERIAL_NUMBER), SerialNumType01);
     UpdateSmbiosInfo(mHiiHandle, STRING_TOKEN (STR_MISC_SYSTEM_MANUFACTURER), SystemManufacturerType01);
 
