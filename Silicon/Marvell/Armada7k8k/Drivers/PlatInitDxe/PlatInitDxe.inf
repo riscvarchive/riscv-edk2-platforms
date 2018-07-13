@@ -30,6 +30,7 @@
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
+  ArmadaIcuLib
   ComPhyLib
   DebugLib
   MppLib
