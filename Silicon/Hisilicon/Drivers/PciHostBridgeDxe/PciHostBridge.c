@@ -839,7 +839,6 @@ NotifyPhase(
 
   case EfiPciHostBridgeEndEnumeration:
     PCIE_DEBUG("Case EfiPciHostBridgeEndEnumeration\n");
-    EnlargeAtuConfig0 (This);
     break;
 
   case EfiPciHostBridgeBeginBusAllocation:

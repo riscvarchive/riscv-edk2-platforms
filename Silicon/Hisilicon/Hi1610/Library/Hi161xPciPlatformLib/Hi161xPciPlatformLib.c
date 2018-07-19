@@ -14,6 +14,7 @@
 **/
 
 #include <Uefi.h>
+#include <IndustryStandard/Acpi.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/OemMiscLib.h>
@@ -21,8 +22,14 @@
 #include <Library/PciExpressLib.h>
 #include <Library/PlatformPciLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Protocol/PciHostBridgeResourceAllocation.h>
+#include <Protocol/PciPlatform.h>
+#include <Protocol/PciRootBridgeIo.h>
 #include <Regs/HisiPcieV1RegOffset.h>
 
+#define INVALID_CAPABILITY_00       0x00
+#define INVALID_CAPABILITY_FF       0xFF
+#define PCI_CAPABILITY_POINTER_MASK 0xFC
 
 STATIC
 UINT64
@@ -35,6 +42,53 @@ GetPcieCfgAddress (
     )
 {
   return Ecam + PCI_EXPRESS_LIB_ADDRESS (Bus, Device, Function, Reg);
+}
+
+STATIC
+PCI_ROOT_BRIDGE_RESOURCE_APPETURE *
+GetAppetureByRootBridgeIo (
+    IN  EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL  *RootBridge
+    )
+{
+  EFI_STATUS Status;
+  EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR *Configuration = NULL;
+  UINTN Hb;
+  UINTN Rb;
+
+  Status = RootBridge->Configuration (
+      RootBridge,
+      (VOID **)&Configuration
+      );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "[%a:%d] RootBridgeIo->Configuration failed %r\n",
+          __FUNCTION__, __LINE__, Status));
+    return NULL;
+  };
+
+  while (Configuration->Desc == ACPI_ADDRESS_SPACE_DESCRIPTOR) {
+    if (Configuration->ResType == ACPI_ADDRESS_SPACE_TYPE_BUS) {
+      break;
+    }
+    Configuration++;
+  }
+
+  if (Configuration->Desc != ACPI_ADDRESS_SPACE_DESCRIPTOR) {
+    DEBUG ((DEBUG_ERROR, "[%a:%d] Can't find bus descriptor\n", __FUNCTION__, __LINE__));
+    return NULL;
+  }
+
+  for (Hb = 0; Hb < PCIE_MAX_HOSTBRIDGE; Hb++) {
+    for (Rb = 0; Rb < PCIE_MAX_ROOTBRIDGE; Rb++) {
+      if (RootBridge->SegmentNumber == mResAppeture[Hb][Rb].Segment &&
+          Configuration->AddrRangeMin >= mResAppeture[Hb][Rb].BusBase &&
+          Configuration->AddrRangeMax <= mResAppeture[Hb][Rb].BusLimit) {
+        return &mResAppeture[Hb][Rb];
+      }
+    }
+  }
+
+  DEBUG ((DEBUG_ERROR, "[%a:%d] Can't find PCI appeture\n", __FUNCTION__, __LINE__));
+  return NULL;
 }
 
 STATIC
@@ -181,5 +235,150 @@ PciInitPlatform (
   }
 
   return;
+}
+
+STATIC
+BOOLEAN
+PcieCheckAriFwdEn (
+  UINTN  PciBaseAddr
+  )
+{
+  UINT8   PciPrimaryStatus;
+  UINT8   CapabilityOffset;
+  UINT8   CapId;
+  UINT8   TempData;
+
+  PciPrimaryStatus = MmioRead16 (PciBaseAddr + PCI_PRIMARY_STATUS_OFFSET);
+
+  if (PciPrimaryStatus & EFI_PCI_STATUS_CAPABILITY) {
+    CapabilityOffset = MmioRead8 (PciBaseAddr + PCI_CAPBILITY_POINTER_OFFSET);
+    CapabilityOffset &= PCI_CAPABILITY_POINTER_MASK;
+
+    while ((CapabilityOffset != INVALID_CAPABILITY_00) && (CapabilityOffset != INVALID_CAPABILITY_FF)) {
+      CapId = MmioRead8 (PciBaseAddr + CapabilityOffset);
+      if (CapId == EFI_PCI_CAPABILITY_ID_PCIEXP) {
+        break;
+      }
+      CapabilityOffset = MmioRead8 (PciBaseAddr + CapabilityOffset + 1);
+      CapabilityOffset &= PCI_CAPABILITY_POINTER_MASK;
+    }
+  } else {
+    return FALSE;
+  }
+
+  if ((CapabilityOffset == INVALID_CAPABILITY_FF) || (CapabilityOffset == INVALID_CAPABILITY_00)) {
+    return FALSE;
+  }
+
+  TempData = MmioRead16 (PciBaseAddr + CapabilityOffset +
+                          EFI_PCIE_CAPABILITY_DEVICE_CONTROL_2_OFFSET);
+  TempData &= EFI_PCIE_CAPABILITY_DEVICE_CAPABILITIES_2_ARI_FORWARDING;
+
+  if (TempData == EFI_PCIE_CAPABILITY_DEVICE_CAPABILITIES_2_ARI_FORWARDING) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+
+VOID
+EnlargeAtuConfig0 (
+  IN EFI_HANDLE HostBridge
+  )
+{
+  EFI_PCI_HOST_BRIDGE_RESOURCE_ALLOCATION_PROTOCOL    *ResAlloc = NULL;
+  EFI_STATUS                                          Status;
+  EFI_HANDLE RootBridgeHandle = NULL;
+  EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL *RootBridgeIo = NULL;
+  PCI_ROOT_BRIDGE_RESOURCE_APPETURE *Appeture;
+  UINTN                           RbPciBase;
+  UINT64                          MemLimit;
+
+  DEBUG ((DEBUG_INFO, "In Enlarge RP iATU Config 0.\n"));
+
+  Status = gBS->HandleProtocol (
+      HostBridge,
+      &gEfiPciHostBridgeResourceAllocationProtocolGuid,
+      (VOID **)&ResAlloc
+      );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "[%a:%d] - HandleProtocol failed %r\n", __FUNCTION__,
+          __LINE__, Status));
+    return;
+  }
+
+  while (TRUE) {
+    Status = ResAlloc->GetNextRootBridge (
+        ResAlloc,
+        &RootBridgeHandle
+        );
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+    Status = gBS->HandleProtocol (
+        RootBridgeHandle,
+        &gEfiPciRootBridgeIoProtocolGuid,
+        (VOID **)&RootBridgeIo
+        );
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "[%a:%d] - HandleProtocol failed %r\n", __FUNCTION__, __LINE__, Status));
+      // This should never happen so that it is a fatal error and we don't try
+      // to continue
+      break;
+    }
+
+    Appeture = GetAppetureByRootBridgeIo (RootBridgeIo);
+    if (Appeture == NULL) {
+      DEBUG ((DEBUG_ERROR, "[%a:%d] Get appeture failed\n", __FUNCTION__,
+            __LINE__));
+      continue;
+    }
+
+    RbPciBase = Appeture->RbPciBar;
+    // Those ARI FWD Enable Root Bridge, need enlarge iATU window.
+    if (PcieCheckAriFwdEn (RbPciBase)) {
+      MemLimit = GetPcieCfgAddress (Appeture->Ecam, Appeture->BusBase + 2, 0, 0, 0) - 1;
+      MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, 1);
+      MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LIMIT, (UINT32) MemLimit);
+    }
+  }
+}
+
+/*++
+
+Routine Description:
+
+  Perform Platform initialization by the phase indicated.
+
+Arguments:
+
+  HostBridge    -  The associated PCI host bridge handle.
+  Phase         -  The phase of the PCI controller enumeration.
+  ChipsetPhase  -  Defines the execution phase of the PCI chipset driver.
+
+Returns:
+
+--*/
+VOID
+EFIAPI
+PhaseNotifyPlatform (
+  IN  EFI_HANDLE                                     HostBridge,
+  IN  EFI_PCI_HOST_BRIDGE_RESOURCE_ALLOCATION_PHASE  Phase,
+  IN  EFI_PCI_CHIPSET_EXECUTION_PHASE                ChipsetPhase
+  )
+{
+  switch (Phase) {
+  case EfiPciHostBridgeEndEnumeration:
+    // Only do once
+    if (ChipsetPhase == ChipsetEntry) {
+      DEBUG ((DEBUG_INFO, "PCI end enumeration platform hook\n"));
+      EnlargeAtuConfig0 (HostBridge);
+    }
+    break;
+  default:
+    break;
+  }
+
+  return ;
 }
 
