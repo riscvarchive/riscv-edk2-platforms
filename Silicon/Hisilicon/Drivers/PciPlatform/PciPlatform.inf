@@ -38,6 +38,7 @@
   ArmLib
   IoLib
   MemoryAllocationLib
+  PciPlatformLib
 
 [Protocols]
   gEfiPciPlatformProtocolGuid
