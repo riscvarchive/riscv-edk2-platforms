@@ -633,112 +633,6 @@ UINT64 GetPcieCfgAddress (
 }
 
 
-void SetAtuConfig0RW (
-    PCI_ROOT_BRIDGE_INSTANCE *Private,
-    UINT32 Index
-    )
-{
-    UINTN RbPciBase = Private->RbPciBar;
-    UINT64 MemLimit = GetPcieCfgAddress (Private->Ecam, Private->BusBase + 1, 1, 0, 0) - 1;
-    UINT64 Cfg0Base = GetPcieCfgAddress (Private->Ecam, Private->BusBase, 0, 0, 0);
-
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, Index);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LOW, (UINT32)(Cfg0Base));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_HIGH, (UINT32)(Cfg0Base >> 32));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LIMIT, (UINT32) MemLimit);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_LOW, 0);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_HIGH, 0);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL1, IATU_CTRL1_TYPE_CONFIG0);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL2, IATU_SHIIF_MODE);
-
-    {
-      UINTN i;
-      for (i=0; i<0x20; i+=4) {
-        DEBUG ((EFI_D_ERROR, "[%a:%d] - Base=%p value=%x\n", __FUNCTION__, __LINE__, RbPciBase + 0x900 + i, MmioRead32(RbPciBase + 0x900 + i)));
-      }
-    }
-}
-
-void SetAtuConfig1RW (
-    PCI_ROOT_BRIDGE_INSTANCE *Private,
-    UINT32 Index
-    )
-{
-    UINTN RbPciBase = Private->RbPciBar;
-    UINT64 MemLimit = GetPcieCfgAddress (Private->Ecam, Private->BusLimit, 0x1F, 0x07, 0xFFF);
-    UINT64 Cfg1Base = GetPcieCfgAddress (Private->Ecam, Private->BusBase + 2, 0, 0, 0);
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, Index);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL1, IATU_CTRL1_TYPE_CONFIG1);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LOW, (UINT32)(Cfg1Base));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_HIGH, (UINT32)(Cfg1Base >> 32));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LIMIT, (UINT32) MemLimit);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_LOW, 0);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_HIGH, 0);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL2, IATU_SHIIF_MODE);
-
-    {
-      UINTN i;
-      for (i=0; i<0x20; i+=4) {
-        DEBUG ((EFI_D_ERROR, "[%a:%d] - Base=%p value=%x\n", __FUNCTION__, __LINE__, RbPciBase + 0x900 + i, MmioRead32(RbPciBase + 0x900 + i)));
-      }
-    }
-}
-
-void SetAtuIoRW(UINT64 RbPciBase,UINT64 IoBase,UINT64 CpuIoRegionLimit, UINT64 CpuIoRegionBase, UINT32 Index)
-{
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, Index);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL1, IATU_CTRL1_TYPE_IO);
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LOW, (UINT32)(CpuIoRegionBase));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_HIGH, (UINT32)((UINT64)CpuIoRegionBase >> 32));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LIMIT, (UINT32)(CpuIoRegionLimit));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_LOW, (UINT32)(IoBase));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_HIGH, (UINT32)((UINT64)(IoBase) >> 32));
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL2, IATU_NORMAL_MODE);
-
-    {
-      UINTN i;
-      for (i=0; i<0x20; i+=4) {
-        DEBUG ((EFI_D_ERROR, "[%a:%d] - Base=%p value=%x\n", __FUNCTION__, __LINE__, RbPciBase + 0x900 + i, MmioRead32(RbPciBase + 0x900 + i)));
-      }
-    }
-}
-
-void SetAtuMemRW(UINT64 RbPciBase,UINT64 MemBase,UINT64 CpuMemRegionLimit, UINT64 CpuMemRegionBase, UINT32 Index)
-{
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_VIEW_POINT, Index);
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL1, IATU_CTRL1_TYPE_MEM);
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LOW, (UINT32)(CpuMemRegionBase));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_HIGH, (UINT32)((UINT64)(CpuMemRegionBase) >> 32));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_BASE_LIMIT, (UINT32)(CpuMemRegionLimit));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_LOW, (UINT32)(MemBase));
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_TARGET_HIGH, (UINT32)((UINT64)(MemBase) >> 32));
-
-    MmioWrite32 (RbPciBase + IATU_OFFSET + IATU_REGION_CTRL2, IATU_NORMAL_MODE);
-
-    {
-      UINTN i;
-      for (i=0; i<0x20; i+=4) {
-        DEBUG ((EFI_D_ERROR, "[%a:%d] - Base=%p value=%x\n", __FUNCTION__, __LINE__, RbPciBase + 0x900 + i, MmioRead32(RbPciBase + 0x900 + i)));
-      }
-    }
-}
-
-VOID InitAtu (PCI_ROOT_BRIDGE_INSTANCE *Private)
-{
-  SetAtuMemRW (Private->RbPciBar, Private->PciRegionBase, Private->PciRegionLimit, Private->CpuMemRegionBase, 0);
-  SetAtuConfig0RW (Private, 1);
-  SetAtuConfig1RW (Private, 2);
-  SetAtuIoRW (Private->RbPciBar, Private->IoBase, Private->IoLimit, Private->CpuIoRegionBase, 3);
-}
-
-
 BOOLEAN PcieIsLinkUp (UINT32 SocType, UINTN RbPciBar, UINTN Port)
 {
     UINT32                     Value = 0;
@@ -861,7 +755,6 @@ RootBridgeConstructor (
 
   Protocol->SegmentNumber  = Seg;
 
-  InitAtu (PrivateData);
 
   Status = gBS->LocateProtocol (&gEfiMetronomeArchProtocolGuid, NULL, (VOID **)&mMetronome);
   if (EFI_ERROR(Status))

@@ -1,0 +1,42 @@
+## @file
+# PCI Segment Library for Hisilicon Hi1610/Hi1616 SoC with multiple RCs
+#
+# Copyright (c) 2007 - 2014, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2018, Linaro Ltd. All rights reserved.<BR>
+# Copyright (c) 2018, Hisilicon Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php.
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = Hi161xPciPlatformLib
+  FILE_GUID                      = 22447df4-0baa-11e8-b6de-286ed489ee9b
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = PciPlatformLib
+
+[Sources]
+  Hi161xPciPlatformLib.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Silicon/Hisilicon/HisiPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  IoLib
+  PlatformPciLib
+
+[Protocols]
+  gEfiPciHostBridgeResourceAllocationProtocolGuid
+  gEfiPciIoProtocolGuid
+  gEfiPciRootBridgeIoProtocolGuid
