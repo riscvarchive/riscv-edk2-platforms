@@ -56,7 +56,7 @@ UpdateSrat (
   UINT8               Skt = 0;
   UINTN               Index = 0;
   VOID                *HobList;
-  GBL_DATA            *Gbl_Data;
+  GBL_INTERFACE       *Gbl_Data;
   UINTN               Base;
   UINTN               Size;
   UINT8               NodeId;
@@ -69,7 +69,7 @@ UpdateSrat (
   if (HobList == NULL) {
     return EFI_UNSUPPORTED;
   }
-  Gbl_Data = (GBL_DATA*)GetNextGuidHob(&gHisiEfiMemoryMapGuid, HobList);
+  Gbl_Data = (GBL_INTERFACE*)GetNextGuidHob(&gHisiEfiMemoryMapGuid, HobList);
   if (Gbl_Data == NULL) {
     DEBUG((DEBUG_ERROR, "Get next Guid HOb fail.\n"));
     return EFI_NOT_FOUND;

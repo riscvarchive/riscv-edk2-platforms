@@ -50,48 +50,6 @@ typedef enum {
     DDR_FREQ_MAX
 } DDR_FREQUENCY_INDEX;
 
-typedef struct _DDR_FREQ_TCK
-{
-    UINT32      ddrFreq;
-    UINT32      ddrCk;
-}DDR_FREQ_TCK;
-
-typedef struct _GBL_CFG{
-
-
-}GBL_CFG;
-
-typedef struct _GBL_VAR{
-
-
-}GBL_VAR;
-
-typedef struct _GBL_NVDATA{
-
-
-}GBL_NVDATA;
-
-typedef struct _GOBAL {
-    const GBL_CFG Config;  // constant input data
-    GBL_VAR       Variable;    // variable, volatile data
-    GBL_NVDATA    NvData;  // variable, non-volatile data for S3, warm boot path
-    UINT32        PreBootFailed;
-}GOBAL, *PGOBAL;
-
-struct DDR_RANK {
-    BOOLEAN     Status;
-    UINT16      RttNom;
-    UINT16      RttPark;
-    UINT16      RttWr;
-    UINT16      MR0;
-    UINT16      MR1;
-    UINT16      MR2;
-    UINT16      MR3;
-    UINT16      MR4;
-    UINT16      MR5;
-    UINT16      MR6[9];
-};
-
 struct baseMargin {
   INT16 n;
   INT16 p;
@@ -101,171 +59,7 @@ struct rankMargin {
   struct baseMargin rank[MAX_CHANNEL][MAX_RANK_CH];
 };
 
-typedef struct _DDR_DIMM{
-    BOOLEAN     Status;
-    UINT8       mapout;
-    UINT8       DramType;           //Byte 2
-    UINT8       ModuleType;         //Byte 3
-    UINT8       ExtendModuleType;
-    UINT8       SDRAMCapacity;      //Byte 4
-    UINT8       BankNum;
-    UINT8       BGNum;              //Byte 4 For DDR4
-    UINT8       RowBits;            //Byte 5
-    UINT8       ColBits;            //Byte 5
-    UINT8       SpdVdd;             //Byte 6
-    UINT8       DramWidth;          //Byte 7
-    UINT8       RankNum;            //Byte 7
-    UINT8       PrimaryBusWidth;    //Byte 8
-    UINT8       ExtensionBusWidth;  //Byte 8
-    UINT32      Mtb;
-    UINT32      Ftb;
-    UINT32      minTck;
-    UINT8       MtbDividend;
-    UINT8       MtbDivsor;
-    UINT8       nCL;
-    UINT32      nRCD;
-    UINT32      nRP;
-    UINT8       SPDftb;
-    UINT8       SpdMinTCK;
-    UINT8       SpdMinTCKFtb;
-    UINT8       SpdMaxTCK;
-    UINT8       SpdMinTCL;
-    UINT8       SpdMinTCLFtb;
-    UINT8       SpdMinTWR;
-    UINT8       SpdMinTRCD;
-    UINT8       SpdMinTRCDFtb;
-    UINT8       SpdMinTRRD;
-    UINT8       SpdMinTRRDL;
-    UINT16      SpdMinTRAS;
-    UINT16      SpdMinTRC;
-    UINT16      SpdMinTRCFtb;
-    UINT16      SpdMinTRFC;
-    UINT8       SpdMinTWTR;
-    UINT8       SpdMinTRTP;
-    UINT8       SpdMinTAA;
-    UINT8       SpdMinTAAFtb;
-    UINT8       SpdMinTFAW;
-    UINT8       SpdMinTRP;
-    UINT8       SpdMinTRPFtb;
-    UINT8       SpdMinTCCDL;
-    UINT8       SpdMinTCCDLFtb;
-    UINT8       SpdAddrMap;
-    UINT8       SpdModuleAttr;
-
-    UINT8       SpdModPart[SPD_MODULE_PART];         // Module Part Number
-    UINT8       SpdModPartDDR4[SPD_MODULE_PART_DDR4];     // Module Part Number DDR4
-    UINT16      SpdMMfgId;              // Module Mfg Id from SPD
-    UINT16      SpdRMId;              // Register Manufacturer Id
-    UINT16      SpdMMDate;              // Module Manufacturing Date
-    UINT32      SpdSerialNum;
-    UINT16      DimmSize;
-    UINT16      DimmSpeed;
-    UINT32      RankSize;
-    UINT8       SpdMirror; //Denote the dram address mapping is standard mode or mirrored mode
-    struct DDR_RANK  Rank[MAX_RANK_DIMM];
-}DDR_DIMM;
-
-typedef struct {
-    UINT32      ddrcTiming0;
-    UINT32      ddrcTiming1;
-    UINT32      ddrcTiming2;
-    UINT32      ddrcTiming3;
-    UINT32      ddrcTiming4;
-    UINT32      ddrcTiming5;
-    UINT32      ddrcTiming6;
-    UINT32      ddrcTiming7;
-    UINT32      ddrcTiming8;
-}DDRC_TIMING;
-
-typedef struct _MARGIN_RESULT{
-    UINT32 OptimalDramVref[12];
-    UINT32 optimalPhyVref[18];
-}MARGIN_RESULT;
-
-typedef struct _DDR_Channel{
-    BOOLEAN     Status;
-    UINT8       CurrentDimmNum;
-    UINT8       CurrentRankNum;
-    UINT16      RankPresent;
-    UINT8       DramType;
-    UINT8       DramWidth;
-    UINT8       ModuleType;
-    UINT32      MemSize;
-    UINT32      tck;
-    UINT32      ratio;
-    UINT32      CLSupport;
-    UINT32      minTck;
-    UINT32      taref;
-    UINT32      nAA;
-    UINT32      nAOND;
-    UINT32      nCKE;
-    UINT32      nCL;
-    UINT32      nCCDL;
-    UINT32      nCKSRX;
-    UINT32      nCKSRE;
-    UINT32      nCCDNSW;
-    UINT32      nCCDNSR;
-    UINT32      nFAW;
-    UINT32      nMRD;
-    UINT32      nMOD;
-    UINT32      nRCD;
-    UINT32      nRRD;
-    UINT32      nRRDL;
-    UINT32      nRAS;
-    UINT32      nRC;
-    UINT32      nRFC;
-    UINT32      nRFCAB;
-    UINT32      nRTP;
-    UINT32      nRTW;
-    UINT32      nRP;
-    UINT32      nSRE;
-    UINT32      nWL;
-    UINT32      nWR;
-    UINT32      nWTR;
-    UINT32      nWTRL;
-    UINT32      nXARD;
-    UINT32      nZQPRD;
-    UINT32      nZQINIT;
-    UINT32      nZQCS;
-    UINT8       cwl;  //tWL?
-    UINT8       pl;     //parity latency
-    UINT8       wr_pre_2t_en;
-    UINT8       rd_pre_2t_en;
-    UINT8       cmd_2t_en;
-    UINT8       parity_en;
-    UINT8       wr_dbi_en;
-    UINT8       wr_dm_en;
-    UINT8       ddr4_crc_en;
-    UINT16      emrs0;
-    UINT16      emrs1;
-    UINT16      emrs1Wr;
-    UINT16      emrs2;
-    UINT16      emrs3;
-    UINT16      emrs4;
-    UINT16      emrs5;
-    UINT16      emrs5Wr;
-    UINT16      emrs6;
-    UINT16      emrs7;
-    UINT8       phy_rddata_set;
-    UINT8       phyif_tim_rdcs;
-    UINT8       phyif_tim_rden;
-    UINT8       phyif_tim_wden;
-    UINT8       phyif_tim_wdda;
-    UINT8       phyif_tim_wdcs;
-    UINT8       per_cs_training_en;
-    UINT32      phyRdDataEnIeDly;
-    UINT32      phyPadCalConfig;
-    UINT32      phyDqsFallRiseDelay;
-    UINT32      ddrcCfgDfiLat0;
-    UINT32      ddrcCfgDfiLat1;
-    UINT32      parityLatency;
-    UINT32      dimm_parity_en;
-    DDRC_TIMING ddrcTiming;
-    DDR_DIMM    Dimm[MAX_DIMM];
-    MARGIN_RESULT sMargin;
-}DDR_CHANNEL;
-
-typedef struct _NVRAM_RANK{
+typedef struct _NVRAM_RANK_DATA {
     UINT16      MR0;
     UINT16      MR1;
     UINT16      MR2;
@@ -273,15 +67,15 @@ typedef struct _NVRAM_RANK{
     UINT16      MR4;
     UINT16      MR5;
     UINT16      MR6[9];
-}NVRAM_RANK;
+} NVRAM_RANK_DATA;
 
-typedef struct _NVRAM_DIMM{
-    NVRAM_RANK      Rank[MAX_RANK_DIMM];
-}NVRAM_DIMM;
+typedef struct _NVRAM_DIMM_DATA {
+    NVRAM_RANK_DATA      Rank[MAX_RANK_DIMM];
+} NVRAM_DIMM_DATA;
 
 
-typedef struct _NVRAM_CHANNEL{
-    NVRAM_DIMM      Dimm[MAX_DIMM];
+typedef struct _NVRAM_CHANNEL_DATA {
+    NVRAM_DIMM_DATA      Dimm[MAX_DIMM];
     UINT32          DDRC_CFG_ECC;
     UINT32          DDRC_CFG_WORKMODE;
     UINT32          DDRC_CFG_WORKMODE1;
@@ -325,94 +119,70 @@ typedef struct _NVRAM_CHANNEL{
     UINT32          DDRC_CFG_DDRPHY;
     UINT32          Config[24];
     BOOLEAN         Status;
-}NVRAM_CHANNEL;
+} NVRAM_CHANNEL_DATA;
 
-typedef struct _NVRAM{
-    UINT32          NvramCrc;
-    NVRAM_CHANNEL   Channel[MAX_SOCKET][MAX_CHANNEL];
-    UINT32          DdrFreqIdx;
+typedef struct _NVRAM_DATA {
+    UINT32              NvramCrc;
+    NVRAM_CHANNEL_DATA  Channel[MAX_SOCKET][MAX_CHANNEL];
+    UINT32              DdrFreqIdx;
 
-}NVRAM;
+} NVRAM_DATA;
 
-typedef struct _MEMORY{
-    UINT8           Config0;
-    UINT8           marginTest;
-    UINT8           Config1[5];
-    UINT8           ErrorBypass; //register of spd mirror mode
-    UINT32          Config2;
-}MEMORY;
+struct DDR_RANK_DATA {
+    BOOLEAN     Enabled;
+};
 
-typedef struct _NUMAINFO{
+typedef struct _DDR_DIMM_DATA {
+    BOOLEAN         Enabled;
+    UINT8           DramType;           //Byte 2
+    UINT8           ModuleType;         //Byte 3
+    UINT8           BankNum;            //Byte 4
+    UINT8           RowBits;            //Byte 5
+    UINT8           ColBits;            //Byte 5
+    UINT8           SpdVdd;             //Byte 6
+    UINT8           RankNum;            //Byte 7
+    UINT8           PrimaryBusWidth;    //Byte 8
+    UINT8           ExtensionBusWidth;  //Byte 8
+    UINT8           SpdModPart[SPD_MODULE_PART];                // Module Part Number
+    UINT8           SpdModPartDDR4[SPD_MODULE_PART_DDR4];       // Module Part Number DDR4
+    UINT16          SpdMMfgId;              // Module Mfg Id from SPD
+    UINT32          SpdSerialNum;
+    UINT32          RankSize;
+    UINT16          DimmSize;
+    UINT16          DimmSpeed;
+    UINT16          SpdMMDate;
+    struct DDR_RANK_DATA    Rank[MAX_RANK_DIMM];
+} DDR_DIMM_DATA;
+
+typedef struct _DDR_CHANNEL_DATA {
+    BOOLEAN         Enabled;
+    DDR_DIMM_DATA   Dimm[MAX_DIMM];
+    UINT8           CurrentDimmNum;
+} DDR_CHANNEL_DATA;
+
+typedef struct _MEMORY_DATA {
+    UINT8           RascBypass;
+} MEMORY_DATA;
+
+typedef struct _NUMAINFO_DATA {
     UINT8           NodeId;
     UINT64          Base;
     UINT64          Length;
     UINT32          ScclInterleaveEn;
-}NUMAINFO;
+} NUMAINFO_DATA;
 
 
-typedef struct _GBL_DATA
-{
-    DDR_CHANNEL Channel[MAX_SOCKET][MAX_CHANNEL];
-    UINT8       DramType;
-    UINT8       CurrentDimmNum;
-    UINT8       CurrentRankNum;
-    UINT8       MaxSPCNum;
-    UINT32      Freq;
-    UINT32      SpdTckMtb;
-    UINT32      SpdTckFtb;
-    UINT32      SpdTck;
-    UINT32      Tck;
-    UINT32      DdrFreqIdx;
-    UINT32      DevParaFreqIdx; //Maximum frequency of DDR device
-    UINT32      MemSize;
-    UINT32      EccEn;
-
-    BOOLEAN     SetupExist;
-    UINT8       warmReset;
-    UINT8       needColdReset;
-
-    UINT8       cl;
-    UINT8       cwl;
-    UINT8       pl;
-    UINT8       wr_pre_2t_en;
-    UINT8       rd_pre_2t_en;
-    UINT8       cmd_2t_en;
-    UINT8       ddr4_parity_en;
-    UINT8       wr_dbi_en;
-    UINT8       wr_dm_en;
-    UINT8       ddr4_crc_en;
-    UINT16      emrs0;
-    UINT16      emrs1;
-    UINT16      emrs2;
-    UINT16      emrs3;
-    UINT16      emrs4;
-    UINT16      emrs5;
-    UINT16      emrs6;
-    UINT16      emrs7;
-    UINT8       phy_rddata_set;
-    UINT8       phyif_tim_rdcs;
-    UINT8       phyif_tim_rden;
-    UINT8       phyif_tim_wden;
-    UINT8       phyif_tim_wdda;
-    UINT8       phyif_tim_wdcs;
-    UINT8       dimm_trtr;
-    UINT8       dimm_twtw;
-    UINT8       rnk_trtr;
-    UINT8       rnk_twtw;
-    UINT8       rnk_trtw;
-    UINT8       rnk_twtr;
-    UINT8       per_cs_training_en;
-    UINT8       scale;
-    UINT8       ddrFreq;
-    UINT8       debugNeed;
-    UINT8       ddr3OdtEnable;
-    double      fprd;
-    BOOLEAN     chipIsEc;
-    NVRAM       nvram;
-    MEMORY      mem;
-    NUMAINFO    NumaInfo[MAX_SOCKET][MAX_NUM_PER_TYPE];
-
-}GBL_DATA, *pGBL_DATA;
+typedef struct _GBL_DATA_INTERFACE {
+    DDR_CHANNEL_DATA        Channel[MAX_SOCKET][MAX_CHANNEL];
+    UINT32                  DdrFreqIdx;
+    UINT32                  Freq;
+    UINT32                  EccEn;
+    UINT32                  MemSize;
+    BOOLEAN                 SetupExist;
+    NVRAM_DATA              NvRamData;
+    MEMORY_DATA             MemData;
+    NUMAINFO_DATA           NumaInfo[MAX_SOCKET][MAX_NUM_PER_TYPE];
+} GBL_INTERFACE;
 
 typedef union {
     struct {
