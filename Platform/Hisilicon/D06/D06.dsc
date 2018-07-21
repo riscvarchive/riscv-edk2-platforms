@@ -40,6 +40,8 @@
 
 
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
+  IpmiCmdLib|Silicon/Hisilicon/Library/IpmiCmdLib/IpmiCmdLib.inf
+
   NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
   DpcLib|MdeModulePkg/Library/DxeDpcLib/DxeDpcLib.inf
   HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
@@ -63,9 +65,13 @@
 
   CpldIoLib|Silicon/Hisilicon/Library/CpldIoLib/CpldIoLib.inf
 
+  SerdesLib|Silicon/Hisilicon/Hi1620/Library/Hi1620Serdes/Hi1620SerdesLib.inf
+
   TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
   RealTimeClockLib|Silicon/Hisilicon/Library/M41T83RealTimeClockLib/M41T83RealTimeClockLib.inf
   OemMiscLib|Platform/Hisilicon/D06/Library/OemMiscLibD06/OemMiscLibD06.inf
+  OemAddressMapLib|Platform/Hisilicon/D06/Library/OemAddressMapD06/OemAddressMapD06.inf
+  PlatformSysCtrlLib|Silicon/Hisilicon/Hi1620/Library/PlatformSysCtrlLibHi1620/PlatformSysCtrlLibHi1620.inf
 
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
@@ -79,6 +85,7 @@
   # USB Requirements
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
 
+  LpcLib|Silicon/Hisilicon/Hi1620/Library/LpcLibHi1620/LpcLib.inf
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf

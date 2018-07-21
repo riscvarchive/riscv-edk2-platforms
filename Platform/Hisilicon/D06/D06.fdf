@@ -56,6 +56,7 @@ NumBlocks     = 0x40
 
 0x00000000|0x00100000
 gArmTokenSpaceGuid.PcdSecureFvBaseAddress|gArmTokenSpaceGuid.PcdSecureFvSize
+FILE = Platform/Hisilicon/D06/Sec/FVMAIN_SEC.Fv
 
 0x00100000|0x00280000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
@@ -163,6 +164,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/Dxe/DxeMain.inf
   INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
 
+  INF Platform/Hisilicon/D06/Drivers/IoInitDxe/IoInitDxe.inf
   #
   # PI DXE Drivers producing Architectural Protocols (EFI Services)
   #
@@ -170,6 +172,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/SFC/SfcDxeDriver.inf
 
 
   INF Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
@@ -224,7 +227,12 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Usb/UsbMouseDxe/UsbMouseDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
 
+  INF Platform/Hisilicon/D06/Drivers/Ipmi/IpmiInterfaceDxe/IpmiInterfaceDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/GetInfoFromBmc/GetInfoFromBmc.inf
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/TransferSmbiosInfo/TransSmbiosInfo.inf
+  INF Platform/Hisilicon/D06/Drivers/IpmiMiscOpDxe/IpmiMiscOpDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/IpmiWatchdogDxe/IpmiWatchdogDxe.inf
 
   #
   #ACPI
@@ -237,6 +245,7 @@ READ_LOCK_STATUS   = TRUE
   #
   #Network
   #
+  INF Platform/Hisilicon/D06/Drivers/Net/SnpHi1620NewDxe/SnpDxe.inf
 
   INF MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
   INF MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
@@ -273,8 +282,14 @@ READ_LOCK_STATUS   = TRUE
   INF ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
   INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/PcieRasInitDxe/PcieRasInitDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/RasInitDxe/RasInitDxe.inf
 
+  # VGA Driver
+  #
+  INF Platform/Hisilicon/D06/Drivers/Sm750Dxe/UefiSmi.inf
   INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/Sas/SasDxeDriver.inf
   INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   INF MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
   INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
@@ -324,6 +339,8 @@ READ_LOCK_STATUS   = TRUE
 
   INF Silicon/Hisilicon/Drivers/VersionInfoPeim/VersionInfoPeim.inf
 
+  INF Platform/Hisilicon/D06/Drivers/Ipmi/IpmiInterfacePei/IpmiInterfacePei.inf
+  INF Platform/Hisilicon/D06/MemoryInitPei/MemoryInitPeim.inf
   INF ArmPkg/Drivers/CpuPei/CpuPei.inf
   INF MdeModulePkg/Universal/PCD/Pei/Pcd.inf
   INF IntelFrameworkModulePkg/Universal/StatusCode/Pei/StatusCodePei.inf
