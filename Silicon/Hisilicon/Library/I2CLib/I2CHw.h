@@ -265,5 +265,9 @@
      UINT32      Val32;
  } I2C0_ENABLE_STATUS_U;
 
+typedef enum {
+  I2CTx,
+  I2CRx
+} I2CTransfer;
 
 #endif
