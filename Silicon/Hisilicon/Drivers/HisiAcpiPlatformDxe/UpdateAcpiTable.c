@@ -16,11 +16,97 @@
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
 #include <Library/HwMemInitLib.h>
+#include <Library/OemConfigData.h>
 #include <Library/OemMiscLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/UefiLib.h>
 
 #define CORECOUNT(X) ((X) * CORE_NUM_PER_SOCKET)
+
+#define FIELD_IORT_NODE_OFFSET     40
+
+typedef enum {
+  NodeTypeIts = 0,
+  NodeTypeNameComponent,
+  NodeTypePciRC,
+  NodeTypeSmmuV1,
+  NodeTypeSmmuV3,
+  NodeTypePMCG
+} IORT_NODE_TYPE;
+
+#pragma pack(1)
+typedef struct {
+  UINT8   Type;
+  UINT16  Length;
+  UINT8   Revision;
+  UINT32  Reserved;
+  UINT32  IdMapNumber;
+  UINT32  IdArrayOffset;
+} IORT_NODE_HEAD;
+#pragma pack()
+
+BOOLEAN
+IsIortWithSmmu (
+  IN EFI_ACPI_DESCRIPTION_HEADER      *TableHeader
+  )
+{
+  UINT32           *NodeOffset;
+  UINT32           NextOffset;
+  IORT_NODE_HEAD   *Node;
+
+  NodeOffset = (UINT32 *)((UINT8 *)TableHeader + FIELD_IORT_NODE_OFFSET);
+  NextOffset = *NodeOffset;
+
+  while (NextOffset < TableHeader->Length) {
+    Node = (IORT_NODE_HEAD *)((UINT8 *)TableHeader + NextOffset);
+    NextOffset += Node->Length;
+
+    if ((Node->Type == NodeTypeSmmuV1) || (Node->Type == NodeTypeSmmuV3)) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+EFI_STATUS
+SelectIort (
+  IN EFI_ACPI_DESCRIPTION_HEADER      *TableHeader
+  )
+{
+  EFI_STATUS          Status;
+  UINTN               Size;
+  OEM_CONFIG_DATA     Configuration;
+
+  Configuration.EnableSmmu = 0;
+  Size = sizeof (OEM_CONFIG_DATA);
+  Status = gRT->GetVariable (
+                  OEM_CONFIG_NAME,
+                  &gOemConfigGuid,
+                  NULL,
+                  &Size,
+                  &Configuration
+                  );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Get OemConfig variable (%r).\n", Status));
+  }
+
+  Status =  EFI_SUCCESS;
+  if (IsIortWithSmmu (TableHeader)) {
+    if (!Configuration.EnableSmmu) {
+      Status = EFI_ABORTED;
+    }
+  } else {
+    if (Configuration.EnableSmmu) {
+      Status = EFI_ABORTED;
+    }
+  }
+  DEBUG ((DEBUG_INFO, "SmmuEnable=%x, return %r for Iort table.\n",
+          Configuration.EnableSmmu, Status));
+
+  return Status;
+}
 
 STATIC
 VOID
@@ -129,6 +215,9 @@ UpdateAcpiTable (
 
   case EFI_ACPI_6_0_SYSTEM_LOCALITY_INFORMATION_TABLE_SIGNATURE:
     Status = UpdateSlit (TableHeader);
+    break;
+  case EFI_ACPI_6_2_IO_REMAPPING_TABLE_SIGNATURE:
+    Status = SelectIort (TableHeader);
     break;
   }
   return Status;

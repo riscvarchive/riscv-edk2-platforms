@@ -51,6 +51,7 @@
 
 [Guids]
   gHisiEfiMemoryMapGuid
+  gOemConfigGuid
 
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiTableStorageFile    ## CONSUMES
