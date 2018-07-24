@@ -192,7 +192,7 @@
   !ifdef $(FIRMWARE_VER)
     gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
   !else
-    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 18.02 for Hisilicon D05"
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 18.08 for Hisilicon D05"
   !endif
 
   gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"

@@ -165,12 +165,12 @@
   !ifdef $(FIRMWARE_VER)
     gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
   !else
-    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Hisilicon D06 UEFI RC0 - B308 (V0.38)"
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 18.08 for Hisilicon D06"
   !endif
 
   gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"
 
-  gHisiTokenSpaceGuid.PcdBiosVersionForBmc|L"0.38"
+  gHisiTokenSpaceGuid.PcdBiosVersionForBmc|L"0.42"
 
   gHisiTokenSpaceGuid.PcdSystemProductName|L"D06"
   gHisiTokenSpaceGuid.PcdSystemVersion|L"VER.A"
