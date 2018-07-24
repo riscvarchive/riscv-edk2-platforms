@@ -45,5 +45,5 @@ MinPlatformPkg
 M: Jiewen Yao <jiewen.yao@intel.com>
 
 PurleyOpenBoardPkg
-M: Xiaohu Zhou <xiaohu.zhou@intel.com>
+M: Xiaohu Zhou <bowen.zhou@intel.com>
 
