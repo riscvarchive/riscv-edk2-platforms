@@ -103,6 +103,10 @@
 [PcdsFixedAtBuild.common]
   gArmTokenSpaceGuid.PcdVFPEnabled|1
 
+  # DRAM Block2 Base and Size
+  gArmSgiTokenSpaceGuid.PcdDramBlock2Base|0x8080000000
+  gArmSgiTokenSpaceGuid.PcdDramBlock2Size|0x180000000
+
   # NV Storage PCDs. Use base of 0x08000000 for NOR0, 0xC0000000 for NOR 1
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|0x0C000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize|0x01400000

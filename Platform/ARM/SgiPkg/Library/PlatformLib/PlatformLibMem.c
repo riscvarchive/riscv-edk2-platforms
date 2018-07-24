@@ -22,7 +22,7 @@
 #include <SgiPlatform.h>
 
 // Total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  10
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  11
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -41,6 +41,22 @@ ArmPlatformGetVirtualMemoryMap (
 {
   UINTN                         Index;
   ARM_MEMORY_REGION_DESCRIPTOR  *VirtualMemoryTable;
+  EFI_RESOURCE_ATTRIBUTE_TYPE   ResourceAttributes;
+
+  ResourceAttributes =
+    EFI_RESOURCE_ATTRIBUTE_PRESENT |
+    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
+    EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
+    EFI_RESOURCE_ATTRIBUTE_TESTED;
+
+  BuildResourceDescriptorHob (
+    EFI_RESOURCE_SYSTEM_MEMORY,
+    ResourceAttributes,
+    FixedPcdGet64 (PcdDramBlock2Base),
+    FixedPcdGet64 (PcdDramBlock2Size));
 
   ASSERT (VirtualMemoryMap != NULL);
   Index = 0;
@@ -98,6 +114,12 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdSystemMemoryBase);
   VirtualMemoryTable[Index].Length          = PcdGet64 (PcdSystemMemorySize);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+
+  // DDR - Second Block
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdDramBlock2Base);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdDramBlock2Base);
+  VirtualMemoryTable[Index].Length          = PcdGet64 (PcdDramBlock2Size);
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
 
   // PCI Configuration Space
