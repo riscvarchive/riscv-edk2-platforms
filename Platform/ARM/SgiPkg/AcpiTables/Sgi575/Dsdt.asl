@@ -96,4 +96,16 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "SGI575", EFI_ACPI_ARM_OEM
       })
     }
   } // Scope(_SB)
+
+  // VIRTIO DISK
+  Device (VR00) {
+    Name (_HID, "LNRO0005")
+    Name (_UID, 0)
+    Name (_CCA, 1)    // mark the device coherent
+
+    Name (_CRS, ResourceTemplate() {
+      Memory32Fixed (ReadWrite, 0x1c130000, 0x10000)
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 202 }
+    })
+  }
 }
