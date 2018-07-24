@@ -16,8 +16,10 @@
 # TRUE is ENABLE. FALSE is DISABLE.
 #
 
+[PcdsFixedAtBuild]
   gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
-  
+
+[PcdsFeatureFlag]
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
