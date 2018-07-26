@@ -45,6 +45,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MV_SIP_COMPHY_POWER_OFF     0x82000002
 #define MV_SIP_COMPHY_PLL_LOCK      0x82000003
 
+#define COMPHY_FW_MODE_FORMAT(mode) (mode << 12)
 #define COMPHY_FW_FORMAT(mode, idx, speeds) \
                                     ((mode << 12) | (idx << 8) | (speeds << 2))
 #define COMPHY_FW_PCIE_FORMAT(pcie_width, mode, speeds) \
