@@ -42,9 +42,9 @@ CHAR16 * TypeStringTable [] = {L"unconnected", L"PCIE0", L"PCIE1", L"PCIE2",
                            L"USB3_DEVICE", L"XAUI0", L"XAUI1", L"XAUI2",
                            L"XAUI3", L"RXAUI0", L"RXAUI1", L"SFI"};
 
-CHAR16 * SpeedStringTable [] = {L"-", L"1.25 Gbps", L"1.5 Gbps", L"2.5 Gbps",
-                                L"3.0 Gbps", L"3.125 Gbps", L"5 Gbps", L"5.156 Gbps",
-                                L"6 Gbps", L"6.25 Gbps", L"10.31 Gbps"};
+CHAR16 * SpeedStringTable [] = {L"1.25 Gbps", L"2.5 Gbps", L"3.125 Gbps",
+                                L"5 Gbps", L"5.156 Gbps", L"6 Gbps",
+                                L"10.31 Gbps"};
 
 CHIP_COMPHY_CONFIG ChipCfgTbl[] = {
   {
@@ -129,7 +129,11 @@ GetSpeedString (
   )
 {
 
-  if (Speed < 0 || Speed > 10) {
+  if (Speed == COMPHY_SPEED_DEFAULT) {
+    return L"default";
+  }
+
+  if (Speed < 0 || Speed > COMPHY_SPEED_MAX) {
     return L"invalid";
   }
 
@@ -266,7 +270,6 @@ MvComPhyInit (
       PtrChipCfg->MapData[Lane].Invert = LaneData[Index].InvFlag[Lane];
 
       if ((PtrChipCfg->MapData[Lane].Speed == COMPHY_SPEED_INVALID) ||
-          (PtrChipCfg->MapData[Lane].Speed == COMPHY_SPEED_ERROR) ||
           (PtrChipCfg->MapData[Lane].Type == COMPHY_TYPE_INVALID)) {
         DEBUG((DEBUG_ERROR, "ComPhy: No valid phy speed or type for lane %d, "
           "setting lane as unconnected\n", Lane + 1));

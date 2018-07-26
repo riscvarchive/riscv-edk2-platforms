@@ -47,6 +47,7 @@
 
 [LibraryClasses]
   ArmLib
+  ArmSmcLib
   DebugLib
   MemoryAllocationLib
   PcdLib

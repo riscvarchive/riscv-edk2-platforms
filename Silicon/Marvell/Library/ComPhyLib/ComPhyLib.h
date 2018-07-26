@@ -48,6 +48,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <Protocol/BoardDesc.h>
 
+#include "ComPhySipSvc.h"
+
 #define MAX_LANE_OPTIONS          10
 
 /***** Parsing PCD *****/
@@ -60,21 +62,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   lane_struct[id].SpeedValue = (UINT8 *)GET_LANE_SPEED(id);  \
   lane_struct[id].InvFlag = (UINT8 *)GET_LANE_SPEED(id);     \
 }
-
-/***** ComPhy *****/
-#define COMPHY_SPEED_ERROR                           0
-#define COMPHY_SPEED_1_25G                           1
-#define COMPHY_SPEED_1_5G                            2
-#define COMPHY_SPEED_2_5G                            3
-#define COMPHY_SPEED_3G                              4
-#define COMPHY_SPEED_3_125G                          5
-#define COMPHY_SPEED_5G                              6
-#define COMPHY_SPEED_5_15625G                        7
-#define COMPHY_SPEED_6G                              8
-#define COMPHY_SPEED_6_25G                           9
-#define COMPHY_SPEED_10_3125G                        10
-#define COMPHY_SPEED_MAX                             11
-#define COMPHY_SPEED_INVALID                         0xff
 
 #define COMPHY_TYPE_UNCONNECTED                      0
 #define COMPHY_TYPE_PCIE0                            1

@@ -601,17 +601,18 @@
 #
 ################################################################################
 [Defines]
-  # ComPhy speed
-  DEFINE CP_1_25G           = 0x1
-  DEFINE CP_1_5G            = 0x2
-  DEFINE CP_2_5G            = 0x3
-  DEFINE CP_3G              = 0x4
-  DEFINE CP_3_125G          = 0x5
-  DEFINE CP_5G              = 0x6
-  DEFINE CP_5_15625G        = 0x7
-  DEFINE CP_6G              = 0x8
-  DEFINE CP_6_25G           = 0x9
-  DEFINE CP_10_3125G        = 0xA
+  #
+  # ComPhy speed - values defined externally, used for the
+  # SerDes configuration via SiP services.
+  #
+  DEFINE CP_1_25G           = 0x0
+  DEFINE CP_2_5G            = 0x1
+  DEFINE CP_3_125G          = 0x2
+  DEFINE CP_5G              = 0x3
+  DEFINE CP_5_15625G        = 0x4
+  DEFINE CP_6G              = 0x5
+  DEFINE CP_10_3125G        = 0x6
+  DEFINE CP_DEFAULT         = 0x3f
 
   # ComPhy type
   DEFINE CP_UNCONNECTED     = 0x0
