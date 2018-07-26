@@ -46,58 +46,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HPIPE_ADDR(base, Lane)      (SD_ADDR(base, Lane) + HPIPE_ADDR_OFFSET)
 #define COMPHY_ADDR(base, Lane)     (base + COMPHY_ADDR_LANE_WIDTH * Lane)
 
-/*
- * For CP-110 we have 2 Selector registers "PHY Selectors"
- * and " PIPE Selectors".
- * PIPE selector include USB and PCIe options.
- * PHY selector include the Ethernet and SATA options, every Ethernet option
- * has different options, for example: serdes Lane2 have option Eth_port_0
- * that include (SGMII0, RXAUI0, SFI)
- */
-COMPHY_MUX_DATA Cp110ComPhyMuxData[] = {
-  /* Lane 0 */
-  {4, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_SGMII1, 0x1},
-       {COMPHY_TYPE_SATA1, 0x4}, {COMPHY_TYPE_SATA3, 0x4}}},
-  /* Lane 1 */
-  {4, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_SGMII2, 0x1},
-       {COMPHY_TYPE_SATA0, 0x4}, {COMPHY_TYPE_SATA2, 0x4}}},
-  /* Lane 2 */
-  {6, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_SGMII0, 0x1},
-       {COMPHY_TYPE_RXAUI0, 0x1}, {COMPHY_TYPE_SFI, 0x1},
-       {COMPHY_TYPE_SATA0, 0x4}, {COMPHY_TYPE_SATA2, 0x4}}},
-  /* Lane 3 */
-  {8, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_RXAUI1, 0x1},
-       {COMPHY_TYPE_SGMII1, 0x2}, {COMPHY_TYPE_SATA1, 0x4},
-       {COMPHY_TYPE_SATA3, 0x4}}},
-  /* Lane 4 */
-  {7, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_SGMII0, 0x2},
-       {COMPHY_TYPE_RXAUI0, 0x2}, {COMPHY_TYPE_SFI, 0x2},
-       {COMPHY_TYPE_SGMII1, 0x1}}},
-  /* Lane 5 */
-  {6, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_SGMII2, 0x1},
-       {COMPHY_TYPE_RXAUI1, 0x2}, {COMPHY_TYPE_SATA1, 0x4},
-       {COMPHY_TYPE_SATA3, 0x4}}},
-};
-
-COMPHY_MUX_DATA Cp110ComPhyPipeMuxData[] = {
-  /* Lane 0 */
-  {2, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_PCIE0, 0x4}}},
-  /* Lane 1 */
-  {4, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_USB3_HOST0, 0x1},
-       {COMPHY_TYPE_USB3_DEVICE, 0x2}, {COMPHY_TYPE_PCIE0, 0x4}}},
-  /* Lane 2 */
-  {3, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_USB3_HOST0, 0x1},
-       {COMPHY_TYPE_PCIE0, 0x4}}},
-  /* Lane 3 */
-  {3, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_USB3_HOST1, 0x1},
-       {COMPHY_TYPE_PCIE0, 0x4}}},
-  /* Lane 4 */
-  {4, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_USB3_HOST1, 0x1},
-       {COMPHY_TYPE_USB3_DEVICE, 0x2}, {COMPHY_TYPE_PCIE1, 0x4}}},
-  /* Lane 5 */
-  {2, {{COMPHY_TYPE_UNCONNECTED, 0x0}, {COMPHY_TYPE_PCIE2, 0x4}}},
-};
-
 STATIC
 VOID
 ComPhySataMacPowerDown (
@@ -240,48 +188,6 @@ ComPhySataPowerUp (
   return Status;
 }
 
-STATIC
-VOID
-ComPhyMuxCp110 (
-  IN CHIP_COMPHY_CONFIG *PtrChipCfg,
-  IN COMPHY_MAP *SerdesMap
-  )
-{
-  EFI_PHYSICAL_ADDRESS ComPhyBaseAddr;
-  COMPHY_MAP ComPhyMapPipeData[MAX_LANE_OPTIONS];
-  COMPHY_MAP ComPhyMapPhyData[MAX_LANE_OPTIONS];
-  UINT32 Lane, ComPhyMaxCount;
-
-  ComPhyMaxCount = PtrChipCfg->LanesCount;
-  ComPhyBaseAddr = PtrChipCfg->ComPhyBaseAddr;
-
-  /*
-   * Copy the SerDes map configuration for PIPE map and PHY map.
-   * The ComPhyMuxInit modifies the Type of the Lane if the Type is not valid.
-   * Because we have 2 selectors, run the ComPhyMuxInit twice and after
-   * that, update the original SerdesMap.
-   */
-  for (Lane = 0; Lane < ComPhyMaxCount; Lane++) {
-    ComPhyMapPipeData[Lane].Type = SerdesMap[Lane].Type;
-    ComPhyMapPipeData[Lane].Speed = SerdesMap[Lane].Speed;
-    ComPhyMapPhyData[Lane].Type = SerdesMap[Lane].Type;
-    ComPhyMapPhyData[Lane].Speed = SerdesMap[Lane].Speed;
-  }
-  PtrChipCfg->MuxData = Cp110ComPhyMuxData;
-  ComPhyMuxInit(PtrChipCfg, ComPhyMapPhyData, ComPhyBaseAddr +
-    COMMON_SELECTOR_PHY_OFFSET);
-
-  PtrChipCfg->MuxData = Cp110ComPhyPipeMuxData;
-  ComPhyMuxInit(PtrChipCfg, ComPhyMapPipeData, ComPhyBaseAddr +
-    COMMON_SELECTOR_PIPE_OFFSET);
-
-  /* Fix the Type after check the PHY and PIPE configuration */
-  for (Lane = 0; Lane < ComPhyMaxCount; Lane++)
-    if ((ComPhyMapPipeData[Lane].Type == COMPHY_TYPE_UNCONNECTED) &&
-        (ComPhyMapPhyData[Lane].Type == COMPHY_TYPE_UNCONNECTED))
-      SerdesMap[Lane].Type = COMPHY_TYPE_UNCONNECTED;
-}
-
 VOID
 ComPhyCp110Init (
   IN CHIP_COMPHY_CONFIG *PtrChipCfg
@@ -301,9 +207,6 @@ ComPhyCp110Init (
   HpipeBaseAddr = PtrChipCfg->Hpipe3BaseAddr;
   SerdesMap = PtrChipCfg->MapData;
   ChipId = PtrChipCfg->ChipId;
-
-  /* Config Comphy mux configuration */
-  ComPhyMuxCp110(PtrChipCfg, SerdesMap);
 
   /* Check if the first 4 Lanes configured as By-4 */
   for (Lane = 0, PtrComPhyMap = SerdesMap; Lane < 4; Lane++, PtrComPhyMap++) {

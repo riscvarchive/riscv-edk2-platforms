@@ -624,13 +624,6 @@ struct _CHIP_COMPHY_CONFIG {
 };
 
 VOID
-ComPhyMuxInit (
-  IN CHIP_COMPHY_CONFIG *PtrChipCfg,
-  IN COMPHY_MAP *ComPhyMapData,
-  IN EFI_PHYSICAL_ADDRESS SelectorBase
-  );
-
-VOID
 ComPhyCp110Init (
   IN CHIP_COMPHY_CONFIG * First
   );

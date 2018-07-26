@@ -58,7 +58,6 @@
 [Sources.common]
   ComPhyLib.c
   ComPhyCp110.c
-  ComPhyMux.c
 
 [Protocols]
   gMarvellBoardDescProtocolGuid  ## CONSUMES
