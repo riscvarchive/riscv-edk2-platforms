@@ -82,34 +82,6 @@ RegSetSilent (
   MmioWrite32 (Addr, RegData);
 }
 
-VOID
-RegSet16 (
-  IN EFI_PHYSICAL_ADDRESS Addr,
-  IN UINT16 Data,
-  IN UINT16 Mask
-  )
-{
-  DEBUG((DEBUG_INFO, "Write to address = %#010lx, Data = %#06x (mask = %#06x)"
-    "- ", Addr, Data, Mask));
-  DEBUG((DEBUG_INFO, "old value = %#06x ==> ", MmioRead16 (Addr)));
-  RegSetSilent16 (Addr, Data, Mask);
-  DEBUG((DEBUG_INFO, "new value %#06x\n", MmioRead16 (Addr)));
-}
-
-VOID
-RegSetSilent16(
-  IN EFI_PHYSICAL_ADDRESS Addr,
-  IN UINT16 Data,
-  IN UINT16 Mask
-  )
-{
-  UINT16 RegData;
-  RegData = MmioRead16(Addr);
-  RegData &= ~Mask;
-  RegData |= Data;
-  MmioWrite16 (Addr, RegData);
-}
-
 CHAR16 *
 GetTypeString (
   UINT32 Type
