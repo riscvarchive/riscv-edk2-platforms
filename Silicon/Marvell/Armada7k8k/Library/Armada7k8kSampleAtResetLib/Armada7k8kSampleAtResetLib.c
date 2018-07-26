@@ -90,22 +90,3 @@ SampleAtResetGetDramFrequency (
 
   return PllFrequencies->DdrFrequency;
 }
-
-UINT32
-EFIAPI
-SampleAtResetGetPcieClockDirection (
-  IN UINT32 CpIndex,
-  IN UINT32 PcieIndex
-  )
-{
-  UINT32 ClockDirection;
-
-  ASSERT (CpIndex < MAX_CP_COUNT);
-  ASSERT (PcieIndex < MAX_PCIE_CLK_TYPE_COUNT);
-
-  ClockDirection = MmioAnd32 (CP110_SAR_BASE (CpIndex),
-                     PcieClockMask[CpIndex][PcieIndex] >>
-                     PcieClockOffset[CpIndex][PcieIndex]);
-
-  return ClockDirection;
-}

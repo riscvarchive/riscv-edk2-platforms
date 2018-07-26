@@ -47,6 +47,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define COMPHY_FW_FORMAT(mode, idx, speeds) \
                                     ((mode << 12) | (idx << 8) | (speeds << 2))
+#define COMPHY_FW_PCIE_FORMAT(pcie_width, mode, speeds) \
+                      ((pcie_width << 18) | COMPHY_FW_FORMAT (mode, 0, speeds))
 
 /* Comphy speed */
 #define COMPHY_SPEED_1_25G          0

@@ -47,11 +47,4 @@ SampleAtResetGetDramFrequency (
   VOID
   );
 
-UINT32
-EFIAPI
-SampleAtResetGetPcieClockDirection (
-  IN UINT32        CpIndex,
-  IN UINT32        PcieIndex
-  );
-
 #endif /* __SAMPLE_AT_RESET_LIB_H__ */
