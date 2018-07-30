@@ -26,7 +26,6 @@
   DEFINE      BOARD                           = KabylakeRvp3
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
 
-[PcdsFeatureFlag]
   #
   # Platform On/Off features are defined here
   #

@@ -13,6 +13,7 @@
 #
 ##
 
+[PcdsFixedAtBuild]
   #
   # Please select BootStage here.
   # Stage 1 - enable debug (system deadloop after debug init)
@@ -23,6 +24,7 @@
   #
   gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
   
+[PcdsFeatureFlag]
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
