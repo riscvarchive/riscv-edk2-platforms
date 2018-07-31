@@ -81,7 +81,7 @@
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
 
   LpcLib|Silicon/Hisilicon/Hi1610/Library/LpcLib/LpcLib.inf
-  PlatformPciLib|Platform/Hisilicon/D05/Library/PlatformPciLib/PlatformPciLib.inf
+  PlatformPciLib|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   SerialPortLib|Silicon/Hisilicon/Hi1610/Library/Uart/LpcSerialPortLib/LpcSerialPortLib.inf
   PciHostBridgeLib|Platform/Hisilicon/Library/PciHostBridgeLib/PciHostBridgeLib.inf
   PciSegmentLib|Silicon/Hisilicon/Hi1610/Library/Hi161xPciSegmentLib/Hi161xPciSegmentLib.inf
@@ -466,7 +466,7 @@
   }
   Silicon/Hisilicon/Drivers/PciPlatform/PciPlatform.inf {
     <LibraryClasses>
-      NULL|Platform/Hisilicon/D05/Library/PlatformPciLib/PlatformPciLib.inf
+      NULL|Platform/Hisilicon/D03/Library/PlatformPciLib/PlatformPciLib.inf
   }
   MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf {
     <LibraryClasses>
