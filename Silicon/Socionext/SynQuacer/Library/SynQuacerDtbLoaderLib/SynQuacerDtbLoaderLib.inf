@@ -24,6 +24,7 @@
   SynQuacerDtbLoaderLib.c
 
 [Packages]
+  ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   Silicon/Socionext/SynQuacer/SynQuacer.dec
@@ -34,6 +35,7 @@
   DxeServicesLib
   FdtLib
   MemoryAllocationLib
+  OpteeLib
 
 [Pcd]
   gSynQuacerTokenSpaceGuid.PcdPcieEnableMask

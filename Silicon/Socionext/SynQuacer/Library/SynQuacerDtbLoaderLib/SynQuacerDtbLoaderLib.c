@@ -19,6 +19,7 @@
 #include <Library/DebugLib.h>
 #include <Library/DxeServicesLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/OpteeLib.h>
 #include <Platform/VarStore.h>
 
 // add enough space for three instances of 'status = "disabled"'
@@ -41,6 +42,29 @@ DisableDtNode (
     return;
   }
   Rc = fdt_setprop_string (Dtb, Node, "status", "disabled");
+  if (Rc < 0) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to set status to 'disabled' on '%a': %a\n",
+      __FUNCTION__, NodePath, fdt_strerror (Rc)));
+  }
+}
+
+STATIC
+VOID
+EnableDtNode (
+  IN  VOID                        *Dtb,
+  IN  CONST CHAR8                 *NodePath
+  )
+{
+  INT32                           Node;
+  INT32                           Rc;
+
+  Node = fdt_path_offset (Dtb, NodePath);
+  if (Node < 0) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate DT path '%a': %a\n",
+      __FUNCTION__, NodePath, fdt_strerror (Node)));
+    return;
+  }
+  Rc = fdt_setprop_string (Dtb, Node, "status", "okay");
   if (Rc < 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to set status to 'disabled' on '%a': %a\n",
       __FUNCTION__, NodePath, fdt_strerror (Rc)));
@@ -105,6 +129,10 @@ DtPlatformLoadDtb (
   Settings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&SettingsVal;
   if (Settings->EnableEmmc == EMMC_DISABLED) {
     DisableDtNode (CopyDtb, "/sdhci@52300000");
+  }
+
+  if (IsOpteePresent()) {
+    EnableDtNode (CopyDtb, "/firmware/optee");
   }
 
   *Dtb = CopyDtb;

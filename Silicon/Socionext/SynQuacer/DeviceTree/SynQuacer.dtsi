@@ -574,6 +574,14 @@
         #address-cells = <1>;
         #size-cells = <0>;
     };
+
+    firmware {
+        optee {
+            compatible = "linaro,optee-tz";
+            method = "smc";
+            status = "disabled";
+        };
+    };
 };
 
 #include "SynQuacerCaches.dtsi"
