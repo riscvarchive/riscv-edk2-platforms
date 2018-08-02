@@ -473,6 +473,7 @@
 
         msi-map = <0x000 &its 0x0 0x7f00>;
         dma-coherent;
+        status = "disabled";
     };
 
     pcie1: pcie@70000000 {
@@ -492,6 +493,7 @@
 
         msi-map = <0x0 &its 0x10000 0x7f00>;
         dma-coherent;
+        status = "disabled";
     };
 
     gpio: gpio@51000000 {
@@ -537,6 +539,7 @@
         clocks = <&clk_alw_c_0 &clk_alw_b_0>;
         clock-names = "core", "iface";
         dma-coherent;
+        status = "disabled";
     };
 
     clk_alw_1_8: spi_ihclk {

@@ -22,32 +22,6 @@
 #include <Library/OpteeLib.h>
 #include <Platform/VarStore.h>
 
-// add enough space for three instances of 'status = "disabled"'
-#define DTB_PADDING               64
-
-STATIC
-VOID
-DisableDtNode (
-  IN  VOID                        *Dtb,
-  IN  CONST CHAR8                 *NodePath
-  )
-{
-  INT32                           Node;
-  INT32                           Rc;
-
-  Node = fdt_path_offset (Dtb, NodePath);
-  if (Node < 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to locate DT path '%a': %a\n",
-      __FUNCTION__, NodePath, fdt_strerror (Node)));
-    return;
-  }
-  Rc = fdt_setprop_string (Dtb, Node, "status", "disabled");
-  if (Rc < 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to set status to 'disabled' on '%a': %a\n",
-      __FUNCTION__, NodePath, fdt_strerror (Rc)));
-  }
-}
-
 STATIC
 VOID
 EnableDtNode (
@@ -105,7 +79,7 @@ DtPlatformLoadDtb (
     return EFI_NOT_FOUND;
   }
 
-  CopyDtbSize = OrigDtbSize + DTB_PADDING;
+  CopyDtbSize = OrigDtbSize;
   CopyDtb = AllocatePool (CopyDtbSize);
   if (CopyDtb == NULL) {
     return EFI_OUT_OF_RESOURCES;
@@ -118,17 +92,17 @@ DtPlatformLoadDtb (
     return EFI_NOT_FOUND;
   }
 
-  if (!(PcdGet8 (PcdPcieEnableMask) & BIT0)) {
-    DisableDtNode (CopyDtb, "/pcie@60000000");
+  if (PcdGet8 (PcdPcieEnableMask) & BIT0) {
+    EnableDtNode (CopyDtb, "/pcie@60000000");
   }
-  if (!(PcdGet8 (PcdPcieEnableMask) & BIT1)) {
-    DisableDtNode (CopyDtb, "/pcie@70000000");
+  if (PcdGet8 (PcdPcieEnableMask) & BIT1) {
+    EnableDtNode (CopyDtb, "/pcie@70000000");
   }
 
   SettingsVal = PcdGet64 (PcdPlatformSettings);
   Settings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&SettingsVal;
-  if (Settings->EnableEmmc == EMMC_DISABLED) {
-    DisableDtNode (CopyDtb, "/sdhci@52300000");
+  if (Settings->EnableEmmc == EMMC_ENABLED) {
+    EnableDtNode (CopyDtb, "/sdhci@52300000");
   }
 
   if (IsOpteePresent()) {
