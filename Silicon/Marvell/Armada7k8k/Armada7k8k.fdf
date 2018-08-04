@@ -212,6 +212,8 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   }
 !endif
 
+!include $(BOARD_DXE_FV_COMPONENTS)
+
 # PEI phase firmware volume
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 8

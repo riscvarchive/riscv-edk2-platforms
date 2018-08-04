@@ -44,6 +44,7 @@
   BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Silicon/Marvell/Armada7k8k/Armada7k8k.fdf
+  BOARD_DXE_FV_COMPONENTS        = Platform/Marvell/Armada70x0Db/Armada70x0Db.fdf.inc
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
 
