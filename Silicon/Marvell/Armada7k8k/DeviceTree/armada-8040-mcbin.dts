@@ -185,6 +185,9 @@
         num-lanes = <4>;
         num-viewport = <8>;
         reset-gpio = <&cp0_gpio1 20 GPIO_ACTIVE_LOW>;
+        ranges = <0x1000000 0x0 0x00000000 0x0 0xeff00000 0x0 0x00010000>,
+                 <0x2000000 0x0 0xc0000000 0x0 0xc0000000 0x0 0x20000000>,
+                 <0x3000000 0x8 0x00000000 0x8 0x00000000 0x1 0x00000000>;
         status = "okay";
 };
 
@@ -355,7 +358,7 @@
 &cp1_spi1 {
         pinctrl-names = "default";
         pinctrl-0 = <&cp1_spi1_pins>;
-        status = "okay";
+        status = "disabled";
 
         spi-flash@0 {
                 compatible = "st,w25q32";
