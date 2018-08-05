@@ -113,7 +113,7 @@ DATA = {
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 
 0x002F0000|0x00010000
-FILE = Platform/Hisilicon/D03/CustomData.Fv
+FILE = Platform/Hisilicon/D0x-CustomData.Fv
 
 ################################################################################
 #
