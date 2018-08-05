@@ -48,6 +48,9 @@
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
 
+[Components.common]
+  Silicon/Marvell/Armada7k8k/DeviceTree/Armada70x0Db.inf
+
 ################################################################################
 #
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform

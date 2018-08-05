@@ -163,6 +163,7 @@
                         reg = <0x284000 0x20>, <0x284080 0x24>;
                         reg-names = "rtc", "rtc-soc";
                         interrupts = <ICU_GRP_NSR 77 IRQ_TYPE_LEVEL_HIGH>;
+                        status = "disabled";
                 };
 
                 CP110_LABEL(thermal): thermal@400078 {

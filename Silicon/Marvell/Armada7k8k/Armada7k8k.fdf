@@ -212,6 +212,9 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   }
 !endif
 
+  # DTB
+  INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
+
 !include $(BOARD_DXE_FV_COMPONENTS)
 
 # PEI phase firmware volume
@@ -399,4 +402,9 @@ READ_LOCK_STATUS   = TRUE
      PE32      PE32    Align=4K          $(INF_OUTPUT)/$(MODULE_NAME).efi
      UI       STRING="$(MODULE_NAME)" Optional
      VERSION  STRING="$(INF_VERSION)" Optional BUILD_NUM=$(BUILD_NUMBER)
+  }
+
+[Rule.Common.USER_DEFINED.DTB]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW BIN                |.dtb
   }
