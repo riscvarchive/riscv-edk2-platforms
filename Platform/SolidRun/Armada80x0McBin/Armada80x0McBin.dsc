@@ -52,6 +52,9 @@
 [Components.common]
   Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
 
+[Components.AARCH64]
+  Silicon/Marvell/Armada7k8k/AcpiTables/Armada80x0McBin.inf
+
 ################################################################################
 #
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform

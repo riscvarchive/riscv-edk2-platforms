@@ -14,3 +14,7 @@
 
   # DTB
   INF RuleOverride = DTB Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0McBin.inf
+
+!if $(ARCH) == AARCH64
+  INF RuleOverride = ACPITABLE Silicon/Marvell/Armada7k8k/AcpiTables/Armada80x0McBin.inf
+!endif
