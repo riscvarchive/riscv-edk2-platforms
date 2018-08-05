@@ -215,6 +215,12 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   # DTB
   INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 
+!if $(ARCH) == AARCH64
+  # ACPI support
+  INF MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
+  INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+!endif
+
 !include $(BOARD_DXE_FV_COMPONENTS)
 
 # PEI phase firmware volume
@@ -407,4 +413,10 @@ READ_LOCK_STATUS   = TRUE
 [Rule.Common.USER_DEFINED.DTB]
   FILE FREEFORM = $(NAMED_GUID) {
     RAW BIN                |.dtb
+  }
+
+[Rule.Common.USER_DEFINED.ACPITABLE]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW ASL                |.aml
+    RAW ACPI               |.acpi
   }

@@ -43,6 +43,28 @@ board. For the sake of simplicity new Marvell board will be called "new_board".
  - Output files (and among others FD file, which may be used by ATF) are
    generated under directory pointed by "OUTPUT_DIRECTORY" entry (see point 1.2).
 
+5. ACPI support (optional)
+ - The tables can be enabled as in A70x0Db example:
+
+     <path to edk2-platforms>/Platforms/Marvell/Armada/AcpiTables/Armada70x0Db/
+
+ - Enable compilation of the tables in the board's .dsc file. Add it to the
+   output flash image contents via .fdf.inc file - path to it defined as
+   BOARD_DXE_FV_COMPONENTS. Example:
+   Armada70x0Db.dsc:
+
+     BOARD_DXE_FV_COMPONENTS = Platform/Marvell/Armada70x0Db/Armada70x0Db.fdf.inc
+
+     [Components.AARCH64]
+       Silicon/Marvell/Armada7k8k/AcpiTables/Armada70x0Db/AcpiTables.inf
+
+   Armada70x0Db.fdf.inc:
+
+     !if $(ARCH) == AARCH64
+       # ACPI support
+       INF RuleOverride = ACPITABLE Silicon/Marvell/Armada7k8k/AcpiTables/Armada70x0Db/AcpiTables.inf
+     !endif
+
 
 COMPHY configuration
 ====================
