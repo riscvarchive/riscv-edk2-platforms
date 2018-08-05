@@ -213,7 +213,7 @@
 };
 
 &cp1_spi1 {
-        status = "okay";
+        status = "disabled";
 
         spi-flash@0 {
                 #address-cells = <0x1>;
