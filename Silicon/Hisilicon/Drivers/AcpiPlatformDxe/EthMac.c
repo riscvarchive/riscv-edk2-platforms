@@ -51,7 +51,6 @@
 #define EFI_ACPI_MAX_NUM_TABLES         20
 #define DSDT_SIGNATURE                  0x54445344
 
-#define D02_ACPI_ETH_ID                     "HISI00C1"
 #define D03_ACPI_ETH_ID                     "HISI00C2"
 
 #define ACPI_ETH_MAC_KEY                "local-mac-address"
@@ -320,8 +319,7 @@ EFI_STATUS ProcessDSDTDevice (
 
           if (EFI_ERROR(Status) ||
               DataType != EFI_ACPI_DATA_TYPE_STRING ||
-              ((AsciiStrCmp((CHAR8 *) Data, D02_ACPI_ETH_ID) != 0) &&
-              (AsciiStrCmp((CHAR8 *) Data, D03_ACPI_ETH_ID) != 0))) {
+              (AsciiStrCmp((CHAR8 *) Data, D03_ACPI_ETH_ID) != 0)) {
             AcpiTableProtocol->Close(ValueHandle);
             Found = 0;
             continue;
