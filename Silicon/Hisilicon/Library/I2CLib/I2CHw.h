@@ -78,7 +78,7 @@
      struct
      {
         UINT32      master                : 1   ;
-        UINT32      spedd                 : 2   ;
+        UINT32      Speed                 : 2   ;
         UINT32      slave_10bit           : 1   ;
         UINT32      master_10bit          : 1   ;
         UINT32      restart_en            : 1   ;

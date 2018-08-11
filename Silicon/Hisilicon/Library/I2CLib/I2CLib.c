@@ -152,7 +152,7 @@ I2CInit (
 
   I2C_REG_READ (Base + I2C_CON_OFFSET, I2cControlReg.Val32);
   I2cControlReg.bits.master = 1;
-  I2cControlReg.bits.spedd = 0x1;
+  I2cControlReg.bits.Speed = 0x1;
   I2cControlReg.bits.restart_en = 1;
   I2cControlReg.bits.slave_disable = 1;
   I2C_REG_WRITE (Base + I2C_CON_OFFSET, I2cControlReg.Val32);
