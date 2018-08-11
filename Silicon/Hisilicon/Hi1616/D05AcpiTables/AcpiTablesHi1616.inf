@@ -43,7 +43,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-
+  Silicon/Hisilicon/Hi1616/Hi1616.dec
   Silicon/Hisilicon/HisiPkg.dec
 
 [FixedPcd]

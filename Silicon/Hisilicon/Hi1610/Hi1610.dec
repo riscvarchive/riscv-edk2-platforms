@@ -1,0 +1,23 @@
+#/** @file
+#
+#    Copyright (c) 2018, Hisilicon Limited. All rights reserved.
+#    Copyright (c) 2018, Linaro Limited. All rights reserved.
+#
+#    This program and the accompanying materials
+#    are licensed and made available under the terms and conditions of the BSD License
+#    which accompanies this distribution. The full text of the license may be found at
+#    http://opensource.org/licenses/bsd-license.php
+#
+#    THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+#**/
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = Hi1610Pkg
+  PACKAGE_GUID                   = 0063d37d-adab-47b4-9926-af83539ea167
+  PACKAGE_VERSION                = 0.1
+
+[Includes]
+  Include
