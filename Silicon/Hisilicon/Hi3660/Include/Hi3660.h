@@ -58,7 +58,7 @@
 #define USB3OTG_PHY_CR_CAP_ADDR                 (1 << 0)
 
 #define PMU_REG_BASE                            0xFFF34000
-#define PMIC_LDO9_VSET_REG                      (PMU_REG_BASE + (0x068 << 2))
+#define PMIC_LDO9_VSET_REG                      (PMU_REG_BASE + (0x06b << 2))
 #define LDO9_VSET_MASK                          (7 << 0)
 
 #define PMIC_LDO16_ONOFF_ECO_REG                (PMU_REG_BASE + (0x078 << 2))
