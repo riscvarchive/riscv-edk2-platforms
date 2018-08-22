@@ -36,4 +36,8 @@
 #define CPLD_X8_X8_X8_BOARD_ID            0x92
 #define CPLD_X16_X8_BOARD_ID              0x93
 
+#define CPLD_CLOCK_FLAG      0xFD
+#define CPLD_BOM_VER_FLAG    0x0B
+#define CPLD_BOARD_REVISION_4TH           0x4
+
 #endif /* __CPLDD06_H__ */

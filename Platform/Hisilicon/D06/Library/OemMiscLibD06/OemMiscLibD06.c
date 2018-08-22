@@ -206,3 +206,19 @@ OemIsNeedDisableExpanderBuffer (
 {
   return TRUE;
 }
+
+UINTN OemGetCpuFreq (UINT8 Socket)
+{
+  UINT8 BoardRevision;
+
+  BoardRevision = MmioRead8 (CPLD_BASE_ADDRESS + CPLD_BOM_VER_FLAG);
+
+  // Board revision 4 and higher run at 2.5GHz
+  // Earlier revisions run at 2GHz
+  if (BoardRevision >= CPLD_BOARD_REVISION_4TH) {
+    return 2500000000;
+  } else {
+    return 2000000000;
+  }
+}
+
