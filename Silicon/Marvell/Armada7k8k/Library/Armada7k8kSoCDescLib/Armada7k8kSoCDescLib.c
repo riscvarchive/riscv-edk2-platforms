@@ -74,6 +74,45 @@ ArmadaSoCDescCpBaseGet (
 
 EFI_STATUS
 EFIAPI
+ArmadaSoCGpioGet (
+  IN OUT GPIO_CONTROLLER  **SoCGpioDescription,
+  IN OUT UINTN             *Count
+  )
+{
+  GPIO_CONTROLLER *GpioInstance;
+  UINTN CpCount, CpIndex, Index;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  *Count = CpCount * MV_SOC_GPIO_PER_CP_COUNT + MV_SOC_AP806_COUNT;
+  GpioInstance = AllocateZeroPool (*Count * sizeof (GPIO_CONTROLLER));
+  if (GpioInstance == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  *SoCGpioDescription = GpioInstance;
+
+  /* AP806 GPIO controller */
+  GpioInstance->RegisterBase = MV_SOC_AP806_GPIO_BASE;
+  GpioInstance->InternalGpioCount = MV_SOC_AP806_GPIO_PIN_COUNT;
+  GpioInstance++;
+
+  /* CP110 GPIO controllers */
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    for (Index = 0; Index < MV_SOC_GPIO_PER_CP_COUNT; Index++) {
+      GpioInstance->RegisterBase = MV_SOC_CP_BASE (CpIndex) +
+                                   MV_SOC_CP_GPIO_BASE (Index);
+      GpioInstance->InternalGpioCount = MV_SOC_CP_GPIO_PIN_COUNT (Index);
+      GpioInstance++;
+    }
+  }
+
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
 ArmadaSoCDescI2cGet (
   IN OUT MV_SOC_I2C_DESC  **I2cDesc,
   IN OUT UINTN             *DescCount

@@ -24,6 +24,7 @@
   Armada7k8kSoCDescLib.c
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Silicon/Marvell/Marvell.dec

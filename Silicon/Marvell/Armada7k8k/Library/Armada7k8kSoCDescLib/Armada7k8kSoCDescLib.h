@@ -22,6 +22,7 @@
 // Common macros
 //
 #define MV_SOC_CP_BASE(Cp)               (0xF2000000 + ((Cp) * 0x2000000))
+#define MV_SOC_AP806_COUNT               1
 
 //
 // Platform description of AHCI controllers
@@ -36,6 +37,15 @@
 #define MV_SOC_HPIPE3_BASE(Cp)           (MV_SOC_CP_BASE (Cp) + 0x120000)
 #define MV_SOC_COMPHY_LANE_COUNT         6
 #define MV_SOC_COMPHY_MUX_BITS           4
+
+//
+// Platform description of GPIO controllers
+//
+#define MV_SOC_AP806_GPIO_BASE           0xF06F5040
+#define MV_SOC_AP806_GPIO_PIN_COUNT      20
+#define MV_SOC_GPIO_PER_CP_COUNT         2
+#define MV_SOC_CP_GPIO_BASE(Gpio)        (0x440100 + ((Gpio) * 0x40))
+#define MV_SOC_CP_GPIO_PIN_COUNT(Gpio)   ((Gpio) == 0 ? 32 : 31)
 
 //
 // Platform description of I2C controllers

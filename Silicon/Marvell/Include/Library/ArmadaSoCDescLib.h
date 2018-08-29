@@ -17,6 +17,8 @@
 #include <Library/MvComPhyLib.h>
 #include <Library/NonDiscoverableDeviceRegistrationLib.h>
 
+#include <Protocol/EmbeddedGpio.h>
+
 //
 // ComPhy SoC description
 //
@@ -43,6 +45,16 @@ EFI_PHYSICAL_ADDRESS
 EFIAPI
 ArmadaSoCDescCpBaseGet (
   IN UINTN  CpIndex
+  );
+
+//
+// GPIO devices description template definition
+//
+EFI_STATUS
+EFIAPI
+ArmadaSoCGpioGet (
+  IN OUT GPIO_CONTROLLER  **SoCGpioDescription,
+  IN OUT UINTN             *Count
   );
 
 //
