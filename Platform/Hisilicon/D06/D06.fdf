@@ -187,6 +187,7 @@ READ_LOCK_STATUS   = TRUE
 !endif
 
   INF MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
+  INF EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   INF EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
 
   INF MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
@@ -230,6 +231,10 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/Hisilicon/D06/Drivers/Ipmi/IpmiInterfaceDxe/IpmiInterfaceDxe.inf
   INF Platform/Hisilicon/D06/Drivers/GetInfoFromBmc/GetInfoFromBmc.inf
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  INF Silicon/Hisilicon/Drivers/Smbios/SmbiosMiscDxe/SmbiosMiscDxe.inf
+  INF Silicon/Hisilicon/Drivers/Smbios/AddSmbiosType9/AddSmbiosType9.inf
+  INF Silicon/Hisilicon/Drivers/Smbios/MemorySubClassDxe/MemorySubClassDxe.inf
+  INF Silicon/Hisilicon/Drivers/Smbios/ProcessorSubClassDxe/ProcessorSubClassDxe.inf
   INF Platform/Hisilicon/D06/Drivers/TransferSmbiosInfo/TransSmbiosInfo.inf
   INF Platform/Hisilicon/D06/Drivers/IpmiMiscOpDxe/IpmiMiscOpDxe.inf
   INF Platform/Hisilicon/D06/Drivers/IpmiWatchdogDxe/IpmiWatchdogDxe.inf
@@ -308,6 +313,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
   INF MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
   INF MdeModulePkg/Universal/SetupBrowserDxe/SetupBrowserDxe.inf
+  INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
 
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16
