@@ -25,6 +25,7 @@
   Armada80x0McBinBoardDescLib.c
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Silicon/Marvell/Marvell.dec

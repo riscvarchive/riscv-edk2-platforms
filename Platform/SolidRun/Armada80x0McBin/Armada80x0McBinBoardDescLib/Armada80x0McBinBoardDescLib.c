@@ -22,6 +22,23 @@
 #include <Library/UefiBootServicesTableLib.h>
 
 //
+// GPIO Expander
+//
+EFI_STATUS
+EFIAPI
+ArmadaBoardGpioExpanderGet (
+  IN OUT MV_GPIO_EXPANDER **GpioExpanders,
+  IN OUT UINTN             *GpioExpanderCount
+  )
+{
+  /* No GPIO expanders on board */
+  *GpioExpanders = NULL;
+  *GpioExpanderCount = 0;
+
+  return EFI_SUCCESS;
+}
+
+//
 // Order of devices in SdMmcDescTemplate has to be in par with ArmadaSoCDescLib
 //
 STATIC
