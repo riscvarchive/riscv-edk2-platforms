@@ -96,7 +96,7 @@ UINTN OemGetDimmSlot(UINTN Socket, UINTN Channel)
 VOID CoreSelectBoot(VOID)
 {
   if (!PcdGet64 (PcdTrustedFirmwareEnable)) {
-      StartupAp ();
+      StartUpBSP ();
   }
 
   return;
@@ -128,3 +128,4 @@ BOOLEAN OemIsNeedDisableExpanderBuffer(VOID)
 {
   return TRUE;
 }
+

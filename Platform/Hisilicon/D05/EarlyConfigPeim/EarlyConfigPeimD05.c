@@ -35,7 +35,7 @@ QResetAp (
   (VOID)WriteBackInvalidateDataCacheRange((VOID *) FixedPcdGet64(PcdMailBoxAddress), 8);
 
   if (!PcdGet64 (PcdTrustedFirmwareEnable)) {
-    StartupAp();
+    StartUpBSP ();
   }
 }
 

@@ -133,7 +133,7 @@ VOID CoreSelectBoot(VOID)
 {
     if (!PcdGet64 (PcdTrustedFirmwareEnable))
     {
-        StartupAp ();
+        StartUpBSP ();
     }
 
     return;

@@ -78,7 +78,7 @@ QResetAp (
 
   //SCCL A
   if (!PcdGet64 (PcdTrustedFirmwareEnable)) {
-    StartupAp ();
+    StartUpBSP ();
   }
 }
 
