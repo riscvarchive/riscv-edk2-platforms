@@ -165,6 +165,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
 
   INF Platform/Hisilicon/D06/Drivers/IoInitDxe/IoInitDxe.inf
+  INF Platform/Hisilicon/D06/Drivers/Sas/SasDxeDriver.inf
   #
   # PI DXE Drivers producing Architectural Protocols (EFI Services)
   #
@@ -296,7 +297,6 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Platform/Hisilicon/D06/Drivers/Sm750Dxe/UefiSmi.inf
   INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
-  INF Platform/Hisilicon/D06/Drivers/Sas/SasDxeDriver.inf
   INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   INF MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
   INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
