@@ -61,3 +61,8 @@
   gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosEnable|TRUE
   gAdvancedFeaturePkgTokenSpaceGuid.PcdIpmiEnable|TRUE
 
+  gPlatformTokenSpaceGuid.PcdFastBoot|FALSE
+!if gPlatformTokenSpaceGuid.PcdFastBoot == TRUE
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdIpmiEnable|FALSE
+  gPlatformTokenSpaceGuid.PcdUpdateConsoleInBds|FALSE
+!endif

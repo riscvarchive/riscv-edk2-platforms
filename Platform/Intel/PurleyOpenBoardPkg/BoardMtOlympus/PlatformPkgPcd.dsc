@@ -279,7 +279,11 @@
   gOemSkuTokenSpaceGuid.PcdOemSkuUplinkPortIndex|0x5
 
 [PcdsDynamicExHii.common.DEFAULT]
+!if gPlatformTokenSpaceGuid.PcdFastBoot == FALSE
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|3 # Variable: L"Timeout"
+!else
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|0 # Variable: L"Timeout"
+!endif
   gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
 
 

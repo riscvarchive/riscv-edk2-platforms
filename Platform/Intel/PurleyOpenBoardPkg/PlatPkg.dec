@@ -26,6 +26,7 @@
   gCpPlatFlashTokenSpaceGuid                          = { 0xc9c39664, 0x96dd, 0x4c5c, { 0xaf, 0xd7, 0xcd, 0x65, 0x76, 0x29, 0xcf, 0xb0 } }
   gOemSkuTokenSpaceGuid                               = { 0x9e37d253, 0xabf8, 0x4985, { 0x8e, 0x23, 0xba, 0xca, 0x10, 0x39, 0x56, 0x13 } }
   gEfiIpmiPkgTokenSpaceGuid                           = { 0xe96431d, 0xc68e, 0x4212, { 0xa1, 0x70, 0x16, 0xa6, 0x8, 0x55, 0x12, 0xc6 } }
+  gPlatformTokenSpaceGuid                             = { 0x07dfa0d2, 0x2ac5, 0x4cab, { 0xac, 0x14, 0x30, 0x5c, 0x62, 0x48, 0x87, 0xe4 } }
 
 [Ppis]
   gEfiPeiSystemBoardPpiGuid                           = { 0xc8d85e8c, 0xdc1c, 0x4f8c, { 0xad, 0xa7, 0x58, 0xc1, 0xd1, 0x07, 0xa3, 0x04 } }
@@ -42,6 +43,11 @@
   # Choose the default serial debug message level when CMOS is bad; in the later BIOS phase, the setup default is applied
   # 0 - Disable; 1 - Minimum; 2 - Normal; 3 - Max
   gPlatformTokenSpaceGuid.PcdSerialDbgLvlAtBadCmos|0x1|UINT8|0x30000033
+
+[PcdsFeatureFlag]
+  gPlatformTokenSpaceGuid.PcdFastBoot|FALSE|BOOLEAN|0x30000034
+
+  gPlatformTokenSpaceGuid.PcdUpdateConsoleInBds|TRUE|BOOLEAN|0x30000035
 
 [PcdsDynamicEx]
   gPlatformTokenSpaceGuid.PcdDfxAdvDebugJumper|FALSE|BOOLEAN|0x6000001D

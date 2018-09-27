@@ -84,7 +84,12 @@
 !include $(PCH_PKG)/PchCommonLib.dsc
 
 [LibraryClasses.common]
+!if gPlatformTokenSpaceGuid.PcdFastBoot == FALSE
   PlatformBootManagerLib|MinPlatformPkg/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
+!else
+  PlatformBootManagerLib|$(BOARD_PKG)/Override/Platform/Intel/MinPlatformPkg/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
+!endif
+
   TestPointCheckLib|MinPlatformPkg/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
 
   CompressLib|MinPlatformPkg/Library/CompressLib/CompressLib.inf
