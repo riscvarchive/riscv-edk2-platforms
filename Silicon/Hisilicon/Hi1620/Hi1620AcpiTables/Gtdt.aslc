@@ -30,6 +30,16 @@
 #define SYSTEM_TIMER_BASE_ADDRESS     0xFFFFFFFFFFFFFFFF
 
 #define GTDT_GTIMER_FLAGS           (GTDT_TIMER_ACTIVE_LOW | GTDT_TIMER_LEVEL_TRIGGERED)
+#define GENERIC_WATCHDOG_CONTROL_BASE_CPU1_TOTEM_A 0x9C200000
+#define GENERIC_WATCHDOG_REFRESH_BASE_CPU1_TOTEM_A 0X9C210000
+
+#define EFI_ACPI_6_2_SBSA_GENERIC_WATCHDOG_STRUCTURE_INIT(RefreshFramePhysicalAddress,                  \
+    ControlFramePhysicalAddress, WatchdogTimerGSIV, WatchdogTimerFlags)                                 \
+  {                                                                                                     \
+    EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG, sizeof(EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG_STRUCTURE), \
+    EFI_ACPI_RESERVED_BYTE, RefreshFramePhysicalAddress, ControlFramePhysicalAddress,                   \
+    WatchdogTimerGSIV, WatchdogTimerFlags                                                               \
+  }
 
 #pragma pack (1)
 
@@ -44,7 +54,7 @@ EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLES Gtdt = {
   {
     ARM_ACPI_HEADER(
       EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLE_SIGNATURE,
-      EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLE,
+      EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLES,
       EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLE_REVISION
     ),
     SYSTEM_TIMER_BASE_ADDRESS,                    // UINT64  PhysicalAddress
@@ -58,25 +68,14 @@ EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLES Gtdt = {
     FixedPcdGet32 (PcdArmArchTimerHypIntrNum),    // UINT32  NonSecurePL2TimerGSIV
     GTDT_GTIMER_FLAGS,                            // UINT32  NonSecurePL2TimerFlags
     0xFFFFFFFFFFFFFFFF,                           // UINT64  CntReadBasePhysicalAddress
-#ifdef notyet
-    PV660_WATCHDOG_COUNT,                          // UINT32  PlatformTimerCount
+    HI1620_WATCHDOG_COUNT,                        // UINT32  PlatformTimerCount
     sizeof (EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLE) // UINT32 PlatfromTimerOffset
   },
   {
-    {
-      EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG, sizeof(EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG_STRUCTURE),
-      EFI_ACPI_RESERVED_BYTE, 0, 0, 0, 0
-    },
-    {
-      EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG, sizeof(EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG_STRUCTURE),
-      EFI_ACPI_RESERVED_BYTE, 0, 0, 0, 0
-    }
+    EFI_ACPI_6_2_SBSA_GENERIC_WATCHDOG_STRUCTURE_INIT(
+      GENERIC_WATCHDOG_REFRESH_BASE_CPU1_TOTEM_A, GENERIC_WATCHDOG_CONTROL_BASE_CPU1_TOTEM_A, 88, 1)
   }
-#else /* !notyet */
-  0, 0
-  }
-#endif
-  };
+};
 
 //
 // Reference the table being generated to prevent the optimizer from removing the

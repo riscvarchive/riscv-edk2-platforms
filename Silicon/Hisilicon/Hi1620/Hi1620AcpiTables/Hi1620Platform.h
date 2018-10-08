@@ -22,6 +22,6 @@
 
 #include <PlatformArch.h>
 
-#define HI1620_WATCHDOG_COUNT  2
+#define HI1620_WATCHDOG_COUNT  1
 
 #endif
