@@ -90,6 +90,7 @@
   PlatformBootManagerLib|$(BOARD_PKG)/Override/Platform/Intel/MinPlatformPkg/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
 !endif
 
+  ReportFvLib|MinPlatformPkg/PlatformInit/Library/PeiReportFvLib/PeiReportFvLib.inf
   TestPointCheckLib|MinPlatformPkg/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
 
   CompressLib|MinPlatformPkg/Library/CompressLib/CompressLib.inf
@@ -163,6 +164,7 @@
 
   $(BOARD_PKG)/Policy/SystemBoard/SystemBoardPei.inf
 
+  MinPlatformPkg/PlatformInit/ReportFv/ReportFvPei.inf
   MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
       BoardInitLib|$(BOARD_PKG)/$(BOARD_NAME)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
@@ -228,7 +230,7 @@
   ShellBinPkg/UefiShell/UefiShell.inf
 
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
-  
+
   PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
 
 !include $(BOARD_PKG)/$(BOARD_NAME)/PlatformPkgBuildOption.dsc

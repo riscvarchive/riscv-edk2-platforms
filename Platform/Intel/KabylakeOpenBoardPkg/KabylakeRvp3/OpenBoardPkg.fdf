@@ -1,7 +1,7 @@
 ## @file
 #  FDF file of Platform.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -237,6 +237,7 @@ INF  UefiCpuPkg/SecCore/SecCore.inf
 INF  MdeModulePkg/Core/Pei/PeiMain.inf
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CorePreMemoryInclude.fdf
 
+INF $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
 INF $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf
 INF IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
 INF $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
@@ -466,7 +467,7 @@ FILE FV_IMAGE = B9020753-84A8-4BB6-947C-CE7D41F5CE39 {
          SECTION FV_IMAGE = FvOsBootUncompact
        }
      }
-     
+
 FILE FV_IMAGE = D4632741-510C-44E3-BE21-C3D6D7881485 {
        SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
          SECTION FV_IMAGE = FvLateSilicon
@@ -588,7 +589,7 @@ FvNameGuid         = 5A9A8B4E-149A-4CB2-BDC7-C8D62DE2C8CF
 FILE FV_IMAGE = 757CC075-1428-423D-A73C-22639706C119 {
        SECTION FV_IMAGE = FvSecurityPreMemory
      }
-     
+
 FILE FV_IMAGE = 80BB8482-44D5-4BEC-82B5-8D87A933830B {
        SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {
          SECTION FV_IMAGE = FvSecurityPostMemory

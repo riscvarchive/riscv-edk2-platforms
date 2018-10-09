@@ -1,7 +1,7 @@
 ## @file
 #  Platform description.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -81,6 +81,7 @@
 [LibraryClasses.common]
 
   PeiLib|$(PLATFORM_PACKAGE)/Library/PeiLib/PeiLib.inf
+  ReportFvLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/PeiReportFvLib/PeiReportFvLib.inf
 
   PciHostBridgeLib|$(PLATFORM_PACKAGE)/Pci/Library/PciHostBridgeLibSimple/PciHostBridgeLibSimple.inf
   PciSegmentInfoLib|$(PLATFORM_PACKAGE)/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
@@ -92,7 +93,7 @@
 
   FspWrapperHobProcessLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperHobProcessLib/PeiFspWrapperHobProcessLib.inf
   PlatformSecLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/SecFspWrapperPlatformSecLib/SecFspWrapperPlatformSecLib.inf
-  
+
   FspWrapperApiLib|IntelFsp2WrapperPkg/Library/BaseFspWrapperApiLib/BaseFspWrapperApiLib.inf
   FspWrapperApiTestLib|IntelFsp2WrapperPkg/Library/PeiFspWrapperApiTestLib/PeiFspWrapperApiTestLib.inf
 
@@ -193,7 +194,7 @@
       #PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
-  
+
 #
 # Silicon
 #
@@ -202,6 +203,7 @@
 #
 # Platform
 #
+  $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
@@ -252,7 +254,7 @@
 # Common
 #
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
-  
+
   UefiCpuPkg/CpuDxe/CpuDxe.inf
   MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
 
@@ -283,7 +285,7 @@
   IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
 
   $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
-  
+
   $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
   $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
 

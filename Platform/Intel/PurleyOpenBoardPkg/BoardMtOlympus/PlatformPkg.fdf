@@ -140,11 +140,11 @@ FILE = $(SILICON_BIN_PKG)/FvTempMemorySilicon/$(TARGET)/FvTempMemorySilicon.Fv
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeBase    = gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress + gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeSize    = gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize
 
-SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress    = gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress + gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase + 0x60 
-SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize - 0x60 
+SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress    = gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress + gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase + 0x60
+SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize - 0x60
 
-SET gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchAddress        = gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress + gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase + 0x60 
-SET gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize     = gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize - 0x60 
+SET gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchAddress        = gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress + gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeBase + 0x60
+SET gEfiCpuTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize     = gCpuUncoreTokenSpaceGuid.PcdFlashNvStorageMicrocodeSize - 0x60
 
 ################################################################################
 #
@@ -233,6 +233,7 @@ INF  MdeModulePkg/Core/Pei/PeiMain.inf
 
 INF  $(BOARD_PKG)/Policy/SystemBoard/SystemBoardPei.inf
 
+INF  MinPlatformPkg/PlatformInit/ReportFv/ReportFvPei.inf
 INF  MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf
 INF  MinPlatformPkg/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
 
