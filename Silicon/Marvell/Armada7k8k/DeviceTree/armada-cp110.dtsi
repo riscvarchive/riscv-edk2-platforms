@@ -40,9 +40,9 @@
                 CP110_LABEL(ethernet): ethernet@0 {
                         compatible = "marvell,armada-7k-pp22";
                         reg = <0x0 0x100000>, <0x129000 0xb000>;
-                        clocks = <&CP110_LABEL(clk) 1 3>, <&CP110_LABEL(clk) 1 9>,
-                                 <&CP110_LABEL(clk) 1 5>, <&CP110_LABEL(clk) 1 6>,
-                                 <&CP110_LABEL(clk) 1 18>;
+                        clocks = <&CP110_LABEL(ppv2_clk)>, <&CP110_LABEL(ppv2_clk)>,
+                                 <&CP110_LABEL(ppv2_clk)>, <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(core_clk)>;
                         clock-names = "pp_clk", "gop_clk",
                                       "mg_clk", "mg_core_clk", "axi_clk";
                         marvell,system-controller = <&CP110_LABEL(syscon0)>;
@@ -135,8 +135,8 @@
                         #size-cells = <0>;
                         compatible = "marvell,orion-mdio";
                         reg = <0x12a200 0x10>;
-                        clocks = <&CP110_LABEL(clk) 1 9>, <&CP110_LABEL(clk) 1 5>,
-                                 <&CP110_LABEL(clk) 1 6>, <&CP110_LABEL(clk) 1 18>;
+                        clocks = <&CP110_LABEL(ppv2_clk)>, <&CP110_LABEL(ppv2_clk)>,
+                                 <&CP110_LABEL(core_clk)>, <&CP110_LABEL(core_clk)>;
                         status = "disabled";
                 };
 
@@ -145,8 +145,8 @@
                         #size-cells = <0>;
                         compatible = "marvell,xmdio";
                         reg = <0x12a600 0x10>;
-                        clocks = <&CP110_LABEL(clk) 1 5>,
-                                 <&CP110_LABEL(clk) 1 6>, <&CP110_LABEL(clk) 1 18>;
+                        clocks = <&CP110_LABEL(ppv2_clk)>, <&CP110_LABEL(ppv2_clk)>,
+                                 <&CP110_LABEL(core_clk)>;
                         status = "disabled";
                 };
 
@@ -178,6 +178,7 @@
 
                         CP110_LABEL(clk): clock {
                                 compatible = "marvell,cp110-clock";
+                                status = "disabled";
                                 #clock-cells = <2>;
                         };
 
@@ -219,8 +220,8 @@
                         dma-coherent;
                         interrupts = <ICU_GRP_NSR 106 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 22>,
-                                 <&CP110_LABEL(clk) 1 16>;
+                        clocks = <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(core_clk)>;
                         status = "disabled";
                 };
 
@@ -231,8 +232,8 @@
                         dma-coherent;
                         interrupts = <ICU_GRP_NSR 105 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 23>,
-                                 <&CP110_LABEL(clk) 1 16>;
+                        clocks = <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(core_clk)>;
                         status = "disabled";
                 };
 
@@ -242,8 +243,8 @@
                         reg = <0x540000 0x30000>;
                         dma-coherent;
                         interrupts = <ICU_GRP_NSR 107 IRQ_TYPE_LEVEL_HIGH>;
-                        clocks = <&CP110_LABEL(clk) 1 15>,
-                                 <&CP110_LABEL(clk) 1 16>;
+                        clocks = <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(core_clk)>;
                         status = "disabled";
                 };
 
@@ -253,8 +254,8 @@
                         dma-coherent;
                         msi-parent = <&gic_v2m0>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 8>,
-                                 <&CP110_LABEL(clk) 1 14>;
+                        clocks = <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                 };
 
                 CP110_LABEL(xor1): xor@6c0000 {
@@ -263,8 +264,8 @@
                         dma-coherent;
                         msi-parent = <&gic_v2m0>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 7>,
-                                 <&CP110_LABEL(clk) 1 14>;
+                        clocks = <&CP110_LABEL(core_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                 };
 
                 CP110_LABEL(spi0): spi@700600 {
@@ -273,8 +274,8 @@
                         #address-cells = <0x1>;
                         #size-cells = <0x0>;
                         clock-names = "core", "axi";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -284,8 +285,8 @@
                         #address-cells = <1>;
                         #size-cells = <0>;
                         clock-names = "core", "axi";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -296,8 +297,8 @@
                         #size-cells = <0>;
                         interrupts = <ICU_GRP_NSR 120 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -308,8 +309,8 @@
                         #size-cells = <0>;
                         interrupts = <ICU_GRP_NSR 121 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -320,8 +321,8 @@
                         interrupts = <ICU_GRP_NSR 122 IRQ_TYPE_LEVEL_HIGH>;
                         reg-io-width = <1>;
                         clock-names = "baudclk", "apb_pclk";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -332,8 +333,8 @@
                         interrupts = <ICU_GRP_NSR 123 IRQ_TYPE_LEVEL_HIGH>;
                         reg-io-width = <1>;
                         clock-names = "baudclk", "apb_pclk";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -344,8 +345,8 @@
                         interrupts = <ICU_GRP_NSR 124 IRQ_TYPE_LEVEL_HIGH>;
                         reg-io-width = <1>;
                         clock-names = "baudclk", "apb_pclk";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -356,8 +357,8 @@
                         interrupts = <ICU_GRP_NSR 125 IRQ_TYPE_LEVEL_HIGH>;
                         reg-io-width = <1>;
                         clock-names = "baudclk", "apb_pclk";
-                        clocks = <&CP110_LABEL(clk) 1 21>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(slow_io_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "disabled";
                 };
 
@@ -374,8 +375,8 @@
                         #size-cells = <0>;
                         interrupts = <ICU_GRP_NSR 115 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 2>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(nand_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         marvell,system-controller = <&CP110_LABEL(syscon0)>;
                         status = "disabled";
                 };
@@ -386,8 +387,8 @@
                         reg = <0x760000 0x7d>;
                         interrupts = <ICU_GRP_NSR 95 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 25>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(x2core_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         status = "okay";
                 };
 
@@ -396,7 +397,7 @@
                         reg = <0x780000 0x300>;
                         interrupts = <ICU_GRP_NSR 27 IRQ_TYPE_LEVEL_HIGH>;
                         clock-names = "core", "axi";
-                        clocks = <&CP110_LABEL(clk) 1 4>, <&CP110_LABEL(clk) 1 18>;
+                        clocks = <&CP110_LABEL(sdio_clk)>, <&CP110_LABEL(core_clk)>;
                         dma-coherent;
                         status = "disabled";
                 };
@@ -413,8 +414,8 @@
                         interrupt-names = "mem", "ring0", "ring1",
                                 "ring2", "ring3", "eip";
                         clock-names = "core", "reg";
-                        clocks = <&CP110_LABEL(clk) 1 26>,
-                                 <&CP110_LABEL(clk) 1 17>;
+                        clocks = <&CP110_LABEL(x2core_clk)>,
+                                 <&CP110_LABEL(x2core_clk)>;
                         dma-coherent;
                 };
         };
@@ -442,7 +443,7 @@
                 interrupts = <ICU_GRP_NSR 22 IRQ_TYPE_LEVEL_HIGH>;
                 num-lanes = <1>;
                 clock-names = "core", "reg";
-                clocks = <&CP110_LABEL(clk) 1 13>, <&CP110_LABEL(clk) 1 14>;
+                clocks = <&CP110_LABEL(core_clk)>, <&CP110_LABEL(x2core_clk)>;
                 status = "disabled";
         };
 
@@ -470,7 +471,7 @@
 
                 num-lanes = <1>;
                 clock-names = "core", "reg";
-                clocks = <&CP110_LABEL(clk) 1 11>, <&CP110_LABEL(clk) 1 14>;
+                clocks = <&CP110_LABEL(core_clk)>, <&CP110_LABEL(x2core_clk)>;
                 status = "disabled";
         };
 
@@ -498,7 +499,62 @@
 
                 num-lanes = <1>;
                 clock-names = "core", "reg";
-                clocks = <&CP110_LABEL(clk) 1 12>, <&CP110_LABEL(clk) 1 14>;
+                clocks = <&CP110_LABEL(core_clk)>, <&CP110_LABEL(x2core_clk)>;
                 status = "disabled";
+        };
+
+        /* 1 GHz fixed main PLL */
+        CP110_LABEL(mainpll): CP110_LABEL(mainpll) {
+                compatible = "fixed-clock";
+                #clock-cells = <0>;
+                clock-frequency = <1000000000>;
+        };
+
+        CP110_LABEL(x2core_clk): CP110_LABEL(x2core_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <1>;
+                clock-div = <2>;
+        };
+
+        CP110_LABEL(core_clk): CP110_LABEL(core_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <1>;
+                clock-div = <2>;
+        };
+
+        CP110_LABEL(sdio_clk): CP110_LABEL(sdio_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <2>;
+                clock-div = <5>;
+        };
+
+        CP110_LABEL(nand_clk): CP110_LABEL(nand_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <2>;
+                clock-div = <5>;
+        };
+
+        CP110_LABEL(ppv2_clk): CP110_LABEL(ppv2_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <1>;
+                clock-div = <3>;
+        };
+
+        CP110_LABEL(slow_io_clk): CP110_LABEL(slow_io_clk) {
+                compatible = "fixed-factor-clock";
+                clocks = <&CP110_LABEL(mainpll)>;
+                #clock-cells = <0>;
+                clock-mult = <1>;
+                clock-div = <4>;
         };
 };
