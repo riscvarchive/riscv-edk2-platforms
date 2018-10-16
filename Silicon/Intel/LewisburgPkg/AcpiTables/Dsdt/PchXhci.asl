@@ -17,8 +17,6 @@ External(\_SB.PC00.XHCI.RHUB.PS0X, MethodObj)
 External(\_SB.PC00.XHCI.RHUB.PS2X, MethodObj)
 External(\_SB.PC00.XHCI.RHUB.PS3X, MethodObj)
 External(\_SB.PC00.XHCI.RHUB.INIR, MethodObj)
-External(\_SB.PC00.XHCI.XHCS, MethodObj)
-
 
 Scope(\_SB_.PC00.XHCI) {
 
