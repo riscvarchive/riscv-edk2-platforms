@@ -1337,7 +1337,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[1]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[2]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[4]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.PostedInterrupt|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CoherencySupport|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.VMDEnabled[0]|0x0

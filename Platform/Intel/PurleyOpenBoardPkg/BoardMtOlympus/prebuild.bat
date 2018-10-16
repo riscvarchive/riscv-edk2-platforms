@@ -196,7 +196,7 @@ if %ERRORLEVEL% NEQ 0 EXIT /b %ERRORLEVEL%
 @REM MCTL == FIX8
 set AML_FILTER="\"PSYS\" .MCTL\" .FIX[0-9,A-Z]\""
 echo AML_FILTER=%AML_FILTER%
-%WORKSPACE%\edk2-platforms\Platform\Intel\MinPlatformPkg\Tools\AmlGenOffset\AmlGenOffset.py -d --aml_filter %AML_FILTER% -o %WORKSPACE%\edk2-platforms\Platform\Intel\%BOARD_PKG%\Acpi\BoardAcpiDxe\AmlOffsetTable.c %OUTPUT_DIR%\X64\PurleyOpenBoardPkg\Acpi\BoardAcpiDxe\DSDT\OUTPUT\Dsdt\WFPPlatform.offset.h
+call %PYTHON_HOME%\python.exe %WORKSPACE%\edk2-platforms\Platform\Intel\MinPlatformPkg\Tools\AmlGenOffset\AmlGenOffset.py -d --aml_filter %AML_FILTER% -o %WORKSPACE%\edk2-platforms\Platform\Intel\%BOARD_PKG%\Acpi\BoardAcpiDxe\AmlOffsetTable.c %OUTPUT_DIR%\X64\PurleyOpenBoardPkg\Acpi\BoardAcpiDxe\DSDT\OUTPUT\Dsdt\WFPPlatform.offset.h
 echo.
 echo GenOffset done
 

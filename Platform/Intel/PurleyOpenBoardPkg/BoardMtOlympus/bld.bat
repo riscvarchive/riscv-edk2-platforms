@@ -28,7 +28,7 @@ if "%1"=="" goto :argumentCheck
 if /I "%1"=="debug"          set TARGET=DEBUG
 if /I "%1"=="release"        set TARGET=RELEASE
 
-if /I "%1"=="cleantree" (
+if /I "%1"=="clean" (
   set BUILD_TYPE=cleantree
   call :cleantree
   goto :EOF
