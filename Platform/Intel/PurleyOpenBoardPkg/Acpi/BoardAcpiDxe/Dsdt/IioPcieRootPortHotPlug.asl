@@ -276,7 +276,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
   //; connection.
   //;************************************************************************;
   Method(OSHP) {              // OS call to unhook Legacy ASL PCI-Express HP code.
-    Store(SSTS, SSTS)         // Clear any status
+    Store(0, SSTS)            // Clear any status
 //    Store(0x0, HGPE)          // Disable GPE generation
     HPEN(0)                 // Disable GPE generation
   }
