@@ -1285,26 +1285,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpCorrectableErrorEsc[1]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableNonFatalErrorEsc[1]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableFatalErrorEsc[1]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU0[2]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU1[2]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU2[2]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigMCP0[2]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigMCP1[2]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CompletionTimeout[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CompletionTimeoutValue[2]|0x9
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpCorrectableErrorEsc[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableNonFatalErrorEsc[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableFatalErrorEsc[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU0[3]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU1[3]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigIOU2[3]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigMCP0[3]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ConfigMCP1[3]|0xff
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CompletionTimeout[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CompletionTimeoutValue[3]|0x9
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpCorrectableErrorEsc[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableNonFatalErrorEsc[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.RpUncorrectableFatalErrorEsc[3]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.DevPresIoApicIio[0]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.DevPresIoApicIio[1]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.DevPresIoApicIio[2]|0x1
@@ -1335,8 +1315,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.ATS|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[0]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[1]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.IioPresent[3]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.PostedInterrupt|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.CoherencySupport|0x1
   gOemSkuTokenSpaceGuid.PcdSocketIioConfigData.VMDEnabled[0]|0x0
@@ -5745,8 +5723,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.IrqThreshold|0x1
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.BusRatio[0]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.BusRatio[1]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.BusRatio[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.BusRatio[3]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.Cpu0P0KtiPortDisable|0x0
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.Cpu0P0KtiLinkVnaOverride|0x7f
   gOemSkuTokenSpaceGuid.PcdSocketMpLinkConfigData.Cpu0P0KtiLinkSpeed|0x2
@@ -6083,24 +6059,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio3In[1]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio4In[1]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio5In[1]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti0In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti1In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti2In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio0In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio1In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio2In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio3In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio4In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio5In[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti0In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti1In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti2In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio0In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio1In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio2In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio3In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio4In[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.PcieIio5In[3]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio0PkgcClkGateDis[0]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio1PkgcClkGateDis[0]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio2PkgcClkGateDis[0]|0x0
@@ -6133,38 +6091,6 @@
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc1pllOffEna[1]|0x1
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SetvidDecayDisable[1]|0x0
   gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SapmCtlLock[1]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio0PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio1PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio2PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti01PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti23PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc1PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc0PkgcClkGateDis[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti01pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti23pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P0pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P1pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P2pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc0pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc1pllOffEna[2]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SetvidDecayDisable[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SapmCtlLock[2]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio0PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio1PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Iio2PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti01PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti23PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc1PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc0PkgcClkGateDis[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti01pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Kti23pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P0pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P1pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.P2pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc0pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.Mc1pllOffEna[3]|0x1
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SetvidDecayDisable[3]|0x0
-  gOemSkuTokenSpaceGuid.PcdSocketPowerManagementConfigData.SapmCtlLock[3]|0x0
   #gOemSkuTokenSpaceGuid.PcdSocketProcessorCoreConfigData|L"SocketProcessorCoreConfig"|07013588-C789-4E12-A7C3-88FAFAE79F7C|0x00
   gOemSkuTokenSpaceGuid.PcdSocketProcessorCoreConfigData|{0x0}
   gOemSkuTokenSpaceGuid.PcdSocketProcessorCoreConfigData.PchTraceHubEn|0x0
