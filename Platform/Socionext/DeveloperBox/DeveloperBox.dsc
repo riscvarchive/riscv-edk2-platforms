@@ -130,7 +130,8 @@
   NULL|MdePkg/Library/BaseStackCheckLib/BaseStackCheckLib.inf
 
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLibCrypto.inf
+  OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
+  TlsLib|CryptoPkg/Library/TlsLib/TlsLib.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
 
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
@@ -657,6 +658,8 @@
   NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf
   NetworkPkg/HttpDxe/HttpDxe.inf
   NetworkPkg/HttpBootDxe/HttpBootDxe.inf
+  NetworkPkg/TlsDxe/TlsDxe.inf
+  NetworkPkg/TlsAuthConfigDxe/TlsAuthConfigDxe.inf
   Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.inf {
     <LibraryClasses>
       DmaLib|EmbeddedPkg/Library/CoherentDmaLib/CoherentDmaLib.inf

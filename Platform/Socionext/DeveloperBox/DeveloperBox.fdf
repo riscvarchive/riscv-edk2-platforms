@@ -219,6 +219,8 @@ READ_LOCK_STATUS   = TRUE
   INF NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf
   INF NetworkPkg/HttpDxe/HttpDxe.inf
   INF NetworkPkg/HttpBootDxe/HttpBootDxe.inf
+  INF NetworkPkg/TlsDxe/TlsDxe.inf
+  INF NetworkPkg/TlsAuthConfigDxe/TlsAuthConfigDxe.inf
   INF Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.inf
 
   #
