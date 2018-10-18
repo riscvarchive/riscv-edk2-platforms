@@ -80,7 +80,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #include "SioRegs.h"
 
-extern GPIO_INIT_CONFIG mGpioTableMicrosoftWcs;
+extern GPIO_INIT_CONFIG mGpioTableMicrosoftWcs[];
 extern UINTN mGpioTableSizeMicrosoftWcs;
 
 extern PCH_USB_OVERCURRENT_PIN Usb20OverCurrentMappings[PCH_MAX_USB2_PORTS];
@@ -366,7 +366,7 @@ PlatformInitGpios (
   TableSize = mGpioTableSizeMicrosoftWcs;
   DEBUG ((DEBUG_ERROR, "UBA:Size of GpioTable 0x%X, blocks: 0x%X.\n", TableSize, (TableSize/sizeof (GPIO_INIT_CONFIG)) ));
 
-  GpioTable = &mGpioTableMicrosoftWcs;
+  GpioTable = mGpioTableMicrosoftWcs;
   DEBUG ((DEBUG_ERROR, "UBA: ConfigureGpio() MtOlympus Start.\n"));
   Status = GpioConfigurePads (TableSize/sizeof (GPIO_INIT_CONFIG), GpioTable);
   DEBUG ((DEBUG_ERROR, "UBA: ConfigureGpio() MtOlympus End.\n"));
