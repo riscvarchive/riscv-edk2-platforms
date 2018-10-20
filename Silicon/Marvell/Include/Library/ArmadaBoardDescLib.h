@@ -25,6 +25,29 @@ typedef struct {
 } MV_BOARD_COMPHY_DESC;
 
 //
+// GPIO devices per-board description
+//
+typedef struct {
+  UINTN ChipId;
+  UINTN I2cAddress;
+  UINTN I2cBus;
+} MV_GPIO_EXPANDER;
+
+typedef struct {
+  GPIO_CONTROLLER  *SoCGpio;
+  UINTN             GpioDeviceCount;
+  MV_GPIO_EXPANDER *GpioExpanders;
+  UINTN             GpioExpanderCount;
+} MV_BOARD_GPIO_DESCRIPTION;
+
+EFI_STATUS
+EFIAPI
+ArmadaBoardGpioExpanderGet (
+  IN OUT MV_GPIO_EXPANDER **GpioExpanders,
+  IN OUT UINTN             *GpioExpanderCount
+  );
+
+//
 // I2C devices per-board description
 //
 typedef struct {
