@@ -35,6 +35,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 MV_BOARD_DESC *mBoardDescInstance;
 
+STATIC MV_BOARD_GPIO_DESCRIPTION *mGpioDescription;
+
 STATIC
 EFI_STATUS
 MvBoardDescComPhyGet (
@@ -94,6 +96,53 @@ MvBoardDescComPhyGet (
   BoardDesc->ComPhyDevCount = ComPhyIndex;
 
   *ComPhyDesc = BoardDesc;
+
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
+MvBoardGpioDescriptionGet (
+  IN MARVELL_BOARD_DESC_PROTOCOL    *This,
+  IN OUT MV_BOARD_GPIO_DESCRIPTION **GpioDescription
+  )
+{
+  UINTN SoCGpioCount, GpioExpanderCount;
+  MV_GPIO_EXPANDER *GpioExpanders;
+  GPIO_CONTROLLER *SoCGpio;
+  EFI_STATUS Status;
+
+  /* Use existing structure if already created. */
+  if (mGpioDescription != NULL) {
+    *GpioDescription = mGpioDescription;
+    return EFI_SUCCESS;
+  }
+
+  /* Get SoC data about all available GPIO controllers. */
+  Status = ArmadaSoCGpioGet (&SoCGpio, &SoCGpioCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /* Get per-board information about all available GPIO expanders. */
+  Status = ArmadaBoardGpioExpanderGet (&GpioExpanders, &GpioExpanderCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /* Allocate and fill board description. */
+  mGpioDescription = AllocateZeroPool (sizeof (MV_BOARD_GPIO_DESCRIPTION));
+  if (mGpioDescription == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  mGpioDescription->SoCGpio = SoCGpio;
+  mGpioDescription->GpioDeviceCount = SoCGpioCount;
+  mGpioDescription->GpioExpanders = GpioExpanders;
+  mGpioDescription->GpioExpanderCount = GpioExpanderCount;
+
+  *GpioDescription = mGpioDescription;
 
   return EFI_SUCCESS;
 }
@@ -571,6 +620,7 @@ MvBoardDescInitProtocol (
   BoardDescProtocol->BoardDescUtmiGet = MvBoardDescUtmiGet;
   BoardDescProtocol->BoardDescXhciGet = MvBoardDescXhciGet;
   BoardDescProtocol->BoardDescFree = MvBoardDescFree;
+  BoardDescProtocol->GpioDescriptionGet = MvBoardGpioDescriptionGet;
 
   return EFI_SUCCESS;
 }
