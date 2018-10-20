@@ -41,16 +41,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define MAX_BUFFER_LENGTH 64
 
-/*
- * I2C_FLAG_NORESTART is not part of PI spec, it allows to continue
- * transmission without repeated start operation.
- * FIXME: This flag is also defined in Drivers/I2c/MvI2cDxe/MvI2cDxe.h
- * and it's important to have both version synced. This solution is
- * temporary and shared flag should be used by both files.
- * Situation is analogous with I2C_GUID, which also should be common, but is
- * for now defined same way in two header files.
- */
-#define I2C_FLAG_NORESTART 0x00000002
 #define I2C_GUID \
   { \
   0xadc1901b, 0xb83c, 0x4831, { 0x8f, 0x59, 0x70, 0x89, 0x8f, 0x26, 0x57, 0x1e } \

@@ -51,10 +51,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Library/UefiBootServicesTableLib.h>
 
 #include <Protocol/Eeprom.h>
-
-#define I2C_DEVICE_INDEX(bus, address) (((address) & 0xffff) | (bus) << 16)
-#define I2C_DEVICE_ADDRESS(index) ((index) & 0xffff)
-#define I2C_DEVICE_BUS(index) ((index) >> 16)
+#include <Protocol/MvI2c.h>
 
 CONST CHAR16 ShellEepromFileName[] = L"ShellCommand";
 EFI_HANDLE ShellEepromHiiHandle = NULL;

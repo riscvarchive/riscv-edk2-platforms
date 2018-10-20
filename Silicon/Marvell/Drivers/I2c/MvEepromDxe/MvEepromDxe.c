@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Protocol/DriverBinding.h>
 #include <Protocol/I2cIo.h>
 #include <Protocol/Eeprom.h>
+#include <Protocol/MvI2c.h>
 
 #include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
@@ -48,8 +49,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Pi/PiI2c.h>
 
 #include "MvEepromDxe.h"
-
-#define I2C_DEVICE_INDEX(bus, address) (((address) & 0xffff) | (bus) << 16)
 
 STATIC CONST EFI_GUID I2cGuid = I2C_GUID;
 

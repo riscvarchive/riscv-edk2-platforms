@@ -37,6 +37,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <Protocol/I2cEnumerate.h>
 #include <Protocol/I2cBusConfigurationManagement.h>
 #include <Protocol/DevicePath.h>
+#include <Protocol/MvI2c.h>
 
 #include <Library/BaseLib.h>
 #include <Library/IoLib.h>
@@ -627,9 +628,6 @@ MvI2cStartRequest (
 }
 
 STATIC CONST EFI_GUID DevGuid = I2C_GUID;
-
-#define I2C_DEVICE_INDEX(bus, address) (((address) & 0xffff) | (bus) << 16)
-#define I2C_DEVICE_ADDRESS(index) ((index) & 0xffff)
 
 STATIC
 EFI_STATUS
