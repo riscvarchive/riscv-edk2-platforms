@@ -20,7 +20,6 @@ Scope(_SB)
 {
   Device(COM0) {
     Name(_HID, "ARMH0011")
-    Name(_CID, "PL011")
     Name(_UID, Zero)
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0x94080000, 0x1000)

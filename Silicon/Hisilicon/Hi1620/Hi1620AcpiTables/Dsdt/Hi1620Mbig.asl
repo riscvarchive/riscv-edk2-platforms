@@ -18,7 +18,6 @@ Scope(_SB)
   Device(MB30) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x30)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -48,7 +47,6 @@ Scope(_SB)
   Device(MB31) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x31)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -78,7 +76,6 @@ Scope(_SB)
   Device(MB32) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x32)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -108,7 +105,6 @@ Scope(_SB)
   Device(MB33) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x33)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -138,7 +134,6 @@ Scope(_SB)
   Device(MB34) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x34)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -168,7 +163,6 @@ Scope(_SB)
   Device(MB35) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x35)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -198,7 +192,6 @@ Scope(_SB)
   Device(MB38) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x38)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -228,7 +221,6 @@ Scope(_SB)
   Device(MB39) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x39)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -258,7 +250,6 @@ Scope(_SB)
   Device(MB3A) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x3A)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -288,7 +279,6 @@ Scope(_SB)
   Device(MB3B) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x3B)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -318,7 +308,6 @@ Scope(_SB)
   Device(MB3C) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x3C)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -348,7 +337,6 @@ Scope(_SB)
   Device(MB3D) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x3D)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -378,7 +366,6 @@ Scope(_SB)
   Device(MB10) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x10)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -408,7 +395,6 @@ Scope(_SB)
   Device(MB11) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x11)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -438,7 +424,6 @@ Scope(_SB)
   Device(MB12) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x12)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -468,7 +453,6 @@ Scope(_SB)
   Device(MB13) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x13)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -499,7 +483,6 @@ Scope(_SB)
   Device(MB14) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x14)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -529,7 +512,6 @@ Scope(_SB)
   Device(MB15) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x15)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -559,7 +541,6 @@ Scope(_SB)
   Device(MB18) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x18)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -589,7 +570,6 @@ Scope(_SB)
   Device(MB19) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x19)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -619,7 +599,6 @@ Scope(_SB)
   Device(MB1A) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x1A)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -649,7 +628,6 @@ Scope(_SB)
   Device(MB1B) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x1B)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -679,7 +657,6 @@ Scope(_SB)
   Device(MB1C) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x1C)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -709,7 +686,6 @@ Scope(_SB)
   Device(MB1D) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x1D)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -739,7 +715,6 @@ Scope(_SB)
   Device(MB70) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x70)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -769,7 +744,6 @@ Scope(_SB)
   Device(MB71) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x71)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -799,7 +773,6 @@ Scope(_SB)
   Device(MB72) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x72)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -829,7 +802,6 @@ Scope(_SB)
   Device(MB73) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x73)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -860,7 +832,6 @@ Scope(_SB)
   Device(MB74) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x74)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -890,7 +861,6 @@ Scope(_SB)
   Device(MB75) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x75)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -920,7 +890,6 @@ Scope(_SB)
   Device(MB78) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x78)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -950,7 +919,6 @@ Scope(_SB)
   Device(MB79) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x79)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -980,7 +948,6 @@ Scope(_SB)
   Device(MB7A) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x7A)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1010,7 +977,6 @@ Scope(_SB)
   Device(MB7B) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x7B)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1040,7 +1006,6 @@ Scope(_SB)
   Device(MB7C) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x7C)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1070,7 +1035,6 @@ Scope(_SB)
   Device(MB7D) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x7D)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1100,7 +1064,6 @@ Scope(_SB)
   Device(MB50) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x50)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1130,7 +1093,6 @@ Scope(_SB)
   Device(MB51) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x51)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1160,7 +1122,6 @@ Scope(_SB)
   Device(MB52) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x52)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1190,7 +1151,6 @@ Scope(_SB)
   Device(MB53) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x53)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1221,7 +1181,6 @@ Scope(_SB)
   Device(MB54) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x54)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1251,7 +1210,6 @@ Scope(_SB)
   Device(MB55) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x55)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1281,7 +1239,6 @@ Scope(_SB)
   Device(MB58) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x58)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1311,7 +1268,6 @@ Scope(_SB)
   Device(MB59) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x59)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1341,7 +1297,6 @@ Scope(_SB)
   Device(MB5A) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x5A)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1371,7 +1326,6 @@ Scope(_SB)
   Device(MB5B) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x5B)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1401,7 +1355,6 @@ Scope(_SB)
   Device(MB5C) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x5C)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
@@ -1431,7 +1384,6 @@ Scope(_SB)
   Device(MB5D) {
     Name(_HID, "HISI0152")
     Name(_UID, 0x5D)
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QWordMemory (
           ResourceConsumer,
