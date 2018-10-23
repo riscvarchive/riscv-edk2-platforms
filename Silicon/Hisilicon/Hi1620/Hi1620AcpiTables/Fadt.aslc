@@ -31,7 +31,7 @@ EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
   0,                                                                        // UINT32     FirmwareCtrl
   0,                                                                        // UINT32     Dsdt
   EFI_ACPI_RESERVED_BYTE,                                                   // UINT8      Reserved0
-  EFI_ACPI_6_2_PM_PROFILE_UNSPECIFIED,                                      // UINT8      PreferredPmProfile
+  EFI_ACPI_6_2_PM_PROFILE_ENTERPRISE_SERVER,                                // UINT8      PreferredPmProfile
   0,                                                                        // UINT16     SciInt
   0,                                                                        // UINT32     SmiCmd
   0,                                                                        // UINT8      AcpiEnable
