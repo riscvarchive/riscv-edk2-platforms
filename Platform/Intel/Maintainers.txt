@@ -38,12 +38,15 @@ W: https://github.com/tianocore/tianocore.github.io/wiki/Security
 EDK II Packages:
 ----------------
 KabylakeOpenBoardPkg
-M: Jiewen Yao <jiewen.yao@intel.com>
 M: Chasel Chiu <chasel.chiu@intel.com>
+M: Michael A Kubacki <michael.a.kubacki@intel.com>
 
 MinPlatformPkg
+M: Michael A Kubacki <michael.a.kubacki@intel.com>
 M: Jiewen Yao <jiewen.yao@intel.com>
 
 PurleyOpenBoardPkg
+M: Shifei A Lu <shifei.a.lu@intel.com>
 M: Xiaohu Zhou <bowen.zhou@intel.com>
+M: Isaac W Oram <isaac.w.oram@intel.com>
 
