@@ -17,7 +17,7 @@
 
 #define NUMBER_DEBUG_DEVICE_INFO    1
 #define NUMBER_OF_GENERIC_ADDRESS   1
-#define NAMESPACE_STRING_SIZE       8
+#define NAMESPACE_STRING_SIZE       12
 #define UART_LENGTH                 0x1000
 
 #pragma pack(1)
@@ -74,7 +74,7 @@ EFI_ACPI_DEBUG_PORT_2_TABLE Dbg2 = {
       {
         UART_LENGTH
       },
-      "COM1"
+      "\\_SB.COM0"
     }
   }
 };
