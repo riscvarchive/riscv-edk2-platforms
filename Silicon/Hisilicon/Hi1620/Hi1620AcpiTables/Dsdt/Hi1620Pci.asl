@@ -1213,4 +1213,12 @@ Device (PCIB)
     Return(0x03)
   }
 }
+
+Device (RESP)  //reserve for ecam resource
+  {
+    Name (_HID, "PNP0C02")
+    Name (_CRS, ResourceTemplate (){
+      Memory32Fixed (ReadWrite, 0xd0000000, 0x10000000)
+    })
+  }
 }
