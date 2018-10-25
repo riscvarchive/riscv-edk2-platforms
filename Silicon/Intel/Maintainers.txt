@@ -39,5 +39,20 @@ EDK II Packages:
 ----------------
 KabylakeSiliconPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Jiewen Yao <jiewen.yao@intel.com>
+M: Michael A Kubacki <michael.a.kubacki@intel.com>
+
+LewisburgPkg
+M: Piwko, Maciej <maciej.piwko@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+PurleyRcPkg
+M: Gillispie, Thad <thad.gillispie@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+PurleySktPkg
+M: Gillispie, Thad <thad.gillispie@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
 
