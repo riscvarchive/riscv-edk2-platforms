@@ -212,7 +212,7 @@ Scope(_SB)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 } // Device(PCI0)
 
@@ -262,7 +262,7 @@ Device (PCI1)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 } // Device(PCI1)
 
@@ -325,7 +325,7 @@ Device (PCI2)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 }
 
@@ -374,7 +374,7 @@ Device (PCI3)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 }
 
@@ -423,7 +423,7 @@ Device (PCI4)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 }
 
@@ -733,7 +733,7 @@ Device (PCI5)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x01)
+    Return(0x00)
   }
 }
 
@@ -866,11 +866,11 @@ Device (PCI6)
     // Never allow SHPC (no SHPC controller in this system)
     And(CTRL,0x1D,CTRL)
 
-    If(LNotEqual(Arg1,One)) {  // Unknown revision
+    If(LNotEqual(Arg1,One)) { // Unknown revision
       Or(CDW1,0x08,CDW1)
     }
 
-    If(LNotEqual(CDW3,CTRL)) {  // Capabilities bits were masked
+    If(LNotEqual(CDW3,CTRL)) { // Capabilities bits were masked
       Or(CDW1,0x10,CDW1)
     }
 
@@ -924,7 +924,7 @@ Device (PCI6)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 } // Device(PCI6)
 
@@ -974,7 +974,7 @@ Device (PCI7)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 } // Device(PCI7)
 
@@ -1038,7 +1038,7 @@ Device (PCI8)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 }// Device(PCI8)
 
@@ -1087,7 +1087,7 @@ Device (PCI9)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 }// Device(PCI9)
 
@@ -1136,7 +1136,7 @@ Device (PCIA)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 }// Device(PCIA)
 
@@ -1210,7 +1210,7 @@ Device (PCIB)
 
   Method (_PXM, 0, NotSerialized)
   {
-    Return(0x03)
+    Return(0x02)
   }
 }
 
