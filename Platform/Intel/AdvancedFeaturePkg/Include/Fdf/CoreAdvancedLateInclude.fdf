@@ -1,7 +1,7 @@
 ## @file
 #  FDF file of Platform.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -27,9 +27,6 @@ INF  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
 INF  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
 INF  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
 INF  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
-#INF  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
-INF  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
-#INF  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
 
 INF  NetworkPkg/Ip6Dxe/Ip6Dxe.inf
 INF  NetworkPkg/TcpDxe/TcpDxe.inf
@@ -42,7 +39,7 @@ INF  NetworkPkg/HttpDxe/HttpDxe.inf
 INF  NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf
 INF  NetworkPkg/HttpBootDxe/HttpBootDxe.inf
 
-#INF  NetworkPkg/IScsiDxe/IScsiDxe.inf
+INF  NetworkPkg/IScsiDxe/IScsiDxe.inf
 INF  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
 !endif
 
