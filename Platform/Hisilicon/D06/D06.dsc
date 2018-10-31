@@ -56,9 +56,7 @@
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
 
-!if $(NETWORK_IP6_ENABLE) == TRUE
   TcpIoLib|MdeModulePkg/Library/DxeTcpIoLib/DxeTcpIoLib.inf
-!endif
 
 !if $(HTTP_BOOT_ENABLE) == TRUE
   HttpLib|MdeModulePkg/Library/DxeHttpLib/DxeHttpLib.inf
@@ -372,18 +370,15 @@
   MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
   MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
   MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
+  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+  NetworkPkg/TcpDxe/TcpDxe.inf
+  NetworkPkg/IScsiDxe/IScsiDxe.inf
 !if $(NETWORK_IP6_ENABLE) == TRUE
   NetworkPkg/Ip6Dxe/Ip6Dxe.inf
-  NetworkPkg/TcpDxe/TcpDxe.inf
   NetworkPkg/Udp6Dxe/Udp6Dxe.inf
   NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
   NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
-  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
-!else
-  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
-  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
 !endif
-  MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
 !if $(HTTP_BOOT_ENABLE) == TRUE
   NetworkPkg/DnsDxe/DnsDxe.inf
   NetworkPkg/HttpUtilitiesDxe/HttpUtilitiesDxe.inf

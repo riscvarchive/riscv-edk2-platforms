@@ -58,6 +58,7 @@
   ArmPlatformSysConfigLib|Platform/ARM/VExpressPkg/Library/ArmVExpressSysConfigRuntimeLib/ArmVExpressSysConfigRuntimeLib.inf
 
 [LibraryClasses.ARM]
+  ArmSoftFloatLib|ArmPkg/Library/ArmSoftFloatLib/ArmSoftFloatLib.inf
   #
   # PSCI support in EL3 may not be available if we are not running under a PSCI
   # compliant secure firmware. Assume PSCI on AARCH64, and fall back to the

@@ -669,11 +669,11 @@ DEFINE DO_CAPSULE   = FALSE
   }
   MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
   MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
-  MdeModulePkg/Universal/Network/Tcp4Dxe/Tcp4Dxe.inf
   MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
-  MdeModulePkg/Universal/Network/UefiPxeBcDxe/UefiPxeBcDxe.inf
+  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
+  NetworkPkg/TcpDxe/TcpDxe.inf
 ## Bug https://bugs.linaro.org/show_bug.cgi?id=2239
-# MdeModulePkg/Universal/Network/IScsiDxe/IScsiDxe.inf
+# NetworkPkg/IScsiDxe/IScsiDxe.inf
 
   #
   # Core Info
