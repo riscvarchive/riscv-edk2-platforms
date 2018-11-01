@@ -26,6 +26,7 @@
 [Packages]
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
+  Platform/ARM/VExpressPkg/ArmVExpressPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
 
 [LibraryClasses]
