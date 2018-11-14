@@ -392,11 +392,11 @@
 
 /*1P NA PCIe2 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -411,6 +411,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000002
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 0000f800
 [0004]                           ID Count : 00000800
@@ -420,11 +422,11 @@
                            Single Mapping : 0
 /* 1P NB PCIe0 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -439,6 +441,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000004
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00008800
 [0004]                           ID Count : 00000800
@@ -449,11 +453,11 @@
 
 /* 1P NB PCIe1 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -468,6 +472,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000005
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00007800
 [0004]                           ID Count : 00000800
@@ -478,11 +484,11 @@
 
 /* 1P NB PCIe2 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -497,6 +503,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000006
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 0000c000
 [0004]                           ID Count : 00000800
@@ -506,11 +514,11 @@
                            Single Mapping : 0
 /* 1P NB PCIe3 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -525,6 +533,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000007
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00009000
 [0004]                           ID Count : 00000800
@@ -534,11 +544,11 @@
                            Single Mapping : 0
 /* 2P NA PCIe2*/
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -553,6 +563,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 0000000a
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00001000
 [0004]                           ID Count : 00001000
@@ -563,11 +575,11 @@
 
 /* 2P NB PCIe0*/
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -582,6 +594,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 0000000c
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00002000
 [0004]                           ID Count : 00001000
@@ -592,11 +606,11 @@
 
  /* 2P NB PCIe1*/
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -611,6 +625,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 0000000d
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00003000
 [0004]                           ID Count : 00001000

@@ -53,9 +53,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 01
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000001
 [0004]             DeviceID mapping index : 00000002
 
 [0004]                         Input base : 00000000
@@ -99,9 +97,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 01
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000001
 [0004]             DeviceID mapping index : 0001
 
 [0004]                         Input base : 00007c00
@@ -139,9 +135,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 01
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000001
 [0004]             DeviceID mapping index : 00000001
 
 [0004]                         Input base : 00007400
@@ -179,9 +173,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 03
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000003
 [0004]             DeviceID mapping index : 00000002
 
 [0004]                         Input base : 00008000
@@ -225,9 +217,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 03
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000003
 [0004]             DeviceID mapping index : 0001
 
 [0004]                         Input base : 0000BC00
@@ -265,9 +255,7 @@
 [0004]                      PRI Interrupt : 00000000
 [0004]                     GERR Interrupt : 00000000
 [0004]                     Sync Interrupt : 00000000
-[0001]                   Proximity Domain : 03
-[0001]                           Reserved : 00
-[0002]                           Reserved : 0000
+[0004]                   Proximity Domain : 00000003
 [0004]             DeviceID mapping index : 00000001
 
 [0004]                         Input base : 0000B400
@@ -287,10 +275,10 @@
 /*0x2FC RC 0 */
 [0001]                               Type : 02
 [0002]                             Length : 00A0
-[0001]                           Revision : 00
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 0000000C
-[0004]                     Mapping Offset : 00000028
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -305,6 +293,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000000           // should match with above MCFG
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 /* BDF of pcie host 0 -> stream ID of pcie 0/1 SMMU */
 [0004]                         Input base : 00000000
@@ -322,7 +312,7 @@
 [0004]              Flags (decoded below) : 00000000
                            Single Mapping : 1
 
-/* host2 and host3 should no open smmu for chips smmu bug *
+/* host2 and host3 should no open smmu for chips smmu bug */
 /* BDF of pcie host 2 -> stream ID of pcie 0/1 ITS */
 [0004]                         Input base : 00007a00
 [0004]                           ID Count : 00000100          // the number of IDs in range
@@ -371,7 +361,7 @@
 [0004]              Flags (decoded below) : 00000000
                            Single Mapping : 1
 
-/* host8 and host9 should no open smmu for chips smmu bug *
+/* host8 and host9 should no open smmu for chips smmu bug */
 /* BDF of pcie host 8 -> stream ID of pcie ITS */
 [0004]                         Input base : 0000BA00
 [0004]                           ID Count : 00000100          // the number of IDs in range

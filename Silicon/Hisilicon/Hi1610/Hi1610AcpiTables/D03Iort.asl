@@ -282,11 +282,11 @@
 
 /* RC 0 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -301,6 +301,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000000
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00000000
 [0004]                           ID Count : 00002000
@@ -311,11 +313,11 @@
 
 /* RC 1 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -330,6 +332,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000001
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 0000e000
 [0004]                           ID Count : 00002000
@@ -340,11 +344,11 @@
 
 /* RC 2 */
 [0001]                               Type : 02
-[0002]                             Length : 0034
-[0001]                           Revision : 00
+[0002]                             Length : 0038
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 00000001
-[0004]                     Mapping Offset : 00000020
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -359,6 +363,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000002
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 [0004]                         Input base : 00008000
 [0004]                           ID Count : 00002000

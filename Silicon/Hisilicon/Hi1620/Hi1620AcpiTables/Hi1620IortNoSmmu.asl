@@ -36,10 +36,10 @@
 /*0x4c RC 0 */
 [0001]                               Type : 02
 [0002]                             Length : 00A0
-[0001]                           Revision : 00
+[0001]                           Revision : 01
 [0004]                           Reserved : 00000000
 [0004]                      Mapping Count : 0000000C
-[0004]                     Mapping Offset : 00000028
+[0004]                     Mapping Offset : 00000024
 
 [0008]                  Memory Properties : [IORT Memory Access Properties]
 [0004]                    Cache Coherency : 00000001
@@ -54,6 +54,8 @@
                          Device Attribute : 0
 [0004]                      ATS Attribute : 00000000
 [0004]                 PCI Segment Number : 00000000           // should match with above MCFG
+                        Memory Size Limit : 00
+                                 Reserved : 00000000
 
 /* BDF of pcie host 0 -> stream ID of pcie 0/1 SMMU */
 [0004]                         Input base : 00000000
