@@ -18,7 +18,6 @@ Scope(_SB)
   // Mbi-gen peri b intc
   Device(MBI0) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0x60080000, 0x10000)
     })
@@ -38,7 +37,6 @@ Scope(_SB)
 
   Device(MBI1) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
@@ -93,7 +91,6 @@ Scope(_SB)
   // Mbi-gen sas0
   Device(MBI2) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
@@ -146,7 +143,6 @@ Scope(_SB)
 
   Device(MBI3) {          // Mbi-gen sas1 intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xa0080000, 0x10000)
     })
@@ -198,7 +194,6 @@ Scope(_SB)
   }
   Device(MBI4) {          // Mbi-gen sas2 intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xa0080000, 0x10000)
     })
@@ -251,7 +246,6 @@ Scope(_SB)
 
   Device(MBI5) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xa0080000, 0x10000)
     })
@@ -271,7 +265,6 @@ Scope(_SB)
 
   Device(MBI6) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xd0080000, 0x10000)
     })
@@ -291,7 +284,6 @@ Scope(_SB)
 
   Device(MBI7) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xd0080000, 0x10000)
     })
@@ -311,7 +303,6 @@ Scope(_SB)
 
   Device(MBI8) {
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       QwordMemory (
         ResourceProducer,
@@ -377,7 +368,6 @@ Scope(_SB)
 /*
   Device(MBI4) {          // Mbi-gen dsa1 dbg0 intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
@@ -392,7 +382,6 @@ Scope(_SB)
 
   Device(MBI5) {          // Mbi-gen dsa2 dbg1 intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
@@ -407,7 +396,6 @@ Scope(_SB)
 
   Device(MBI6) {          // Mbi-gen dsa sas0 intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
@@ -422,7 +410,6 @@ Scope(_SB)
 */
   Device(MBI9) {          // Mbi-gen roce intc
     Name(_HID, "HISI0152")
-    Name(_CID, "MBIGen")
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0xc0080000, 0x10000)
     })
