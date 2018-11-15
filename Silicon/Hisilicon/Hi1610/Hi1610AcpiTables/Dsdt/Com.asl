@@ -20,7 +20,6 @@ Scope(_SB)
 {
   Device(COM0) {
     Name(_HID, "HISI0031") //it is not 16550 compatible
-    Name(_CID, "8250dw")
     Name(_UID, Zero)
     Name(_CRS, ResourceTemplate() {
       Memory32Fixed(ReadWrite, 0x80300000, 0x1000)
