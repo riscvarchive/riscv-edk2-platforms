@@ -75,8 +75,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A04), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      2
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -99,8 +99,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A05), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      4
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -123,8 +123,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A06), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      5
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -147,8 +147,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A07), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      6
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -171,8 +171,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A08), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      8
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -195,8 +195,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A09), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      10
     },
     {
       END_DEVICE_PATH_TYPE,
@@ -219,8 +219,8 @@ STATIC EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mEfiPciRootBridgeDevicePath [ENUM_HB_NUM]
           (UINT8)(sizeof (ACPI_HID_DEVICE_PATH) >> 8)
         }
       },
-      EISA_PNP_ID(0x0A0A), // PCI
-      0
+      EISA_PNP_ID(0x0A03), // PCI
+      11
     },
     {
       END_DEVICE_PATH_TYPE,
