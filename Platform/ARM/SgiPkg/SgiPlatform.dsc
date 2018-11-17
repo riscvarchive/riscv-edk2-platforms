@@ -164,7 +164,7 @@
   gArmPlatformTokenSpaceGuid.PcdPL031RtcBase|0x1C170000
 
   # List of Device Paths that support BootMonFs
-  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59)"
+  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(93E34C7E-B50E-11DF-9223-2443DFD72085,00)"
 
   # ARM OS Loader
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3

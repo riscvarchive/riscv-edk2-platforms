@@ -355,7 +355,7 @@
   #
 
   # List of Device Paths that support BootMonFs
-  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59);VenHw(1F15DA3C-37FF-4070-B471-BB4AF12A724A)"
+  gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(93E34C7E-B50E-11DF-9223-2443DFD72085,00);VenHw(93E34C7E-B50E-11DF-9223-2443DFD72085,02)"
 
   # RunAxf support via Dynamic Shell Command protocol
   # We want to use the Shell Libraries but don't want it to initialise

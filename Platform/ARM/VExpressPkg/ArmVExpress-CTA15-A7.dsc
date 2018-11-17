@@ -172,7 +172,7 @@
   #
   # Define the device path to the FDT for the platform
   #
-  gFdtPlatformDxeTokenSpaceGuid.PcdFdtDevicePaths|L"VenHw(E7223039-5836-41E1-B542-D7EC736C5E59)/ca15a7"
+  gFdtPlatformDxeTokenSpaceGuid.PcdFdtDevicePaths|L"VenHw(93E34C7E-B50E-11DF-9223-2443DFD72085,00)/ca15a7"
 
   #
   # ARM Architectural Timer Frequency
