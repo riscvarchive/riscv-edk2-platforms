@@ -55,10 +55,29 @@ typedef struct {
 //
 // SDMMC devices per-board description
 //
+typedef enum {
+  RemovableSlot,
+  EmbeddedSlot,
+  SharedBusSlot,
+  UnknownSlot
+} MV_SDMMC_SLOT_TYPE;
+
 typedef struct {
   MV_SOC_SDMMC_DESC *SoC;
-  UINTN              SdMmcDevCount;
+  UINTN    SdMmcDevCount;
+  BOOLEAN  Xenon1v8Enabled;
+  BOOLEAN  Xenon8BitBusEnabled;
+  BOOLEAN  XenonSlowModeEnabled;
+  UINT8    XenonTuningStepDivisor;
+  MV_SDMMC_SLOT_TYPE SlotType;
 } MV_BOARD_SDMMC_DESC;
+
+EFI_STATUS
+EFIAPI
+ArmadaBoardDescSdMmcGet (
+  OUT UINTN               *SdMmcDevCount,
+  OUT MV_BOARD_SDMMC_DESC **SdMmcDesc
+  );
 
 //
 // XHCI devices per-board description
