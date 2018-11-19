@@ -55,6 +55,9 @@
 [Components.AARCH64]
   Silicon/Marvell/Armada7k8k/AcpiTables/Armada80x0McBin.inf
 
+[LibraryClasses.common]
+  ArmadaBoardDescLib|Platform/SolidRun/Armada80x0McBin/Armada80x0McBinBoardDescLib/Armada80x0McBinBoardDescLib.inf
+
 ################################################################################
 #
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform
