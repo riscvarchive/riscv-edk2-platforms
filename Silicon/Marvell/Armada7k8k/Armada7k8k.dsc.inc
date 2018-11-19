@@ -509,7 +509,6 @@
   # SD/MMC
   MdeModulePkg/Bus/Sd/EmmcDxe/EmmcDxe.inf
   MdeModulePkg/Bus/Sd/SdDxe/SdDxe.inf
-  Silicon/Marvell/Drivers/SdMmc/XenonDxe/SdMmcPciHcDxe.inf
 
   # Console packages
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
