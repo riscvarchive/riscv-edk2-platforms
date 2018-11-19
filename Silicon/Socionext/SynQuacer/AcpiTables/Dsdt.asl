@@ -135,7 +135,6 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
     // UART PL011
     Device (COM0) {
       Name (_HID, "ARMH0011")
-      Name (_CID, "PL011")
       Name (_UID, Zero)
       Name (_CRS, ResourceTemplate () {
         Memory32Fixed (ReadWrite, FixedPcdGet32 (PcdSerialRegisterBase), 0x1000)
