@@ -17,6 +17,90 @@
 **/
 
 //#include "ArmPlatform.h"
+
+/*
+  See ACPI 6.1 Spec, 6.2.11, PCI Firmware Spec 3.0, 4.5
+*/
+#define PCI_OSC_SUPPORT() \
+  Name(SUPP, Zero) /* PCI _OSC Support Field value */ \
+  Name(CTRL, Zero) /* PCI _OSC Control Field value */ \
+  Method(_OSC,4) { \
+    If(LEqual(Arg0,ToUUID("33DB4D5B-1FF7-401C-9657-7441C03DD766"))) { \
+      /* Create DWord-adressable fields from the Capabilities Buffer */ \
+      CreateDWordField(Arg3,0,CDW1) \
+      CreateDWordField(Arg3,4,CDW2) \
+      CreateDWordField(Arg3,8,CDW3) \
+      /* Save Capabilities DWord2 & 3 */ \
+      Store(CDW2,SUPP) \
+      Store(CDW3,CTRL) \
+      /* Only allow native hot plug control if OS supports: */ \
+      /* ASPM */ \
+      /* Clock PM */ \
+      /* MSI/MSI-X */ \
+      If(LNotEqual(And(SUPP, 0x16), 0x16)) { \
+        And(CTRL,0x1E,CTRL) \
+      }\
+      \
+      /* Do not allow native PME, AER */ \
+      /* Never allow SHPC (no SHPC controller in this system)*/ \
+      And(CTRL,0x10,CTRL) \
+      If(LNotEqual(Arg1,One)) { /* Unknown revision */ \
+        Or(CDW1,0x08,CDW1) \
+      } \
+      \
+      If(LNotEqual(CDW3,CTRL)) { /* Capabilities bits were masked */ \
+        Or(CDW1,0x10,CDW1) \
+      } \
+      \
+      /* Update DWORD3 in the buffer */ \
+      Store(CTRL,CDW3) \
+      Return(Arg3) \
+    } Else { \
+      Or(CDW1,4,CDW1) /* Unrecognized UUID */ \
+      Return(Arg3) \
+    } \
+  } // End _OSC
+
+#define PCI_OSC_SUPPORT_HOTPLUG() \
+  Name(SUPP, Zero) /* PCI _OSC Support Field value */ \
+  Name(CTRL, Zero) /* PCI _OSC Control Field value */ \
+  Method(_OSC,4) { \
+    If(LEqual(Arg0,ToUUID("33DB4D5B-1FF7-401C-9657-7441C03DD766"))) { \
+      /* Create DWord-adressable fields from the Capabilities Buffer */ \
+      CreateDWordField(Arg3,0,CDW1) \
+      CreateDWordField(Arg3,4,CDW2) \
+      CreateDWordField(Arg3,8,CDW3) \
+      /* Save Capabilities DWord2 & 3 */ \
+      Store(CDW2,SUPP) \
+      Store(CDW3,CTRL) \
+      /* Only allow native hot plug control if OS supports: */ \
+      /* ASPM */ \
+      /* Clock PM */ \
+      /* MSI/MSI-X */ \
+      If(LNotEqual(And(SUPP, 0x16), 0x16)) { \
+        And(CTRL,0x1E,CTRL) \
+      }\
+      \
+      /* Always allow native PME, AER (no dependencies) */ \
+      /* Never allow SHPC (no SHPC controller in this system)*/ \
+      And(CTRL,0x1D,CTRL) \
+      If(LNotEqual(Arg1,One)) { /* Unknown revision */ \
+        Or(CDW1,0x08,CDW1) \
+      } \
+      \
+      If(LNotEqual(CDW3,CTRL)) { /* Capabilities bits were masked */ \
+        Or(CDW1,0x10,CDW1) \
+      } \
+      \
+      /* Update DWORD3 in the buffer */ \
+      Store(CTRL,CDW3) \
+      Return(Arg3) \
+    } Else { \
+      Or(CDW1,4,CDW1) /* Unrecognized UUID */ \
+      Return(Arg3) \
+    } \
+  } // End _OSC
+
 Scope(_SB)
 {
   Device (PCI0)
@@ -139,53 +223,7 @@ Scope(_SB)
       Return (RBUF)
     }                                        // Method(_CRS), this method return RBUF!
 
-  //
-  // OS Control Handoff
-  //
-  Name(SUPP, Zero) // PCI _OSC Support Field value
-  Name(CTRL, Zero) // PCI _OSC Control Field value
-
-  Method(_OSC,4) {
-    // Check for proper UUID
-    If(LEqual(Arg0,ToUUID("33DB4D5B-1FF7-401C-9657-7441C03DD766"))) {
-      // Create DWord-adressable fields from the Capabilities Buffer
-      CreateDWordField(Arg3,0,CDW1)
-      CreateDWordField(Arg3,4,CDW2)
-      CreateDWordField(Arg3,8,CDW3)
-
-      // Save Capabilities DWord2 & 3
-      Store(CDW2,SUPP)
-      Store(CDW3,CTRL)
-
-      // Only allow native hot plug control if OS supports:
-      //  ASPM
-      //  Clock PM
-      //  MSI/MSI-X
-      If(LNotEqual(And(SUPP, 0x16), 0x16)) {
-        And(CTRL,0x1E,CTRL) // Mask bit 0 (and undefined bits)
-      }
-
-      // Always allow native PME, AER (no dependencies)
-
-      // Never allow SHPC (no SHPC controller in this system)
-      And(CTRL,0x1D,CTRL)
-
-      If(LNotEqual(Arg1,One)) {  // Unknown revision
-        Or(CDW1,0x08,CDW1)
-      }
-
-      If(LNotEqual(CDW3,CTRL)) {  // Capabilities bits were masked
-        Or(CDW1,0x10,CDW1)
-      }
-
-      // Update DWORD3 in the buffer
-      Store(CTRL,CDW3)
-      Return(Arg3)
-    } Else {
-      Or(CDW1,4,CDW1) // Unrecognized UUID
-      Return(Arg3)
-    }
-  } // End _OSC
+  PCI_OSC_SUPPORT_HOTPLUG ()
 
   Method (_HPX, 0) {
     Return (Package(2) {
@@ -270,6 +308,8 @@ Device (PCI1)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -333,6 +373,8 @@ Device (PCI2)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -382,6 +424,8 @@ Device (PCI3)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -430,6 +474,8 @@ Device (PCI4)
     })                                      // Name(RBUF)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
+
+  PCI_OSC_SUPPORT ()
 
   Method (_STA, 0x0, NotSerialized)
   {
@@ -504,6 +550,8 @@ Device (PCI5)
     })                                 // Name(RBUF)
     Return (RBUF)
   }                                    // Method(_CRS), this method return RBUF!
+
+  PCI_OSC_SUPPORT ()
 
   Method (_STA, 0x0, NotSerialized)
   {
@@ -870,53 +918,7 @@ Device (PCI6)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
-  //
-  // OS Control Handoff
-  //
-  Name(SUPP, Zero) // PCI _OSC Support Field value
-  Name(CTRL, Zero) // PCI _OSC Control Field value
-
-  Method(_OSC,4) {
-    // Check for proper UUID
-    If(LEqual(Arg0,ToUUID("33DB4D5B-1FF7-401C-9657-7441C03DD766"))) {
-    // Create DWord-adressable fields from the Capabilities Buffer
-    CreateDWordField(Arg3,0,CDW1)
-    CreateDWordField(Arg3,4,CDW2)
-    CreateDWordField(Arg3,8,CDW3)
-
-    // Save Capabilities DWord2 & 3
-    Store(CDW2,SUPP)
-    Store(CDW3,CTRL)
-
-    // Only allow native hot plug control if OS supports:
-    //  ASPM
-    //  Clock PM
-    //  MSI/MSI-X
-    If(LNotEqual(And(SUPP, 0x16), 0x16)) {
-      And(CTRL,0x1E,CTRL) // Mask bit 0 (and undefined bits)
-    }
-
-    // Always allow native PME, AER (no dependencies)
-
-    // Never allow SHPC (no SHPC controller in this system)
-    And(CTRL,0x1D,CTRL)
-
-    If(LNotEqual(Arg1,One)) { // Unknown revision
-      Or(CDW1,0x08,CDW1)
-    }
-
-    If(LNotEqual(CDW3,CTRL)) { // Capabilities bits were masked
-      Or(CDW1,0x10,CDW1)
-    }
-
-    // Update DWORD3 in the buffer
-    Store(CTRL,CDW3)
-    Return(Arg3)
-    } Else {
-    Or(CDW1,4,CDW1) // Unrecognized UUID
-    Return(Arg3)
-    }
-  } // End _OSC
+  PCI_OSC_SUPPORT_HOTPLUG ()
 
   Method (_HPX, 0) {
     Return (Package(2) {
@@ -1002,6 +1004,8 @@ Device (PCI7)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -1066,6 +1070,8 @@ Device (PCI8)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -1115,6 +1121,8 @@ Device (PCI9)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
 
+  PCI_OSC_SUPPORT ()
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -1163,6 +1171,8 @@ Device (PCIA)
     })                                      // Name(RBUF)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
+
+  PCI_OSC_SUPPORT ()
 
   Method (_STA, 0x0, NotSerialized)
   {
@@ -1237,6 +1247,8 @@ Device (PCIB)
     })                                      // Name(RBUF)
     Return (RBUF)
   }                                         // Method(_CRS), this method return RBUF!
+
+  PCI_OSC_SUPPORT ()
 
   Method (_STA, 0x0, NotSerialized)
   {
