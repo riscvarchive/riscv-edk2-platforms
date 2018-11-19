@@ -189,7 +189,6 @@ NonDiscoverableEntryPoint (
   if (EFI_ERROR(Status)) {
     return Status;
   }
-  BoardDescProtocol->BoardDescFree (SdMmcBoardDesc);
 
   return EFI_SUCCESS;
 }

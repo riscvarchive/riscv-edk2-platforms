@@ -47,6 +47,7 @@
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
+  ArmadaBoardDescLib
   ArmadaSoCDescLib
   DebugLib
   MemoryAllocationLib

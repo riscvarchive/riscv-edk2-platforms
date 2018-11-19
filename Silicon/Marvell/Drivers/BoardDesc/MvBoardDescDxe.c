@@ -270,6 +270,7 @@ MvBoardDescSdMmcGet (
 {
   UINT8 *SdMmcDeviceEnabled;
   UINTN SdMmcCount, SdMmcDeviceTableSize, SdMmcIndex, Index;
+  UINTN SdMmcDevCount;
   MV_BOARD_SDMMC_DESC *BoardDesc;
   MV_SOC_SDMMC_DESC *SoCDesc;
   EFI_STATUS Status;
@@ -277,6 +278,13 @@ MvBoardDescSdMmcGet (
   /* Get SoC data about all available SDMMC controllers */
   Status = ArmadaSoCDescSdMmcGet (&SoCDesc, &SdMmcCount);
   if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /* Get per-board configuration of the controllers */
+  Status = ArmadaBoardDescSdMmcGet (&SdMmcDevCount, &BoardDesc);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: ArmadaBoardDescSdMmcGet filed\n", __FUNCTION__));
     return Status;
   }
 
@@ -294,16 +302,10 @@ MvBoardDescSdMmcGet (
   SdMmcDeviceTableSize = PcdGetSize (PcdPciESdhci);
 
   /* Check if PCD with SDMMC controllers is correctly defined */
-  if (SdMmcDeviceTableSize > SdMmcCount) {
+  if ((SdMmcDeviceTableSize > SdMmcCount) ||
+      (SdMmcDeviceTableSize < SdMmcDevCount)) {
     DEBUG ((DEBUG_ERROR, "%a: Wrong PcdPciESdhci format\n", __FUNCTION__));
     return EFI_INVALID_PARAMETER;
-  }
-
-  /* Allocate and fill board description */
-  BoardDesc = AllocateZeroPool (SdMmcDeviceTableSize * sizeof (MV_BOARD_SDMMC_DESC));
-  if (BoardDesc == NULL) {
-    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
-    return EFI_OUT_OF_RESOURCES;
   }
 
   SdMmcIndex = 0;
@@ -313,6 +315,12 @@ MvBoardDescSdMmcGet (
       continue;
     }
 
+    if (SdMmcIndex >= SdMmcDevCount) {
+      DEBUG ((DEBUG_ERROR,
+        "%a: More enabled devices than returned by ArmadaBoardDescSdMmcGet\n",
+        __FUNCTION__));
+      return EFI_INVALID_PARAMETER;
+    }
     BoardDesc[SdMmcIndex].SoC = &SoCDesc[Index];
     SdMmcIndex++;
   }
