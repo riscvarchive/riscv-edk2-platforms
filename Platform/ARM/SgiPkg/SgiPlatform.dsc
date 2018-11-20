@@ -102,6 +102,7 @@
 
 [PcdsFixedAtBuild.common]
   gArmTokenSpaceGuid.PcdVFPEnabled|1
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
 
   # DRAM Block2 Base and Size
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base|0x8080000000
