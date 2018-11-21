@@ -83,10 +83,13 @@ typedef struct _NOR_FLASH_INSTANCE                NOR_FLASH_INSTANCE;
 
 typedef EFI_STATUS (*NOR_FLASH_INITIALIZE)        (NOR_FLASH_INSTANCE* Instance);
 
+#pragma pack(1)
 typedef struct {
   VENDOR_DEVICE_PATH                  Vendor;
+  UINT8                               Index;
   EFI_DEVICE_PATH_PROTOCOL            End;
 } NOR_FLASH_DEVICE_PATH;
+#pragma pack()
 
 struct _NOR_FLASH_INSTANCE {
   UINT32                              Signature;
