@@ -79,6 +79,7 @@
 // ARM platform description data.
 typedef struct {
   UINTN  PlatformId;
+  UINTN  ConfigId;
 } SGI_PLATFORM_DESCRIPTOR;
 
 #endif // __SGI_PLATFORM_H__
