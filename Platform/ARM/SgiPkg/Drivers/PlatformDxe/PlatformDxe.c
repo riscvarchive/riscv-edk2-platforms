@@ -48,14 +48,16 @@ ArmSgiPkgEntryPoint (
 
   if ((PartNum == SGI575_PART_NUM) && (ConfigId == SGI575_CONF_NUM)) {
     Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesFileGuid);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR, "%a: Failed to install ACPI tables\n",
-        __FUNCTION__));
-      return Status;
-    }
+  } else if ((PartNum == SGI_CLARK_PART_NUM) &&
+             (ConfigId == SGI_CLARK_CONF_ARES)) {
+    Status = LocateAndInstallAcpiFromFv (&gSgiClarkAresAcpiTablesFileGuid);
   } else {
-    DEBUG ((DEBUG_ERROR, "PlatformDxe: Unsupported Platform Id\n"));
-    return EFI_UNSUPPORTED;
+    Status = EFI_UNSUPPORTED;
+  }
+
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Failed to install ACPI tables\n", __FUNCTION__));
+    return Status;
   }
 
   Status = EFI_REQUEST_UNLOAD_IMAGE;
