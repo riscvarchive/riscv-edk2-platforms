@@ -15,21 +15,19 @@
 
 #include "SgiAcpiHeader.h"
 #include <Library/AcpiLib.h>
-#include <IndustryStandard/Acpi61.h>
+#include <IndustryStandard/Acpi62.h>
 #include <IndustryStandard/DebugPort2Table.h>
 
 #define SGI_DBG2_NUM_DEBUG_PORTS           1
 #define SGI_DBG2_NUM_GAS                   1
-#define SGI_DBG2_NS_STR_LENGTH             8
+#define SGI_DBG2_NS_STR_LENGTH             12
 #define SGI_PL011_REGISTER_SPACE           0x1000
-
-#define NAME_STR_UART1     {'C', 'O', 'M', '1', '\0', '\0', '\0', '\0'}
 
 #pragma pack(1)
 
 typedef struct {
   EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT Dbg2Device;
-  EFI_ACPI_6_1_GENERIC_ADDRESS_STRUCTURE        BaseAddressRegister;
+  EFI_ACPI_6_2_GENERIC_ADDRESS_STRUCTURE        BaseAddressRegister;
   UINT32                                        AddressSize;
   UINT8                                         NameSpaceString[SGI_DBG2_NS_STR_LENGTH];
 } DBG2_DEBUG_DEVICE_INFORMATION;
@@ -56,7 +54,7 @@ typedef struct {
     OFFSET_OF (DBG2_DEBUG_DEVICE_INFORMATION, BaseAddressRegister), /* UINT16    BaseAddressRegister Offset */      \
     OFFSET_OF (DBG2_DEBUG_DEVICE_INFORMATION, AddressSize)          /* UINT16    AddressSize Offset */              \
   },                                                                                                                \
-  ARM_GAS32 (UartBase),                            /* EFI_ACPI_6_1_GENERIC_ADDRESS_STRUCTURE BaseAddressRegister */ \
+  ARM_GAS32 (UartBase),                            /* EFI_ACPI_6_2_GENERIC_ADDRESS_STRUCTURE BaseAddressRegister */ \
   UartAddrLen,                                     /* UINT32  AddressSize */                                        \
   UartNameStr                                      /* UINT8   NameSpaceString[MAX_DBG2_NAME_LEN] */                 \
 }
@@ -64,7 +62,7 @@ typedef struct {
 STATIC DBG2_TABLE Dbg2 = {
   {
     ARM_ACPI_HEADER (
-      EFI_ACPI_6_1_DEBUG_PORT_2_TABLE_SIGNATURE,
+      EFI_ACPI_6_2_DEBUG_PORT_2_TABLE_SIGNATURE,
       DBG2_TABLE,
       EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT_REVISION
     ),
@@ -75,11 +73,11 @@ STATIC DBG2_TABLE Dbg2 = {
     // Kernel Debug Port
     DBG2_DEBUG_PORT_DDI (
       SGI_DBG2_NUM_GAS,
-      EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_ARM_SBSA_GENERIC_UART,
+      EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_ARM_PL011_UART,
       FixedPcdGet64 (PcdSerialDbgRegisterBase),
       SGI_PL011_REGISTER_SPACE,
-      NAME_STR_UART1
-    ),
+      "\\_SB.COM0"
+    )
   }
 };
 

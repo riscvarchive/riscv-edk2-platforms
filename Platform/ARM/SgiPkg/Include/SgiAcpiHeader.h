@@ -19,7 +19,7 @@
 // ACPI table information used to initialize tables.
 //
 #define EFI_ACPI_ARM_OEM_ID           'A','R','M','L','T','D'   // OEMID 6 bytes long
-#define EFI_ACPI_ARM_OEM_TABLE_ID     SIGNATURE_64('S','G','I','5','7','5',' ',' ') // OEM table id 8 bytes long
+#define EFI_ACPI_ARM_OEM_TABLE_ID     SIGNATURE_64 ('A','R','M','S','G','I',' ',' ') // OEM table id 8 bytes long
 #define EFI_ACPI_ARM_OEM_REVISION     0x20140727
 #define EFI_ACPI_ARM_CREATOR_ID       SIGNATURE_32('A','R','M',' ')
 #define EFI_ACPI_ARM_CREATOR_REVISION 0x00000099

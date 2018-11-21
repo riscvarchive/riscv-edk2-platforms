@@ -251,7 +251,7 @@
   # ACPI Support
   #
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-  Platform/ARM/SgiPkg/AcpiTables/Sgi575/AcpiTables.inf
+  Platform/ARM/SgiPkg/AcpiTables/Sgi575AcpiTables.inf
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
   #

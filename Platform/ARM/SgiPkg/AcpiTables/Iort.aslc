@@ -14,7 +14,7 @@
 **/
 
 #include <IndustryStandard/Acpi.h>
-#include <IndustryStandard/Acpi60.h>
+#include <IndustryStandard/Acpi62.h>
 #include <IndustryStandard/IoRemappingTable.h>
 #include "SgiAcpiHeader.h"
 
@@ -47,7 +47,7 @@ ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE Iort =
   {
      ARM_ACPI_HEADER  // EFI_ACPI_DESCRIPTION_HEADER
      (
-       EFI_ACPI_6_0_IO_REMAPPING_TABLE_SIGNATURE,
+       EFI_ACPI_6_2_IO_REMAPPING_TABLE_SIGNATURE,
        ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE,
        EFI_ACPI_IO_REMAPPING_TABLE_REVISION
      ),
@@ -83,7 +83,7 @@ ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE Iort =
         0,  // Revision
         0,  // Reserved
         1,  // NumIdMappings
-        __builtin_offsetof (ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE, RcIdMap),  // IdReference
+        OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_RC_NODE, RcIdMap)  // IdReference
       },
       1,  // CacheCoherent
       0,  // AllocationHints
@@ -97,8 +97,8 @@ ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE Iort =
       0x0000,  // InputBase
       0xffff,  // NumIds
       0x0000,  // OutputBase
-      __builtin_offsetof (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, ItsNode),  // OutputReference
-      0,  // Flags
+      OFFSET_OF (ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE, ItsNode),  // OutputReference
+      0,       // Flags
     }
   }
 };

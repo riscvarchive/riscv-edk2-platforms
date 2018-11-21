@@ -22,12 +22,12 @@
 
 [Sources]
   Dbg2.aslc
-  Dsdt.asl
   Fadt.aslc
   Gtdt.aslc
   Iort.aslc
-  Madt.aslc
   Mcfg.aslc
+  Sgi575/Dsdt.asl
+  Sgi575/Madt.aslc
   Spcr.aslc
   Ssdt.asl
 

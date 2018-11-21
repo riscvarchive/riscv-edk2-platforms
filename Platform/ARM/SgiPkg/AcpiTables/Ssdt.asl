@@ -15,12 +15,10 @@
 
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock("SsdtPci.aml", "SSDT", 1, "ARMLTD", "SGI575",
-                EFI_ACPI_ARM_OEM_REVISION)
-{
+DefinitionBlock("SsdtPci.aml", "SSDT", 1, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
     // PCI Root Complex
-    Device(PCI0) {
+    Device (PCI0) {
       Name (_HID, EISAID("PNP0A08")) // PCI Express Root Bridge
       Name (_CID, EISAID("PNP0A03")) // Compatible PCI Root Bridge
       Name (_SEG, Zero)              // PCI Segment Group number
@@ -86,7 +84,7 @@ DefinitionBlock("SsdtPci.aml", "SSDT", 1, "ARMLTD", "SGI575",
             ,
             TypeTranslation
           )
-        }) // Name(RBUF)
+        }) // Name (RBUF)
 
         Return (RBUF)
       } // Method (_CRS)

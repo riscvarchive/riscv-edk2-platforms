@@ -17,16 +17,16 @@
 #include <Library/AcpiLib.h>
 #include <IndustryStandard/Acpi.h>
 
-STATIC EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
+STATIC EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
   ARM_ACPI_HEADER (
-    EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE_SIGNATURE,
-    EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE,
-    EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE_REVISION
+    EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE_SIGNATURE,
+    EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE,
+    EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE_REVISION
   ),
   0,                                                                        // UINT32     FirmwareCtrl
   0,                                                                        // UINT32     Dsdt
   EFI_ACPI_RESERVED_BYTE,                                                   // UINT8      Reserved0
-  EFI_ACPI_6_1_PM_PROFILE_ENTERPRISE_SERVER,                                // UINT8      PreferredPmProfile
+  EFI_ACPI_6_2_PM_PROFILE_ENTERPRISE_SERVER,                                // UINT8      PreferredPmProfile
   0,                                                                        // UINT16     SciInt
   0,                                                                        // UINT32     SmiCmd
   0,                                                                        // UINT8      AcpiEnable
@@ -60,11 +60,11 @@ STATIC EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
   0,                                                                        // UINT8      Century
   0,                                                                        // UINT16     IaPcBootArch
   0,                                                                        // UINT8      Reserved1
-  EFI_ACPI_6_1_HW_REDUCED_ACPI | EFI_ACPI_6_1_LOW_POWER_S0_IDLE_CAPABLE,    // UINT32     Flags
+  EFI_ACPI_6_2_HW_REDUCED_ACPI | EFI_ACPI_6_2_LOW_POWER_S0_IDLE_CAPABLE,    // UINT32     Flags
   NULL_GAS,                                                                 // GAS        ResetReg
   0,                                                                        // UINT8      ResetValue
-  EFI_ACPI_6_1_ARM_PSCI_COMPLIANT,                                          // UINT16     ArmBootArchFlags
-  EFI_ACPI_6_1_FIXED_ACPI_DESCRIPTION_TABLE_MINOR_REVISION,                 // UINT8      MinorRevision
+  EFI_ACPI_6_2_ARM_PSCI_COMPLIANT,                                          // UINT16     ArmBootArchFlags
+  EFI_ACPI_6_2_FIXED_ACPI_DESCRIPTION_TABLE_MINOR_REVISION,                 // UINT8      MinorRevision
   0,                                                                        // UINT64     XFirmwareCtrl
   0,                                                                        // UINT64     XDsdt
   NULL_GAS,                                                                 // GAS        XPm1aEvtBlk

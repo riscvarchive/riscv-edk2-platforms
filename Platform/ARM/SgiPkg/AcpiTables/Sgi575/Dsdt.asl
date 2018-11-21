@@ -16,7 +16,7 @@
 #include "SgiPlatform.h"
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "SGI575", EFI_ACPI_ARM_OEM_REVISION) {
+DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM_REVISION) {
   Scope(_SB) {
 
     Device(CP00) { // A75-0: Cluster 0, Cpu 0
