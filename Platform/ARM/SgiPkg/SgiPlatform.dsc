@@ -252,6 +252,7 @@
   #
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   Platform/ARM/SgiPkg/AcpiTables/Sgi575AcpiTables.inf
+  Platform/ARM/SgiPkg/AcpiTables/SgiClarkAresAcpiTables.inf
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
   #
