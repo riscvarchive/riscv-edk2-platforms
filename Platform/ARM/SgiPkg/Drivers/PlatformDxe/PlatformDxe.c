@@ -51,6 +51,9 @@ ArmSgiPkgEntryPoint (
   } else if ((PartNum == SGI_CLARK_PART_NUM) &&
              (ConfigId == SGI_CLARK_CONF_ARES)) {
     Status = LocateAndInstallAcpiFromFv (&gSgiClarkAresAcpiTablesFileGuid);
+  } else if ((PartNum == SGI_CLARK_PART_NUM) &&
+             (ConfigId == SGI_CLARK_CONF_HELIOS)) {
+    Status = LocateAndInstallAcpiFromFv (&gSgiClarkHeliosAcpiTablesFileGuid);
   } else {
     Status = EFI_UNSUPPORTED;
   }
