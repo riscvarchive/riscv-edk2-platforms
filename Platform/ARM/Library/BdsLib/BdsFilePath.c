@@ -423,8 +423,8 @@ BdsConnectAndUpdateDevicePath (
     }
   }
 
-  if (RemainingDevicePath) {
-    *RemainingDevicePath = Remaining;
+  if (!EFI_ERROR (Status) && RemainingDevicePath != NULL) {
+    *RemainingDevicePath = DuplicateDevicePath (Remaining);
   }
 
   return Status;
@@ -1314,14 +1314,18 @@ BdsLoadImageAndUpdateDevicePath (
   }
 
   FileLoader = FileLoaders;
+  Status = EFI_UNSUPPORTED;
   while (FileLoader->Support != NULL) {
     if (FileLoader->Support (*DevicePath, Handle, RemainingDevicePath)) {
-      return FileLoader->LoadImage (DevicePath, Handle, RemainingDevicePath, Type, Image, FileSize);
+      Status = FileLoader->LoadImage (DevicePath, Handle, RemainingDevicePath,
+                             Type, Image, FileSize);
+      break;
     }
     FileLoader++;
   }
 
-  return EFI_UNSUPPORTED;
+  FreePool (RemainingDevicePath);
+  return Status;
 }
 
 EFI_STATUS
