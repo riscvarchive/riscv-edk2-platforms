@@ -99,12 +99,17 @@ typedef struct {
   UINT64  LastReportedNbOfBytes;
 } BDS_TFTP_CONTEXT;
 
+/**
+  Connect all DXE drivers
+
+  @retval EFI_SUCCESS           All drivers have been connected
+  @retval EFI_NOT_FOUND         No handles match the search.
+  @retval EFI_OUT_OF_RESOURCES  There is not resource pool memory to store the matching results.
+
+**/
 EFI_STATUS
-BdsLoadImage (
-  IN     EFI_DEVICE_PATH       *DevicePath,
-  IN     EFI_ALLOCATE_TYPE     Type,
-  IN OUT EFI_PHYSICAL_ADDRESS* Image,
-  OUT    UINTN                 *FileSize
+BdsConnectAllDrivers (
+  VOID
   );
 
 #endif

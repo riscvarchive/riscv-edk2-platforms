@@ -22,9 +22,7 @@
 
 [Sources.common]
   BdsFilePath.c
-  BdsAppLoader.c
   BdsHelper.c
-  BdsLoadOption.c
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec

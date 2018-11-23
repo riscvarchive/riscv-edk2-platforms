@@ -24,6 +24,9 @@
 #include <Protocol/Dhcp4.h>
 #include <Protocol/Mtftp4.h>
 
+#define IS_DEVICE_PATH_NODE(node,type,subtype)    \
+        (((node)->Type == (type)) && ((node)->SubType == (subtype)))
+
 #define MAX_TFTP_FILE_SIZE    0x01000000
 
 /* Type and defines to set up the DHCP4 options */
@@ -425,28 +428,6 @@ BdsConnectAndUpdateDevicePath (
   }
 
   return Status;
-}
-
-/**
-  Connect a Device Path and return the handle of the driver that support this DevicePath
-
-  @param  DevicePath            Device Path of the File to connect
-  @param  Handle                Handle of the driver that support this DevicePath
-  @param  RemainingDevicePath   Remaining DevicePath nodes that do not match the driver DevicePath
-
-  @retval EFI_SUCCESS           A driver that matches the Device Path has been found
-  @retval EFI_NOT_FOUND         No handles match the search.
-  @retval EFI_INVALID_PARAMETER DevicePath or Handle is NULL
-
-**/
-EFI_STATUS
-BdsConnectDevicePath (
-  IN  EFI_DEVICE_PATH_PROTOCOL* DevicePath,
-  OUT EFI_HANDLE                *Handle,
-  OUT EFI_DEVICE_PATH_PROTOCOL  **RemainingDevicePath
-  )
-{
-  return BdsConnectAndUpdateDevicePath (&DevicePath, Handle, RemainingDevicePath);
 }
 
 BOOLEAN
@@ -1352,62 +1333,4 @@ BdsLoadImage (
   )
 {
   return BdsLoadImageAndUpdateDevicePath (&DevicePath, Type, Image, FileSize);
-}
-
-/**
-  Start an EFI Application from a Device Path
-
-  @param  ParentImageHandle     Handle of the calling image
-  @param  DevicePath            Location of the EFI Application
-
-  @retval EFI_SUCCESS           All drivers have been connected
-  @retval EFI_NOT_FOUND         The Linux kernel Device Path has not been found
-  @retval EFI_OUT_OF_RESOURCES  There is not enough resource memory to store the matching results.
-
-**/
-EFI_STATUS
-BdsStartEfiApplication (
-  IN EFI_HANDLE                  ParentImageHandle,
-  IN EFI_DEVICE_PATH_PROTOCOL    *DevicePath,
-  IN UINTN                       LoadOptionsSize,
-  IN VOID*                       LoadOptions
-  )
-{
-  EFI_STATUS                   Status;
-  EFI_HANDLE                   ImageHandle;
-  EFI_PHYSICAL_ADDRESS         BinaryBuffer;
-  UINTN                        BinarySize;
-  EFI_LOADED_IMAGE_PROTOCOL*   LoadedImage;
-
-  // Find the nearest supported file loader
-  Status = BdsLoadImageAndUpdateDevicePath (&DevicePath, AllocateAnyPages, &BinaryBuffer, &BinarySize);
-  if (EFI_ERROR (Status)) {
-    return Status;
-  }
-
-  // Load the image from the Buffer with Boot Services function
-  Status = gBS->LoadImage (TRUE, ParentImageHandle, DevicePath, (VOID*)(UINTN)BinaryBuffer, BinarySize, &ImageHandle);
-  if (EFI_ERROR (Status)) {
-    return Status;
-  }
-
-  // Passed LoadOptions to the EFI Application
-  if (LoadOptionsSize != 0) {
-    Status = gBS->HandleProtocol (ImageHandle, &gEfiLoadedImageProtocolGuid, (VOID **) &LoadedImage);
-    if (EFI_ERROR (Status)) {
-      return Status;
-    }
-
-    LoadedImage->LoadOptionsSize  = LoadOptionsSize;
-    LoadedImage->LoadOptions      = LoadOptions;
-  }
-
-  // Before calling the image, enable the Watchdog Timer for  the 5 Minute period
-  gBS->SetWatchdogTimer (5 * 60, 0x0000, 0x00, NULL);
-  // Start the image
-  Status = gBS->StartImage (ImageHandle, NULL, NULL);
-  // Clear the Watchdog Timer after the image returns
-  gBS->SetWatchdogTimer (0x0000, 0x0000, 0x0000, NULL);
-
-  return Status;
 }

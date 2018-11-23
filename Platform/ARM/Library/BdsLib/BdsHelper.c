@@ -14,62 +14,6 @@
 
 #include "BdsInternal.h"
 
-EFI_STATUS
-ShutdownUefiBootServices (
-  VOID
-  )
-{
-  EFI_STATUS              Status;
-  UINTN                   MemoryMapSize;
-  EFI_MEMORY_DESCRIPTOR   *MemoryMap;
-  UINTN                   MapKey;
-  UINTN                   DescriptorSize;
-  UINT32                  DescriptorVersion;
-  UINTN                   Pages;
-
-  MemoryMap = NULL;
-  MemoryMapSize = 0;
-  Pages = 0;
-
-  do {
-    Status = gBS->GetMemoryMap (
-                    &MemoryMapSize,
-                    MemoryMap,
-                    &MapKey,
-                    &DescriptorSize,
-                    &DescriptorVersion
-                    );
-    if (Status == EFI_BUFFER_TOO_SMALL) {
-
-      Pages = EFI_SIZE_TO_PAGES (MemoryMapSize) + 1;
-      MemoryMap = AllocatePages (Pages);
-
-      //
-      // Get System MemoryMap
-      //
-      Status = gBS->GetMemoryMap (
-                      &MemoryMapSize,
-                      MemoryMap,
-                      &MapKey,
-                      &DescriptorSize,
-                      &DescriptorVersion
-                      );
-    }
-
-    // Don't do anything between the GetMemoryMap() and ExitBootServices()
-    if (!EFI_ERROR(Status)) {
-      Status = gBS->ExitBootServices (gImageHandle, MapKey);
-      if (EFI_ERROR(Status)) {
-        FreePages (MemoryMap, Pages);
-        MemoryMap = NULL;
-        MemoryMapSize = 0;
-      }
-    }
-  } while (EFI_ERROR(Status));
-
-  return Status;
-}
-
 /**
   Connect all DXE drivers
 
@@ -112,72 +56,6 @@ BdsConnectAllDrivers (
     // Check if new handles have been created after the start of the previous handles
     Status = gDS->Dispatch ();
   } while (!EFI_ERROR(Status));
-
-  return EFI_SUCCESS;
-}
-
-EFI_STATUS
-GetGlobalEnvironmentVariable (
-  IN     CONST CHAR16*   VariableName,
-  IN     VOID*           DefaultValue,
-  IN OUT UINTN*          Size,
-  OUT    VOID**          Value
-  )
-{
-  return GetEnvironmentVariable (VariableName, &gEfiGlobalVariableGuid,
-           DefaultValue, Size, Value);
-}
-
-EFI_STATUS
-GetEnvironmentVariable (
-  IN     CONST CHAR16*   VariableName,
-  IN     EFI_GUID*       VendorGuid,
-  IN     VOID*           DefaultValue,
-  IN OUT UINTN*          Size,
-  OUT    VOID**          Value
-  )
-{
-  EFI_STATUS  Status;
-  UINTN       VariableSize;
-
-  // Try to get the variable size.
-  *Value = NULL;
-  VariableSize = 0;
-  Status = gRT->GetVariable ((CHAR16 *) VariableName, VendorGuid, NULL, &VariableSize, *Value);
-  if (Status == EFI_NOT_FOUND) {
-    if ((DefaultValue != NULL) && (Size != NULL) && (*Size != 0)) {
-      // If the environment variable does not exist yet then set it with the default value
-      Status = gRT->SetVariable (
-                    (CHAR16*)VariableName,
-                    VendorGuid,
-                    EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS,
-                    *Size,
-                    DefaultValue
-                    );
-      *Value = AllocateCopyPool (*Size, DefaultValue);
-    } else {
-      return EFI_NOT_FOUND;
-    }
-  } else if (Status == EFI_BUFFER_TOO_SMALL) {
-    // Get the environment variable value
-    *Value = AllocatePool (VariableSize);
-    if (*Value == NULL) {
-      return EFI_OUT_OF_RESOURCES;
-    }
-
-    Status = gRT->GetVariable ((CHAR16 *)VariableName, VendorGuid, NULL, &VariableSize, *Value);
-    if (EFI_ERROR (Status)) {
-      FreePool(*Value);
-      return EFI_INVALID_PARAMETER;
-    }
-
-    if (Size) {
-      *Size = VariableSize;
-    }
-  } else {
-    *Value = AllocateCopyPool (*Size, DefaultValue);
-    return Status;
-  }
 
   return EFI_SUCCESS;
 }
