@@ -21,5 +21,8 @@
 [Includes]
   Include                        # Root include for the package
 
+[LibraryClasses]
+  BdsLib|Include/Library/BdsLib.h
+
 [Guids]
   gArmBootMonFsFileInfoGuid   = { 0x41e26b9c, 0xada6, 0x45b3, { 0x80, 0x8e, 0x23, 0x57, 0xa3, 0x5b, 0x60, 0xd6 } }

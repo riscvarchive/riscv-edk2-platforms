@@ -27,10 +27,10 @@
   BdsLoadOption.c
 
 [Packages]
-  ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/ARM/ARM.dec
 
 [LibraryClasses]
   ArmLib

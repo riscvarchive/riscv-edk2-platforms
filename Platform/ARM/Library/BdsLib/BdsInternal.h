@@ -16,7 +16,6 @@
 #define __BDS_INTERNAL_H__
 
 #include <PiDxe.h>
-#include <Library/ArmLib.h>
 #include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DxeServicesTableLib.h>
