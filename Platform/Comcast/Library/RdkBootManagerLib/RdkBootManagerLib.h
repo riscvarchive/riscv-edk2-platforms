@@ -13,7 +13,6 @@
 #ifndef __RDK_BOOT_MANAGER_LIB_H__
 #define __RDK_BOOT_MANAGER_LIB_H__
 
-#include <Library/BdsLib.h>
 #include <Library/UefiLib.h>
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
