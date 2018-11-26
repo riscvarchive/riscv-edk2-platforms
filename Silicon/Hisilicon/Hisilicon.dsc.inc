@@ -253,7 +253,6 @@
   gArmTokenSpaceGuid.PcdArmGicV3WithV2Legacy|FALSE
 
 [PcdsFixedAtBuild.common]
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|44
   #
   # IO is mapped to memory space, so we use the same size of
   # PcdPrePiCpuMemorySize

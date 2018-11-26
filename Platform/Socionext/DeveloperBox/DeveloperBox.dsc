@@ -243,7 +243,6 @@
   gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0xFFC0
   gSynQuacerTokenSpaceGuid.PcdDramInfoBase|0x2E00FFC0
 
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|40
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
 
   gArmPlatformTokenSpaceGuid.PcdCoreCount|2

@@ -128,7 +128,6 @@
 
 [PcdsFixedAtBuild.common]
   gArmPlatformTokenSpaceGuid.PcdCoreCount|48
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|48
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
 

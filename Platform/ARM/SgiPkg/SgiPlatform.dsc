@@ -145,7 +145,6 @@
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x60000000
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|40
 
   ## PL011 - Serial Terminal
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x7FF80000

@@ -159,9 +159,6 @@
   # Set tick frequency value to 100Mhz
   gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|100000000
 
-  # the entire FVP address space can be covered by 36 bit VAs
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|36
-
   #
   # ACPI Table Version
   #

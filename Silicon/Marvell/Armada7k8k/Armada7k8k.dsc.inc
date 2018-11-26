@@ -375,7 +375,6 @@
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x40000000
 
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|36
-  gEmbeddedTokenSpaceGuid.PcdPrePiCpuMemorySize|36
 
   gArmPlatformTokenSpaceGuid.PcdCPUCoresStackBase|0x41F0000
   gArmPlatformTokenSpaceGuid.PcdCPUCorePrimaryStackSize|0x10000
