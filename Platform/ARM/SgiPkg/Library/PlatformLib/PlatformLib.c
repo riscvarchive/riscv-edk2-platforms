@@ -17,8 +17,8 @@
 #include <Ppi/ArmMpCoreInfo.h>
 #include <Ppi/SgiPlatformId.h>
 
-UINT64 HwConfigDtBlob;
-STATIC SGI_HW_CONFIG_INFO_PPI mHwConfigDtInfoPpi;
+UINT64 NtFwConfigDtBlob;
+STATIC SGI_NT_FW_CONFIG_INFO_PPI mNtFwConfigDtInfoPpi;
 
 STATIC ARM_CORE_INFO mCoreInfoTable[] = {
   {
@@ -40,7 +40,7 @@ ArmPlatformInitialize (
   IN  UINTN                     MpId
   )
 {
-  mHwConfigDtInfoPpi.HwConfigDtAddr = HwConfigDtBlob;
+  mNtFwConfigDtInfoPpi.NtFwConfigDtAddr = NtFwConfigDtBlob;
   return RETURN_SUCCESS;
 }
 
@@ -67,8 +67,8 @@ EFI_PEI_PPI_DESCRIPTOR gPlatformPpiTable[] = {
   },
   {
     EFI_PEI_PPI_DESCRIPTOR_PPI,
-    &gHwConfigDtInfoPpiGuid,
-    &mHwConfigDtInfoPpi
+    &gNtFwConfigDtInfoPpiGuid,
+    &mNtFwConfigDtInfoPpi
   }
 };
 

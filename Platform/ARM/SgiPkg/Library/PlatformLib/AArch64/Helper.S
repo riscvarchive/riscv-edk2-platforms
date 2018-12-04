@@ -22,7 +22,7 @@ GCC_ASM_EXPORT(ArmPlatformPeiBootAction)
 GCC_ASM_EXPORT(ArmPlatformGetCorePosition)
 GCC_ASM_EXPORT(ArmPlatformGetPrimaryCoreMpId)
 GCC_ASM_EXPORT(ArmPlatformIsPrimaryCore)
-GCC_ASM_IMPORT(HwConfigDtBlob)
+GCC_ASM_IMPORT(NtFwConfigDtBlob)
 
 //
 // First platform specific function to be called in the PEI phase
@@ -34,8 +34,8 @@ GCC_ASM_IMPORT(HwConfigDtBlob)
 //  VOID
 //  );
 ASM_PFX(ArmPlatformPeiBootAction):
-  adr  x10, HwConfigDtBlob
-  str  x1, [x10]
+  adr  x10, NtFwConfigDtBlob
+  str  x0, [x10]
   ret
 
 //UINTN

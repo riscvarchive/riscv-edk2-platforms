@@ -24,9 +24,9 @@
 
   This function returns the System ID of the platform
 
-  This functions locates the HwConfig PPI and gets the base address of HW CONFIG
-  DT from which the platform ID and config ID is obtained using FDT helper
-  functions
+  This functions locates the NtFwConfig PPI and gets the base address of
+  NT_FW_CONFIG DT from which the platform ID and config ID is obtained
+  using FDT helper functions
 
   @param[out]      Pointer to the SGI_PLATFORM_DESCRIPTOR HoB
   @return          returns EFI_SUCCESS on success and EFI_INVALID_PARAMETER on error
@@ -41,31 +41,31 @@ GetSgiSystemId (
 {
   CONST UINT32                  *Property;
   INT32                         Offset;
-  CONST VOID                    *HwCfgDtBlob;
-  SGI_HW_CONFIG_INFO_PPI        *HwConfigInfoPpi;
+  CONST VOID                    *NtFwCfgDtBlob;
+  SGI_NT_FW_CONFIG_INFO_PPI     *NtFwConfigInfoPpi;
   EFI_STATUS                    Status;
 
-  Status = PeiServicesLocatePpi (&gHwConfigDtInfoPpiGuid, 0, NULL,
-             (VOID**)&HwConfigInfoPpi);
+  Status = PeiServicesLocatePpi (&gNtFwConfigDtInfoPpiGuid, 0, NULL,
+             (VOID**)&NtFwConfigInfoPpi);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR,
       "PeiServicesLocatePpi failed with error %r\n", Status));
     return EFI_INVALID_PARAMETER;
   }
 
-  HwCfgDtBlob = (VOID *)(UINTN)HwConfigInfoPpi->HwConfigDtAddr;
-  if (fdt_check_header (HwCfgDtBlob) != 0) {
-    DEBUG ((DEBUG_ERROR, "Invalid DTB file %p passed\n", HwCfgDtBlob));
+  NtFwCfgDtBlob = (VOID *)(UINTN)NtFwConfigInfoPpi->NtFwConfigDtAddr;
+  if (fdt_check_header (NtFwCfgDtBlob) != 0) {
+    DEBUG ((DEBUG_ERROR, "Invalid DTB file %p passed\n", NtFwCfgDtBlob));
     return EFI_INVALID_PARAMETER;
   }
 
-  Offset = fdt_subnode_offset (HwCfgDtBlob, 0, "system-id");
+  Offset = fdt_subnode_offset (NtFwCfgDtBlob, 0, "system-id");
   if (Offset == -FDT_ERR_NOTFOUND) {
     DEBUG ((DEBUG_ERROR, "Invalid DTB : system-id node not found\n"));
     return EFI_INVALID_PARAMETER;
   }
 
-  Property = fdt_getprop (HwCfgDtBlob, Offset, "platform-id", NULL);
+  Property = fdt_getprop (NtFwCfgDtBlob, Offset, "platform-id", NULL);
   if (Property == NULL) {
     DEBUG ((DEBUG_ERROR, "platform-id property not found\n"));
     return EFI_INVALID_PARAMETER;
@@ -73,7 +73,7 @@ GetSgiSystemId (
 
   HobData->PlatformId = fdt32_to_cpu (*Property);
 
-  Property = fdt_getprop (HwCfgDtBlob, Offset, "config-id", NULL);
+  Property = fdt_getprop (NtFwCfgDtBlob, Offset, "config-id", NULL);
   if (Property == NULL) {
     DEBUG ((DEBUG_ERROR, "config-id property not found\n"));
     return EFI_INVALID_PARAMETER;
@@ -108,7 +108,7 @@ SgiPlatformPeim (
                                          &gArmSgiPlatformIdDescriptorGuid,
                                          sizeof (SGI_PLATFORM_DESCRIPTOR));
 
-  // Get the system id from the platform specific hw_config device tree
+  // Get the system id from the platform specific nt_fw_config device tree
   if (HobData == NULL) {
     DEBUG ((DEBUG_ERROR, "Platform HOB is NULL\n"));
     ASSERT (FALSE);

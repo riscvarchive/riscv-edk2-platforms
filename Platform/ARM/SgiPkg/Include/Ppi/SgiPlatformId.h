@@ -15,9 +15,9 @@
 #ifndef  SGI_PLATFORMID_PPI_
 #define  SGI_PLATFORMID_PPI_
 
-// HwConfig DT structure
+// NT_FW_CONFIG DT structure
 typedef struct {
-  UINT64                  HwConfigDtAddr;
-} SGI_HW_CONFIG_INFO_PPI;
+  UINT64                  NtFwConfigDtAddr;
+} SGI_NT_FW_CONFIG_INFO_PPI;
 
 #endif

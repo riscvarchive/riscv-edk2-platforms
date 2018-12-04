@@ -71,4 +71,4 @@
 
 [Ppis]
   gArmMpCoreInfoPpiGuid
-  gHwConfigDtInfoPpiGuid
+  gNtFwConfigDtInfoPpiGuid

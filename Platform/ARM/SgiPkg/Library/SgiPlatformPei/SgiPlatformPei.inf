@@ -34,7 +34,7 @@
   gArmSgiPlatformIdDescriptorGuid
 
 [Ppis]
-  gHwConfigDtInfoPpiGuid
+  gNtFwConfigDtInfoPpiGuid
 
 [Depex]
-  gHwConfigDtInfoPpiGuid
+  gNtFwConfigDtInfoPpiGuid
