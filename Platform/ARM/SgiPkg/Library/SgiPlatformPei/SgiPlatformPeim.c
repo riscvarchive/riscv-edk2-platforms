@@ -67,7 +67,7 @@ GetSgiSystemId (
 
   Property = fdt_getprop (HwCfgDtBlob, Offset, "platform-id", NULL);
   if (Property == NULL) {
-    DEBUG ((DEBUG_ERROR, "Platform Id is NULL\n"));
+    DEBUG ((DEBUG_ERROR, "platform-id property not found\n"));
     return EFI_INVALID_PARAMETER;
   }
 
@@ -75,7 +75,7 @@ GetSgiSystemId (
 
   Property = fdt_getprop (HwCfgDtBlob, Offset, "config-id", NULL);
   if (Property == NULL) {
-    DEBUG ((DEBUG_ERROR, "Config Id is NULL\n"));
+    DEBUG ((DEBUG_ERROR, "config-id property not found\n"));
     return EFI_INVALID_PARAMETER;
   }
 
@@ -121,7 +121,7 @@ SgiPlatformPeim (
     return EFI_INVALID_PARAMETER;
   }
 
-  if (HobData->PlatformId == 0 || HobData->ConfigId == 0) {
+  if (HobData->PlatformId == 0) {
     ASSERT (FALSE);
     return EFI_INVALID_PARAMETER;
   }
