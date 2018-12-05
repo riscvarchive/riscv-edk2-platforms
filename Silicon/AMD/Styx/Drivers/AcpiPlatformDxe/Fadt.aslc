@@ -21,7 +21,7 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
+#include "AcpiPlatform.h"
 
 #define FADT_FLAGS          ( EFI_ACPI_5_1_HW_REDUCED_ACPI |           \
                               EFI_ACPI_5_1_LOW_POWER_S0_IDLE_CAPABLE | \
@@ -91,11 +91,4 @@ STATIC EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE AcpiFadt = {
 
 #pragma pack(pop)
 
-EFI_ACPI_DESCRIPTION_HEADER *
-FadtTable (
-  VOID
-  )
-{
-  return (EFI_ACPI_DESCRIPTION_HEADER *) &AcpiFadt;
-}
-
+VOID* CONST ReferenceAcpiTable = &AcpiFadt;

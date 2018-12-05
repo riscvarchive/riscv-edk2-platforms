@@ -16,7 +16,7 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
+#include "AcpiPlatform.h"
 
 //
 // CSRT for ARM_CCN504 (L3 CACHE)
@@ -69,7 +69,7 @@ typedef struct {
 } AMD_ACPI_ARM_CCN504_CORE_SYSTEM_RESOURCE_TABLE;
 
 
-AMD_ACPI_ARM_CCN504_CORE_SYSTEM_RESOURCE_TABLE AcpiCsrt = {
+STATIC AMD_ACPI_ARM_CCN504_CORE_SYSTEM_RESOURCE_TABLE AcpiCsrt = {
    AMD_ACPI_HEADER (EFI_ACPI_5_1_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,
                     AMD_ACPI_ARM_CCN504_CORE_SYSTEM_RESOURCE_TABLE,
                     AMD_ACPI_ARM_CCN504_CSRT_REVISION),
@@ -97,11 +97,4 @@ AMD_ACPI_ARM_CCN504_CORE_SYSTEM_RESOURCE_TABLE AcpiCsrt = {
 
 #pragma pack(pop)
 
-
-EFI_ACPI_DESCRIPTION_HEADER *
-CsrtHeader (
-  VOID
-  )
-{
-  return &AcpiCsrt.Header;
-}
+VOID* CONST ReferenceAcpiTable = &AcpiCsrt;

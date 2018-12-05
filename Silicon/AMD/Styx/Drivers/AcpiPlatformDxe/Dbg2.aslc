@@ -16,8 +16,9 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
 #include <IndustryStandard/DebugPort2Table.h>
+
+#include "AcpiPlatform.h"
 
 #pragma pack(push, 1)
 
@@ -104,11 +105,4 @@ STATIC DBG2_TABLE AcpiDbg2 = {
 
 #pragma pack(pop)
 
-EFI_ACPI_DESCRIPTION_HEADER *
-Dbg2Header (
-  VOID
-  )
-{
-  return &AcpiDbg2.Description.Header;
-}
-
+VOID* CONST ReferenceAcpiTable = &AcpiDbg2;

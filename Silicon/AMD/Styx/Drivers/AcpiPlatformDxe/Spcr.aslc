@@ -16,8 +16,9 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
 #include <IndustryStandard/SerialPortConsoleRedirectionTable.h>
+
+#include "AcpiPlatform.h"
 
 #pragma pack(push, 1)
 
@@ -114,11 +115,4 @@ STATIC EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE AcpiSpcr = {
 
 #pragma pack(pop)
 
-EFI_ACPI_DESCRIPTION_HEADER *
-SpcrHeader (
-  VOID
-  )
-{
-  return &AcpiSpcr.Header;
-}
-
+VOID* CONST ReferenceAcpiTable = &AcpiSpcr;

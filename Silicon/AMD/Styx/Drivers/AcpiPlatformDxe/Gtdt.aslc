@@ -21,7 +21,7 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
+#include "AcpiPlatform.h"
 
 #pragma pack(push, 1)
 
@@ -170,20 +170,4 @@ STATIC AMD_ACPI_5_1_ARM_GTDT_STRUCTURE AcpiGtdt = {
 
 #pragma pack(pop)
 
-
-EFI_ACPI_DESCRIPTION_HEADER *
-GtdtHeader (
-  VOID
-  )
-{
-  UINT32 CpuId = PcdGet32 (PcdSocCpuId);
-
-  // Check BaseModel and Stepping: Styx-B0 or prior?
-  if (((CpuId & 0xFF0) == 0) || ((CpuId & 0x00F) == 0)) {
-    AcpiGtdt.Gtdt.Header.Length = sizeof (EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE);
-    AcpiGtdt.Gtdt.PlatformTimerCount = 0;
-    AcpiGtdt.Gtdt.PlatformTimerOffset = 0;
-  }
-
-  return (EFI_ACPI_DESCRIPTION_HEADER *) &AcpiGtdt.Gtdt.Header;
-}
+VOID* CONST ReferenceAcpiTable = &AcpiGtdt;

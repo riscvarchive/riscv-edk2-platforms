@@ -27,8 +27,9 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Guid/ArmMpCoreInfo.h>
 
-#include <AmdStyxAcpiLib.h>
 #include <Protocol/AmdMpCoreInfo.h>
+
+#include "AcpiPlatform.h"
 
 AMD_MP_CORE_INFO_PROTOCOL  *mAmdMpCoreInfoProtocol = NULL;
 

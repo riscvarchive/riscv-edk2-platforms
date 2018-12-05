@@ -121,7 +121,6 @@ DEFINE DO_CAPSULE   = FALSE
   # Styx specific libraries
   #
   AmdSataInit|Silicon/AMD/Styx/AmdModulePkg/Library/AmdSataInitLib/AmdSataInitLib.inf
-  AmdStyxAcpiLib|Silicon/AMD/Styx/AcpiTables/AcpiTables.inf
   ResetSystemLib|ArmPkg/Library/ArmSmcPsciResetSystemLib/ArmSmcPsciResetSystemLib.inf
   RealTimeClockLib|Silicon/AMD/Styx/Library/RealTimeClockLib/RealTimeClockLib.inf
 

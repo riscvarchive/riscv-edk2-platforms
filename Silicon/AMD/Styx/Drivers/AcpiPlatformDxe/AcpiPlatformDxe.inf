@@ -28,7 +28,16 @@
 
 [Sources]
   AcpiPlatform.c
+  Csrt.aslc
+  Dbg2.aslc
   Dsdt.asl
+  Fadt.aslc
+  Gtdt.aslc
+  Iort.aslc
+  Madt.c
+  Mcfg.aslc
+  Pptt.aslc
+  Spcr.aslc
   SsdtB1.asl
   SsdtXgbe.asl
 
@@ -40,7 +49,6 @@
   Silicon/AMD/Styx/AmdStyx.dec
 
 [LibraryClasses]
-  AmdStyxAcpiLib
   BaseLib
   BaseMemoryLib
   DebugLib
@@ -54,12 +62,33 @@
   gAmdStyxTokenSpaceGuid.PcdEthMacA
   gAmdStyxTokenSpaceGuid.PcdEthMacB
   gAmdStyxTokenSpaceGuid.PcdEnableSmmus
+  gAmdStyxTokenSpaceGuid.PcdSocCoreCount
   gAmdStyxTokenSpaceGuid.PcdSocCpuId
 
 [FixedPcd]
+  gAmdStyxTokenSpaceGuid.PcdCntControlBase
+  gAmdStyxTokenSpaceGuid.PcdCntReadBase
+  gAmdStyxTokenSpaceGuid.PcdCntCTLBase
+  gAmdStyxTokenSpaceGuid.PcdCntBase0
+  gAmdStyxTokenSpaceGuid.PcdCntEL0Base0
+  gAmdStyxTokenSpaceGuid.PcdGicVersion
+  gAmdStyxTokenSpaceGuid.PcdGicHypervisorInterruptInterfaceBase
+  gAmdStyxTokenSpaceGuid.PcdGicVirtualInterruptInterfaceBase
+  gAmdStyxTokenSpaceGuid.PcdGicVirtualMaintenanceInterrupt
+  gAmdStyxTokenSpaceGuid.PcdGicVirtualRegisterInterfaceBase
+  gAmdStyxTokenSpaceGuid.PcdGicMSIFrameBase
   gAmdStyxTokenSpaceGuid.PcdSata1PortCount
+  gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogRefreshBase
+  gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogControlBase
+  gAmdStyxTokenSpaceGuid.PcdSbsaWakeUpGSIV
+  gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogGSIV
+  gAmdStyxTokenSpaceGuid.PcdSerialDbgRegisterBase
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase
+  gArmTokenSpaceGuid.PcdGicDistributorBase
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
 
 [Protocols]
+  gAmdMpCoreInfoProtocolGuid                    ## CONSUMED
   gEfiAcpiTableProtocolGuid                     ## ALWAYS_CONSUMED
 
 [Depex]

@@ -19,7 +19,6 @@
    MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatform.c
 **/
 
-#include <AmdStyxAcpiLib.h>
 #include <Protocol/AcpiTable.h>
 
 #include <Library/BaseLib.h>
@@ -31,12 +30,11 @@
 #include <Library/UefiBootServicesTableLib.h>
 
 #include <IndustryStandard/Acpi61.h>
+#include <IndustryStandard/IoRemappingTable.h>
 
 #include <SocVersion.h>
 
-#define MAX_ACPI_TABLES    16
-
-EFI_ACPI_DESCRIPTION_HEADER *AcpiTableList[MAX_ACPI_TABLES];
+#include "AcpiPlatform.h"
 
 STATIC EFI_ACPI_TABLE_PROTOCOL   *mAcpiTableProtocol;
 
@@ -97,15 +95,19 @@ InstallSystemDescriptionTables (
   VOID
   )
 {
-  EFI_ACPI_DESCRIPTION_HEADER   *Table;
-  EFI_STATUS                    Status;
-  UINT32                        CpuId;
-  UINTN                         Index;
-  UINTN                         TableSize;
-  UINTN                         TableHandle;
+  EFI_ACPI_DESCRIPTION_HEADER                   *Table;
+  EFI_STATUS                                    Status;
+  UINT32                                        CpuId;
+  UINTN                                         Index;
+  UINTN                                         TableSize;
+  UINTN                                         TableHandle;
+  EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE  *Gtdt;
+  EFI_ACPI_6_0_IO_REMAPPING_TABLE               *Iort;
 #if DO_XGBE
   UINT8                         MacPackage[sizeof(mDefaultMacPackageA)];
 #endif
+
+  CpuId = PcdGet32 (PcdSocCpuId);
 
   Status = EFI_SUCCESS;
   for (Index = 0; !EFI_ERROR (Status); Index++) {
@@ -117,7 +119,6 @@ InstallSystemDescriptionTables (
 
     switch (Table->OemTableId) {
     case SIGNATURE_64 ('S', 't', 'y', 'x', 'B', '1', ' ', ' '):
-      CpuId = PcdGet32 (PcdSocCpuId);
       if ((CpuId & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
         continue;
       }
@@ -141,11 +142,39 @@ InstallSystemDescriptionTables (
       break;
 #endif
       continue;
+
+    default:
+      switch (Table->Signature) {
+      case EFI_ACPI_6_0_IO_REMAPPING_TABLE_SIGNATURE:
+        if (!PcdGetBool (PcdEnableSmmus)) {
+          continue;
+        }
+        if ((CpuId & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
+          Iort = (EFI_ACPI_6_0_IO_REMAPPING_TABLE *)Table;
+          Iort->NumNodes -= 2;
+        }
+        break;
+
+      case EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE_SIGNATURE:
+        if ((CpuId & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
+          Gtdt = (EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE *)Table;
+          Gtdt->Header.Length = sizeof (*Gtdt);
+          Gtdt->PlatformTimerCount = 0;
+          Gtdt->PlatformTimerOffset = 0;
+        }
+        break;
+      }
     }
 
     Status = mAcpiTableProtocol->InstallAcpiTable (mAcpiTableProtocol, Table,
-                                   TableSize, &TableHandle);
-    ASSERT_EFI_ERROR (Status);
+                                   Table->Length, &TableHandle);
+
+    DEBUG ((DEBUG_WARN,
+      "Installing %c%c%c%c Table (Revision %d, Length %d) ... %r\n",
+      ((UINT8 *)&Table->Signature)[0], ((UINT8 *)&Table->Signature)[1],
+      ((UINT8 *)&Table->Signature)[2], ((UINT8 *)&Table->Signature)[3],
+      Table->Revision, Table->Length, Status));
+
     FreePool (Table);
   }
 }
@@ -168,67 +197,23 @@ AcpiPlatformEntryPoint (
   IN EFI_SYSTEM_TABLE   *SystemTable
   )
 {
-  EFI_STATUS                Status;
-  UINTN                     TableHandle;
-  UINTN                     TableIndex;
-
-  ZeroMem(AcpiTableList, sizeof(AcpiTableList));
-
-  TableIndex = 0;
-  AcpiTableList[TableIndex++] = FadtTable();
-  AcpiTableList[TableIndex++] = MadtHeader();
-  AcpiTableList[TableIndex++] = GtdtHeader();
-  AcpiTableList[TableIndex++] = Dbg2Header();
-  AcpiTableList[TableIndex++] = SpcrHeader();
-  AcpiTableList[TableIndex++] = McfgHeader();
-  AcpiTableList[TableIndex++] = CsrtHeader();
-  if (PcdGetBool (PcdEnableSmmus)) {
-    AcpiTableList[TableIndex++] = IortHeader();
-  }
-  AcpiTableList[TableIndex++] = PpttHeader();
-  AcpiTableList[TableIndex++] = NULL;
-
-  DEBUG((DEBUG_INFO, "%a(): ACPI Table installer\n", __FUNCTION__));
+  EFI_STATUS                  Status;
+  UINTN                       TableHandle;
+  EFI_ACPI_DESCRIPTION_HEADER *Header;
 
   //
   // Find the AcpiTable protocol
   //
   Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL,
                   (VOID**)&mAcpiTableProtocol);
-  if (EFI_ERROR (Status)) {
-    DEBUG((EFI_D_ERROR, "Failed to locate AcpiTable protocol. Status = %r\n", Status));
-    ASSERT_EFI_ERROR(Status);
-  }
+  ASSERT_EFI_ERROR (Status);
 
-  TableIndex = 0;
-  while (AcpiTableList[TableIndex] != NULL) {
-    //
-    // Install ACPI table
-    //
-    DEBUG ((EFI_D_ERROR, "Installing %c%c%c%c Table (Revision %d, Length %d) ...\n",
-                          *((UINT8*)&AcpiTableList[TableIndex]->Signature),
-                          *((UINT8*)&AcpiTableList[TableIndex]->Signature + 1),
-                          *((UINT8*)&AcpiTableList[TableIndex]->Signature + 2),
-                          *((UINT8*)&AcpiTableList[TableIndex]->Signature + 3),
-                          AcpiTableList[TableIndex]->Revision,
-                          AcpiTableList[TableIndex]->Length));
-
-    Status = mAcpiTableProtocol->InstallAcpiTable (
-                                   mAcpiTableProtocol,
-                                   AcpiTableList[TableIndex],
-                                   (AcpiTableList[TableIndex])->Length,
-                                   &TableHandle
-                                   );
-    if (EFI_ERROR (Status)) {
-      DEBUG((DEBUG_ERROR,"Error adding ACPI Table. Status = %r\n", Status));
-      ASSERT_EFI_ERROR(Status);
-    }
-    TableIndex++;
-    ASSERT( TableIndex < MAX_ACPI_TABLES );
-  }
+  Header = MadtHeader ();
+  Status = mAcpiTableProtocol->InstallAcpiTable (mAcpiTableProtocol, Header,
+                                 Header->Length, &TableHandle);
+  ASSERT_EFI_ERROR (Status);
 
   InstallSystemDescriptionTables ();
 
-  return EFI_SUCCESS;
+  return EFI_REQUEST_UNLOAD_IMAGE;
 }
-

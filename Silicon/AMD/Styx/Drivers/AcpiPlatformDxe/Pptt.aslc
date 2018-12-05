@@ -14,7 +14,7 @@
 
 #include <IndustryStandard/Acpi.h>
 
-#include <AmdStyxAcpiLib.h>
+#include "AcpiPlatform.h"
 
 #define FIELD_OFFSET(type, name)            __builtin_offsetof(type, name)
 
@@ -216,10 +216,4 @@ STATIC STYX_PPTT_TABLE mStyxPpttTable = {
   }
 };
 
-EFI_ACPI_DESCRIPTION_HEADER *
-PpttHeader (
-  VOID
-  )
-{
-  return (EFI_ACPI_DESCRIPTION_HEADER *)&mStyxPpttTable.Pptt.Header;
-}
+VOID* CONST ReferenceAcpiTable = &mStyxPpttTable;

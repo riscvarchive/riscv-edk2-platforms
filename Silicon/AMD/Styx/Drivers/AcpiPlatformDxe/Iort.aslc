@@ -12,9 +12,9 @@
 
 **/
 
-#include <AmdStyxAcpiLib.h>
 #include <IndustryStandard/IoRemappingTable.h>
-#include <SocVersion.h>
+
+#include "AcpiPlatform.h"
 
 #define FIELD_OFFSET(type, name)            __builtin_offsetof(type, name)
 
@@ -355,17 +355,4 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
 
 #pragma pack()
 
-EFI_ACPI_DESCRIPTION_HEADER *
-IortHeader (
-  VOID
-  )
-{
-  if ((PcdGet32 (PcdSocCpuId) & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
-    //
-    // Silicon revisions prior to B1 have only one SATA port,
-    // so omit the nodes of the second port in this case.
-    //
-    AcpiIort.Iort.NumNodes -= 2;
-  }
-  return (EFI_ACPI_DESCRIPTION_HEADER *)&AcpiIort.Iort.Header;
-}
+VOID* CONST ReferenceAcpiTable = &AcpiIort;
