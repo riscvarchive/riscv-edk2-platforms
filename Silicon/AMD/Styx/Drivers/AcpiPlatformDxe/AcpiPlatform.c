@@ -22,6 +22,7 @@
 #include <AmdStyxAcpiLib.h>
 #include <Protocol/AcpiTable.h>
 
+#include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DxeServicesLib.h>
@@ -39,6 +40,57 @@ EFI_ACPI_DESCRIPTION_HEADER *AcpiTableList[MAX_ACPI_TABLES];
 
 STATIC EFI_ACPI_TABLE_PROTOCOL   *mAcpiTableProtocol;
 
+#if DO_XGBE
+
+STATIC CONST UINT8 mDefaultMacPackageA[] = {
+  0x12, 0xe, 0x6, 0xa, 0x2, 0xa, 0xa1, 0xa, 0xa2, 0xa, 0xa3, 0xa, 0xa4, 0xa, 0xa5
+};
+
+STATIC CONST UINT8 mDefaultMacPackageB[] = {
+  0x12, 0xe, 0x6, 0xa, 0x2, 0xa, 0xb1, 0xa, 0xb2, 0xa, 0xb3, 0xa, 0xb4, 0xa, 0xb5
+};
+
+#define PACKAGE_MAC_OFFSET  4
+#define PACKAGE_MAC_INCR    2
+
+STATIC
+VOID
+SetPackageAddress (
+  UINT8         *Package,
+  UINT64        MacAddress,
+  UINTN         Size
+  )
+{
+  UINTN   Index;
+
+  for (Index = PACKAGE_MAC_OFFSET; Index < Size; Index += PACKAGE_MAC_INCR) {
+    Package[Index] = (UINT8)MacAddress;
+    MacAddress >>= 8;
+  }
+}
+
+STATIC
+VOID
+PatchAmlPackage (
+  CONST UINT8   *Pattern,
+  CONST UINT8   *Replacement,
+  UINTN         PatternLength,
+  UINT8         *SsdtTable,
+  UINTN         TableSize
+  )
+{
+  UINTN         Offset;
+
+  for (Offset = 0; Offset < (TableSize - PatternLength); Offset++) {
+    if (CompareMem (SsdtTable + Offset, Pattern, PatternLength) == 0) {
+      CopyMem (SsdtTable + Offset, Replacement, PatternLength);
+      break;
+    }
+  }
+}
+
+#endif
+
 STATIC
 VOID
 InstallSystemDescriptionTables (
@@ -51,6 +103,9 @@ InstallSystemDescriptionTables (
   UINTN                         Index;
   UINTN                         TableSize;
   UINTN                         TableHandle;
+#if DO_XGBE
+  UINT8                         MacPackage[sizeof(mDefaultMacPackageA)];
+#endif
 
   Status = EFI_SUCCESS;
   for (Index = 0; !EFI_ERROR (Status); Index++) {
@@ -67,6 +122,25 @@ InstallSystemDescriptionTables (
         continue;
       }
       break;
+
+    case SIGNATURE_64 ('S', 't', 'y', 'x', 'X', 'g', 'b', 'e'):
+#if DO_XGBE
+      //
+      // Patch the SSDT binary with the correct MAC addresses
+      //
+      CopyMem (MacPackage, mDefaultMacPackageA, sizeof (MacPackage));
+
+      SetPackageAddress (MacPackage, PcdGet64 (PcdEthMacA), sizeof (MacPackage));
+      PatchAmlPackage (mDefaultMacPackageA, MacPackage, sizeof (MacPackage),
+        (UINT8 *)Table, TableSize);
+
+      SetPackageAddress (MacPackage, PcdGet64 (PcdEthMacB), sizeof (MacPackage));
+      PatchAmlPackage (mDefaultMacPackageB, MacPackage, sizeof (MacPackage),
+        (UINT8 *)Table, TableSize);
+
+      break;
+#endif
+      continue;
     }
 
     Status = mAcpiTableProtocol->InstallAcpiTable (mAcpiTableProtocol, Table,

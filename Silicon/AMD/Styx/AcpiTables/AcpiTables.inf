@@ -58,8 +58,6 @@
 [Pcd]
   gAmdStyxTokenSpaceGuid.PcdSocCoreCount
   gAmdStyxTokenSpaceGuid.PcdSocCpuId
-  gAmdStyxTokenSpaceGuid.PcdEthMacA
-  gAmdStyxTokenSpaceGuid.PcdEthMacB
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase

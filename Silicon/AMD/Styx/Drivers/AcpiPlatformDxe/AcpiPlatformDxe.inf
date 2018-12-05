@@ -29,6 +29,7 @@
 [Sources]
   AcpiPlatform.c
   SsdtB1.asl
+  SsdtXgbe.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -39,6 +40,8 @@
 
 [LibraryClasses]
   AmdStyxAcpiLib
+  BaseLib
+  BaseMemoryLib
   DebugLib
   DxeServicesLib
   MemoryAllocationLib
@@ -47,6 +50,8 @@
   UefiDriverEntryPoint
 
 [Pcd]
+  gAmdStyxTokenSpaceGuid.PcdEthMacA
+  gAmdStyxTokenSpaceGuid.PcdEthMacB
   gAmdStyxTokenSpaceGuid.PcdEnableSmmus
   gAmdStyxTokenSpaceGuid.PcdSocCpuId
 
