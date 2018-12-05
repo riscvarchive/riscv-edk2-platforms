@@ -22,6 +22,8 @@
 
 #include <Protocol/NonDiscoverableDevice.h>
 
+#include <SocVersion.h>
+
 STATIC
 VOID
 ResetSataController (
@@ -143,11 +145,6 @@ InitializeSataController (
            1,
            AhciBaseAddr, SIZE_4KB);
 }
-
-#define STYX_SOC_VERSION_MASK    0xFFF
-#define STYX_SOC_VERSION_A0      0x000
-#define STYX_SOC_VERSION_B0      0x010
-#define STYX_SOC_VERSION_B1      0x011
 
 EFI_STATUS
 EFIAPI

@@ -14,6 +14,7 @@
 
 #include <AmdStyxAcpiLib.h>
 #include <IndustryStandard/IoRemappingTable.h>
+#include <SocVersion.h>
 
 #define FIELD_OFFSET(type, name)            __builtin_offsetof(type, name)
 
@@ -353,11 +354,6 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
 };
 
 #pragma pack()
-
-#define STYX_SOC_VERSION_MASK    0xFFF
-#define STYX_SOC_VERSION_A0      0x000
-#define STYX_SOC_VERSION_B0      0x010
-#define STYX_SOC_VERSION_B1      0x011
 
 EFI_ACPI_DESCRIPTION_HEADER *
 IortHeader (

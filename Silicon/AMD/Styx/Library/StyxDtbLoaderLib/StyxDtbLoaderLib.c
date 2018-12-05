@@ -28,6 +28,8 @@
 
 #include <Protocol/AmdMpCoreInfo.h>
 
+#include <SocVersion.h>
+
 #define PMU_INT_FLAG_SPI        0
 #define PMU_INT_TYPE_HIGH_LEVEL 4
 
@@ -229,11 +231,6 @@ DisableSmmu (
       __FUNCTION__, SmmuNodeName, fdt_strerror (Error)));
   }
 }
-
-#define STYX_SOC_VERSION_MASK    0xFFF
-#define STYX_SOC_VERSION_A0      0x000
-#define STYX_SOC_VERSION_B0      0x010
-#define STYX_SOC_VERSION_B1      0x011
 
 STATIC
 VOID
