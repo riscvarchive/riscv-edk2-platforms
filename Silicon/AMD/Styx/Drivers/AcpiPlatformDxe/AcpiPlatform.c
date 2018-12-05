@@ -60,15 +60,14 @@ STATIC
 VOID
 SetPackageAddress (
   UINT8         *Package,
-  UINT64        MacAddress,
+  UINT8         *MacAddress,
   UINTN         Size
   )
 {
   UINTN   Index;
 
   for (Index = PACKAGE_MAC_OFFSET; Index < Size; Index += PACKAGE_MAC_INCR) {
-    Package[Index] = (UINT8)MacAddress;
-    MacAddress >>= 8;
+    Package[Index] = *MacAddress++;
   }
 }
 
@@ -165,11 +164,11 @@ InstallSystemDescriptionTables (
       //
       CopyMem (MacPackage, mDefaultMacPackageA, sizeof (MacPackage));
 
-      SetPackageAddress (MacPackage, PcdGet64 (PcdEthMacA), sizeof (MacPackage));
+      SetPackageAddress (MacPackage, PcdGetPtr (PcdEthMacA), sizeof (MacPackage));
       PatchAmlPackage (mDefaultMacPackageA, MacPackage, sizeof (MacPackage),
         (UINT8 *)Table, TableSize);
 
-      SetPackageAddress (MacPackage, PcdGet64 (PcdEthMacB), sizeof (MacPackage));
+      SetPackageAddress (MacPackage, PcdGetPtr (PcdEthMacB), sizeof (MacPackage));
       PatchAmlPackage (mDefaultMacPackageB, MacPackage, sizeof (MacPackage),
         (UINT8 *)Table, TableSize);
 

@@ -123,7 +123,7 @@ PlatInitPeiEntryPoint (
   ISCP_CPU_RESET_INFO         CpuResetInfo = {0};
 #if DO_XGBE == 1
   ISCP_MAC_INFO               MacAddrInfo = {0};
-  UINT64                      MacAddr0, MacAddr1;
+  UINTN                       MacSize;
 #endif
   UINTN                       CpuCoreCount, CpuMap, CpuMapSize;
   UINTN                       Index, CoreNum;
@@ -223,16 +223,20 @@ PlatInitPeiEntryPoint (
              PeiServices, &MacAddrInfo );
   ASSERT_EFI_ERROR (Status);
 
-  MacAddr0 = MacAddr1 = 0;
-  for (Index = 0; Index < 6; ++Index) {
-    MacAddr0 |= (UINT64)MacAddrInfo.MacAddress0[Index] << (Index * 8);
-    MacAddr1 |= (UINT64)MacAddrInfo.MacAddress1[Index] << (Index * 8);
-  }
-  PcdSet64 (PcdEthMacA, MacAddr0);
-  PcdSet64 (PcdEthMacB, MacAddr1);
+  MacSize = sizeof(MacAddrInfo.MacAddress0);
+  Status = PcdSetPtrS (PcdEthMacA, &MacSize, MacAddrInfo.MacAddress0);
+  ASSERT_EFI_ERROR (Status);
+  Status = PcdSetPtrS (PcdEthMacB, &MacSize, MacAddrInfo.MacAddress1);
+  ASSERT_EFI_ERROR (Status);
 
-  DEBUG ((EFI_D_ERROR, "EthMacA = 0x%lX\n", PcdGet64 (PcdEthMacA)));
-  DEBUG ((EFI_D_ERROR, "EthMacB = 0x%lX\n", PcdGet64 (PcdEthMacB)));
+  DEBUG ((EFI_D_ERROR, "EthMacA = %02x:%02x:%02x:%02x:%02x:%02x\n",
+    ((UINT8 *)PcdGetPtr (PcdEthMacA))[0], ((UINT8 *)PcdGetPtr (PcdEthMacA))[1],
+    ((UINT8 *)PcdGetPtr (PcdEthMacA))[2], ((UINT8 *)PcdGetPtr (PcdEthMacA))[3],
+    ((UINT8 *)PcdGetPtr (PcdEthMacA))[4], ((UINT8 *)PcdGetPtr (PcdEthMacA))[5]));
+  DEBUG ((EFI_D_ERROR, "EthMacB = %02x:%02x:%02x:%02x:%02x:%02x\n",
+    ((UINT8 *)PcdGetPtr (PcdEthMacB))[0], ((UINT8 *)PcdGetPtr (PcdEthMacB))[1],
+    ((UINT8 *)PcdGetPtr (PcdEthMacB))[2], ((UINT8 *)PcdGetPtr (PcdEthMacB))[3],
+    ((UINT8 *)PcdGetPtr (PcdEthMacB))[4], ((UINT8 *)PcdGetPtr (PcdEthMacB))[5]));
 #endif
 
   // Let other PEI modules know we're done!

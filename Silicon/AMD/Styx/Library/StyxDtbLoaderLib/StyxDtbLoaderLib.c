@@ -168,7 +168,7 @@ VOID
 SetMacAddress (
   IN VOID           *Fdt,
   IN CONST CHAR8    *Device,
-  IN UINT64         MacAddress
+  IN UINT8          *MacAddress
   )
 {
   INT32     Node;
@@ -179,7 +179,7 @@ SetMacAddress (
   if (Node >= 0) {
     SubNode = fdt_subnode_offset (Fdt, Node, Device);
     if (SubNode >= 0) {
-      Rc = fdt_setprop (Fdt, SubNode, "mac-address", (VOID *)&MacAddress,
+      Rc = fdt_setprop (Fdt, SubNode, "mac-address", MacAddress,
              MAC_ADDRESS_BYTES);
       if (Rc) {
         DEBUG ((DEBUG_ERROR,
@@ -289,8 +289,8 @@ SetXgbeStatus (
   SetDeviceStatus (Fdt, "xgmac@e0900000", TRUE);
   SetDeviceStatus (Fdt, "phy@e1240c00", TRUE);
 
-  SetMacAddress (Fdt, "xgmac@e0700000", PcdGet64 (PcdEthMacA));
-  SetMacAddress (Fdt, "xgmac@e0900000", PcdGet64 (PcdEthMacB));
+  SetMacAddress (Fdt, "xgmac@e0700000", PcdGetPtr (PcdEthMacA));
+  SetMacAddress (Fdt, "xgmac@e0900000", PcdGetPtr (PcdEthMacB));
 #else
   SetDeviceStatus (Fdt, "xgmac@e0700000", FALSE);
   SetDeviceStatus (Fdt, "phy@e1240800", FALSE);

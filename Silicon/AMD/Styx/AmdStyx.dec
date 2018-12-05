@@ -42,8 +42,8 @@
   gAmdStyxTokenSpaceGuid.PcdSocCoreCount|1|UINT32|0x00000100
   gAmdStyxTokenSpaceGuid.PcdSocCpuId|1|UINT32|0x00000101
 
-  gAmdStyxTokenSpaceGuid.PcdEthMacA|0|UINT64|0x000d0001
-  gAmdStyxTokenSpaceGuid.PcdEthMacB|0|UINT64|0x000d0002
+  gAmdStyxTokenSpaceGuid.PcdEthMacA|{0x0,0x0,0x0,0x0,0x0,0x0}|VOID*|0x000d0001
+  gAmdStyxTokenSpaceGuid.PcdEthMacB|{0x0,0x0,0x0,0x0,0x0,0x0}|VOID*|0x000d0002
 
 [PcdsFixedAtBuild]
   # CPUID Register

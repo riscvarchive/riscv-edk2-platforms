@@ -468,8 +468,8 @@ DEFINE DO_CAPSULE   = FALSE
   gAmdModulePkgTokenSpaceGuid.PcdPort1NetSpeed|1
 
 [PcdsDynamicDefault.common]
-  gAmdStyxTokenSpaceGuid.PcdEthMacA|0x02A1A2A3A4A5
-  gAmdStyxTokenSpaceGuid.PcdEthMacB|0x02B1B2B3B4B5
+  gAmdStyxTokenSpaceGuid.PcdEthMacA|{0x2,0xA1,0xA2,0xA3,0xA4,0xA5}
+  gAmdStyxTokenSpaceGuid.PcdEthMacB|{0x2,0xB1,0xB2,0xB3,0xB4,0xB5}
 
 [PcdsPatchableInModule]
   gAmdModulePkgTokenSpaceGuid.PcdXgbeUseMacFromIscp|TRUE
