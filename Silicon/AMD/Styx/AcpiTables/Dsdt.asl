@@ -105,35 +105,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
             })
         }
 
-        Device (AHC1)
-        {
-            Name (_HID, "AMDI0600")  // _HID: Hardware ID
-            Name (_UID, 0x01)  // _UID: Unique ID
-            Name (_CCA, 0x01)  // _CCA: Cache Coherency Attribute
-            Name (_CLS, Package (0x03)  // _CLS: Class Code
-            {
-                0x01,
-                0x06,
-                0x01
-            })
-            Method (_STA)
-            {
-                 Return (0x0F)
-            }
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                Memory32Fixed (ReadWrite,
-                    0xE0D00000,         // Address Base (MMIO)
-                    0x00010000,         // Address Length
-                    )
-                Memory32Fixed (ReadWrite,
-                    0xE000007C,         // Address Base (SGPIO)
-                    0x00000001,         // Address Length
-                    )
-                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, ) {0x00000182, }
-            })
-        }
-
 #if DO_XGBE
         Device (ETH0)
         {
@@ -341,44 +312,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
                     0x00001000,         // Address Length
                     )
                 Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, ) {0x00000186, }
-            })
-        }
-
-        Device (GIO2)
-        {
-            Name (_HID, "AMDI0400")  // _HID: Hardware ID
-            Name (_CID, "ARMH0061")  // _CID: Compatible ID
-            Name (_UID, 0x02)  // _UID: Unique ID
-            Method (_STA)
-            {
-                 Return (0x0F)
-            }
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                Memory32Fixed (ReadWrite,
-                    0xE0020000,         // Address Base
-                    0x00001000,         // Address Length
-                    )
-                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, ) {0x0000018E, }
-            })
-        }
-
-        Device (GIO3)
-        {
-            Name (_HID, "AMDI0400")  // _HID: Hardware ID
-            Name (_CID, "ARMH0061")  // _CID: Compatible ID
-            Name (_UID, 0x03)  // _UID: Unique ID
-            Method (_STA)
-            {
-                 Return (0x0F)
-            }
-            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
-            {
-                Memory32Fixed (ReadWrite,
-                    0xE0030000,         // Address Base
-                    0x00001000,         // Address Length
-                    )
-                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, ) {0x0000018D, }
             })
         }
 

@@ -130,41 +130,12 @@ OverrideMacAddr (
   }
 }
 
-VOID
-OverrideStatus (
-  IN UINT8 *DSD_Data,
-  IN BOOLEAN Enable
-  )
-{
-  if (Enable) {
-    // AML encoding: ReturnOp + BytePrefix
-    if (DSD_Data[1] == 0xA4 && DSD_Data[2] == 0x0A) {
-      DSD_Data[3] = 0x0F;
-    }
-  } else {
-    // AML encoding: ReturnOp
-    if (DSD_Data[1] == 0xA4) {
-      // AML encoding: BytePrefix?
-      if (DSD_Data[2] == 0x0A) {
-        DSD_Data[3] = 0x00;
-      } else {
-        DSD_Data[2] = 0x00;
-      }
-    }
-  }
-}
-
 EFI_ACPI_DESCRIPTION_HEADER *
 DsdtHeader (
   VOID
   )
 {
   AML_OFFSET_TABLE_ENTRY *Table;
-  BOOLEAN                EnableOnB1;
-  UINT32                 CpuId = PcdGet32 (PcdSocCpuId);
-
-  // Enable features on Styx-B1 or later
-  EnableOnB1 = (CpuId & 0xFF0) && (CpuId & 0x00F);
 
   Table = &DSDT_SEATTLE__OffsetTable[0];
   while (Table->Pathname) {
@@ -173,16 +144,6 @@ DsdtHeader (
     }
     else if (AsciiStrCmp(Table->Pathname, "_SB_.ETH1._DSD") == 0) {
       OverrideMacAddr ((UINT8 *)&AmlCode[Table->Offset], PcdGet64 (PcdEthMacB));
-    }
-    else if (AsciiStrCmp(Table->Pathname, "_SB_.AHC1._STA") == 0) {
-      OverrideStatus ((UINT8 *)&AmlCode[Table->Offset],
-        EnableOnB1 && FixedPcdGet8(PcdSata1PortCount) > 0);
-    }
-    else if (AsciiStrCmp(Table->Pathname, "_SB_.GIO2._STA") == 0) {
-      OverrideStatus ((UINT8 *)&AmlCode[Table->Offset], EnableOnB1);
-    }
-    else if (AsciiStrCmp(Table->Pathname, "_SB_.GIO3._STA") == 0) {
-      OverrideStatus ((UINT8 *)&AmlCode[Table->Offset], EnableOnB1);
     }
 
     ++Table;

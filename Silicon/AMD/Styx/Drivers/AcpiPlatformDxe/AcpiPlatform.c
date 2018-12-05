@@ -24,13 +24,57 @@
 
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
+#include <Library/DxeServicesLib.h>
+#include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+
+#include <IndustryStandard/Acpi61.h>
+
+#include <SocVersion.h>
 
 #define MAX_ACPI_TABLES    16
 
 EFI_ACPI_DESCRIPTION_HEADER *AcpiTableList[MAX_ACPI_TABLES];
 
+STATIC EFI_ACPI_TABLE_PROTOCOL   *mAcpiTableProtocol;
+
+STATIC
+VOID
+InstallSystemDescriptionTables (
+  VOID
+  )
+{
+  EFI_ACPI_DESCRIPTION_HEADER   *Table;
+  EFI_STATUS                    Status;
+  UINT32                        CpuId;
+  UINTN                         Index;
+  UINTN                         TableSize;
+  UINTN                         TableHandle;
+
+  Status = EFI_SUCCESS;
+  for (Index = 0; !EFI_ERROR (Status); Index++) {
+    Status = GetSectionFromFv (&gEfiCallerIdGuid, EFI_SECTION_RAW, Index,
+               (VOID **) &Table, &TableSize);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    switch (Table->OemTableId) {
+    case SIGNATURE_64 ('S', 't', 'y', 'x', 'B', '1', ' ', ' '):
+      CpuId = PcdGet32 (PcdSocCpuId);
+      if ((CpuId & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
+        continue;
+      }
+      break;
+    }
+
+    Status = mAcpiTableProtocol->InstallAcpiTable (mAcpiTableProtocol, Table,
+                                   TableSize, &TableHandle);
+    ASSERT_EFI_ERROR (Status);
+    FreePool (Table);
+  }
+}
 
 /**
   Entrypoint of Acpi Platform driver.
@@ -51,7 +95,6 @@ AcpiPlatformEntryPoint (
   )
 {
   EFI_STATUS                Status;
-  EFI_ACPI_TABLE_PROTOCOL   *AcpiTable;
   UINTN                     TableHandle;
   UINTN                     TableIndex;
 
@@ -77,7 +120,8 @@ AcpiPlatformEntryPoint (
   //
   // Find the AcpiTable protocol
   //
-  Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL, (VOID**)&AcpiTable);
+  Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL,
+                  (VOID**)&mAcpiTableProtocol);
   if (EFI_ERROR (Status)) {
     DEBUG((EFI_D_ERROR, "Failed to locate AcpiTable protocol. Status = %r\n", Status));
     ASSERT_EFI_ERROR(Status);
@@ -96,12 +140,12 @@ AcpiPlatformEntryPoint (
                           AcpiTableList[TableIndex]->Revision,
                           AcpiTableList[TableIndex]->Length));
 
-    Status = AcpiTable->InstallAcpiTable (
-                            AcpiTable,
-                            AcpiTableList[TableIndex],
-                            (AcpiTableList[TableIndex])->Length,
-                            &TableHandle
-                            );
+    Status = mAcpiTableProtocol->InstallAcpiTable (
+                                   mAcpiTableProtocol,
+                                   AcpiTableList[TableIndex],
+                                   (AcpiTableList[TableIndex])->Length,
+                                   &TableHandle
+                                   );
     if (EFI_ERROR (Status)) {
       DEBUG((DEBUG_ERROR,"Error adding ACPI Table. Status = %r\n", Status));
       ASSERT_EFI_ERROR(Status);
@@ -109,6 +153,8 @@ AcpiPlatformEntryPoint (
     TableIndex++;
     ASSERT( TableIndex < MAX_ACPI_TABLES );
   }
+
+  InstallSystemDescriptionTables ();
 
   return EFI_SUCCESS;
 }

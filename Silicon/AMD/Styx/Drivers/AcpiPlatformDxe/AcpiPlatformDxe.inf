@@ -28,6 +28,7 @@
 
 [Sources]
   AcpiPlatform.c
+  SsdtB1.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -39,12 +40,18 @@
 [LibraryClasses]
   AmdStyxAcpiLib
   DebugLib
+  DxeServicesLib
+  MemoryAllocationLib
   PcdLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
 
 [Pcd]
   gAmdStyxTokenSpaceGuid.PcdEnableSmmus
+  gAmdStyxTokenSpaceGuid.PcdSocCpuId
+
+[FixedPcd]
+  gAmdStyxTokenSpaceGuid.PcdSata1PortCount
 
 [Protocols]
   gEfiAcpiTableProtocolGuid                     ## ALWAYS_CONSUMED
