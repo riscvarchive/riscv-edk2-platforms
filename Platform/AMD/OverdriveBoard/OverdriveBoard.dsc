@@ -485,6 +485,9 @@ DEFINE DO_CAPSULE   = FALSE
   gAmdModulePkgTokenSpaceGuid.PcdPciePort2Present|1
   gAmdModulePkgTokenSpaceGuid.PcdPcieHardcodeEnumeration|TRUE
 
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|0
+
 [PcdsDynamicDefault.common]
   gAmdStyxTokenSpaceGuid.PcdSocCoreCount|$(NUM_CORES)
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x0400000000
