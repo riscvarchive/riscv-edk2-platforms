@@ -36,7 +36,6 @@
   Madt.c
   Mcfg.c
   Csrt.c
-  Dsdt.c
   Iort.c
   Pptt.c
 

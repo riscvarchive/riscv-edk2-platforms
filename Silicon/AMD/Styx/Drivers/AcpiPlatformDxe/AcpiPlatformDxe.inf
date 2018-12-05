@@ -28,6 +28,7 @@
 
 [Sources]
   AcpiPlatform.c
+  Dsdt.asl
   SsdtB1.asl
   SsdtXgbe.asl
 

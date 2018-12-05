@@ -176,7 +176,6 @@ AcpiPlatformEntryPoint (
 
   TableIndex = 0;
   AcpiTableList[TableIndex++] = FadtTable();
-  AcpiTableList[TableIndex++] = DsdtHeader();
   AcpiTableList[TableIndex++] = MadtHeader();
   AcpiTableList[TableIndex++] = GtdtHeader();
   AcpiTableList[TableIndex++] = Dbg2Header();

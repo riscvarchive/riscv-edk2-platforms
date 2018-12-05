@@ -272,8 +272,6 @@ DEFINE DO_CAPSULE   = FALSE
   GCC:*_*_AARCH64_ARCHCC_FLAGS = -DDO_XGBE=$(DO_XGBE) -DDO_KCS=$(DO_KCS) -DNUM_CORES=$(NUM_CORES) -DARM_CPU_AARCH64
   GCC:*_*_AARCH64_PP_FLAGS = -DDO_XGBE=$(DO_XGBE) -DDO_KCS=$(DO_KCS) -DNUM_CORES=$(NUM_CORES) -DARM_CPU_AARCH64
 
-  GCC:*_*_AARCH64_PLATFORM_FLAGS = -I$(BIN_DIR)/Silicon/AMD/Styx/AcpiTables/AcpiAml/OUTPUT
-
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
@@ -683,7 +681,6 @@ DEFINE DO_CAPSULE   = FALSE
       NULL|EmbeddedPkg/Library/PlatformHasAcpiLib/PlatformHasAcpiLib.inf
   }
 
-  Silicon/AMD/Styx/AcpiTables/AcpiAml.inf
   Silicon/AMD/Styx/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
