@@ -18,7 +18,7 @@
 
 #include <IndustryStandard/Acpi.h>
 
-EFI_ACPI_DESCRIPTION_HEADER *MadtHeader (void);
+#define MAX_CORES                        8
 
 #define EFI_ACPI_AMD_OEM_ID_ARRAY        {'A','M','D','I','N','C'}
 #define EFI_ACPI_AMD_OEM_TABLE_ID        SIGNATURE_64('S','E','A','T','T','L','E',' ')

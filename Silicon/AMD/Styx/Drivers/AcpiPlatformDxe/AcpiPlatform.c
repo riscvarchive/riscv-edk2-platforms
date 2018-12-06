@@ -19,8 +19,12 @@
    MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatform.c
 **/
 
-#include <Protocol/AcpiTable.h>
+#include <Guid/ArmMpCoreInfo.h>
 
+#include <Protocol/AcpiTable.h>
+#include <Protocol/AmdMpCoreInfo.h>
+
+#include <Library/ArmLib.h>
 #include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
@@ -37,6 +41,7 @@
 #include "AcpiPlatform.h"
 
 STATIC EFI_ACPI_TABLE_PROTOCOL   *mAcpiTableProtocol;
+STATIC AMD_MP_CORE_INFO_PROTOCOL *mAmdMpCoreInfoProtocol;
 
 #if DO_XGBE
 
@@ -91,18 +96,47 @@ PatchAmlPackage (
 
 STATIC
 VOID
+EnableAvailableCores (
+  EFI_ACPI_5_1_GIC_STRUCTURE            *GicC
+  )
+{
+  ARM_CORE_INFO                         *ArmCoreInfoTable;
+  UINTN                                 CoreCount;
+  UINTN                                 Index;
+
+  CoreCount = 0;
+  ArmCoreInfoTable = mAmdMpCoreInfoProtocol->GetArmCoreInfoTable (&CoreCount);
+  ASSERT (ArmCoreInfoTable != NULL);
+
+  while (CoreCount--) {
+    for (Index = 0; Index < MAX_CORES; Index++) {
+      if (GicC[Index].MPIDR == GET_MPID (ArmCoreInfoTable->ClusterId,
+                                         ArmCoreInfoTable->CoreId)) {
+        GicC[Index].Flags |= EFI_ACPI_5_1_GIC_ENABLED;
+        break;
+      }
+    }
+    ArmCoreInfoTable++;
+  }
+}
+
+STATIC
+VOID
 InstallSystemDescriptionTables (
   VOID
   )
 {
-  EFI_ACPI_DESCRIPTION_HEADER                   *Table;
-  EFI_STATUS                                    Status;
-  UINT32                                        CpuId;
-  UINTN                                         Index;
-  UINTN                                         TableSize;
-  UINTN                                         TableHandle;
-  EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE  *Gtdt;
-  EFI_ACPI_6_0_IO_REMAPPING_TABLE               *Iort;
+  EFI_ACPI_DESCRIPTION_HEADER                         *Table;
+  EFI_STATUS                                          Status;
+  UINT32                                              CpuId;
+  UINTN                                               Index;
+  UINTN                                               TableSize;
+  UINTN                                               TableHandle;
+  EFI_ACPI_5_1_GENERIC_TIMER_DESCRIPTION_TABLE        *Gtdt;
+  EFI_ACPI_6_0_IO_REMAPPING_TABLE                     *Iort;
+  EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER *Madt;
+  EFI_ACPI_5_1_GIC_STRUCTURE                          *GicC;
+
 #if DO_XGBE
   UINT8                         MacPackage[sizeof(mDefaultMacPackageA)];
 #endif
@@ -163,6 +197,13 @@ InstallSystemDescriptionTables (
           Gtdt->PlatformTimerOffset = 0;
         }
         break;
+
+      case EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_SIGNATURE:
+        Madt = (EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER *)Table;
+        GicC = (EFI_ACPI_5_1_GIC_STRUCTURE *)(Madt + 1);
+
+        EnableAvailableCores (GicC);
+        break;
       }
     }
 
@@ -198,8 +239,6 @@ AcpiPlatformEntryPoint (
   )
 {
   EFI_STATUS                  Status;
-  UINTN                       TableHandle;
-  EFI_ACPI_DESCRIPTION_HEADER *Header;
 
   //
   // Find the AcpiTable protocol
@@ -208,9 +247,8 @@ AcpiPlatformEntryPoint (
                   (VOID**)&mAcpiTableProtocol);
   ASSERT_EFI_ERROR (Status);
 
-  Header = MadtHeader ();
-  Status = mAcpiTableProtocol->InstallAcpiTable (mAcpiTableProtocol, Header,
-                                 Header->Length, &TableHandle);
+  Status = gBS->LocateProtocol (&gAmdMpCoreInfoProtocolGuid, NULL,
+                  (VOID**)&mAmdMpCoreInfoProtocol);
   ASSERT_EFI_ERROR (Status);
 
   InstallSystemDescriptionTables ();

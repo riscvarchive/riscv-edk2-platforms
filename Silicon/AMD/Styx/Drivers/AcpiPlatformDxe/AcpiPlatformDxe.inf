@@ -34,7 +34,7 @@
   Fadt.aslc
   Gtdt.aslc
   Iort.aslc
-  Madt.c
+  Madt.aslc
   Mcfg.aslc
   Pptt.aslc
   Spcr.aslc
@@ -49,6 +49,7 @@
   Silicon/AMD/Styx/AmdStyx.dec
 
 [LibraryClasses]
+  ArmLib
   BaseLib
   BaseMemoryLib
   DebugLib
@@ -92,4 +93,4 @@
   gEfiAcpiTableProtocolGuid                     ## ALWAYS_CONSUMED
 
 [Depex]
-  gEfiAcpiTableProtocolGuid
+  gEfiAcpiTableProtocolGuid AND gAmdMpCoreInfoProtocolGuid
