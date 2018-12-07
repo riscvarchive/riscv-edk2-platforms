@@ -562,6 +562,7 @@ DEFINE DO_FLASHER   = FALSE
       FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
       DtPlatformDtbLoaderLib|Silicon/AMD/Styx/Library/StyxDtbLoaderLib/StyxDtbLoaderLib.inf
   }
+  Platform/AMD/OverdriveBoard/DeviceTree/OverdriveBoard.inf
 
   #
   # PCI support

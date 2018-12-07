@@ -145,10 +145,7 @@ READ_LOCK_STATUS   = TRUE
   # FDT support
   #
   INF EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
-
-  FILE FREEFORM = 25462CDA-221F-47DF-AC1D-259CFAA4E326 {
-    SECTION RAW = Platform/AMD/OverdriveBoard/FdtBlob/styx-overdrive.dtb
-  }
+  INF RuleOverride = DTB Platform/AMD/OverdriveBoard/DeviceTree/OverdriveBoard.inf
 
   #
   # PCI support
@@ -408,3 +405,7 @@ READ_LOCK_STATUS   = TRUE
     RAW ASL                |.aml
   }
 
+[Rule.Common.USER_DEFINED.DTB]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW BIN                |.dtb
+  }
