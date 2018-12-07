@@ -21,6 +21,8 @@
 
 **/
 
+#define NUM_CORES                           FixedPcdGet32 (PcdCoreCount)
+
 DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
 {
     Scope (_SB)

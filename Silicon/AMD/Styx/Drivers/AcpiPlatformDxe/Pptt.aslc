@@ -18,6 +18,8 @@
 
 #define FIELD_OFFSET(type, name)            __builtin_offsetof(type, name)
 
+#define NUM_CORES                           FixedPcdGet32 (PcdCoreCount)
+
 #pragma pack(1)
 typedef struct {
   EFI_ACPI_6_2_PPTT_STRUCTURE_PROCESSOR                     Core;

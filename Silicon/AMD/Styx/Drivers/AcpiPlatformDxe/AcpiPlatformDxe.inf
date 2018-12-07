@@ -42,6 +42,7 @@
   SsdtXgbe.asl
 
 [Packages]
+  ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
@@ -84,6 +85,7 @@
   gAmdStyxTokenSpaceGuid.PcdSbsaWakeUpGSIV
   gAmdStyxTokenSpaceGuid.PcdSbsaWatchDogGSIV
   gAmdStyxTokenSpaceGuid.PcdSerialDbgRegisterBase
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase
   gArmTokenSpaceGuid.PcdGicDistributorBase
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase

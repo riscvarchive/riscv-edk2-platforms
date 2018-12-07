@@ -33,6 +33,8 @@
 #define PMU_INT_FLAG_SPI        0
 #define PMU_INT_TYPE_HIGH_LEVEL 4
 
+#define NUM_CORES               FixedPcdGet32 (PcdCoreCount)
+
 //
 // PMU interrupts per core
 //

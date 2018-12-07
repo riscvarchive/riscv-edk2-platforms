@@ -24,6 +24,7 @@
   StyxDtbLoaderLib.c
 
 [Packages]
+  ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
@@ -49,6 +50,7 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase
 
 [FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmTokenSpaceGuid.PcdArmLinuxFdtMaxOffset
   gArmTokenSpaceGuid.PcdArmLinuxFdtAlignment
   gAmdStyxTokenSpaceGuid.PcdSata1PortCount
