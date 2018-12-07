@@ -309,11 +309,7 @@ STATIC SMBIOS_TABLE_TYPE4 mProcessorInfoType4 = {
 STATIC CHAR8 CONST * CONST mProcessorInfoType4Strings[] = {
   "Socket",
   "ARM",
-#ifdef ARM_CPU_AARCH64
   "v8",
-#else
-  "v7",
-#endif
   "1.0",
   "1.0",
   "1.0",
