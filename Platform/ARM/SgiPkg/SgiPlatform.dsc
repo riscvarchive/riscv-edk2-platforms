@@ -37,6 +37,8 @@
   ArmPlatformLib|Platform/ARM/SgiPkg/Library/PlatformLib/PlatformLib.inf
   BasePathLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   EfiResetSystemLib|ArmPkg/Library/ArmPsciResetSystemLib/ArmPsciResetSystemLib.inf
+  LcdHwLib|ArmPlatformPkg/Library/HdLcd/HdLcd.inf
+  LcdPlatformLib|Platform/ARM/SgiPkg/Library/HdLcdArmSgiLib/HdLcdArmSgiLib.inf
   NorFlashPlatformLib|Platform/ARM/SgiPkg/Library/NorFlashLib/NorFlashLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   TimerLib|ArmPkg/Library/ArmArchTimerLib/ArmArchTimerLib.inf
@@ -153,6 +155,9 @@
   gArmPlatformTokenSpaceGuid.PL011UartInteger|4
   gArmPlatformTokenSpaceGuid.PL011UartFractional|0
 
+  ## PL370 - HDLCD1
+  gArmPlatformTokenSpaceGuid.PcdArmHdLcdBase|0x7FF60000
+
   ## PL011 - Serial Debug UART
   gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase|0x7FF80000
   gArmPlatformTokenSpaceGuid.PcdSerialDbgUartClkInHz|7372800
@@ -223,6 +228,7 @@
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+  ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
   ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf

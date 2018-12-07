@@ -22,7 +22,7 @@
 #include <SgiPlatform.h>
 
 // Total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  11
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS  12
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -102,6 +102,12 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[++Index].PhysicalBase  = SGI_SUBSYS_GENERIC_GIC_BASE;
   VirtualMemoryTable[Index].VirtualBase     = SGI_SUBSYS_GENERIC_GIC_BASE;
   VirtualMemoryTable[Index].Length          = SGI_SUBSYS_GENERIC_GIC_SZ;
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Expansion AXI - Platform Peripherals - HDLCD1
+  VirtualMemoryTable[++Index].PhysicalBase  = SGI_EXP_PLAT_PERIPH_HDLCD1_BASE;
+  VirtualMemoryTable[Index].VirtualBase     = SGI_EXP_PLAT_PERIPH_HDLCD1_BASE;
+  VirtualMemoryTable[Index].Length          = SGI_EXP_PLAT_PERIPH_HDLCD1_SZ;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Expansion AXI - Platform Peripherals - UART1

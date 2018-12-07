@@ -56,6 +56,10 @@
 #define SGI_SUBSYS_GENERIC_GICR_BASE              0x300C0000
 #define SGI_SUBSYS_GENERIC_GIC_SZ                 SIZE_1MB
 
+// Expansion AXI - Platform Peripherals - HDLCD1
+#define SGI_EXP_PLAT_PERIPH_HDLCD1_BASE           0x7FF60000
+#define SGI_EXP_PLAT_PERIPH_HDLCD1_SZ             SIZE_64KB
+
 // Expansion AXI - Platform Peripherals - UART0
 #define SGI_EXP_PLAT_PERIPH_UART0_BASE            0x7FF70000
 #define SGI_EXP_PLAT_PERIPH_UART0_SZ              SIZE_64KB

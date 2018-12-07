@@ -133,6 +133,9 @@ READ_LOCK_STATUS   = TRUE
   #
   # Multiple Console IO support
   #
+  INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
+  INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
+  INF MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
 
@@ -143,6 +146,9 @@ READ_LOCK_STATUS   = TRUE
   # NOR Flash driver
   INF ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
   INF OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
+
+  # Graphics Output Protocol
+  INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   INF Platform/ARM/Drivers/BootMonFs/BootMonFs.inf
   INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
