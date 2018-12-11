@@ -181,13 +181,11 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
 
-!if $(DO_XGBE)
   #
   # SNP support
   #
   INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort0.inf
   INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort1.inf
-!endif
 
   #
   # Networking stack

@@ -17,7 +17,6 @@
 ################################################################################
 [Defines]
 
-DEFINE DO_XGBE      = 1
 DEFINE NUM_CORES    = 8
 DEFINE DO_KCS       = 1
 DEFINE DO_FLASHER   = FALSE
@@ -272,8 +271,8 @@ DEFINE DO_CAPSULE   = FALSE
   *_*_*_ASLPP_FLAGS             = $(ARCHCC_FLAGS)
   *_*_*_ASLCC_FLAGS             = $(ARCHCC_FLAGS)
 
-  GCC:*_*_AARCH64_ARCHCC_FLAGS = -DDO_XGBE=$(DO_XGBE) -DDO_KCS=$(DO_KCS)
-  GCC:*_*_AARCH64_PP_FLAGS = -DDO_XGBE=$(DO_XGBE) -DDO_KCS=$(DO_KCS)
+  GCC:*_*_AARCH64_ARCHCC_FLAGS = -DDO_KCS=$(DO_KCS)
+  GCC:*_*_AARCH64_PP_FLAGS = -DDO_KCS=$(DO_KCS)
 
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
@@ -465,7 +464,6 @@ DEFINE DO_CAPSULE   = FALSE
 
   gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
 
-!if $(DO_XGBE)
   gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable|TRUE
 
   gAmdModulePkgTokenSpaceGuid.PcdPort0PhyMode|0
@@ -480,7 +478,6 @@ DEFINE DO_CAPSULE   = FALSE
 [PcdsPatchableInModule]
   gAmdModulePkgTokenSpaceGuid.PcdXgbeUseMacFromIscp|TRUE
   gAmdModulePkgTokenSpaceGuid.PcdXgbeRev|2
-!endif
 
 [PcdsPatchableInModule]
 # PCIe Configuration: x4x4
@@ -654,13 +651,11 @@ DEFINE DO_CAPSULE   = FALSE
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
 
-!if $(DO_XGBE)
   #
   # SNP support
   #
   Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort0.inf
   Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort1.inf
-!endif
 
   #
   # Networking stack
