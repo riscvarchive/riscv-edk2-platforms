@@ -60,12 +60,10 @@ typedef struct {
   STYX_SMMU_NODE                            PciSmmuNode;
   STYX_RC_NODE                              PciRcNode;
 
-#if DO_XGBE
   STYX_SMMU_NODE                            Eth0SmmuNode;
   STYX_NC_NODE                              Eth0NamedNode;
   STYX_SMMU_NODE                            Eth1SmmuNode;
   STYX_NC_NODE                              Eth1NamedNode;
-#endif
 
   STYX_SMMU_NODE                            Sata0SmmuNode;
   STYX_NC_NODE                              Sata0NamedNode;
@@ -147,11 +145,7 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
     AMD_ACPI_HEADER(EFI_ACPI_6_0_IO_REMAPPING_TABLE_SIGNATURE,
                     STYX_IO_REMAPPING_STRUCTURE,
                     EFI_ACPI_IO_REMAPPING_TABLE_REVISION),
-#if DO_XGBE
     10,                                             // NumNodes
-#else
-    6,                                              // NumNodes
-#endif
     sizeof(EFI_ACPI_6_0_IO_REMAPPING_TABLE),        // NodeOffset
     0                                               // Reserved
   }, {
@@ -180,7 +174,6 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
     }, {
       __STYX_ID_MAPPING(0x0, 0xffff, 0x0, PciSmmuNode, 0x0),
     }
-#if DO_XGBE
   }, {
     // Eth0SmmuNode
     __STYX_SMMU_NODE(STYX_ETH0_SMMU_BASE,
@@ -265,7 +258,6 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
       __STYX_ID_MAPPING_SINGLE(0x1E, Eth1SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x1F, Eth1SmmuNode),
     }
-#endif
   }, {
     // Sata0SmmuNode
     __STYX_SMMU_NODE(STYX_SATA0_SMMU_BASE,
