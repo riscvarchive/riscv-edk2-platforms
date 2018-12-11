@@ -1,0 +1,55 @@
+## @file
+#  Device driver for the OP-TEE based random number generator.
+#
+#  Copyright (c) 2018, Linaro Ltd. All rights reserved.<BR>
+#
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD
+#  License which accompanies this distribution. The full text of the license may
+#  be found at  http://opensource.org/licenses/bsd-license.php.
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = OpteeRngDxe
+  MODULE_UNI_FILE                = OpteeRngDxe.uni
+  FILE_GUID                      = 93A599F2-6D82-4FCC-9970-49BB013D695A
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = OpteeRngEntry
+
+#
+#  VALID_ARCHITECTURES           = AARCH64 ARM
+#
+
+[Sources]
+  OpteeRng.c
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/Socionext/SynQuacer/SynQuacer.dec
+
+[LibraryClasses]
+  OpteeLib
+  TimerLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+
+[Protocols]
+  gEfiRngProtocolGuid                 # PROTOCOL BY_START
+
+[Guids]
+  gEfiRngAlgorithmRaw
+  gOpteeRngTaGuid
+
+[Depex]
+  TRUE
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  OpteeRngDxeExtra.uni

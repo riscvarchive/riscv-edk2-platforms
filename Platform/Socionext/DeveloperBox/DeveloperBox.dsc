@@ -627,6 +627,7 @@
   #
   # RNG
   #
+  Silicon/Socionext/SynQuacer/Drivers/OpteeRngDxe/OpteeRngDxe.inf
   Silicon/Openmoko/ChaosKeyDxe/ChaosKeyDxe.inf
 
   #

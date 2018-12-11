@@ -189,6 +189,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # RNG
   #
+  INF Silicon/Socionext/SynQuacer/Drivers/OpteeRngDxe/OpteeRngDxe.inf
   INF Silicon/Openmoko/ChaosKeyDxe/ChaosKeyDxe.inf
 
   #
