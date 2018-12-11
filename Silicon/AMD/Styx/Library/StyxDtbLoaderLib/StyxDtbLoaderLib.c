@@ -247,11 +247,12 @@ SetSocIdStatus (
   SetDeviceStatus (Fdt, "gpio@e0020000", IsRevB1);
   SetDeviceStatus (Fdt, "gpio@e0030000", IsRevB1);
   SetDeviceStatus (Fdt, "gwdt@e0bb0000", IsRevB1);
-#if DO_KCS
-  SetDeviceStatus (Fdt, "kcs@e0010000", IsRevB1);
-#else
-  SetDeviceStatus (Fdt, "kcs@e0010000", FALSE);
-#endif
+
+  if (FixedPcdGetBool (PcdEnableKcs)) {
+    SetDeviceStatus (Fdt, "kcs@e0010000", IsRevB1);
+  } else {
+    SetDeviceStatus (Fdt, "kcs@e0010000", FALSE);
+  }
 
   if (!PcdGetBool (PcdEnableSmmus)) {
     DisableSmmu (Fdt, "iommu-map", "/smb/smmu@e0a00000", "/smb/pcie@f0000000");
