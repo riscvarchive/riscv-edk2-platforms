@@ -172,7 +172,8 @@ InstallSystemDescriptionTables (
       break;
 
     case SIGNATURE_64 ('S', 't', 'y', 'x', 'K', 'c', 's', ' '):
-      if (!FixedPcdGetBool (PcdEnableKcs)) {
+      if (!FixedPcdGetBool (PcdEnableKcs) ||
+          (CpuId & STYX_SOC_VERSION_MASK) < STYX_SOC_VERSION_B1) {
         continue;
       }
 
