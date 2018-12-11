@@ -18,7 +18,6 @@
 [Defines]
 
 DEFINE NUM_CORES    = 4
-DEFINE DO_KCS       = 1
 DEFINE DO_FLASHER   = FALSE
 
   PLATFORM_NAME                  = Overdrive1000
@@ -253,13 +252,6 @@ DEFINE DO_FLASHER   = FALSE
 
 [BuildOptions]
   GCC:RELEASE_*_*_CC_FLAGS  = -DMDEPKG_NDEBUG
-
-  *_*_*_ASL_FLAGS               = -tc -li -l -so
-  *_*_*_ASLPP_FLAGS             = $(ARCHCC_FLAGS)
-  *_*_*_ASLCC_FLAGS             = $(ARCHCC_FLAGS)
-
-  GCC:*_*_AARCH64_ARCHCC_FLAGS = -DDO_KCS=$(DO_KCS)
-  GCC:*_*_AARCH64_PP_FLAGS = -DDO_KCS=$(DO_KCS)
 
 [BuildOptions.common.EDKII.DXE_RUNTIME_DRIVER]
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
