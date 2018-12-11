@@ -58,6 +58,7 @@
   gAmdStyxMpCoreInfoGuid               ## PRODUCER
 
 [Pcd]
+  gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable
   gArmTokenSpaceGuid.PcdSystemMemorySize
   gArmPlatformTokenSpaceGuid.PcdCoreCount
   gAmdStyxTokenSpaceGuid.PcdSocCoreCount

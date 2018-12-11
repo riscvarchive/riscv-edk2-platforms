@@ -121,10 +121,8 @@ PlatInitPeiEntryPoint (
   AMD_MEMORY_RANGE_DESCRIPTOR IscpMemDescriptor = {0};
   ISCP_FUSE_INFO              IscpFuseInfo = {0};
   ISCP_CPU_RESET_INFO         CpuResetInfo = {0};
-#if DO_XGBE == 1
   ISCP_MAC_INFO               MacAddrInfo = {0};
   UINTN                       MacSize;
-#endif
   UINTN                       CpuCoreCount, CpuMap, CpuMapSize;
   UINTN                       Index, CoreNum;
   UINT32                      *CpuIdReg = (UINT32 *)FixedPcdGet32 (PcdCpuIdRegister);
@@ -217,27 +215,28 @@ PlatInitPeiEntryPoint (
 
   DEBUG ((EFI_D_ERROR, "SystemMemorySize = %ld\n", PcdGet64 (PcdSystemMemorySize)));
 
-#if DO_XGBE == 1
-  // Get MAC Address from ISCP
-  Status = PeiIscpPpi->ExecuteGetMacAddressTransaction (
-             PeiServices, &MacAddrInfo );
-  ASSERT_EFI_ERROR (Status);
 
-  MacSize = sizeof(MacAddrInfo.MacAddress0);
-  Status = PcdSetPtrS (PcdEthMacA, &MacSize, MacAddrInfo.MacAddress0);
-  ASSERT_EFI_ERROR (Status);
-  Status = PcdSetPtrS (PcdEthMacB, &MacSize, MacAddrInfo.MacAddress1);
-  ASSERT_EFI_ERROR (Status);
+  if (FixedPcdGetBool (PcdXgbeEnable)) {
+    // Get MAC Address from ISCP
+    Status = PeiIscpPpi->ExecuteGetMacAddressTransaction (
+               PeiServices, &MacAddrInfo );
+    ASSERT_EFI_ERROR (Status);
 
-  DEBUG ((EFI_D_ERROR, "EthMacA = %02x:%02x:%02x:%02x:%02x:%02x\n",
-    ((UINT8 *)PcdGetPtr (PcdEthMacA))[0], ((UINT8 *)PcdGetPtr (PcdEthMacA))[1],
-    ((UINT8 *)PcdGetPtr (PcdEthMacA))[2], ((UINT8 *)PcdGetPtr (PcdEthMacA))[3],
-    ((UINT8 *)PcdGetPtr (PcdEthMacA))[4], ((UINT8 *)PcdGetPtr (PcdEthMacA))[5]));
-  DEBUG ((EFI_D_ERROR, "EthMacB = %02x:%02x:%02x:%02x:%02x:%02x\n",
-    ((UINT8 *)PcdGetPtr (PcdEthMacB))[0], ((UINT8 *)PcdGetPtr (PcdEthMacB))[1],
-    ((UINT8 *)PcdGetPtr (PcdEthMacB))[2], ((UINT8 *)PcdGetPtr (PcdEthMacB))[3],
-    ((UINT8 *)PcdGetPtr (PcdEthMacB))[4], ((UINT8 *)PcdGetPtr (PcdEthMacB))[5]));
-#endif
+    MacSize = sizeof(MacAddrInfo.MacAddress0);
+    Status = PcdSetPtrS (PcdEthMacA, &MacSize, MacAddrInfo.MacAddress0);
+    ASSERT_EFI_ERROR (Status);
+    Status = PcdSetPtrS (PcdEthMacB, &MacSize, MacAddrInfo.MacAddress1);
+    ASSERT_EFI_ERROR (Status);
+
+    DEBUG ((EFI_D_ERROR, "EthMacA = %02x:%02x:%02x:%02x:%02x:%02x\n",
+      ((UINT8 *)PcdGetPtr (PcdEthMacA))[0], ((UINT8 *)PcdGetPtr (PcdEthMacA))[1],
+      ((UINT8 *)PcdGetPtr (PcdEthMacA))[2], ((UINT8 *)PcdGetPtr (PcdEthMacA))[3],
+      ((UINT8 *)PcdGetPtr (PcdEthMacA))[4], ((UINT8 *)PcdGetPtr (PcdEthMacA))[5]));
+    DEBUG ((EFI_D_ERROR, "EthMacB = %02x:%02x:%02x:%02x:%02x:%02x\n",
+      ((UINT8 *)PcdGetPtr (PcdEthMacB))[0], ((UINT8 *)PcdGetPtr (PcdEthMacB))[1],
+      ((UINT8 *)PcdGetPtr (PcdEthMacB))[2], ((UINT8 *)PcdGetPtr (PcdEthMacB))[3],
+      ((UINT8 *)PcdGetPtr (PcdEthMacB))[4], ((UINT8 *)PcdGetPtr (PcdEthMacB))[5]));
+  }
 
   // Let other PEI modules know we're done!
   Status = (*PeiServices)->InstallPpi (PeiServices, &mPlatInitPpiDescriptor);
