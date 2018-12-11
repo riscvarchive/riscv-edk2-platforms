@@ -68,6 +68,7 @@
   gAmdStyxTokenSpaceGuid.PcdSocCpuId
 
 [FixedPcd]
+  gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable
   gAmdStyxTokenSpaceGuid.PcdCntControlBase
   gAmdStyxTokenSpaceGuid.PcdCntReadBase
   gAmdStyxTokenSpaceGuid.PcdCntCTLBase

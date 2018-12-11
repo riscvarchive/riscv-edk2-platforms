@@ -43,7 +43,6 @@
 STATIC EFI_ACPI_TABLE_PROTOCOL   *mAcpiTableProtocol;
 STATIC AMD_MP_CORE_INFO_PROTOCOL *mAmdMpCoreInfoProtocol;
 
-#if DO_XGBE
 
 STATIC CONST UINT8 mDefaultMacPackageA[] = {
   0x12, 0xe, 0x6, 0xa, 0x2, 0xa, 0xa1, 0xa, 0xa2, 0xa, 0xa3, 0xa, 0xa4, 0xa, 0xa5
@@ -91,8 +90,6 @@ PatchAmlPackage (
   }
 }
 
-#endif
-
 STATIC
 VOID
 EnableAvailableCores (
@@ -135,10 +132,7 @@ InstallSystemDescriptionTables (
   EFI_ACPI_6_0_IO_REMAPPING_TABLE                     *Iort;
   EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER *Madt;
   EFI_ACPI_5_1_GIC_STRUCTURE                          *GicC;
-
-#if DO_XGBE
   UINT8                         MacPackage[sizeof(mDefaultMacPackageA)];
-#endif
 
   CpuId = PcdGet32 (PcdSocCpuId);
 
@@ -158,7 +152,10 @@ InstallSystemDescriptionTables (
       break;
 
     case SIGNATURE_64 ('S', 't', 'y', 'x', 'X', 'g', 'b', 'e'):
-#if DO_XGBE
+      if (!FixedPcdGetBool (PcdXgbeEnable)) {
+        continue;
+      }
+
       //
       // Patch the SSDT binary with the correct MAC addresses
       //
@@ -173,8 +170,6 @@ InstallSystemDescriptionTables (
         (UINT8 *)Table, TableSize);
 
       break;
-#endif
-      continue;
 
     default:
       switch (Table->Signature) {
