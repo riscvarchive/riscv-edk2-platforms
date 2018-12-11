@@ -103,3 +103,4 @@
 
 [PcdsFixedAtBuild,PcdsDynamic]
   gAmdStyxTokenSpaceGuid.PcdEnableSmmus|FALSE|BOOLEAN|0xe0000000
+  gAmdStyxTokenSpaceGuid.PcdEnableKcs|FALSE|BOOLEAN|0xe0000001

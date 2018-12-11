@@ -462,6 +462,8 @@ DEFINE DO_CAPSULE   = FALSE
   # map the stack as non-executable when entering the DXE phase
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 
+  gAmdStyxTokenSpaceGuid.PcdEnableKcs|TRUE
+
   gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
 
   gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable|TRUE
