@@ -171,6 +171,11 @@ InstallSystemDescriptionTables (
 
       break;
 
+    case SIGNATURE_64 ('S', 't', 'y', 'x', 'K', 'c', 's', ' '):
+      if (!FixedPcdGetBool (PcdEnableKcs)) {
+        continue;
+      }
+
     default:
       switch (Table->Signature) {
       case EFI_ACPI_6_0_IO_REMAPPING_TABLE_SIGNATURE:

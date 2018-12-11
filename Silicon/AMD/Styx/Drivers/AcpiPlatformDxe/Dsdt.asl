@@ -295,31 +295,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
             })
         }
 
-#if DO_KCS
-        //
-        // IPMI/KCS
-        //
-        Device (KCS0)
-        {
-            Name (_HID, "AMDI0300")
-            Name (_CID, "IPI0001")
-            Name (_STR, Unicode("IPMI_KCS"))
-            Name (_UID, 0)
-            Name (_CRS, ResourceTemplate() {
-                Memory32Fixed(ReadWrite, 0xE0010000, 0x1) // KCS Data In/Out
-                Memory32Fixed(ReadWrite, 0xE0010004, 0x1) // KCS Control/Status
-                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive,,,) { 421 } // GSIV
-            })
-            Method (_IFT) {     // Interface Type
-                Return ( 0x01)   // IPMI KCS
-            }
-
-            Method (_SRV) {     // Spec Revision
-                Return (0x200)  // IPMI Spec v2.0
-            }
-        }
-#endif // DO_KCS
-
         //
         // PCIe Root Bus
         //

@@ -39,6 +39,7 @@
   Pptt.aslc
   Spcr.aslc
   SsdtB1.asl
+  SsdtKcs.asl
   SsdtXgbe.asl
 
 [Packages]
@@ -74,6 +75,7 @@
   gAmdStyxTokenSpaceGuid.PcdCntCTLBase
   gAmdStyxTokenSpaceGuid.PcdCntBase0
   gAmdStyxTokenSpaceGuid.PcdCntEL0Base0
+  gAmdStyxTokenSpaceGuid.PcdEnableKcs
   gAmdStyxTokenSpaceGuid.PcdGicVersion
   gAmdStyxTokenSpaceGuid.PcdGicHypervisorInterruptInterfaceBase
   gAmdStyxTokenSpaceGuid.PcdGicVirtualInterruptInterfaceBase
