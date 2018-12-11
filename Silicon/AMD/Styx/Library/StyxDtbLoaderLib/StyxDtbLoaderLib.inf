@@ -50,6 +50,7 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase
 
 [FixedPcd]
+  gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable
   gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmTokenSpaceGuid.PcdArmLinuxFdtMaxOffset
   gArmTokenSpaceGuid.PcdArmLinuxFdtAlignment

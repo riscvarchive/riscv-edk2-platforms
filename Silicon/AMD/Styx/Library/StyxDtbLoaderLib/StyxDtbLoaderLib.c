@@ -161,8 +161,6 @@ SetDeviceStatus (
   }
 }
 
-#if DO_XGBE
-
 #define MAC_ADDRESS_BYTES       6
 
 STATIC
@@ -191,8 +189,6 @@ SetMacAddress (
     }
   }
 }
-
-#endif
 
 STATIC
 VOID
@@ -242,7 +238,6 @@ SetSocIdStatus (
 {
   UINT32        SocId;
   BOOLEAN       IsRevB1;
-  BOOLEAN       DisableXgbeSmmus;
 
   SocId = PcdGet32 (PcdSocCpuId);
   IsRevB1 = (SocId & STYX_SOC_VERSION_MASK) >= STYX_SOC_VERSION_B1;
@@ -267,13 +262,7 @@ SetSocIdStatus (
     DisableSmmu (Fdt, "iommus", "/smb/smmu@e0c00000", "/smb/sata@e0d00000");
   }
 
-#if DO_XGBE
-  DisableXgbeSmmus = !PcdGetBool (PcdEnableSmmus);
-#else
-  DisableXgbeSmmus = TRUE;
-#endif
-
-  if (DisableXgbeSmmus) {
+  if (!FixedPcdGetBool (PcdXgbeEnable) || !PcdGetBool (PcdEnableSmmus)) {
     DisableSmmu (Fdt, "iommus", "/smb/smmu@e0600000", "/smb/xgmac@e0700000");
     DisableSmmu (Fdt, "iommus", "/smb/smmu@e0800000", "/smb/xgmac@e0900000");
   }
@@ -285,20 +274,20 @@ SetXgbeStatus (
   IN VOID       *Fdt
   )
 {
-#if DO_XGBE
-  SetDeviceStatus (Fdt, "xgmac@e0700000", TRUE);
-  SetDeviceStatus (Fdt, "phy@e1240800", TRUE);
-  SetDeviceStatus (Fdt, "xgmac@e0900000", TRUE);
-  SetDeviceStatus (Fdt, "phy@e1240c00", TRUE);
+  if (FixedPcdGetBool (PcdXgbeEnable)) {
+    SetDeviceStatus (Fdt, "xgmac@e0700000", TRUE);
+    SetDeviceStatus (Fdt, "phy@e1240800", TRUE);
+    SetDeviceStatus (Fdt, "xgmac@e0900000", TRUE);
+    SetDeviceStatus (Fdt, "phy@e1240c00", TRUE);
 
-  SetMacAddress (Fdt, "xgmac@e0700000", PcdGetPtr (PcdEthMacA));
-  SetMacAddress (Fdt, "xgmac@e0900000", PcdGetPtr (PcdEthMacB));
-#else
-  SetDeviceStatus (Fdt, "xgmac@e0700000", FALSE);
-  SetDeviceStatus (Fdt, "phy@e1240800", FALSE);
-  SetDeviceStatus (Fdt, "xgmac@e0900000", FALSE);
-  SetDeviceStatus (Fdt, "phy@e1240c00", FALSE);
-#endif
+    SetMacAddress (Fdt, "xgmac@e0700000", PcdGetPtr (PcdEthMacA));
+    SetMacAddress (Fdt, "xgmac@e0900000", PcdGetPtr (PcdEthMacB));
+  } else {
+    SetDeviceStatus (Fdt, "xgmac@e0700000", FALSE);
+    SetDeviceStatus (Fdt, "phy@e1240800", FALSE);
+    SetDeviceStatus (Fdt, "xgmac@e0900000", FALSE);
+    SetDeviceStatus (Fdt, "phy@e1240c00", FALSE);
+  }
 }
 
 
