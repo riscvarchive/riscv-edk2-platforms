@@ -114,4 +114,22 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM
       }
     })
   }
+
+  // VIRTIO NET
+  Device (VR01) {
+    Name (_HID, "LNRO0005")
+    Name (_UID, 1)
+    Name (_CCA, 1)    // mark the device coherent
+
+    Name (_CRS, ResourceTemplate() {
+      Memory32Fixed (
+        ReadWrite,
+        FixedPcdGet32 (PcdVirtioNetBaseAddress),
+        FixedPcdGet32 (PcdVirtioNetSize)
+      )
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
+        FixedPcdGet32 (PcdVirtioNetInterrupt)
+      }
+    })
+  }
 }
