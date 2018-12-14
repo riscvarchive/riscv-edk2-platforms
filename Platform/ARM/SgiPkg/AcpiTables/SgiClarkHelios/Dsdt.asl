@@ -254,8 +254,14 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI",
       Name (_CCA, 1)    // mark the device coherent
 
       Name (_CRS, ResourceTemplate() {
-        Memory32Fixed (ReadWrite, 0x1c130000, 0x10000)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 202 }
+        Memory32Fixed (
+          ReadWrite,
+          FixedPcdGet32 (PcdVirtioBlkBaseAddress),
+          FixedPcdGet32 (PcdVirtioBlkSize)
+        )
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
+          FixedPcdGet32 (PcdVirtioBlkInterrupt)
+        }
       })
     }
   } // Scope(_SB)
