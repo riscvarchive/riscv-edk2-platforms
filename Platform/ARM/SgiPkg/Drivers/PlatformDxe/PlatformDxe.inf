@@ -20,7 +20,7 @@
 
 [Sources.common]
   PlatformDxe.c
-  VirtioBlockIo.c
+  VirtioDevices.c
 
 [Packages]
   EmbeddedPkg/EmbeddedPkg.dec
@@ -41,7 +41,11 @@
   gSgiClarkHeliosAcpiTablesFileGuid
 
 [FeaturePcd]
-  gArmSgiTokenSpaceGuid.PcdVirtioSupported
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported
+
+[FixedPcd]
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
 
 [Depex]
   TRUE

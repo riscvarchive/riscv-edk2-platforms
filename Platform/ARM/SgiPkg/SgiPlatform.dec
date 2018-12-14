@@ -37,12 +37,16 @@
   gSgiClarkHeliosAcpiTablesFileGuid = { 0x2af40815, 0xa84e, 0x4de9, { 0x8c, 0x38, 0x91, 0x40, 0xb3, 0x54, 0x40, 0x73 } }
 
 [PcdsFeatureFlag.common]
-  # Set this PCD to TRUE to enable virtio support.
-  gArmSgiTokenSpaceGuid.PcdVirtioSupported|TRUE|BOOLEAN|0x00000001
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported|FALSE|BOOLEAN|0x00000001
 
 [PcdsFixedAtBuild]
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base|0|UINT64|0x00000002
   gArmSgiTokenSpaceGuid.PcdDramBlock2Size|0|UINT64|0x00000003
+
+  # Virtio Block device
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x00000000|UINT32|0x00000004
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x00000000|UINT32|0x00000005
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|0x00000000|UINT32|0x00000006
 
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

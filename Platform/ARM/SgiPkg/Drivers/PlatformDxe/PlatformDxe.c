@@ -17,9 +17,9 @@
 #include <Library/HobLib.h>
 #include <SgiPlatform.h>
 
-EFI_STATUS
-InitVirtioBlockIo (
-  IN EFI_HANDLE         ImageHandle
+VOID
+InitVirtioDevices (
+  VOID
   );
 
 EFI_STATUS
@@ -63,14 +63,7 @@ ArmSgiPkgEntryPoint (
     return Status;
   }
 
-  Status = EFI_REQUEST_UNLOAD_IMAGE;
-  if (FeaturePcdGet (PcdVirtioSupported)) {
-    Status = InitVirtioBlockIo (ImageHandle);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR, "%a: Failed to install Virtio Block device\n",
-        __FUNCTION__));
-    }
-  }
+  InitVirtioDevices ();
 
   return Status;
 }

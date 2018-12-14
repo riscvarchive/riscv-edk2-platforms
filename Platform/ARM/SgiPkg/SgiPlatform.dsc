@@ -100,7 +100,7 @@
 ################################################################################
 
 [PcdsFeatureFlag.common]
-  gArmSgiTokenSpaceGuid.PcdVirtioSupported|TRUE
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported|TRUE
 
 [PcdsFixedAtBuild.common]
   gArmTokenSpaceGuid.PcdVFPEnabled|1
@@ -184,6 +184,11 @@
 
   # Ethernet
   gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
+
+  # Virtio Disk
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x1c130000
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x10000
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|202
 
 ################################################################################
 #
