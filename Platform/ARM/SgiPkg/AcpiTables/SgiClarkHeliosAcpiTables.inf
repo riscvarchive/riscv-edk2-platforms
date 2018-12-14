@@ -58,5 +58,8 @@
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt
+  gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSize
+  gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
