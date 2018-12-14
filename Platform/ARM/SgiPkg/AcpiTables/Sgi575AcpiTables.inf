@@ -55,4 +55,8 @@
   gArmTokenSpaceGuid.PcdPciBusMin
   gArmTokenSpaceGuid.PcdPciBusMax
 
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
+  gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt
+
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
