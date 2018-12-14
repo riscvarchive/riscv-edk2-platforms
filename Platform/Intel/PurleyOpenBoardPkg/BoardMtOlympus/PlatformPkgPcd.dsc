@@ -91,8 +91,6 @@
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x0
   gEfiMdePkgTokenSpaceGuid.PcdFSBClock|133333333
   gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxPeiStackSize|0x100000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxFvSupported|32
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreMaxPpiSupported|128
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxSizeNonPopulateCapsule|0x1700000
 
   gEfiCpuTokenSpaceGuid.PcdCpuIEDRamSize|0x400000
