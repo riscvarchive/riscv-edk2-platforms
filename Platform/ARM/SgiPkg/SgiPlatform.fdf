@@ -197,7 +197,11 @@ READ_LOCK_STATUS   = TRUE
   INF NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
   INF NetworkPkg/TcpDxe/TcpDxe.inf
   INF NetworkPkg/IScsiDxe/IScsiDxe.inf
+
+!ifdef EDK2_ENABLE_SMSC_91X
   INF EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+!endif
+  INF OvmfPkg/VirtioNetDxe/VirtioNet.inf
 
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16

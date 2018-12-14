@@ -38,6 +38,7 @@
 
 [PcdsFeatureFlag.common]
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported|FALSE|BOOLEAN|0x00000001
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSupported|FALSE|BOOLEAN|0x00000010
 
 [PcdsFixedAtBuild]
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base|0|UINT64|0x00000002
@@ -47,6 +48,11 @@
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x00000000|UINT32|0x00000004
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x00000000|UINT32|0x00000005
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|0x00000000|UINT32|0x00000006
+
+  # Virtio Network device
+  gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress|0x00000000|UINT32|0x00000007
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x00000000|UINT32|0x00000008
+  gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|0x00000000|UINT32|0x00000009
 
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

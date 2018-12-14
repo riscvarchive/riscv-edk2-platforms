@@ -42,10 +42,13 @@
 
 [FeaturePcd]
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSupported
 
 [FixedPcd]
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
+  gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSize
 
 [Depex]
   TRUE

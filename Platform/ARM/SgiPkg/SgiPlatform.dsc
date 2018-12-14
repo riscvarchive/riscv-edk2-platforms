@@ -47,6 +47,7 @@
   VirtioLib|OvmfPkg/Library/VirtioLib/VirtioLib.inf
   VirtioMmioDeviceLib|OvmfPkg/Library/VirtioMmioDeviceLib/VirtioMmioDeviceLib.inf
   FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
+  OrderedCollectionLib|MdePkg/Library/BaseOrderedCollectionRedBlackTreeLib/BaseOrderedCollectionRedBlackTreeLib.inf
 
 [LibraryClasses.common.SEC]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
@@ -101,6 +102,7 @@
 
 [PcdsFeatureFlag.common]
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported|TRUE
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSupported|TRUE
 
 [PcdsFixedAtBuild.common]
   gArmTokenSpaceGuid.PcdVFPEnabled|1
@@ -182,13 +184,18 @@
   gArmPlatformTokenSpaceGuid.PcdCoreCount|4
   gArmPlatformTokenSpaceGuid.PcdClusterCount|2
 
-  # Ethernet
-  gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
-
   # Virtio Disk
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x1c130000
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x10000
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|202
+
+  # Ethernet / Virtio Network
+!ifdef EDK2_ENABLE_SMSC_91X
+  gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
+!endif
+  gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress|0x1c150000
+  gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x10000
+  gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|204
 
 ################################################################################
 #
@@ -294,8 +301,11 @@
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
 
-  # SMSC LAN 91C111
+  # SMSC LAN 91C111 / Virtio Network
+!ifdef EDK2_ENABLE_SMSC_91X
   EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+!endif
+  OvmfPkg/VirtioNetDxe/VirtioNet.inf
 
   #
   # Required by PCI
