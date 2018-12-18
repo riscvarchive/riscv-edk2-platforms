@@ -76,4 +76,7 @@
 #define PL111_CLCD_MOTHERBOARD_VIDEO_MODE_OSC_ID  1
 #define PL111_CLCD_CORE_TILE_VIDEO_MODE_OSC_ID  1
 
+#define SBSA_WATCHDOG_BASE                      0x2a440000
+#define SBSA_WATCHDOG_SIZE                      (2 * SIZE_64KB)
+
 #endif

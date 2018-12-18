@@ -116,7 +116,7 @@ FvNameGuid         = 87940482-fc81-41c3-87e6-399cf85ac8a0
 !ifdef EDK2_ENABLE_PL111
   INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 !endif
-  INF ArmPlatformPkg/Drivers/SP805WatchdogDxe/SP805WatchdogDxe.inf
+  INF ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
   #
   # Semi-hosting filesystem

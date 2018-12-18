@@ -133,9 +133,10 @@
   gArmPlatformTokenSpaceGuid.PcdPL031RtcBase|0x1C170000
 
   ## SBSA Watchdog Count
-!ifndef DISABLE_SBSA_WATCHDOG
   gArmPlatformTokenSpaceGuid.PcdWatchdogCount|1
-!endif
+  gArmTokenSpaceGuid.PcdGenericWatchdogControlBase|0x2a440000
+  gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase|0x2a450000
+  gArmTokenSpaceGuid.PcdGenericWatchdogEl2IntrNum|59
 
 !ifdef EDK2_ENABLE_PL111
   ## PL111 Versatile Express Motherboard controller
@@ -262,7 +263,7 @@
 !ifdef EDK2_ENABLE_PL111
   ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 !endif
-  ArmPlatformPkg/Drivers/SP805WatchdogDxe/SP805WatchdogDxe.inf
+  ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
   # SMBIOS Support
 
