@@ -52,8 +52,6 @@
 [FixedPcd]
   gAmdModulePkgTokenSpaceGuid.PcdXgbeEnable
   gArmPlatformTokenSpaceGuid.PcdCoreCount
-  gArmTokenSpaceGuid.PcdArmLinuxFdtMaxOffset
-  gArmTokenSpaceGuid.PcdArmLinuxFdtAlignment
   gAmdStyxTokenSpaceGuid.PcdEnableKcs
   gAmdStyxTokenSpaceGuid.PcdSata1PortCount
 
