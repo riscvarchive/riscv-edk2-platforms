@@ -206,9 +206,7 @@ they will be documented with the platform.
 * [Overdrive](Platform/AMD/OverdriveBoard)
 * [Overdrive 1000](Platform/SoftIron/Overdrive1000Board)
 
-## ARM
-* [Juno](Platform/ARM/JunoPkg)
-* [Versatile Express](Platform/ARM/VExpressPkg)
+## [ARM](Platform/ARM/Readme.md)
 
 ## Hisilicon
 * [D02](Platform/Hisilicon/D02)
