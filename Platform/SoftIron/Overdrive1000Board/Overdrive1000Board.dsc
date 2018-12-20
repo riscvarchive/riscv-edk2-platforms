@@ -155,7 +155,6 @@ DEFINE DO_FLASHER   = FALSE
   ArmPlatformLib|Silicon/AMD/Styx/Library/AmdStyxLib/AmdStyxLibSec.inf
 
   DebugAgentLib|ArmPkg/Library/DebugAgentSymbolsBaseLib/DebugAgentSymbolsBaseLib.inf
-  DefaultExceptionHandlerLib|ArmPkg/Library/DefaultExceptionHandlerLib/DefaultExceptionHandlerLibBase.inf
 
   ArmGicArchLib|ArmPkg/Library/ArmGicArchSecLib/ArmGicArchSecLib.inf
 
