@@ -59,7 +59,6 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemRevision
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorRevision
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
 
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase
   gSynQuacerTokenSpaceGuid.PcdNetsecPhyAddress

@@ -19,6 +19,7 @@
 
 #include <IndustryStandard/Acpi61.h>
 #include <IndustryStandard/SerialPortConsoleRedirectionTable.h>
+#include <Platform/MemoryMap.h>
 
 #include "AcpiTables.h"
 
@@ -47,7 +48,7 @@ STATIC EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE Spcr = {
     32,
     0,
     EFI_ACPI_5_1_DWORD,
-    FixedPcdGet32 (PcdSerialRegisterBase)
+    SYNQUACER_UART0_BASE
   },
   //
   // InterruptType

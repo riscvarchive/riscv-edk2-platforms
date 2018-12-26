@@ -137,7 +137,7 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       Name (_HID, "ARMH0011")
       Name (_UID, Zero)
       Name (_CRS, ResourceTemplate () {
-        Memory32Fixed (ReadWrite, FixedPcdGet32 (PcdSerialRegisterBase), 0x1000)
+        Memory32Fixed (ReadWrite, SYNQUACER_UART0_BASE, SYNQUACER_UART0_SIZE)
         Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 95 }
       })
     }
