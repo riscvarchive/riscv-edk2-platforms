@@ -142,6 +142,25 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       })
     }
 
+    // DesignWare FUART
+    Device (COM1) {
+      Name (_HID, "SCX0006")
+      Name (_CID, "HISI0031")
+      Name (_UID, Zero)
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, SYNQUACER_UART1_BASE, SYNQUACER_UART1_SIZE)
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 200 }
+      })
+      Name (_DSD, Package () {
+        ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package () { "clock-frequency", 62500000 },
+          Package () { "reg-io-width", 4 },
+          Package () { "reg-shift", 2 },
+        }
+      })
+    }
+
     Device (NET0) {
       Name (_HID, "SCX0001")
       Name (_UID, Zero)

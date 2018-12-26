@@ -76,4 +76,8 @@
 #define SYNQUACER_UART0_BASE            0x2A400000
 #define SYNQUACER_UART0_SIZE            SIZE_4KB
 
+// DesignWare FUART
+#define SYNQUACER_UART1_BASE            0x51040000
+#define SYNQUACER_UART1_SIZE            SIZE_4KB
+
 #endif
