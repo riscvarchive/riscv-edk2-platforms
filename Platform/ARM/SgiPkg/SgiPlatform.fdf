@@ -169,6 +169,9 @@ READ_LOCK_STATUS   = TRUE
   #
   INF  ShellPkg/Application/Shell/Shell.inf
 
+  # MM Communicate
+  INF ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+
   #
   # Platform driver
   #

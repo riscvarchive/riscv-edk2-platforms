@@ -343,3 +343,5 @@
   # SATA Controller
   #
   MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+
+  ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
