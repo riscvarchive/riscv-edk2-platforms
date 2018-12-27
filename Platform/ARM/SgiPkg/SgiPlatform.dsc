@@ -197,6 +197,18 @@
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x10000
   gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|204
 
+  #
+  # Set the base address and size of the buffer used
+  # for communication between the Normal world edk2
+  # with StandaloneMm image at S-EL0 through MM_COMMUNICATE.
+  # This buffer gets allocated in ATF and since we do not have
+  # a mechanism currently to communicate the base address and
+  # size of this buffer from ATF, hard-code it here
+  #
+  ## MM Communicate
+  gArmTokenSpaceGuid.PcdMmBufferBase|0xFF600000
+  gArmTokenSpaceGuid.PcdMmBufferSize|0x10000
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform
