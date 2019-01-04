@@ -124,6 +124,7 @@
   PlatformSecureLib|SecurityPkg/Library/PlatformSecureLibNull/PlatformSecureLibNull.inf
 
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
+  NorFlashPlatformLib|Silicon/Socionext/SynQuacer/Library/NorFlashSynQuacerLib/NorFlashSynQuacerLib.inf
 
 ################################################################################
 #
@@ -299,6 +300,18 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(BUILD_NUMBER)"
 !endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision|$(BUILD_NUMBER)
+
+  #
+  # NOTE: this platform is not fully secure (the NOR flash is mapped non-secure)
+  # and so the MM based secure boot implementation it provides should be treated
+  # as a reference only. For this reason, it does not make a lot of sense to
+  # implement an elaborate PlatformSecureLib implementation that can assert
+  # physical presence, and instead, we'll stick with the default PCD based one.
+  #
+  gEfiSecurityPkgTokenSpaceGuid.PcdUserPhysicalPresence|TRUE
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxAuthVariableSize|0x2800
 
 [PcdsPatchableInModule]
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0

@@ -273,10 +273,7 @@
   #
   # Variable services
   #
-  Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf {
-    <LibraryClasses>
-      NorFlashPlatformLib|Silicon/Socionext/SynQuacer/Library/NorFlashSynQuacerLib/NorFlashSynQuacerLib.inf
-  }
+  Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
