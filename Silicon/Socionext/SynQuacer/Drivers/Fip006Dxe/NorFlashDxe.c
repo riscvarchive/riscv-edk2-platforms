@@ -338,7 +338,7 @@ NorFlashEraseSingleBlock (
   //
   if (EfiAtRuntime()) {
     BlockAddress -= Instance->RegionBaseAddress;
-    BlockAddress += Instance->OffsetLba * Instance->Media.BlockSize;
+    BlockAddress += Instance->OffsetLba * Instance->BlockSize;
   }
 
   NorFlashSetHostCSDC (Instance, TRUE, mFip006NullCmdSeq);
@@ -520,10 +520,6 @@ NorFlashWriteBlocks (
     return EFI_INVALID_PARAMETER;
   }
 
-  if (Instance->Media.ReadOnly == TRUE) {
-    return EFI_WRITE_PROTECTED;
-  }
-
   // We must have some bytes to read
   DEBUG ((DEBUG_BLKIO, "NorFlashWriteBlocks: BufferSizeInBytes=0x%x\n",
     BufferSizeInBytes));
@@ -533,19 +529,19 @@ NorFlashWriteBlocks (
 
   // The size of the buffer must be a multiple of the block size
   DEBUG ((DEBUG_BLKIO, "NorFlashWriteBlocks: BlockSize in bytes =0x%x\n",
-    Instance->Media.BlockSize));
-  if ((BufferSizeInBytes % Instance->Media.BlockSize) != 0) {
+    Instance->BlockSize));
+  if ((BufferSizeInBytes % Instance->BlockSize) != 0) {
     return EFI_BAD_BUFFER_SIZE;
   }
 
   // All blocks must be within the device
-  NumBlocks = ((UINT32)BufferSizeInBytes) / Instance->Media.BlockSize ;
+  NumBlocks = ((UINT32)BufferSizeInBytes) / Instance->BlockSize ;
 
   DEBUG ((DEBUG_BLKIO,
     "NorFlashWriteBlocks: NumBlocks=%d, LastBlock=%ld, Lba=%ld.\n", NumBlocks,
-    Instance->Media.LastBlock, Lba));
+    Instance->LastBlock, Lba));
 
-  if ((Lba + NumBlocks) > (Instance->Media.LastBlock + 1)) {
+  if ((Lba + NumBlocks) > (Instance->LastBlock + 1)) {
     DEBUG ((DEBUG_ERROR,
       "NorFlashWriteBlocks: ERROR - Write will exceed last block.\n"));
     return EFI_INVALID_PARAMETER;
@@ -553,7 +549,7 @@ NorFlashWriteBlocks (
 
   ASSERT (((UINTN)Buffer % sizeof (UINT32)) == 0);
 
-  BlockSizeInWords = Instance->Media.BlockSize / 4;
+  BlockSizeInWords = Instance->BlockSize / 4;
 
   // Because the target *Buffer is a pointer to VOID, we must put
   // all the data into a pointer to a proper data type, so use *ReadBuffer
@@ -592,7 +588,7 @@ NorFlashReadBlocks (
 
   DEBUG ((DEBUG_BLKIO,
     "NorFlashReadBlocks: BufferSize=0x%xB BlockSize=0x%xB LastBlock=%ld, Lba=%ld.\n",
-    BufferSizeInBytes, Instance->Media.BlockSize, Instance->Media.LastBlock,
+    BufferSizeInBytes, Instance->BlockSize, Instance->LastBlock,
     Lba));
 
   // The buffer must be valid
@@ -606,14 +602,14 @@ NorFlashReadBlocks (
   }
 
   // The size of the buffer must be a multiple of the block size
-  if ((BufferSizeInBytes % Instance->Media.BlockSize) != 0) {
+  if ((BufferSizeInBytes % Instance->BlockSize) != 0) {
     return EFI_BAD_BUFFER_SIZE;
   }
 
   // All blocks must be within the device
-  NumBlocks = ((UINT32)BufferSizeInBytes) / Instance->Media.BlockSize ;
+  NumBlocks = ((UINT32)BufferSizeInBytes) / Instance->BlockSize ;
 
-  if ((Lba + NumBlocks) > (Instance->Media.LastBlock + 1)) {
+  if ((Lba + NumBlocks) > (Instance->LastBlock + 1)) {
     DEBUG ((DEBUG_ERROR,
       "NorFlashReadBlocks: ERROR - Read will exceed last block\n"));
     return EFI_INVALID_PARAMETER;
@@ -621,7 +617,7 @@ NorFlashReadBlocks (
 
   // Get the address to start reading from
   StartAddress = GET_NOR_BLOCK_ADDRESS (Instance->RegionBaseAddress, Lba,
-                                        Instance->Media.BlockSize);
+                                        Instance->BlockSize);
 
   // Put the device into Read Array mode
   NorFlashSetHostCommand (Instance, SPINOR_OP_READ_4B);
@@ -654,7 +650,7 @@ NorFlashRead (
     return EFI_SUCCESS;
   }
 
-  if (((Lba * Instance->Media.BlockSize) + Offset + BufferSizeInBytes) >
+  if (((Lba * Instance->BlockSize) + Offset + BufferSizeInBytes) >
       Instance->Size) {
     DEBUG ((DEBUG_ERROR,
       "NorFlashRead: ERROR - Read will exceed device size.\n"));
@@ -663,7 +659,7 @@ NorFlashRead (
 
   // Get the address to start reading from
   StartAddress = GET_NOR_BLOCK_ADDRESS (Instance->RegionBaseAddress, Lba,
-                                        Instance->Media.BlockSize);
+                                        Instance->BlockSize);
 
   // Put the device into Read Array mode
   NorFlashSetHostCommand (Instance, SPINOR_OP_READ_4B);
@@ -677,7 +673,7 @@ NorFlashRead (
 
 /*
   Write a full or portion of a block. It must not span block boundaries;
-  that is, Offset + *NumBytes <= Instance->Media.BlockSize.
+  that is, Offset + *NumBytes <= Instance->BlockSize.
 */
 EFI_STATUS
 NorFlashWriteSingleBlock (
@@ -711,16 +707,8 @@ NorFlashWriteSingleBlock (
     "NorFlashWriteSingleBlock(Parameters: Lba=%ld, Offset=0x%x, *NumBytes=0x%x, Buffer @ 0x%08x)\n",
     Lba, Offset, *NumBytes, Buffer));
 
-  // Detect WriteDisabled state
-  if (Instance->Media.ReadOnly == TRUE) {
-    DEBUG ((DEBUG_ERROR,
-      "NorFlashWriteSingleBlock: ERROR - Can not write: Device is in WriteDisabled state.\n"));
-    // It is in WriteDisabled state, return an error right away
-    return EFI_ACCESS_DENIED;
-  }
-
   // Cache the block size to avoid de-referencing pointers all the time
-  BlockSize = Instance->Media.BlockSize;
+  BlockSize = Instance->BlockSize;
 
   // The write must not span block boundaries.
   // We need to check each variable individually because adding two large
@@ -896,143 +884,6 @@ NorFlashWriteSingleBlock (
   return EFI_SUCCESS;
 }
 
-/*
-  Although DiskIoDxe will automatically install the DiskIO protocol whenever
-  we install the BlockIO protocol, its implementation is sub-optimal as it reads
-  and writes entire blocks using the BlockIO protocol. In fact we can access
-  NOR flash with a finer granularity than that, so we can improve performance
-  by directly producing the DiskIO protocol.
-*/
-
-/**
-  Read BufferSize bytes from Offset into Buffer.
-
-  @param  This                  Protocol instance pointer.
-  @param  MediaId               Id of the media, changes every time the media is
-                                replaced.
-  @param  Offset                The starting byte offset to read from
-  @param  BufferSize            Size of Buffer
-  @param  Buffer                Buffer containing read data
-
-  @retval EFI_SUCCESS           The data was read correctly from the device.
-  @retval EFI_DEVICE_ERROR      The device reported an error while performing
-                                the read.
-  @retval EFI_NO_MEDIA          There is no media in the device.
-  @retval EFI_MEDIA_CHNAGED     The MediaId does not matched the current device.
-  @retval EFI_INVALID_PARAMETER The read request contains device addresses that
-                                are not valid for the device.
-
-**/
-STATIC
-EFI_STATUS
-EFIAPI
-NorFlashDiskIoReadDisk (
-  IN EFI_DISK_IO_PROTOCOL         *This,
-  IN UINT32                       MediaId,
-  IN UINT64                       DiskOffset,
-  IN UINTN                        BufferSize,
-  OUT VOID                        *Buffer
-  )
-{
-  NOR_FLASH_INSTANCE *Instance;
-  UINT32              BlockSize;
-  UINT32              BlockOffset;
-  EFI_LBA             Lba;
-
-  Instance = INSTANCE_FROM_DISKIO_THIS(This);
-
-  if (MediaId != Instance->Media.MediaId) {
-    return EFI_MEDIA_CHANGED;
-  }
-
-  BlockSize = Instance->Media.BlockSize;
-  Lba = (EFI_LBA) DivU64x32Remainder (DiskOffset, BlockSize, &BlockOffset);
-
-  return NorFlashRead (Instance, Lba, BlockOffset, BufferSize, Buffer);
-}
-
-/**
-  Writes a specified number of bytes to a device.
-
-  @param  This       Indicates a pointer to the calling context.
-  @param  MediaId    ID of the medium to be written.
-  @param  Offset     The starting byte offset on the logical block I/O device to
-                     write.
-  @param  BufferSize The size in bytes of Buffer. The number of bytes to write
-                     to the device.
-  @param  Buffer     A pointer to the buffer containing the data to be written.
-
-  @retval EFI_SUCCESS           The data was written correctly to the device.
-  @retval EFI_WRITE_PROTECTED   The device can not be written to.
-  @retval EFI_DEVICE_ERROR      The device reported an error while performing
-                                the write.
-  @retval EFI_NO_MEDIA          There is no media in the device.
-  @retval EFI_MEDIA_CHNAGED     The MediaId does not matched the current device.
-  @retval EFI_INVALID_PARAMETER The write request contains device addresses that
-                                are not valid for the device.
-
-**/
-STATIC
-EFI_STATUS
-EFIAPI
-NorFlashDiskIoWriteDisk (
-  IN EFI_DISK_IO_PROTOCOL         *This,
-  IN UINT32                       MediaId,
-  IN UINT64                       DiskOffset,
-  IN UINTN                        BufferSize,
-  IN VOID                         *Buffer
-  )
-{
-  NOR_FLASH_INSTANCE *Instance;
-  UINT32              BlockSize;
-  UINT32              BlockOffset;
-  EFI_LBA             Lba;
-  UINTN               RemainingBytes;
-  UINTN               WriteSize;
-  EFI_STATUS          Status;
-
-  Instance = INSTANCE_FROM_DISKIO_THIS(This);
-
-  if (MediaId != Instance->Media.MediaId) {
-    return EFI_MEDIA_CHANGED;
-  }
-
-  BlockSize = Instance->Media.BlockSize;
-  Lba = (EFI_LBA) DivU64x32Remainder (DiskOffset, BlockSize, &BlockOffset);
-
-  RemainingBytes = BufferSize;
-
-  // Write either all the remaining bytes, or the number of bytes that bring
-  // us up to a block boundary, whichever is less.
-  // (DiskOffset | (BlockSize - 1)) + 1) rounds DiskOffset up to the next
-  // block boundary (even if it is already on one).
-  WriteSize = MIN (RemainingBytes,
-                   ((DiskOffset | (BlockSize - 1)) + 1) - DiskOffset);
-
-  do {
-    if (WriteSize == BlockSize) {
-      // Write a full block
-      Status = NorFlashWriteFullBlock (Instance, Lba, Buffer,
-                 BlockSize / sizeof (UINT32));
-    } else {
-      // Write a partial block
-      Status = NorFlashWriteSingleBlock (Instance, Lba, BlockOffset, &WriteSize,
-                 Buffer);
-    }
-    if (EFI_ERROR (Status)) {
-      return Status;
-    }
-    // Now continue writing either all the remaining bytes or single blocks.
-    RemainingBytes -= WriteSize;
-    Buffer = (UINT8 *) Buffer + WriteSize;
-    Lba++;
-    BlockOffset = 0;
-    WriteSize = MIN (RemainingBytes, BlockSize);
-  } while (RemainingBytes);
-
-  return Status;
-}
-
 STATIC CONST NOR_FLASH_INSTANCE mNorFlashInstanceTemplate = {
   NOR_FLASH_SIGNATURE, // Signature
   NULL, // Handle ... NEED TO BE FILLED
@@ -1044,37 +895,11 @@ STATIC CONST NOR_FLASH_INSTANCE mNorFlashInstanceTemplate = {
   0, // DeviceBaseAddress ... NEED TO BE FILLED
   0, // RegionBaseAddress ... NEED TO BE FILLED
   0, // Size ... NEED TO BE FILLED
+  0, // BlockSize
+  0, // LastBlock
   0, // StartLba
   0, // OffsetLba
 
-  {
-    EFI_BLOCK_IO_PROTOCOL_REVISION2,  // Revision
-    NULL,                             // Media ... NEED TO BE FILLED
-    NorFlashBlockIoReset,             // Reset;
-    NorFlashBlockIoReadBlocks,        // ReadBlocks
-    NorFlashBlockIoWriteBlocks,       // WriteBlocks
-    NorFlashBlockIoFlushBlocks        // FlushBlocks
-  }, // BlockIoProtocol
-
-  {
-    0, // MediaId ... NEED TO BE FILLED
-    FALSE, // RemovableMedia
-    TRUE, // MediaPresent
-    FALSE, // LogicalPartition
-    FALSE, // ReadOnly
-    FALSE, // WriteCaching;
-    0, // BlockSize ... NEED TO BE FILLED
-    4, //  IoAlign
-    0, // LastBlock ... NEED TO BE FILLED
-    0, // LowestAlignedLba
-    1, // LogicalBlocksPerPhysicalBlock
-  }, //Media;
-
-  {
-    EFI_DISK_IO_PROTOCOL_REVISION, // Revision
-    NorFlashDiskIoReadDisk,        // ReadDisk
-    NorFlashDiskIoWriteDisk        // WriteDisk
-  },
   {
     FvbGetAttributes, // GetAttributes
     FvbSetAttributes, // SetAttributes
@@ -1143,12 +968,10 @@ NorFlashCreateInstance (
   Instance->HostRegisterBaseAddress = HostRegisterBase;
   Instance->DeviceBaseAddress       = NorFlashDeviceBase;
   Instance->RegionBaseAddress       = NorFlashRegionBase;
-  Instance->Size = NorFlashSize;
+  Instance->Size                    = NorFlashSize;
+  Instance->BlockSize               = BlockSize;
+  Instance->LastBlock               = (NorFlashSize / BlockSize) - 1;
 
-  Instance->BlockIoProtocol.Media = &Instance->Media;
-  Instance->Media.MediaId = Index;
-  Instance->Media.BlockSize = BlockSize;
-  Instance->Media.LastBlock = (NorFlashSize / BlockSize) - 1;
   Instance->OffsetLba = (NorFlashRegionBase - NorFlashDeviceBase) / BlockSize;
 
   CopyGuid (&Instance->DevicePath.Vendor.Guid, &gEfiCallerIdGuid);
@@ -1262,16 +1085,6 @@ NorFlashVirtualNotifyEvent (
       (VOID**)&mNorFlashInstances[Index]->DeviceBaseAddress);
     EfiConvertPointer (0x0,
       (VOID**)&mNorFlashInstances[Index]->RegionBaseAddress);
-
-    // Convert BlockIo protocol
-    EfiConvertPointer (0x0,
-      (VOID**)&mNorFlashInstances[Index]->BlockIoProtocol.FlushBlocks);
-    EfiConvertPointer (0x0,
-      (VOID**)&mNorFlashInstances[Index]->BlockIoProtocol.ReadBlocks);
-    EfiConvertPointer (0x0,
-      (VOID**)&mNorFlashInstances[Index]->BlockIoProtocol.Reset);
-    EfiConvertPointer (0x0,
-      (VOID**)&mNorFlashInstances[Index]->BlockIoProtocol.WriteBlocks);
 
     // Convert Fvb
     EfiConvertPointer (0x0,

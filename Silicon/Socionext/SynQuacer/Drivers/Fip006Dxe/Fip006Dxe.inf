@@ -24,7 +24,6 @@
   ENTRY_POINT                    = NorFlashInitialise
 
 [Sources]
-  NorFlashBlockIoDxe.c
   NorFlashDxe.c
   NorFlashFvbDxe.c
 
@@ -60,9 +59,7 @@
   gEfiVariableGuid
 
 [Protocols]
-  gEfiBlockIoProtocolGuid
   gEfiDevicePathProtocolGuid
-  gEfiDiskIoProtocolGuid
   gEfiFirmwareVolumeBlockProtocolGuid
 
 [FixedPcd]

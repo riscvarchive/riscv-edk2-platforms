@@ -91,8 +91,8 @@ InitializeFvAndVariableStoreHeaders (
   FirmwareVolumeHeader->HeaderLength = sizeof(EFI_FIRMWARE_VOLUME_HEADER) +
                                        sizeof(EFI_FV_BLOCK_MAP_ENTRY);
   FirmwareVolumeHeader->Revision = EFI_FVH_REVISION;
-  FirmwareVolumeHeader->BlockMap[0].NumBlocks = Instance->Media.LastBlock + 1;
-  FirmwareVolumeHeader->BlockMap[0].Length      = Instance->Media.BlockSize;
+  FirmwareVolumeHeader->BlockMap[0].NumBlocks = Instance->LastBlock + 1;
+  FirmwareVolumeHeader->BlockMap[0].Length      = Instance->BlockSize;
   FirmwareVolumeHeader->BlockMap[1].NumBlocks = 0;
   FirmwareVolumeHeader->BlockMap[1].Length      = 0;
   FirmwareVolumeHeader->Checksum = CalculateCheckSum16 (
@@ -223,13 +223,9 @@ FvbGetAttributes(
   Instance = INSTANCE_FROM_FVB_THIS(This);
 
   FlashFvbAttributes = EFI_FVB2_READ_ENABLED_CAP | EFI_FVB2_READ_STATUS |
+                       EFI_FVB2_WRITE_ENABLED_CAP | EFI_FVB2_WRITE_STATUS |
                        EFI_FVB2_STICKY_WRITE | EFI_FVB2_MEMORY_MAPPED |
                        EFI_FVB2_ERASE_POLARITY;
-
-  // Check if it is write protected
-  if (!Instance->Media.ReadOnly) {
-    FlashFvbAttributes |= EFI_FVB2_WRITE_STATUS | EFI_FVB2_WRITE_ENABLED_CAP;
-  }
 
   *Attributes = FlashFvbAttributes;
 
@@ -349,17 +345,17 @@ FvbGetBlockSize (
 
   DEBUG ((DEBUG_BLKIO,
     "FvbGetBlockSize(Lba=%ld, BlockSize=0x%x, LastBlock=%ld)\n", Lba,
-    Instance->Media.BlockSize, Instance->Media.LastBlock));
+    Instance->BlockSize, Instance->LastBlock));
 
-  if (Lba > Instance->Media.LastBlock) {
+  if (Lba > Instance->LastBlock) {
     DEBUG ((DEBUG_ERROR,
       "FvbGetBlockSize: ERROR - Parameter LBA %ld is beyond the last Lba (%ld).\n",
-      Lba, Instance->Media.LastBlock));
+      Lba, Instance->LastBlock));
     Status = EFI_INVALID_PARAMETER;
   } else {
     // This is easy because in this platform each NorFlash device has equal sized blocks.
-    *BlockSize = (UINTN) Instance->Media.BlockSize;
-    *NumberOfBlocks = (UINTN) (Instance->Media.LastBlock - Lba + 1);
+    *BlockSize = (UINTN) Instance->BlockSize;
+    *NumberOfBlocks = (UINTN) (Instance->LastBlock - Lba + 1);
 
     DEBUG ((DEBUG_BLKIO,
       "FvbGetBlockSize: *BlockSize=0x%x, *NumberOfBlocks=0x%x.\n", *BlockSize,
@@ -442,7 +438,7 @@ FvbRead (
   TempStatus = EFI_SUCCESS;
 
   // Cache the block size to avoid de-referencing pointers all the time
-  BlockSize = Instance->Media.BlockSize;
+  BlockSize = Instance->BlockSize;
 
   DEBUG ((DEBUG_BLKIO,
     "FvbRead: Check if (Offset=0x%x + NumBytes=0x%x) <= BlockSize=0x%x\n",
@@ -626,14 +622,6 @@ FvbEraseBlocks (
 
   Status = EFI_SUCCESS;
 
-  // Detect WriteDisabled state
-  if (Instance->Media.ReadOnly) {
-    // Firmware volume is in WriteDisabled state
-    DEBUG ((DEBUG_ERROR,
-      "FvbEraseBlocks: ERROR - Device is in WriteDisabled state.\n"));
-    return EFI_ACCESS_DENIED;
-  }
-
   // Before erasing, check the entire list of parameters to ensure
   // all specified blocks are valid
 
@@ -654,10 +642,10 @@ FvbEraseBlocks (
     // All blocks must be within range
     DEBUG ((DEBUG_BLKIO,
       "FvbEraseBlocks: Check if: ( StartingLba=%ld + NumOfLba=%d - 1 ) > LastBlock=%ld.\n",
-      Instance->StartLba + StartingLba, NumOfLba, Instance->Media.LastBlock));
+      Instance->StartLba + StartingLba, NumOfLba, Instance->LastBlock));
     if (NumOfLba == 0 ||
         (Instance->StartLba + StartingLba + NumOfLba - 1) >
-        Instance->Media.LastBlock) {
+        Instance->LastBlock) {
       VA_END (Args);
       DEBUG ((DEBUG_ERROR,
         "FvbEraseBlocks: ERROR - Lba range goes past the last Lba.\n"));
@@ -690,7 +678,7 @@ FvbEraseBlocks (
       // Get the physical address of Lba to erase
       BlockAddress = GET_NOR_BLOCK_ADDRESS (Instance->RegionBaseAddress,
                        Instance->StartLba + StartingLba,
-                       Instance->Media.BlockSize);
+                       Instance->BlockSize);
 
       // Erase it
       DEBUG ((DEBUG_BLKIO, "FvbEraseBlocks: Erasing Lba=%ld @ 0x%08x.\n",
@@ -747,7 +735,7 @@ NorFlashFvbInitialize (
 
   DEBUG ((DEBUG_BLKIO,"NorFlashFvbInitialize\n"));
 
-  BlockSize = Instance->Media.BlockSize;
+  BlockSize = Instance->BlockSize;
 
   // FirmwareVolumeHeader->FvLength is declared to have the Variable area
   // AND the FTW working area AND the FTW Spare contiguous.
@@ -798,7 +786,7 @@ NorFlashFvbInitialize (
     FvbNumLba = (PcdGet32(PcdFlashNvStorageVariableSize) +
                  PcdGet32(PcdFlashNvStorageFtwWorkingSize) +
                  PcdGet32(PcdFlashNvStorageFtwSpareSize)) /
-                Instance->Media.BlockSize;
+                Instance->BlockSize;
 
     Status = FvbEraseBlocks (&Instance->FvbProtocol, (EFI_LBA)0, FvbNumLba,
                EFI_LBA_LIST_TERMINATOR);
