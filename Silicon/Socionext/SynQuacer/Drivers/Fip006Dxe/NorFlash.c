@@ -841,7 +841,7 @@ NorFlashWriteSingleBlock (
                    BlockSize);
 
       // The word of data that is to be written.
-      TmpBuf = *((UINT32*)(Buffer + (*NumBytes - BytesToWrite)));
+      TmpBuf = ReadUnaligned32 ((UINT32 *)(Buffer + (*NumBytes - BytesToWrite)));
 
       // First do word aligned chunks.
       if ((CurOffset & 0x3) == 0) {
