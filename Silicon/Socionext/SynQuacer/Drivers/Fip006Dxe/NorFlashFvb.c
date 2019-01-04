@@ -21,16 +21,14 @@
 
 #include <Library/BaseLib.h>
 #include <Library/BaseMemoryLib.h>
-#include <Library/HobLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 
-#include "NorFlashDxe.h"
+#include "NorFlash.h"
 
-STATIC EFI_EVENT mFvbVirtualAddrChangeEvent;
-STATIC UINTN     mFlashNvStorageVariableBase;
+UINTN     mFlashNvStorageVariableBase;
 
 ///
 /// The Firmware Volume Block Protocol is the low-level interface
@@ -49,7 +47,6 @@ STATIC UINTN     mFlashNvStorageVariableBase;
   @param[in]  Ptr - Location to initialise the headers
 
 **/
-STATIC
 EFI_STATUS
 InitializeFvAndVariableStoreHeaders (
   IN NOR_FLASH_INSTANCE *Instance
@@ -698,159 +695,5 @@ FvbEraseBlocks (
   VA_END (Args);
 
 EXIT:
-  return Status;
-}
-
-/**
-  Fixup internal data so that EFI can be call in virtual mode.
-  Call the passed in Child Notify event and convert any pointers in
-  lib to virtual mode.
-
-  @param[in]    Event   The Event that is being processed
-  @param[in]    Context Event Context
-**/
-STATIC
-VOID
-EFIAPI
-FvbVirtualNotifyEvent (
-  IN EFI_EVENT        Event,
-  IN VOID             *Context
-  )
-{
-  EfiConvertPointer (0x0, (VOID**)&mFlashNvStorageVariableBase);
-  return;
-}
-
-EFI_STATUS
-EFIAPI
-NorFlashFvbInitialize (
-  IN NOR_FLASH_INSTANCE* Instance
-  )
-{
-  EFI_STATUS      Status;
-  UINT32          FvbNumLba;
-  EFI_BOOT_MODE   BootMode;
-  UINTN           RuntimeMmioRegionSize;
-  UINTN           BlockSize;
-
-  DEBUG ((DEBUG_BLKIO,"NorFlashFvbInitialize\n"));
-
-  BlockSize = Instance->BlockSize;
-
-  // FirmwareVolumeHeader->FvLength is declared to have the Variable area
-  // AND the FTW working area AND the FTW Spare contiguous.
-  ASSERT(PcdGet32(PcdFlashNvStorageVariableBase) +
-         PcdGet32(PcdFlashNvStorageVariableSize) ==
-         PcdGet32(PcdFlashNvStorageFtwWorkingBase));
-  ASSERT(PcdGet32(PcdFlashNvStorageFtwWorkingBase) +
-         PcdGet32(PcdFlashNvStorageFtwWorkingSize) ==
-         PcdGet32(PcdFlashNvStorageFtwSpareBase));
-
-  // Check if the size of the area is at least one block size
-  ASSERT((PcdGet32(PcdFlashNvStorageVariableSize) > 0) &&
-         (PcdGet32(PcdFlashNvStorageVariableSize) / BlockSize > 0));
-  ASSERT((PcdGet32(PcdFlashNvStorageFtwWorkingSize) > 0) &&
-         (PcdGet32(PcdFlashNvStorageFtwWorkingSize) / BlockSize > 0));
-  ASSERT((PcdGet32(PcdFlashNvStorageFtwSpareSize) > 0) &&
-         (PcdGet32(PcdFlashNvStorageFtwSpareSize) / BlockSize > 0));
-
-  // Ensure the Variable areas are aligned on block size boundaries
-  ASSERT((PcdGet32(PcdFlashNvStorageVariableBase) % BlockSize) == 0);
-  ASSERT((PcdGet32(PcdFlashNvStorageFtwWorkingBase) % BlockSize) == 0);
-  ASSERT((PcdGet32(PcdFlashNvStorageFtwSpareBase) % BlockSize) == 0);
-
-
-  Instance->Initialized = TRUE;
-  mFlashNvStorageVariableBase = FixedPcdGet32 (PcdFlashNvStorageVariableBase);
-
-  // Set the index of the first LBA for the FVB
-  Instance->StartLba = (PcdGet32 (PcdFlashNvStorageVariableBase) -
-                        Instance->RegionBaseAddress) / BlockSize;
-
-  BootMode = GetBootModeHob ();
-  if (BootMode == BOOT_WITH_DEFAULT_SETTINGS) {
-    Status = EFI_INVALID_PARAMETER;
-  } else {
-    // Determine if there is a valid header at the beginning of the NorFlash
-    Status = ValidateFvHeader (Instance);
-  }
-
-  // Install the Default FVB header if required
-  if (EFI_ERROR(Status)) {
-    // There is no valid header, so time to install one.
-    DEBUG ((DEBUG_INFO, "%a: The FVB Header is not valid.\n", __FUNCTION__));
-    DEBUG ((DEBUG_INFO, "%a: Installing a correct one for this volume.\n",
-      __FUNCTION__));
-
-    // Erase all the NorFlash that is reserved for variable storage
-    FvbNumLba = (PcdGet32(PcdFlashNvStorageVariableSize) +
-                 PcdGet32(PcdFlashNvStorageFtwWorkingSize) +
-                 PcdGet32(PcdFlashNvStorageFtwSpareSize)) /
-                Instance->BlockSize;
-
-    Status = FvbEraseBlocks (&Instance->FvbProtocol, (EFI_LBA)0, FvbNumLba,
-               EFI_LBA_LIST_TERMINATOR);
-    if (EFI_ERROR(Status)) {
-      return Status;
-    }
-
-    // Install all appropriate headers
-    Status = InitializeFvAndVariableStoreHeaders (Instance);
-    if (EFI_ERROR(Status)) {
-      return Status;
-    }
-  }
-
-  //
-  // The driver implementing the variable read service can now be dispatched;
-  // the varstore headers are in place.
-  //
-  Status = gBS->InstallProtocolInterface (&gImageHandle,
-                  &gEdkiiNvVarStoreFormattedGuid,
-                  EFI_NATIVE_INTERFACE,
-                  NULL);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR,
-      "%a: Failed to install gEdkiiNvVarStoreFormattedGuid\n",
-      __FUNCTION__));
-      return Status;
-  }
-
-  //
-  // Declare the Non-Volatile storage as EFI_MEMORY_RUNTIME
-  //
-  RuntimeMmioRegionSize = Instance->Size;
-
-  Status = gDS->AddMemorySpace (EfiGcdMemoryTypeMemoryMappedIo,
-                  Instance->RegionBaseAddress, RuntimeMmioRegionSize,
-                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  ASSERT_EFI_ERROR (Status);
-
-  Status = gDS->AddMemorySpace (EfiGcdMemoryTypeMemoryMappedIo,
-                  Instance->DeviceBaseAddress, SIZE_4KB,
-                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  ASSERT_EFI_ERROR (Status);
-
-  Status = gDS->SetMemorySpaceAttributes (Instance->RegionBaseAddress,
-                  RuntimeMmioRegionSize, EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  ASSERT_EFI_ERROR (Status);
-
-  Status = gDS->SetMemorySpaceAttributes (Instance->DeviceBaseAddress,
-                  SIZE_4KB, EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  ASSERT_EFI_ERROR (Status);
-
-  //
-  // Register for the virtual address change event
-  //
-  Status = gBS->CreateEventEx (
-                  EVT_NOTIFY_SIGNAL,
-                  TPL_NOTIFY,
-                  FvbVirtualNotifyEvent,
-                  NULL,
-                  &gEfiEventVirtualAddressChangeGuid,
-                  &mFvbVirtualAddrChangeEvent
-                  );
-  ASSERT_EFI_ERROR (Status);
-
   return Status;
 }

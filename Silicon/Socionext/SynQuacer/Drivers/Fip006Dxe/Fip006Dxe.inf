@@ -2,7 +2,7 @@
 #  Socionext FIP006 High-Speed SPI Controller with NOR Flash Driver
 #
 #  Copyright (c) 2017, Socionext Inc. All rights reserved.<BR>
-#  Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+#  Copyright (c) 2017-2018, Linaro, Ltd. All rights reserved.<BR>
 #
 #  This program and the accompanying materials
 #  are licensed and made available under the terms and conditions of the BSD License
@@ -25,7 +25,9 @@
 
 [Sources]
   NorFlashDxe.c
-  NorFlashFvbDxe.c
+  NorFlash.c
+  NorFlash.h
+  NorFlashFvb.c
 
 [Packages]
   ArmPlatformPkg/ArmPlatformPkg.dec

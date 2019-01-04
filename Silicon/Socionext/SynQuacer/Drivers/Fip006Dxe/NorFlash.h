@@ -27,11 +27,8 @@
 #include <Protocol/FirmwareVolumeBlock.h>
 
 #include <Library/DebugLib.h>
-#include <Library/DxeServicesTableLib.h>
 #include <Library/IoLib.h>
 #include <Library/NorFlashPlatformLib.h>
-#include <Library/UefiLib.h>
-#include <Library/UefiRuntimeLib.h>
 
 #include "Fip006Reg.h"
 
@@ -112,12 +109,26 @@ struct _NOR_FLASH_INSTANCE {
 
   NOR_FLASH_DEVICE_PATH               DevicePath;
 
-  CONST CSDC_DEFINITION               *CmdTable;
-  UINTN                               CmdTableSize;
-
   UINT32                              Flags;
 #define NOR_FLASH_POLL_FSR      BIT0
 };
+
+typedef struct {
+  EFI_TPL         OriginalTPL;
+  BOOLEAN         InterruptsEnabled;
+} NOR_FLASH_LOCK_CONTEXT;
+
+VOID
+EFIAPI
+NorFlashLock (
+  NOR_FLASH_LOCK_CONTEXT    *Context
+  );
+
+VOID
+EFIAPI
+NorFlashUnlock (
+  NOR_FLASH_LOCK_CONTEXT    *Context
+  );
 
 EFI_STATUS
 NorFlashReadCfiData (
@@ -135,14 +146,34 @@ NorFlashWriteBuffer (
   IN UINT32                 *Buffer
   );
 
-//
-// NorFlashFvbDxe.c
-//
+extern UINTN     mFlashNvStorageVariableBase;
+
+EFI_STATUS
+NorFlashCreateInstance (
+  IN UINTN                  HostRegisterBase,
+  IN UINTN                  NorFlashDeviceBase,
+  IN UINTN                  NorFlashRegionBase,
+  IN UINTN                  NorFlashSize,
+  IN UINT32                 Index,
+  IN UINT32                 BlockSize,
+  IN BOOLEAN                HasVarStore,
+  OUT NOR_FLASH_INSTANCE**  NorFlashInstance
+  );
 
 EFI_STATUS
 EFIAPI
 NorFlashFvbInitialize (
-  IN NOR_FLASH_INSTANCE*                            Instance
+  IN NOR_FLASH_INSTANCE* Instance
+  );
+
+EFI_STATUS
+ValidateFvHeader (
+  IN  NOR_FLASH_INSTANCE *Instance
+  );
+
+EFI_STATUS
+InitializeFvAndVariableStoreHeaders (
+  IN NOR_FLASH_INSTANCE *Instance
   );
 
 EFI_STATUS
