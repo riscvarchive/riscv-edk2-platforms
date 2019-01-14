@@ -147,7 +147,9 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
   INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+!if $(ARCH) == AARCH64
   INF MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
+!endif
   INF MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
   INF MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
 

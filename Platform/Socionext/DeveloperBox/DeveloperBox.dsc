@@ -616,7 +616,6 @@
   }
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
-  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
   Silicon/Socionext/SynQuacer/Stage2Tables/Stage2Tables.inf
   MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
@@ -743,3 +742,6 @@
     <BuildOptions>
       *_*_*_CC_FLAGS = -DFIRMWARE_VENDOR=\"$(FIRMWARE_VENDOR)\" -DBUILD_NUMBER=\"$(BUILD_NUMBER)\"
   }
+
+[Components.AARCH64]
+  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
