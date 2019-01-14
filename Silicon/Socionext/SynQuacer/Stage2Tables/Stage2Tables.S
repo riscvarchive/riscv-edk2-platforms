@@ -32,6 +32,12 @@
 #define TT_S2_L3_PAGE               (0x1 << 1)
 #define TT_S2_VALID                 (0x1 << 0)
 
+#ifdef __aarch64__
+#define QWORD(x)    .quad (x)
+#else
+#define QWORD(x)    .long (x), 0
+#endif
+
   .altmacro
   .macro    for, start, count, do, arg2, arg3, arg4
   .if       \count == 1
@@ -69,7 +75,7 @@
   .section  ".rodata", "a", %progbits
   /* level 1 */
   s2_mem_entry  0      /* 0x0000_0000 - 0x3fff_ffff */
-  .quad   1f + TT_S2_TABLE /* 0x4000_0000 - 0x7fff_ffff */
+  QWORD   (1f + TT_S2_TABLE) /* 0x4000_0000 - 0x7fff_ffff */
   for       2, 246, s2_mem_entry  /* 0x8000_0000 - 0x3d_ffff_ffff */
   for     248,   8, s2_dev_entry  /* PCIe MMIO64 */
   for     256, 768, s2_mem_entry  /* 0x40_0000_0000 - 0xff_ffff_ffff */
@@ -77,12 +83,12 @@
   /* level 2 */
 1:for     0, 256, s2_mem_entry, 21, 0x40000000, 1
 
-  .quad   2f + TT_S2_TABLE /* 0x6000_0000 -> RC #0 bus 0 */
+  QWORD   (2f + TT_S2_TABLE) /* 0x6000_0000 -> RC #0 bus 0 */
   for     1, 15, s2_mem_entry, 21, 0x60000000
   for     0, 48, s2_mem_entry, 21, 0x62000000, 1
   for     0, 64, s2_dev_entry, 21, 0x68000000, 1 /* PCIe MMIO32 */
 
-  .quad   3f + TT_S2_TABLE /* 0x7000_0000 -> RC #1 bus 0 */
+  QWORD   (3f + TT_S2_TABLE) /* 0x7000_0000 -> RC #1 bus 0 */
   for     1, 15, s2_mem_entry, 21, 0x70000000
   for     0, 48, s2_mem_entry, 21, 0x72000000, 1
   for     0, 64, s2_dev_entry, 21, 0x78000000, 1 /* PCIe MMIO32 */
