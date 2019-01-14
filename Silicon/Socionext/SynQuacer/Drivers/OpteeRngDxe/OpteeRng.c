@@ -159,7 +159,7 @@ GetRNG (
     InvokeFunctionArg.Params[0].Attribute =
       OPTEE_MESSAGE_ATTRIBUTE_TYPE_MEMORY_INOUT;
     InvokeFunctionArg.Params[0].Union.Memory.BufferAddress =
-      (UINT64) OutPointer;
+      (UINTN) OutPointer;
     InvokeFunctionArg.Params[0].Union.Memory.Size = ValueLength;
 
     Status = OpteeInvokeFunction (&InvokeFunctionArg);
