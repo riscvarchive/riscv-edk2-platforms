@@ -204,7 +204,7 @@ CheckCapsule (
     // Coalesce the capsule into unused memory. CreateState() below will copy
     // it to a properly allocated buffer.
     //
-    *CapsuleBuffer = (VOID *)PcdGet64 (PcdSystemMemoryBase);
+    *CapsuleBuffer = (VOID *)(UINTN)PcdGet64 (PcdSystemMemoryBase);
     *CapsuleBufferLength = UefiMemoryBase - PcdGet64 (PcdSystemMemoryBase);
 
     PeiServicesSetBootMode (BOOT_ON_FLASH_UPDATE);
