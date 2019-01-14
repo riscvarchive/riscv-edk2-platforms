@@ -159,17 +159,22 @@ DeclareDram (
 
   DramDescriptor = *VirtualMemoryTable + ARRAY_SIZE (mVirtualMemoryTable);
 
-  for (Idx = 0; Idx < RegionCount; Idx++, DramDescriptor++) {
+  for (Idx = 0; Idx < RegionCount; Idx++) {
     Status = DramInfo->GetRegion (Idx, &Base, &Size);
     ASSERT_EFI_ERROR (Status);
 
     BuildResourceDescriptorHob (EFI_RESOURCE_SYSTEM_MEMORY,
       mDramResourceAttributes, Base, Size);
 
+    if (Base > MAX_ALLOC_ADDRESS - Size + 1) {
+      continue;
+    }
+
     DramDescriptor->PhysicalBase = Base;
     DramDescriptor->VirtualBase  = Base;
-    DramDescriptor->Length       = Size;
+    DramDescriptor->Length       = MIN (Size, MAX_ALLOC_ADDRESS - Base + 1);
     DramDescriptor->Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+    DramDescriptor++;
   }
 
   DramDescriptor->PhysicalBase = 0;
