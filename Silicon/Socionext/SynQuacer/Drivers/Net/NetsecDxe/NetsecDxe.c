@@ -103,9 +103,9 @@ Probe (
   ogma_err = ogma_init (
                (VOID *)(UINTN)LanDriver->Dev->Resources[0].AddrRangeMin,
                Handle, &Param,
-               (VOID *)dmac_hm_cmd_base, dmac_hm_cmd_size,
-               (VOID *)dmac_mh_cmd_base, dmac_mh_cmd_size,
-               (VOID *)core_cmd_base, core_cmd_size,
+               (VOID *)(UINTN)dmac_hm_cmd_base, dmac_hm_cmd_size,
+               (VOID *)(UINTN)dmac_mh_cmd_base, dmac_mh_cmd_size,
+               (VOID *)(UINTN)core_cmd_base, core_cmd_size,
                &LanDriver->Handle);
   if (ogma_err != OGMA_ERR_OK) {
     DEBUG ((DEBUG_ERROR, "NETSEC: ogma_init() failed with error code %d\n",

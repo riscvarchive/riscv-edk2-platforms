@@ -71,7 +71,7 @@ typedef struct {
 typedef VOID *pfdep_dev_handle_t;
 typedef PACKET_HANDLE *pfdep_pkt_handle_t;
 typedef EFI_PHYSICAL_ADDRESS pfdep_phys_addr_t;
-typedef UINT64 pfdep_cpu_addr_t;
+typedef UINTN pfdep_cpu_addr_t;
 
 typedef int pfdep_hard_lock_t;
 typedef int pfdep_soft_lock_t;
