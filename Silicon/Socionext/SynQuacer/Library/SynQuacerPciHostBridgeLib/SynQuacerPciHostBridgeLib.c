@@ -109,8 +109,12 @@ PCI_ROOT_BRIDGE mPciRootBridges[] = {
     { SYNQUACER_PCI_SEG0_MMIO32_MIN,
       SYNQUACER_PCI_SEG0_MMIO32_MAX,
       MAX_UINT64 - SYNQUACER_PCI_SEG0_MMIO32_XLATE + 1 },    // Mem
+#ifndef MDE_CPU_ARM
     { SYNQUACER_PCI_SEG0_MMIO64_MIN,
       SYNQUACER_PCI_SEG0_MMIO64_MAX },      // MemAbove4G
+#else
+    { MAX_UINT64, 0x0 },                    // MemAbove4G
+#endif
     { MAX_UINT64, 0x0 },                    // PMem
     { MAX_UINT64, 0x0 },                    // PMemAbove4G
     (EFI_DEVICE_PATH_PROTOCOL *)&mEfiPciRootBridgeDevicePath[0]
@@ -130,8 +134,12 @@ PCI_ROOT_BRIDGE mPciRootBridges[] = {
     { SYNQUACER_PCI_SEG1_MMIO32_MIN,
       SYNQUACER_PCI_SEG1_MMIO32_MAX,
       MAX_UINT64 - SYNQUACER_PCI_SEG1_MMIO32_XLATE + 1 },    // Mem
+#ifndef MDE_CPU_ARM
     { SYNQUACER_PCI_SEG1_MMIO64_MIN,
       SYNQUACER_PCI_SEG1_MMIO64_MAX },      // MemAbove4G
+#else
+    { MAX_UINT64, 0x0 },                    // MemAbove4G
+#endif
     { MAX_UINT64, 0x0 },                    // PMem
     { MAX_UINT64, 0x0 },                    // PMemAbove4G
     (EFI_DEVICE_PATH_PROTOCOL *)&mEfiPciRootBridgeDevicePath[1]
