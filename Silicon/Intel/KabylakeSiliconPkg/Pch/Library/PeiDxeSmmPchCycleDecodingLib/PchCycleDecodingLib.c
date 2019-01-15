@@ -1,7 +1,7 @@
 /** @file
   PCH cycle deocding configuration and query library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -306,6 +306,36 @@ PchPwrmBaseGet (
 }
 
 /**
+  Check if TCO Base register is present and unlocked.
+  This should be called before calling PchTcoBaseSet ()
+
+  @retval FALSE                         Either TCO base is locked or Smbus not present
+  @retval TRUE                          TCO base is not locked
+
+**/
+BOOLEAN
+EFIAPI
+PchIsTcoBaseSetValid (
+  VOID
+  )
+{
+  UINTN                                 SmbusBase;
+
+  SmbusBase = MmPciBase (
+                DEFAULT_PCI_BUS_NUMBER_PCH,
+                PCI_DEVICE_NUMBER_PCH_SMBUS,
+                PCI_FUNCTION_NUMBER_PCH_SMBUS
+                );
+  if (MmioRead16 (SmbusBase) == 0xFFFF) {
+    return FALSE;
+  }
+  //
+  // Verify TCO base is not locked.
+  //
+  return ((MmioRead8 (SmbusBase + R_PCH_SMBUS_TCOCTL) & B_PCH_SMBUS_TCOCTL_TCO_BASE_LOCK) == 0);
+}
+
+/**
   Set PCH TCO base address.
   This cycle decoding is allowed to set when DMIC.SRL is 0.
   Programming steps:
@@ -318,7 +348,8 @@ PchPwrmBaseGet (
 
   @retval EFI_SUCCESS                   Successfully completed.
   @retval EFI_INVALID_PARAMETER         Invalid base address passed.
-  @retval EFI_UNSUPPORTED               DMIC.SRL is set.
+  @retval EFI_UNSUPPORTED               DMIC.SRL is set, or Smbus device not present
+  @retval EFI_DEVICE_ERROR              TCO Base register is locked already
 **/
 EFI_STATUS
 EFIAPI
@@ -353,16 +384,17 @@ PchTcoBaseSet (
   //
   // Verify TCO base is not locked.
   //
-  if ((MmioRead8 (SmbusBase + R_PCH_SMBUS_TCOCTL) & B_PCH_SMBUS_TCOCTL_TCO_BASE_LOCK) != 0) {
+  if (!PchIsTcoBaseSetValid ()) {
     ASSERT (FALSE);
     return EFI_DEVICE_ERROR;
   }
   //
   // Disable TCO in SMBUS Device first before changing base address.
+  // Byte access to not touch the TCO_BASE_LOCK bit
   //
-  MmioAnd16 (
-    SmbusBase + R_PCH_SMBUS_TCOCTL,
-    (UINT16) ~B_PCH_SMBUS_TCOCTL_TCO_BASE_EN
+  MmioAnd8 (
+    SmbusBase + R_PCH_SMBUS_TCOCTL + 1,
+    (UINT8) ~(B_PCH_SMBUS_TCOCTL_TCO_BASE_EN >> 8)
     );
   //
   // Program TCO in SMBUS Device
@@ -373,11 +405,11 @@ PchTcoBaseSet (
     Address
     );
   //
-  // Enable TCO in SMBUS Device
+  // Enable TCO in SMBUS Device and lock TCO BASE
   //
   MmioOr16 (
     SmbusBase + R_PCH_SMBUS_TCOCTL,
-    B_PCH_SMBUS_TCOCTL_TCO_BASE_EN
+    B_PCH_SMBUS_TCOCTL_TCO_BASE_EN | B_PCH_SMBUS_TCOCTL_TCO_BASE_LOCK
     );
   //
   // Program "TCO Base Address" PCR[DMI] + 2778h[15:5, 1] to [SMBUS PCI offset 50h[15:5], 1].

@@ -1,7 +1,7 @@
 /** @file
   Header file for PchCycleDecodingLib.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -87,6 +87,20 @@ PchPwrmBaseGet (
   );
 
 /**
+  Check if TCO Base register is present and unlocked.
+  This should be called before calling PchTcoBaseSet ()
+
+  @retval FALSE                         Either TCO base is locked or Smbus not present
+  @retval TRUE                          TCO base is not locked
+
+**/
+BOOLEAN
+EFIAPI
+PchIsTcoBaseSetValid (
+  VOID
+  );
+
+/**
   Set PCH TCO base address.
   This cycle decoding is allowed to set when DMIC.SRL is 0.
   Programming steps:
@@ -99,6 +113,8 @@ PchPwrmBaseGet (
 
   @retval EFI_SUCCESS                   Successfully completed.
   @retval EFI_INVALID_PARAMETER         Invalid base address passed.
+  @retval EFI_UNSUPPORTED               DMIC.SRL is set, or Smbus device not present
+  @retval EFI_DEVICE_ERROR              TCO Base register is locked already
 **/
 EFI_STATUS
 EFIAPI

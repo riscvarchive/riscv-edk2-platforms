@@ -1,7 +1,7 @@
 /** @file
   Source code file for Platform Init Pre-Memory PEI module
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -80,9 +80,11 @@ EarlySiliconInit (
   PchPwrmBaseSet (PCH_PWRM_BASE_ADDRESS);
 
   ///
-  /// Program TCO BASE
+  /// Program TCO BASE if it is present and not locked
   ///
-  PchTcoBaseSet (PcdGet16 (PcdTcoBaseAddress));
+  if (PchIsTcoBaseSetValid ()) {
+    PchTcoBaseSet (PcdGet16 (PcdTcoBaseAddress));
+  }
 
   ///
   /// LPC I/O Configuration
