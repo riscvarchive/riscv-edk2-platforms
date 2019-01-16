@@ -63,6 +63,7 @@
   ArmadaBoardDescLib|Include/Library/ArmadaBoardDescLib.h
   ArmadaIcuLib|Include/Library/ArmadaIcuLib.h
   ArmadaSoCDescLib|Include/Library/ArmadaSoCDescLib.h
+  MvGpioLib|Include/Library/MvGpioLib.h
   SampleAtResetLib|Include/Library/SampleAtResetLib.h
 
 [Protocols]
