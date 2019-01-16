@@ -348,7 +348,6 @@
   Platform/Hisilicon/D03/Drivers/SFC/SfcDxeDriver.inf
 
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
-  MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>

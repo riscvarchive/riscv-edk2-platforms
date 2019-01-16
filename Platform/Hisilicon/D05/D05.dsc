@@ -481,8 +481,6 @@
   Platform/Hisilicon/D05/Drivers/SFC/SfcDxeDriver.inf
 
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
-  # Sometimes we can use EmuVariableRuntimeDxe instead of real flash variable store for debug.
-  #MdeModulePkg/Universal/Variable/EmuRuntimeDxe/EmuVariableRuntimeDxe.inf
   Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
