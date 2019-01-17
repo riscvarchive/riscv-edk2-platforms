@@ -64,6 +64,7 @@
   ArmadaIcuLib|Include/Library/ArmadaIcuLib.h
   ArmadaSoCDescLib|Include/Library/ArmadaSoCDescLib.h
   MvGpioLib|Include/Library/MvGpioLib.h
+  NonDiscoverableInitLib|Include/Library/NonDiscoverableInitLib.h
   SampleAtResetLib|Include/Library/SampleAtResetLib.h
 
 [Protocols]

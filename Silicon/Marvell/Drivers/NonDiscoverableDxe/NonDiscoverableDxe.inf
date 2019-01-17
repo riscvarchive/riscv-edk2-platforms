@@ -50,6 +50,7 @@
 
 [LibraryClasses]
   NonDiscoverableDeviceRegistrationLib
+  NonDiscoverableInitLib
   UefiDriverEntryPoint
 
 [Protocols]

@@ -37,6 +37,7 @@
   ArmPlatformLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kLib/Armada7k8kLib.inf
   ComPhyLib|Silicon/Marvell/Library/ComPhyLib/ComPhyLib.inf
   MppLib|Silicon/Marvell/Library/MppLib/MppLib.inf
+  MvGpioLib|Silicon/Marvell/Library/MvGpioLib/MvGpioLib.inf
   NorFlashInfoLib|EmbeddedPkg/Library/NorFlashInfoLib/NorFlashInfoLib.inf
   SampleAtResetLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kSampleAtResetLib/Armada7k8kSampleAtResetLib.inf
   UtmiPhyLib|Silicon/Marvell/Library/UtmiPhyLib/UtmiPhyLib.inf
