@@ -51,7 +51,11 @@ NumBlocks     = 0x28
 ################################################################################
 
 0x00000000|0x00078000
+!if $(SECURE_BOOT_ENABLE) == FALSE
 FILE = Platform/Socionext/DeveloperBox/fip_all_arm_tf.bin
+!else
+FILE = Platform/Socionext/DeveloperBox/fip_all_arm_tf_mm.bin
+!endif
 
 0x00078000|0x00008000
 FILE = $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/$(ARCH)/Silicon/Socionext/SynQuacer/Stage2Tables/Stage2Tables/OUTPUT/Stage2Tables.bin
@@ -122,9 +126,15 @@ READ_LOCK_STATUS   = TRUE
   #
   # Variable services
   #
+!if $(SECURE_BOOT_ENABLE) == FALSE
   INF Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
+!else
+  INF ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+  INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
+  INF SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+!endif
 
   #
   # UEFI applications
@@ -330,6 +340,9 @@ READ_STATUS        = TRUE
 READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  INF  Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf
+!endif
   INF  SignedCapsulePkg/Universal/SystemFirmwareUpdate/SystemFirmwareUpdateDxe.inf
 
 [FV.SystemFirmwareUpdateCargo]

@@ -29,6 +29,7 @@
   BUILD_NUMBER                   = 1
 
   DEFINE DEBUG_ON_UART1          = FALSE
+  DEFINE SECURE_BOOT_ENABLE      = FALSE
 
 !include Platform/Socionext/DeveloperBox/DeveloperBox.dsc.inc
 
@@ -179,6 +180,13 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x51040000
 !endif
 
+  gArmTokenSpaceGuid.PcdMmBufferBase|0xFFC00000
+  gArmTokenSpaceGuid.PcdMmBufferSize|0x00200000
+
+  gEfiSecurityPkgTokenSpaceGuid.PcdOptionRomImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdFixedMediaImageVerificationPolicy|0x04
+  gEfiSecurityPkgTokenSpaceGuid.PcdRemovableMediaImageVerificationPolicy|0x04
+
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareFileGuid|{0xf7, 0x89, 0x9b, 0xe9, 0x20, 0xc1, 0x25, 0x4b, 0x4d, 0xb1, 0x83, 0x94, 0xed, 0xb0, 0xb4, 0xf5}
@@ -274,6 +282,7 @@
   # Variable services
   #
   Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006Dxe.inf
+!if $(SECURE_BOOT_ENABLE) == FALSE
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
@@ -283,6 +292,11 @@
       TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
       VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   }
+!else
+  ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+  MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
+  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+!endif
 
   #
   # UEFI application (Shell Embedded Boot Loader)
