@@ -35,16 +35,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __COMPHY_SIP_SVC_H__
 #define __COMPHY_SIP_SVC_H__
 
+#include <IndustryStandard/MvSmc.h>
+
 /*
  * All values in this file are defined externally and used
  * for the SerDes configuration via SiP services.
  */
 
-/* Firmware related definitions used for SMC calls */
-#define MV_SIP_COMPHY_POWER_ON      0x82000001
-#define MV_SIP_COMPHY_POWER_OFF     0x82000002
-#define MV_SIP_COMPHY_PLL_LOCK      0x82000003
-
+/* Helper macros for passing ComPhy parameters to the EL3 */
 #define COMPHY_FW_MODE_FORMAT(mode) (mode << 12)
 #define COMPHY_FW_FORMAT(mode, idx, speeds) \
                                     ((mode << 12) | (idx << 8) | (speeds << 2))

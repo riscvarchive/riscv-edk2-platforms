@@ -163,7 +163,7 @@ ComPhySataPowerUp (
 
   ComPhySataMacPowerDown (Desc[ChipId].SoC->AhciBaseAddress);
 
-  Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+  Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
              ComPhyBase,
              Lane,
              COMPHY_FW_FORMAT (COMPHY_SATA_MODE,
@@ -175,7 +175,7 @@ ComPhySataPowerUp (
 
   ComPhySataPhyPowerUp (Desc[ChipId].SoC->AhciBaseAddress);
 
-  Status = ComPhySmc (MV_SIP_COMPHY_PLL_LOCK,
+  Status = ComPhySmc (MV_SMC_ID_COMPHY_PLL_LOCK,
              ComPhyBase,
              Lane,
              COMPHY_FW_FORMAT (COMPHY_SATA_MODE,
@@ -234,7 +234,7 @@ ComPhyCp110Init (
     case COMPHY_TYPE_PCIE1:
     case COMPHY_TYPE_PCIE2:
     case COMPHY_TYPE_PCIE3:
-      Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+      Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
                  PtrChipCfg->ComPhyBaseAddr,
                  Lane,
                  COMPHY_FW_PCIE_FORMAT (PcieWidth,
@@ -269,7 +269,7 @@ ComPhyCp110Init (
       break;
     case COMPHY_TYPE_USB3_HOST0:
     case COMPHY_TYPE_USB3_HOST1:
-      Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+      Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
                  PtrChipCfg->ComPhyBaseAddr,
                  Lane,
                  COMPHY_FW_MODE_FORMAT (COMPHY_USB3H_MODE));
@@ -278,7 +278,7 @@ ComPhyCp110Init (
     case COMPHY_TYPE_SGMII1:
     case COMPHY_TYPE_SGMII2:
     case COMPHY_TYPE_SGMII3:
-      Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+      Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
                  PtrChipCfg->ComPhyBaseAddr,
                  Lane,
                  COMPHY_FW_FORMAT (COMPHY_SGMII_MODE,
@@ -286,7 +286,7 @@ ComPhyCp110Init (
                    PtrComPhyMap->Speed));
       break;
     case COMPHY_TYPE_SFI:
-      Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+      Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
                  PtrChipCfg->ComPhyBaseAddr,
                  Lane,
                  COMPHY_FW_FORMAT (COMPHY_SFI_MODE,
@@ -295,7 +295,7 @@ ComPhyCp110Init (
       break;
     case COMPHY_TYPE_RXAUI0:
     case COMPHY_TYPE_RXAUI1:
-      Status = ComPhySmc (MV_SIP_COMPHY_POWER_ON,
+      Status = ComPhySmc (MV_SMC_ID_COMPHY_POWER_ON,
                  PtrChipCfg->ComPhyBaseAddr,
                  Lane,
                  COMPHY_FW_MODE_FORMAT (COMPHY_RXAUI_MODE));
