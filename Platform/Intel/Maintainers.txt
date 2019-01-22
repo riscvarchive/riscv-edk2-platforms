@@ -39,11 +39,11 @@ EDK II Packages:
 ----------------
 KabylakeOpenBoardPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael A Kubacki <michael.a.kubacki@intel.com>
+M: Michael Kubacki <michael.a.kubacki@intel.com>
 
 MinPlatformPkg
-M: Michael A Kubacki <michael.a.kubacki@intel.com>
-M: Jiewen Yao <jiewen.yao@intel.com>
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+R: Chasel Chiu <chasel.chiu@intel.com>
 
 PurleyOpenBoardPkg
 M: Shifei A Lu <shifei.a.lu@intel.com>
