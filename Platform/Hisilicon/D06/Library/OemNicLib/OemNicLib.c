@@ -21,43 +21,20 @@
 #include <Library/OemNicLib.h>
 
 #define CPU2_SFP2_100G_CARD_OFFSET   0x25
-#define CPU1_SFP1_LOCATE_OFFSET      0x16
-#define CPU1_SFP0_LOCATE_OFFSET      0x12
-#define CPU2_SFP1_LOCATE_OFFSET      0x21
-#define CPU2_SFP0_LOCATE_OFFSET      0x19
-#define CPU2_SFP2_10G_GE_CARD_OFFSET 0x25
 
-#define SFP_10G_SPEED   10
-#define SFP_25G_SPEED   25
-#define SFP_100G_SPEED  100
-#define SFP_GE_SPEED    1
-
-#define SFP_GE_SPEED_VAL_VENDOR_FINISAR 0x0C
-#define SFP_GE_SPEED_VAL                0x0D
-#define SFP_10G_SPEED_VAL               0x67
-#define SFP_25G_SPEED_VAL               0xFF
+#define SOCKET1_NET_PORT_100G         1
+#define SOCKET0_NET_PORT_NUM          4
+#define SOCKET1_NET_PORT_NUM          2
 
 #define CARD_PRESENT_100G               (BIT7)
-#define CARD_PRESENT_10G                (BIT0)
-#define SELECT_SFP_BY_INDEX(index)      (1 << (index - 1))
-#define SPF_SPEED_OFFSET                12
-
-#define SFP_DEVICE_ADDRESS 0x50
-#define CPU1_9545_I2C_ADDR 0x70
-#define CPU2_9545_I2C_ADDR 0x71
-
-#define FIBER_PRESENT     0
-#define CARD_PRESENT      1
-#define I2C_PORT_SFP      4
-#define CPU2_I2C_PORT_SFP 5
-
-#define SOCKET_0                 0
-#define SOCKET_1                 1
 #define EEPROM_I2C_PORT          4
 #define EEPROM_PAGE_SIZE         0x40
 #define MAC_ADDR_LEN             6
 #define I2C_OFFSET_EEPROM_ETH0   (0xc00)
 #define I2C_SLAVEADDR_EEPROM     (0x52)
+
+#define SRAM_NIC_NCL1_OFFSET_ADDRESS   0xA0E87FE0
+#define SRAM_NIC_NCL2_OFFSET_ADDRESS   0xA0E87FE4
 
 #pragma pack(1)
 typedef struct {
@@ -113,204 +90,6 @@ UINT16 CrcTable16[256] = {
   0xEF1F, 0xFF3E, 0xCF5D, 0xDF7C, 0xAF9B, 0xBFBA, 0x8FD9, 0x9FF8,
   0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0,
 };
-
-EFI_STATUS
-GetSfpSpeed (
-  UINT16 Socket,
-  UINT16 SfpNum,
-  UINT8* FiberSpeed
-  )
-{
-  EFI_STATUS  Status;
-  I2C_DEVICE  SpdDev;
-  UINT8       SfpSelect;
-  UINT8       SfpSpeed;
-  UINT32      RegAddr;
-  UINT16      I2cAddr;
-  UINT32      SfpPort;
-
-  SfpSpeed = 0x0;
-  if (Socket == SOCKET_1) {
-    I2cAddr = CPU2_9545_I2C_ADDR;
-    SfpPort = CPU2_I2C_PORT_SFP;
-  } else {
-    I2cAddr = CPU1_9545_I2C_ADDR;
-    SfpPort = I2C_PORT_SFP;
-  }
-
-  Status = I2CInit (Socket, SfpPort, Normal);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "[%a]:[%dL] Socket%d Call I2CInit failed! p1=0x%x.\n",
-            __FUNCTION__, __LINE__, Socket, Status));
-    return Status;
-  }
-
-  SpdDev.Socket = Socket;
-  SpdDev.DeviceType = DEVICE_TYPE_SPD;
-  SpdDev.Port = SfpPort;
-  SpdDev.SlaveDeviceAddress = I2cAddr;
-  RegAddr = 0x0;
-  SfpSelect = SELECT_SFP_BY_INDEX (SfpNum);
-
-  Status = I2CWrite (&SpdDev, RegAddr, 1, &SfpSelect);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "I2CWrite Error =%r.\n", Status));
-    return Status;
-  }
-
-  SpdDev.Socket = Socket;
-  SpdDev.DeviceType = DEVICE_TYPE_SPD;
-  SpdDev.Port = SfpPort;
-  SpdDev.SlaveDeviceAddress = SFP_DEVICE_ADDRESS;
-
-  RegAddr = SPF_SPEED_OFFSET;
-  Status = I2CRead (&SpdDev, RegAddr, 1, &SfpSpeed);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "I2CRead Error =%r.\n", Status));
-    return Status;
-  }
-
-  DEBUG ((DEBUG_INFO, "BR, Nominal, Nominal signalling rate, SfpSpeed:    0x%x\n",
-         SfpSpeed));
-
-  if (SfpSpeed == SFP_10G_SPEED_VAL) {
-    *FiberSpeed = SFP_10G_SPEED;
-  } else if (SfpSpeed == SFP_25G_SPEED_VAL) {
-    *FiberSpeed = SFP_25G_SPEED;
-  } else if ((SfpSpeed == SFP_GE_SPEED_VAL) ||
-             (SfpSpeed == SFP_GE_SPEED_VAL_VENDOR_FINISAR)) {
-    *FiberSpeed = SFP_GE_SPEED;
-  }
-
-  return EFI_SUCCESS;
-}
-
-//Fiber1Type/Fiber2Type/Fiber3Type return: SFP_10G_SPEED, SFP_100G_SPEED, SFP_GE_SPEED
-UINT32
-GetCpu2FiberType (
-  UINT8* Fiber1Type,
-  UINT8* Fiber2Type,
-  UINT8* Fiber100Ge
-  )
-{
-  EFI_STATUS  Status;
-  UINT16      SfpNum1;
-  UINT8       SfpSpeed1;
-  UINT16      SfpNum2;
-  UINT8       SfpSpeed2;
-
-  SfpNum1 = 0x1;
-  SfpSpeed1 = SFP_10G_SPEED;
-  SfpNum2 = 0x2;
-  SfpSpeed2 = SFP_10G_SPEED;
-  *Fiber100Ge = 0x0;
-  *Fiber1Type = SFP_10G_SPEED;
-  *Fiber2Type = SFP_10G_SPEED;
-
-  if ((ReadCpldReg (CPU2_SFP2_100G_CARD_OFFSET) & CARD_PRESENT_100G) != 0) {
-    // 100 Ge card
-    *Fiber1Type = SFP_10G_SPEED;
-    *Fiber2Type = SFP_10G_SPEED;
-    *Fiber100Ge = SFP_100G_SPEED;
-    DEBUG ((DEBUG_ERROR,"Detect Fiber SFP_100G is Present, Set 100Ge\n"));
-  } else if ((ReadCpldReg (CPU2_SFP2_10G_GE_CARD_OFFSET) & CARD_PRESENT_10G) != 0) {
-    *Fiber100Ge = 0x0;
-    *Fiber1Type = SFP_10G_SPEED;
-    *Fiber2Type = SFP_10G_SPEED;
-    if (ReadCpldReg (CPU2_SFP0_LOCATE_OFFSET) == FIBER_PRESENT) {
-      // Fiber detected in CPU2 slot0, read speed via i2c
-      Status = GetSfpSpeed (SOCKET_1, SfpNum1, &SfpSpeed1);
-      if (EFI_ERROR (Status)) {
-        DEBUG((DEBUG_ERROR,
-               "Get Socket1 Sfp%d Speed Error: %r.\n",
-               SfpNum1,
-               Status));
-        return Status;
-      }
-      if (SfpSpeed1 == SFP_25G_SPEED) {
-        // P1 don't support 25G, so set speed to 10G
-        *Fiber1Type = SFP_10G_SPEED;
-      } else {
-        *Fiber1Type = SfpSpeed1;
-      }
-    } else {
-      // No fiber, set speed to 10G
-      *Fiber1Type = SFP_10G_SPEED;
-    }
-
-    if (ReadCpldReg (CPU2_SFP1_LOCATE_OFFSET) == FIBER_PRESENT) {
-      // Fiber detected in CPU2 slot1, read speed via i2c
-      Status = GetSfpSpeed (SOCKET_1, SfpNum2, &SfpSpeed2);
-      if (EFI_ERROR (Status)) {
-        DEBUG ((DEBUG_ERROR, "Get Sfp%d Speed Error: %r.\n", SfpNum2, Status));
-        return Status;
-      }
-      if (SfpSpeed2 == SFP_25G_SPEED) {
-        *Fiber2Type = SFP_10G_SPEED;
-      } else {
-        *Fiber2Type = SfpSpeed2;
-      }
-    } else {
-      // No fiber, set speed to 10G
-      *Fiber2Type = SFP_10G_SPEED;
-    }
-  } else {
-    // 100Ge/10Ge/Ge Fiber is not found.
-    *Fiber1Type = SFP_10G_SPEED;
-    *Fiber2Type = SFP_10G_SPEED;
-    *Fiber100Ge = 0x0;
-  }
-
-  return EFI_SUCCESS;
-}
-
-//Fiber1Type/Fiber2Type return: SFP_10G_SPEED, SFP_25G_SPEED, SFP_GE_SPEED
-UINT32
-GetCpu1FiberType (
-  UINT8* Fiber1Type,
-  UINT8* Fiber2Type
-  )
-{
-  EFI_STATUS  Status;
-  UINT16      SfpNum1;
-  UINT8       SfpSpeed1;
-  UINT16      SfpNum2;
-  UINT8       SfpSpeed2;
-
-  SfpNum1 = 0x1;
-  SfpSpeed1 = SFP_10G_SPEED;
-  SfpNum2 = 0x2;
-  SfpSpeed2 = SFP_10G_SPEED;
-  *Fiber1Type = SFP_10G_SPEED;
-  *Fiber2Type = SFP_10G_SPEED;
-  // Fiber detected in CPU1 slot0, read speed via i2c
-  if (ReadCpldReg (CPU1_SFP0_LOCATE_OFFSET) == FIBER_PRESENT) {
-    Status = GetSfpSpeed (SOCKET_0, SfpNum1, &SfpSpeed1);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR, "Get Socket0 Sfp%d Speed Error: %r.\n",
-              SfpNum1, Status));
-      return Status;
-    }
-    *Fiber1Type = SfpSpeed1;
-  } else {
-    *Fiber1Type = SFP_10G_SPEED;
-  }
-
-  // Fiber detected in CPU1 slot1, read speed via i2c
-  if (ReadCpldReg (CPU1_SFP1_LOCATE_OFFSET) == FIBER_PRESENT) {
-    Status = GetSfpSpeed (SOCKET_0, SfpNum2, &SfpSpeed2);
-    if (EFI_ERROR (Status)) {
-      *Fiber2Type = SFP_10G_SPEED;
-      DEBUG ((DEBUG_ERROR, "Get Sfp%d Speed Error: %r.\n", SfpNum2, Status));
-      return Status;
-    }
-    *Fiber2Type = SfpSpeed2;
-  } else {
-    *Fiber2Type = SFP_10G_SPEED;
-  }
-
-  return EFI_SUCCESS;
-}
 
 UINT16 MakeCrcCheckSum (
   UINT8 *Buffer,
@@ -566,4 +345,52 @@ OemIsInitEth (
   )
 {
   return TRUE;
+}
+
+EFI_STATUS
+ConfigCDR (
+  UINT32 Socket
+  )
+{
+  return EFI_SUCCESS;
+}
+
+UINT32
+OemGetNclConfOffset (
+  UINT32 Socket
+  )
+{
+  UINT32           ConfigurationOffset;
+
+  if (Socket == 0) {
+    // For 1st socket, the NCL configuration offset is 0
+    ConfigurationOffset = 0;
+    MmioWrite32 (SRAM_NIC_NCL1_OFFSET_ADDRESS, ConfigurationOffset);
+    return ConfigurationOffset;
+  }
+
+  // For 2nd Socket
+  if ((ReadCpldReg (CPU2_SFP2_100G_CARD_OFFSET) & CARD_PRESENT_100G) != 0) {
+    ConfigurationOffset = SIZE_128KB;
+  } else {
+    ConfigurationOffset = SIZE_64KB;
+  }
+  MmioWrite32 (SRAM_NIC_NCL2_OFFSET_ADDRESS, ConfigurationOffset);
+  return ConfigurationOffset;
+}
+
+UINT32
+OemGetNetPortNum (
+  UINT32 Socket
+  )
+{
+  if (Socket == 0){
+    return SOCKET0_NET_PORT_NUM;
+  }
+
+  if ((ReadCpldReg (CPU2_SFP2_100G_CARD_OFFSET) & CARD_PRESENT_100G) != 0) {
+    return SOCKET1_NET_PORT_100G;
+  } else {
+    return SOCKET1_NET_PORT_NUM;
+  }
 }
