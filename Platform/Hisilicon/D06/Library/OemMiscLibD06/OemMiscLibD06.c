@@ -222,3 +222,11 @@ UINTN OemGetCpuFreq (UINT8 Socket)
   }
 }
 
+UINTN
+OemGetHccsFreq (
+  VOID
+  )
+{
+  return HCCS_PLL_VALUE_2600;
+}
+
