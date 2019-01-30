@@ -163,9 +163,6 @@
   gHisiTokenSpaceGuid.PcdPcieRootBridgeMask2P|0x34F4 # bit0:HB0RB0,bit1:HB0RB1,bit2:HB0RB2,bit3:HB0RB3,bit4:HB0RB4,bit5:HB0RB5,bit6:HB0RB6,bit7:HB0RB7
                                                 # bit8:HB1RB0,bit9:HB1RB1,bit10:HB1RB2,bit11:HB1RB3,bit12:HB1RB4,bit13:HB1RB5,bit14:HB1RB6,bit14:HB1RB15
 
-  ## SP805 Watchdog - Motherboard Watchdog
-  gArmPlatformTokenSpaceGuid.PcdSP805WatchdogBase|0x601e0000
-
   ## Serial Terminal
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x602B0000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
