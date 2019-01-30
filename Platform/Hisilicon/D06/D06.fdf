@@ -29,7 +29,7 @@
 ################################################################################
 [FD.D06]
 
-BaseAddress   = 0x204100000|gArmTokenSpaceGuid.PcdFdBaseAddress  # The base address of the Firmware in NOR Flash.
+BaseAddress   = 0x204800000|gArmTokenSpaceGuid.PcdFdBaseAddress  # The base address of the Firmware in NOR Flash.
 
 Size          = 0x00400000|gArmTokenSpaceGuid.PcdFdSize         # The size in bytes of the FLASH Device
 ErasePolarity = 1
@@ -124,7 +124,7 @@ gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase64|gEfiMdeModulePkgT
 0x003E0000|0x00010000
 
 0x003F0000|0x00010000
-FILE = Platform/Hisilicon/D0x-CustomData.Fv
+FILE = Platform/Hisilicon/D06/CustomData.Fv
 
 ################################################################################
 #
