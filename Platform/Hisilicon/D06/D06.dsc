@@ -30,7 +30,6 @@
   FLASH_DEFINITION               = Platform/Hisilicon/$(PLATFORM_NAME)/$(PLATFORM_NAME).fdf
   DEFINE NETWORK_IP6_ENABLE      = FALSE
   DEFINE HTTP_BOOT_ENABLE        = FALSE
-  DEFINE SECURE_BOOT_ENABLE      = FALSE
 
 !include Silicon/Hisilicon/Hisilicon.dsc.inc
 
@@ -87,9 +86,6 @@
   LpcLib|Silicon/Hisilicon/Hi1620/Library/LpcLibHi1620/LpcLib.inf
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
   OemNicLib|Platform/Hisilicon/D06/Library/OemNicLib/OemNicLib.inf
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  FileExplorerLib|MdeModulePkg/Library/FileExplorerLib/FileExplorerLib.inf
-!endif
   PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
   PciPlatformLib|Silicon/Hisilicon/Hi1620/Library/Hi1620PciPlatformLib/Hi1620PciPlatformLib.inf
 
@@ -290,15 +286,7 @@
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   Platform/Hisilicon/D06/Drivers/OemNicConfig2PHi1620/OemNicConfig2P.inf
 
-!if $(SECURE_BOOT_ENABLE) == TRUE
-  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf {
-    <LibraryClasses>
-      NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
-  }
-  SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
-!else
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
-!endif
   Silicon/Hisilicon/Drivers/FlashFvbDxe/FlashFvbDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf {
     <LibraryClasses>
