@@ -156,12 +156,12 @@
   !ifdef $(FIRMWARE_VER)
     gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"$(FIRMWARE_VER)"
   !else
-    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 18.08 for Hisilicon D06"
+    gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"Development build 19.02 for Hisilicon D06"
   !endif
 
   gHisiTokenSpaceGuid.PcdBiosVersionString|L"10.01.01T18"
 
-  gHisiTokenSpaceGuid.PcdBiosVersionForBmc|L"0.42"
+  gHisiTokenSpaceGuid.PcdBiosVersionForBmc|L"19.02"
 
   gHisiTokenSpaceGuid.PcdSystemProductName|L"D06"
   gHisiTokenSpaceGuid.PcdSystemVersion|L"VER.A"
