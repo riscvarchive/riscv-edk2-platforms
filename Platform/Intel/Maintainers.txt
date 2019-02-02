@@ -37,6 +37,15 @@ W: https://github.com/tianocore/tianocore.github.io/wiki/Security
 
 EDK II Packages:
 ----------------
+AdvancedFeaturePkg
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+
+ClevoOpenBoardPkg
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Ankit Sinha <ankit.sinha@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
+
 KabylakeOpenBoardPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Michael Kubacki <michael.a.kubacki@intel.com>
@@ -49,4 +58,3 @@ PurleyOpenBoardPkg
 M: Shifei A Lu <shifei.a.lu@intel.com>
 M: Xiaohu Zhou <bowen.zhou@intel.com>
 M: Isaac W Oram <isaac.w.oram@intel.com>
-
