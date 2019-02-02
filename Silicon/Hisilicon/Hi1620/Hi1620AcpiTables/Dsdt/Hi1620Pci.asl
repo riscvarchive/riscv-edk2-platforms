@@ -375,6 +375,29 @@ Device (PCI2)
 
   PCI_OSC_SUPPORT ()
 
+  Method(_DMA, 0, Serialized)
+  {
+    Return (ResourceTemplate()
+    {
+      QWORDMemory(
+      ResourceConsumer,
+      PosDecode,          // _DEC
+      MinFixed,           // _MIF
+      MaxFixed,           // _MAF
+      Prefetchable,       // _MEM
+      ReadWrite,          // _RW
+      0,                  // _GRA
+      0x00000000,         // _MIN
+      0xFFFFFFFF,         // _MAX
+      0x00000000,        // _TRA
+      0x100000000,         // _LEN
+      ,
+      ,
+      ,
+      )
+    })
+  }
+
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
@@ -1075,6 +1098,29 @@ Device (PCI8)
   Method (_STA, 0x0, NotSerialized)
   {
     Return (0xf)
+  }
+
+  Method(_DMA, 0, Serialized)
+  {
+    Return (ResourceTemplate()
+    {
+      QWORDMemory(
+      ResourceConsumer,
+      PosDecode,          // _DEC
+      MinFixed,           // _MIF
+      MaxFixed,           // _MAF
+      Prefetchable,       // _MEM
+      ReadWrite,          // _RW
+      0,                  // _GRA
+      0x00000000,         // _MIN
+      0xFFFFFFFF,         // _MAX
+      0x00000000,        // _TRA
+      0x100000000,         // _LEN
+      ,
+      ,
+      ,
+      )
+    })
   }
 
   Method (_PXM, 0, NotSerialized)
