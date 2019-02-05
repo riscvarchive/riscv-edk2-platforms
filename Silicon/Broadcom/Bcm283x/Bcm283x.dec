@@ -1,0 +1,23 @@
+## @file
+#
+#  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
+#
+#  This program and the accompanying materials are licensed and made available
+#  under the terms and conditions of the BSD License which accompanies this
+#  distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR
+#  IMPLIED.
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = Bcm283xPkg
+  PACKAGE_GUID                   = 900C0F44-1152-4FF9-B9C5-933E2918C831
+  PACKAGE_VERSION                = 1.0
+
+[Includes]
+  Include
