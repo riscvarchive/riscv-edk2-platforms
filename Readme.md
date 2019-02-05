@@ -217,6 +217,9 @@ they will be documented with the platform.
 ## Marvell
 * [Armada 70x0](Platform/Marvell/Armada)
 
+## Raspberry Pi
+* [Pi 3](Platform/RaspberryPi/RPi3)
+
 ## Socionext
 * [SynQuacer](Platform/Socionext/DeveloperBox)
 
