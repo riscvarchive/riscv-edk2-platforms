@@ -759,20 +759,20 @@ Device (PCI6)
     // adding RPx INTx configure deponds on hardware board topology,
     // if UEFI enables RPx, RPy, RPz... related INTx configure
     // should be added
-    Package () {0x04FFFF,0,0,640},         // INT_A
-    Package () {0x04FFFF,1,0,641},         // INT_B
-    Package () {0x04FFFF,2,0,642},         // INT_C
-    Package () {0x04FFFF,3,0,643},         // INT_D
+    Package () {0x4FFFF,0,0,640},         // INT_A
+    Package () {0x4FFFF,1,0,641},         // INT_B
+    Package () {0x4FFFF,2,0,642},         // INT_C
+    Package () {0x4FFFF,3,0,643},         // INT_D
 
-    Package () {0x08FFFF,0,0,640},         // INT_A
-    Package () {0x08FFFF,1,0,641},         // INT_B
-    Package () {0x08FFFF,2,0,642},         // INT_C
-    Package () {0x08FFFF,3,0,643},         // INT_D
+    Package () {0x8FFFF,0,0,640},         // INT_A
+    Package () {0x8FFFF,1,0,641},         // INT_B
+    Package () {0x8FFFF,2,0,642},         // INT_C
+    Package () {0x8FFFF,3,0,643},         // INT_D
 
-    Package () {0x0CFFFF,0,0,640},         // INT_A
-    Package () {0x0CFFFF,1,0,641},         // INT_B
-    Package () {0x0CFFFF,2,0,642},         // INT_C
-    Package () {0x0CFFFF,3,0,643},         // INT_D
+    Package () {0xCFFFF,0,0,640},         // INT_A
+    Package () {0xCFFFF,1,0,641},         // INT_B
+    Package () {0xCFFFF,2,0,642},         // INT_C
+    Package () {0xCFFFF,3,0,643},         // INT_D
 
     Package () {0x10FFFF,0,0,640},         // INT_A
     Package () {0x10FFFF,1,0,641},         // INT_B
