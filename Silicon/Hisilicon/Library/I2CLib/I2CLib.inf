@@ -31,6 +31,7 @@
   MdeModulePkg/MdeModulePkg.dec
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
+  Silicon/Hisilicon/HisiliconNonOsi.dec
   Silicon/Hisilicon/HisiPkg.dec
 
 

@@ -30,6 +30,7 @@
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/Hisilicon/HisiliconNonOsi.dec
   Silicon/Hisilicon/HisiPkg.dec
 
 [LibraryClasses]

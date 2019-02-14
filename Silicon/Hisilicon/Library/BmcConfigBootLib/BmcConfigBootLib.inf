@@ -27,6 +27,7 @@
 [Packages]
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/Hisilicon/HisiliconNonOsi.dec
   Silicon/Hisilicon/HisiPkg.dec
 
 [LibraryClasses]
