@@ -279,6 +279,11 @@ READ_LOCK_STATUS   = TRUE
   INF NetworkPkg/TcpDxe/TcpDxe.inf
 
   #
+  # RNG
+  #
+  INF Silicon/Broadcom/Bcm283x/Drivers/RngDxe/RngDxe.inf
+
+  #
   # SCSI Bus and Disk Driver
   #
   INF MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf

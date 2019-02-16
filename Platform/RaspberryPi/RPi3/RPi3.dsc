@@ -605,6 +605,11 @@
   NetworkPkg/TcpDxe/TcpDxe.inf
 
   #
+  # RNG
+  #
+  Silicon/Broadcom/Bcm283x/Drivers/RngDxe/RngDxe.inf
+
+  #
   # UEFI application (Shell Embedded Boot Loader)
   #
   ShellPkg/Application/Shell/Shell.inf {
