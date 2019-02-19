@@ -114,7 +114,6 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
 
   // GIC Distributor Info
   {
-    0,                                      // UINT32  GicId
     FixedPcdGet64 (PcdGicDistributorBase),  // UINT64  PhysicalBaseAddress
     0,                                      // UINT32  SystemVectorBase
     3                                       // UINT8   GicVersion
