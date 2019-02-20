@@ -25,7 +25,7 @@
 #define EFI_ACPI_DBG2_REVISION                     0
 #define DBG2_NUM_DEBUG_PORTS                       1
 #define DBG2_NUMBER_OF_GENERIC_ADDRESS_REGISTERS   1
-#define DBG2_NAMESPACESTRING_FIELD_SIZE            8
+#define DBG2_NAMESPACESTRING_FIELD_SIZE            9
 #define DBG2_OEM_DATA_FIELD_SIZE                   0
 #define DBG2_OEM_DATA_FIELD_OFFSET                 0
 
@@ -33,7 +33,7 @@
 #define DBG2_DEBUG_PORT_SUBTYPE_UEFI               0x0007        // Sub type for UEFI Debug Port
 #define PL011_UART_LENGTH                          0x1000
 
-#define NAME_STR_UART1     {'C', 'O', 'M', '1', '\0', '\0', '\0', '\0'}
+#define NAME_STR_UART1     "\\SB.COM1"
 #define NAME_STR_UEFI      {'U', 'E', 'F', 'I', '\0', '\0', '\0', '\0'}
 
 
