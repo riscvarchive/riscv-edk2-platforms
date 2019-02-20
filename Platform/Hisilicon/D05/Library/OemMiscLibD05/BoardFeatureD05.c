@@ -22,7 +22,6 @@
 #include <Library/I2CLib.h>
 #include <Library/IoLib.h>
 #include <Library/OemMiscLib.h>
-#include <Library/SerdesLib.h>
 #include <Protocol/Smbios.h>
 
 

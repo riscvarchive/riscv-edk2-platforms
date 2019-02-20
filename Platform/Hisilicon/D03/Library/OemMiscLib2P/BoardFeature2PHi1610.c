@@ -21,7 +21,6 @@
 
 #include <PlatformArch.h>
 #include <Library/OemMiscLib.h>
-#include <Library/SerdesLib.h>
 #include <Library/I2CLib.h>
 #include <Library/HiiLib.h>
 

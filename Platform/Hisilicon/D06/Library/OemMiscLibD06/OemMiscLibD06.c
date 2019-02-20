@@ -24,7 +24,6 @@
 #include <Library/OemMiscLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PlatformSysCtrlLib.h>
-#include <Library/SerdesLib.h>
 #include <Library/SerialPortLib.h>
 #include <Library/TimerLib.h>
 

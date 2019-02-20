@@ -64,8 +64,6 @@
 
   CpldIoLib|Silicon/Hisilicon/Library/CpldIoLib/CpldIoLib.inf
 
-  SerdesLib|Silicon/Hisilicon/Hi1620/Library/Hi1620Serdes/Hi1620SerdesLib.inf
-
   TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
   RealTimeClockLib|Silicon/Hisilicon/Library/M41T83RealTimeClockLib/M41T83RealTimeClockLib.inf
   OemMiscLib|Platform/Hisilicon/D06/Library/OemMiscLibD06/OemMiscLibD06.inf

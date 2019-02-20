@@ -69,6 +69,7 @@
   BaseMemoryLib
   BaseLib
   DebugLib
+  OemMiscLib
   UefiBootServicesTableLib
   UefiRuntimeServicesTableLib
   UefiDriverEntryPoint
@@ -77,7 +78,6 @@
 
   IpmiCmdLib
 
-  SerdesLib
 
 [Protocols]
   gEfiSmbiosProtocolGuid                       # PROTOCOL ALWAYS_CONSUMED
