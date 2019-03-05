@@ -76,9 +76,9 @@
 #define SGI575_CONF_NUM                           0x3
 #define SGI575_PART_NUM                           0x783
 
-//SGI-Clark Platform Identification values
-#define SGI_CLARK_PART_NUM                        0x786
-#define SGI_CLARK_CONF_ARES                       0x1
+//RDN1E1EDGE Platform Identification values
+#define RD_N1E1_EDGE_PART_NUM                     0x786
+#define RD_N1_EDGE_CONF_ID                        0x1
 #define SGI_CLARK_CONF_HELIOS                     0x2
 
 #define SGI_CONFIG_MASK                           0x0F

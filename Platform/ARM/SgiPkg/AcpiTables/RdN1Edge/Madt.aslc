@@ -120,36 +120,36 @@ STATIC EFI_ACPI_6_2_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
     //                                          Efficiency)
     // Note: The GIC Structure of the primary CPU must be the first entry
     // (see note in 5.2.12.14 GICC Structure of ACPI v6.2).
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-0
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-0
       0, 0, GET_MPID(0x0, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-1
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-1
       0, 1, GET_MPID(0x0, 0x100), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-2
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-2
       0, 2, GET_MPID(0x0, 0x200), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-3
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-3
       0, 3, GET_MPID(0x0, 0x300), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
 
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-4
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-4
       0, 4, GET_MPID(0x100, 0x00), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-5
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-5
       0, 5, GET_MPID(0x100, 0x100), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-6
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-6
       0, 6, GET_MPID(0x100, 0x200), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
-    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Ares-7
+    EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Neoverse-N1-7
       0, 7, GET_MPID(0x100, 0x300), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */)

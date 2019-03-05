@@ -48,10 +48,10 @@ ArmSgiPkgEntryPoint (
 
   if ((PartNum == SGI575_PART_NUM) && (ConfigId == SGI575_CONF_NUM)) {
     Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesFileGuid);
-  } else if ((PartNum == SGI_CLARK_PART_NUM) &&
-             (ConfigId == SGI_CLARK_CONF_ARES)) {
-    Status = LocateAndInstallAcpiFromFv (&gSgiClarkAresAcpiTablesFileGuid);
-  } else if ((PartNum == SGI_CLARK_PART_NUM) &&
+  } else if ((PartNum == RD_N1E1_EDGE_PART_NUM) &&
+             (ConfigId == RD_N1_EDGE_CONF_ID)) {
+    Status = LocateAndInstallAcpiFromFv (&gRdN1EdgeAcpiTablesFileGuid);
+  } else if ((PartNum == RD_N1E1_EDGE_PART_NUM) &&
              (ConfigId == SGI_CLARK_CONF_HELIOS)) {
     Status = LocateAndInstallAcpiFromFv (&gSgiClarkHeliosAcpiTablesFileGuid);
   } else {
