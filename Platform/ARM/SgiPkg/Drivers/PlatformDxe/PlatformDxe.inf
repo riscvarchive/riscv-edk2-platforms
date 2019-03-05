@@ -38,7 +38,7 @@
   gArmSgiPlatformIdDescriptorGuid
   gSgi575AcpiTablesFileGuid
   gRdN1EdgeAcpiTablesFileGuid
-  gSgiClarkHeliosAcpiTablesFileGuid
+  gRdE1EdgeAcpiTablesFileGuid
 
 [FeaturePcd]
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSupported

@@ -15,7 +15,7 @@
 
 [Defines]
   INF_VERSION                    = 0x0001001A
-  BASE_NAME                      = SgiClarkHeliosAcpiTables
+  BASE_NAME                      = RdE1EdgeAcpiTables
   FILE_GUID                      = 2af40815-a84e-4de9-8c38-9140b3544073
   MODULE_TYPE                    = USER_DEFINED
   VERSION_STRING                 = 1.0
@@ -26,8 +26,8 @@
   Gtdt.aslc
   Iort.aslc
   Mcfg.aslc
-  SgiClarkHelios/Dsdt.asl
-  SgiClarkHelios/Madt.aslc
+  RdE1Edge/Dsdt.asl
+  RdE1Edge/Madt.aslc
   Spcr.aslc
   Ssdt.asl
 

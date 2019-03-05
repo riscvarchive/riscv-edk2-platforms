@@ -79,7 +79,7 @@
 //RDN1E1EDGE Platform Identification values
 #define RD_N1E1_EDGE_PART_NUM                     0x786
 #define RD_N1_EDGE_CONF_ID                        0x1
-#define SGI_CLARK_CONF_HELIOS                     0x2
+#define RD_E1_EDGE_CONF_ID                        0x2
 
 #define SGI_CONFIG_MASK                           0x0F
 #define SGI_CONFIG_SHIFT                          0x1C

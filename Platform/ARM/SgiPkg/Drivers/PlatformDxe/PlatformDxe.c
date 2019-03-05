@@ -52,8 +52,8 @@ ArmSgiPkgEntryPoint (
              (ConfigId == RD_N1_EDGE_CONF_ID)) {
     Status = LocateAndInstallAcpiFromFv (&gRdN1EdgeAcpiTablesFileGuid);
   } else if ((PartNum == RD_N1E1_EDGE_PART_NUM) &&
-             (ConfigId == SGI_CLARK_CONF_HELIOS)) {
-    Status = LocateAndInstallAcpiFromFv (&gSgiClarkHeliosAcpiTablesFileGuid);
+             (ConfigId == RD_E1_EDGE_CONF_ID)) {
+    Status = LocateAndInstallAcpiFromFv (&gRdE1EdgeAcpiTablesFileGuid);
   } else {
     Status = EFI_UNSUPPORTED;
   }
