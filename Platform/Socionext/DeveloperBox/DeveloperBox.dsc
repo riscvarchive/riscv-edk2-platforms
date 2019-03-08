@@ -293,7 +293,10 @@
       VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   }
 !else
-  ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf
+  ArmPkg/Drivers/MmCommunicationDxe/MmCommunication.inf {
+    <LibraryClasses>
+      NULL|StandaloneMmPkg/Library/VariableMmDependency/VariableMmDependency.inf
+  }
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
   SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
 !endif

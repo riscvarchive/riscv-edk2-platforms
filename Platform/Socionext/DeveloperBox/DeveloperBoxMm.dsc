@@ -68,9 +68,6 @@
 [PcdsFixedAtBuild]
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x51040000
 
-[PcdsPatchableInModule]
-  gEfiMdePkgTokenSpaceGuid.PcdGuidedExtractHandlerTableAddress|0x0
-
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform
@@ -82,8 +79,10 @@
   #
   StandaloneMmPkg/Core/StandaloneMmCore.inf {
     <LibraryClasses>
-      ExtractGuidedSectionLib|MdePkg/Library/BaseExtractGuidedSectionLib/BaseExtractGuidedSectionLib.inf
+      ExtractGuidedSectionLib|EmbeddedPkg/Library/PrePiExtractGuidedSectionLib/PrePiExtractGuidedSectionLib.inf
       NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+    <PcdsFixedAtBuild>
+      gEfiMdePkgTokenSpaceGuid.PcdMaximumGuidedExtractHandler|0x2
   }
 
   StandaloneMmPkg/Drivers/StandaloneMmCpu/AArch64/StandaloneMmCpu.inf
