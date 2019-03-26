@@ -22,9 +22,9 @@
 #define PACKAGE_VERSION                     0xFFFFFFFF
 #define PACKAGE_VERSION_STRING              L"Unknown"
 
-#define CURRENT_FIRMWARE_VERSION            0x00000002
-#define CURRENT_FIRMWARE_VERSION_STRING     L"0x00000002"
-#define LOWEST_SUPPORTED_FIRMWARE_VERSION   0x00000001
+#define CURRENT_FIRMWARE_VERSION            0x00000003
+#define CURRENT_FIRMWARE_VERSION_STRING     L"0x00000003"
+#define LOWEST_SUPPORTED_FIRMWARE_VERSION   0x00000003
 
 #define IMAGE_ID                            SIGNATURE_64('H','W','A', 'R', 'M', '_', 'F', 'd')
 #define IMAGE_ID_STRING                     L"ARMPlatformFd"
