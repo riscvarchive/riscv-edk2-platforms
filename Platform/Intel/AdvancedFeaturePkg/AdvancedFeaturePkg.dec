@@ -6,7 +6,7 @@
 # INF files to generate AutoGen.c and AutoGen.h files
 # for the build infrastructure.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -146,11 +146,17 @@ gAdvancedFeaturePkgTokenSpaceGuid         =  {0xa8514688, 0x6693, 0x4ab5, {0xaa,
 
 [PcdsFixedAtBuild]
   gAdvancedFeaturePkgTokenSpaceGuid.PcdMaxSOLChannels|0x3|UINT8|0x40000009
+  ## This PCD specifies AcpiDebug feature is enable/disable.
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugEnable|FALSE|BOOLEAN|0x00000012
+  ## This PCD specifies AcpiDebug buffer size.
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize|0x10000|UINT32|0x00000013
 
 [PcdsDynamic, PcdsDynamicEx]
   gAdvancedFeaturePkgTokenSpaceGuid.PcdIpmiIoBaseAddress|0xCA2|UINT16|0x90000022
   gAdvancedFeaturePkgTokenSpaceGuid.PcdFRB2EnabledFlag|TRUE|BOOLEAN|0x10000030
   gAdvancedFeaturePkgTokenSpaceGuid.PcdFRBTimeoutValue|360|UINT16|0x10000040
+  ## This PCD specifies AcpiDebug buffer address
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress|0|UINT32|0x00000014
 
 [PcdsFeatureFlag]
   gAdvancedFeaturePkgTokenSpaceGuid.PcdNetworkEnable          |FALSE|BOOLEAN|0xF00000A1

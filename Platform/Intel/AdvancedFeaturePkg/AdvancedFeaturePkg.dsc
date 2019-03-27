@@ -1,7 +1,7 @@
 ## @file
 #  Platform description.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -155,3 +155,5 @@
   AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
   AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
 
+  AdvancedFeaturePkg/AcpiDebug/AcpiDebugDxe.inf
+  AdvancedFeaturePkg/AcpiDebug/AcpiDebugSmm.inf
