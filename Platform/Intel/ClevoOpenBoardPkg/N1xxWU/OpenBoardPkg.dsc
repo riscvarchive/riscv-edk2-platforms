@@ -116,10 +116,18 @@
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgCommonLib.dsc
 
+[LibraryClasses.IA32.SEC]
+  SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SecTestPointCheckLib.inf
+  SecBoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/SecBoardInitLibNull/SecBoardInitLibNull.inf
+
 [LibraryClasses.IA32]
   #
   # PEI phase common
   #
+  SerialPortLib|$(PLATFORM_BOARD_PACKAGE)/Library/PeiSerialPortLibSpiFlash/PeiSerialPortLibSpiFlash.inf
+  DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
   FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
@@ -137,10 +145,6 @@
 # Silicon Init Package
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgPeiLib.dsc
-
-[LibraryClasses.IA32.SEC]
-  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SecTestPointCheckLib.inf
-  SecBoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/SecBoardInitLibNull/SecBoardInitLibNull.inf
 
 [LibraryClasses.X64]
   #
@@ -184,6 +188,14 @@
 # Common
 #
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
+
+  #
+  # Core
+  #
+  MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf {
+    <LibraryClasses>
+      DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+  }
 
   #
   # FSP wrapper SEC Core
