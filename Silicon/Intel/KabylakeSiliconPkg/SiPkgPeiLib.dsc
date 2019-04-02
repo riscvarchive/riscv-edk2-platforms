@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the SkyLake SiPkg PEI libraries.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -30,6 +30,7 @@
 !endif
  ResetSystemLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiResetSystemLib/PeiResetSystemLib.inf
  PchResetLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiPchResetLib/PeiPchResetLib.inf
+ SpiLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiSpiLib/PeiSpiLib.inf
 
 #
 # Cpu

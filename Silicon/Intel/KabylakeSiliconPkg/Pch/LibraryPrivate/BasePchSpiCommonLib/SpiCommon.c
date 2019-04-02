@@ -1,7 +1,7 @@
 /** @file
   PCH SPI Common Driver implements the SPI Host Controller Compatibility Interface.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -760,9 +760,8 @@ SendSpiCmd (
   Status            = EFI_SUCCESS;
   SpiInstance       = SPI_INSTANCE_FROM_SPIPROTOCOL (This);
   SpiBaseAddress    = SpiInstance->PchSpiBase;
-  PchSpiBar0        = AcquireSpiBar0 (SpiInstance);
-  SpiBaseAddress    = SpiInstance->PchSpiBase;
   ABase             = SpiInstance->PchAcpiBase;
+  PchSpiBar0        = AcquireSpiBar0 (SpiInstance);
 
   //
   // Disable SMIs to make sure normal mode flash access is not interrupted by an SMI
