@@ -55,7 +55,7 @@
   #
   # Default value for OpenBoardPkg.fdf use
   #
-  DEFINE BIOS_SIZE_OPTION = SIZE_70
+  DEFINE BIOS_SIZE_OPTION = SIZE_60
 
 ################################################################################
 #

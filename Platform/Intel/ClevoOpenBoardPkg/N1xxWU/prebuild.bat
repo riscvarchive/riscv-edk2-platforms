@@ -202,8 +202,8 @@ cl
 
 @set BIOS_SIZE_OPTION=
 
-@REM default size option is 7M
-@set BIOS_SIZE_OPTION=-DBIOS_SIZE_OPTION=SIZE_70
+@REM default size option is 6M
+@set BIOS_SIZE_OPTION=-DBIOS_SIZE_OPTION=SIZE_60
 
 :BiosSizeDone
 @echo BIOS_SIZE_OPTION=%BIOS_SIZE_OPTION%
