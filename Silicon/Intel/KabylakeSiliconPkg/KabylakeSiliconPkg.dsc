@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the SkyLake SiPkg DSC file.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -19,7 +19,6 @@ gSiPkgTokenSpaceGuid.PcdSmmVariableEnable            |TRUE
 gSiPkgTokenSpaceGuid.PcdSerialGpioEnable             |FALSE
 gSiPkgTokenSpaceGuid.PcdAtaEnable                    |FALSE
 gSiPkgTokenSpaceGuid.PcdSiCsmEnable                  |FALSE
-gSiPkgTokenSpaceGuid.PcdUseHpetTimer                 |FALSE
 gSiPkgTokenSpaceGuid.PcdSgEnable                     |TRUE
 gSiPkgTokenSpaceGuid.PcdAcpiEnable                   |FALSE
 gSiPkgTokenSpaceGuid.PcdSourceDebugEnable            |FALSE
