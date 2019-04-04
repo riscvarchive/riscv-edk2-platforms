@@ -1,7 +1,7 @@
 ## @file
 #  Platform configuration file.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # This program and the accompanying materials are licensed and made available under
 # the terms and conditions of the BSD License which accompanies this distribution.
@@ -111,7 +111,6 @@
   gSiPkgTokenSpaceGuid.PcdSmmVariableEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSoftwareGuardEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSsaFlagEnable|FALSE
-  gSiPkgTokenSpaceGuid.PcdUseHpetTimer|TRUE                       # TRUE - HPET / FALSE - 8254 timer is used.
   gSiPkgTokenSpaceGuid.PcdOcWdtEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|FALSE
 
