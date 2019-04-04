@@ -107,7 +107,6 @@
   gSiPkgTokenSpaceGuid.PcdSmmVariableEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSoftwareGuardEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSsaFlagEnable|FALSE
-  gSiPkgTokenSpaceGuid.PcdUseHpetTimer|TRUE                       # TRUE - HPET / FALSE - 8254 timer is used.
   gSiPkgTokenSpaceGuid.PcdOcWdtEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|FALSE
 
