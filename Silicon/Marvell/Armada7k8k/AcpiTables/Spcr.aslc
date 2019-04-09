@@ -30,11 +30,11 @@ EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE Spcr = {
   { EFI_ACPI_RESERVED_BYTE,
     EFI_ACPI_RESERVED_BYTE,
     EFI_ACPI_RESERVED_BYTE },                                           // Reserved1[3]
-  ARM_GAS32 (FixedPcdGet64(PcdSerialRegisterBase)),                     // BaseAddress
+  ARM_GAS8 (FixedPcdGet64(PcdSerialRegisterBase)),                      // BaseAddress
   EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERRUPT_TYPE_GIC,    // InterruptType
   0,                                                                    // Irq
   51,                                                                   // GlobalSystemInterrupt
-  EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_BAUD_RATE_115200,      // BaudRate
+  0,                                                                    // BaudRate
   EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_PARITY_NO_PARITY,      // Parity
   EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_STOP_BITS_1,           // StopBits
   0,                                                                    // FlowControl
