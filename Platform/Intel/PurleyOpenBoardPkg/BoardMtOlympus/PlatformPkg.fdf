@@ -301,8 +301,6 @@ INF  MinPlatformPkg/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
 
 INF  ShellBinPkg/UefiShell/UefiShell.inf
 
-INF  PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
-
 INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
 
 

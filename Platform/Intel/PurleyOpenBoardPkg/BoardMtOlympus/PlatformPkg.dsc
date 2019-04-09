@@ -231,6 +231,4 @@
 
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
 
-  PcAtChipsetPkg/8259InterruptControllerDxe/8259.inf
-
 !include $(BOARD_PKG)/$(BOARD_NAME)/PlatformPkgBuildOption.dsc

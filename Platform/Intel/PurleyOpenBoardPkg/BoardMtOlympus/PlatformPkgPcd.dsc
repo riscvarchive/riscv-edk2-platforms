@@ -195,7 +195,6 @@
   gMinPlatformPkgTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
 
 [PcdsFixedAtBuild.X64]
-  gPcAtChipsetPkgTokenSpaceGuid.Pcd8259LegacyModeMask|0x0eB8
   gPcAtChipsetPkgTokenSpaceGuid.PcdMinimalValidYear|2015
   gPcAtChipsetPkgTokenSpaceGuid.PcdMaximalValidYear|2099
   # Change PcdBootManagerMenuFile to UiApp

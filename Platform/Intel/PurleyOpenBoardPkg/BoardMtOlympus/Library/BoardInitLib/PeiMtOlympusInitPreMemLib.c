@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -79,6 +79,9 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #include <KtiHost.h>
 
 #include "SioRegs.h"
+
+#define LEGACY_8259_MASK_REGISTER_MASTER    0x21
+#define LEGACY_8259_MASK_REGISTER_SLAVE     0xA1
 
 extern GPIO_INIT_CONFIG mGpioTableMicrosoftWcs[];
 extern UINTN mGpioTableSizeMicrosoftWcs;
@@ -413,6 +416,20 @@ PchLanConfig (
   return EFI_SUCCESS;
 }
 
+/**
+  Write to mask registers of master and slave 8259 PICs.
+
+**/
+VOID
+STATIC
+Mask8259Interrupts (
+  VOID
+  )
+{
+  IoWrite8 (LEGACY_8259_MASK_REGISTER_MASTER, 0xFF);
+  IoWrite8 (LEGACY_8259_MASK_REGISTER_SLAVE, 0xFF);
+}
+
 EFI_STATUS
 EFIAPI
 MtOlympusBoardInitBeforeMemoryInit (
@@ -494,6 +511,12 @@ MtOlympusBoardInitBeforeMemoryInit (
   // Do platform specific on-board Zoar init
   //
   PchLanConfig (&SystemConfiguration);
+
+  //
+  // The 8259 PIC is still functional and not masked by default even if APIC is
+  // enabled. So need to disable all 8259 interrupts.
+  //
+  Mask8259Interrupts ();
 
   return EFI_SUCCESS;
 }
