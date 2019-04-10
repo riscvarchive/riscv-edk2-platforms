@@ -335,7 +335,7 @@ INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 INF  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
 INF  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
 
-INF  ShellBinPkg/UefiShell/UefiShell.inf
+INF  ShellPkg/Application/Shell/Shell.inf
 
 INF  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
 INF  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
