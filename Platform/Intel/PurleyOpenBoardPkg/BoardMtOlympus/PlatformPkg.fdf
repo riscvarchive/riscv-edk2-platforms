@@ -299,7 +299,7 @@ INF  $(BOARD_PKG)/Pci/PciPlatform/PciPlatform.inf
 
 INF  MinPlatformPkg/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
 
-INF  ShellBinPkg/UefiShell/UefiShell.inf
+INF  ShellPkg/Application/Shell/Shell.inf
 
 INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
 
