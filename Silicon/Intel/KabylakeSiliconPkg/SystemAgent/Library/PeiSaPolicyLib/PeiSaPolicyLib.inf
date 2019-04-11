@@ -28,6 +28,7 @@ CpuMailboxLib
 SiConfigBlockLib
 RngLib
 SmbusLib
+PchCycleDecodingLib
 
 [Packages]
 MdePkg/MdePkg.dec

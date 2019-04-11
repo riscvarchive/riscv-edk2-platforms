@@ -2,7 +2,7 @@
   This file is PeiSiPolicyLib library creates default settings of RC
   Policy and installs RC Policy PPI.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -69,8 +69,6 @@ SiCreatePreMemConfigBlocks (
 
 /**
   SiPreMemInstallPolicyPpi installs SiPreMemPolicyPpi.
-  While installed, RC assumes the Policy is ready and finalized. So please update and override
-  any setting before calling this function.
 
   @param[in] SiPreMemPolicyPpi   The pointer to Silicon Policy PPI instance
 
@@ -97,6 +95,50 @@ SiPreMemInstallPolicyPpi (
   SiPolicyPreMemPpiDesc->Ppi   = SiPolicyPreMemPpi;
 
   //
+  // Install Silicon Policy PPI
+  //
+  Status = PeiServicesInstallPpi (SiPolicyPreMemPpiDesc);
+  ASSERT_EFI_ERROR (Status);
+  return Status;
+}
+
+/**
+  SiPreMemInstallPolicyReadyPpi installs SiPreMemPolicyReadyPpi.
+  While installed, RC assumes the Policy is ready and finalized. So please update and override
+  any setting before calling this function.
+
+  @retval EFI_SUCCESS            The policy is installed.
+  @retval EFI_OUT_OF_RESOURCES   Insufficient resources to create buffer
+**/
+EFI_STATUS
+EFIAPI
+SiPreMemInstallPolicyReadyPpi (
+  VOID
+  )
+{
+  EFI_STATUS             Status;
+  EFI_PEI_PPI_DESCRIPTOR *SiPolicyPreMemPpiDesc;
+  SI_PREMEM_POLICY_PPI    *SiPolicyPreMemPpi;
+
+  SiPolicyPreMemPpiDesc = (EFI_PEI_PPI_DESCRIPTOR *) AllocateZeroPool (sizeof (EFI_PEI_PPI_DESCRIPTOR));
+  if (SiPolicyPreMemPpiDesc == NULL) {
+    ASSERT (FALSE);
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  SiPolicyPreMemPpiDesc->Flags = EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST;
+  SiPolicyPreMemPpiDesc->Guid  = &gSiPreMemPolicyReadyPpiGuid;
+  SiPolicyPreMemPpiDesc->Ppi   = NULL;
+
+  Status = PeiServicesLocatePpi (
+             &gSiPreMemPolicyPpiGuid,
+             0,
+             NULL,
+             (VOID **)&SiPolicyPreMemPpi
+             );
+  ASSERT_EFI_ERROR (Status);
+
+  //
   // Print whole PCH_POLICY_PPI and serial out.
   //
   PchPreMemPrintPolicyPpi (SiPolicyPreMemPpi);
@@ -114,7 +156,7 @@ SiPreMemInstallPolicyPpi (
   CpuPreMemPrintPolicy (SiPolicyPreMemPpi);
 
   //
-  // Install Silicon Policy PPI
+  // Install PreMem Silicon Policy Ready PPI
   //
   Status = PeiServicesInstallPpi (SiPolicyPreMemPpiDesc);
   ASSERT_EFI_ERROR (Status);

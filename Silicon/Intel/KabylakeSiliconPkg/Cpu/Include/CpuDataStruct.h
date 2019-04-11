@@ -1,7 +1,7 @@
 /** @file
   This file declares various data structures used in CPU reference code.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -23,6 +23,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define CPU_CAUSE_USER_SELECTION    0x0080
 #define CPU_CAUSE_BY_ASSOCIATION    0x0100
 #define CPU_CAUSE_UNSPECIFIED       0x8000
+
+#define MAX_MICROCODE_PATCH_SIZE    0x20000
 
 typedef UINT32 CPU_STATE_CHANGE_CAUSE;
 

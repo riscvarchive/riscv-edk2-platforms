@@ -1,7 +1,7 @@
 /** @file
   Prototype of the SiPolicyLib library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -65,8 +65,6 @@ SiCreateConfigBlocks (
 
 /**
   SiPreMemInstallPolicyPpi installs SiPreMemPolicyPpi.
-  While installed, RC assumes the Policy is ready and finalized. So please update and override
-  any setting before calling this function.
 
   @param[in] SiPreMemPolicyPpi   The pointer to Silicon PREMEM Policy PPI instance
 
@@ -80,9 +78,21 @@ SiPreMemInstallPolicyPpi (
   );
 
 /**
-  SiInstallPolicyPpi installs SiPolicyPpi.
+  SiPreMemInstallPolicyReadyPpi installs SiPreMemPolicyReadyPpi.
   While installed, RC assumes the Policy is ready and finalized. So please update and override
   any setting before calling this function.
+
+  @retval EFI_SUCCESS            The policy is installed.
+  @retval EFI_OUT_OF_RESOURCES   Insufficient resources to create buffer
+**/
+EFI_STATUS
+EFIAPI
+SiPreMemInstallPolicyReadyPpi (
+  VOID
+  );
+
+/**
+  SiInstallPolicyPpi installs SiPolicyPpi.
 
   @param[in] SiPolicyPpi         The pointer to Silicon Policy PPI instance
 
@@ -93,6 +103,20 @@ EFI_STATUS
 EFIAPI
 SiInstallPolicyPpi (
   IN  SI_POLICY_PPI          *SiPolicyPpi
+  );
+
+/**
+  SiInstallPolicyReadyPpi installs SiPolicyReadyPpi.
+  While installed, RC assumes the Policy is ready and finalized. So please update and override
+  any setting before calling this function.
+
+  @retval EFI_SUCCESS            The policy is installed.
+  @retval EFI_OUT_OF_RESOURCES   Insufficient resources to create buffer
+**/
+EFI_STATUS
+EFIAPI
+SiInstallPolicyReadyPpi (
+  VOID
   );
 
 /**

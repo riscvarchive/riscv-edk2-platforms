@@ -1,7 +1,7 @@
 /** @file
   Header file for the PeiCpuPolicyLib library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -23,7 +23,5 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/CpuPlatformLib.h>
 #include <Register/Cpuid.h>
 #include <Library/PcdLib.h>
-
-#define MAX_MICROCODE_PATCH_SIZE 0x20000
 
 #endif // _PEI_CPU_POLICY_LIBRARY_H_

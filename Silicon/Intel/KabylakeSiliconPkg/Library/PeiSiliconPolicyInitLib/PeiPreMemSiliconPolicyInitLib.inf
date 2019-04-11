@@ -1,7 +1,7 @@
 ### @file
 # Library functions for Policy Initialization Library.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -14,7 +14,7 @@
 ################################################################################
 [Defines]
   INF_VERSION                    = 0x00010005
-  BASE_NAME                      = PeiSiliconPolicyInitLib
+  BASE_NAME                      = PeiPreMemSiliconPolicyInitLib
   FILE_GUID                      = 80920B16-7778-4793-878E-4555F68BDC69
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
@@ -34,7 +34,6 @@
 
 [Sources]
   PeiPolicyInitPreMem.c
-  PeiPolicyInit.c
   PeiPolicyInit.h
 
 ################################################################################
@@ -53,3 +52,9 @@
   SiPolicyLib
   DebugLib
   PeiServicesLib
+
+[Ppis]
+  gSiPreMemDefaultPolicyInitPpiGuid  ## CONSUMES
+
+[Depex]
+  gSiPreMemDefaultPolicyInitPpiGuid

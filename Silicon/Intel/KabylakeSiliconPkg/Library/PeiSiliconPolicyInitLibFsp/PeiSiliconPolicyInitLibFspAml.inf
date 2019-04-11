@@ -72,6 +72,7 @@
   MemoryAllocationLib
   DebugPrintErrorLevelLib
   FspWrapperApiLib
+  SiPolicyLib
 
 [Pcd]
   gSiPkgTokenSpaceGuid.PcdTsegSize                    ## CONSUMES

@@ -1,7 +1,7 @@
 /** @file
   This file provides service for PEI phase policy printing
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -41,11 +41,11 @@ SaPrintPolicyPpiPreMem (
 
   DEBUG ((DEBUG_INFO, "\n------------------------ SA Policy (PEI PreMem) Print BEGIN -----------------\n"));
   DEBUG ((DEBUG_INFO, "Revision : 0x%x\n", SiPolicyPreMemPpi->TableHeader.Header.Revision));
-  ASSERT (SiPolicyPreMemPpi->TableHeader.Header.Revision == SI_PREMEM_POLICY_REVISION);
+  ASSERT (SiPolicyPreMemPpi->TableHeader.Header.Revision >= SI_PREMEM_POLICY_REVISION);
 
   DEBUG ((DEBUG_INFO, "------------------------ SA_MISC_PEI_PREMEM_CONFIG  -----------------\n"));
   DEBUG ((DEBUG_INFO, " Revision : %d\n", MiscPeiPreMemConfig->Header.Revision));
-  ASSERT (MiscPeiPreMemConfig->Header.Revision == SA_MISC_PEI_PREMEM_CONFIG_REVISION);
+  ASSERT (MiscPeiPreMemConfig->Header.Revision >= SA_MISC_PEI_PREMEM_CONFIG_REVISION);
   DEBUG ((DEBUG_INFO, " SpdAddressTable[%d] :", SA_MC_MAX_SOCKETS));
   for (Index = 0; Index < SA_MC_MAX_SOCKETS; Index++) {
     DEBUG ((DEBUG_INFO, " 0x%x", MiscPeiPreMemConfig->SpdAddressTable[Index]));
@@ -56,7 +56,7 @@ SaPrintPolicyPpiPreMem (
   DEBUG ((DEBUG_INFO, "------------------------ MEMORY_CONFIG ------------------------------\n"));
   DEBUG ((DEBUG_INFO, " Guid                : %g\n", &MemConfig->Header.GuidHob.Name));
   DEBUG ((DEBUG_INFO, " Revision            : %d\n",   MemConfig->Header.Revision));
-  ASSERT (MemConfig->Header.Revision == MEMORY_CONFIG_REVISION);
+  ASSERT (MemConfig->Header.Revision >= MEMORY_CONFIG_REVISION);
   DEBUG ((DEBUG_INFO, " Size                : 0x%x\n", MemConfig->Header.GuidHob.Header.HobLength));
   DEBUG ((DEBUG_INFO, " HobBufferSize       : 0x%x\n", MemConfig->HobBufferSize));
   DEBUG ((DEBUG_INFO, " EccSupport          : 0x%x\n", MemConfig->EccSupport));
@@ -296,17 +296,17 @@ SaPrintPolicyPpi (
 
   DEBUG ((DEBUG_INFO, "\n------------------------ SA Policy (PEI) Print BEGIN -----------------\n"));
   DEBUG ((DEBUG_INFO, "Revision : 0x%x\n", SiPolicyPpi->TableHeader.Header.Revision));
-  ASSERT (SiPolicyPpi->TableHeader.Header.Revision == SI_POLICY_REVISION);
+  ASSERT (SiPolicyPpi->TableHeader.Header.Revision >= SI_POLICY_REVISION);
   DEBUG ((DEBUG_INFO, "------------------------ GRAPHICS_PEI_CONFIG -----------------\n"));
   DEBUG ((DEBUG_INFO, " Revision : %d\n", GtConfig->Header.Revision));
-  ASSERT (GtConfig->Header.Revision == GRAPHICS_PEI_CONFIG_REVISION);
+  ASSERT (GtConfig->Header.Revision >= GRAPHICS_PEI_CONFIG_REVISION);
   DEBUG ((DEBUG_INFO, " PeiGraphicsPeimInit : 0x%x\n", GtConfig->PeiGraphicsPeimInit));
   DEBUG ((DEBUG_INFO, " LogoPtr : 0x%x\n", GtConfig->LogoPtr));
   DEBUG ((DEBUG_INFO, " LogoSize : 0x%x\n", GtConfig->LogoSize));
   DEBUG ((DEBUG_INFO, " GraphicsConfigPtr : 0x%x\n", GtConfig->GraphicsConfigPtr));
   DEBUG ((DEBUG_INFO, "------------------------ VTD_CONFIG -----------------\n"));
   DEBUG ((DEBUG_INFO, " Revision : %d\n", Vtd->Header.Revision));
-  ASSERT (Vtd->Header.Revision == VTD_CONFIG_REVISION);
+  ASSERT (Vtd->Header.Revision >= VTD_CONFIG_REVISION);
   DEBUG ((DEBUG_INFO, " VtdDisable : 0x%x\n", Vtd->VtdDisable));
   DEBUG ((DEBUG_INFO, " X2ApicOptOut : 0x%x\n", Vtd->X2ApicOptOut));
   DEBUG ((DEBUG_INFO, " VtdBaseAddress[%d] :", SA_VTD_ENGINE_NUMBER));

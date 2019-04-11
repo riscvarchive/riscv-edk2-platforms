@@ -2,7 +2,7 @@
   This file is PeiSiPolicyLib library creates default settings of RC
   Policy and installs RC Policy PPI.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -196,8 +196,6 @@ DumpSiPolicy (
 
 /**
   SiInstallPolicyPpi installs SiPolicyPpi.
-  While installed, RC assumes the Policy is ready and finalized. So please update and override
-  any setting before calling this function.
 
   @param[in] SiPolicyPpi         The pointer to Silicon Policy PPI instance
 
@@ -226,11 +224,56 @@ SiInstallPolicyPpi (
   Status = GetConfigBlock ((VOID *) SiPolicyPpi, &gSiConfigGuid, (VOID *) &SiConfig);
   ASSERT_EFI_ERROR (Status);
 
-  DEBUG ((DEBUG_INFO, "Dump Silicon Policy update by Platform...\n"));
-  DumpSiPolicy (SiPolicyPpi);
-
   //
   // Install Silicon Policy PPI
+  //
+  Status = PeiServicesInstallPpi (SiPolicyPpiDesc);
+  ASSERT_EFI_ERROR (Status);
+  return Status;
+}
+
+/**
+  SiInstallPolicyReadyPpi installs SiPolicyReadyPpi.
+  While installed, RC assumes the Policy is ready and finalized. So please update and override
+  any setting before calling this function.
+
+  @retval EFI_SUCCESS            The policy is installed.
+  @retval EFI_OUT_OF_RESOURCES   Insufficient resources to create buffer
+**/
+EFI_STATUS
+EFIAPI
+SiInstallPolicyReadyPpi (
+  VOID
+  )
+{
+  EFI_STATUS             Status;
+  EFI_PEI_PPI_DESCRIPTOR *SiPolicyPpiDesc;
+  SI_POLICY_PPI          *SiPolicy;
+
+  SiPolicyPpiDesc = (EFI_PEI_PPI_DESCRIPTOR *) AllocateZeroPool (sizeof (EFI_PEI_PPI_DESCRIPTOR));
+  if (SiPolicyPpiDesc == NULL) {
+    ASSERT (FALSE);
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  SiPolicyPpiDesc->Flags = EFI_PEI_PPI_DESCRIPTOR_PPI | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST;
+  SiPolicyPpiDesc->Guid  = &gSiPolicyReadyPpiGuid;
+  SiPolicyPpiDesc->Ppi   = NULL;
+
+  SiPolicy = NULL;
+  Status = PeiServicesLocatePpi (
+             &gSiPolicyPpiGuid,
+             0,
+             NULL,
+             (VOID **)&SiPolicy
+             );
+  ASSERT_EFI_ERROR(Status);
+
+  DEBUG ((DEBUG_INFO, "Dump Silicon Policy update by Platform...\n"));
+  DumpSiPolicy (SiPolicy);
+
+  //
+  // Install Silicon Policy Ready PPI
   //
   Status = PeiServicesInstallPpi (SiPolicyPpiDesc);
   ASSERT_EFI_ERROR (Status);

@@ -1,7 +1,7 @@
 /** @file
   This file provide services for DXE phase policy default initialization
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -38,7 +38,7 @@ SaPrintPolicyProtocol (
 
   DEBUG ((DEBUG_INFO, "\n------------------------ SA Policy (DXE) print BEGIN -----------------\n"));
   DEBUG ((DEBUG_INFO, "Revision : %x\n", SaPolicy->TableHeader.Header.Revision));
-  ASSERT (SaPolicy->TableHeader.Header.Revision == SA_POLICY_PROTOCOL_REVISION);
+  ASSERT (SaPolicy->TableHeader.Header.Revision >= SA_POLICY_PROTOCOL_REVISION);
   DEBUG ((DEBUG_INFO, "------------------------ SA_MISC_CONFIGURATION -----------------\n"));
   DEBUG ((DEBUG_INFO, " EnableAbove4GBMmio : %x\n", MiscDxeConfig->EnableAbove4GBMmio));
   DEBUG ((DEBUG_INFO, "\n------------------------ SA Policy (DXE) print END -----------------\n"));

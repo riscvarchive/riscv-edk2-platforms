@@ -1,7 +1,7 @@
 /** @file
   This file is PeiCpuPolicy library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -13,128 +13,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/ConfigBlockLib.h>
 #include <Library/PostCodeLib.h>
 
-#ifndef FSP_FLAG
-/**
-  Get the next microcode patch pointer.
-
-  @param[in, out] MicrocodeData - Input is a pointer to the last microcode patch address found,
-                                  and output points to the next patch address found.
-
-  @retval EFI_SUCCESS           - Patch found.
-  @retval EFI_NOT_FOUND         - Patch not found.
-**/
-EFI_STATUS
-EFIAPI
-RetrieveMicrocode (
-  IN OUT CPU_MICROCODE_HEADER **MicrocodeData
-  )
-{
-  UINTN                MicrocodeStart;
-  UINTN                MicrocodeEnd;
-  UINTN                TotalSize;
-
-  if ((FixedPcdGet32 (PcdFlashMicrocodeFvBase) == 0) || (FixedPcdGet32 (PcdFlashMicrocodeFvSize) == 0)) {
-    return EFI_NOT_FOUND;
-  }
-
-  ///
-  /// Microcode binary in SEC
-  ///
-  MicrocodeStart = (UINTN) FixedPcdGet32 (PcdFlashMicrocodeFvBase) +
-          ((EFI_FIRMWARE_VOLUME_HEADER *) (UINTN) FixedPcdGet32 (PcdFlashMicrocodeFvBase))->HeaderLength +
-          sizeof (EFI_FFS_FILE_HEADER);
-
-  MicrocodeEnd = (UINTN) FixedPcdGet32 (PcdFlashMicrocodeFvBase) + (UINTN) FixedPcdGet32 (PcdFlashMicrocodeFvSize);
-
-  if (*MicrocodeData == NULL) {
-    *MicrocodeData = (CPU_MICROCODE_HEADER *) (UINTN) MicrocodeStart;
-  } else {
-    if (*MicrocodeData < (CPU_MICROCODE_HEADER *) (UINTN) MicrocodeStart) {
-      DEBUG ((DEBUG_INFO, "[CpuPolicy]*MicrocodeData < MicrocodeStart \n"));
-      return EFI_NOT_FOUND;
-    }
-
-    TotalSize = (UINTN) ((*MicrocodeData)->TotalSize);
-    if (TotalSize == 0) {
-      TotalSize = 2048;
-    }
-
-    *MicrocodeData = (CPU_MICROCODE_HEADER *) ((UINTN)*MicrocodeData + TotalSize);
-    if (*MicrocodeData >= (CPU_MICROCODE_HEADER *) (UINTN) (MicrocodeEnd) || (*MicrocodeData)->TotalSize == (UINT32) -1) {
-      DEBUG ((DEBUG_INFO, "[CpuPolicy]*MicrocodeData >= MicrocodeEnd \n"));
-      return EFI_NOT_FOUND;
-    }
-  }
-  return EFI_SUCCESS;
-}
-
-/**
-  Get the microcode patch pointer.
-
-  @retval EFI_PHYSICAL_ADDRESS - Address of the microcode patch, or NULL if not found.
-**/
-EFI_PHYSICAL_ADDRESS
-PlatformCpuLocateMicrocodePatch (
-  VOID
-  )
-{
-  EFI_STATUS           Status;
-  CPU_MICROCODE_HEADER *MicrocodeData;
-  EFI_CPUID_REGISTER   Cpuid;
-  UINT32               UcodeRevision;
-  UINTN                MicrocodeBufferSize;
-  VOID                 *MicrocodeBuffer = NULL;
-
-  AsmCpuid (
-    CPUID_VERSION_INFO,
-    &Cpuid.RegEax,
-    &Cpuid.RegEbx,
-    &Cpuid.RegEcx,
-    &Cpuid.RegEdx
-    );
-
-  UcodeRevision = GetCpuUcodeRevision ();
-  MicrocodeData = NULL;
-  while (TRUE) {
-    ///
-    /// Find the next patch address
-    ///
-    Status = RetrieveMicrocode (&MicrocodeData);
-    DEBUG ((DEBUG_INFO, "MicrocodeData = %x\n", MicrocodeData));
-
-    if (Status != EFI_SUCCESS) {
-      break;
-    } else if (CheckMicrocode (Cpuid.RegEax, MicrocodeData, &UcodeRevision)) {
-      break;
-    }
-  }
-
-  if (EFI_ERROR (Status)) {
-    return (EFI_PHYSICAL_ADDRESS) (UINTN) NULL;
-  }
-
-  ///
-  /// Check that microcode patch size is <= 128K max size,
-  /// then copy the patch from FV to temp buffer for faster access.
-  ///
-  MicrocodeBufferSize = (UINTN) MicrocodeData->TotalSize;
-
-  if (MicrocodeBufferSize <= MAX_MICROCODE_PATCH_SIZE) {
-    MicrocodeBuffer = AllocatePages (EFI_SIZE_TO_PAGES (MicrocodeBufferSize));
-    if (MicrocodeBuffer != NULL) {
-      DEBUG(( DEBUG_INFO, "Copying Microcode to temp buffer.\n"));
-      CopyMem (MicrocodeBuffer, MicrocodeData, MicrocodeBufferSize);
-
-      return (EFI_PHYSICAL_ADDRESS) (UINTN) MicrocodeBuffer;
-    } else {
-      DEBUG(( DEBUG_ERROR, "Failed to allocate enough memory for Microcode Patch.\n"));
-    }
-  } else {
-    DEBUG(( DEBUG_ERROR, "Microcode patch size is greater than max allowed size of 128K.\n"));
-  }
-  return (EFI_PHYSICAL_ADDRESS) (UINTN) NULL;
-}
-#endif
 
 /**
   Load Config block default
@@ -158,9 +36,12 @@ LoadCpuConfigDefault (
   CpuConfig->AesEnable             = CPU_FEATURE_ENABLE;
   CpuConfig->EnableRsr             = CPU_FEATURE_ENABLE;
   CpuConfig->SmmbaseSwSmiNumber    = (UINTN) PcdGet8 (PcdSmmbaseSwSmi);
-#ifndef FSP_FLAG
-  CpuConfig->MicrocodePatchAddress = PlatformCpuLocateMicrocodePatch ();
-#endif
+  //
+  // This function is shared by both non-FSP and FSP scenarios and always executed unconditionally.
+  // Since FSP/silicon code should not unconditionally access any hardcoding flash regions (that region might not be accessible
+  // in unknown platforms), the microcode location searching code should be moved to outside silicon code scope.
+  //
+  CpuConfig->MicrocodePatchAddress = 0;
 }
 
 

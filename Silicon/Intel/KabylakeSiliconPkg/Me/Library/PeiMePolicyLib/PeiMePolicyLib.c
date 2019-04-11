@@ -1,7 +1,7 @@
 /** @file
   This file is PeiMePolicy library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -97,7 +97,7 @@ PrintMePeiPreMemConfig (
   DEBUG_CODE_BEGIN ();
   DEBUG ((DEBUG_INFO, "------------------------ ME_PEI_PREMEM_CONFIG -----------------\n"));
   DEBUG ((DEBUG_INFO, " Revision                  : 0x%x\n", MePeiPreMemConfig->Header.Revision));
-  ASSERT (MePeiPreMemConfig->Header.Revision == ME_PEI_PREMEM_CONFIG_REVISION);
+  ASSERT (MePeiPreMemConfig->Header.Revision >= ME_PEI_PREMEM_CONFIG_REVISION);
 
   DEBUG ((DEBUG_INFO, " HeciTimeouts              : 0x%x\n", MePeiPreMemConfig->HeciTimeouts));
   DEBUG ((DEBUG_INFO, " DidInitStat               : 0x%x\n", MePeiPreMemConfig->DidInitStat));
@@ -129,7 +129,7 @@ PrintMePeiConfig (
   DEBUG_CODE_BEGIN ();
   DEBUG ((DEBUG_INFO, "------------------------ ME_PEI_CONFIG -----------------\n"));
   DEBUG ((DEBUG_INFO, " Revision                  : 0x%x\n", MePeiConfig->Header.Revision));
-  ASSERT (MePeiConfig->Header.Revision == ME_PEI_CONFIG_REVISION);
+  ASSERT (MePeiConfig->Header.Revision >= ME_PEI_CONFIG_REVISION);
 
   DEBUG ((DEBUG_INFO, " EndOfPostMessage          : 0x%x\n", MePeiConfig->EndOfPostMessage));
   DEBUG ((DEBUG_INFO, " Heci3Enabled              : 0x%x\n", MePeiConfig->Heci3Enabled));

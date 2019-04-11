@@ -1,7 +1,7 @@
 /** @file
   Header file for the PolicyInitPei PEIM.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -12,6 +12,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <PiPei.h>
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Ppi/PeiPreMemSiDefaultPolicyInit.h>
+#include <Ppi/PeiSiDefaultPolicyInit.h>
 
 #include "PeiSiPolicyInit.h"
 
