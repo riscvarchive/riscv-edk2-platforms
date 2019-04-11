@@ -1,7 +1,7 @@
 /** @file
   System reset library services.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -251,7 +251,6 @@ DxeRuntimePchGlobalReset (
 /**
   Calling this function causes the system to enter a power state for platform specific.
 
-  @param[in] ResetStatus          The status code for the reset.
   @param[in] DataSize             The size of ResetData in bytes.
   @param[in] ResetData            Optional element used to introduce a platform specific reset.
                                   The exact type of the reset is defined by the EFI_GUID that follows
@@ -261,7 +260,6 @@ DxeRuntimePchGlobalReset (
 VOID
 EFIAPI
 ResetPlatformSpecific (
-  IN EFI_STATUS       ResetStatus,
   IN UINTN            DataSize,
   IN VOID             *ResetData OPTIONAL
   )
@@ -296,6 +294,49 @@ EnterS3WithImmediateWake (
   )
 {
   ASSERT (FALSE);
+}
+
+/**
+  The ResetSystem function resets the entire platform.
+
+  @param[in] ResetType      The type of reset to perform.
+  @param[in] ResetStatus    The status code for the reset.
+  @param[in] DataSize       The size, in bytes, of ResetData.
+  @param[in] ResetData      For a ResetType of EfiResetCold, EfiResetWarm, or EfiResetShutdown
+                            the data buffer starts with a Null-terminated string, optionally
+                            followed by additional binary data. The string is a description
+                            that the caller may use to further indicate the reason for the
+                            system reset.
+**/
+VOID
+EFIAPI
+ResetSystem (
+  IN EFI_RESET_TYPE               ResetType,
+  IN EFI_STATUS                   ResetStatus,
+  IN UINTN                        DataSize,
+  IN VOID                         *ResetData OPTIONAL
+  )
+{
+  switch (ResetType) {
+  case EfiResetWarm:
+    ResetWarm ();
+    break;
+
+  case EfiResetCold:
+    ResetCold ();
+    break;
+
+  case EfiResetShutdown:
+    ResetShutdown ();
+    return;
+
+  case EfiResetPlatformSpecific:
+    ResetPlatformSpecific (DataSize, ResetData);
+    return;
+
+  default:
+    return;
+  }
 }
 
 /**
