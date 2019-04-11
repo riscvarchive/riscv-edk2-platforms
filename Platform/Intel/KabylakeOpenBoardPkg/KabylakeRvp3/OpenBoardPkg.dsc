@@ -248,6 +248,12 @@
       NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
 !endif
   }
+
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # In FSP API mode the policy has to be installed before FSP Wrapper updating UPD.
+  # Add policy as dependency for FSP Wrapper
+  #
   IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf {
     <LibraryClasses>
       SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPreMemSiliconPolicyInitLibDependency.inf
@@ -259,6 +265,26 @@
     #
     NULL|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/PeiSiliconPolicyNotifyLib/PeiPreMemSiliconPolicyNotifyLib.inf
   }
+!else
+  #
+  # In FSP Dispatch mode the policy will be installed after FSP-M dispatched. (only PrePolicy silicon-init executed)
+  # Do not add policy dependency and let FspmWrapper report FSP-M FV to dispatcher.
+  #
+  IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|MinPlatformPkg/PlatformInit/Library/SiliconPolicyInitLibNull/SiliconPolicyInitLibNull.inf
+  }
+  #
+  # FSP Dispatch mode will consume DefaultPolicyInit PPI produced by FSP to install a default policy PPI.
+  # Similar as UPD in FSP API mode, DefaultPolicyInit PPI in Dispatch mode can generate different policy structure
+  # for different FSP revisions, but they must maintain backward compatibility.
+  #
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLib/PeiPreMemSiliconPolicyInitLib.inf
+  }
+!endif
+
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
@@ -268,11 +294,35 @@
 !endif
   }
 
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # In FSP API mode the policy has to be installed before FSP Wrapper updating UPD.
+  # Add policy as dependency for FSP Wrapper
+  #
   IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf {
     <LibraryClasses>
       SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPostMemSiliconPolicyInitLibDependency.inf
   }
   $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
+!else
+  #
+  # In FSP Dispatch mode the policy will be installed after FSP-S dispatched. (only PrePolicy silicon-init executed)
+  # Do not add policy dependency and let FspsWrapper report FSP-S FV to dispatcher.
+  #
+  IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|MinPlatformPkg/PlatformInit/Library/SiliconPolicyInitLibNull/SiliconPolicyInitLibNull.inf
+  }
+  #
+  # FSP Dispatch mode will consume DefaultPolicyInit PPI produced by FSP to install a default policy PPI.
+  # Similar as UPD in FSP API mode, DefaultPolicyInit PPI in Dispatch mode can generate different policy structure
+  # for different FSP revisions, but they must maintain backward compatibility.
+  #
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf {
+    <LibraryClasses>
+      SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLib/PeiPostMemSiliconPolicyInitLib.inf
+  }
+!endif
 
 #
 # Security
