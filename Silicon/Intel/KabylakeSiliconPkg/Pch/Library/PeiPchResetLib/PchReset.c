@@ -1,7 +1,7 @@
 /** @file
   PCH RESET PEIM DRIVER.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -27,7 +27,6 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 VOID
 EFIAPI
 ResetPlatformSpecific (
-  IN EFI_STATUS       ResetStatus,
   IN UINTN            DataSize,
   IN VOID             *ResetData OPTIONAL
   );
@@ -67,7 +66,7 @@ ResetSystem (
     return;
 
   case EfiResetPlatformSpecific:
-    ResetPlatformSpecific (ResetStatus, DataSize, ResetData);
+    ResetPlatformSpecific (DataSize, ResetData);
     return;
 
   default:
@@ -115,7 +114,7 @@ Reset (
     case PchGlobalReset:
       CopyMem (&ResetData.Guid, &gPchGlobalResetGuid, sizeof (EFI_GUID));
       StrCpyS (ResetData.Description, PCH_RESET_DATA_STRING_MAX_LENGTH, PCH_PLATFORM_SPECIFIC_RESET_STRING);
-      ResetPlatformSpecific (EFI_SUCCESS, sizeof (PCH_RESET_DATA), &ResetData);
+      ResetPlatformSpecific (sizeof (PCH_RESET_DATA), &ResetData);
       break;
 
     default:
