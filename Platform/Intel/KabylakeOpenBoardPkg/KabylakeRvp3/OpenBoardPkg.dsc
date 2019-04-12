@@ -15,7 +15,6 @@
   DEFINE      PLATFORM_PACKAGE                = MinPlatformPkg
   DEFINE      PLATFORM_SI_PACKAGE             = KabylakeSiliconPkg
   DEFINE      PLATFORM_SI_BIN_PACKAGE         = KabylakeSiliconBinPkg
-  DEFINE      PLATFORM_FSP_BIN_PACKAGE        = AmberLakeFspBinPkg
   DEFINE      PLATFORM_BOARD_PACKAGE          = KabylakeOpenBoardPkg
   DEFINE      BOARD                           = KabylakeRvp3
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
@@ -38,6 +37,22 @@
   # AmberLakeFspBinPkg supports both API and Dispatch modes
   #
   DEFINE      PLATFORM_FSP_BIN_PACKAGE        = AmberLakeFspBinPkg
+!endif
+
+[PcdsDynamicExDefault.common.DEFAULT]
+!if gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode == TRUE
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 0
+  #
+  # Include FSP DynamicEx PCD settings in Dispatch mode
+  #
+  !include $(PLATFORM_FSP_BIN_PACKAGE)/FspPcds.dsc
+
+  #
+  # Override some FSP consumed PCD default value to match platform requirement.
+  #
+  gSiPkgTokenSpaceGuid.PcdSiPciExpressBaseAddress |gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gSiPkgTokenSpaceGuid.PcdSiPciExpressRegionLength|gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength
+!endif
 !endif
 
 ################################################################################

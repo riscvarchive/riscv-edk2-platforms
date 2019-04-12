@@ -1,7 +1,7 @@
 ### @file
 # Component information file for the ThunderBolt Smm module.
 #
-# Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -44,7 +44,6 @@
 
 [Pcd]
   gBoardModuleTokenSpaceGuid.PcdSwSmiDTbtEnumerate ## CONSUMES
-  gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength      ## CONSUMES
 
 [FixedPcd]
   gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress       ## CONSUMES

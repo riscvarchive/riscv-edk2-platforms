@@ -48,7 +48,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
-  gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
+  gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF00000
@@ -147,6 +147,15 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFE00000
 
+  ## Specifies timeout value in microseconds for the BSP to detect all APs for the first time.
+  # @Prompt Timeout for the BSP to detect all APs for the first time.
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuApInitTimeOutInMicroSeconds|1000
+
+!if (gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode == FALSE) || (gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1)
+  #
+  # In non-FSP build (EDK2 build) or FSP API mode below PCD are FixedAtBuild
+  # (They will be DynamicEx in FSP Dispatch mode)
+  #
   ## Specifies max supported number of Logical Processors.
   # @Prompt Configure max supported number of Logical Processorss
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|12
@@ -154,10 +163,6 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   ## Specifies the size of the microcode Region.
   # @Prompt Microcode Region size.
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize|0
-
-  ## Specifies timeout value in microseconds for the BSP to detect all APs for the first time.
-  # @Prompt Timeout for the BSP to detect all APs for the first time.
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuApInitTimeOutInMicroSeconds|1000
 
   ## Specifies the AP wait loop state during POST phase.
   #  The value is defined as below.
@@ -167,6 +172,15 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   # @Prompt The AP wait loop state.
   gUefiCpuPkgTokenSpaceGuid.PcdCpuApLoopMode|2
 
+  gSiPkgTokenSpaceGuid.PcdSiPciExpressBaseAddress|gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gSiPkgTokenSpaceGuid.PcdSiPciExpressRegionLength|gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength
+!else
+  #
+  # FSP Dispatch mode requires more platform memory as boot loader and FSP sharing the same
+  # platform memory.
+  #
+  gSiPkgTokenSpaceGuid.PcdPeiMinMemorySize|0x5500000
+!endif
 
   #
   # The PCDs are used to control the Windows SMM Security Mitigations Table - Protection Flags
@@ -294,4 +308,3 @@ gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax | 26
 gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd | 100
 gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax | 28
 gBoardModuleTokenSpaceGuid.PcdPchPcieRootPortHpe| 0x00000001
-
