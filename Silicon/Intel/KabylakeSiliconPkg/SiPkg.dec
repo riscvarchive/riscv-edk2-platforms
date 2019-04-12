@@ -575,8 +575,12 @@ gSiPkgTokenSpaceGuid.PcdSerialIoUartInputClock  |1843200|UINT32|0x00100003
 ## PCI Express MMIO region length
 ## Valid settings: 0x10000000/256MB, 0x8000000/128MB, 0x4000000/64MB
 ##
-gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000|UINT32|0x0010004
-
+gSiPkgTokenSpaceGuid.PcdSiPciExpressRegionLength|0x10000000|UINT32|0x0010004
+##
+## Typically this should be the same with gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress.
+## This PCD is added for supporting different PCD type in different phases.
+##
+gSiPkgTokenSpaceGuid.PcdSiPciExpressBaseAddress |0xE0000000|UINT64|0x0010008
 
 [PcdsFeatureFlag]
 ##

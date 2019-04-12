@@ -47,7 +47,11 @@ gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable         |FALSE
 
 [PcdsFixedAtBuild.common]
 gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress    |0xE0000000
-gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength       |0x10000000
+gSiPkgTokenSpaceGuid.PcdSiPciExpressRegionLength     |0x10000000
+#
+# This DSC mainly for GreenH Silicon code build so PciExpressBaseAddress can be FixedAtBuild
+#
+gSiPkgTokenSpaceGuid.PcdSiPciExpressBaseAddress|gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
 
 [Defines]
   PLATFORM_NAME = KabylakeSiliconPkg

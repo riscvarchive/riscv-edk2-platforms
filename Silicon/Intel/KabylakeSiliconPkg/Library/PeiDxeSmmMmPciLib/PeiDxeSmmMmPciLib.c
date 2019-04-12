@@ -1,7 +1,7 @@
 /** @file
   This file contains routines that get PCI Express Address
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -27,5 +27,9 @@ MmPciBase (
 {
   ASSERT ((Bus <= 0xFF) && (Device <= 0x1F) && (Function <= 0x7));
 
-  return ((UINTN) PcdGet64 (PcdPciExpressBaseAddress) + (UINTN) (Bus << 20) + (UINTN) (Device << 15) + (UINTN) (Function << 12));
+#ifdef FSP_FLAG
+  return ((UINTN) PcdGet64 (PcdSiPciExpressBaseAddress) + (UINTN) (Bus << 20) + (UINTN) (Device << 15) + (UINTN) (Function << 12));
+#else
+  return ((UINTN) PcdGet64 (PcdPciExpressBaseAddress)   + (UINTN) (Bus << 20) + (UINTN) (Device << 15) + (UINTN) (Function << 12));
+#endif
 }
