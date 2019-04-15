@@ -6,6 +6,7 @@
   Copyright (c) 2008 - 2009, Apple Inc. All rights reserved.<BR>
   Copyright (c) 2013, ARM Ltd. All rights reserved.<BR>
   Copyright (c) 2017, Linaro Ltd. All rights reserved.<BR>
+  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
 
   This program and the accompanying materials
   are licensed and made available under the terms and conditions of the BSD License
@@ -108,4 +109,47 @@ ResetPlatformSpecific (
   )
 {
   ResetCold ();
+}
+
+/**
+  The ResetSystem function resets the entire platform.
+
+  @param[in] ResetType      The type of reset to perform.
+  @param[in] ResetStatus    The status code for the reset.
+  @param[in] DataSize       The size, in bytes, of ResetData.
+  @param[in] ResetData      For a ResetType of EfiResetCold, EfiResetWarm, or EfiResetShutdown
+                            the data buffer starts with a Null-terminated string, optionally
+                            followed by additional binary data. The string is a description
+                            that the caller may use to further indicate the reason for the
+                            system reset.
+**/
+VOID
+EFIAPI
+ResetSystem (
+  IN EFI_RESET_TYPE               ResetType,
+  IN EFI_STATUS                   ResetStatus,
+  IN UINTN                        DataSize,
+  IN VOID                         *ResetData OPTIONAL
+  )
+{
+  switch (ResetType) {
+  case EfiResetWarm:
+    ResetWarm ();
+    break;
+
+  case EfiResetCold:
+    ResetCold ();
+    break;
+
+  case EfiResetShutdown:
+    ResetShutdown ();
+    return;
+
+  case EfiResetPlatformSpecific:
+    ResetPlatformSpecific (DataSize, ResetData);
+    return;
+
+  default:
+    return;
+  }
 }
