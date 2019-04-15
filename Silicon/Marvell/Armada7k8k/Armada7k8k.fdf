@@ -220,6 +220,11 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   # ACPI support
   INF MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
+
+!if $(X64EMU_ENABLE) == TRUE
+  # PE/COFF emulator for X64 option ROMs taken from edk2-non-osi
+  INF Emulator/X86EmulatorDxe/X86EmulatorDxe.inf
+!endif
 !endif
 
 !include $(BOARD_DXE_FV_COMPONENTS)
