@@ -17,8 +17,9 @@
 ################################################################################
 [Defines]
 
-DEFINE NUM_CORES    = 8
-DEFINE DO_FLASHER   = FALSE
+DEFINE NUM_CORES      = 8
+DEFINE DO_FLASHER     = FALSE
+DEFINE X64EMU_ENABLE  = FALSE
 
   PLATFORM_NAME                  = Overdrive
   PLATFORM_GUID                  = B2296C02-9DA1-4CD1-BD48-4D4F0F1276EB

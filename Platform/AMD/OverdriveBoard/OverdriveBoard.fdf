@@ -159,6 +159,9 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
   INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+!if $(X64EMU_ENABLE) == TRUE
+  INF Emulator/X86EmulatorDxe/X86EmulatorDxe.inf
+!endif
 
   #
   # AHCI Support
