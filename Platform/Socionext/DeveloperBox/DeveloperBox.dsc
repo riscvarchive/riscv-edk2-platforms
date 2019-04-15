@@ -30,6 +30,7 @@
 
   DEFINE DEBUG_ON_UART1          = FALSE
   DEFINE SECURE_BOOT_ENABLE      = FALSE
+  DEFINE X64EMU_ENABLE           = FALSE
 
 !include Platform/Socionext/DeveloperBox/DeveloperBox.dsc.inc
 
