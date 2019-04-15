@@ -21,6 +21,8 @@
 
 #include "AcpiHeader.h"
 
+#define MV_UART_AS32(Address) { EFI_ACPI_5_0_SYSTEM_MEMORY, 32, 0, EFI_ACPI_5_0_BYTE, Address }
+
 EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE Spcr = {
   __ACPI_HEADER(EFI_ACPI_6_1_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_SIGNATURE,
                 EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE,
@@ -30,7 +32,7 @@ EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE Spcr = {
   { EFI_ACPI_RESERVED_BYTE,
     EFI_ACPI_RESERVED_BYTE,
     EFI_ACPI_RESERVED_BYTE },                                           // Reserved1[3]
-  ARM_GAS8 (FixedPcdGet64(PcdSerialRegisterBase)),                      // BaseAddress
+  MV_UART_AS32 (FixedPcdGet64(PcdSerialRegisterBase)),                  // BaseAddress
   EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERRUPT_TYPE_GIC,    // InterruptType
   0,                                                                    // Irq
   51,                                                                   // GlobalSystemInterrupt
