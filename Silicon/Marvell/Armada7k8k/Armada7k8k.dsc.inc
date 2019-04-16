@@ -454,7 +454,7 @@
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
-  ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 
   # Platform Initialization
   Silicon/Marvell/Drivers/BoardDesc/MvBoardDescDxe.inf
