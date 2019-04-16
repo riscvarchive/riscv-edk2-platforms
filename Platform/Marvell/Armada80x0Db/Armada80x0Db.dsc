@@ -137,7 +137,7 @@
   # 4: PCIE1         5 Gbps
   # 5: PCIE2         5 Gbps
   gMarvellTokenSpaceGuid.PcdChip1ComPhyTypes|{ $(CP_PCIE0), $(CP_SATA2), $(CP_SFI), $(CP_SATA3), $(CP_PCIE1), $(CP_PCIE2) }
-  gMarvellTokenSpaceGuid.PcdChip1ComPhySpeeds|{ $(CP_5G), $(CP_5G), $(CP_5_15625G), $(CP_5G), $(CP_5G), $(CP_5G) }
+  gMarvellTokenSpaceGuid.PcdChip1ComPhySpeeds|{ $(CP_5G), $(CP_5G), $(CP_10_3125G), $(CP_5G), $(CP_5G), $(CP_5G) }
 
   #UtmiPhy
   gMarvellTokenSpaceGuid.PcdUtmiControllersEnabled|{ 0x1, 0x1, 0x1, 0x0 }
