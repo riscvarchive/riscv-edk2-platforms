@@ -157,7 +157,7 @@ ArmadaSoCDescI2cGet (
 
   CpCount = FixedPcdGet8 (PcdMaxCpCount);
 
-  *DescCount = CpCount * MV_SOC_I2C_PER_CP_COUNT;
+  *DescCount = CpCount * MV_SOC_I2C_PER_CP_COUNT + MV_SOC_I2C_PER_AP_COUNT;
   Desc = AllocateZeroPool (*DescCount * sizeof (MV_SOC_I2C_DESC));
   if (Desc == NULL) {
     DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
@@ -165,6 +165,9 @@ ArmadaSoCDescI2cGet (
   }
 
   *I2cDesc = Desc;
+
+  Desc->I2cBaseAddress = MV_SOC_I2C_AP_BASE;
+  Desc++;
 
   for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
     for (Index = 0; Index < MV_SOC_I2C_PER_CP_COUNT; Index++) {

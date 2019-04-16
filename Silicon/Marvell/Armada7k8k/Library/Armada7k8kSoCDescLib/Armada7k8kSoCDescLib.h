@@ -56,8 +56,12 @@
 //
 // Platform description of I2C controllers
 //
-#define MV_SOC_I2C_PER_CP_COUNT          2
-#define MV_SOC_I2C_BASE(I2c)             (0x701000 + ((I2c) * 0x100))
+#define MV_SOC_I2C_PER_AP_COUNT          1
+#define MV_SOC_I2C_AP_BASE               (MV_SOC_AP806_BASE + 0x511000)
+#define MV_SOC_I2C_PER_CP_COUNT          3
+#define MV_SOC_I2C_BASE(I2c)             ((I2c < 2) ? \
+                                          (0x701000 + (I2c) * 0x100) : \
+                                          0x211000)
 
 //
 // Platform description of ICU (Interrupt Consolidation Unit) controllers
