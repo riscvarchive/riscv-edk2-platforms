@@ -250,6 +250,11 @@ LibRtcInitialize (
 
   /* Update RTC-MBUS bridge timing parameters */
   MmioAndThenOr32 (
+          mArmadaRtcBase + RTC_BRIDGE_TIMING_CTRL0_REG_OFFS,
+          ~(RTC_WRITE_SETUP_DELAY_MASK | RTC_WRITE_PERIOD_DELAY_MASK),
+          (RTC_WRITE_SETUP_DELAY_DEFAULT | RTC_WRITE_PERIOD_DELAY_DEFAULT)
+          );
+  MmioAndThenOr32 (
           mArmadaRtcBase + RTC_BRIDGE_TIMING_CTRL1_REG_OFFS,
           ~RTC_READ_OUTPUT_DELAY_MASK,
           RTC_READ_OUTPUT_DELAY_DEFAULT
