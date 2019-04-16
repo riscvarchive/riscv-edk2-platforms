@@ -48,6 +48,7 @@
 
 [Protocols]
   gEfiAcpiTableProtocolGuid                     ## CONSUMES
+  gHisiInstalledAcpiProtocolGuid                ## CONSUMES
 
 [Guids]
   gHisiEfiMemoryMapGuid

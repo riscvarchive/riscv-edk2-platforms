@@ -68,5 +68,5 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorRevision
 
 [Depex]
-  gEfiAcpiTableProtocolGuid AND gEfiAcpiSdtProtocolGuid AND gHisiBoardNicProtocolGuid
+  gEfiAcpiTableProtocolGuid AND gEfiAcpiSdtProtocolGuid AND gHisiBoardNicProtocolGuid AND gHisiInstalledAcpiProtocolGuid
 

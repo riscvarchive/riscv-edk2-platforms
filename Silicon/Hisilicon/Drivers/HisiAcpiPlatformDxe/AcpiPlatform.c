@@ -264,6 +264,16 @@ AcpiPlatformEntryPoint (
     }
   }
 
-  return EFI_SUCCESS;
+  Status = gBS->InstallProtocolInterface (
+                  &ImageHandle,
+                  &gHisiInstalledAcpiProtocolGuid,
+                  EFI_NATIVE_INTERFACE,
+                  NULL
+                  );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Install protocol %r\n", Status));
+  }
+
+  return Status;
 }
 
