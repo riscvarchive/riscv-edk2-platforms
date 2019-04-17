@@ -43,11 +43,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
 /* Helper macros for passing ComPhy parameters to the EL3 */
+#define COMPHY_CALLED_FROM_FW       (1 << 21)
 #define COMPHY_FW_MODE_FORMAT(mode) (mode << 12)
 #define COMPHY_FW_FORMAT(mode, idx, speeds) \
                                     ((mode << 12) | (idx << 8) | (speeds << 2))
 #define COMPHY_FW_PCIE_FORMAT(pcie_width, mode, speeds) \
-                      ((pcie_width << 18) | COMPHY_FW_FORMAT (mode, 0, speeds))
+                              (COMPHY_CALLED_FROM_FW | ((pcie_width) << 18) | \
+                               COMPHY_FW_FORMAT(mode, 0, speeds))
 
 /* Comphy speed */
 #define COMPHY_SPEED_1_25G          0
