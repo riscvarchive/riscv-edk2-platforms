@@ -25,6 +25,7 @@
   PlatInitDxe.c
 
 [Packages]
+  ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
@@ -32,6 +33,7 @@
 
 [LibraryClasses]
   ArmadaIcuLib
+  ArmSmcLib
   ComPhyLib
   DebugLib
   MppLib
@@ -39,6 +41,10 @@
   TimerLib
   UefiDriverEntryPoint
   UtmiPhyLib
+
+[Guids]
+  gEdkiiPlatformHasAcpiGuid
+  gEfiEventReadyToBootGuid
 
 [Protocols]
   gMarvellPlatformInitCompleteProtocolGuid    ## PRODUCES
