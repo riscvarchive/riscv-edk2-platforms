@@ -18,7 +18,6 @@
 [Defines]
 
 DEFINE NUM_CORES      = 8
-DEFINE DO_FLASHER     = FALSE
 DEFINE X64EMU_ENABLE  = FALSE
 
   PLATFORM_NAME                  = Overdrive
@@ -746,13 +745,6 @@ DEFINE X64EMU_ENABLE  = FALSE
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
-
-!if $(DO_FLASHER) == TRUE
-  Silicon/AMD/Styx/Applications/StyxFlashUefi/StyxFlashUefi.inf {
-    <LibraryClasses>
-      ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
-  }
-!endif
 
   #
   # Firmware update

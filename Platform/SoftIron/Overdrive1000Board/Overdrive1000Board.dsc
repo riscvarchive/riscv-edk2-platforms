@@ -18,7 +18,6 @@
 [Defines]
 
 DEFINE NUM_CORES    = 4
-DEFINE DO_FLASHER   = FALSE
 
   PLATFORM_NAME                  = Overdrive1000
   PLATFORM_GUID                  = 36774DD7-20DE-4C5B-8722-f8861DFF1F16
@@ -668,10 +667,3 @@ DEFINE DO_FLASHER   = FALSE
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
-
-!if $(DO_FLASHER) == TRUE
-  Silicon/AMD/Styx/Applications/StyxFlashUefi/StyxFlashUefi.inf {
-    <LibraryClasses>
-      ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
-  }
-!endif
