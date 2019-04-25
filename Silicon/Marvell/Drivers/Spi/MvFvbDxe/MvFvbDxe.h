@@ -55,6 +55,7 @@ typedef struct {
 
   UINT32                              Signature;
 
+  BOOLEAN                             IsMemoryMapped;
   UINTN                               DeviceBaseAddress;
   UINTN                               RegionBaseAddress;
   UINTN                               Size;

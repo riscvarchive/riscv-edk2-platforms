@@ -52,6 +52,7 @@ STATIC CONST FVB_DEVICE mMvFvbFlashInstanceTemplate = {
 
   FVB_FLASH_SIGNATURE, // Signature
 
+  FALSE, // IsMemoryMapped ... NEED TO BE FILLED
   0, // DeviceBaseAddress ... NEED TO BE FILLED
   0, // RegionBaseAddress ... NEED TO BE FILLED
   SIZE_256KB, // Size
@@ -175,10 +176,13 @@ MvFvbInitFvAndVariableStoreHeaders (
   FirmwareVolumeHeader->Attributes = EFI_FVB2_READ_ENABLED_CAP |
                                      EFI_FVB2_READ_STATUS |
                                      EFI_FVB2_STICKY_WRITE |
-                                     EFI_FVB2_MEMORY_MAPPED |
                                      EFI_FVB2_ERASE_POLARITY |
                                      EFI_FVB2_WRITE_STATUS |
                                      EFI_FVB2_WRITE_ENABLED_CAP;
+
+  if (FlashInstance->IsMemoryMapped) {
+    FirmwareVolumeHeader->Attributes |= EFI_FVB2_MEMORY_MAPPED;
+  }
 
   FirmwareVolumeHeader->HeaderLength = sizeof (EFI_FIRMWARE_VOLUME_HEADER) +
                                        sizeof (EFI_FV_BLOCK_MAP_ENTRY);
@@ -349,9 +353,12 @@ MvFvbSetAttributes (
   EFI_FVB_ATTRIBUTES_2  OldAttributes;
   EFI_FVB_ATTRIBUTES_2  FlashFvbAttributes;
   EFI_FVB_ATTRIBUTES_2  UnchangedAttributes;
+  FVB_DEVICE           *FlashInstance;
   UINT32                Capabilities;
   UINT32                OldStatus;
   UINT32                NewStatus;
+
+  FlashInstance = INSTANCE_FROM_FVB_THIS (This);
 
   //
   // Obtain attributes from FVB header
@@ -369,11 +376,14 @@ MvFvbSetAttributes (
                         EFI_FVB2_WRITE_ENABLED_CAP  | \
                         EFI_FVB2_LOCK_CAP           | \
                         EFI_FVB2_STICKY_WRITE       | \
-                        EFI_FVB2_MEMORY_MAPPED      | \
                         EFI_FVB2_ERASE_POLARITY     | \
                         EFI_FVB2_READ_LOCK_CAP      | \
                         EFI_FVB2_WRITE_LOCK_CAP     | \
                         EFI_FVB2_ALIGNMENT;
+
+  if (FlashInstance->IsMemoryMapped) {
+    UnchangedAttributes |= EFI_FVB2_MEMORY_MAPPED;
+  }
 
   //
   // Some attributes of FV is read only can *not* be set
@@ -692,6 +702,7 @@ MvFvbWrite (
   IN        UINT8                                 *Buffer
   )
 {
+  EFI_STATUS    Status;
   FVB_DEVICE   *FlashInstance;
   UINTN         DataOffset;
 
@@ -701,10 +712,27 @@ MvFvbWrite (
                  FlashInstance->StartLba + Lba,
                  FlashInstance->Media.BlockSize);
 
-  return FlashInstance->SpiFlashProtocol->Write (&FlashInstance->SpiDevice,
-                                            DataOffset,
-                                            *NumBytes,
-                                            Buffer);
+  Status = FlashInstance->SpiFlashProtocol->Write (&FlashInstance->SpiDevice,
+                                              DataOffset,
+                                              *NumBytes,
+                                              Buffer);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Failed to write to Spi device\n",
+      __FUNCTION__));
+    return Status;
+  }
+
+  // Update shadow buffer
+  if (!FlashInstance->IsMemoryMapped) {
+    DataOffset = GET_DATA_OFFSET (FlashInstance->RegionBaseAddress + Offset,
+                   FlashInstance->StartLba + Lba,
+                   FlashInstance->Media.BlockSize);
+
+    CopyMem ((UINTN *)DataOffset, Buffer, *NumBytes);
+  }
+
+  return EFI_SUCCESS;
 }
 
 /**
@@ -975,6 +1003,9 @@ MvFvbConfigureFlashInstance (
   )
 {
   EFI_STATUS Status;
+  UINTN     *NumBytes;
+  UINTN     DataOffset;
+  UINTN     VariableSize, FtwWorkingSize, FtwSpareSize, MemorySize;
 
 
   // Locate SPI protocols
@@ -1009,25 +1040,62 @@ MvFvbConfigureFlashInstance (
   }
 
   // Fill remaining flash description
-  FlashInstance->DeviceBaseAddress = PcdGet64 (PcdSpiMemoryBase);
-  FlashInstance->RegionBaseAddress = FixedPcdGet64 (PcdFlashNvStorageVariableBase64);
-  FlashInstance->FvbOffset = FlashInstance->RegionBaseAddress -
-                             FlashInstance->DeviceBaseAddress;
-  FlashInstance->FvbSize = PcdGet32(PcdFlashNvStorageVariableSize) +
-                           PcdGet32(PcdFlashNvStorageFtwWorkingSize) +
-                           PcdGet32(PcdFlashNvStorageFtwSpareSize);
+  VariableSize = PcdGet32 (PcdFlashNvStorageVariableSize);
+  FtwWorkingSize = PcdGet32 (PcdFlashNvStorageFtwWorkingSize);
+  FtwSpareSize = PcdGet32 (PcdFlashNvStorageFtwSpareSize);
+
+  FlashInstance->IsMemoryMapped = PcdGetBool (PcdSpiMemoryMapped);
+  FlashInstance->FvbSize = VariableSize + FtwWorkingSize + FtwSpareSize;
+  FlashInstance->FvbOffset = PcdGet32 (PcdSpiVariableOffset);
 
   FlashInstance->Media.MediaId = 0;
   FlashInstance->Media.BlockSize = FlashInstance->SpiDevice.Info->SectorSize;
   FlashInstance->Media.LastBlock = FlashInstance->Size /
                                    FlashInstance->Media.BlockSize - 1;
 
+  if (FlashInstance->IsMemoryMapped) {
+    FlashInstance->DeviceBaseAddress = PcdGet64 (PcdSpiMemoryBase);
+    FlashInstance->RegionBaseAddress = PcdGet64 (PcdFlashNvStorageVariableBase64);
+  } else {
+    MemorySize = EFI_SIZE_TO_PAGES (FlashInstance->FvbSize);
+
+    // FaultTolerantWriteDxe requires memory to be aligned to FtwWorkingSize
+    FlashInstance->RegionBaseAddress = (UINTN) AllocateAlignedRuntimePages (MemorySize,
+                                                 SIZE_64KB);
+    if (FlashInstance->RegionBaseAddress == (UINTN) NULL) {
+        return EFI_OUT_OF_RESOURCES;
+    }
+
+    PcdSet64 (PcdFlashNvStorageVariableBase64,
+      (UINT64) FlashInstance->RegionBaseAddress);
+    PcdSet64 (PcdFlashNvStorageFtwWorkingBase64,
+      (UINT64) FlashInstance->RegionBaseAddress
+      + VariableSize);
+    PcdSet64 (PcdFlashNvStorageFtwSpareBase64,
+      (UINT64) FlashInstance->RegionBaseAddress
+      + VariableSize
+      + FtwWorkingSize);
+
+    // Fill the buffer with data from flash
+    DataOffset = GET_DATA_OFFSET (FlashInstance->FvbOffset,
+                   FlashInstance->StartLba,
+                   FlashInstance->Media.BlockSize);
+    *NumBytes = FlashInstance->FvbSize;
+    Status = FlashInstance->SpiFlashProtocol->Read (&FlashInstance->SpiDevice,
+                                                DataOffset,
+                                                *NumBytes,
+                                                (VOID *)FlashInstance->RegionBaseAddress);
+    if (EFI_ERROR (Status)) {
+      goto ErrorFreeAllocatedPages;
+    }
+  }
+
   Status = gBS->InstallMultipleProtocolInterfaces (&FlashInstance->Handle,
                   &gEfiDevicePathProtocolGuid, &FlashInstance->DevicePath,
                   &gEfiFirmwareVolumeBlockProtocolGuid, &FlashInstance->FvbProtocol,
                   NULL);
   if (EFI_ERROR (Status)) {
-    return Status;
+    goto ErrorFreeAllocatedPages;
   }
 
   Status = MvFvbPrepareFvHeader (FlashInstance);
@@ -1042,6 +1110,12 @@ ErrorPrepareFvbHeader:
          &gEfiDevicePathProtocolGuid,
          &gEfiFirmwareVolumeBlockProtocolGuid,
          NULL);
+
+ErrorFreeAllocatedPages:
+  if (!FlashInstance->IsMemoryMapped) {
+    FreeAlignedPages ((VOID *)FlashInstance->RegionBaseAddress,
+      MemorySize);
+  }
 
   return Status;
 }
@@ -1094,24 +1168,27 @@ MvFvbEntryPoint (
   //
   // Declare the Non-Volatile storage as EFI_MEMORY_RUNTIME
   //
-  RuntimeMmioRegionSize = mFvbDevice->FvbSize;
   RegionBaseAddress = mFvbDevice->RegionBaseAddress;
 
-  Status = gDS->AddMemorySpace (EfiGcdMemoryTypeMemoryMappedIo,
-                  RegionBaseAddress,
-                  RuntimeMmioRegionSize,
-                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: Failed to add memory space\n", __FUNCTION__));
-    goto ErrorAddSpace;
-  }
+  if (mFvbDevice->IsMemoryMapped) {
+    RuntimeMmioRegionSize = mFvbDevice->FvbSize;
+    Status = gDS->AddMemorySpace (EfiGcdMemoryTypeMemoryMappedIo,
+                    RegionBaseAddress,
+                    RuntimeMmioRegionSize,
+                    EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a: Failed to add memory space\n", __FUNCTION__));
+      goto ErrorAddSpace;
+    }
 
-  Status = gDS->SetMemorySpaceAttributes (RegionBaseAddress,
-                  RuntimeMmioRegionSize,
-                  EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: Failed to set memory attributes\n", __FUNCTION__));
-    goto ErrorSetMemAttr;
+
+    Status = gDS->SetMemorySpaceAttributes (RegionBaseAddress,
+                    RuntimeMmioRegionSize,
+                    EFI_MEMORY_UC | EFI_MEMORY_RUNTIME);
+    if (EFI_ERROR (Status)) {
+     DEBUG ((DEBUG_ERROR, "%a: Failed to set memory attributes\n", __FUNCTION__));
+      goto ErrorSetMemAttr;
+    }
   }
 
   //
