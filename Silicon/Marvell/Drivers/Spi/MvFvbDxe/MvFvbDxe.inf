@@ -85,4 +85,6 @@
   gMarvellTokenSpaceGuid.PcdSpiMemoryBase
 
 [Depex]
-  gEfiCpuArchProtocolGuid
+  gEfiCpuArchProtocolGuid AND
+  gMarvellSpiMasterProtocolGuid AND
+  gMarvellSpiFlashProtocolGuid
