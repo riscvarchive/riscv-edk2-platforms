@@ -105,14 +105,6 @@ External(\_SB.PCI0.RP24.PON, MethodObj)
 External(\_SB.PCI0.PEG0.PG00._ON, MethodObj)
 External(\_SB.PCI0.PEG1.PG01._ON, MethodObj)
 External(\_SB.PCI0.PEG2.PG02._ON, MethodObj)
-//
-// SA:RestrictedBegin
-//
-External(\_SB.PCI0.LKEN, MethodObj)
-External(\_SB.PCI0.LKDS, MethodObj)
-//
-// SA:RestrictedEnd
-//
 
 Name(TRDO, 0) // 1 during TBT RTD3 _ON
 Name(TRD3, 0) // 1 during TBT RTD3 _OFF
