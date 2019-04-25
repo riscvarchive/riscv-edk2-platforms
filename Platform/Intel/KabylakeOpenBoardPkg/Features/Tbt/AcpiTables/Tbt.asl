@@ -1,7 +1,7 @@
 /** @file
  Thunderbolt ACPI methods
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials are licensed and made available under
 the terms and conditions of the BSD License that accompanies this distribution.
 The full text of the license may be found at
@@ -106,14 +106,6 @@ External(\_SB.PCI0.RP24.PON, MethodObj)
 External(\_SB.PCI0.PEG0.PG00._ON, MethodObj)
 External(\_SB.PCI0.PEG1.PG01._ON, MethodObj)
 External(\_SB.PCI0.PEG2.PG02._ON, MethodObj)
-//
-// SA:RestrictedBegin
-//
-External(\_SB.PCI0.LKEN, MethodObj)
-External(\_SB.PCI0.LKDS, MethodObj)
-//
-// SA:RestrictedEnd
-//
 
 Name(TRDO, 0) // 1 during TBT RTD3 _ON
 Name(TRD3, 0) // 1 during TBT RTD3 _OFF
@@ -612,7 +604,7 @@ Scope(\_GPE)
       } Else {
         Return (OSUP(Local0, DTBT_CONTROLLER))
       }
-    } Else 
+    } Else
     {
       ADBG("Dev Present")
       Return (0)
