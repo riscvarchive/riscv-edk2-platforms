@@ -139,7 +139,7 @@
 
 #SPI
   gMarvellTokenSpaceGuid.PcdSpiRegBase|0|UINT32|0x3000051
-  gMarvellTokenSpaceGuid.PcdSpiMemoryBase|0|UINT32|0x3000059
+  gMarvellTokenSpaceGuid.PcdSpiMemoryBase|0|UINT64|0x3000059
   gMarvellTokenSpaceGuid.PcdSpiMaxFrequency|0|UINT32|0x30000052
   gMarvellTokenSpaceGuid.PcdSpiClockFrequency|0|UINT32|0x30000053
 

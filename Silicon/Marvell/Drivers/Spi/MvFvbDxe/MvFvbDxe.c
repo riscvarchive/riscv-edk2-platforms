@@ -145,12 +145,12 @@ MvFvbInitFvAndVariableStoreHeaders (
   // FirmwareVolumeHeader->FvLength is declared to have the Variable area
   // AND the FTW working area AND the FTW Spare contiguous.
   //
-  ASSERT (PcdGet32 (PcdFlashNvStorageVariableBase) +
+  ASSERT (PcdGet64 (PcdFlashNvStorageVariableBase64) +
     PcdGet32 (PcdFlashNvStorageVariableSize) ==
-    PcdGet32 (PcdFlashNvStorageFtwWorkingBase));
-  ASSERT (PcdGet32 (PcdFlashNvStorageFtwWorkingBase) +
+    PcdGet64 (PcdFlashNvStorageFtwWorkingBase64));
+  ASSERT (PcdGet64 (PcdFlashNvStorageFtwWorkingBase64) +
     PcdGet32 (PcdFlashNvStorageFtwWorkingSize) ==
-    PcdGet32 (PcdFlashNvStorageFtwSpareBase));
+    PcdGet64 (PcdFlashNvStorageFtwSpareBase64));
 
   // Check if the size of the area is at least one block size
   ASSERT ((PcdGet32 (PcdFlashNvStorageVariableSize) > 0) &&
@@ -161,9 +161,9 @@ MvFvbInitFvAndVariableStoreHeaders (
     (PcdGet32 (PcdFlashNvStorageFtwSpareSize) / BlockSize > 0));
 
   // Ensure the Variable areas are aligned on block size boundaries
-  ASSERT ((PcdGet32 (PcdFlashNvStorageVariableBase) % BlockSize) == 0);
-  ASSERT ((PcdGet32 (PcdFlashNvStorageFtwWorkingBase) % BlockSize) == 0);
-  ASSERT ((PcdGet32 (PcdFlashNvStorageFtwSpareBase) % BlockSize) == 0);
+  ASSERT ((PcdGet64 (PcdFlashNvStorageVariableBase64) % BlockSize) == 0);
+  ASSERT ((PcdGet64 (PcdFlashNvStorageFtwWorkingBase64) % BlockSize) == 0);
+  ASSERT ((PcdGet64 (PcdFlashNvStorageFtwSpareBase64) % BlockSize) == 0);
 
   //
   // EFI_FIRMWARE_VOLUME_HEADER
@@ -1009,8 +1009,8 @@ MvFvbConfigureFlashInstance (
   }
 
   // Fill remaining flash description
-  FlashInstance->DeviceBaseAddress = PcdGet32 (PcdSpiMemoryBase);
-  FlashInstance->RegionBaseAddress = FixedPcdGet32 (PcdFlashNvStorageVariableBase);
+  FlashInstance->DeviceBaseAddress = PcdGet64 (PcdSpiMemoryBase);
+  FlashInstance->RegionBaseAddress = FixedPcdGet64 (PcdFlashNvStorageVariableBase64);
   FlashInstance->FvbOffset = FlashInstance->RegionBaseAddress -
                              FlashInstance->DeviceBaseAddress;
   FlashInstance->FvbSize = PcdGet32(PcdFlashNvStorageVariableSize) +
