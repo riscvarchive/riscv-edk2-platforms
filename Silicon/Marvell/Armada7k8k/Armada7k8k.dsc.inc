@@ -427,10 +427,7 @@
   ArmPlatformPkg/PlatformPei/PlatformPeim.inf
   ArmPlatformPkg/MemoryInitPei/MemoryInitPeim.inf
   ArmPkg/Drivers/CpuPei/CpuPei.inf
-  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
 !if $(CAPSULE_ENABLE)
-  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
-  MdeModulePkg/Universal/CapsulePei/CapsulePei.inf
   Silicon/Marvell/Armada7k8k/Feature/Capsule/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
 !endif
   MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf {

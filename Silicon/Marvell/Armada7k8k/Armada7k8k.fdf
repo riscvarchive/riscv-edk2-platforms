@@ -254,10 +254,7 @@ READ_LOCK_STATUS   = TRUE
   INF ArmPlatformPkg/PlatformPei/PlatformPeim.inf
   INF ArmPlatformPkg/MemoryInitPei/MemoryInitPeim.inf
   INF ArmPkg/Drivers/CpuPei/CpuPei.inf
-  INF MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
 !if $(CAPSULE_ENABLE)
-  INF MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
-  INF MdeModulePkg/Universal/CapsulePei/CapsulePei.inf
   INF RuleOverride = FMP_IMAGE_DESC Silicon/Marvell/Armada7k8k/Feature/Capsule/SystemFirmwareDescriptor/SystemFirmwareDescriptor.inf
 !endif
   INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
