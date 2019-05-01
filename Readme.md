@@ -208,6 +208,9 @@ they will be documented with the platform.
 
 ## [ARM](Platform/ARM/Readme.md)
 
+## BeagleBoard
+* [BeagleBoard](Platform/BeagleBoard/BeagleBoardPkg)
+
 ## Hisilicon
 * [D02](Platform/Hisilicon/D02)
 * [D03](Platform/Hisilicon/D03)
@@ -222,6 +225,12 @@ they will be documented with the platform.
 
 ## Socionext
 * [SynQuacer](Platform/Socionext/DeveloperBox)
+
+## Intel(R) Quark SoC X1000 based platforms
+* [Galileo](Platform/Intel/QuarkPlatformPkg)
+
+## Minnowboard Max/Turbot based on Intel Valleyview2 SoC
+* [Minnowboard Max](Platform/Intel/Vlv2TbltDevicePkg)
 
 # Maintainers
 

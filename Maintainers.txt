@@ -38,12 +38,32 @@ W: https://github.com/tianocore/tianocore.github.io/wiki/Security
 EDK II Packages:
 ----------------
 
+Drivers/OptionRomPkg
+W: https://github.com/tianocore/tianocore.github.io/wiki/OptionRomPkg
+M: Ray Ni <ray.ni@intel.com>
+
 Platform
 M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
 M: Michael D Kinney <michael.d.kinney@intel.com>
 
+Platform/Intel/QuarkPlatformPkg
+M: Michael D Kinney <michael.d.kinney@intel.com>
+M: Kelly Steele <kelly.steele@intel.com>
+
+Platform/Intel/Vlv2TbltDevicePkg
+M: Zailiang Sun <zailiang.sun@intel.com>
+M: Yi Qian <yi.qian@intel.com>
+
 Silicon
 M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
 M: Michael D Kinney <michael.d.kinney@intel.com>
+
+Silicon/Intel/QuarkSocPkg
+M: Michael D Kinney <michael.d.kinney@intel.com>
+M: Kelly Steele <kelly.steele@intel.com>
+
+Silicon/Intel/Vlv2DeviceRefCodePkg
+M: Zailiang Sun <zailiang.sun@intel.com>
+M: Yi Qian <yi.qian@intel.com>
