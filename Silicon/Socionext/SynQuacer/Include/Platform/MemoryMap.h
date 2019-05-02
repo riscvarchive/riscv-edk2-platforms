@@ -42,6 +42,10 @@
 #define SYNQUACER_GPIO_BASE             0x51000000
 #define SYNQUACER_GPIO_SIZE             SIZE_4KB
 
+// EXIU interrupt controller
+#define SYNQUACER_EXIU_BASE             0x510c0000
+#define SYNQUACER_EXIU_SIZE             0x20
+
 // I2C0 block
 #define SYNQUACER_I2C0_BASE             0x51200000
 #define SYNQUACER_I2C0_SIZE             SIZE_4KB

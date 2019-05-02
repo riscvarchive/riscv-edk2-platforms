@@ -201,5 +201,61 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
         }
       })
     }
+
+    Device (EXIU) {
+      Name (_HID, "SCX0008")
+      Name (_UID, Zero)
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, SYNQUACER_EXIU_BASE, SYNQUACER_EXIU_SIZE)
+      })
+      Name (_DSD, Package () {
+        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package () { "socionext,spi-base", 112 },
+        }
+      })
+    }
+
+    Device (GPIO) {
+      Name (_HID, "SCX0007")
+      Name (_UID, Zero)
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, SYNQUACER_GPIO_BASE, SYNQUACER_GPIO_SIZE)
+        Interrupt (ResourceConsumer, Edge, ActiveLow, ExclusiveAndWake, 0, "\\_SB.EXIU") {
+          8,
+        }
+      })
+      Name (_DSD, Package () {
+        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package () {
+            "gpio-line-names",
+            Package () {
+              "DSW3-PIN1",  "DSW3-PIN2",  "DSW3-PIN3",    "DSW3-PIN4",
+              "DSW3-PIN5",  "DSW3-PIN6",  "DSW3-PIN7",    "DSW3-PIN8",
+              "PSIN#",      "PWROFF#",    "GPIO-A",       "GPIO-B",
+              "GPIO-C",     "GPIO-D",     "PCIE1EXTINT",  "PCIE0EXTINT",
+              "PHY2-INT#",  "PHY1-INT#",  "GPIO-E",       "GPIO-F",
+              "GPIO-G",     "GPIO-H",     "GPIO-I",       "GPIO-J",
+              "GPIO-K",     "GPIO-L",     "PEC-PD26",     "PEC-PD27",
+              "PEC-PD28",   "PEC-PD29",   "PEC-PD30",     "PEC-PD31"
+            },
+          }
+        }
+      })
+      Name (_AEI, ResourceTemplate () {
+        GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault, 0, "\\_SB.GPIO")
+        {
+          8
+        }
+      })
+      Method (_E08) {
+        Notify (\_SB.PWRB, 0x80)
+      }
+    }
+
+    Device (PWRB) {
+      Name (_HID, "PNP0C0C")
+    }
   } // Scope (_SB)
 }
