@@ -46,7 +46,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
-  StdLib/StdLib.dec
   MdeModulePkg/MdeModulePkg.dec
   Silicon/Marvell/Marvell.dec
 
