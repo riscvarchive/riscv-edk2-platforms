@@ -46,6 +46,7 @@
 [Protocols]
   g96BoardsLsConnectorProtocolGuid     ## PRODUCES
   g96BoardsMezzanineProtocolGuid       ## CONSUMES
+  gEfiAcpiTableProtocolGuid            ## SOMETIMES_CONSUMES
 
 [Guids]
   gEfiEndOfDxeEventGroupGuid

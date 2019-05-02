@@ -16,6 +16,7 @@
 #define _96BOARDS_MEZZANINE_H_
 
 #include <Pi/PiI2c.h>
+#include <Protocol/AcpiTable.h>
 #include <Protocol/SpiConfiguration.h>
 
 #define MEZZANINE_PROTOCOL_GUID \
@@ -39,11 +40,31 @@ EFI_STATUS
   IN  OUT VOID                  *Dtb
   );
 
+/**
+  Install the mezzanine's SSDT table
+
+  @param[in]      This      Pointer to the MEZZANINE_PROTOCOL instance.
+  @param[in]      Dtb       Pointer to the device tree blob
+
+  @return   EFI_SUCCESS     Operation succeeded.
+  @return   other           An error has occurred.
+**/
+typedef
+EFI_STATUS
+(EFIAPI *INSTALL_SSDT_TABLE) (
+  IN      MEZZANINE_PROTOCOL        *This,
+  IN      EFI_ACPI_TABLE_PROTOCOL   *AcpiProtocol
+  );
+
 struct _MEZZANINE_PROTOCOL {
   //
   // Get the device tree overlay for this mezzanine board
   //
   APPLY_DEVICE_TREE_OVERLAY   ApplyDeviceTreeOverlay;
+  //
+  // Install the mezzanine's SSDT table
+  //
+  INSTALL_SSDT_TABLE          InstallSsdtTable;
   //
   // The number of devices on LS connector I2C bus #0
   //

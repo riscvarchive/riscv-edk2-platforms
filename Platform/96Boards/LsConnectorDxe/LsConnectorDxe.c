@@ -21,6 +21,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
+#include <Protocol/AcpiTable.h>
 #include <Protocol/LsConnector.h>
 #include <Protocol/Mezzanine.h>
 
@@ -97,7 +98,7 @@ InstallHiiPages (
 STATIC
 VOID
 EFIAPI
-ApplyDeviceTreeOverlay (
+PublishOsDescription (
   EFI_EVENT           Event,
   VOID                *Context
   )
@@ -105,17 +106,7 @@ ApplyDeviceTreeOverlay (
   VOID                    *Dtb;
   MEZZANINE_PROTOCOL      *Mezzanine;
   EFI_STATUS              Status;
-
-  //
-  // Find the DTB in the configuration table array. If it isn't there, just
-  // bail without an error: we may be running on an ACPI platform even if
-  // this driver does not support it [yet].
-  //
-  Status = EfiGetSystemConfigurationTable (&gFdtTableGuid, &Dtb);
-  if (Status == EFI_NOT_FOUND) {
-    return;
-  }
-  ASSERT_EFI_ERROR (Status);
+  EFI_ACPI_TABLE_PROTOCOL *AcpiProtocol;
 
   Status = gBS->LocateProtocol (&g96BoardsMezzanineProtocolGuid, NULL,
                   (VOID **)&Mezzanine);
@@ -123,6 +114,28 @@ ApplyDeviceTreeOverlay (
     DEBUG ((DEBUG_INFO, "%a: no mezzanine driver active\n", __FUNCTION__));
     return;
   }
+
+  Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL,
+                  (VOID **)&AcpiProtocol);
+  if (!EFI_ERROR (Status)) {
+    Status = Mezzanine->InstallSsdtTable (Mezzanine, AcpiProtocol);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table - %r\n",
+        __FUNCTION__, Status));
+    }
+    return;
+  }
+
+  //
+  // Find the DTB in the configuration table array. If it isn't there, just
+  // bail without an error: the system may be able to proceed even without
+  // ACPI or DT description, so it isn't up to us to complain about this.
+  //
+  Status = EfiGetSystemConfigurationTable (&gFdtTableGuid, &Dtb);
+  if (Status == EFI_NOT_FOUND) {
+    return;
+  }
+  ASSERT_EFI_ERROR (Status);
 
   Status = Mezzanine->ApplyDeviceTreeOverlay (Mezzanine, Dtb);
   if (EFI_ERROR (Status)) {
@@ -211,7 +224,7 @@ EntryPoint (
   Status = gBS->CreateEventEx (
                   EVT_NOTIFY_SIGNAL,
                   TPL_NOTIFY,
-                  ApplyDeviceTreeOverlay,
+                  PublishOsDescription,
                   NULL,
                   &gEfiEndOfDxeEventGroupGuid,
                   &EndOfDxeEvent);
