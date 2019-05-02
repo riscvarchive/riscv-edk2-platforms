@@ -55,6 +55,7 @@
   BaseMemoryLib
   DebugLib
   FileHandleLib
+  HandleParsingLib
   HiiLib
   MemoryAllocationLib
   PcdLib
@@ -62,12 +63,18 @@
   ShellLib
   UefiBootServicesTableLib
   UefiLib
-  UefiLib
   UefiRuntimeServicesTableLib
 
+[Pcd]
+  gMarvellTokenSpaceGuid.PcdSpiFlashCs
+  gMarvellTokenSpaceGuid.PcdSpiFlashMode
+
 [Protocols]
- gMarvellSpiFlashProtocolGuid
- gMarvellSpiMasterProtocolGuid
+  gEfiBlockIoProtocolGuid
+  gEfiDevicePathFromTextProtocolGuid
+  gEfiDevicePathProtocolGuid
+  gMarvellSpiFlashProtocolGuid
+  gMarvellSpiMasterProtocolGuid
 
 [Guids]
   gShellFUpdateHiiGuid
