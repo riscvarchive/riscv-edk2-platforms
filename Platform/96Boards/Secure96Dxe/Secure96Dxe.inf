@@ -21,6 +21,7 @@
   ENTRY_POINT                    = Secure96DxeEntryPoint
 
 [Sources]
+  Secure96.asl
   Secure96.dts
   Secure96.h
   Secure96Dxe.c

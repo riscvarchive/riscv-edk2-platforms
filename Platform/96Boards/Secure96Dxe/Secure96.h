@@ -23,4 +23,12 @@
 #define INFINEON_SLB9670_SPI_CS         0x0
 #define INFINEON_SLB9670_DT_NODENAME    tpm@0
 
+#ifndef SECURE96_ACPI_GPIO
+#define SECURE96_ACPI_GPIO              "\\_SB.GPIO"
+#endif
+
+#ifndef SECURE96_ACPI_I2C0
+#define SECURE96_ACPI_I2C0              "\\_SB.I2C0"
+#endif
+
 #endif // _SECURE96_H_

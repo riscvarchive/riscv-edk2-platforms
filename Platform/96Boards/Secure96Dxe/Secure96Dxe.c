@@ -24,6 +24,8 @@
 
 #include "Secure96.h"
 
+#define SECURE96_SSDT_OEM_TABLE_ID SIGNATURE_64('S','E','C','U','R','E','9','6')
+
 STATIC CONST UINT32 mI2cAtmelSha204aSlaveAddress[] = {
   ATSHA204A_SLAVE_ADDRESS,
 
@@ -148,15 +150,20 @@ ApplyDeviceTreeOverlay (
   UINTN           OverlaySize;
   EFI_STATUS      Status;
   INT32           Err;
+  UINTN           Index;
 
   //
   // Load the raw overlay DTB image from the raw section of this FFS file.
   //
-  Status = GetSectionFromFv (&gEfiCallerIdGuid,
-             EFI_SECTION_RAW, 0, &Overlay, &OverlaySize);
-  ASSERT_EFI_ERROR (Status);
-  if (EFI_ERROR (Status)) {
-    return EFI_NOT_FOUND;
+  for (Index = 0;; Index++) {
+    Status = GetSectionFromFv (&gEfiCallerIdGuid,
+               EFI_SECTION_RAW, Index, &Overlay, &OverlaySize);
+    if (EFI_ERROR (Status)) {
+      return EFI_NOT_FOUND;
+    }
+    if (!fdt_check_header (Overlay)) {
+      break;
+    }
   }
 
   //
@@ -177,8 +184,50 @@ ApplyDeviceTreeOverlay (
   return EFI_SUCCESS;
 }
 
+/**
+  Install the mezzanine's SSDT table
+
+  @param[in]      This      Pointer to the MEZZANINE_PROTOCOL instance.
+  @param[in]      Dtb       Pointer to the device tree blob
+
+  @return   EFI_SUCCESS     Operation succeeded.
+  @return   other           An error has occurred.
+**/
+STATIC
+EFI_STATUS
+EFIAPI
+InstallSsdtTable (
+  IN      MEZZANINE_PROTOCOL        *This,
+  IN      EFI_ACPI_TABLE_PROTOCOL   *AcpiProtocol
+  )
+{
+  EFI_ACPI_DESCRIPTION_HEADER   *Ssdt;
+  UINTN                         SsdtSize;
+  EFI_STATUS                    Status;
+  UINTN                         Index;
+  UINTN                         TableKey;
+
+  //
+  // Load SSDT table from the raw section of this FFS file.
+  //
+  for (Index = 0;; Index++) {
+    Status = GetSectionFromFv (&gEfiCallerIdGuid, EFI_SECTION_RAW, Index,
+               (VOID **)&Ssdt, &SsdtSize);
+    if (EFI_ERROR (Status)) {
+      return EFI_NOT_FOUND;
+    }
+    if (SsdtSize >= sizeof (EFI_ACPI_DESCRIPTION_HEADER) &&
+        Ssdt->OemTableId == SECURE96_SSDT_OEM_TABLE_ID) {
+      break;
+    }
+  }
+  return AcpiProtocol->InstallAcpiTable (AcpiProtocol, Ssdt, SsdtSize,
+                         &TableKey);
+}
+
 STATIC MEZZANINE_PROTOCOL mMezzanine = {
   ApplyDeviceTreeOverlay,
+  InstallSsdtTable,
   ARRAY_SIZE (mI2c0Devices),
   0,
   mI2c0Devices,
