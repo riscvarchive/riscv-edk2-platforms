@@ -146,7 +146,7 @@ Example
 PHY Driver configuration
 ========================
 MvPhyDxe provides basic initialization and status routines for Marvell PHYs.
-Currently only 1518 series PHYs are supported. Following PCDs are required:
+Currently only 1512 and 1112 series PHYs are supported. Following PCDs are required:
 
   - gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg
         (boolean - if true, driver waits for autonegotiation on startup)
@@ -162,6 +162,7 @@ MV_PHY_DEVICE_ID:
 
                 typedef enum {
                         0    MV_PHY_DEVICE_1512,
+                        1    MV_PHY_DEVICE_1112,
                 } MV_PHY_DEVICE_ID;
 
 It should be extended when adding support for other PHY models.
@@ -170,9 +171,9 @@ Disable autonegotiation:
 
  gMarvellTokenSpaceGuid.PcdPhyStartupAutoneg|FALSE
 
-assuming, that PHY models are 1512:
+assuming, that PHY models are 1512 and 1112 for two consecutive ports:
 
- gMarvellTokenSpaceGuid.PcdPhyDeviceIds|{ 0x0, 0x0 }
+ gMarvellTokenSpaceGuid.PcdPhyDeviceIds|{ 0x0, 0x1 }
 
 
 MDIO configuration

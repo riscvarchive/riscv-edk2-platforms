@@ -75,7 +75,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MIIM_88E1111_HWCFG_FIBER_COPPER_RES   0x2000
 
 typedef enum {
-  MV_PHY_DEVICE_1512
+  MV_PHY_DEVICE_1512,
+  MV_PHY_DEVICE_1112
 } MV_PHY_DEVICE_ID;
 
 typedef
@@ -96,5 +97,19 @@ MvPhyInit1512 (
     IN CONST MARVELL_PHY_PROTOCOL *Snp,
     IN OUT PHY_DEVICE *PhyDev
     );
+
+/**
+  Initialize Marvell 88E1112 PHY.
+
+  @param[in]      MvPhyProtocol   Marvell PHY protocol instance.
+  @param[in out] *PhyDevice       PHY device structure.
+
+**/
+STATIC
+EFI_STATUS
+MvPhyInit1112 (
+  IN CONST MARVELL_PHY_PROTOCOL  *MvPhyProtocol,
+  IN OUT PHY_DEVICE              *PhyDevice
+  );
 
 #endif

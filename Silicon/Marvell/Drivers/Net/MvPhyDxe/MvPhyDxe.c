@@ -66,6 +66,7 @@ STATIC UINT8 * CONST PhySmiAddresses = PcdGetPtr (PcdPhySmiAddresses);
 
 STATIC MV_PHY_DEVICE MvPhyDevices[] = {
   { MV_PHY_DEVICE_1512, MvPhyInit1512 },
+  { MV_PHY_DEVICE_1112, MvPhyInit1112 },
   { 0, NULL }
 };
 
@@ -378,6 +379,36 @@ MvPhyInit1512 (
   }
 
   MvPhyParseStatus (PhyDev);
+
+  return EFI_SUCCESS;
+}
+
+/**
+  Initialize Marvell 88E1112 PHY.
+
+  @param[in]      MvPhyProtocol   Marvell PHY protocol instance.
+  @param[in out] *PhyDevice       PHY device structure.
+
+**/
+STATIC
+EFI_STATUS
+MvPhyInit1112 (
+  IN CONST MARVELL_PHY_PROTOCOL  *MvPhyProtocol,
+  IN OUT PHY_DEVICE              *PhyDevice
+  )
+{
+  EFI_STATUS Status;
+
+  MvPhyM88e1111sConfig (PhyDevice);
+
+  if (PcdGetBool (PcdPhyStartupAutoneg)) {
+    Status = MvPhyConfigureAutonegotiation (PhyDevice);
+    if (EFI_ERROR (Status)) {
+      return Status;
+    }
+
+    MvPhyParseStatus (PhyDevice);
+  }
 
   return EFI_SUCCESS;
 }
