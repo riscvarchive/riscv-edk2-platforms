@@ -251,6 +251,58 @@ MvPhyParseStatus (
   return EFI_SUCCESS;
 }
 
+/**
+  Configure PHY device autonegotiation.
+
+  @param[in out]   *PhyDevice      A pointer to configured PHY device structure.
+
+**/
+STATIC
+EFI_STATUS
+MvPhyConfigureAutonegotiation (
+  IN OUT PHY_DEVICE *PhyDevice
+  )
+{
+  UINT32 Data;
+  INTN Index;
+
+  /* Read BMSR register in order to check autoneg capabilities and status. */
+  Mdio->Read (Mdio, PhyDevice->Addr, PhyDevice->MdioIndex, MII_BMSR, &Data);
+
+  if ((Data & BMSR_ANEGCAPABLE) && !(Data & BMSR_ANEGCOMPLETE)) {
+
+    DEBUG ((DEBUG_INFO,
+      "%a: Waiting for PHY auto negotiation...",
+      __FUNCTION__));
+
+    /* Wait for autonegotiation to complete and read media status */
+    for (Index = 0; !(Data & BMSR_ANEGCOMPLETE); Index++) {
+      if (Index > PHY_AUTONEGOTIATE_TIMEOUT) {
+        DEBUG ((DEBUG_ERROR, "%a: Timeout\n", __FUNCTION__));
+        PhyDevice->LinkUp = FALSE;
+        return EFI_TIMEOUT;
+      }
+      gBS->Stall (1000);  /* 1 ms */
+      Mdio->Read (Mdio, PhyDevice->Addr, PhyDevice->MdioIndex, MII_BMSR, &Data);
+    }
+
+    PhyDevice->LinkUp = TRUE;
+    DEBUG ((DEBUG_INFO, "%a: link up\n", __FUNCTION__));
+  } else {
+    Mdio->Read (Mdio, PhyDevice->Addr, PhyDevice->MdioIndex, MII_BMSR, &Data);
+
+    if (Data & BMSR_LSTATUS) {
+      PhyDevice->LinkUp = TRUE;
+      DEBUG ((DEBUG_INFO, "%a: link up\n", __FUNCTION__));
+    } else {
+      PhyDevice->LinkUp = FALSE;
+      DEBUG ((DEBUG_INFO, "%a: link down\n", __FUNCTION__));
+    }
+  }
+
+  return EFI_SUCCESS;
+}
+
 STATIC
 VOID
 MvPhy1512WriteBits (
@@ -282,8 +334,7 @@ MvPhyInit1512 (
     IN OUT PHY_DEVICE *PhyDev
     )
 {
-  UINT32 Data;
-  INTN i;
+  EFI_STATUS Status;
 
   if (PhyDev->Connection == PHY_CONNECTION_SGMII) {
     /* Select page 0xff and update configuration registers according to
@@ -321,34 +372,11 @@ MvPhyInit1512 (
   if (!PcdGetBool (PcdPhyStartupAutoneg))
     return EFI_SUCCESS;
 
-  Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
-
-  if ((Data & BMSR_ANEGCAPABLE) && !(Data & BMSR_ANEGCOMPLETE)) {
-
-    DEBUG((DEBUG_ERROR, "MvPhyDxe: Waiting for PHY auto negotiation... "));
-    for (i = 0; !(Data & BMSR_ANEGCOMPLETE); i++) {
-      if (i > PHY_AUTONEGOTIATE_TIMEOUT) {
-        DEBUG((DEBUG_ERROR, "timeout\n"));
-        PhyDev->LinkUp = FALSE;
-        return EFI_TIMEOUT;
-      }
-
-      gBS->Stall(1000);  /* 1 ms */
-      Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
-    }
-    PhyDev->LinkUp = TRUE;
-    DEBUG((DEBUG_INFO, "MvPhyDxe: link up\n"));
-  } else {
-    Mdio->Read (Mdio, PhyDev->Addr, PhyDev->MdioIndex, MII_BMSR, &Data);
-
-    if (Data & BMSR_LSTATUS) {
-      PhyDev->LinkUp = TRUE;
-      DEBUG((DEBUG_INFO, "MvPhyDxe: link up\n"));
-    } else {
-      PhyDev->LinkUp = FALSE;
-      DEBUG((DEBUG_INFO, "MvPhyDxe: link down\n"));
-    }
+  Status = MvPhyConfigureAutonegotiation (PhyDev);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
+
   MvPhyParseStatus (PhyDev);
 
   return EFI_SUCCESS;
