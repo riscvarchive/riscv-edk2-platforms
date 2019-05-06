@@ -180,8 +180,6 @@ MvPhyM88e1111sConfig (
   /* Soft reset */
   MvPhyReset (PhyDev);
 
-  MvPhyReset (PhyDev);
-
   return EFI_SUCCESS;
 }
 
