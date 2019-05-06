@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef __PP2_DXE_H__
 #define __PP2_DXE_H__
 
+#include <Protocol/AdapterInformation.h>
 #include <Protocol/Cpu.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/DriverBinding.h>
@@ -59,6 +60,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define MVPP2_MAX_PORT  3
 
 #define PP2DXE_SIGNATURE                    SIGNATURE_32('P', 'P', '2', 'D')
+#define INSTANCE_FROM_AIP(a)                CR((a), PP2DXE_CONTEXT, Aip, PP2DXE_SIGNATURE)
 #define INSTANCE_FROM_SNP(a)                CR((a), PP2DXE_CONTEXT, Snp, PP2DXE_SIGNATURE)
 
 /* OS API */
@@ -365,6 +367,7 @@ typedef struct {
   UINTN                       CompletionQueueTail;
   EFI_EVENT                   EfiExitBootServicesEvent;
   PP2_DEVICE_PATH             *DevicePath;
+  EFI_ADAPTER_INFORMATION_PROTOCOL Aip;
 } PP2DXE_CONTEXT;
 
 /* Inline helpers */
