@@ -67,15 +67,6 @@
      UI       STRING="$(MODULE_NAME)" Optional
   }
 
-[Rule.Common.PEIM.TIANOCOMPRESSED]
-  FILE PEIM = $(NAMED_GUID) DEBUG_MYTOOLS_IA32 {
-    PEI_DEPEX PEI_DEPEX Optional        $(INF_OUTPUT)/$(MODULE_NAME).depex
-    GUIDED A31280AD-481E-41B6-95E8-127F4C984779 PROCESSING_REQUIRED = TRUE {
-      PE32      PE32                    $(INF_OUTPUT)/$(MODULE_NAME).efi
-      UI        STRING="$(MODULE_NAME)" Optional
-    }
-  }
-
 [Rule.Common.PEIM.FMP_IMAGE_DESC]
   FILE PEIM = $(NAMED_GUID) {
      RAW BIN                  |.acpi
