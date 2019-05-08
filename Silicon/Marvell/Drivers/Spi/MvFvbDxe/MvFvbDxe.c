@@ -1003,7 +1003,6 @@ MvFvbConfigureFlashInstance (
   )
 {
   EFI_STATUS Status;
-  UINTN     *NumBytes;
   UINTN     DataOffset;
   UINTN     VariableSize, FtwWorkingSize, FtwSpareSize, MemorySize;
 
@@ -1080,10 +1079,9 @@ MvFvbConfigureFlashInstance (
     DataOffset = GET_DATA_OFFSET (FlashInstance->FvbOffset,
                    FlashInstance->StartLba,
                    FlashInstance->Media.BlockSize);
-    *NumBytes = FlashInstance->FvbSize;
     Status = FlashInstance->SpiFlashProtocol->Read (&FlashInstance->SpiDevice,
                                                 DataOffset,
-                                                *NumBytes,
+                                                FlashInstance->FvbSize,
                                                 (VOID *)FlashInstance->RegionBaseAddress);
     if (EFI_ERROR (Status)) {
       goto ErrorFreeAllocatedPages;
