@@ -105,6 +105,82 @@ return back to the minimum platform caller.
 
 ### Build
 
+**Building with the python script**
+
+1. Open command window, go to the workspace directory, e.g. c:\Kabylake.
+2. Type "cd edk2-platforms\Platform\Intel
+3. Type "python build_bios.py -p REPLACE_WITH_BOARD_NAME"
+
+* build_bios.py arguments:
+
+  | Argument              | Function                            |
+  | ----------------------|-------------------------------------|
+  | -h, --help            | show this help message and exit     |
+  | --platform, -p        | the platform to build               |
+  | --toolchain, -t       | tool Chain to use in build process  |
+  | --DEBUG, -d           | debug flag                          |
+  | --RELEASE, -r         | release flag                        |
+  | --TEST_RELEASE, -tr   | test Release flag                   |
+  | --RELEASE_PDB, -rp    | release flag                        |
+  | --list, -l            | lists available platforms           |
+  | --cleanall            | cleans all                          |
+  | --clean               | cleans specified platform           |
+  | --capsule             | capsule build enabled               |
+  | --silent              | silent build enabled                |
+  | --performance         | performance build enabled           |
+  | --fsp                 | fsp build enabled                   |
+  |                                                             |
+
+* For more information on build options
+  * ``Type "python build_bios.py -h"``
+
+* Note
+  * ``Python 2.7.16 and Python 3.7.3 compatible``
+  * ``These python build scripts have been tested on Windows due to`` [cross-platform limitations](#Known-limitations)
+
+* Configuration Files
+  * ``The edk2-platforms\Platform\Intel\build.cfg file contains the default settings used by build_bios.py``
+  * ``The default settings are under the DEFAULT_CONFIG section``
+  * ``Each board can have a settings file that will override the edk2-platforms\Platform\Intel\build.cfg settings``
+  * ``An example of a board specific settings:``
+    * ``edk2-platforms\Platform\Intel\KabylakeOpenBoardPkg\KabylakeRvp3\build_config.cfg``
+
+* Workspace view of the build scripts
+  * <pre>
+    WORKSPACE
+          |------edk2
+          |------edk2-non-osi
+          |------edk2-platforms
+          |       |---Platform
+          |       |    |--Intel
+          |       |        |------build.cfg: Default build settings. These are overridden by
+          |       |        |                 platform specific settings (build_config.cfg) and
+          |       |        |                 then command-line settings.
+          |       |        |
+          |       |        |------build_bios.py: Main build script. Generic pre-build, build,
+          |       |        |                     post-build, and clean functions.
+          |       |        |
+          |       |        |------ClevoOpenBoardPkg
+          |       |        |        |------N1xxWU
+          |       |        |                |---build_config.cfg: N1xxWU specific build
+          |       |        |                                      settings environment variables.
+          |       |        |
+          |       |        |------KabylakeOpenBoardPkg
+          |       |        |        |------KabylakeRvp3
+          |       |        |                  |---build_config.cfg: KabylakeRvp3 specific
+          |       |        |                  |                     build settings, environment variables.
+          |       |        |                  |---build_board.py: Optional board-specific pre-build, build
+          |       |        |                                      and clean post-build functions.
+          |       |        |------PurleyOpenBoardPkg
+          |       |        |       |------BoardMtOlympus
+          |       |        |                |---build_config.cfg: BoardMtOlympus specific
+          |       |        |                |                     build settings, environment variables.
+          |       |        |                |---build_board.py: Optional board-specific pre-build,
+          |       |        |                |                   build, post-build and clean functions.
+          |------FSP
+  </pre>
+
+**Building with the batch scripts**
 For KabylakeOpenBoardPkg
 1. Open command window, go to the workspace directory, e.g. c:\Kabylake.
 2. Type "cd edk2-platforms\Platform\Intel\KabylakeOpenBoardPkg\KabylakeRvp3".
