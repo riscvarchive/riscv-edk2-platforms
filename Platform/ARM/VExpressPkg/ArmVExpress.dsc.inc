@@ -9,6 +9,14 @@
   SECURE_BOOT_ENABLE    = FALSE
   INCLUDE_TFTP_COMMAND  = TRUE
 
+  #
+  # Network definition
+  #
+  DEFINE NETWORK_SNP_ENABLE             = FALSE
+  DEFINE NETWORK_IP6_ENABLE             = FALSE
+  DEFINE NETWORK_TLS_ENABLE             = FALSE
+  DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
+
 [BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
 
@@ -54,12 +62,6 @@
 
   BaseMemoryLib|MdePkg/Library/BaseMemoryLibOptDxe/BaseMemoryLibOptDxe.inf
 
-  # Networking Requirements
-  NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
-  DpcLib|MdeModulePkg/Library/DxeDpcLib/DxeDpcLib.inf
-  UdpIoLib|MdeModulePkg/Library/DxeUdpIoLib/DxeUdpIoLib.inf
-  IpIoLib|MdeModulePkg/Library/DxeIpIoLib/DxeIpIoLib.inf
-  TcpIoLib|MdeModulePkg/Library/DxeTcpIoLib/DxeTcpIoLib.inf
 
   # ARM Architectural Libraries
   CacheMaintenanceLib|ArmPkg/Library/ArmCacheMaintenanceLib/ArmCacheMaintenanceLib.inf
@@ -409,17 +411,7 @@
   #
   # Networking stack
   #
-  MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
-  MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
-  MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
-  MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
-  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
-  MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
-  MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
-  MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
-  NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
-  NetworkPkg/TcpDxe/TcpDxe.inf
-  NetworkPkg/IScsiDxe/IScsiDxe.inf
+!include NetworkPkg/Network.dsc.inc
 !ifdef EDK2_ENABLE_SMSC_91X
   # SMSC LAN 91C111
   EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
