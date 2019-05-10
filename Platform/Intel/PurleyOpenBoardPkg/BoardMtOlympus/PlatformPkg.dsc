@@ -77,6 +77,15 @@
 !include $(SKT_PKG)/SktCommonLib.dsc
 !include $(PCH_PKG)/PchCommonLib.dsc
 
+[Defines]
+  !if gAdvancedFeaturePkgTokenSpaceGuid.PcdNetworkEnable == TRUE
+    DEFINE NETWORK_TLS_ENABLE             = FALSE
+    DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
+  !else
+    DEFINE NETWORK_ENABLE                 = FALSE
+  !endif
+!include NetworkPkg/NetworkDefines.dsc.inc
+
 [LibraryClasses.common]
 !if gPlatformTokenSpaceGuid.PcdFastBoot == FALSE
   PlatformBootManagerLib|MinPlatformPkg/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
