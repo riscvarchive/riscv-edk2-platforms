@@ -129,17 +129,7 @@ FvNameGuid         = 5eda4200-2c5f-43cb-9da3-0baf74b1b30c
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 
   # Network support
-  INF MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
-  INF MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
-  INF MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
-  INF MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
-  INF MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
-  INF MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
-  INF MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
-  INF MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
-  INF MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
-  INF NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
-  INF NetworkPkg/TcpDxe/TcpDxe.inf
+!include NetworkPkg/Network.fdf.inc
   INF Silicon/Marvell/Drivers/Net/MvMdioDxe/MvMdioDxe.inf
   INF Silicon/Marvell/Drivers/Net/MvPhyDxe/MvPhyDxe.inf
   INF Silicon/Marvell/Drivers/Net/Pp2Dxe/Pp2Dxe.inf

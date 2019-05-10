@@ -46,6 +46,14 @@
   FLASH_DEFINITION               = Silicon/Marvell/Armada7k8k/Armada7k8k.fdf
   BOARD_DXE_FV_COMPONENTS        = Platform/Marvell/Armada70x0Db/Armada70x0Db.fdf.inc
 
+  #
+  # Network definition
+  #
+  DEFINE NETWORK_IP6_ENABLE             = FALSE
+  DEFINE NETWORK_TLS_ENABLE             = FALSE
+  DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
+  DEFINE NETWORK_ISCSI_ENABLE           = FALSE
+
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
 
 [LibraryClasses.common]
