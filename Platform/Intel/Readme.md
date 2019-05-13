@@ -8,7 +8,7 @@ Package maintainers for the Minimum Platform projects are listed in Maintainers.
 ## Overview
 The key elements of the architecture are organized into a staged boot approach where each stage has requirements and
 functionality for specific use cases. The generic control flow through the boot process is implemented in the
-[`MinPlatformPkg`](https://github.com/tianocore/edk2-platforms/tree/devel-MinPlatform/Platform/Intel/MinPlatformPkg).
+[`MinPlatformPkg`](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel/MinPlatformPkg).
 The generic nature of the tasks performed in MinPlatformPkg lends to reuse across all Intel platforms with no
 source modification. Details for any particular board are made accessible to the MinPlatformPkg through a well-defined
 statically linked board API. A complete platform solution then consists of the MinPlatformPkg and a compatible board
@@ -16,13 +16,13 @@ package.
 
 ## Board Naming Convention
 The board packages supported by Intel follow the naming convention \<xxx\>OpenBoardPkg where xxx refers to the
-encompassing platform name for a particular platform generation. For example, the [`KabylakeOpenBoardPkg`](https://github.com/tianocore/edk2-platforms/tree/devel-MinPlatform/Platform/Intel/KabylakeOpenBoardPkg) contains the
+encompassing platform name for a particular platform generation. For example, the [`KabylakeOpenBoardPkg`](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel/KabylakeOpenBoardPkg) contains the
 board code for Intel Kaby Lake reference systems. Intel uses the moniker "OpenBoardPkg" to indicate that this package
 is the open source board code. A closed source counterpart may exist which simply uses "BoardPkg". Both directly use
 the MinPlatformPkg from edk2-platforms.
 
 ## Stage Selection
-Stage selection is controlled via the PCD `gMinPlatformPkgTokenSpaceGuid.PcdBootStage` in [`MinPlatformPkg.dec`](https://github.com/tianocore/edk2-platforms/blob/devel-MinPlatform/Platform/Intel/MinPlatformPkg/MinPlatformPkg.dec).
+Stage selection is controlled via the PCD `gMinPlatformPkgTokenSpaceGuid.PcdBootStage` in [`MinPlatformPkg.dec`](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel/MinPlatformPkg/MinPlatformPkg.dec).
 The stage should be configured in the board package DSC file to the appropriate value. For example, a board may disable
 all advanced features by setting this value to 4 instead of 6. This may be used to improve boot time for a particular
 use case. Decrementing the stage can also be used for debug since only the actions required for that stage objective
@@ -46,8 +46,8 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 |------------------------------------|
 | [EDK II](https://github.com/tianocore/edk2)                                                                              |
 | [Intel(r) FSP](https://github.com/IntelFsp/FSP)                                                                            |
-| [Minimum Platform (`MinPlatformPkg`)](https://github.com/tianocore/edk2-platforms/tree/devel-MinPlatform/Platform/Intel/MinPlatformPkg)                        |
-| [Board Support (\<xxx\>OpenBoardPkg)](https://github.com/tianocore/edk2-platforms/tree/devel-MinPlatform/Platform/Intel)  |
+| [Minimum Platform (`MinPlatformPkg`)](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel/MinPlatformPkg)                        |
+| [Board Support (\<xxx\>OpenBoardPkg)](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel)  |
 
 
 ## Board Support
@@ -95,7 +95,7 @@ return back to the minimum platform caller.
   * ``git clone https://github.com/tianocore/edk2.git``
 
 * edk2-platforms repository
-  * ``git clone https://github.com/tianocore/edk2-platforms.git -b devel-MinPlatform``
+  * ``git clone https://github.com/tianocore/edk2-platforms.git``
 
 * edk2-non-osi repository
   * ``git clone https://github.com/tianocore/edk2-non-osi.git -b devel-MinPlatform``
