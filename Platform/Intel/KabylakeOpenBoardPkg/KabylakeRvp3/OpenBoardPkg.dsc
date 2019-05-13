@@ -394,8 +394,12 @@
 #
   $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # Below module is used by FSP API mode
+  #
   IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
-
+!endif
   $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
 
   $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
