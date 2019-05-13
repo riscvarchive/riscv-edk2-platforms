@@ -1,7 +1,7 @@
 /** @file
   Platform Hook Library instances
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -12,6 +12,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/BoardInitLib.h>
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
+#include <KabylakeRvp3Id.h>
 
 EFI_STATUS
 EFIAPI
@@ -72,7 +73,9 @@ BoardInitBeforeMemoryInit (
   VOID
   )
 {
-  KabylakeRvp3BoardInitBeforeMemoryInit ();
+  if ((LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) || (LibPcdGetSku () == BoardIdSkylakeRvp3)) {
+    KabylakeRvp3BoardInitBeforeMemoryInit ();
+  }
   return EFI_SUCCESS;
 }
 

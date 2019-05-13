@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -24,6 +24,8 @@ extern const UINT8 mDqByteMapSklRvp3[2][6][2];
 extern const UINT8 mDqsMapCpu2DramSklRvp3[2][8];
 extern const UINT8 mSkylakeRvp3Spd110[];
 extern const UINT16 mSkylakeRvp3Spd110Size;
+extern const UINT8 mSkylakeRvp3Spd[];
+extern const UINT16 mSkylakeRvp3SpdSize;
 extern HSIO_PTSS_TABLES PchLpHsioPtss_Bx_KabylakeRvp3[];
 extern UINT16 PchLpHsioPtss_Bx_KabylakeRvp3_Size;
 extern HSIO_PTSS_TABLES PchLpHsioPtss_Cx_KabylakeRvp3[];

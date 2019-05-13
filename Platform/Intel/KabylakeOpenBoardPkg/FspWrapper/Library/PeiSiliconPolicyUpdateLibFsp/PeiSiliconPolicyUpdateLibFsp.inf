@@ -1,7 +1,7 @@
 ## @file
 #  Provide FSP wrapper platform related function.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -94,6 +94,13 @@
   gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
   gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
   gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
+
+  # SPD Address Table
+  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0    ## CONSUMES
+  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1    ## CONSUMES
+  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2    ## CONSUMES
+  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3    ## CONSUMES
+
   gBoardModuleTokenSpaceGuid.PcdMrcSpdData
   gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
 

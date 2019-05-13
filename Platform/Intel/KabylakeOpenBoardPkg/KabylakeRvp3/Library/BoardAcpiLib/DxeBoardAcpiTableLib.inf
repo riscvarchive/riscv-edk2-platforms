@@ -1,7 +1,7 @@
 ### @file
 # Platform Hook Library instance for SandyBridge Mobile/Desktop CRB.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -36,9 +36,9 @@
 
 [Pcd]
   gBoardModuleTokenSpaceGuid.PcdPs2KbMsEnable
-  gMinPlatformPkgTokenSpaceGuid.PcdPciExpNative
-  gMinPlatformPkgTokenSpaceGuid.PcdNativeAspmEnable
-  gMinPlatformPkgTokenSpaceGuid.PcdLowPowerS0Idle
+  gBoardModuleTokenSpaceGuid.PcdPciExpNative
+  gBoardModuleTokenSpaceGuid.PcdNativeAspmEnable
+  gBoardModuleTokenSpaceGuid.PcdLowPowerS0Idle
   gBoardModuleTokenSpaceGuid.PcdAcpiGnvsAddress
   
 [Sources]

@@ -1,7 +1,7 @@
 /** @file
 Do Platform Stage System Agent initialization.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -39,8 +39,19 @@ PeiFspSaPolicyUpdatePreMem (
 {
   VOID                        *Buffer;
 
-  CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr00, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
-  CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr10, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
+  //
+  // If SpdAddressTable are not all 0, it means DIMM slots implemented and
+  // MemorySpdPtr* already updated by reading SPD from DIMM in SiliconPolicyInitPreMem.
+  //
+  // If SpdAddressTable all 0, this is memory down design and hardcoded SpdData
+  // should be applied to MemorySpdPtr*.
+  //
+  if ((PcdGet8 (PcdMrcSpdAddressTable0) == 0) && (PcdGet8 (PcdMrcSpdAddressTable1) == 0)
+      && (PcdGet8 (PcdMrcSpdAddressTable2) == 0) && (PcdGet8 (PcdMrcSpdAddressTable3) == 0)) {
+    DEBUG((DEBUG_INFO, "Override MemorySpdPtr...\n"));
+    CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr00, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
+    CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr10, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
+  }
 
   DEBUG((DEBUG_INFO, "Updating Dq Byte Map and DQS Byte Swizzling Settings...\n"));
   Buffer = (VOID *) (UINTN) PcdGet32 (PcdMrcDqByteMap);

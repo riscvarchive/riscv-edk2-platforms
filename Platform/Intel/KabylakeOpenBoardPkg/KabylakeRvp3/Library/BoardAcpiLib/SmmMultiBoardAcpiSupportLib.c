@@ -1,7 +1,7 @@
 /** @file
   Platform Hook Library instances
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -73,8 +73,8 @@ SmmKabylakeRvp3MultiBoardAcpiSupportLibConstructor (
   VOID
   )
 {
-  if (LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) {
-    return RegisterBoardAcpiEnableFunc (&mKabylakeRvp3BoardAcpiEnableFunc);
+   if ((LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) || (LibPcdGetSku () == BoardIdSkylakeRvp3)) {
+     return RegisterBoardAcpiEnableFunc (&mKabylakeRvp3BoardAcpiEnableFunc);
   }
   return EFI_SUCCESS;
 }

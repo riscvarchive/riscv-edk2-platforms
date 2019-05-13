@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -80,10 +80,82 @@ KabylakeRvp3InitPreMem (
   //
   PcdSet8S (PcdSaMiscUserBd, 5);
 
-  PcdSet8S (PcdMrcSpdAddressTable0, 0xA2);
-  PcdSet8S (PcdMrcSpdAddressTable1, 0xA0);
-  PcdSet8S (PcdMrcSpdAddressTable2, 0xA2);
-  PcdSet8S (PcdMrcSpdAddressTable3, 0xA0);
+  PcdSet32S (PcdMrcDqByteMap, (UINTN) mDqByteMapSklRvp3);
+  PcdSet16S (PcdMrcDqByteMapSize, sizeof (mDqByteMapSklRvp3));
+  PcdSet32S (PcdMrcDqsMapCpu2Dram, (UINTN) mDqsMapCpu2DramSklRvp3);
+  PcdSet16S (PcdMrcDqsMapCpu2DramSize, sizeof (mDqsMapCpu2DramSklRvp3));
+  PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorSklRvp1);
+  PcdSet32S (PcdMrcRcompTarget, (UINTN) RcompTargetSklRvp1);
+  //
+  // Example policy for DIMM slots implementation boards:
+  // 1. Assign Smbus address of DIMMs and SpdData will be updated later
+  //    by reading from DIMM SPD.
+  // 2. No need to apply hardcoded SpdData buffers here for such board.
+  //   Example:
+  //   PcdMrcSpdAddressTable0 = 0xA0
+  //   PcdMrcSpdAddressTable1 = 0xA2
+  //   PcdMrcSpdAddressTable2 = 0xA4
+  //   PcdMrcSpdAddressTable3 = 0xA6
+  //   PcdMrcSpdData = 0
+  //   PcdMrcSpdDataSize = 0
+  //
+  // Kabylake RVP3 has 8GB Memory down implementation withouit SPD,
+  // So assign all SpdAddress to 0 and apply static SpdData buffers:
+  //   PcdMrcSpdAddressTable0 = 0
+  //   PcdMrcSpdAddressTable1 = 0
+  //   PcdMrcSpdAddressTable2 = 0
+  //   PcdMrcSpdAddressTable3 = 0
+  //   PcdMrcSpdData = static data buffer
+  //   PcdMrcSpdDataSize = sizeof (static data buffer)
+  //
+  PcdSet8S (PcdMrcSpdAddressTable0, 0);
+  PcdSet8S (PcdMrcSpdAddressTable1, 0);
+  PcdSet8S (PcdMrcSpdAddressTable2, 0);
+  PcdSet8S (PcdMrcSpdAddressTable3, 0);
+  PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd110);
+  PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3Spd110Size);
+
+  PcdSetBoolS (PcdIoExpanderPresent, TRUE);
+
+  return EFI_SUCCESS;
+}
+
+/**
+  SkylaeA0Rvp3 board configuration init function for PEI pre-memory phase.
+
+  PEI_BOARD_CONFIG_PCD_INIT
+
+  @param  Content  pointer to the buffer contain init information for board init.
+
+  @retval EFI_SUCCESS             The function completed successfully.
+  @retval EFI_INVALID_PARAMETER   The parameter is NULL.
+**/
+EFI_STATUS
+EFIAPI
+SkylakeRvp3InitPreMem (
+  VOID
+  )
+{
+  PcdSet32S (PcdPcie0WakeGpioNo, 0);
+  PcdSet8S  (PcdPcie0HoldRstExpanderNo, 0);
+  PcdSet32S (PcdPcie0HoldRstGpioNo, 8);
+  PcdSetBoolS (PcdPcie0HoldRstActive, TRUE);
+  PcdSet8S  (PcdPcie0PwrEnableExpanderNo, 0);
+  PcdSet32S (PcdPcie0PwrEnableGpioNo, 16);
+  PcdSetBoolS (PcdPcie0PwrEnableActive, FALSE);
+
+  //
+  // HSIO PTSS Table
+  //
+  PcdSet32S (PcdSpecificLpHsioPtssTable1,     (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3);
+  PcdSet16S (PcdSpecificLpHsioPtssTable1Size, (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3_Size);
+  PcdSet32S (PcdSpecificLpHsioPtssTable2,     (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3);
+  PcdSet16S (PcdSpecificLpHsioPtssTable2Size, (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3_Size);
+
+  //
+  // DRAM related definition
+  //
+  PcdSet8S (PcdSaMiscUserBd, 5);
 
   PcdSet32S (PcdMrcDqByteMap, (UINTN) mDqByteMapSklRvp3);
   PcdSet16S (PcdMrcDqByteMapSize, sizeof (mDqByteMapSklRvp3));
@@ -91,19 +163,44 @@ KabylakeRvp3InitPreMem (
   PcdSet16S (PcdMrcDqsMapCpu2DramSize, sizeof (mDqsMapCpu2DramSklRvp3));
   PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorSklRvp1);
   PcdSet32S (PcdMrcRcompTarget, (UINTN) RcompTargetSklRvp1);
-
-    PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd110);
-    PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3Spd110Size);
+  //
+  // Example policy for DIMM slots implementation boards:
+  // 1. Assign Smbus address of DIMMs and SpdData will be updated later
+  //    by reading from DIMM SPD.
+  // 2. No need to apply hardcoded SpdData buffers here for such board.
+  //   Example:
+  //   PcdMrcSpdAddressTable0 = 0xA0
+  //   PcdMrcSpdAddressTable1 = 0xA2
+  //   PcdMrcSpdAddressTable2 = 0xA4
+  //   PcdMrcSpdAddressTable3 = 0xA6
+  //   PcdMrcSpdData = 0
+  //   PcdMrcSpdDataSize = 0
+  //
+  // Skylake RVP3 has 4GB Memory down implementation withouit SPD,
+  // So assign all SpdAddress to 0 and apply static SpdData buffers:
+  //   PcdMrcSpdAddressTable0 = 0
+  //   PcdMrcSpdAddressTable1 = 0
+  //   PcdMrcSpdAddressTable2 = 0
+  //   PcdMrcSpdAddressTable3 = 0
+  //   PcdMrcSpdData = static data buffer
+  //   PcdMrcSpdDataSize = sizeof (static data buffer)
+  //
+  PcdSet8S (PcdMrcSpdAddressTable0, 0);
+  PcdSet8S (PcdMrcSpdAddressTable1, 0);
+  PcdSet8S (PcdMrcSpdAddressTable2, 0);
+  PcdSet8S (PcdMrcSpdAddressTable3, 0);
+  PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd);
+  PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3SpdSize);
 
   PcdSetBoolS (PcdIoExpanderPresent, TRUE);
-  
+
   return EFI_SUCCESS;
 }
 
 #define SIO_RUNTIME_REG_BASE_ADDRESS                          0x0680
 
 /**
-  Configures GPIO
+  Configures GPIO.
 
   @param[in]  GpioTable       Point to Platform Gpio table
   @param[in]  GpioTableCount  Number of Gpio table entries
@@ -137,7 +234,7 @@ GpioInitPreMem (
 }
 
 /**
-  Configure Super IO
+  Configure Super IO.
 
 **/
 VOID
@@ -175,7 +272,7 @@ I2CGpioExpanderInitPreMem(
 }
 
 /**
-  Configure GPIO and SIO before memory ready
+  Configure GPIO and SIO before memory ready.
 
   @retval  EFI_SUCCESS   Operation success.
 **/
@@ -185,7 +282,11 @@ KabylakeRvp3BoardInitBeforeMemoryInit (
   VOID
   )
 {
-  KabylakeRvp3InitPreMem ();
+  if (LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) {
+    KabylakeRvp3InitPreMem ();
+  } else if (LibPcdGetSku () == BoardIdSkylakeRvp3) {
+    SkylakeRvp3InitPreMem ();
+  }
 
   //
   // Configures the I2CGpioExpander
