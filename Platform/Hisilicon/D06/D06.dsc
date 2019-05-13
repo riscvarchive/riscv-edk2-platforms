@@ -60,7 +60,6 @@
   PlatformSysCtrlLib|Silicon/Hisilicon/Hi1620/Library/PlatformSysCtrlLibHi1620/PlatformSysCtrlLibHi1620.inf
 
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
-  GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
   BmcConfigBootLib|Silicon/Hisilicon/Library/BmcConfigBootLib/BmcConfigBootLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf

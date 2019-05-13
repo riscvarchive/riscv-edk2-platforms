@@ -71,8 +71,6 @@
   OemAddressMapLib|Platform/Hisilicon/D05/Library/OemAddressMapD05/OemAddressMapD05.inf
   PlatformSysCtrlLib|Silicon/Hisilicon/Hi1616/Library/PlatformSysCtrlLibHi1616/PlatformSysCtrlLibHi1616.inf
 
-  GenericBdsLib|IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
-  PlatformBdsLib|Silicon/Hisilicon/Library/PlatformIntelBdsLib/PlatformIntelBdsLib.inf
   BmcConfigBootLib|Silicon/Hisilicon/Library/BmcConfigBootLib/BmcConfigBootLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
