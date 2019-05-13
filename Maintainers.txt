@@ -55,6 +55,28 @@ Platform/Intel/Vlv2TbltDevicePkg
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
 
+Platform/Intel/AdvancedFeaturePkg
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+
+Platform/Intel/ClevoOpenBoardPkg
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Ankit Sinha <ankit.sinha@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
+
+Platform/Intel/KabylakeOpenBoardPkg
+M: Chasel Chiu <chasel.chiu@intel.com>
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+
+Platform/Intel/MinPlatformPkg
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+R: Chasel Chiu <chasel.chiu@intel.com>
+
+Platform/Intel/PurleyOpenBoardPkg
+M: Shifei A Lu <shifei.a.lu@intel.com>
+M: Xiaohu Zhou <bowen.zhou@intel.com>
+M: Isaac W Oram <isaac.w.oram@intel.com>
+
 Silicon
 M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
@@ -67,3 +89,22 @@ M: Kelly Steele <kelly.steele@intel.com>
 Silicon/Intel/Vlv2DeviceRefCodePkg
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
+
+Silicon/Intel/KabylakeSiliconPkg
+M: Chasel Chiu <chasel.chiu@intel.com>
+M: Michael A Kubacki <michael.a.kubacki@intel.com>
+
+Silicon/Intel/LewisburgPkg
+M: Piwko, Maciej <maciej.piwko@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+Silicon/Intel/PurleyRcPkg
+M: Gillispie, Thad <thad.gillispie@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+Silicon/Intel/PurleySktPkg
+M: Gillispie, Thad <thad.gillispie@intel.com>
+M: Bu, Daocheng <daocheng.bu@intel.com>
+M: Oram, Isaac W <isaac.w.oram@intel.com>
