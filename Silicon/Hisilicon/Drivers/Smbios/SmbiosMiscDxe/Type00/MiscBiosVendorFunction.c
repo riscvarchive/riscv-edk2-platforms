@@ -122,8 +122,8 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
     CHAR16                *ReleaseDate;
     CHAR16                *Char16String;
     EFI_STATUS            Status;
-    STRING_REF            TokenToUpdate;
-    STRING_REF            TokenToGet;
+    EFI_STRING_ID         TokenToUpdate;
+    EFI_STRING_ID         TokenToGet;
     SMBIOS_TABLE_TYPE0    *SmbiosRecord;
     EFI_SMBIOS_HANDLE     SmbiosHandle;
     SMBIOS_TABLE_TYPE0    *InputData;

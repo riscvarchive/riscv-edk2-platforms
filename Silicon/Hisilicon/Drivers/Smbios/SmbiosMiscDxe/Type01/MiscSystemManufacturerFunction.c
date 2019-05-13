@@ -46,12 +46,12 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     EFI_STRING                      SerialNumber;
     EFI_STRING                      SKUNumber;
     EFI_STRING                      Family;
-    STRING_REF                      TokenToGet;
+    EFI_STRING_ID                   TokenToGet;
     EFI_SMBIOS_HANDLE               SmbiosHandle;
     SMBIOS_TABLE_TYPE1              *SmbiosRecord;
     SMBIOS_TABLE_TYPE1              *InputData;
     EFI_STATUS                      Status;
-    STRING_REF                      TokenToUpdate;
+    EFI_STRING_ID                   TokenToUpdate;
     CHAR16                          *Product;
     CHAR16                          *pVersion;
 

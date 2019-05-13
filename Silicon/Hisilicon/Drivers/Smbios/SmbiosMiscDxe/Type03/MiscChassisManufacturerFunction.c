@@ -61,7 +61,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
     EFI_STRING                      SerialNumber;
     EFI_STRING                      AssertTag;
     EFI_STRING                      ChassisSkuNumber;
-    STRING_REF                      TokenToGet;
+    EFI_STRING_ID                   TokenToGet;
     EFI_SMBIOS_HANDLE               SmbiosHandle;
     SMBIOS_TABLE_TYPE3              *SmbiosRecord;
     SMBIOS_TABLE_TYPE3              *InputData;

@@ -23,7 +23,7 @@ UpdateSlotDesignation (
   IN SMBIOS_TABLE_TYPE9 *InputData
   )
 {
-    STRING_REF                      TokenToUpdate;
+    EFI_STRING_ID                   TokenToUpdate;
     CHAR16                          *SlotDesignation;
     UINTN                           DesignationStrLen;
 
@@ -134,7 +134,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemSlotDesignation)
     UINTN                              SlotDesignationStrLen;
     EFI_STATUS                         Status;
     EFI_STRING                         SlotDesignation;
-    STRING_REF                         TokenToGet;
+    EFI_STRING_ID                      TokenToGet;
     SMBIOS_TABLE_TYPE9                 *SmbiosRecord;
     EFI_SMBIOS_HANDLE                  SmbiosHandle;
     SMBIOS_TABLE_TYPE9                 *InputData = NULL;

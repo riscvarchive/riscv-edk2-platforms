@@ -19,7 +19,6 @@ Based on files under Nt32Pkg/MiscSubClassPlatformDxe/
 #ifndef _SMBIOS_MISC_DRIVER_H
 #define _SMBIOS_MISC_DRIVER_H
 
-#include <FrameworkDxe.h>
 #include <Protocol/Smbios.h>
 #include <IndustryStandard/SmBios.h>
 #include <Library/HiiLib.h>

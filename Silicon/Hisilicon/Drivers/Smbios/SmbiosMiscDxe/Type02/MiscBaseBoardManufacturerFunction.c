@@ -48,13 +48,13 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
     EFI_STRING                        SerialNumber;
     EFI_STRING                        AssetTag;
     EFI_STRING                        ChassisLocation;
-    STRING_REF                        TokenToGet;
+    EFI_STRING_ID                     TokenToGet;
     EFI_SMBIOS_HANDLE                 SmbiosHandle;
     SMBIOS_TABLE_TYPE2                *SmbiosRecord;
     SMBIOS_TABLE_TYPE2                *InputData = NULL;
     EFI_STATUS                        Status;
 
-    STRING_REF                        TokenToUpdate;
+    EFI_STRING_ID                     TokenToUpdate;
     //CHAR16                            *ProductName;
     //CHAR16                            *pVersion;
     //uniBIOS_y00216284_018_end 2015-1-13 09:08:22
