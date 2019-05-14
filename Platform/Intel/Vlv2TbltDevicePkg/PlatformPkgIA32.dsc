@@ -167,13 +167,7 @@
 !if $(SCSI_ENABLE) == TRUE
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 !endif
-!if $(NETWORK_ENABLE) == TRUE
-  NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
-  IpIoLib|MdeModulePkg/Library/DxeIpIoLib/DxeIpIoLib.inf
-  UdpIoLib|MdeModulePkg/Library/DxeUdpIoLib/DxeUdpIoLib.inf
-  TcpIoLib|MdeModulePkg/Library/DxeTcpIoLib/DxeTcpIoLib.inf
-  DpcLib|MdeModulePkg/Library/DxeDpcLib/DxeDpcLib.inf
-!endif
+
 !if $(S3_ENABLE) == TRUE
   S3Lib|IntelFrameworkModulePkg/Library/PeiS3Lib/PeiS3Lib.inf
 !endif
@@ -1438,40 +1432,17 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   }
 
 
+  #
+  # Network Stacks
+  #
+!include NetworkPkg/Network.dsc.inc
 
 !if $(NETWORK_ENABLE) == TRUE
-  !if $(NETWORK_ISCSI_ENABLE) == TRUE
-    NetworkPkg/IScsiDxe/IScsiDxe.inf
-  !endif
-  !if $(NETWORK_VLAN_ENABLE) == TRUE
-    MdeModulePkg/Universal/Network/VlanConfigDxe/VlanConfigDxe.inf
-  !endif
   !if $(CSM_ENABLE) == TRUE
     IntelFrameworkModulePkg/Csm/BiosThunk/Snp16Dxe/Snp16Dxe.inf
   !endif
 !endif
 
-!if $(NETWORK_ENABLE) == TRUE
-  #
-  # UEFI network modules
-  #
-    MdeModulePkg/Universal/Network/DpcDxe/DpcDxe.inf
-    MdeModulePkg/Universal/Network/SnpDxe/SnpDxe.inf
-
-    MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf
-    MdeModulePkg/Universal/Network/ArpDxe/ArpDxe.inf
-    MdeModulePkg/Universal/Network/Dhcp4Dxe/Dhcp4Dxe.inf
-    MdeModulePkg/Universal/Network/Ip4Dxe/Ip4Dxe.inf
-    MdeModulePkg/Universal/Network/Mtftp4Dxe/Mtftp4Dxe.inf
-    NetworkPkg/UefiPxeBcDxe/UefiPxeBcDxe.inf
-    NetworkPkg/TcpDxe/TcpDxe.inf
-    MdeModulePkg/Universal/Network/Udp4Dxe/Udp4Dxe.inf
-    !if $(NETWORK_IP6_ENABLE) == TRUE
-      NetworkPkg/Ip6Dxe/Ip6Dxe.inf
-      NetworkPkg/Dhcp6Dxe/Dhcp6Dxe.inf
-      NetworkPkg/Udp6Dxe/Udp6Dxe.inf
-      NetworkPkg/Mtftp6Dxe/Mtftp6Dxe.inf
-    !endif
 !endif
 
 !if $(CAPSULE_ENABLE) || $(MICOCODE_CAPSULE_ENABLE)
