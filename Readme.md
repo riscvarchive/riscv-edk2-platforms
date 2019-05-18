@@ -222,6 +222,20 @@ they will be documented with the platform.
 * [D05](Platform/Hisilicon/D05)
 * [HiKey](Platform/Hisilicon/HiKey)
 
+## [Intel](Platform/Intel/Readme.md)
+### Minimum Platforms
+* [Clevo](Platform/Intel/ClevoOpenBoardPkg)
+* [Kaby Lake](Platform/Intel/KabylakeOpenBoardPkg)
+* [Purley](Platform/Intel/PurleyOpenBoardPkg)
+
+For more information, see the
+[EDK II Minimum Platform Specification](https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification).
+### Other Platforms
+##### Intel&reg; Quark SoC X1000 based platforms
+* [Galileo](Platform/Intel/QuarkPlatformPkg)
+##### Minnowboard Max/Turbot based on Intel Valleyview2 SoC
+* [Minnowboard Max](Platform/Intel/Vlv2TbltDevicePkg)
+
 ## Marvell
 * [Armada 70x0](Platform/Marvell/Armada)
 
@@ -230,12 +244,6 @@ they will be documented with the platform.
 
 ## Socionext
 * [SynQuacer](Platform/Socionext/DeveloperBox)
-
-## Intel(R) Quark SoC X1000 based platforms
-* [Galileo](Platform/Intel/QuarkPlatformPkg)
-
-## Minnowboard Max/Turbot based on Intel Valleyview2 SoC
-* [Minnowboard Max](Platform/Intel/Vlv2TbltDevicePkg)
 
 # Maintainers
 
