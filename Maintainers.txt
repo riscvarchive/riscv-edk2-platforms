@@ -58,6 +58,7 @@ M: Yi Qian <yi.qian@intel.com>
 Platform/Intel/AdvancedFeaturePkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+R: Liming Gao <liming.gao@intel.com>
 
 Platform/Intel/ClevoOpenBoardPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
@@ -71,6 +72,7 @@ M: Michael Kubacki <michael.a.kubacki@intel.com>
 Platform/Intel/MinPlatformPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 R: Chasel Chiu <chasel.chiu@intel.com>
+R: Liming Gao <liming.gao@intel.com>
 
 Platform/Intel/PurleyOpenBoardPkg
 M: Shifei A Lu <shifei.a.lu@intel.com>
