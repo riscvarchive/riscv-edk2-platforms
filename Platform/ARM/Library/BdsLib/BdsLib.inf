@@ -22,6 +22,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  NetworkPkg/NetworkPkg.dec
   Platform/ARM/ARM.dec
 
 [LibraryClasses]
