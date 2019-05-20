@@ -48,6 +48,7 @@
   SecurityPkg/SecurityPkg.dec
   SignedCapsulePkg/SignedCapsulePkg.dec
   SourceLevelDebugPkg/SourceLevelDebugPkg.dec
+  NetworkPkg/NetworkPkg.dec
 
 [LibraryClasses]
   DxeServicesTableLib

@@ -2,7 +2,7 @@
 # Component name for module MiscSubclass
 #
 # FIX ME!
-# Copyright (c) 2006 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2006 - 2019, Intel Corporation. All rights reserved.<BR>
 #                                                                                  
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #                                                                                  
@@ -89,6 +89,7 @@
   MdePkg/MdePkg.dec
   IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
+  NetworkPkg/NetworkPkg.dec
 
 [LibraryClasses]
   HiiLib

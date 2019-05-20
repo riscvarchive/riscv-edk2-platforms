@@ -44,6 +44,7 @@
   IntelFrameworkPkg/IntelFrameworkPkg.dec
   IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   ShellPkg/ShellPkg.dec
+  NetworkPkg/NetworkPkg.dec
 
 [LibraryClasses]
   DevicePathLib
