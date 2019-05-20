@@ -71,7 +71,7 @@ M: Michael Kubacki <michael.a.kubacki@intel.com>
 
 Platform/Intel/MinPlatformPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
-R: Chasel Chiu <chasel.chiu@intel.com>
+M: Chasel Chiu <chasel.chiu@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
 Platform/Intel/PurleyOpenBoardPkg
