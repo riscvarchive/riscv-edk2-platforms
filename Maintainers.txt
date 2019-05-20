@@ -63,7 +63,7 @@ R: Liming Gao <liming.gao@intel.com>
 Platform/Intel/ClevoOpenBoardPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Ankit Sinha <ankit.sinha@intel.com>
-R: Nate DeSimone <nathaniel.l.desimone@intel.com>
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Platform/Intel/KabylakeOpenBoardPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
