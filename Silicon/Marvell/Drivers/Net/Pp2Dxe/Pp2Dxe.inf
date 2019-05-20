@@ -46,6 +46,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  NetworkPkg/NetworkPkg.dec
   ArmPkg/ArmPkg.dec
   Silicon/Marvell/Marvell.dec
 
