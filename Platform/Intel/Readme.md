@@ -107,9 +107,13 @@ return back to the minimum platform caller.
 
 **Building with the python script**
 
-1. Open command window, go to the workspace directory, e.g. c:\Kabylake.
-2. Type "cd edk2-platforms\Platform\Intel
-3. Type "python build_bios.py -p REPLACE_WITH_BOARD_NAME"
+1. Open command window, go to the workspace directory, e.g. c:\Kabylake or ~/Kabylake in the case of a linux OS
+2. If using a linux OS
+   * Type "cd edk2"
+   * Type "source edksetup.sh"
+   * Type "cd ../" to go back to the workspace directory
+3. Type "cd edk2-platforms/Platform/Intel
+4. Type "python build_bios.py -p REPLACE_WITH_BOARD_NAME"
 
 * build_bios.py arguments:
 
@@ -132,18 +136,19 @@ return back to the minimum platform caller.
   |                                                             |
 
 * For more information on build options
-  * ``Type "python build_bios.py -h"``
+  * Type "python build_bios.py -h"
 
 * Note
-  * ``Python 2.7.16 and Python 3.7.3 compatible``
-  * ``These python build scripts have been tested on Windows due to`` [cross-platform limitations](#Known-limitations)
+  * Python 2.7.16 and Python 3.7.3 compatible
+  * This python build script has been tested on Windows 10 and Ubuntu 16.04.5 LTS
+  * See [cross-platform limitations](#Known-limitations)
 
 * Configuration Files
-  * ``The edk2-platforms\Platform\Intel\build.cfg file contains the default settings used by build_bios.py``
-  * ``The default settings are under the DEFAULT_CONFIG section``
-  * ``Each board can have a settings file that will override the edk2-platforms\Platform\Intel\build.cfg settings``
-  * ``An example of a board specific settings:``
-    * ``edk2-platforms\Platform\Intel\KabylakeOpenBoardPkg\KabylakeRvp3\build_config.cfg``
+  * The edk2-platforms\Platform\Intel\build.cfg file contains the default settings used by build_bios.py
+  * The default settings are under the DEFAULT_CONFIG section
+  * Each board can have a settings file that will override the edk2-platforms\Platform\Intel\build.cfg settings
+  * An example of a board specific settings:
+    * edk2-platforms\Platform\Intel\KabylakeOpenBoardPkg\KabylakeRvp3\build_config.cfg
 
 * Workspace view of the build scripts
   * <pre>
@@ -212,14 +217,13 @@ Users can also flash the UEFI firmware image to the highest area of the flash re
 
 ### **Known limitations**
 
-* All firmware projects can only build on Windows with the validated configuration below.
-  * Cross-platform build support is work-in-progress.
-
 **KabylakeOpenBoardPkg**
 1. This firmware project has only been tested on the Intel KabylakeRvp3 board.
 2. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
   Device.
-3. This firmware project build has only been tested using the Microsoft Visual Studio 2015 compiler.
+3. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015.
+4. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
+5. The build was tested with NASM version 2.11.08.
 
 **PurleyOpenBoardPkg**
 1. This firmware project has only been tested on the Microsoft MtOlympus board.
@@ -228,9 +232,11 @@ Users can also flash the UEFI firmware image to the highest area of the flash re
 
 **ClevoOpenBoardPkg**
 1. Currently, support is only being added for the N1xxWU series of boards.
-2. The firmware project build has only been tested using the Microsoft Visual Studio 2015 compiler.
-3. The firmware project has not been tested on an actual board, it *should not* be expected to boot.
-4. The firmware project applies to all Clevo supported board configurations but is only being tested on System 76 Galago
+2. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015 compiler.
+3. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
+4. The build was tested with NASM version 2.11.08.
+5. The firmware project has not been tested on an actual board, it *should not* be expected to boot.
+6. The firmware project applies to all Clevo supported board configurations but is only being tested on System 76 Galago
   Pro devices.
 
 ### **Planned Activities**
