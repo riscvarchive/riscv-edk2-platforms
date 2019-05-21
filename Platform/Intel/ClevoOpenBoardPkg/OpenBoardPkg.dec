@@ -18,8 +18,8 @@ PACKAGE_GUID      = D04CCA80-5F71-478D-9A26-72BC751D0106
 
 [Includes]
 Include
-N1xxWU\Include
-Features\Tbt\Include
+N1xxWU/Include
+Features/Tbt/Include
 
 [Guids]
 gBoardModuleTokenSpaceGuid            =  {0x72d1fff7, 0xa42a, 0x4219, {0xb9, 0x95, 0x5a, 0x67, 0x53, 0x6e, 0xa4, 0x2a}}
