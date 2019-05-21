@@ -28,6 +28,11 @@
 
 [PcdsFixedAtBuild.common]
   gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode|TRUE
+  #
+  # 0: FSP Wrapper is running in Dispatch mode.
+  # 1: FSP Wrapper is running in API mode.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection|1
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
@@ -49,9 +54,33 @@
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF00000
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
 
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # FSP API mode is backward compatible with earlier FSP which
+  # does not share stack with boot loader, so FSP needs more
+  # temporary memory for FSP heap + stack size.
+  #
   gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize        | 0x00026000
 
+  #
+  # In FSP API mode, FSP and boot loader runnig on different stack
+  # so no need to enlarge boot loader stack size.
+  #
   gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
+!else
+  #
+  # FSP Dispatch mode will share the same stack with boot loader,
+  # here temporary ram size is used by FSP heap and can be smaller
+  #
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize        | 0x00010000
+
+  #
+  # In FSP Dispatch mode boot loader stack size must be big enough for executing
+  # both boot loader and FSP.
+  #
+  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x40000
+!endif
+
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x5000
   gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400

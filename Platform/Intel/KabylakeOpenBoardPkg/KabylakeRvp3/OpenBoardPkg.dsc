@@ -15,7 +15,7 @@
   DEFINE      PLATFORM_PACKAGE                = MinPlatformPkg
   DEFINE      PLATFORM_SI_PACKAGE             = KabylakeSiliconPkg
   DEFINE      PLATFORM_SI_BIN_PACKAGE         = KabylakeSiliconBinPkg
-  DEFINE      PLATFORM_FSP_BIN_PACKAGE        = KabylakeFspBinPkg
+  DEFINE      PLATFORM_FSP_BIN_PACKAGE        = AmberLakeFspBinPkg
   DEFINE      PLATFORM_BOARD_PACKAGE          = KabylakeOpenBoardPkg
   DEFINE      BOARD                           = KabylakeRvp3
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
@@ -24,6 +24,21 @@
   # Platform On/Off features are defined here
   #
   !include OpenBoardPkgConfig.dsc
+  !include OpenBoardPkgPcd.dsc
+
+[Defines]
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # For backward compatibility API mode will use KabylakeFspBinPkg.
+  # KabylakeFspBinPkg only supports API mode.
+  #
+  DEFINE      PLATFORM_FSP_BIN_PACKAGE        = KabylakeFspBinPkg
+!else
+  #
+  # AmberLakeFspBinPkg supports both API and Dispatch modes
+  #
+  DEFINE      PLATFORM_FSP_BIN_PACKAGE        = AmberLakeFspBinPkg
+!endif
 
 ################################################################################
 #
@@ -92,8 +107,20 @@
   FspWrapperApiTestLib|IntelFsp2WrapperPkg/Library/PeiFspWrapperApiTestLib/PeiFspWrapperApiTestLib.inf
 
   FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
-  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibFsp/PeiSiliconPolicyInitLibFsp.inf
+
+!if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
+  #
+  # Below library are used by FSP API mode
+  #
   SiliconPolicyUpdateLib|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/PeiSiliconPolicyUpdateLibFsp/PeiSiliconPolicyUpdateLibFsp.inf
+  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibFsp/PeiSiliconPolicyInitLibFsp.inf
+!else
+  #
+  # Below library are used by FSP Dispatch mode and non-FSP build (EDK2 build)
+  #
+  SiliconPolicyUpdateLib|$(PLATFORM_BOARD_PACKAGE)/Policy/Library/PeiSiliconPolicyUpdateLib/PeiSiliconPolicyUpdateLib.inf
+  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibFsp/PeiSiliconPolicyInitLibFspAml.inf
+!endif
 
   ConfigBlockLib|$(PLATFORM_SI_PACKAGE)/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
   SiliconInitLib|$(PLATFORM_SI_PACKAGE)/Library/SiliconInitLib/SiliconInitLib.inf
@@ -172,8 +199,6 @@
 
 [LibraryClasses.X64.DXE_RUNTIME_DRIVER]
   ResetSystemLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/DxeRuntimeResetSystemLib/DxeRuntimeResetSystemLib.inf
-
-!include OpenBoardPkgPcd.dsc
 
 [Components.IA32]
 

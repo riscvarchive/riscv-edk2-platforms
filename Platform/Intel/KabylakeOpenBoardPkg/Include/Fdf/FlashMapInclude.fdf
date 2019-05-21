@@ -1,7 +1,7 @@
 ## @file
 #  FDF file of Platform.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -41,6 +41,6 @@ SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspSSize                = 0x00060000
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMOffset              = 0x00600000  # Flash addr (0xFFE00000)
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMSize                = 0x000BC000  #
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTOffset              = 0x006BC000  # Flash addr (0xFFEBC000)
-SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTSize                = 0x00004000  #
-SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemoryOffset         = 0x006C0000  # Flash addr (0xFFEC0000)
-SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemorySize           = 0x00140000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTSize                = 0x00014000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemoryOffset         = 0x006D0000  # Flash addr (0xFFED0000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemorySize           = 0x00130000  #
