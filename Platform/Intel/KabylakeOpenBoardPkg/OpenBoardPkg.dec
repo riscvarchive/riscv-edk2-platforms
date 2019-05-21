@@ -5,7 +5,7 @@
 # INF files to generate AutoGen.c and AutoGen.h files
 # for the build infrastructure.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -20,8 +20,8 @@ PACKAGE_GUID = 0A8BA6E8-C8AC-4AC1-87AC-52772FA6AE5E
 
 [Includes]
 Include
-KabylakeRvp3\Include
-Features\Tbt\Include
+KabylakeRvp3/Include
+Features/Tbt/Include
 
 [Guids]
 
