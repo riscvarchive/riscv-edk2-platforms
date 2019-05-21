@@ -135,12 +135,16 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
 
     # get the python path
     if os.environ.get("PYTHON_HOME") is None:
-        config["PYTHON_HOME"] = None
         if os.environ.get("PYTHONPATH") is not None:
             config["PYTHON_HOME"] = os.environ.get("PYTHONPATH")
         else:
-            print("PYTHONPATH environment variable is not found")
-            sys.exit(1)
+            config["PYTHON_HOME"] = os.path.dirname(sys.executable)
+            config["PYTHONPATH"] = config["PYTHON_HOME"]
+
+    if config.get("PYTHON_HOME") is None or \
+       not os.path.exists(config.get("PYTHON_HOME")):
+        print("PYTHON_HOME environment variable is not found")
+        sys.exit(1)
 
     # if python is installed, disable the binary base tools.
     # python is installed if this code is running :)
@@ -151,18 +155,18 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
     # Run edk setup and  update config
     if os.name == 'nt':
         edk2_setup_cmd = [os.path.join(config["EFI_SOURCE"], "edksetup"),
-                        "Rebuild"]
+                          "Rebuild"]
 
         if config.get("EDK_SETUP_OPTION") and \
-        config["EDK_SETUP_OPTION"] != " ":
+           config["EDK_SETUP_OPTION"] != " ":
             edk2_setup_cmd.append(config["EDK_SETUP_OPTION"])
 
         _, _, result, return_code = execute_script(edk2_setup_cmd,
-                                                config,
-                                                collect_env=True,
-                                                shell=True)
+                                                   config,
+                                                   collect_env=True,
+                                                   shell=True)
         if return_code == 0 and result is not None and isinstance(result,
-                                                                dict):
+                                                                  dict):
             config.update(result)
 
     # nmake BaseTools source
@@ -355,7 +359,11 @@ def build(config):
         command.append("-D")
         command.append("MAX_SOCKET=" + config["MAX_SOCKET"])
 
-    _, _, _, exit_code = execute_script(command, config)
+    shell = True
+    if os.name == "posix":
+        shell = False
+
+    _, _, _, exit_code = execute_script(command, config, shell=shell)
     if exit_code != 0:
         build_failed(config)
 
