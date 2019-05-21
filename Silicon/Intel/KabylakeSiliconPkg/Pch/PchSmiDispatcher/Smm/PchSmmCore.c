@@ -2,7 +2,7 @@
   This driver is responsible for the registration of child drivers
   and the abstraction of the PCH SMI sources.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -325,6 +325,7 @@ SmiInputValueDuplicateCheck (
                                   registered and the SMI source has been enabled.
 **/
 EFI_STATUS
+EFIAPI
 PchSmmCoreRegister (
   IN  PCH_SMM_GENERIC_PROTOCOL                          *This,
   IN  EFI_SMM_HANDLER_ENTRY_POINT2                      DispatchFunction,
@@ -596,6 +597,7 @@ Error:
   @retval EFI_INVALID_PARAMETER   Handle is invalid.
 **/
 EFI_STATUS
+EFIAPI
 PchSmmCoreUnRegister (
   IN PCH_SMM_GENERIC_PROTOCOL                           *This,
   IN EFI_HANDLE                                         *DispatchHandle

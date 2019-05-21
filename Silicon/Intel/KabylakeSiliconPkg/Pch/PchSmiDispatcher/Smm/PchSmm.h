@@ -1,7 +1,7 @@
 /** @file
   Prototypes and defines for the PCH SMM Dispatcher.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -510,6 +510,7 @@ typedef struct {
                                   registered and the SMI source has been enabled.
 **/
 EFI_STATUS
+EFIAPI
 PchSmmCoreRegister (
   IN  PCH_SMM_GENERIC_PROTOCOL                          *This,
   IN  EFI_SMM_HANDLER_ENTRY_POINT2                      DispatchFunction,
@@ -530,6 +531,7 @@ PchSmmCoreRegister (
   @retval EFI_INVALID_PARAMETER   Handle is invalid.
 **/
 EFI_STATUS
+EFIAPI
 PchSmmCoreUnRegister (
   IN  PCH_SMM_GENERIC_PROTOCOL                         *This,
   IN  EFI_HANDLE                                       *DispatchHandle

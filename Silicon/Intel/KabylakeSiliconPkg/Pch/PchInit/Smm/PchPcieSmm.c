@@ -1,7 +1,7 @@
 /** @file
   PCH Pcie SMM Driver Entry
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -238,6 +238,7 @@ PchPciePmIoTrapSmiCallback (
 
 **/
 VOID
+EFIAPI
 PchPcieIoTrapSmiCallback (
   IN  EFI_HANDLE                            DispatchHandle,
   IN  EFI_SMM_IO_TRAP_CONTEXT                *CallbackContext,
