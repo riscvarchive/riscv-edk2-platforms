@@ -19,6 +19,7 @@
 
 [Sources]
   Armada80x0McBin/Dsdt.asl
+  Armada80x0McBin/Mcfg.aslc
   Fadt.aslc
   Gtdt.aslc
   Madt.aslc
