@@ -21,6 +21,12 @@
 
 
 [Includes]
-
+  Include
 
 [LibraryClasses]
+  ##  @libraryclass    Provide services to access CMOS area.
+  CmosAccessLib|Include/Library/CmosAccessLib.h
+
+  ##  @libraryclass    Provide platform relevant services to access CMOS area.
+  PlatformCmosAccessLib|Include/Library/PlatformCmosAccessLib.h
+

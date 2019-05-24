@@ -71,4 +71,5 @@
 ###################################################################################################
 
 [Components]
-
+  BoardModulePkg/Library/CmosAccessLib/CmosAccessLib.inf
+  BoardModulePkg/Library/PlatformCmosAccessLibNull/PlatformCmosAccessLibNull.inf
