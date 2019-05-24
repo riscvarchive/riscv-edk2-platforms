@@ -73,3 +73,7 @@
 [Components]
   BoardModulePkg/Library/CmosAccessLib/CmosAccessLib.inf
   BoardModulePkg/Library/PlatformCmosAccessLibNull/PlatformCmosAccessLibNull.inf
+
+  BoardModulePkg/Library/BiosIdLib/DxeBiosIdLib.inf
+  BoardModulePkg/Library/BiosIdLib/PeiBiosIdLib.inf
+
