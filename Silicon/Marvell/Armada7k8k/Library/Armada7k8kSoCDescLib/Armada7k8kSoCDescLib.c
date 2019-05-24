@@ -272,6 +272,50 @@ ArmadaSoCDescAhciGet (
   return EFI_SUCCESS;
 }
 
+/**
+  This function returns the total number of PCIE controllers and an array
+  with their base addresses.
+
+  @param[in out] **PcieBaseAddresses Array containing PCIE controllers' base
+                                     adresses.
+  @param[in out]  *Count             Total amount of available PCIE controllers.
+
+  @retval EFI_SUCCESS                The data were obtained successfully.
+  @retval EFI_OUT_OF_RESOURCES       The request could not be completed due to a
+                                     lack of resources.
+
+**/
+EFI_STATUS
+EFIAPI
+ArmadaSoCPcieGet (
+  IN OUT EFI_PHYSICAL_ADDRESS  **PcieBaseAddresses,
+  IN OUT UINTN                  *Count
+  )
+{
+  UINTN CpCount, CpIndex, Index;
+  EFI_PHYSICAL_ADDRESS *BaseAddress;
+
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  *Count = CpCount * MV_SOC_PCIE_PER_CP_COUNT;
+  BaseAddress = AllocateZeroPool (*Count * sizeof (EFI_PHYSICAL_ADDRESS));
+  if (BaseAddress == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  *PcieBaseAddresses = BaseAddress;
+
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    for (Index = 0; Index < MV_SOC_PCIE_PER_CP_COUNT; Index++) {
+      *BaseAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_PCIE_BASE (Index);
+      BaseAddress++;
+    }
+  }
+
+  return EFI_SUCCESS;
+}
+
 EFI_STATUS
 EFIAPI
 ArmadaSoCDescPp2Get (

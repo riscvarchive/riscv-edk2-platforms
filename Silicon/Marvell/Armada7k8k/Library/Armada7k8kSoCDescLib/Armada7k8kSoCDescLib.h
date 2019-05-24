@@ -76,6 +76,12 @@
 #define MV_SOC_MDIO_ID(Cp)               (Cp)
 
 //
+// Platform description of PCIE
+//
+#define MV_SOC_PCIE_PER_CP_COUNT         3
+#define MV_SOC_PCIE_BASE(Index)          (0x600000 + ((Index) * 0x20000))
+
+//
 // Platform description of PP2 NIC
 //
 #define MV_SOC_PP2_BASE(Cp)              MV_SOC_CP_BASE (Cp)
