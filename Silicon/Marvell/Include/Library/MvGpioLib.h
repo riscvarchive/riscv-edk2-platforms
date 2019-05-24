@@ -47,6 +47,7 @@ typedef struct {
 } MV_GPIO_DEVICE_PATH;
 
 typedef struct {
+  MV_GPIO_DRIVER_TYPE  ControllerType;
   UINTN    ControllerId;
   UINTN    PinNumber;
   BOOLEAN  ActiveHigh;
