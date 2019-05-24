@@ -46,6 +46,54 @@ ArmadaBoardGpioExpanderGet (
 }
 
 //
+// PCIE
+//
+STATIC
+MV_PCIE_CONTROLLER mPcieController[] = {
+  { /* PCIE0 @0xF2600000 */
+    .PcieDbiAddress        = 0xF2600000,
+    .ConfigSpaceAddress    = 0xE0000000,
+    .HaveResetGpio         = FALSE,
+    .PcieResetGpio         = { 0 },
+    .PcieBusMin            = 0,
+    .PcieBusMax            = 0xFE,
+    .PcieIoTranslation     = 0xEFF00000,
+    .PcieIoWinBase         = 0x0,
+    .PcieIoWinSize         = 0x10000,
+    .PcieMmio32Translation = 0,
+    .PcieMmio32WinBase     = 0xC0000000,
+    .PcieMmio32WinSize     = 0x20000000,
+    .PcieMmio64Translation = 0,
+    .PcieMmio64WinBase     = 0x800000000,
+    .PcieMmio64WinSize     = 0x100000000,
+  }
+};
+
+/**
+  Return the number and description of PCIE controllers used on the platform.
+
+  @param[in out] **PcieControllers      Array containing PCIE controllers'
+                                        description.
+  @param[in out]  *PcieControllerCount  Amount of used PCIE controllers.
+
+  @retval EFI_SUCCESS                   The data were obtained successfully.
+  @retval other                         Return error status.
+
+**/
+EFI_STATUS
+EFIAPI
+ArmadaBoardPcieControllerGet (
+  IN OUT MV_PCIE_CONTROLLER CONST **PcieControllers,
+  IN OUT UINTN                     *PcieControllerCount
+  )
+{
+  *PcieControllers = mPcieController;
+  *PcieControllerCount = ARRAY_SIZE (mPcieController);
+
+  return EFI_SUCCESS;
+}
+
+//
 // Order of devices in SdMmcDescTemplate has to be in par with ArmadaSoCDescLib
 //
 STATIC
