@@ -180,6 +180,9 @@
 };
 
 &cp0_pcie0 {
+        compatible = "marvell,armada8k-pcie-ecam", "snps,dw-pcie-ecam";
+        reg = <0 0xe0000000 0 0xff00000>;
+        bus-range = <0 0xfe>;
         pinctrl-names = "default";
         pinctrl-0 = <&cp0_pcie_pins>;
         num-lanes = <4>;
