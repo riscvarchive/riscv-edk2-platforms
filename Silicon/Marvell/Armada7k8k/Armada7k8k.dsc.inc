@@ -72,6 +72,8 @@
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
   PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
   PciCf8Lib|MdePkg/Library/BasePciCf8Lib/BasePciCf8Lib.inf
+  PciHostBridgeLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kPciHostBridgeLib/PciHostBridgeLib.inf
+  PciSegmentLib|Silicon/Marvell/Armada7k8k/Library/Armada7k8kPciSegmentLib/PciSegmentLib.inf
 
 # Basic UEFI services libraries
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
@@ -400,6 +402,13 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize|0x00010000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize|0x00010000
 
+  # PCIE
+  gArmTokenSpaceGuid.PcdPciIoTranslation|0xEFF00000
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
+
+  # SoC Configuration Space
+  gMarvellTokenSpaceGuid.PcdConfigSpaceBaseAddress|0xE0000000
+
 !if $(CAPSULE_ENABLE)
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100
@@ -502,6 +511,11 @@
   MdeModulePkg/Bus/Sd/SdDxe/SdDxe.inf
   MdeModulePkg/Bus/Pci/SdMmcPciHcDxe/SdMmcPciHcDxe.inf
   Silicon/Marvell/Drivers/SdMmc/XenonDxe/XenonDxe.inf
+
+  # PCI
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
   # Console packages
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
