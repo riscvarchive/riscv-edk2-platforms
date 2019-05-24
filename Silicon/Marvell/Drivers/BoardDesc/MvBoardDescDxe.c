@@ -36,6 +36,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 MV_BOARD_DESC *mBoardDescInstance;
 
 STATIC MV_BOARD_GPIO_DESCRIPTION *mGpioDescription;
+STATIC MV_BOARD_PCIE_DESCRIPTION *mPcieDescription;
 
 STATIC
 EFI_STATUS
@@ -444,6 +445,90 @@ MvBoardDescXhciGet (
   return EFI_SUCCESS;
 }
 
+/**
+  Return the description of PCIE controllers used on the platform.
+
+  @param[in out]  *This                 Pointer to board description protocol.
+  @param[in out] **PcieDescription      Array containing PCIE controllers'
+                                        description.
+
+  @retval EFI_SUCCESS                   The data were obtained successfully.
+  @retval EFI_NOT_FOUND                 None of the controllers is used.
+  @retval EFI_INVALID_PARAMETER         Description wrongly defined.
+  @retval EFI_OUT_OF_RESOURCES          Lack of resources.
+  @retval Other                         Return error status.
+
+**/
+STATIC
+EFI_STATUS
+MvBoardPcieDescriptionGet (
+  IN MARVELL_BOARD_DESC_PROTOCOL          *This,
+  IN OUT MV_BOARD_PCIE_DESCRIPTION CONST **PcieDescription
+  )
+{
+  UINTN SoCPcieControllerCount, BoardPcieControllerCount, SoCIndex, BoardIndex;
+  EFI_PHYSICAL_ADDRESS *PcieDbiAddresses;
+  MV_PCIE_CONTROLLER CONST *PcieControllers;
+  EFI_STATUS Status;
+
+  /* Use existing structure if already created. */
+  if (mPcieDescription != NULL) {
+    *PcieDescription = mPcieDescription;
+    return EFI_SUCCESS;
+  }
+
+  /* Get SoC data about all available PCIE controllers. */
+  Status = ArmadaSoCPcieGet (&PcieDbiAddresses, &SoCPcieControllerCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /* Get per-board information about all used PCIE controllers. */
+  Status = ArmadaBoardPcieControllerGet (&PcieControllers,
+             &BoardPcieControllerCount);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  /* Sanity check of the board description. */
+  if (BoardPcieControllerCount > SoCPcieControllerCount) {
+    DEBUG ((DEBUG_ERROR, "%a: Too many controllers described\n", __FUNCTION__));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  for (BoardIndex = 0; BoardIndex < BoardPcieControllerCount; BoardIndex++) {
+    for (SoCIndex = 0; SoCIndex < SoCPcieControllerCount; SoCIndex++) {
+      if (PcieControllers[BoardIndex].PcieDbiAddress ==
+          PcieDbiAddresses[SoCIndex]) {
+          /* Match found */
+          break;
+      }
+    }
+    if (SoCIndex == SoCPcieControllerCount) {
+      DEBUG ((DEBUG_ERROR,
+        "%a: Controller #%d base address invalid: 0x%x\n",
+        __FUNCTION__,
+        BoardIndex,
+        PcieControllers[BoardIndex].PcieDbiAddress));
+      return EFI_INVALID_PARAMETER;
+    }
+  }
+
+  /* Allocate and fill board description. */
+  mPcieDescription = AllocateZeroPool (sizeof (MV_BOARD_PCIE_DESCRIPTION));
+  if (mPcieDescription == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  mPcieDescription->PcieControllers = PcieControllers;
+  mPcieDescription->PcieControllerCount = BoardPcieControllerCount;
+
+  *PcieDescription = mPcieDescription;
+
+  return EFI_SUCCESS;
+}
+
 STATIC
 EFI_STATUS
 MvBoardDescPp2Get (
@@ -621,6 +706,7 @@ MvBoardDescInitProtocol (
   BoardDescProtocol->BoardDescXhciGet = MvBoardDescXhciGet;
   BoardDescProtocol->BoardDescFree = MvBoardDescFree;
   BoardDescProtocol->GpioDescriptionGet = MvBoardGpioDescriptionGet;
+  BoardDescProtocol->PcieDescriptionGet = MvBoardPcieDescriptionGet;
 
   return EFI_SUCCESS;
 }

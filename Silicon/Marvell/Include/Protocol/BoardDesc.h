@@ -90,6 +90,27 @@ EFI_STATUS
   IN OUT MV_BOARD_XHCI_DESC      **XhciDesc
   );
 
+/**
+  Return the description of PCIE controllers used on the platform.
+
+  @param[in out]  *This                 Pointer to board description protocol.
+  @param[in out] **PcieDescription      Array containing PCIE controllers'
+                                        description.
+
+  @retval EFI_SUCCESS                   The data were obtained successfully.
+  @retval EFI_NOT_FOUND                 None of the controllers is used.
+  @retval EFI_INVALID_PARAMETER         Description wrongly defined.
+  @retval EFI_OUT_OF_RESOURCES          Lack of resources.
+  @retval Other                         Return error status.
+
+**/
+typedef
+EFI_STATUS
+(EFIAPI *MV_BOARD_PCIE_DESCRIPTION_GET) (
+  IN MARVELL_BOARD_DESC_PROTOCOL          *This,
+  IN OUT MV_BOARD_PCIE_DESCRIPTION CONST **PcieDescription
+  );
+
 typedef
 EFI_STATUS
 (EFIAPI *MV_BOARD_DESC_PP2_GET) (
@@ -121,6 +142,7 @@ struct _MARVELL_BOARD_DESC_PROTOCOL {
   MV_BOARD_DESC_XHCI_GET         BoardDescXhciGet;
   MV_BOARD_DESC_FREE             BoardDescFree;
   MV_BOARD_GPIO_DESCRIPTION_GET  GpioDescriptionGet;
+  MV_BOARD_PCIE_DESCRIPTION_GET  PcieDescriptionGet;
 };
 
 #endif // __MARVELL_BOARD_DESC_PROTOCOL_H__
