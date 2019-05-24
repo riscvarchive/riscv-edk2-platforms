@@ -56,9 +56,6 @@
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
 
-[LibraryClasses.common]
-  NonDiscoverableInitLib|Platform/Marvell/Armada80x0Db/NonDiscoverableInitLib/NonDiscoverableInitLib.inf
-
 [Components.common]
   Silicon/Marvell/Armada7k8k/DeviceTree/Armada80x0Db.inf
 
@@ -67,6 +64,7 @@
 
 [LibraryClasses.common]
   ArmadaBoardDescLib|Platform/Marvell/Armada80x0Db/Armada80x0DbBoardDescLib/Armada80x0DbBoardDescLib.inf
+  NonDiscoverableInitLib|Platform/Marvell/Armada80x0Db/NonDiscoverableInitLib/NonDiscoverableInitLib.inf
 
 ################################################################################
 #
