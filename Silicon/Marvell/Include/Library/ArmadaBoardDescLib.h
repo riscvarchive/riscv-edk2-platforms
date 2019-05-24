@@ -9,6 +9,7 @@
 #define __ARMADA_BOARD_DESC_LIB_H__
 
 #include <Library/ArmadaSoCDescLib.h>
+#include <Library/MvGpioLib.h>
 
 //
 // COMPHY controllers per-board description
@@ -103,6 +104,51 @@ typedef struct {
   MV_SOC_XHCI_DESC *SoC;
   UINTN             XhciDevCount;
 } MV_BOARD_XHCI_DESC;
+
+//
+// PCIE controllers description
+//
+typedef struct {
+  EFI_PHYSICAL_ADDRESS PcieDbiAddress;
+  EFI_PHYSICAL_ADDRESS ConfigSpaceAddress;
+  BOOLEAN HaveResetGpio;
+  MV_GPIO_PIN PcieResetGpio;
+  UINT64 PcieBusMin;
+  UINT64 PcieBusMax;
+  UINT64 PcieIoTranslation;
+  UINT64 PcieIoWinBase;
+  UINT64 PcieIoWinSize;
+  UINT64 PcieMmio32Translation;
+  UINT64 PcieMmio32WinBase;
+  UINT64 PcieMmio32WinSize;
+  UINT64 PcieMmio64Translation;
+  UINT64 PcieMmio64WinBase;
+  UINT64 PcieMmio64WinSize;
+} MV_PCIE_CONTROLLER;
+
+typedef struct {
+  MV_PCIE_CONTROLLER CONST *PcieControllers;
+  UINTN                     PcieControllerCount;
+} MV_BOARD_PCIE_DESCRIPTION;
+
+/**
+  Return the number and description of PCIE controllers used on the platform.
+
+  @param[in out] **PcieControllers      Array containing PCIE controllers'
+                                        description.
+  @param[in out]  *PcieControllerCount  Amount of used PCIE controllers.
+
+  @retval EFI_SUCCESS                   The data were obtained successfully.
+  @retval EFI_NOT_FOUND                 None of the controllers is used.
+  @retval other                         Return error status.
+
+**/
+EFI_STATUS
+EFIAPI
+ArmadaBoardPcieControllerGet (
+  IN OUT MV_PCIE_CONTROLLER CONST **PcieControllers,
+  IN OUT UINTN                     *PcieControllerCount
+  );
 
 //
 // PP2 NIC devices per-board description
