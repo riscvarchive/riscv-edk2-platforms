@@ -19,6 +19,7 @@
 
 [Sources]
   Armada70x0Db/Dsdt.asl
+  Armada70x0Db/Mcfg.aslc
   Fadt.aslc
   Gtdt.aslc
   Madt.aslc

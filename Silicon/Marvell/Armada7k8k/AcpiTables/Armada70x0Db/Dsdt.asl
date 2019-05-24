@@ -9,6 +9,7 @@
 
 **/
 
+#include "Armada70x0Db/Pcie.h"
 #include "IcuInterrupts.h"
 
 DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
@@ -218,6 +219,113 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
                     Package () { "compatible", "inside-secure,safexcel-eip76" },
                 }
             })
+        }
+
+        //
+        // PCIe Root Bus
+        //
+        Device (PCI0)
+        {
+            Name (_HID, "PNP0A08" /* PCI Express Bus */)  // _HID: Hardware ID
+            Name (_CID, "PNP0A03" /* PCI Bus */)  // _CID: Compatible ID
+            Name (_SEG, 0x00)  // _SEG: PCI Segment
+            Name (_BBN, 0x00)  // _BBN: BIOS Bus Number
+            Name (_CCA, 0x01)  // _CCA: Cache Coherency Attribute
+            Name (_PRT, Package ()  // _PRT: PCI Routing Table
+            {
+                Package () { 0xFFFF, 0x0, 0x0, 0x40 },
+                Package () { 0xFFFF, 0x1, 0x0, 0x40 },
+                Package () { 0xFFFF, 0x2, 0x0, 0x40 },
+                Package () { 0xFFFF, 0x3, 0x0, 0x40 }
+            })
+
+            Method (_CRS, 0, Serialized)  // _CRS: Current Resource Settings
+            {
+                Name (RBUF, ResourceTemplate ()
+                {
+                    WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
+                        0x0000,                             // Granularity
+                        PCI_BUS_MIN,                        // Range Minimum
+                        PCI_BUS_MAX,                        // Range Maximum
+                        0x0000,                             // Translation Offset
+                        PCI_BUS_COUNT                       // Length
+                        )
+                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
+                        0x00000000,                         // Granularity
+                        PCI_MMIO32_BASE,                    // Range Minimum
+                        0xDFFFFFFF,                         // Range Maximum
+                        0x00000000,                         // Translation Offset
+                        PCI_MMIO32_SIZE                     // Length
+                        )
+                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
+                        0x0000000000000000,                 // Granularity
+                        PCI_MMIO64_BASE,                    // Range Minimum
+                        0x8FFFFFFFF,                        // Range Maximum
+                        0x00000000,                         // Translation Offset
+                        PCI_MMIO64_SIZE                     // Length
+                        )
+                    DWordIo (ResourceProducer, MinFixed, MaxFixed, PosDecode, EntireRange,
+                        0x00000000,                         // Granularity
+                        PCI_IO_BASE,                        // Range Minimum
+                        0x0000FFFF,                         // Range Maximum
+                        PCI_IO_TRANSLATION,                 // Translation Address
+                        PCI_IO_SIZE,                        // Length
+                        ,
+                        ,
+                        ,
+                        TypeTranslation
+                        )
+                })
+                Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
+            } // Method(_CRS)
+
+            Device (RES0)
+            {
+                Name (_HID, "PNP0C02")
+                Name (_CRS, ResourceTemplate ()
+                {
+                    Memory32Fixed (ReadWrite,
+                                   PCI_ECAM_BASE,
+                                   PCI_ECAM_SIZE
+                                   )
+                })
+            }
+            Name (SUPP, 0x00)
+            Name (CTRL, 0x00)
+            Method (_OSC, 4, NotSerialized)  // _OSC: Operating System Capabilities
+            {
+                CreateDWordField (Arg3, 0x00, CDW1)
+                If (LEqual (Arg0, ToUUID ("33db4d5b-1ff7-401c-9657-7441c03dd766") /* PCI Host Bridge Device */))
+                {
+                    CreateDWordField (Arg3, 0x04, CDW2)
+                    CreateDWordField (Arg3, 0x08, CDW3)
+                    Store (CDW2, SUPP) /* \_SB_.PCI0.SUPP */
+                    Store (CDW3, CTRL) /* \_SB_.PCI0.CTRL */
+                    If (LNotEqual (And (SUPP, 0x16), 0x16))
+                    {
+                        And (CTRL, 0x1E, CTRL) /* \_SB_.PCI0.CTRL */
+                    }
+
+                    And (CTRL, 0x1D, CTRL) /* \_SB_.PCI0.CTRL */
+                    If (LNotEqual (Arg1, One))
+                    {
+                        Or (CDW1, 0x08, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
+                    }
+
+                    If (LNotEqual (CDW3, CTRL))
+                    {
+                        Or (CDW1, 0x10, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
+                    }
+
+                    Store (CTRL, CDW3) /* \_SB_.PCI0._OSC.CDW3 */
+                    Return (Arg3)
+                }
+                Else
+                {
+                    Or (CDW1, 0x04, CDW1) /* \_SB_.PCI0._OSC.CDW1 */
+                    Return (Arg3)
+                }
+            } // Method(_OSC)
         }
     }
 }
