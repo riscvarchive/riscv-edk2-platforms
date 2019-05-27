@@ -1,0 +1,26 @@
+## @file
+# This package provides the modules that build for a full feature platform.
+# This BoardModulePkg should only depend on EDKII Core packages and MinPlatformPkg.
+#
+# The DEC files are used by the utilities that parse DSC and
+# INF files to generate AutoGen.c and AutoGen.h files
+# for the build infrastructure.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+
+[Defines]
+  DEC_SPECIFICATION = 0x00010017
+  PACKAGE_NAME      = BoardModulePkg
+  PACKAGE_VERSION   = 0.1
+  PACKAGE_GUID      = 30EEB750-574D-45AA-8895-D77161019BC7
+
+
+[Includes]
+
+
+[LibraryClasses]

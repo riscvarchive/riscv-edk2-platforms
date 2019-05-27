@@ -60,6 +60,10 @@ M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
+Platform/Intel/BoardModulePkg
+M: Eric Dong <eric.dong@intel.com>
+R: Liming Gao <liming.gao@intel.com>
+
 Platform/Intel/ClevoOpenBoardPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Ankit Sinha <ankit.sinha@intel.com>
