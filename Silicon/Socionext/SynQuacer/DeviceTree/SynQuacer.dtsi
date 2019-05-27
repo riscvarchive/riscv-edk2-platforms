@@ -545,6 +545,9 @@
     spi: spi@54810000 {
         compatible = "socionext,synquacer-spi";
         reg = <0x0 0x54810000 0x0 0x1000>;
+        interrupts = <GIC_SPI 160 IRQ_TYPE_LEVEL_HIGH>,
+                     <GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>,
+                     <GIC_SPI 162 IRQ_TYPE_LEVEL_HIGH>;
         clocks = <&clk_alw_1_8>;
         clock-names = "iHCLK";
         socionext,use-rtm;
