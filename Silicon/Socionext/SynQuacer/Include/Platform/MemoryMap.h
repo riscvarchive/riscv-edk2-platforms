@@ -78,4 +78,8 @@
 #define SYNQUACER_UART1_BASE            0x51040000
 #define SYNQUACER_UART1_SIZE            SIZE_4KB
 
+// SPI controller #1
+#define SYNQUACER_SPI1_BASE             0x54810000
+#define SYNQUACER_SPI1_SIZE             SIZE_4KB
+
 #endif

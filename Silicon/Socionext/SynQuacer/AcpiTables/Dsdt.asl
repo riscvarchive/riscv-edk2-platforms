@@ -251,5 +251,24 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
     Device (PWRB) {
       Name (_HID, "PNP0C0C")
     }
+
+    Device (SPI0) {
+      Name (_HID, "SCX0004")
+      Name (_UID, Zero)
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, SYNQUACER_SPI1_BASE, SYNQUACER_SPI1_SIZE)
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 192, 193, 194 }
+      })
+
+      Name (_DSD, Package ()  // _DSD: Device-Specific Data
+      {
+        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package (2) { "socionext,ihclk-rate", 125000000 },
+          Package (2) { "socionext,use-rtm", 1 },
+          Package (2) { "socionext,set-aces", 1 },
+        }
+      })
+    }
   } // Scope (_SB)
 }
