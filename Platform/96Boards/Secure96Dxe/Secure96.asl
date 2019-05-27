@@ -105,5 +105,17 @@ DefinitionBlock ("Secure96.aml", "SSDT", 2, "96BRDS", "SECURE96", 1)
                 I2CSerialBus (ATECC508A_SLAVE_ADDRESS,, 100000,, SECURE96_ACPI_I2C0,,,,)
             })
         }
+
+        Device (TP96)
+        {
+            Name (_ADR, SECURE96_SPI0_CS)
+            Name (_CID, "SMO0768")
+            Name (_CRS, ResourceTemplate() {
+                SpiSerialBus (SECURE96_SPI0_CS, PolarityLow, FourWireMode,
+                              8, ControllerInitiated, 5000000, ClockPolarityLow,
+                              ClockPhaseFirst, SECURE96_ACPI_SPI0, 0,
+                              ResourceConsumer)
+            })
+        }
     }
 }

@@ -30,4 +30,8 @@
 #define SECURE96_ACPI_I2C0              "\\_SB.I2C0"
 #endif
 
+#ifndef SECURE96_ACPI_SPI0
+#define SECURE96_ACPI_SPI0              "\\_SB.SPI0"
+#endif
+
 #endif // _SECURE96_H_
