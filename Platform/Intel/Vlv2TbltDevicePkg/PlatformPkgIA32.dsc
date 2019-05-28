@@ -143,8 +143,6 @@
   BmpSupportLib|MdeModulePkg/Library/BaseBmpSupportLib/BaseBmpSupportLib.inf
   SafeIntLib|MdePkg/Library/BaseSafeIntLib/BaseSafeIntLib.inf
   PlatformBdsLib|$(PLATFORM_PACKAGE)/Library/PlatformBdsLib/PlatformBdsLib.inf
-  NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
-  DpcLib|MdeModulePkg/Library/DxeDpcLib/DxeDpcLib.inf
   FlashDeviceLib|$(PLATFORM_PACKAGE)/Library/FlashDeviceLib/FlashDeviceLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   #
@@ -1441,8 +1439,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   !if $(CSM_ENABLE) == TRUE
     IntelFrameworkModulePkg/Csm/BiosThunk/Snp16Dxe/Snp16Dxe.inf
   !endif
-!endif
-
 !endif
 
 !if $(CAPSULE_ENABLE) || $(MICOCODE_CAPSULE_ENABLE)
