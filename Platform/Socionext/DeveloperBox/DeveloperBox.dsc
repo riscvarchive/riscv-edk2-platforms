@@ -22,11 +22,6 @@
   FLASH_DEFINITION               = Platform/Socionext/DeveloperBox/DeveloperBox.fdf
   BUILD_NUMBER                   = 1
 
-  #
-  # Network definition
-  #
-  DEFINE NETWORK_TLS_ENABLE      = FALSE
-
   DEFINE DEBUG_ON_UART1          = FALSE
   DEFINE SECURE_BOOT_ENABLE      = FALSE
   DEFINE X64EMU_ENABLE           = FALSE
