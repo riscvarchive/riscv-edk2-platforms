@@ -359,6 +359,11 @@ def build(config):
         command.append("-D")
         command.append("MAX_SOCKET=" + config["MAX_SOCKET"])
 
+    if config.get("API_MODE_FSP_WRAPPER_BUILD", "FALSE") == "TRUE":
+        #Override PCD to enable API mode FSP wrapper.
+        command.append("--pcd")
+        command.append("gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection=1")
+
     shell = True
     if os.name == "posix":
         shell = False
@@ -840,6 +845,9 @@ def get_cmd_config_arguments(arguments):
     if arguments.fsp is True:
         result["FSP_WRAPPER_BUILD"] = "TRUE"
 
+    if arguments.fspapi is True:
+        result["API_MODE_FSP_WRAPPER_BUILD"] = "TRUE"
+
     return result
 
 
@@ -910,8 +918,11 @@ def get_cmd_arguments(build_config):
     parser.add_argument("--performance", help="performance build enabled",
                         action='store_true', dest="performance")
 
-    parser.add_argument("--fsp", help="fsp build enabled",
+    parser.add_argument("--fsp", help="fsp wrapper build enabled",
                         action='store_true', dest="fsp")
+
+    parser.add_argument("--fspapi", help="API mode fsp wrapper build enabled",
+                        action='store_true', dest="fspapi")
 
     return parser.parse_args()
 
