@@ -570,7 +570,7 @@ DEFINE NUM_CORES    = 4
   # Networking stack
   #
 !include NetworkPkg/Network.dsc.inc
-  MdeModulePkg/Universal/Network/MnpDxe/MnpDxe.inf {
+  NetworkPkg/MnpDxe/MnpDxe.inf {
     <PcdsFixedAtBuild>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x21
   }
