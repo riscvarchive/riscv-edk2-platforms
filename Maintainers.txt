@@ -33,7 +33,7 @@ Descriptions of section entries:
 EDK II
 ------
 W: https://github.com/tianocore/tianocore.github.io/wiki/EDK-II
-L: https://lists.01.org/mailman/listinfo/edk2-devel
+L: https://edk2.groups.io/g/devel/
 T: git - https://github.com/tianocore/edk2-platforms.git
 
 Responsible Disclosure, Reporting Security Issues
