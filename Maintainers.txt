@@ -90,6 +90,12 @@ M: Shifei A Lu <shifei.a.lu@intel.com>
 M: Xiaohu Zhou <bowen.zhou@intel.com>
 M: Isaac W Oram <isaac.w.oram@intel.com>
 
+Platform/Marvell
+R: Marcin Wojtas <mw@semihalf.com>
+
+Platform/SolidRun/Armada80x0McBin
+R: Marcin Wojtas <mw@semihalf.com>
+
 Silicon
 M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
@@ -122,3 +128,6 @@ Silicon/Intel/PurleySktPkg
 M: Gillispie, Thad <thad.gillispie@intel.com>
 M: Bu, Daocheng <daocheng.bu@intel.com>
 M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+Silicon/Marvell
+R: Marcin Wojtas <mw@semihalf.com>
