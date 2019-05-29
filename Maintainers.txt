@@ -69,6 +69,10 @@ Platform/Intel/BoardModulePkg
 M: Eric Dong <eric.dong@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
+Platform/Intel/DebugFeaturePkg
+M: Eric Dong <eric.dong@intel.com>
+R: Liming Gao <liming.gao@intel.com>
+
 Platform/Intel/ClevoOpenBoardPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Ankit Sinha <ankit.sinha@intel.com>

@@ -1,0 +1,19 @@
+## @file
+# This package provides the modules that build for debug feature.
+# This DebugFeaturePkg should only depend on EDKII Core packages and MinPlatformPkg.
+#
+# The DEC files are used by the utilities that parse DSC and
+# INF files to generate AutoGen.c and AutoGen.h files
+# for the build infrastructure.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x00010005
+  PACKAGE_NAME                   = DebugFeaturePkg
+  PACKAGE_GUID                   = 58B6F2BB-A94F-4EB9-89DA-2F06ED59CE39
+  PACKAGE_VERSION                = 0.1
