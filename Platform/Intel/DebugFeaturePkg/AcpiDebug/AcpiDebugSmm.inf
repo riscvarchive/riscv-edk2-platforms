@@ -33,12 +33,12 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  AdvancedFeaturePkg/AdvancedFeaturePkg.dec
+  DebugFeaturePkg/DebugFeaturePkg.dec
 
 [Pcd]
-  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugEnable      ## CONSUMES
-  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize  ## CONSUMES
-  gAdvancedFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress     ## PRODUCES
+  gDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugEnable      ## CONSUMES
+  gDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize  ## CONSUMES
+  gDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress     ## PRODUCES
 
 [Sources]
   AcpiDebug.c

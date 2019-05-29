@@ -148,6 +148,3 @@
   AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
   AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
   AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
-
-  AdvancedFeaturePkg/AcpiDebug/AcpiDebugDxe.inf
-  AdvancedFeaturePkg/AcpiDebug/AcpiDebugSmm.inf

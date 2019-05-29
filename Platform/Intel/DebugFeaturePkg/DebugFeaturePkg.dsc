@@ -23,6 +23,10 @@
   SKUID_IDENTIFIER               = DEFAULT
 
 [LibraryClasses]
+  #
+  # Entry point
+  #
+  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
   PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
@@ -32,6 +36,10 @@
   TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+  DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+  DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+  UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
+  UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
 
 [LibraryClasses.common.PEIM]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
@@ -57,6 +65,7 @@
 [LibraryClasses.common.DXE_SMM_DRIVER]
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/SmmMemoryAllocationLib/SmmMemoryAllocationLib.inf
+  SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
 
 ###################################################################################################
 #
@@ -84,3 +93,6 @@
   DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxeIoMmu.inf
   DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPei.inf
   DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxe.inf
+
+  DebugFeaturePkg/AcpiDebug/AcpiDebugDxe.inf
+  DebugFeaturePkg/AcpiDebug/AcpiDebugSmm.inf
