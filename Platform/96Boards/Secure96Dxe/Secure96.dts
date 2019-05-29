@@ -39,7 +39,7 @@
         __overlay__ {
             INFINEON_SLB9670_DT_NODENAME {
                 compatible = "infineon,slb9670";
-                reg = <INFINEON_SLB9670_SPI_CS>;
+                reg = <SECURE96_SPI0_CS>;
                 spi-max-frequency = <22500000>;
             };
         };

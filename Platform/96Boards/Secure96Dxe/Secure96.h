@@ -1,9 +1,11 @@
 /** @file
 
-  Copyright (c) 2018, Linaro, Ltd. All rights reserved.<BR>
+  Copyright (c) 2018-2019, Linaro, Ltd. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
+
+#include <Base.h>
 
 #ifndef _SECURE96_H_
 #define _SECURE96_H_
@@ -14,8 +16,11 @@
 #define ATECC508A_SLAVE_ADDRESS         0x51
 #define ATECC508A_DT_NODENAME           atecc508a@51
 
-#define INFINEON_SLB9670_SPI_CS         0x0
-#define INFINEON_SLB9670_DT_NODENAME    tpm@0
+#define INFINEON_SLB9670_DT_NODENAME    __CONCATENATE(tpm@,SECURE96_SPI0_CS)
+
+#ifndef SECURE96_SPI0_CS
+#define SECURE96_SPI0_CS                0
+#endif
 
 #ifndef SECURE96_ACPI_GPIO
 #define SECURE96_ACPI_GPIO              "\\_SB.GPIO"
