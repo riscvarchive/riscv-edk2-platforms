@@ -56,6 +56,10 @@
   PlatformFlashAccessLib|Silicon/Marvell/Armada7k8k/Feature/Capsule/PlatformFlashAccessLib/PlatformFlashAccessLib.inf
 !endif
 
+!if $(NETWORK_TLS_ENABLE)
+  TlsLib|CryptoPkg/Library/TlsLib/TlsLib.inf
+!endif
+
 # Basic utility libraries
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
 !if $(CAPSULE_ENABLE)
@@ -269,6 +273,10 @@
   gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|320
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|1
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxAuthVariableSize|0x2800
+
 
   # Required for Intel BDS
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|FALSE
