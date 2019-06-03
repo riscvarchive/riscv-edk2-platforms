@@ -125,6 +125,16 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
     config["BASE_TOOLS_PATH"] = config["EDK_TOOLS_PATH"]
     config["EDK_TOOLS_BIN"] = os.path.join(config["WORKSPACE"],
                                            config["EDK_TOOLS_BIN"])
+
+    #
+    # Board may have different FSP binary between API and Dispatch modes.
+    # In API mode if FSP_BIN_PKG_FOR_API_MODE is assigned, it should
+    # override FSP_BIN_PKG.
+    #
+    if config.get("API_MODE_FSP_WRAPPER_BUILD", "FALSE") == "TRUE":
+        if config.get("FSP_BIN_PKG_FOR_API_MODE") is not None:
+            config['FSP_BIN_PKG'] = config['FSP_BIN_PKG_FOR_API_MODE']
+
     config["PLATFORM_FSP_BIN_PACKAGE"] = \
         os.path.join(config['WORKSPACE_FSP_BIN'], config['FSP_BIN_PKG'])
     config['PROJECT_DSC'] = os.path.join(config["WORKSPACE_PLATFORM"],
