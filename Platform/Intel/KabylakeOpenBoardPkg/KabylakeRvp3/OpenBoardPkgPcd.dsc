@@ -32,7 +32,7 @@
   # 0: FSP Wrapper is running in Dispatch mode.
   # 1: FSP Wrapper is running in API mode.
   #
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection|1
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection|0
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
