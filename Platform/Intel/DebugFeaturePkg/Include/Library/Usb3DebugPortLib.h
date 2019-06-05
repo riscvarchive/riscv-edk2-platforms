@@ -52,11 +52,6 @@ Usb3DebugPortWrite (
 
 
 /**
-  Read data from USB3 debug port and save the datas in buffer.
-
-  Reads NumberOfBytes data bytes from a serial device into the buffer
-  specified by Buffer. The number of bytes actua
-/**
   Polls a USB3 debug port to see if there is any data waiting to be read.
 
   Polls a serial device to see if there is any data waiting to be read.
