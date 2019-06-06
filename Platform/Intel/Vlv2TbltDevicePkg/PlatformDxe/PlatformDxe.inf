@@ -1,6 +1,6 @@
 ## @file
 #
-#  Copyright (c)  1999  - 2016, Intel Corporation. All rights reserved
+#  Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -50,13 +50,10 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   SecurityPkg/SecurityPkg.dec
   CryptoPkg/CryptoPkg.dec
-  IntelFspWrapperPkg/IntelFspWrapperPkg.dec
 
 [LibraryClasses]
   BaseLib
@@ -91,24 +88,18 @@
   gEfiEventExitBootServicesGuid
   gEfiVlv2VariableGuid
   gEfiSecureBootEnableDisableGuid
+  gEfiEndOfDxeEventGroupGuid
 
 [Protocols]
   gEfiPciRootBridgeIoProtocolGuid    # CONSUMES  ## GUID
   gEfiVariableArchProtocolGuid
   gEfiVariableWriteArchProtocolGuid
   gEfiHiiConfigAccessProtocolGuid
-  gEfiBootScriptSaveProtocolGuid
-  gEfiCpuIoProtocolGuid
+  gEfiCpuIo2ProtocolGuid
   gEfiDevicePathProtocolGuid
   gEfiDiskInfoProtocolGuid
-  gEfiPs2PolicyProtocolGuid
-  gEfiIsaAcpiProtocolGuid
-  gEfiDataHubProtocolGuid
   gEfiPciIoProtocolGuid
   gDxePchPlatformPolicyProtocolGuid
-  gEfiTpmMpDriverProtocolGuid
-  gEfiLpcWpce791PolicyProtocolGuid
-  gUsbPolicyGuid
   gEfiSpeakerInterfaceProtocolGuid
   gDxeVlvPlatformPolicyGuid
   gEfiSmbiosSlotPopulationGuid
@@ -121,7 +112,6 @@
   gEfiGlobalNvsAreaProtocolGuid
   gEfiCpuIo2ProtocolGuid
   gIgdOpRegionProtocolGuid
-  gExitPmAuthProtocolGuid
   gEdkiiVariableLockProtocolGuid
 
 [Pcd.common]
@@ -134,15 +124,13 @@
   gPlatformModuleTokenSpaceGuid.PcdFlashFvMainBase
   gPlatformModuleTokenSpaceGuid.PcdFlashFvRecoveryBase
   gPlatformModuleTokenSpaceGuid.PcdFlashFvRecoverySize
-  gFspWrapperTokenSpaceGuid.PcdFlashFvFspBase
 
 
 [Depex]
   gEfiPciRootBridgeIoProtocolGuid     AND
   gEfiVariableArchProtocolGuid        AND
   gEfiVariableWriteArchProtocolGuid   AND
-  gEfiBootScriptSaveProtocolGuid      AND
-  gEfiCpuIoProtocolGuid               AND
+  gEfiCpuIo2ProtocolGuid               AND
   gDxePchPlatformPolicyProtocolGuid   AND
   gEfiGlobalNvsAreaProtocolGuid
 

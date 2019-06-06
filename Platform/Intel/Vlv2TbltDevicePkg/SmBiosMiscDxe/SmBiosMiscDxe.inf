@@ -3,11 +3,8 @@
 #
 # FIX ME!
 # Copyright (c) 2006 - 2019, Intel Corporation. All rights reserved.<BR>
-#                                                                                  
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-#                                                                                  
-#
-#
 #
 ##
 
@@ -87,7 +84,6 @@
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   MdePkg/MdePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   NetworkPkg/NetworkPkg.dec
 
@@ -107,13 +103,10 @@
   PrintLib
   CpuIA32Lib
   PchPlatformLib
-  I2cLib
   NetLib
   HobLib
   
 [Guids]
-  gEfiProcessorSubClassGuid
-  gEfiCacheSubClassGuid
   gEfiNormalSetupGuid
   gEfiPlatformInfoGuid
   gEfiVlv2VariableGuid
@@ -137,4 +130,4 @@
   gEfiVLVTokenSpaceGuid.PcdProductSerialNumber
 
 [Depex]
- gEfiSmbiosProtocolGuid AND gMemInfoProtocolGuid AND gEfiMpServiceProtocolGuid AND gEfiSimpleNetworkProtocolGuid
+  gEfiSmbiosProtocolGuid AND gMemInfoProtocolGuid AND gEfiMpServiceProtocolGuid

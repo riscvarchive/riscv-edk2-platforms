@@ -638,7 +638,6 @@ OnReadyToBoot (
   EFI_STATUS                  Status;
   EFI_ACPI_TABLE_VERSION      TableVersion;
   EFI_ACPI_SUPPORT_PROTOCOL   *AcpiSupport;
-  EFI_ACPI_S3_SAVE_PROTOCOL   *AcpiS3Save;
   SYSTEM_CONFIGURATION        SetupVarBuffer;
   UINTN                       VariableSize;
   EFI_PLATFORM_CPU_INFO       *PlatformCpuInfoPtr = NULL;
@@ -722,15 +721,6 @@ OnReadyToBoot (
                           TableVersion
                           );
   ASSERT_EFI_ERROR (Status);
-
-  //
-  // S3 script save.
-  //
-  Status = gBS->LocateProtocol (&gEfiAcpiS3SaveProtocolGuid, NULL, (VOID **) &AcpiS3Save);
-  if (!EFI_ERROR (Status)) {
-    AcpiS3Save->S3Save (AcpiS3Save, NULL);
-  }
-
 }
 
 VOID
@@ -1261,12 +1251,23 @@ AcpiPlatformEntryPoint (
     }
   }
 
-  Status = EfiCreateEventReadyToBootEx (
-             TPL_NOTIFY,
-             OnReadyToBoot,
-             NULL,
-             &Event
-             );
+  //
+  // Publish ACPI 1.0 or 2.0 Tables.
+  //
+//  Status = AcpiSupport->PublishTables (
+//                          AcpiSupport,
+//                          TableVersion
+//                          );
+//  ASSERT_EFI_ERROR (Status);
+
+//  Status = EfiCreateEventReadyToBootEx (
+//             TPL_NOTIFY,
+//             OnReadyToBoot,
+//             NULL,
+//             &Event
+//             );
+  Event = NULL;
+  OnReadyToBoot (Event, NULL);
 
   //
   // Finished.

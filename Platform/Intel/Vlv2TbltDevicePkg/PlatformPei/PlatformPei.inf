@@ -1,9 +1,9 @@
 #
 #
-# Copyright (c)  1999  - 2018, Intel Corporation. All rights reserved
-#                                                                                  
+# Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-#                                                                                  
+#
 #
 # This PEIM includes 3 parts, pre memory initialization, MRC
 #  wrapper and post memory initialization.
@@ -63,9 +63,7 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
-  Vlv2SocBinPkg/Vlv2SocBinPkg.dec
   UefiCpuPkg/UefiCpuPkg.dec
   CryptoPkg/CryptoPkg.dec
 
@@ -89,14 +87,11 @@
   gEfiPeiReadOnlyVariable2PpiGuid
   gEfiPeiResetPpiGuid
   gEfiEndOfPeiSignalPpiGuid
-  gEfiFindFvPpiGuid
   gPeiCapsulePpiGuid
   gEfiPeiBootInRecoveryModePpiGuid
   gEfiPeiRecoveryModulePpiGuid
   gEfiPeiDeviceRecoveryModulePpiGuid
-  gPeiCachePpiGuid
   gEfiPeiMasterBootModePpiGuid
-  gEfiPeiSmbusPpiGuid
   gPeiMfgMemoryTestPpiGuid
   gPeiSha256HashPpiGuid
   gVlvMmioPolicyPpiGuid

@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
@@ -13,18 +11,15 @@
 
 
 
-#include <FrameworkPei.h>
+#include <PiPei.h>
 
 #include <IndustryStandard/SmBus.h>
 #include <IndustryStandard/Pci22.h>
 #include <Ppi/AtaController.h>
-#include <Guid/Capsule.h>
-#include <Ppi/Cache.h>
 #include <Ppi/MasterBootMode.h>
 #include <Guid/MemoryTypeInformation.h>
 #include <Guid/RecoveryDevice.h>
 #include <Ppi/ReadOnlyVariable2.h>
-#include <Ppi/FvLoadFile.h>
 #include <Ppi/DeviceRecoveryModule.h>
 #include <Ppi/Capsule.h>
 #include <Ppi/Reset.h>

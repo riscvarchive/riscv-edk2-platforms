@@ -1,12 +1,9 @@
 
 /*++
 
-Copyright (c)  1999  - 2014, Intel Corporation. All rights reserved
-                                                                                   
+Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -36,7 +33,7 @@ Abstract:
 #include "VlvPlatformInit.h"
 #include "VlvCommonDefinitions.h"
 #include <Uefi/UefiInternalFormRepresentation.h>
-#include <FrameworkDxe.h>
+#include <PiDxe.h>
 
 //
 //
@@ -175,24 +172,6 @@ typedef struct {
 EFI_STATUS
 GetSVER (
   OUT UINT8 *SVER
-  );
-
-/**
-  Acquire the string associated with the ProducerGuid and return it.
-
-  @param ProducerGuid  The Guid to search the HII database for
-  @param Token         The token value of the string to extract
-  @param String        The string that is extracted
-
-  @retval EFI_SUCCESS       The function completed successfully
-  @retval EFI_NOT_FOUND     The requested string was not found
-
-**/
-EFI_STATUS
-GetStringFromToken (
-  IN      EFI_GUID                  *ProducerGuid,
-  IN      STRING_REF                Token,
-  OUT     CHAR16                    **String
   );
 
 /**

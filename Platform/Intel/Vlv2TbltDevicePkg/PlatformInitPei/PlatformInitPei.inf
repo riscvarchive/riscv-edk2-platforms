@@ -1,10 +1,8 @@
 #
 #
-# Copyright (c)  1999  - 2016, Intel Corporation. All rights reserved
-#                                                                                  
-# SPDX-License-Identifier: BSD-2-Clause-Patent
-#                                                                                  
+# Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
 #
+# SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 #  Module Name:
 #
@@ -17,13 +15,13 @@
 #--*/
 
 [defines]
-INF_VERSION 				   = 0x00010005
-BASE_NAME					   = PlatformEarlyInit
-FILE_GUID					   = 0A5EA2E1-BE0B-44a0-A775-F429C9A018A0
-MODULE_TYPE 				   = PEIM
-VERSION_STRING				   = 1.0
-PI_SPECIFICATION_VERSION	   = 0x0001000A
-ENTRY_POINT 				   = PlatformEarlyInitEntry
+INF_VERSION               = 0x00010005
+BASE_NAME                 = PlatformEarlyInit
+FILE_GUID                 = 0A5EA2E1-BE0B-44a0-A775-F429C9A018A0
+MODULE_TYPE               = PEIM
+VERSION_STRING            = 1.0
+PI_SPECIFICATION_VERSION  = 0x0001000A
+ENTRY_POINT               = PlatformEarlyInitEntry
 
 [sources.common]
   BootMode.c
@@ -44,19 +42,15 @@ ENTRY_POINT 				   = PlatformEarlyInitEntry
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   Vlv2SocBinPkg/Vlv2SocBinPkg.dec
   UefiCpuPkg/UefiCpuPkg.dec
-  Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
 
 [LibraryClasses]
   PeimEntryPoint
   DebugLib
   HobLib
   IoLib
-#  PeiKscLib
   MultiPlatformLib
   PcdLib
   PchPlatformLib
@@ -71,14 +65,12 @@ ENTRY_POINT 				   = PlatformEarlyInitEntry
   gEfiPeiResetPpiGuid
   gEfiEndOfPeiSignalPpiGuid
   gPeiSmbusPolicyPpiGuid
-  gEfiFindFvPpiGuid
   gPeiCapsulePpiGuid
   gEfiPeiBootInRecoveryModePpiGuid
   gEfiPeiRecoveryModulePpiGuid
   gEfiPeiDeviceRecoveryModulePpiGuid
   gPeiCachePpiGuid
   gEfiPeiMasterBootModePpiGuid
-  gEfiPeiSmbusPpiGuid
   gPchInitPpiGuid
   gPchUsbPolicyPpiGuid
 
@@ -96,7 +88,6 @@ ENTRY_POINT 				   = PlatformEarlyInitEntry
   gEfiNormalSetupGuid
   gEfiMemoryTypeInformationGuid
   gOsSelectionVariableGuid
-  gEfiSmmPeiSmramMemoryReserveGuid
 
 [Pcd.common]
   gPlatformModuleTokenSpaceGuid.PcdFlashFvMainBase
@@ -111,7 +102,7 @@ ENTRY_POINT 				   = PlatformEarlyInitEntry
 
 [Pcd]
   gEfiVLVTokenSpaceGuid.PcdMeasuredBootEnable
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBootState
+  gPlatformModuleTokenSpaceGuid.PcdBootState
 
 [Depex]
   gEfiPeiReadOnlyVariable2PpiGuid  AND gPeiCachePpiGuid

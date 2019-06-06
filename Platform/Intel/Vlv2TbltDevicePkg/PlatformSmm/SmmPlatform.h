@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -35,7 +33,6 @@ Abstract:
 #include <Protocol/PciRootBridgeIo.h>
 #include <Protocol/LoadedImage.h>
 #include "Protocol/GlobalNvsArea.h"
-#include <Guid/AcpiVariableCompatibility.h>
 #include <Guid/SetupVariable.h>
 #include <Guid/EfiVpdData.h>
 #include <Guid/PciLanInfo.h>

@@ -37,7 +37,6 @@
   IntelFrameworkPkg/IntelFrameworkPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
 
 [LibraryClasses]
@@ -63,13 +62,9 @@
   gEfiVlv2VariableGuid
 
 [Protocols]
-  gEfiAcpiTableProtocolGuid                     # PROTOCOL ALWAYS_CONSUMED
   gEnhancedSpeedstepProtocolGuid
   gEfiPlatformCpuProtocolGuid
   gEfiAcpiSupportProtocolGuid
-  gEfiAcpiS3SaveProtocolGuid
-  gEfiCpuIoProtocolGuid
-  gEfiPs2PolicyProtocolGuid
   gEfiFirmwareVolume2ProtocolGuid
   gEfiMpServiceProtocolGuid
   gEfiGlobalNvsAreaProtocolGuid

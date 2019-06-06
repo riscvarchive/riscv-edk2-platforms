@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -70,25 +68,8 @@ UINT8 mTco1Sources[] = {
   IchnNmi
 };
 
-UINTN
-DevicePathSize (
-  IN EFI_DEVICE_PATH_PROTOCOL  *DevicePath
-  );
-
 VOID
 S4S5ProgClock();
-
-EFI_STATUS
-InitRuntimeScriptTable (
-  IN EFI_SYSTEM_TABLE  *SystemTable
-  );
-
-VOID
-S5SleepWakeOnRtcCallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
-  );
-
 
 VOID
 EnableS5WakeOnRtc();
@@ -97,12 +78,6 @@ UINT8
 HexToBcd(
   UINT8 HexValue
   );
-
-UINT8
-BcdToHex(
-  IN UINT8 BcdValue
-  );
-
 
 VOID
 CpuSmmSxWorkAround(
@@ -779,46 +754,6 @@ DummyTco1Callback (
 {
 }
 
-UINTN
-DevicePathSize (
-  IN EFI_DEVICE_PATH_PROTOCOL  *DevicePath
-  )
-{
-  EFI_DEVICE_PATH_PROTOCOL     *Start;
-
-  if (DevicePath == NULL) {
-    return 0;
-  }
-
-  //
-  // Search for the end of the device path structure
-  //
-  Start = DevicePath;
-  while (!IsDevicePathEnd (DevicePath)) {
-    DevicePath = NextDevicePathNode (DevicePath);
-  }
-
-  //
-  // Compute the size and add back in the size of the end device path structure
-  //
-  return ((UINTN)DevicePath - (UINTN)Start) + sizeof(EFI_DEVICE_PATH_PROTOCOL);
-}
-
-/**
-
-  @param DispatchHandle   The handle of this callback, obtained when registering
-  @param DispatchContext  The predefined context which contained sleep type and phase
-
-**/
-VOID
-S5SleepWakeOnRtcCallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
-  )
-{
-  EnableS5WakeOnRtc();
-}
-
 /**
 
  @retval 1. Check Alarm interrupt is not set.
@@ -979,19 +914,5 @@ HexToBcd(
   LowByte     = (UINTN)HexValue % 10;
 
   return ((UINT8)(LowByte + (HighByte << 4)));
-}
-
-UINT8
-BcdToHex(
-  IN UINT8 BcdValue
-  )
-{
-  UINTN   HighByte;
-  UINTN   LowByte;
-
-  HighByte    = (UINTN)((BcdValue >> 4) * 10);
-  LowByte     = (UINTN)(BcdValue & 0x0F);
-
-  return ((UINT8)(LowByte + HighByte));
 }
 

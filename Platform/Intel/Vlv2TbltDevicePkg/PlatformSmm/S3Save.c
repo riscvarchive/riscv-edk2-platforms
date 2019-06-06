@@ -1,11 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -22,52 +19,6 @@ Revision History
 
 extern  UINT16                          mAcpiBaseAddr;
 EFI_PHYSICAL_ADDRESS                    mRuntimeScriptTableBase;
-
-EFI_STATUS
-InitRuntimeScriptTable (
-  IN EFI_SYSTEM_TABLE  *SystemTable
-  )
-{
-  EFI_STATUS        Status;
-  UINT32            VarAttrib;
-  UINTN             VarSize;
-  ACPI_VARIABLE_SET_COMPATIBILITY *AcpiVariableBase;
-
-  //
-  // Allocate runtime ACPI script table space. We need it to save some
-  // settings done by CSM, which runs after normal script table closed
-  //
-  Status = gBS->AllocatePages (
-                  AllocateAnyPages,
-                  EfiACPIReclaimMemory,
-                  1,
-                  &mRuntimeScriptTableBase
-                  );
-  if (EFI_ERROR(Status)) {
-    return EFI_OUT_OF_RESOURCES ;
-  }
-
-  //
-  // Save runtime script table base into global ACPI variable
-  //
-  VarAttrib = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS
-              | EFI_VARIABLE_NON_VOLATILE;
-  VarSize   = sizeof (UINTN);
-  Status = SystemTable->RuntimeServices->GetVariable (
-                          ACPI_GLOBAL_VARIABLE,
-                          &gEfiAcpiVariableCompatiblityGuid,
-                          &VarAttrib,
-                          &VarSize,
-                          &AcpiVariableBase
-                          );
-  if (EFI_ERROR(Status)) {
-    return Status;
-  }
-
-  AcpiVariableBase->RuntimeScriptTableBase = mRuntimeScriptTableBase;
-
-  return EFI_SUCCESS;
-}
 
 EFI_STATUS
 SaveRuntimeScriptTable (

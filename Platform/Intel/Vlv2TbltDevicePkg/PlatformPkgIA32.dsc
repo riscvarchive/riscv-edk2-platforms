@@ -18,24 +18,10 @@
   PLATFORM_GUID                       = 465B0A0B-7AC1-443b-8F67-7B8DEC145F90
   PLATFORM_VERSION                    = 0.1
   DSC_SPECIFICATION                   = 0x00010005
-
-  #
-  # Set platform specific package/folder name, same as passed from PREBUILD script.
-  # PLATFORM_PACKAGE would be the same as PLATFORM_NAME as well as package build folder
-  # DEFINE only takes effect at R9 DSC and FDF.
-  #
-  DEFINE      PLATFORM_PACKAGE                = Vlv2TbltDevicePkg
-  DEFINE      PLATFORM_RC_PACKAGE             = Vlv2DeviceRefCodePkg
-  DEFINE      PLATFORM_BINARY_PACKAGE         = Vlv2SocBinPkg
-  OUTPUT_DIRECTORY                    = Build/$(PLATFORM_PACKAGE)
+  OUTPUT_DIRECTORY                    = Build/Vlv2TbltDevicePkgIA32
   SUPPORTED_ARCHITECTURES             = IA32
   BUILD_TARGETS                       = DEBUG|RELEASE
   SKUID_IDENTIFIER                    = DEFAULT
-
-  DEFINE CPU_ARCH                 =ValleyView2
-  DEFINE PROJECT_SC_FAMILY        =IntelPch
-  DEFINE PROJECT_SC_ROOT          =../$(PLATFORM_RC_PACKAGE)/ValleyView2Soc/SouthCluster
-  DEFINE PROJECT_VLV_ROOT          =../$(PLATFORM_RC_PACKAGE)/ValleyView2Soc/NorthCluster
 
   DEFINE RC_BINARY_RELEASE        = TRUE
   #
@@ -47,20 +33,16 @@
   #   3.BayleyBay
   #     ENBDT_PF_ENABLE  = TRUE
   #
-  !include $(PLATFORM_PACKAGE)/AutoPlatformCFG.txt
-  !include $(PLATFORM_PACKAGE)/PlatformPkgConfig.dsc
+  !include Vlv2TbltDevicePkg/AutoPlatformCFG.txt
+  !include Vlv2TbltDevicePkg/PlatformPkgConfig.dsc
 
 !if $(X64_CONFIG) == TRUE
   DEFINE      DXE_ARCHITECTURE        = X64
-  DEFINE      EDK_DXE_ARCHITECTURE    = X64
-  DEFINE      UNDI_DXE_ARCHITECTURE   = 64
 !else
   DEFINE      DXE_ARCHITECTURE        = IA32
-  DEFINE      EDK_DXE_ARCHITECTURE    = Ia32
-  DEFINE      UNDI_DXE_ARCHITECTURE   = 32
 !endif
 
-  FLASH_DEFINITION                    = $(PLATFORM_PACKAGE)/PlatformPkg.fdf
+  FLASH_DEFINITION                    = Vlv2TbltDevicePkg/PlatformPkg.fdf
 !if $(LFMA_ENABLE) == TRUE
   FIX_LOAD_TOP_MEMORY_ADDRESS         = 0xFFFFFFFFFFFFFFFF
   DEFINE   TOP_MEMORY_ADDRESS         = 0xFFFFFFFFFFFFFFFF
@@ -70,10 +52,6 @@
 !endif
 
   DEFINE   PLATFORM_PCIEXPRESS_BASE   = 0E0000000
-
-  DEFINE SEC_ENABLE = FALSE
-  DEFINE SEC_DEBUG_INFO_ENABLE = FALSE
-  DEFINE FTPM_ENABLE = FALSE
 
 ################################################################################
 #
@@ -98,7 +76,6 @@
   DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
   UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
   UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
-  DxeSmmDriverEntryPoint|IntelFrameworkPkg/Library/DxeSmmDriverEntryPoint/DxeSmmDriverEntryPoint.inf
 
   #
   # Basic
@@ -142,8 +119,7 @@
   GenericBdsLib|$(PLATFORM_PACKAGE)/Override/IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
   BmpSupportLib|MdeModulePkg/Library/BaseBmpSupportLib/BaseBmpSupportLib.inf
   SafeIntLib|MdePkg/Library/BaseSafeIntLib/BaseSafeIntLib.inf
-  PlatformBdsLib|$(PLATFORM_PACKAGE)/Library/PlatformBdsLib/PlatformBdsLib.inf
-  FlashDeviceLib|$(PLATFORM_PACKAGE)/Library/FlashDeviceLib/FlashDeviceLib.inf
+  FlashDeviceLib|Vlv2TbltDevicePkg/Library/FlashDeviceLib/FlashDeviceLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
   #
   # Framework
@@ -164,10 +140,6 @@
 !endif
 !if $(SCSI_ENABLE) == TRUE
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
-!endif
-
-!if $(S3_ENABLE) == TRUE
-  S3Lib|IntelFrameworkModulePkg/Library/PeiS3Lib/PeiS3Lib.inf
 !endif
 
   OemHookStatusCodeLib|MdeModulePkg/Library/OemHookStatusCodeLibNull/OemHookStatusCodeLibNull.inf
@@ -197,27 +169,27 @@
   #
   # ICH
   #
-  SmbusLib|$(PLATFORM_PACKAGE)/Library/SmbusLib/SmbusLib.inf
-  SmmLib|$(PLATFORM_PACKAGE)/Library/PchSmmLib/PchSmmLib.inf
+  SmbusLib|Vlv2TbltDevicePkg/Library/SmbusLib/SmbusLib.inf
+  SmmLib|Vlv2TbltDevicePkg/Library/PchSmmLib/PchSmmLib.inf
 
   #
   # Platform
   #
-  TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
-  ResetSystemLib|$(PLATFORM_PACKAGE)/Library/ResetSystemLib/ResetSystemLib.inf
+  TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+  ResetSystemLib|Vlv2TbltDevicePkg/Library/ResetSystemLib/ResetSystemLib.inf
 
-  PlatformCmosLib|$(PLATFORM_PACKAGE)/Library/PlatformCmosLib/PlatformCmosLib.inf
+  PlatformCmosLib|Vlv2TbltDevicePkg/Library/PlatformCmosLib/PlatformCmosLib.inf
 
   #
   # Misc
   #
-  MonoStatusCodeLib|$(PLATFORM_PACKAGE)/MonoStatusCode/MonoStatusCode.inf
+  MonoStatusCodeLib|Vlv2TbltDevicePkg/MonoStatusCode/MonoStatusCode.inf
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
   SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
 !else
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-  SerialPortLib|$(PLATFORM_PACKAGE)/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
 !endif
 
   PerformanceLib|MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull.inf
@@ -229,10 +201,11 @@
 
 !endif
 
+  PlatformHookLib|MdeModulePkg/Library/BasePlatformHookLibNull/BasePlatformHookLibNull.inf
+
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
   DebugCommunicationLib|SourceLevelDebugPkg/Library/DebugCommunicationLibSerialPort/DebugCommunicationLibSerialPort.inf
-  PlatformHookLib|MdeModulePkg/Library/BasePlatformHookLibNull/BasePlatformHookLibNull.inf
   SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
 !else
   PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
@@ -247,10 +220,10 @@
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
 !endif
 
- BiosIdLib|$(PLATFORM_PACKAGE)/Library/BiosIdLib/BiosIdLib.inf
- CpuIA32Lib|$(PLATFORM_PACKAGE)/Library/CpuIA32Lib/CpuIA32Lib.inf
+ BiosIdLib|Vlv2TbltDevicePkg/Library/BiosIdLib/BiosIdLib.inf
+ CpuIA32Lib|Vlv2TbltDevicePkg/Library/CpuIA32Lib/CpuIA32Lib.inf
 
-  StallSmmLib|$(PLATFORM_PACKAGE)/Library/StallSmmLib/StallSmmLib.inf
+  StallSmmLib|Vlv2TbltDevicePkg/Library/StallSmmLib/StallSmmLib.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
@@ -264,13 +237,10 @@
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
-!if $(RC_BINARY_RELEASE) == TRUE
-  I2cLib|Vlv2TbltDevicePkg/Library/I2CLib/I2CLibNull.inf
-!endif
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
   SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
-!if $(FTPM_ENABLE) == TRUE || $(NETWORK_ISCSI_ENABLE) == TRUE
+!if $(NETWORK_ISCSI_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
@@ -281,13 +251,6 @@
 
 
   Tpm2CommandLib|SecurityPkg/Library/Tpm2CommandLib/Tpm2CommandLib.inf
-!if $(MINNOW2_FSP_BUILD) == TRUE
-  FspApiLib|IntelFspWrapperPkg/Library/BaseFspApiLib/BaseFspApiLib.inf
-  FspPlatformInfoLib|IntelFspWrapperPkg/Library/BaseFspPlatformInfoLibSample/BaseFspPlatformInfoLibSample.inf
-  FspPlatformSecLib|Vlv2TbltDevicePkg/FspSupport/Library/SecFspPlatformSecLibVlv2/FspPlatformSecLibVlv2.inf
-  FspHobProcessLib|Vlv2TbltDevicePkg/FspSupport/Library/PeiFspHobProcessLibVlv2/FspHobProcessLibVlv2.inf
-!endif
-
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
 
 [LibraryClasses.IA32.SEC]
@@ -307,14 +270,14 @@
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/PeiReportStatusCodeLib/PeiReportStatusCodeLib.inf
   ExtractGuidedSectionLib|MdePkg/Library/PeiExtractGuidedSectionLib/PeiExtractGuidedSectionLib.inf
-  MultiPlatformLib|$(PLATFORM_PACKAGE)/Library/MultiPlatformLib/MultiPlatformLib.inf
+  MultiPlatformLib|Vlv2TbltDevicePkg/Library/MultiPlatformLib/MultiPlatformLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/PeiCryptLib.inf
   CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/SecPeiCpuExceptionHandlerLib.inf
   MpInitLib|UefiCpuPkg/Library/MpInitLib/PeiMpInitLib.inf
 
 !if $(PERFORMANCE_ENABLE) == TRUE
   PerformanceLib|MdeModulePkg/Library/PeiPerformanceLib/PeiPerformanceLib.inf
-  TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+  TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
 !endif
 
 !if $(TARGET) == RELEASE
@@ -322,20 +285,13 @@
   SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
 !else
   DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
-  SerialPortLib|$(PLATFORM_PACKAGE)/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
 !endif
 
   LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxPeiLib.inf
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterPei.inf
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
-!endif
-
- !if $(MINNOW2_FSP_BUILD) == TRUE
- PlatformFspLib|Vlv2TbltDevicePkg/Library/PlatformFspLib/PlatformFspLib.inf
- !endif
-!if $(FTPM_ENABLE) == TRUE
-  Tpm2DeviceLib|Vlv2TbltDevicePkg/Library/Tpm2DeviceLibSeCPei/Tpm2DeviceLibSeC.inf
 !endif
 
 [LibraryClasses.IA32]
@@ -354,7 +310,7 @@
 !endif
 
   LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxDxeLib.inf
-  EfiRegTableLib|$(PLATFORM_PACKAGE)/Library/EfiRegTableLib/EfiRegTableLib.inf
+  EfiRegTableLib|Vlv2TbltDevicePkg/Library/EfiRegTableLib/EfiRegTableLib.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
@@ -369,14 +325,14 @@
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
 !if $(PERFORMANCE_ENABLE) == TRUE
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
-  TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+  TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
 !endif
 
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/DxeDebugAgentLib.inf
 !endif
 
-  FlashDeviceLib|$(PLATFORM_PACKAGE)/Library/FlashDeviceLib/FlashDeviceLibDxe.inf
+  FlashDeviceLib|Vlv2TbltDevicePkg/Library/FlashDeviceLib/FlashDeviceLibDxe.inf
 
 [LibraryClasses.IA32.DXE_CORE]
   HobLib|MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
@@ -384,7 +340,7 @@
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
 !if $(PERFORMANCE_ENABLE) == TRUE
   PerformanceLib|MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
-  TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+  TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
 !endif
 
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
@@ -409,7 +365,7 @@
 
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SmmDebugAgentLib.inf
-  TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+  TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
 !endif
   CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/SmmCpuExceptionHandlerLib.inf
 
@@ -484,12 +440,6 @@
 !else
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|FALSE
 !endif
-  gEfiCpuTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
-!if $(DATAHUB_STATUS_CODE_ENABLE) == TRUE
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdStatusCodeUseDataHub|TRUE
-!else
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdStatusCodeUseDataHub|FALSE
-!endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreImageLoaderSearchTeSectionFirst|FALSE
 !if $(TARGET) == RELEASE
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
@@ -514,59 +464,20 @@
 !endif
 
 
-  ## This PCD specifies whether PS2 keyboard does a extended verification during start.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPs2KbdExtendedVerification|FALSE
-
-  ## This PCD specifies whether PS2 mouse does a extended verification during start.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPs2MouseExtendedVerification|FALSE
-
 !if $(VARIABLE_INFO_ENABLE) == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdVariableCollectStatistics|TRUE
 !else
   gEfiMdeModulePkgTokenSpaceGuid.PcdVariableCollectStatistics|FALSE
 !endif
 
-  gEfiCpuTokenSpaceGuid.PcdCpuSmmBlockStartupThisAp|TRUE
-
 !if $(SOURCE_DEBUG_ENABLE)
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmDebug|TRUE
 !endif
 
+  gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmBlockStartupThisAp|TRUE
+
 [PcdsFixedAtBuild.common]
-!if $(MINNOW2_FSP_BUILD) == TRUE
-# $(FLASH_REGION_VLVMICROCODE_BASE)
-  gFspWrapperTokenSpaceGuid.PcdCpuMicrocodePatchAddress|0xFFC00000
-# $(FLASH_REGION_VLVMICROCODE_SIZE)
-  gFspWrapperTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize|0x00040000
-  gFspWrapperTokenSpaceGuid.PcdFlashMicroCodeOffset|0x60
-# $(FLASH_AREA_BASE_ADDRESS)
-  gFspWrapperTokenSpaceGuid.PcdFlashCodeCacheAddress|0xFF800000
-# $(FLASH_AREA_SIZE)
-  gFspWrapperTokenSpaceGuid.PcdFlashCodeCacheSize|0x00800000
-# $(FLASH_REGION_FSPBIN_BASE)
-  gFspWrapperTokenSpaceGuid.PcdFlashFvFspBase|0xFFCC0000
-!endif
-
-!if $(PERFORMANCE_ENABLE) == TRUE
-!if $(MINNOW2_FSP_BUILD) == TRUE
-  # in FSP, when this got used, the memory already is up
-  gEfiCpuTokenSpaceGuid.PcdTemporaryRamBase|0x00080000
-!else
-  gEfiCpuTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
-!endif
-  gEfiCpuTokenSpaceGuid.PcdTemporaryRamSize|0x00010000
-
-!else
-  !if $(MINNOW2_FSP_BUILD) == TRUE
-    gEfiCpuTokenSpaceGuid.PcdTemporaryRamBase|0x00080000
-  !else
-    gEfiCpuTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
-  !endif
-  gEfiCpuTokenSpaceGuid.PcdTemporaryRamSize|0x00010000
-  gEfiCpuTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x3C00
-!endif
-
-
 !if $(SECURE_BOOT_ENABLE) == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x22000
 !else
@@ -574,11 +485,8 @@
 !endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400
-  gEfiCpuTokenSpaceGuid.PcdCpuIEDRamSize|0x400000
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdS3AcpiReservedMemorySize|0x10000
   gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdAriSupport|FALSE
-  gEfiCpuTokenSpaceGuid.PcdCpuSmmApSyncTimeout|1000
 !if $(S4_ENABLE) == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|TRUE
 !else
@@ -596,13 +504,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|60
 !endif
 
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdEbdaReservedMemorySize|0x10000
   gEfiMdeModulePkgTokenSpaceGuid.PcdLoadModuleAtFixAddressEnable|$(TOP_MEMORY_ADDRESS)
   gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserSubtitleTextColor|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserFieldTextColor|0x01
-  gEfiCpuTokenSpaceGuid.PcdCpuIEDEnabled|TRUE
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBiosVideoCheckVbeEnable|TRUE
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBiosVideoCheckVgaEnable|TRUE
 
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x17
@@ -648,11 +552,6 @@
 [PcdsPatchableInModule.common]
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x803805c6
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x$(PLATFORM_PCIEXPRESS_BASE)
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdLegacyBiosCacheLegacyRegion|FALSE
-
-  ## This PCD specifies whether to use the optimized timing for best PS2 detection performance.
-  #  Note this PCD could be set to TRUE for best boot performance and set to FALSE for best device compatibility.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFastPS2Detection|TRUE
 
   #######################################################################################################
   #
@@ -827,10 +726,6 @@
   gEfiVLVTokenSpaceGuid.PcdFTPMStatus|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateSmmDataPtr|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0
-  gEfiCpuTokenSpaceGuid.PcdCpuS3DataAddress|0
-  gEfiCpuTokenSpaceGuid.PcdCpuHotPlugDataAddress|0
-  gEfiCpuTokenSpaceGuid.PcdCpuCallbackSignal|0
-  gEfiCpuTokenSpaceGuid.PcdCpuConfigContextBuffer|0
   gEfiVLVTokenSpaceGuid.PcdCpuLockBoxDataAddress|0
   gEfiVLVTokenSpaceGuid.PcdCpuSmramCpuDataAddress|0
   gEfiVLVTokenSpaceGuid.PcdCpuLockBoxSize|0
@@ -843,24 +738,7 @@
 
 [Components.IA32]
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/SecCore.inf
-
-  !if $(MINNOW2_FSP_BUILD) == TRUE
-  IntelFspWrapperPkg/FspWrapperSecCore/FspWrapperSecCore.inf {
-    !if $(TARGET) == DEBUG
-
-    <LibraryClasses>
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-    !endif
-  }
-  Vlv2TbltDevicePkg/FspSupport/BootModePei/BootModePei.inf
-  IntelFspWrapperPkg/FspInitPei/FspInitPei.inf {
-    !if $(TARGET) == DEBUG
-    <LibraryClasses>
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-    !endif
-  }
-  !endif
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/SecCore.inf
 
   MdeModulePkg/Core/Pei/PeiMain.inf {
 !if $(TARGET) == DEBUG
@@ -871,31 +749,23 @@
       gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
   }
 
-  $(PLATFORM_PACKAGE)/MonoStatusCode/MonoStatusCode.inf {
+  Vlv2TbltDevicePkg/MonoStatusCode/MonoStatusCode.inf {
 !if $(TARGET) == DEBUG
     <PcdsFixedAtBuild>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x2E
 !endif
   }
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/MemoryInit.inf {
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/MemoryInit.inf {
     <PcdsPatchableInModule>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
-    <BuildOptions>
-      !if $(FTPM_ENABLE)==TRUE
-        *_*_IA32_CC_FLAGS = /D FTPM_ENABLE
-      !endif
   }
 
 !if $(RC_BINARY_RELEASE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/SeCUma.inf
-!endif
-
-!if $(FTPM_ENABLE) == TRUE
-$(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/SeCUma.inf
 !endif
 
 !if $(RC_BINARY_RELEASE) == TRUE
-  $(PLATFORM_PACKAGE)/PlatformPei/PlatformPei.inf {
+  Vlv2TbltDevicePkg/PlatformPei/PlatformPei.inf {
     <BuildOptions>
       *_*_IA32_CC_FLAGS      = /DRC_BINARY_RELEASE
   !if $(TARGET) == DEBUG
@@ -915,10 +785,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
     }
 !endif
 
-!if $(FTPM_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/Tpm2DeviceSeCPei.inf
-!endif
-
 !if $(TPM_ENABLED) == TRUE
   SecurityPkg/Tcg/PhysicalPresencePei/PhysicalPresencePei.inf
   SecurityPkg/Tcg/TcgPei/TcgPei.inf {
@@ -929,7 +795,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 }
 !endif
 
- $(PLATFORM_PACKAGE)/PlatformInitPei/PlatformInitPei.inf {
+ Vlv2TbltDevicePkg/PlatformInitPei/PlatformInitPei.inf {
     <PcdsPatchableInModule>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x803805c6
     <LibraryClasses>
@@ -938,34 +804,33 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 !endif
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
-  $(PLATFORM_PACKAGE)/FvInfoPei/FvInfoPei.inf
+  Vlv2TbltDevicePkg/FvInfoPei/FvInfoPei.inf
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/VlvInitPeim.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/VlvInitPeim.inf
 !if $(PCIESC_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchEarlyInitPeim.inf {
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchEarlyInitPeim.inf {
     <PcdsPatchableInModule>
       gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
   }
 !endif
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchInitPeim.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchInitPeim.inf
 
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchSmbusArpDisabled.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchSpiPeim.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PeiSmmAccess.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PeiSmmControl.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchSmbusArpDisabled.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchSpiPeim.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PeiSmmAccess.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PeiSmmControl.inf
   MdeModulePkg/Universal/PCD/Pei/Pcd.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/CpuPeim.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/CpuPeim.inf
   UefiCpuPkg/CpuIoPei/CpuIoPei.inf
   UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/MpS3.inf
-#  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PiSmmCommunicationPei.inf
+  UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationPei.inf
 
 !if $(RECOVERY_ENABLE)
   #
   # Recovery
   #
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchUsb.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchUsb.inf
   MdeModulePkg/Bus/Pci/EhciPei/EhciPei.inf
   MdeModulePkg/Bus/Usb/UsbBusPei/UsbBusPei.inf
   MdeModulePkg/Bus/Usb/UsbBotPei/UsbBotPei.inf
@@ -991,17 +856,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
  MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
  MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
 
-!if $(FTPM_ENABLE) == TRUE
-   SecurityPkg/Tcg/Tcg2Pei/Tcg2Pei.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
-    <LibraryClasses>
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-      NULL|SecurityPkg/Library\HashInstanceLibSha1/HashInstanceLibSha1.inf
-      NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
-  }
-!endif
 !if $(TPM_ENABLED) == TRUE
   SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf {
     <LibraryClasses>
@@ -1011,7 +865,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 !if $(ACPI50_ENABLE) == TRUE
   MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTablePei/FirmwarePerformancePei.inf{
     <LibraryClasses>
-      TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+      TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
   }
 
 !endif
@@ -1019,17 +873,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
 !endif
 [Components.IA32]
-  !if $(MINNOW2_FSP_BUILD) == TRUE
-  IntelFspWrapperPkg/FspNotifyDxe/FspNotifyDxe.inf {
-    !if $(TARGET) == DEBUG
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
-    <LibraryClasses>
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-    !endif
-  }
-
-  !endif
   #
   # EDK II Related Platform codes
   #
@@ -1047,24 +890,10 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
 !endif
   }
-  IntelFrameworkModulePkg/Universal/Acpi/AcpiS3SaveDxe/AcpiS3SaveDxe.inf {
-    <PcdsPatchableInModule>
-        gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0xF0000043
-    <PcdsFixedAtBuild>
-        gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x27
-    <LibraryClasses>
-    !if $(TARGET) != RELEASE
-          DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-    !endif
-       <BuildOptions>
-        ICC:*_*_*_CC_FLAGS = /D MDEPKG_NDEBUG
-        GCC:*_*_*_CC_FLAGS = -D MDEPKG_NDEBUG
-  }
   MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
     <LibraryClasses>
       PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   }
-  IntelFrameworkModulePkg/Universal/CpuIoDxe/CpuIoDxe.inf
   UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
 
   MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
@@ -1085,12 +914,8 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 !if $(TPM_ENABLED) == TRUE
       NULL|SecurityPkg/Library/DxeTpmMeasureBootLib/DxeTpmMeasureBootLib.inf
 !endif
-!if $(FTPM_ENABLE) == TRUE
-      NULL|SecurityPkg/Library/DxeTpm2MeasureBootLib/DxeTpm2MeasureBootLib.inf
-!endif
   }
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/MpCpu.inf
-  $(PLATFORM_PACKAGE)/Metronome/Metronome.inf
+  MdeModulePkg/Universal/Metronome/Metronome.inf
 
   IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf{
     <LibraryClasses>
@@ -1100,12 +925,8 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
       PlatformBdsLib|$(PLATFORM_PACKAGE)/Library/PlatformBdsLib/PlatformBdsLib.inf
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-      SerialPortLib|$(PLATFORM_PACKAGE)/Library/SerialPortLib/SerialPortLib.inf
-    !if $(FTPM_ENABLE) == TRUE
-      Tpm2DeviceLib|Vlv2TbltDevicePkg/Library/Tpm2DeviceLibSeCDxe/Tpm2DeviceLibSeC.inf
-    !else
+      SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
       Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibTcg2/Tpm2DeviceLibTcg2.inf
-    !endif
   }
 
   $(PLATFORM_PACKAGE)/UiApp/UiApp.inf
@@ -1117,11 +938,11 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmm.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
-      SerialPortLib|$(PLATFORM_PACKAGE)/Library/SerialPortLib/SerialPortLib.inf
+      SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
   }
-  $(PLATFORM_PACKAGE)/FvbRuntimeDxe/FvbSmm.inf
+  Vlv2TbltDevicePkg/FvbRuntimeDxe/FvbSmm.inf
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteSmm.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSpiSmm.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSpiSmm.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
   SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf {
     <LibraryClasses>
@@ -1143,9 +964,9 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   PcAtChipsetPkg/PcatRealTimeClockRuntimeDxe/PcatRealTimeClockRuntimeDxe.inf
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
 
-  $(PLATFORM_PACKAGE)/FvbRuntimeDxe/FvbRuntimeDxe.inf
+  Vlv2TbltDevicePkg/FvbRuntimeDxe/FvbRuntimeDxe.inf
 
-  $(PLATFORM_PACKAGE)/PlatformSetupDxe/PlatformSetupDxe.inf
+  Vlv2TbltDevicePkg/PlatformSetupDxe/PlatformSetupDxe.inf
 
 !if $(DATAHUB_ENABLE) == TRUE
   IntelFrameworkModulePkg/Universal/DataHubDxe/DataHubDxe.inf {
@@ -1153,38 +974,30 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
       gEfiMdePkgTokenSpaceGuid.PcdMaximumLinkedListLength|0
   }
 !endif
-  IntelFrameworkModulePkg/Universal/StatusCode/DatahubStatusCodeHandlerDxe/DatahubStatusCodeHandlerDxe.inf
   MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchS3SupportDxe.inf
-  !if $(USE_HPET_TIMER) == TRUE
-    PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
-  !else
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmartTimer.inf
-  !endif
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmmControl.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchS3SupportDxe.inf
+  PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmmControl.inf
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSmbusDxe.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/IntelPchLegacyInterrupt.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchReset.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchInitDxe.inf{
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSmbusDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchReset.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchInitDxe.inf{
     <PcdsPatchableInModule>
         gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0xF0000043
   }
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchInitSmm.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchInitSmm.inf
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSmiDispatcher.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSmiDispatcher.inf
 
 !if $(PCIESC_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchPcieSmm.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchPcieSmm.inf
 !endif
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSpiRuntime.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchPolicyInitDxe.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchBiosWriteProtect.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmmAccess.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PciHostBridge.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/VlvInitDxe.inf
-
-  IntelFrameworkModulePkg/Universal/LegacyRegionDxe/LegacyRegionDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchSpiRuntime.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchPolicyInitDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchBiosWriteProtect.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmmAccess.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PciHostBridge.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/VlvInitDxe.inf
 
   #
   # Performance Application; Set PERFORMANCE_ENABLE=TRUE for normal boot performance and smm performance data
@@ -1204,35 +1017,9 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/Dptf.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PnpDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/Dptf.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PnpDxe.inf
 
-!if $(SEC_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/HeciDrv.inf {
-!if $(SEC_DEBUG_INFO_ENABLE) == TRUE
-    <BuildOptions>
-      *_*_X64_CC_FLAGS      = /DSEC_DEBUG_INFO=1
-!else
-    <BuildOptions>
-      *_*_X64_CC_FLAGS      = /DSEC_DEBUG_INFO=0
-!endif
-  }
-
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SeCPolicyInitDxe.inf
-!endif
-
-!if $(FTPM_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/Tpm2DeviceSeCDxe.inf
-  SecurityPkg/Tcg/MemoryOverwriteControl/TcgMor.inf
-  SecurityPkg/Tcg/Tcg2Dxe/Tcg2Dxe.inf{
-    <LibraryClasses>
-      NULL|SecurityPkg/Library/HashInstanceLibSha1/HashInstanceLibSha1.inf
-      NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
-      PcdLib|MdePkg/Library\DxePcdLib/DxePcdLib.inf
-      Tpm2DeviceLib|Vlv2TbltDevicePkg/Library/Tpm2DeviceLibSeCDxe/Tpm2DeviceLibSeC.inf
-  }
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/FtpmSmm.inf
-!endif
 !if $(TPM_ENABLED) == TRUE
   SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigPei.inf {
     <LibraryClasses>
@@ -1259,24 +1046,23 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   #
   # EDK II Related Platform codes
   #
-  $(PLATFORM_PACKAGE)/PlatformSmm/PlatformSmm.inf{
+  Vlv2TbltDevicePkg/PlatformSmm/PlatformSmm.inf{
     <LibraryClasses>
     !if $(TARGET) != RELEASE
           DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
     !endif
           PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
-  $(PLATFORM_PACKAGE)/PlatformInfoDxe/PlatformInfoDxe.inf
-  $(PLATFORM_PACKAGE)/PlatformCpuInfoDxe/PlatformCpuInfoDxe.inf
-  $(PLATFORM_PACKAGE)/PlatformDxe/PlatformDxe.inf
+  Vlv2TbltDevicePkg/PlatformInfoDxe/PlatformInfoDxe.inf
+  Vlv2TbltDevicePkg/PlatformCpuInfoDxe/PlatformCpuInfoDxe.inf
+  Vlv2TbltDevicePkg/PlatformDxe/PlatformDxe.inf
 
-  $(PLATFORM_PACKAGE)/PciPlatform/PciPlatform.inf
-  $(PLATFORM_PACKAGE)/SaveMemoryConfig/SaveMemoryConfig.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PlatformCpuPolicy.inf
-  $(PLATFORM_PACKAGE)/PpmPolicy/PpmPolicy.inf
-  $(PLATFORM_PACKAGE)/SmramSaveInfoHandlerSmm/SmramSaveInfoHandlerSmm.inf
+  Vlv2TbltDevicePkg/PciPlatform/PciPlatform.inf
+  Vlv2TbltDevicePkg/SaveMemoryConfig/SaveMemoryConfig.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PlatformCpuPolicy.inf
+  Vlv2TbltDevicePkg/PpmPolicy/PpmPolicy.inf
 !if $(GOP_DRIVER_ENABLE) == TRUE
-  $(PLATFORM_PACKAGE)/PlatformGopPolicy/PlatformGopPolicy.inf
+  Vlv2TbltDevicePkg/PlatformGopPolicy/PlatformGopPolicy.inf
 
 !endif
 
@@ -1287,13 +1073,15 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MdeModulePkg/Core/PiSmmCore/PiSmmIpl.inf
   MdeModulePkg/Core/PiSmmCore/PiSmmCore.inf
   UefiCpuPkg/CpuDxe/CpuDxe.inf
+  UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
   UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
   UefiCpuPkg/CpuIo2Smm/CpuIo2Smm.inf
   MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf
   UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationSmm.inf
-  $(PLATFORM_PACKAGE)/SmmSwDispatch2OnSmmSwDispatchThunk/SmmSwDispatch2OnSmmSwDispatchThunk.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PowerManagement2.inf
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/DigitalThermalSensor.inf
+
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PowerManagement2.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/DigitalThermalSensor.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/GraphicDxeInitSmm.inf
 
   #
   # ACPI
@@ -1306,14 +1094,14 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
     <LibraryClasses>
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
+  MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
 
-  $(PLATFORM_PACKAGE)/BootScriptSaveDxe/BootScriptSaveDxe.inf
   IntelFrameworkModulePkg/Universal/Acpi/AcpiSupportDxe/AcpiSupportDxe.inf
   Vlv2DeviceRefCodePkg/ValleyView2Soc/CPU/PowerManagement/AcpiTables/PowerManagementAcpiTables.inf
 
-  $(PLATFORM_RC_PACKAGE)/AcpiTablesPCAT/AcpiTables.inf
+  Vlv2DeviceRefCodePkg/AcpiTablesPCAT/AcpiTables.inf
 
-  $(PLATFORM_PACKAGE)/AcpiPlatform/AcpiPlatform.inf
+  Vlv2TbltDevicePkg/AcpiPlatform/AcpiPlatform.inf
 
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
@@ -1323,31 +1111,23 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/ISPDxe.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/ISPDxe.inf
 
 
-#
-# ISA
-#
-  $(PLATFORM_PACKAGE)/Wpce791/Wpce791.inf
-  IntelFrameworkModulePkg/Bus/Isa/IsaBusDxe/IsaBusDxe.inf
-  IntelFrameworkModulePkg/Bus/Isa/IsaIoDxe/IsaIoDxe.inf
-  IntelFrameworkModulePkg/Bus/Isa/IsaSerialDxe/IsaSerialDxe.inf
-  IntelFrameworkModulePkg/Bus/Isa/Ps2MouseDxe/Ps2MouseDxe.inf
-  IntelFrameworkModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2keyboardDxe.inf
-#
-# SDIO
-#
-#  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/MmcHost.inf
-#  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/MmcMediaDevice.inf
+  #
+  # ISA
+  #
+  Vlv2TbltDevicePkg/PcuSio/PcuSio.inf
+  MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
+
 !if $(ACPI50_ENABLE) == TRUE
   MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf {
     <LibraryClasses>
-      TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+      TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
   }
   MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableSmm/FirmwarePerformanceSmm.inf {
     <LibraryClasses>
-      TimerLib|$(PLATFORM_PACKAGE)/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
+      TimerLib|Vlv2TbltDevicePkg/Library/IntelPchAcpiTimerLib/IntelPchAcpiTimerLib.inf
   }
 !endif
 
@@ -1355,7 +1135,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 # IDE/SCSI/AHCI
 #
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
-  IntelFrameworkModulePkg/Bus/Pci/IdeBusDxe/IdeBusDxe.inf
   MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
@@ -1379,7 +1158,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
       gEfiMdePkgTokenSpaceGuid.PcdUefiLibMaxPrintBufferSize|8000
   }
 !if $(SATA_ENABLE) == TRUE
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SataController.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SataController.inf
 !endif
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 !if $(SCSI_ENABLE) == TRUE
@@ -1392,7 +1171,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
   MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
-  IntelFrameworkModulePkg/Universal/Console/VgaClassDxe/VgaClassDxe.inf
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
   MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
@@ -1416,9 +1194,9 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   # SMBIOS
   #
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
-  $(PLATFORM_PACKAGE)/SmBiosMiscDxe/SmBiosMiscDxe.inf
+  Vlv2TbltDevicePkg/SmBiosMiscDxe/SmBiosMiscDxe.inf
 
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmbiosMemory.inf
+  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmbiosMemory.inf
   #
   # CPU/FW Microde
   #
@@ -1432,12 +1210,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   # Network Stacks
   #
 !include NetworkPkg/Network.dsc.inc
-
-!if $(NETWORK_ENABLE) == TRUE
-  !if $(CSM_ENABLE) == TRUE
-    IntelFrameworkModulePkg/Csm/BiosThunk/Snp16Dxe/Snp16Dxe.inf
-  !endif
-!endif
 
 !if $(CAPSULE_ENABLE) || $(MICOCODE_CAPSULE_ENABLE)
   MdeModulePkg/Universal/EsrtFmpDxe/EsrtFmpDxe.inf
@@ -1456,7 +1228,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-      SerialPortLib|$(PLATFORM_PACKAGE)/Library/SerialPortLib/SerialPortLib.inf
+      SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
   }
 !endif
 
@@ -1468,11 +1240,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 #
 # Define token for different Platform
 #
-!if $(MINNOW2_FSP_BUILD) == TRUE
-  DEFINE MINNOW2_FSP_OPTION = /DMINNOW2_FSP_BUILD
-!else
   DEFINE MINNOW2_FSP_OPTION =
-!endif
 
 !if $(ENBDT_PF_BUILD) == TRUE
   DEFINE ENBDT_PF_ENABLE = /DENBDT_PF_ENABLE=1
@@ -1511,11 +1279,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   DEFINE X64_BUILD_ENABLE =
 !endif
 
-!if $(FTPM_ENABLE) == TRUE
-  DEFINE DSC_FTPM_BUILD_OPTIONS = /DFTPM_ENABLE
-!else
-  DEFINE DSC_FTPM_BUILD_OPTIONS =
-!endif
 !if $(TPM_ENABLED) == TRUE
   DEFINE DSC_TPM_BUILD_OPTIONS = /DTPM_ENABLED
 !else
@@ -1523,7 +1286,7 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
 !endif
 
 
-  DEFINE EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS = $(MINNOW2_FSP_OPTION) $(MINNOW2_BUILD_OPTION) $(ENBDT_PF_ENABLE) $(EXTERNAL_VGA_BUILD_OPTION) $(PCIE_ENUM_WA_BUILD_OPTION) $(X0_WA_ENABLE_BUILD_OPTION) $(A0_WA_ENABLE_BUILD_OPTION) $(MICROCODE_FREE_BUILD_OPTIONS) $(SIMICS_BUILD_OPTIONS) $(HYBRID_BUILD_OPTIONS) $(COMPACT_BUILD_OPTIONS) $(VP_BUILD_OPTIONS) $(SYSCTL_ID_BUILD_OPTION) $(CLKGEN_CONFIG_EXTRA_BUILD_OPTION) $(SYSCTL_X0_CONVERT_BOARD_OPTION) $(ENBDT_S3_SUPPORT_OPTIONS) $(SATA_SUPPORT_BUILD_OPTION) $(PCIESC_SUPPORT_BUILD_OPTION) $(DSC_FTPM_BUILD_OPTIONS) $(DSC_FTPM_ERROR_WR_BUILD_OPTIONS) $(DSC_TPM_BUILD_OPTIONS) $(DSC_BYTI_SECURE_BOOT_BUILD_OPTIONS)
+  DEFINE EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS = $(MINNOW2_FSP_OPTION) $(MINNOW2_BUILD_OPTION) $(ENBDT_PF_ENABLE) $(EXTERNAL_VGA_BUILD_OPTION) $(PCIE_ENUM_WA_BUILD_OPTION) $(X0_WA_ENABLE_BUILD_OPTION) $(A0_WA_ENABLE_BUILD_OPTION) $(MICROCODE_FREE_BUILD_OPTIONS) $(SIMICS_BUILD_OPTIONS) $(HYBRID_BUILD_OPTIONS) $(COMPACT_BUILD_OPTIONS) $(VP_BUILD_OPTIONS) $(SYSCTL_ID_BUILD_OPTION) $(CLKGEN_CONFIG_EXTRA_BUILD_OPTION) $(SYSCTL_X0_CONVERT_BOARD_OPTION) $(ENBDT_S3_SUPPORT_OPTIONS) $(SATA_SUPPORT_BUILD_OPTION) $(PCIESC_SUPPORT_BUILD_OPTION) $(DSC_FTPM_ERROR_WR_BUILD_OPTIONS) $(DSC_TPM_BUILD_OPTIONS) $(DSC_BYTI_SECURE_BOOT_BUILD_OPTIONS)
 !if $(PERFORMANCE_ENABLE) == TRUE
   DEFINE PDB_BUILD_OPTION = /Zi
 !endif
@@ -1556,76 +1319,6 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   MSFT:*_*_*_DLINK_FLAGS = /ALIGN:4096
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
 
-[BuildOptions.Common.EDK]
-
-#
-# Define token for different Platform
-#
-!if $(ENBDT_PF_BUILD) == TRUE
-  DEFINE ENBDT_PF_ENABLE = /DENBDT_PF_ENABLE=1
-!else
-  DEFINE ENBDT_PF_ENABLE = /DENBDT_PF_ENABLE=0
-!endif
-
-!if $(PERFORMANCE_ENABLE) == TRUE
-  RELEASE_*_*_DLINK_FLAGS = /DEBUG
-!endif
-
-!if $(S3_ENABLE) == TRUE
-  DEFINE DSC_S3_BUILD_OPTIONS = /DEFI_S3_RESUME
-!else
-  DEFINE DSC_S3_BUILD_OPTIONS =
-!endif
-
-!if $(ENBDT_S3_SUPPORT) == TRUE
-  DEFINE ENBDT_S3_SUPPORT_OPTIONS = /DNOCS_S3_SUPPORT
-!else
-  DEFINE ENBDT_S3_SUPPORT_OPTIONS =
-!endif
-
-!if $(X64_CONFIG) == TRUE
-  DEFINE X64_BUILD_ENABLE = /DX64_BUILD_ENABLE=1
-!else
-  DEFINE X64_BUILD_ENABLE =
-!endif
-
-
-  DEFINE EDK_GLUE_LIB_DEBUG  =
-  DEFINE DEBUG_BUILD_OPTIONS = /D EFI_DEBUG /D DEBUG_MODE=1  /GL- $(EDK_GLUE_LIB_DEBUG) /DEDKII_GLUE_DebugPrintErrorLevel=(EFI_D_ERROR)
-  DEFINE EDK_DSC_FEATURE_BUILD_OPTIONS = $(DSC_S3_BUILD_OPTIONS) $(DSC_ACPI_BUILD_OPTIONS) $(DSC_SEC_BUILD_OPTIONS) $(DSC_FTPM_BUILD_OPTIONS) $(DSC_FTPM_ERROR_WR_BUILD_OPTIONS) $(DSC_TPM_BUILD_OPTIONS) $(SOFTSDV_BUILD_OPTIONS) $(SIMICS_BUILD_OPTIONS) $(HYBRID_BUILD_OPTIONS) $(COMPACT_BUILD_OPTIONS) $(VP_BUILD_OPTIONS) $(QT_BUILD_OPTIONS) $(DSC_BYTI_SECURE_BOOT_BUILD_OPTIONS) /D$(PROJECT_SC_CHIPSET)
-
-  DEFINE EDK_DSC_OTHER_BUILD_OPTIONS = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS) $(SV_BUILD_OPTIONS) $(INTEL_FASTBOOT_BUILD_OPTION)
-  DEFINE EDK_DSC_GLOBAL_BUILD_OPTIONS = $(ENBDT_PF_ENABLE) $(EDK_DSC_FEATURE_BUILD_OPTIONS) $(EDK_DSC_OTHER_BUILD_OPTIONS) /D EFI_SPECIFICATION_VERSION=0x00020000  /D PI_SPECIFICATION_VERSION=0x00000009  /D TIANO_RELEASE_VERSION=0x00080006 /D SUPPORT_DEPRECATED_PCI_CFG_PPI /D CSM_SMMENTRY_PORT8DATA8 /D EDKII_GLUE_PciExpressBaseAddress=0x$(PLATFORM_PCIEXPRESS_BASE) /D MAX_VARIABLE_SIZE=0x2000 /D EFI_FIRMWARE_VENDOR="L/"INTEL/"" /D EFI_BUILD_VERSION="L/"EDKII/"" /DEFI_PEI_REPORT_STATUS_CODE_ON $(ENBDT_S3_SUPPORT_OPTIONS)
-
-  *_*_IA32_ASM_FLAGS         = /DEFI32 /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h /DNOCS_S3_SUPPORT
-  DEBUG_*_IA32_CC_FLAGS      = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_IA32_CC_FLAGS    = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_IA32_VFRPP_FLAGS   = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_IA32_VFRPP_FLAGS = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_IA32_APP_FLAGS     = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_IA32_APP_FLAGS   = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_IA32_PP_FLAGS      = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_IA32_PP_FLAGS    = /D EFI32 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  *_*_IA32_ASLPP_FLAGS       = /D EDKII_GLUE_PciExpressBaseAddress=0x$(PLATFORM_PCIEXPRESS_BASE)
-  *_*_IA32_ASLCC_FLAGS       = /D EDKII_GLUE_PciExpressBaseAddress=0x$(PLATFORM_PCIEXPRESS_BASE)
-  *_*_IA32_ASM16_FLAGS       = /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h
-
-  *_*_X64_ASM_FLAGS          = /DEFIX64 /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h /DNOCS_S3_SUPPORT
-  DEBUG_*_X64_CC_FLAGS       = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_X64_CC_FLAGS     = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_X64_VFRPP_FLAGS    = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_X64_VFRPP_FLAGS  = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_X64_APP_FLAGS      = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_X64_APP_FLAGS    = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  DEBUG_*_X64_PP_FLAGS       = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS) $(DEBUG_BUILD_OPTIONS)
-  RELEASE_*_X64_PP_FLAGS     = /D EFIX64 $(EDK_DSC_GLOBAL_BUILD_OPTIONS)
-  *_*_X64_ASLPP_FLAGS        = /D EDKII_GLUE_PciExpressBaseAddress=0x$(PLATFORM_PCIEXPRESS_BASE)
-  *_*_X64_ASLCC_FLAGS        = /D EDKII_GLUE_PciExpressBaseAddress=0x$(PLATFORM_PCIEXPRESS_BASE)
-  *_*_X64_ASM16_FLAGS        = /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h
- # *_*_*_BUILD_FLAGS = -s
-  *_*_*_VFR_FLAGS   = -c
-  *_*_*_BUILD_FLAGS = -c
-
 [BuildOptions.Common.EDKII]
   *_*_IA32_ASM_FLAGS     = $(VP_BUILD_OPTIONS) /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h /DNOCS_S3_SUPPORT
 
@@ -1640,25 +1333,3 @@ $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/IA32/fTPMInitPeim.inf
   *_*_X64_APP_FLAGS      = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS)
   *_*_X64_PP_FLAGS       = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS)
   *_*_X64_ASLPP_FLAGS    = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS)
-
-
-[Components.IA32]
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/I2cBus.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0xF0000043
-  }
-
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/I2cHost.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0xF0000043
-  }
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/I2cPortA0Pio.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x00000043
-  }
-
-  $(PLATFORM_BINARY_PACKAGE)/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/I2cMmioDeviceDxe.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x00000043
-  }
-

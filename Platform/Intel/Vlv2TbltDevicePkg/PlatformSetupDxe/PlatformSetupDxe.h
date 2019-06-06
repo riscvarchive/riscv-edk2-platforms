@@ -1,18 +1,15 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 **/
 
 #ifndef _PLAT_OVER_MNGR_H_
 #define _PLAT_OVER_MNGR_H_
 
-#include <FrameworkDxe.h>
+#include <PiDxe.h>
 
 #include <Protocol/HiiConfigAccess.h>
 #include <Protocol/HiiConfigRouting.h>
@@ -57,23 +54,10 @@
 #include <CpuType.h>
 #include <Guid/PlatformCpuInfo.h>
 #include <Protocol/SimpleTextIn.h>
-#include <Protocol/FrameworkFormBrowser.h>
+
+typedef UINT16  STRING_REF;
+
 extern EFI_HII_HANDLE   mHiiHandle;
-
-UINT32
-ConvertBase10ToRaw (
-  IN  EFI_EXP_BASE10_DATA             *Data);
-
-UINT32
-ConvertBase2ToRaw (
-  IN  EFI_EXP_BASE2_DATA             *Data);
-
-EFI_STATUS
-GetStringFromToken (
-  IN      EFI_GUID                  *ProducerGuid,
-  IN      STRING_REF                Token,
-  OUT     CHAR16                    **String
-  );
 
 VOID
 SwapEntries (

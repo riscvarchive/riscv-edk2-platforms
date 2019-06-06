@@ -1,11 +1,8 @@
 #
 #
-# Copyright (c) 2014 - 2018, Intel Corporation. All rights reserved.<BR>
-#                                                                                  
-# SPDX-License-Identifier: BSD-2-Clause-Patent
-
-#                                                                                  
+# Copyright (c) 2014 - 2019, Intel Corporation. All rights reserved.<BR>
 #
+# SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 #  This driver produces UEFI PLATFORM_DRIVER_OVERRIDE_PROTOCOL if this protocol doesn't exist.
 #  It doesn't install again if this protocol exists.
@@ -63,7 +60,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec    #for PchAccess.h
   SecurityPkg/SecurityPkg.dec
@@ -94,10 +90,6 @@
   #
   # gEfiCallerIdGuid                            ## Private  ## Variable:L"PlatDriOver"
   gEfiIfrTianoGuid                              ## CONSUMES ## Guid
-  gEfiProcessorSubClassGuid
-  gEfiMiscSubClassGuid
-  gEfiCacheSubClassGuid
-  gEfiMemorySubClassGuid
   gEfiPlatformInfoGuid
   gEfiNormalSetupGuid
   gEfiSecureBootEnableDisableGuid
@@ -123,8 +115,6 @@
   gEfiDevicePathToTextProtocolGuid              ## CONSUMED
   gEdkiiFormBrowserEx2ProtocolGuid
 
-  gEfiDataHubProtocolGuid
-  gEfiLegacyBiosProtocolGuid
   gEfiSimpleNetworkProtocolGuid
 
   gEfiDiskInfoProtocolGuid                      ## CONSUMED

@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -89,8 +87,6 @@ Abstract:
 #define VAR_EQ_CONFIG_MODE_DECIMAL_NAME L"67"
 #define VAR_EQ_CPU_EE_NAME              0x0045  // E
 #define VAR_EQ_CPU_EE_DECIMAL_NAME  L"69"
-#define VAR_EQ_FLOPPY_MODE_NAME         0x0046  // F
-#define VAR_EQ_FLOPPY_MODE_DECIMAL_NAME L"70"
 #define VAR_EQ_HT_MODE_NAME             0x0048  // H
 #define VAR_EQ_HT_MODE_DECIMAL_NAME     L"72"
 #define VAR_EQ_AHCI_MODE_NAME           0x0049  // I

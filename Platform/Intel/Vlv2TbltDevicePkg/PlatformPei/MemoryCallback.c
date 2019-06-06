@@ -1,11 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
   This file includes a memory call back function notified when MRC is done,
   following action is performed in this file,
@@ -21,7 +18,6 @@
 
 #include "CommonHeader.h"
 #include "Platform.h"
-#include <Ppi/Cache.h>
 #include <Library/BaseCryptLib.h>
 #include <Library/PciLib.h>
 #include "VlvAccess.h"

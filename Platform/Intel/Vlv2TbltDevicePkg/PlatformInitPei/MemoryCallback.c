@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -158,12 +156,10 @@ MemoryDiscoveredPpiNotifyCallback (
     IoWrite16 (ACPI_BASE_ADDRESS + R_PCH_ACPI_PM1_CNT, Pm1Cnt);
   }
 
-  #ifndef MINNOW2_FSP_BUILD
   //
   // Set PEI cache mode here
   //
   SetPeiCacheMode (PeiServices);
-  #endif
 
   //
   //  Pulish memory tyoe info

@@ -1,23 +1,15 @@
 #/** @file
 # platform configuration file.
 #
-# Copyright (c) 2012  - 2016, Intel Corporation. All rights reserved.<BR>
-#                                                                                  
+# Copyright (c) 2012  - 2019, Intel Corporation. All rights reserved.<BR>
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-
-#                                                                                  
 #
 #**/
 
 #
 # TRUE is ENABLE. FASLE is DISABLE.
 #
-
-#
-# FSP selection
-#
-DEFINE MINNOW2_FSP_BUILD = FALSE
-
 
 DEFINE SCSI_ENABLE = TRUE
 
@@ -30,14 +22,6 @@ DEFINE CLKGEN_CONFIG_EXTRA_ENABLE=TRUE
 #
 # Feature selection
 #
-
-#
-# Select system timer which is used to produce Timer Arch Protocol:
-# TRUE  - HPET timer is used.
-# FALSE - 8254 timer is used.
-#
-DEFINE USE_HPET_TIMER = TRUE
-
 
 #
 # Feature selection
@@ -65,7 +49,6 @@ DEFINE MICOCODE_CAPSULE_ENABLE = TRUE
 
 DEFINE GOP_DRIVER_ENABLE = TRUE
 DEFINE DATAHUB_ENABLE = TRUE
-DEFINE DATAHUB_STATUS_CODE_ENABLE = TRUE
 DEFINE USB_ENABLE = TRUE
 
 DEFINE ISA_SERIAL_STATUS_CODE_ENABLE = TRUE

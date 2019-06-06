@@ -2,12 +2,9 @@
 #
 #/*++
 #
-# Copyright (c) 2014 - 2018, Intel Corporation. All rights reserved.<BR>
-#                                                                                  
+# Copyright (c) 2014 - 2019, Intel Corporation. All rights reserved.<BR>
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-
-#                                                                                  
-
 #
 #  Module Name:
 #
@@ -40,8 +37,3 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-
-
-[LibraryClasses]
-

@@ -1,12 +1,9 @@
 
 /*++
 
-Copyright (c)  2011  - 2018, Intel Corporation. All rights reserved
-                                                                                   
+Copyright (c)  2011  - 2019, Intel Corporation. All rights reserved
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -35,14 +32,12 @@ Abstract:
 
 #include "IgdOpRegion.h"
 #include "VlvPlatformInit.h"
-#include <FrameworkDxe.h>
-#include <Uefi.h>
+#include <PiDxe.h>
 #include <PchRegs.h>
 
 #include <Guid/DataHubRecords.h>
 
 #include <Protocol/IgdOpRegion.h>
-#include <Protocol/FrameworkHii.h>
 #include <Protocol/FirmwareVolume2.h>
 #include <Protocol/PlatformGopPolicy.h>
 #include <Protocol/PciIo.h>

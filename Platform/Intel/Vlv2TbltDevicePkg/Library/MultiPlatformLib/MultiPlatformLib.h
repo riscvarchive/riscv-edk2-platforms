@@ -3,11 +3,11 @@
 
   This file includes package header files, library classes.
 
-  Copyright (c) 2013 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
+
 **/
 
 #ifndef _MULTIPLATFORM_LIB_H_
@@ -52,7 +52,6 @@
 #include <Ppi/Speaker.h>
 #include <Guid/FirmwareFileSystem.h>
 #include <Guid/MemoryTypeInformation.h>
-#include <Ppi/Cache.h>
 #include <Ppi/Reset.h>
 #include <Ppi/EndOfPeiPhase.h>
 #include <Ppi/MemoryDiscovered.h>

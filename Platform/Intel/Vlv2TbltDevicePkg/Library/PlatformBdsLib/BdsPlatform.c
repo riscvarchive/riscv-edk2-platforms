@@ -1789,9 +1789,6 @@ PlatformBdsPolicyBehavior (
     #ifdef TPM_ENABLED
     TcgPhysicalPresenceLibProcessRequest();
     #endif
-    #ifdef FTPM_ENABLE
-    Tcg2PhysicalPresenceLibProcessRequest(NULL);
-    #endif
 
     if (EsrtManagement != NULL) {
       EsrtManagement->LockEsrtRepository();
@@ -1997,9 +1994,6 @@ FULL_CONFIGURATION:
     }
    #ifdef TPM_ENABLED
    TcgPhysicalPresenceLibProcessRequest();
-   #endif
-   #ifdef FTPM_ENABLE
-   Tcg2PhysicalPresenceLibProcessRequest(NULL);
    #endif
 
     if (EsrtManagement != NULL) {

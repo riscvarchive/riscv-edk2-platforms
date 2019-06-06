@@ -1,10 +1,8 @@
 /*++
 
-Copyright (c) 2009 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
-                                                                                   
+Copyright (c) 2009 - 2019, Intel Corporation. All rights reserved.<BR>
 
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -138,7 +136,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
              &MacStr
              );
   if (EFI_ERROR (Status)) {	
-    return Status;
+    MacStr = L"000000000000";
   }
   SerialNumber = MacStr;    
   SerialNumStrLen = StrLen(SerialNumber);

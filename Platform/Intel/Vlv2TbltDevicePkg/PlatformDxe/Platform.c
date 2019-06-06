@@ -1,12 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2015, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -23,9 +19,7 @@ Abstract:
 #include "PlatformDxe.h"
 #include "Platform.h"
 #include "PchCommonDefinitions.h"
-#include <Protocol/UsbPolicy.h>
 #include <Protocol/PchPlatformPolicy.h>
-#include <Protocol/TpmMp.h>
 #include <Protocol/CpuIo2.h>
 #include <Library/S3BootScriptLib.h>
 #include <Guid/PciLanInfo.h>
@@ -63,10 +57,8 @@ GPIO_CONF_PAD_INIT mTB_BL_GpioInitData_SC_TRI_Exit_boot_Service[] =
 EFI_GUID mSystemHiiExportDatabase = EFI_HII_EXPORT_DATABASE_GUID;
 EFI_GUID mPlatformDriverGuid = EFI_PLATFORM_DRIVER_GUID;
 SYSTEM_CONFIGURATION  mSystemConfiguration;
-SYSTEM_PASSWORDS      mSystemPassword;
 EFI_HANDLE            mImageHandle;
 BOOLEAN               mMfgMode = FALSE;
-VOID                  *mDxePlatformStringPack;
 UINT32                mPlatformBootMode = PLATFORM_NORMAL_MODE;
 extern CHAR16 gItkDataVarName[];
 
@@ -77,8 +69,6 @@ EFI_EVENT  mReadyToBootEvent;
 
 UINT8 mSmbusRsvdAddresses[] = PLATFORM_SMBUS_RSVD_ADDRESSES;
 UINT8 mNumberSmbusAddress = sizeof( mSmbusRsvdAddresses ) / sizeof( mSmbusRsvdAddresses[0] );
-UINT32 mSubsystemVidDid;
-UINT32 mSubsystemAudioVidDid;
 
 UINTN   mPciLanCount = 0;
 VOID    *mPciLanInfo = NULL;
@@ -88,9 +78,6 @@ static EFI_SPEAKER_IF_PROTOCOL mSpeakerInterface = {
   ProgramToneFrequency,
   GenerateBeepTone
 };
-
-EFI_USB_POLICY_PROTOCOL         mUsbPolicyData = {0};
-
 
 CFIO_PNP_INIT mTB_BL_GpioInitData_SC_TRI_S0ix_Exit_boot_Service[] =
 {
@@ -177,11 +164,6 @@ PchInitBeforeBoot(
 
 VOID
 UpdateDVMTSetup(
-  );
-
-VOID
-InitPlatformUsbPolicy (
-  VOID
   );
 
 VOID
@@ -427,14 +409,8 @@ SpiBiosProtectionFunction(
 
   BiosFlaLower0 = PcdGet32(PcdFlashMicroCodeAddress)-PcdGet32(PcdFlashAreaBaseAddress);
   BiosFlaLimit0 = PcdGet32(PcdFlashMicroCodeSize)-1;  
-  #ifdef MINNOW2_FSP_BUILD
-  BiosFlaLower1 = PcdGet32(PcdFlashFvFspBase)-PcdGet32(PcdFlashAreaBaseAddress);
-  BiosFlaLimit1 = (PcdGet32(PcdFlashFvRecoveryBase)-PcdGet32(PcdFlashFvFspBase)+PcdGet32(PcdFlashFvRecoverySize))-1;
-  #else
   BiosFlaLower1 = PcdGet32(PcdFlashFvMainBase)-PcdGet32(PcdFlashAreaBaseAddress);
   BiosFlaLimit1 = (PcdGet32(PcdFlashFvRecoveryBase)-PcdGet32(PcdFlashFvMainBase)+PcdGet32(PcdFlashFvRecoverySize))-1;
-  #endif
-
   
   mPciD31F0RegBase = MmPciAddress (0,
                          DEFAULT_PCI_BUS_NUMBER_PCH,
@@ -610,8 +586,6 @@ TristateLpcGpioS0i3Config (
      return EFI_SUCCESS;
 }
 
-
-EFI_BOOT_SCRIPT_SAVE_PROTOCOL *mBootScriptSave;
 
 /**
   Event Notification during exit boot service to enabel ACPI mode
@@ -862,8 +836,6 @@ InitializePlatform (
   //
   //  Add usb policy
   //
-  InitPlatformUsbPolicy();
-  InitSioPlatformPolicy();
   InitializeClockRouting();
   InitializeSlotInfo();
   InitTcoReset();
@@ -949,7 +921,7 @@ InitializePlatform (
                     );
   if (!EFI_ERROR (Status)) {
       Status = gBS->RegisterProtocolNotify (
-                      &gExitPmAuthProtocolGuid,
+                      &gEfiEndOfDxeEventGroupGuid,
                       RtcEvent,
                       &RtcCallbackReg
                       );
@@ -1042,58 +1014,6 @@ ReadyToBootFunction (
   VOID       *Context
   )
 {
-  EFI_STATUS                      Status;
-  EFI_ISA_ACPI_PROTOCOL           *IsaAcpi;
-  EFI_ISA_ACPI_DEVICE_ID          IsaDevice;
-  UINTN                           Size;
-  UINT16                          State;
-  EFI_TPM_MP_DRIVER_PROTOCOL      *TpmMpDriver;
-  EFI_CPU_IO_PROTOCOL             *CpuIo;
-  UINT8                           Data;
-  UINT8                           ReceiveBuffer [64];
-  UINT32                          ReceiveBufferSize;
-
-  UINT8 TpmForceClearCommand [] =              {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0A,
-                                                0x00, 0x00, 0x00, 0x5D};
-  UINT8 TpmPhysicalPresenceCommand [] =        {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0C,
-                                                0x40, 0x00, 0x00, 0x0A,
-                                                0x00, 0x00};
-  UINT8 TpmPhysicalDisableCommand [] =         {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0A,
-                                                0x00, 0x00, 0x00, 0x70};
-  UINT8 TpmPhysicalEnableCommand [] =          {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0A,
-                                                0x00, 0x00, 0x00, 0x6F};
-  UINT8 TpmPhysicalSetDeactivatedCommand [] =  {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0B,
-                                                0x00, 0x00, 0x00, 0x72,
-                                                0x00};
-  UINT8 TpmSetOwnerInstallCommand [] =         {0x00, 0xC1,
-                                                0x00, 0x00, 0x00, 0x0B,
-                                                0x00, 0x00, 0x00, 0x71,
-                                                0x00};
-
-  Size = sizeof(UINT16);
-  Status = gRT->GetVariable (
-                  VAR_EQ_FLOPPY_MODE_DECIMAL_NAME,
-                  &gEfiNormalSetupGuid,
-                  NULL,
-                  &Size,
-                  &State
-                  );
-
-  //
-  // Disable Floppy Controller if needed
-  //
-  Status = gBS->LocateProtocol (&gEfiIsaAcpiProtocolGuid, NULL, (VOID **) &IsaAcpi);
-  if (!EFI_ERROR(Status) && (State == 0x00)) {
-    IsaDevice.HID = EISA_PNP_ID(0x604);
-    IsaDevice.UID = 0;
-    Status = IsaAcpi->EnableDevice(IsaAcpi, &IsaDevice, FALSE);
-  }
-
   //
   // save LAN info to a variable
   //
@@ -1111,386 +1031,6 @@ ReadyToBootFunction (
     gBS->FreePool (mPciLanInfo);
     mPciLanInfo = NULL;
   }
-  
-
-  //
-  // Handle ACPI OS TPM requests here
-  //
-  Status = gBS->LocateProtocol (
-                  &gEfiCpuIoProtocolGuid,
-                  NULL,
-                  (VOID **)&CpuIo
-                  );
-  Status = gBS->LocateProtocol (
-                  &gEfiTpmMpDriverProtocolGuid,
-                  NULL,
-                  (VOID **)&TpmMpDriver
-                  );
-  if (!EFI_ERROR (Status))
-  {
-    Data = ReadCmosBank1Byte (CpuIo, ACPI_TPM_REQUEST);
-
-    //
-    // Clear pending ACPI TPM request indicator
-    //
-    WriteCmosBank1Byte (CpuIo, ACPI_TPM_REQUEST, 0x00);
-    if (Data != 0)
-    {
-      WriteCmosBank1Byte (CpuIo, ACPI_TPM_LAST_REQUEST, Data);
-
-      //
-      // Assert Physical Presence for these commands
-      //
-      TpmPhysicalPresenceCommand [11] = 0x20;
-      ReceiveBufferSize = sizeof(ReceiveBuffer);
-      Status = TpmMpDriver->Transmit (
-                              TpmMpDriver, TpmPhysicalPresenceCommand,
-                              sizeof (TpmPhysicalPresenceCommand),
-                              ReceiveBuffer, &ReceiveBufferSize
-                              );
-      //
-      // PF PhysicalPresence = TRUE
-      //
-      TpmPhysicalPresenceCommand [11] = 0x08;
-      ReceiveBufferSize = sizeof(ReceiveBuffer);
-      Status = TpmMpDriver->Transmit (
-                              TpmMpDriver, TpmPhysicalPresenceCommand,
-                              sizeof (TpmPhysicalPresenceCommand),
-                              ReceiveBuffer,
-                              &ReceiveBufferSize
-                              );
-      if (Data == 0x01)
-      {
-        //
-        // TPM_PhysicalEnable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver, TpmPhysicalEnableCommand,
-                                sizeof (TpmPhysicalEnableCommand),
-                                ReceiveBuffer, &ReceiveBufferSize
-                                );
-      }
-      if (Data == 0x02)
-      {
-        //
-        // TPM_PhysicalDisable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver, TpmPhysicalDisableCommand,
-                                sizeof (TpmPhysicalDisableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-      }
-      if (Data == 0x03)
-      {
-        //
-        // TPM_PhysicalSetDeactivated=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer, &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (EfiResetWarm, EFI_SUCCESS, 0, NULL);
-      }
-      if (Data == 0x04)
-      {
-        //
-        // TPM_PhysicalSetDeactivated=TRUE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x01;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x05)
-      {
-        //
-        // TPM_ForceClear
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmForceClearCommand,
-                                sizeof (TpmForceClearCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x06)
-      {
-        //
-        // TPM_PhysicalEnable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalEnableCommand,
-                                sizeof (TpmPhysicalEnableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalSetDeactivated=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x07)
-      {
-        //
-        // TPM_PhysicalSetDeactivated=TRUE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x01;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalDisable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalDisableCommand,
-                                sizeof (TpmPhysicalDisableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x08)
-      {
-        //
-        // TPM_SetOwnerInstall=TRUE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmSetOwnerInstallCommand [10] = 0x01;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmSetOwnerInstallCommand,
-                                sizeof (TpmSetOwnerInstallCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-      }
-      if (Data == 0x09)
-      {
-        //
-        // TPM_SetOwnerInstall=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmSetOwnerInstallCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmSetOwnerInstallCommand,
-                                sizeof (TpmSetOwnerInstallCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-      }
-      if (Data == 0x0A)
-      {
-        //
-        // TPM_PhysicalEnable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalEnableCommand,
-                                sizeof (TpmPhysicalEnableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalSetDeactivated=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // Do TPM_SetOwnerInstall=TRUE on next reboot
-        //
-
-        WriteCmosBank1Byte (CpuIo, ACPI_TPM_REQUEST, 0xF0);
-
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x0B)
-      {
-        //
-        // TPM_SetOwnerInstall=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmSetOwnerInstallCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmSetOwnerInstallCommand,
-                                sizeof (TpmSetOwnerInstallCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalSetDeactivated=TRUE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x01;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalDisable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalDisableCommand,
-                                sizeof (TpmPhysicalDisableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0x0E)
-      {
-        //
-        // TPM_ForceClear
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmForceClearCommand,
-                                sizeof (TpmForceClearCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalEnable
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalEnableCommand,
-                                sizeof (TpmPhysicalEnableCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        //
-        // TPM_PhysicalSetDeactivated=FALSE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmPhysicalSetDeactivatedCommand [10] = 0x00;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmPhysicalSetDeactivatedCommand,
-                                sizeof (TpmPhysicalSetDeactivatedCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        gRT->ResetSystem (
-               EfiResetWarm,
-               EFI_SUCCESS,
-               0,
-               NULL
-               );
-      }
-      if (Data == 0xF0)
-      {
-        //
-        // Second part of ACPI TPM request 0x0A: OEM custom TPM_SetOwnerInstall=TRUE
-        //
-        ReceiveBufferSize = sizeof(ReceiveBuffer);
-        TpmSetOwnerInstallCommand [10] = 0x01;
-        Status = TpmMpDriver->Transmit (
-                                TpmMpDriver,
-                                TpmSetOwnerInstallCommand,
-                                sizeof (TpmSetOwnerInstallCommand),
-                                ReceiveBuffer,
-                                &ReceiveBufferSize
-                                );
-        WriteCmosBank1Byte (CpuIo, ACPI_TPM_LAST_REQUEST, 0x0A);
-      }
-      //
-      // Deassert Physical Presence
-      //
-      TpmPhysicalPresenceCommand [11] = 0x10;
-      ReceiveBufferSize = sizeof(ReceiveBuffer);
-      Status = TpmMpDriver->Transmit (
-                              TpmMpDriver,
-                              TpmPhysicalPresenceCommand,
-                              sizeof (TpmPhysicalPresenceCommand),
-                              ReceiveBuffer,
-                              &ReceiveBufferSize
-                              );
-    }
-  }
-
-  return;
 }
 
 /**
@@ -1720,66 +1260,6 @@ UpdateDVMTSetup(
                     &SystemConfiguration
                     );
   }
-}
-
-VOID
-InitPlatformUsbPolicy (
-  VOID
-  )
-
-{
-  EFI_HANDLE              Handle;
-  EFI_STATUS              Status;
-
-  Handle = NULL;
-
-  mUsbPolicyData.Version                       = (UINT8)USB_POLICY_PROTOCOL_REVISION_2;
-  mUsbPolicyData.UsbMassStorageEmulationType   = mSystemConfiguration.UsbBIOSINT13DeviceEmulation;
-  if(mUsbPolicyData.UsbMassStorageEmulationType == 3) {
-    mUsbPolicyData.UsbEmulationSize = mSystemConfiguration.UsbBIOSINT13DeviceEmulationSize;
-  } else {
-    mUsbPolicyData.UsbEmulationSize = 0;
-  }
-  mUsbPolicyData.UsbZipEmulationType         = mSystemConfiguration.UsbZipEmulation;
-  mUsbPolicyData.UsbOperationMode              = HIGH_SPEED;
-
-  //
-  //  Some chipset need Period smi, 0 = LEGACY_PERIOD_UN_SUPP
-  //
-  mUsbPolicyData.USBPeriodSupport      = LEGACY_PERIOD_UN_SUPP;
-
-  //
-  //  Some platform need legacyfree, 0 = LEGACY_FREE_UN_SUPP
-  //
-  mUsbPolicyData.LegacyFreeSupport    = LEGACY_FREE_UN_SUPP;
-
-  //
-  //  Set Code base , TIANO_CODE_BASE =0x01, ICBD =0x00
-  //
-  mUsbPolicyData.CodeBase    = (UINT8)ICBD_CODE_BASE;
-
-  //
-  //  Some chispet 's LpcAcpibase are diffrent,set by platform or chipset,
-  //  default is Ich  acpibase =0x040. acpitimerreg=0x08.
-  mUsbPolicyData.LpcAcpiBase     = 0x40;
-  mUsbPolicyData.AcpiTimerReg    = 0x08;
-
-  //
-  //  Set for reduce usb post time
-  //
-  mUsbPolicyData.UsbTimeTue           = 0x00;
-  mUsbPolicyData.InternelHubExist     = 0x00;  //TigerPoint doesn't have RMH
-  mUsbPolicyData.EnumWaitPortStableStall    = 100;
-
-
-  Status = gBS->InstallProtocolInterface (
-                  &Handle,
-                  &gUsbPolicyGuid,
-                  EFI_NATIVE_INTERFACE,
-                  &mUsbPolicyData
-                  );
-  ASSERT_EFI_ERROR(Status);
-
 }
 
 UINT8

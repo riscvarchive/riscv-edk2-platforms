@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2016, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -30,7 +28,7 @@ Abstract:
 #define _EFI_PLATFORM_EARLY_INIT_H_
 
 #define EFI_FORWARD_DECLARATION(x) typedef struct _##x x
-#include <FrameworkPei.h>
+#include <PiPei.h>
 #include "PlatformBaseAddresses.h"
 #include "PchAccess.h"
 #include "VlvAccess.h"
@@ -43,7 +41,6 @@ Abstract:
 #include <Guid/PlatformInfo.h>
 #include <Guid/SetupVariable.h>
 #include <Ppi/AtaController.h>
-#include <Ppi/FindFv.h>
 #include <Ppi/BootInRecoveryMode.h>
 #include <Ppi/ReadOnlyVariable2.h>
 #include <Ppi/Capsule.h>
@@ -60,7 +57,6 @@ Abstract:
 
 #include <IndustryStandard/Pci22.h>
 #include <Ppi/Speaker.h>
-#include <Guid/FirmwareFileSystem.h>
 #include <Guid/MemoryTypeInformation.h>
 #include <Ppi/Cache.h>
 #include <Ppi/Smbus.h>
@@ -73,12 +69,10 @@ Abstract:
 #include <Guid/GlobalVariable.h>
 #include <Ppi/RecoveryModule.h>
 #include <Ppi/DeviceRecoveryModule.h>
-#include <Guid/Capsule.h>
 #include <Guid/RecoveryDevice.h>
 #include <Ppi/MasterBootMode.h>
 #include <Guid/PlatformCpuInfo.h>
 #include <Guid/OsSelection.h>
-#include <Guid/SmramMemoryReserve.h>
 #include <Register/Msr.h>
 
 #define SMC_LAN_ON       0x46
@@ -1377,15 +1371,6 @@ SetPlatformBootMode (
 BOOLEAN
 CheckIfJumperSetForRecovery(
   VOID
-  );
-
-EFI_STATUS
-EFIAPI    
-FindFv (
-  IN EFI_PEI_FIND_FV_PPI              *This,
-  IN CONST EFI_PEI_SERVICES             **PeiServices,
-  IN OUT UINT8                    *FvNumber,
-  OUT EFI_FIRMWARE_VOLUME_HEADER  **FVAddress
   );
 
 BOOLEAN

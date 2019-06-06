@@ -1,11 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -31,10 +28,6 @@ Abstract:
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/UefiLib.h>
-#include <Library/UefiDriverEntryPoint.h>
-#include <Protocol/CpuIo.h>
-#include <Protocol/BootScriptSave.h>
-#include <Framework/BootScript.h>
 #include <Protocol/PciRootBridgeIo.h>
 
 

@@ -1,11 +1,8 @@
 #/*++
 #
-# Copyright (c)  2003  - 2018, Intel Corporation. All rights reserved
-#                                                                                  
+# Copyright (c)  2003  - 2019, Intel Corporation. All rights reserved
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-
-#                                                                                  
-
 #
 #  Module Name:
 #
@@ -46,7 +43,6 @@
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
 
 [LibraryClasses]
   HobLib

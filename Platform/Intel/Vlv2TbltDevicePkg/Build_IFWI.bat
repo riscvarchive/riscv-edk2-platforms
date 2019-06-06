@@ -114,17 +114,12 @@ if /i "%~1"=="/yL" (
     goto OptLoop
 )
 
-
 :: Require 2 input parameters
 if "%~2"=="" goto Usage
 
 :: Assign required arguments
 set Platform_Type=%~1
 set Build_Target=%~2
-
-if "%~3"=="" (
-    set "IFWI_Suffix= "
-) else set "IFWI_Suffix=/S %~3"
 
 :: Build BIOS
 echo ======================================================================
@@ -139,34 +134,6 @@ if %ERRORLEVEL% NEQ 0 (
 )
 echo.
 echo Finished Building BIOS.
-@REM Set BIOS_ID environment variable here.
-call %WORKSPACE%\Conf\BiosId.bat
-echo BIOS_ID=%BIOS_ID%
-
-:: Set the Board_Id, Build_Type, Version_Major, and Version_Minor environment variables
-find /v "#" %WORKSPACE%\Conf\BiosId.env > ver_strings
-for /f "tokens=1,3" %%i in (ver_strings) do set %%i=%%j
-del /f/q ver_strings >nul
-set BIOS_Name=%BOARD_ID%_%Arch%_%BUILD_TYPE%_%VERSION_MAJOR%_%VERSION_MINOR%.ROM
-
-:: Start Integration process
-echo ======================================================================
-echo Build_IFWI:  Calling IFWI Stitching Script...
-pushd %PLATFORM_PATH%\%PLATFORM_PACKAGE%\Stitch
-
-  :: IFWIStitch.bat [/nG] [/nM] [/nB] [/B BIOS.rom] [/C StitchConfig] [/S IFWISuffix]
-  call IFWIStitch.bat %Stitch_Flags% /B %BIOS_Name% %IFWI_Suffix%
-   
- @echo off
-popd
-if %ERRORLEVEL% NEQ 0 (
-    echo echo  -- Error Stitching %BIOS_Nam% & echo.
-    set exitCode=1
-)
-echo.
-echo Build_IFWI is finished.
-echo The final IFWI file is located in %ROOT_DIR%\Vlv2TbltDevicePkg\Stitch\
-echo ======================================================================
 goto Exit
 
 :Usage

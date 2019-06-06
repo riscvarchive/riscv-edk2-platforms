@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -24,41 +22,18 @@ Abstract:
 //
 // Statements that include other files.
 //
-#include "PiPei.h"
+#include <PiPei.h>
 
-#include "Pi/PiBootMode.h"
+#include <Pi/PiBootMode.h>
 
-#include "Ppi/StatusCode.h"
-#include "Ppi/MemoryDiscovered.h"
-#include "Ppi/FvLoadFile.h"
+#include <Ppi/StatusCode.h>
+#include <Ppi/MemoryDiscovered.h>
 
-#include "Library/HobLib.h"
-#include "Library/DebugLib.h"
-#include "Library/IoLib.h"
-#include "Library/SerialPortLib.h"
-#include "Protocol/StatusCode.h"
-
-
-#ifndef _STATUS_CODE_ENABLER_H_
-#define _STATUS_CODE_ENABLER_H_
-
-#ifdef EFI_DEBUG
-
-#define EFI_STATUS_CODE_ENABLER_HOB_GUID \
-  { \
-    0x5ffc6cf3, 0x71ad, 0x46f5, 0xbd, 0x8b, 0x7e, 0x8f, 0xfe, 0x19, 0x7, 0xd7 \
-  }
-
-extern EFI_GUID gEfiSerialStatusCodeEnablerHobGuid;
-
-typedef struct _EFI_STATUS_CODE_INFO {
-  BOOLEAN    StatusCodeDisable;
-} EFI_STATUS_CODE_INFO;
-
-#endif
-#endif
-
-
+#include <Library/HobLib.h>
+#include <Library/DebugLib.h>
+#include <Library/IoLib.h>
+#include <Library/SerialPortLib.h>
+#include <Protocol/StatusCode.h>
 
 //
 // Platform specific function Declarations.  These must be implemented in a

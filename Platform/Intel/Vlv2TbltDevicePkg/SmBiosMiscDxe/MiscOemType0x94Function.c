@@ -1,12 +1,8 @@
 /*++
 
-Copyright (c) 1999  - 2014, Intel Corporation.  All rights reserved.
-                                                                                   
+Copyright (c) 1999  - 2019, Intel Corporation.  All rights reserved.
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
-
 
 Module Name:
 
@@ -36,7 +32,6 @@ Abstract:
 #include <Protocol/I2cBus.h>
 
 #include <Library/IoLib.h>
-#include <Library/I2CLib.h>
 #include <Library/CpuIA32.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Guid/PlatformInfo.h>
@@ -527,11 +522,6 @@ UpdatePlatformInformation (
 {
   UINT32                   MicroCodeVersion;
   CHAR16                   Buffer[40];
-  UINT8                    IgdVBIOSRevH;
-  UINT8                    IgdVBIOSRevL;
-  UINT16                   EDX;
-  EFI_IA32_REGISTER_SET    RegSet;
-  EFI_LEGACY_BIOS_PROTOCOL *LegacyBios = NULL;
   EFI_STATUS               Status;
   UINT8                    CpuFlavor=0;
   EFI_PEI_HOB_POINTERS     GuidHob;
@@ -559,34 +549,6 @@ UpdatePlatformInformation (
     if ((GuidHob.Raw = GetNextGuidHob (&gEfiPlatformInfoGuid, GuidHob.Raw)) != NULL) {
       mPlatformInfo = GET_GUID_HOB_DATA (GuidHob.Guid);
     }
-  }
-
-  //
-  //VBIOS version
-  //
-  Status = gBS->LocateProtocol(
-                  &gEfiLegacyBiosProtocolGuid,
-                  NULL,
-                  (VOID **)&LegacyBios
-                  );
-
-  RegSet.X.AX = 0x5f01;
-  Status = LegacyBios->Int86 (LegacyBios, 0x10, &RegSet);
-  ASSERT_EFI_ERROR(Status);
-
-  //
-  // simulate AMI int15 (ax=5f01) handler
-  // check NbInt15.asm in AMI code for asm edition
-  //
-  EDX = (UINT16)((RegSet.E.EBX >> 16) & 0xffff);
-  IgdVBIOSRevH = (UINT8)(((EDX & 0x0F00) >> 4) | (EDX & 0x000F));
-  IgdVBIOSRevL = (UINT8)(((RegSet.X.BX & 0x0F00) >> 4) | (RegSet.X.BX & 0x000F));
-
-  if (IgdVBIOSRevH==0 && IgdVBIOSRevL==0) {
-    HiiSetString(mHiiHandle, STRING_TOKEN(STR_CHIP_IGD_VBIOS_REV_VALUE), L"N/A", NULL);
-  } else {
-    UnicodeSPrint (Buffer, sizeof (Buffer), L"%02X%02X", IgdVBIOSRevH,IgdVBIOSRevL);
-    HiiSetString(mHiiHandle, STRING_TOKEN(STR_CHIP_IGD_VBIOS_REV_VALUE), Buffer, NULL);
   }
 
   Status = TGetGOPDriverName(Name);

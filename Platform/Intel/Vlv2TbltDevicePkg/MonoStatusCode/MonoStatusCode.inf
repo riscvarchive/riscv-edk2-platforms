@@ -1,9 +1,8 @@
 #
 #
-# Copyright (c)  1999  - 2014, Intel Corporation. All rights reserved
-#                                                                                  
+# Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-#                                                                                  
 #
 #  Module Name:
 #
@@ -34,10 +33,8 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  Vlv2SocBinPkg/Vlv2SocBinPkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
 
 [LibraryClasses]
   PeimEntryPoint
@@ -52,7 +49,6 @@
 [Ppis]
   gEfiPeiMemoryDiscoveredPpiGuid
   gEfiPeiStatusCodePpiGuid
-  gEfiPeiFvFileLoaderPpiGuid
 
 [Protocols]
   gEfiStatusCodeRuntimeProtocolGuid
@@ -62,7 +58,6 @@
 
 [Guids]
   gEfiPlatformCpuInfoGuid
-  gEfiHtBistHobGuid
   gEfiStatusCodeDataTypeStringGuid              ## CONSUMES
 
 [Depex]

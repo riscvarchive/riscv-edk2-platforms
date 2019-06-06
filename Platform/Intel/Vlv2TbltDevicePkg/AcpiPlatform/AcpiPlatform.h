@@ -1,11 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -26,7 +23,6 @@ Abstract:
 //
 // Statements that include other header files.
 //
-#include <FrameworkDxe.h>
 #include <PiDxe.h>
 #include <Base.h>
 #include <Library/UefiLib.h>

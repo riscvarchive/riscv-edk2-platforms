@@ -212,8 +212,12 @@ if defined VS140COMNTOOLS (
   goto :BldFail
 )
 
-echo Ensuring correct build directory is present for GenBiosId...
-set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%\%TARGET%_%TOOL_CHAIN_TAG%
+echo Ensuring correct build directory is present
+if "%Arch%"=="IA32" (
+  set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%IA32\%TARGET%_%TOOL_CHAIN_TAG%
+) else (
+  set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%\%TARGET%_%TOOL_CHAIN_TAG%
+)
 
 echo Modifing Conf files for this build...
 :: Remove lines with these tags from target.txt
@@ -240,16 +244,6 @@ move /Y %WORKSPACE%\Conf\target.txt.tmp %WORKSPACE%\Conf\target.txt >nul
 :: Build BIOS
 ::**********************************************************************
 
-echo Creating BiosId...
-if not exist %BUILD_PATH%\IA32  mkdir %BUILD_PATH%\IA32
-%PLATFORM_PACKAGE%\GenBiosId.exe -i %WORKSPACE%\Conf\BiosId.env -o %BUILD_PATH%\IA32\BiosId.bin -ob %WORKSPACE%\Conf\BiosId.bat
-if "%Arch%"=="X64" (
-   if not exist %BUILD_PATH%\X64  mkdir %BUILD_PATH%\X64
-   %PLATFORM_PACKAGE%\GenBiosId.exe -i %WORKSPACE%\Conf\BiosId.env -o %BUILD_PATH%\X64\BiosId.bin -ob %WORKSPACE%\Conf\BiosId.bat
-)
-
-if %ERRORLEVEL% NEQ 0 goto BldFail
-
 echo.
 echo Invoking EDK2 build...
 call build %Build_Flags%
@@ -267,31 +261,14 @@ pushd %PLATFORM_PACKAGE%
 %PLATFORM_PACKAGE%\fce read -i %BUILD_PATH%\FV\Vlv.fd > %BUILD_PATH%\FV\HiiDefaultData.txt
 
 :: save changes to VlvXXX.fd
-%PLATFORM_PACKAGE%\fce update -i %BUILD_PATH%\FV\Vlv.fd -s %BUILD_PATH%\FV\HiiDefaultData.txt -o %BUILD_PATH%\FV\Vlv%Arch%.fd
+%PLATFORM_PACKAGE%\fce update -i %BUILD_PATH%\FV\Vlv.fd -s %BUILD_PATH%\FV\HiiDefaultData.txt -o %BUILD_PATH%\FV\Vlv.ROM
 popd
 
 if %ERRORLEVEL% NEQ 0 goto BldFail
 ::echo FD successfully updated with default Hii values.
 
-:: Set the Board_Id, Build_Type, Version_Major, and Version_Minor environment variables
-find /v "#" %WORKSPACE%\Conf\BiosId.env > ver_strings
-for /f "tokens=1,3" %%i in (ver_strings) do set %%i=%%j
-del /f/q ver_strings >nul
-
-set BIOS_Name=%BOARD_ID%_%Arch%_%BUILD_TYPE%_%VERSION_MAJOR%_%VERSION_MINOR%.ROM
-copy /y/b %BUILD_PATH%\FV\Vlv%Arch%.fd  %PLATFORM_PACKAGE%\Stitch\%BIOS_Name% >nul
-copy /y/b %BUILD_PATH%\FV\Vlv%Arch%.fd  %BUILD_PATH%\FV\Vlv.ROM >nul
-
-echo.
-echo Build location:     %BUILD_PATH%
-echo BIOS ROM Created:   %BIOS_Name%
-echo.
-echo -------------------- The EDKII BIOS build has successfully completed. --------------------
-echo.
-
 @REM build capsule here
-echo > %BUILD_PATH%\FV\SYSTEMFIRMWAREUPDATECARGO.Fv
-build -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
+call build -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
 
 goto Exit
 
