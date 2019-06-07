@@ -37,7 +37,6 @@ Abstract:
 #include <Guid/BoardFeatures.h>
 #include <Protocol/AcpiSupport.h>
 #include <Protocol/AcpiS3Save.h>
-#include <Protocol/Ps2Policy.h>
 #include <Library/CpuIA32.h>
 #include <SetupMode.h>
 #include <Guid/AcpiTableStorage.h>
@@ -772,7 +771,6 @@ AcpiPlatformEntryPoint (
   UINTN                         VarSize;
   UINTN                         SysCfgSize;
   EFI_HANDLE                    Handle;
-  EFI_PS2_POLICY_PROTOCOL       *Ps2Policy;
   EFI_PEI_HOB_POINTERS          GuidHob;
   EFI_MP_SERVICES_PROTOCOL      *MpService;
   UINTN                         MaximumNumberOfCPUs;
@@ -1131,19 +1129,6 @@ AcpiPlatformEntryPoint (
   //
   mGlobalNvsArea.Area->WPCN381U = GLOBAL_NVS_DEVICE_DISABLE;
   mGlobalNvsArea.Area->DockedSioPresent = GLOBAL_NVS_DEVICE_DISABLE;
-
-  //
-  // Get Ps2 policy to set. Will be use if present.
-  //
-  Status =  gBS->LocateProtocol (
-                   &gEfiPs2PolicyProtocolGuid,
-                   NULL,
-                   (VOID **)&Ps2Policy
-                   );
-  if (!EFI_ERROR (Status)) {
-          Status = Ps2Policy->Ps2InitHardware (ImageHandle);
-  }
-
   mGlobalNvsArea.Area->SDIOMode = mSystemConfiguration.LpssSdioMode;
 
   Handle = NULL;
