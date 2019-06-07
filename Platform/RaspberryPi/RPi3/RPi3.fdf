@@ -248,6 +248,11 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
+  # RAM Disk Support
+  #
+  INF MdeModulePkg/Universal/Disk/RamDiskDxe/RamDiskDxe.inf
+
+  #
   # Bds
   #
   INF MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf

@@ -542,6 +542,11 @@
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
+  # RAM Disk Support
+  #
+  MdeModulePkg/Universal/Disk/RamDiskDxe/RamDiskDxe.inf
+
+  #
   # Bds
   #
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
