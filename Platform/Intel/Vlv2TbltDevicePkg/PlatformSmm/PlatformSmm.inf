@@ -56,7 +56,6 @@
   gEfiSmmPowerButtonDispatchProtocolGuid
   gEfiSmmSxDispatchProtocolGuid
   gEfiSmmVariableProtocolGuid
-  gEfiCpuIo2ProtocolGuid
 
 [Packages]
   MdePkg/MdePkg.dec

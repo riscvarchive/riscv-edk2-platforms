@@ -1,11 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -83,9 +80,6 @@ WriteCmosBank1Byte (
 
 /**
   Turn off system if needed.
-
-  @param PeiServices Pointer to PEI Services
-  @param CpuIo       Pointer to CPU I/O Protocol
 
   @retval None.
 

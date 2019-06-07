@@ -108,7 +108,6 @@
   gEfiWatchdogTimerDriverProtocolGuid
   gEfiPlatformIdeInitProtocolGuid
   gEfiGlobalNvsAreaProtocolGuid
-  gEfiCpuIo2ProtocolGuid
   gIgdOpRegionProtocolGuid
   gEdkiiVariableLockProtocolGuid
 

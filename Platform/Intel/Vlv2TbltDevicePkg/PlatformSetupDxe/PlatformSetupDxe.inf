@@ -120,7 +120,6 @@
   gEfiDiskInfoProtocolGuid                      ## CONSUMED
   gEfiMpServiceProtocolGuid
   gDxePchPlatformPolicyProtocolGuid
-  gEfiCpuIo2ProtocolGuid
   gEfiTdtOperationProtocolGuid
   gEfiSmbiosProtocolGuid                        ## PROTOCOL CONSUMES
 

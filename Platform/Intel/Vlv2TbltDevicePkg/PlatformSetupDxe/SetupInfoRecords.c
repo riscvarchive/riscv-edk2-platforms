@@ -23,7 +23,6 @@ Revision History:
 #include <Protocol/IdeControllerInit.h>
 #include <Protocol/MpService.h>
 #include <Protocol/PchPlatformPolicy.h>
-#include <Protocol/CpuIo2.h>
 #include <Protocol/Smbios.h>
 #include <IndustryStandard/SmBios.h>
 #include <Library/IoLib.h>

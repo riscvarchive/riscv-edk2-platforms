@@ -79,6 +79,4 @@
   gEfiVariableArchProtocolGuid        AND
   gEfiVariableWriteArchProtocolGuid   AND
   gEfiAcpiSupportProtocolGuid AND
-  gEfiMpServiceProtocolGuid AND
-  gEfiCpuIoProtocolGuid
-
+  gEfiMpServiceProtocolGuid

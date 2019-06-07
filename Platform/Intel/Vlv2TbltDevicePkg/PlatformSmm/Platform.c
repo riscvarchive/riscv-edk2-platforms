@@ -16,7 +16,6 @@ Abstract:
 --*/
 
 #include "SmmPlatform.h"
-#include <Protocol/CpuIo2.h>
 
 
 //

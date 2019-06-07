@@ -37,9 +37,8 @@
   gEfiNormalSetupGuid
 
 [Protocols]
-  gEfiCpuIoProtocolGuid
   gEfiFirmwareVolume2ProtocolGuid
   gPlatformGOPPolicyGuid
 
 [Depex]
-  gEfiCpuIoProtocolGuid AND gEfiVariableArchProtocolGuid
+  gEfiVariableArchProtocolGuid

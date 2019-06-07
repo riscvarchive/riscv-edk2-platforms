@@ -59,12 +59,12 @@
   gEfiGlobalNvsAreaProtocolGuid
   gEfiPciIoProtocolGuid
   gEfiFirmwareVolume2ProtocolGuid
-  gEfiCpuIoProtocolGuid
+  gEfiCpuIo2ProtocolGuid
 
 [Depex]
   gDxeVlvPlatformPolicyGuid              AND
   gEfiPciRootBridgeIoProtocolGuid     AND
-  gEfiCpuIoProtocolGuid                      AND
+  gEfiCpuIo2ProtocolGuid                  AND
   gEfiDataHubProtocolGuid                 AND
   gEfiGlobalNvsAreaProtocolGuid       AND
   gEfiFirmwareVolume2ProtocolGuid   AND

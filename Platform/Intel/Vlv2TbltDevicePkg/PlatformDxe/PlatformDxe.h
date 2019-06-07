@@ -145,13 +145,13 @@ PciBusEvent (
 
 UINT8
 ReadCmosBank1Byte (
-  IN  EFI_CPU_IO_PROTOCOL             *CpuIo,
+  IN  EFI_CPU_IO2_PROTOCOL            *CpuIo,
   IN  UINT8                           Index
   );
 
 VOID
 WriteCmosBank1Byte (
-  IN  EFI_CPU_IO_PROTOCOL             *CpuIo,
+  IN  EFI_CPU_IO2_PROTOCOL            *CpuIo,
   IN  UINT8                           Index,
   IN  UINT8                           Data
   );

@@ -41,7 +41,7 @@ Abstract:
 #include <Protocol/FirmwareVolume2.h>
 #include <Protocol/PlatformGopPolicy.h>
 #include <Protocol/PciIo.h>
-#include <Protocol/CpuIo.h>
+#include <Protocol/CpuIo2.h>
 #include <Protocol/GlobalNvsArea.h>
 #include <Protocol/DxeSmmReadyToLock.h>
 #include <Protocol/PciRootBridgeIo.h>
@@ -631,7 +631,7 @@ IgdOpRegionInit (
   EFI_STATUS                    Status;
   EFI_GLOBAL_NVS_AREA_PROTOCOL  *GlobalNvsArea;
   UINT32                        DwordData;
-  EFI_CPU_IO_PROTOCOL           *CpuIo;
+  EFI_CPU_IO2_PROTOCOL          *CpuIo;
   UINT16                        Data16;
   UINT16                        AcpiBase;
   VOID                          *gConOutNotifyReg;
@@ -879,7 +879,7 @@ IgdOpRegionInit (
   // Find the CPU I/O Protocol.  ASSERT if not found.
   //
   Status = gBS->LocateProtocol (
-                  &gEfiCpuIoProtocolGuid,
+                  &gEfiCpuIo2ProtocolGuid,
                   NULL,
                   (void **)&CpuIo
                   );

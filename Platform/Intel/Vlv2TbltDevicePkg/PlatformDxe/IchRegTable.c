@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -129,6 +127,6 @@ InitializeSubsystemIds (
   //
   // Program the SSVID/SSDID
   //
-  ProcessRegTablePci (mSubsystemIdRegs, mPciRootBridgeIo, NULL);
+  ProcessRegTablePci (mSubsystemIdRegs, mPciRootBridgeIo);
 
 }

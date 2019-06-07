@@ -36,7 +36,6 @@ Abstract:
 #include <IndustryStandard/Acpi.h>
 #include <Protocol/AcpiSystemDescriptionTable.h>
 #include <Protocol/MpService.h>
-#include <Protocol/CpuIo.h>
 #include <IndustryStandard/Acpi30.h>
 #include <IndustryStandard/Acpi20.h>
 #include <Library/HobLib.h>

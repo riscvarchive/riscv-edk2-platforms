@@ -33,7 +33,6 @@
 
 [Protocols]
   gEfiPciPlatformProtocolGuid
-  gEfiCpuIoProtocolGuid
   gEfiFirmwareVolume2ProtocolGuid
   gEfiPciRootBridgeIoProtocolGuid
   gEfiPciIoProtocolGuid

@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -41,7 +39,7 @@ PlatformCpuInfoInit (
       //
       // Write the Platform CPU Info to volatile memory for runtime purposes.
       // This must be done in its own driver because SetVariable protocol is dependent on chipset,
-      // which is dependent on CpuIo, PlatformInfo, and Metronome.
+      // which is dependent on CpuIo2, PlatformInfo, and Metronome.
       //
       Status = gRT->SetVariable(
                       EfiPlatformCpuInfoVariable,

@@ -19,7 +19,6 @@ Abstract:
 #include "MiscSubclassDriver.h"
 #include <Protocol/DataHub.h>
 #include <Library/HiiLib.h>
-#include <Protocol/CpuIo2.h>
 #include <Library/PrintLib.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Protocol/SimpleNetwork.h>
@@ -28,7 +27,6 @@ Abstract:
 #include <Protocol/IdeControllerInit.h>
 #include <Protocol/MpService.h>
 #include <Protocol/PchPlatformPolicy.h>
-#include <Protocol/CpuIo2.h>
 #include <Protocol/I2cBus.h>
 
 #include <Library/IoLib.h>
