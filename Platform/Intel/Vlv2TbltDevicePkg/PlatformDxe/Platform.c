@@ -155,10 +155,6 @@ InitVlvPlatformPolicy (
   );
 
 VOID
-InitSioPlatformPolicy(
-  );
-
-VOID
 PchInitBeforeBoot(
   );
 

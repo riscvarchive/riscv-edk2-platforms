@@ -481,7 +481,7 @@ INF RuleOverride = BINARY Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHI
 #
 INF Vlv2TbltDevicePkg/PcuSio/PcuSio.inf
 !if $(SOURCE_DEBUG_ENABLE) != TRUE
-INF  IntelFrameworkModulePkg/Bus/Isa/IsaSerialDxe/IsaSerialDxe.inf
+INF  MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
 !endif
 
 #

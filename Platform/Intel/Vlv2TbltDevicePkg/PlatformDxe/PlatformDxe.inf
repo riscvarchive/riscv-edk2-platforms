@@ -36,7 +36,6 @@
   Platform.c
   IchRegTable.c
   IdccInfo.c
-  SioPlatformPolicy.c
   IchPlatformPolicy.c
   PciDevice.c
   SlotConfig.c
@@ -105,7 +104,6 @@
   gEfiSmbiosSlotPopulationGuid
   gObservableProtocolGuid
   gEfiCk505ClockPlatformInfoGuid
-  gEfiLpcWpc83627PolicyProtocolGuid
   gEfiTcoResetProtocolGuid
   gEfiWatchdogTimerDriverProtocolGuid
   gEfiPlatformIdeInitProtocolGuid
