@@ -36,6 +36,7 @@
   DEFINE NETWORK_TLS_ENABLE             = FALSE
   DEFINE NETWORK_IP6_ENABLE             = FALSE
   DEFINE NETWORK_HTTP_BOOT_ENABLE       = TRUE
+  DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
 
 !include ArmVirtPkg/ArmVirt.dsc.inc
 
@@ -57,6 +58,7 @@
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
   PlatformBootManagerLib|ArmVirtPkg/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+  PlatformBmPrintScLib|OvmfPkg/Library/PlatformBmPrintScLib/PlatformBmPrintScLib.inf
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
   FrameBufferBltLib|MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.inf
   QemuBootOrderLib|OvmfPkg/Library/QemuBootOrderLib/QemuBootOrderLib.inf
@@ -65,12 +67,12 @@
   PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
   PciHostBridgeLib|ArmVirtPkg/Library/FdtPciHostBridgeLib/FdtPciHostBridgeLib.inf
   RdkBootManagerLib|Platform/Comcast/Library/RdkBootManagerLib/RdkBootManagerLib.inf
-!if $(HTTP_BOOT_ENABLE) == TRUE
-  HttpLib|MdeModulePkg/Library/DxeHttpLib/DxeHttpLib.inf
-!endif
 
 [LibraryClasses.common.PEIM]
   ArmVirtMemInfoLib|ArmVirtPkg/Library/QemuVirtMemInfoLib/QemuVirtMemInfoPeiLib.inf
+
+[LibraryClasses.common.DXE_DRIVER]
+  ReportStatusCodeLib|MdeModulePkg/Library/DxeReportStatusCodeLib/DxeReportStatusCodeLib.inf
 
 [LibraryClasses.common.UEFI_DRIVER]
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
@@ -127,9 +129,6 @@
   #
   gArmTokenSpaceGuid.PcdArmArchTimerFreqInHz|0
 
-!if $(HTTP_BOOT_ENABLE) == TRUE
-  gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
-!endif
   # System Memory Base -- fixed at 0x4000_0000
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x40000000
 
@@ -153,6 +152,8 @@
   gRdkTokenSpaceGuid.PcdRdkCmdLineArgs|"root=/dev/vda"
   gRdkTokenSpaceGuid.PcdRdkConfFileName|L"Rdk.conf"
   gRdkTokenSpaceGuid.PcdRdkConfFileDevicePath|L"PciRoot(0x0)/Pci(0x2,0x0)"
+
+  gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|3
 
 [PcdsFixedAtBuild.AARCH64]
   # Clearing BIT0 in this PCD prevents installing a 32-bit SMBIOS entry point,
@@ -407,15 +408,16 @@
   Platform/Comcast/Application/SecureBoot/SecureBoot.inf
   Platform/Comcast/Application/DriSecureBoot/DriSecureBoot.inf
 
+  # Status Code Routing
+  #
+  MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
+
 [Components.AARCH64]
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
   OvmfPkg/AcpiPlatformDxe/QemuFwCfgAcpiPlatformDxe.inf {
     <LibraryClasses>
       NULL|ArmVirtPkg/Library/FdtPciPcdProducerLib/FdtPciPcdProducerLib.inf
   }
-
-[PcdsFixedAtBuild]
-  gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
 
 [BuildOptions]
   GCC:*_*_*_CC_FLAGS = -UDISABLE_NEW_DEPRECATED_INTERFACES
