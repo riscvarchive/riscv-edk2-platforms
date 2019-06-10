@@ -8,8 +8,6 @@
 
 #define MAX_VAR       6
 
-#define ALLOCATE_STRING_MEM(X)  AllocateZeroPool((X + 1) * sizeof(CHAR16))
-
 /**
  * list_for_each_entry	-	iterate over list of given type
  * @pos:	the type * to use as a loop cursor.
@@ -53,10 +51,13 @@ SaveString (
   IN  CHAR16    *String2
   )
 {
-  *Dest = ALLOCATE_STRING_MEM (StrLen (String1) + StrLen (String2));
+  UINTN StringLength;
+
+  StringLength = StrLen (String1) + StrLen (String2) + 1;
+  *Dest = AllocatePool (StringLength * sizeof (CHAR16));
   ASSERT (Dest != NULL);
-  StrCat (*Dest, String1);
-  StrCat (*Dest, String2);
+  StrCpyS (*Dest, StringLength, String1);
+  StrCatS (*Dest, StringLength, String2);
 }
 
 STATIC
@@ -74,11 +75,13 @@ LsFiles (
   BOOLEAN             NoFile;
   CHAR16              *TempPath;
   DIR_NODE            *Node;
+  UINTN               StringLength;
 
   NoFile    = FALSE;
-  TempPath  = ALLOCATE_STRING_MEM (StrLen(DirPath) + 1);
-  StrCat (TempPath, DirPath);
-  StrCat (TempPath, L"/");
+  StringLength = StrLen(DirPath) + 2;
+  TempPath = AllocatePool (StringLength * sizeof (CHAR16));
+  StrCpyS (TempPath, StringLength, DirPath);
+  StrCatS (TempPath, StringLength, L"/");
 
   Status = GetFileHandler (&FileHandle, DirPath, EFI_FILE_MODE_READ);
   ASSERT_EFI_ERROR (Status);
@@ -192,6 +195,7 @@ InitVarList (
   UINTN       Next;
   CHAR8       *VarDelimiter[2];
   EFI_STATUS  Status;
+  UINTN       StringLength;
 
   VarDelimiter[0] = "=";
   VarDelimiter[1] = "\"";
@@ -212,10 +216,10 @@ InitVarList (
       if (VarResult[OuterLoopIndex][InnerLoopIndex]) {
         FreePool (VarResult[OuterLoopIndex][InnerLoopIndex]);
       }
-      VarResult[OuterLoopIndex][InnerLoopIndex] = \
-        ALLOCATE_STRING_MEM (AsciiStrLen (&FileData[Current]));
-      AsciiStrToUnicodeStr (&FileData[Current], \
-        VarResult[OuterLoopIndex][InnerLoopIndex]);
+      StringLength = AsciiStrLen (&FileData[Current]) + 1;
+      VarResult[OuterLoopIndex][InnerLoopIndex] = AllocatePool (StringLength);
+      AsciiStrToUnicodeStrS (&FileData[Current],
+        VarResult[OuterLoopIndex][InnerLoopIndex], StringLength);
       //skip new line
       Next += 2;
     }

@@ -418,6 +418,3 @@
     <LibraryClasses>
       NULL|ArmVirtPkg/Library/FdtPciPcdProducerLib/FdtPciPcdProducerLib.inf
   }
-
-[BuildOptions]
-  GCC:*_*_*_CC_FLAGS = -UDISABLE_NEW_DEPRECATED_INTERFACES

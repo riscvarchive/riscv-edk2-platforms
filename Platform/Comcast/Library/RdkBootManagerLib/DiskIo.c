@@ -90,6 +90,7 @@ ListBlockIos (
   UINTN                             NumHandles;
   UINT16                            *DeviceFullPath;
   DISKIO_PARTITION_LIST             *Entry;
+  RETURN_STATUS                     RetStatus;
 
   InitializeListHead (&mPartitionListHead);
 
@@ -146,11 +147,13 @@ ListBlockIos (
 
       // Copy handle and partition name
       Entry->PartitionHandle = AllHandles[LoopIndex];
-      StrnCpy (
+      RetStatus = StrnCpyS (
         Entry->PartitionName,
+        PARTITION_NAME_MAX_LENGTH,
         PartitionName,
-        PARTITION_NAME_MAX_LENGTH
+        PARTITION_NAME_MAX_LENGTH - 1
       );
+      ASSERT_RETURN_ERROR (RetStatus);
       InsertTailList (&mPartitionListHead, &Entry->Link);
       break;
     }
@@ -176,8 +179,13 @@ OpenPartition (
   DISKIO_PARTITION_LIST    *Entry;
   SPARSE_HEADER            *SparseHeader;
   UINT16                   UnicodePartitionName[100];
+  RETURN_STATUS            RetStatus;
 
-  AsciiStrToUnicodeStr ( PartitionName, UnicodePartitionName);
+  RetStatus = AsciiStrToUnicodeStrS (PartitionName, UnicodePartitionName,
+                sizeof (UnicodePartitionName));
+  if (RETURN_ERROR (RetStatus)) {
+    return EFI_OUT_OF_RESOURCES;
+  }
   DEBUG((DEBUG_INFO, "Unicode partition name %s\n", UnicodePartitionName));
 
   Status = ListBlockIos (UnicodePartitionName);
