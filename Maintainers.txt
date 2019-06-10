@@ -105,6 +105,10 @@ M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
 M: Michael D Kinney <michael.d.kinney@intel.com>
 
+Silicon/Intel/IntelSiliconPkg
+M: Ray Ni <ray.ni@intel.com>
+M: Rangasai V Chaganty <rangasai.v.chaganty@intel.com>
+
 Silicon/Intel/QuarkSocPkg
 M: Michael D Kinney <michael.d.kinney@intel.com>
 M: Kelly Steele <kelly.steele@intel.com>
