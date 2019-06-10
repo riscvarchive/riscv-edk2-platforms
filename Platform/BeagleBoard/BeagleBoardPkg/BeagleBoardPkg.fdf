@@ -45,7 +45,7 @@ NumBlocks     = 0xB0000
 #
 ################################################################################
 0x00000000|0x00000200
-FILE = BeagleBoardPkg/ConfigurationHeader.bin
+FILE = Platform/BeagleBoard/BeagleBoardPkg/ConfigurationHeader.bin
 
 0x00000200|0x00000008
 DATA = {
@@ -123,31 +123,31 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   #
   # Nand Flash
   #
-  INF Omap35xxPkg/Flash/Flash.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   INF EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  INF Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  INF Omap35xxPkg/SmbusDxe/Smbus.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  INF Omap35xxPkg/Gpio/Gpio.inf
-  INF Omap35xxPkg/InterruptDxe/InterruptDxe.inf
-  INF Omap35xxPkg/TimerDxe/TimerDxe.inf
-  INF Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/Gpio/Gpio.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/InterruptDxe/InterruptDxe.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/TimerDxe/TimerDxe.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  INF Omap35xxPkg/TPS65950Dxe/TPS65950.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/TPS65950Dxe/TPS65950.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning
@@ -161,7 +161,7 @@ FvNameGuid         = d0dd3e90-343d-4cb3-8f69-772214989282
   # USB Support
   #
 
-  INF Omap35xxPkg/PciEmulation/PciEmulation.inf
+  INF Silicon/TexasInstruments/Omap35xxPkg/PciEmulation/PciEmulation.inf
   INF MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   INF MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf
@@ -203,7 +203,7 @@ READ_STATUS        = TRUE
 READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 
-  INF BeagleBoardPkg/PrePi/PeiUniCore.inf
+  INF Platform/BeagleBoard/BeagleBoardPkg/PrePi/PeiUniCore.inf
 
   FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
     SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {

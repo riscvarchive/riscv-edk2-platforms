@@ -21,15 +21,15 @@
   DSC_SPECIFICATION              = 0x00010005
   OUTPUT_DIRECTORY               = Build/BeagleBoard
   SUPPORTED_ARCHITECTURES        = ARM
-  BUILD_TARGETS                  = DEBUG|RELEASE
+  BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
   SKUID_IDENTIFIER               = DEFAULT
-  FLASH_DEFINITION               = BeagleBoardPkg/BeagleBoardPkg.fdf
+  FLASH_DEFINITION               = Platform/BeagleBoard/BeagleBoardPkg/BeagleBoardPkg.fdf
 
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
-  ArmPlatformLib|BeagleBoardPkg/Library/BeagleBoardLib/BeagleBoardLib.inf
+  ArmPlatformLib|Platform/BeagleBoard/BeagleBoardPkg/Library/BeagleBoardLib/BeagleBoardLib.inf
   ArmPlatformStackLib|ArmPlatformPkg/Library/ArmPlatformStackLib/ArmPlatformStackLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
 
@@ -48,7 +48,7 @@
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
 
-  ResetSystemLib|BeagleBoardPkg/Library/ResetSystemLib/ResetSystemLib.inf
+  ResetSystemLib|Platform/BeagleBoard/BeagleBoardPkg/Library/ResetSystemLib/ResetSystemLib.inf
 
   PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
   PerformanceLib|MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull.inf
@@ -77,10 +77,10 @@
   CpuExceptionHandlerLib|ArmPkg/Library/ArmExceptionLib/ArmExceptionLib.inf
   PrePiLib|EmbeddedPkg/Library/PrePiLib/PrePiLib.inf
 
-  SerialPortLib|Omap35xxPkg/Library/SerialPortLib/SerialPortLib.inf
+  SerialPortLib|Silicon/TexasInstruments/Omap35xxPkg/Library/SerialPortLib/SerialPortLib.inf
   SemihostLib|ArmPkg/Library/SemihostLib/SemihostLib.inf
 
-  RealTimeClockLib|Omap35xxPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  RealTimeClockLib|Silicon/TexasInstruments/Omap35xxPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
 
@@ -106,17 +106,16 @@
 
   CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
 
-  TimerLib|Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  OmapLib|Omap35xxPkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
-  DebugAgentTimerLib|Omap35xxPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  TimerLib|Silicon/TexasInstruments/Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
+  OmapLib|Silicon/TexasInstruments/Omap35xxPkg/Library/OmapLib/OmapLib.inf
+  OmapDmaLib|Silicon/TexasInstruments/Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
+  DebugAgentTimerLib|Silicon/TexasInstruments/Omap35xxPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
 
-  GdbSerialLib|Omap35xxPkg/Library/GdbSerialLib/GdbSerialLib.inf
+  GdbSerialLib|Silicon/TexasInstruments/Omap35xxPkg/Library/GdbSerialLib/GdbSerialLib.inf
   ArmDisassemblerLib|ArmPkg/Library/ArmDisassemblerLib/ArmDisassemblerLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
   DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
 
-  NetLib|MdeModulePkg/Library/DxeNetLib/DxeNetLib.inf
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
 
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
@@ -150,7 +149,7 @@
   MemoryAllocationLib|EmbeddedPkg/Library/PrePiMemoryAllocationLib/PrePiMemoryAllocationLib.inf
   PerformanceLib|MdeModulePkg/Library/PeiPerformanceLib/PeiPerformanceLib.inf
   PlatformPeiLib|ArmPlatformPkg/PlatformPei/PlatformPeiLib.inf
-  MemoryInitPeiLib|BeagleBoardPkg/Library/MemoryInitPeiLib/MemoryInitPeiLib.inf
+  MemoryInitPeiLib|Platform/BeagleBoard/BeagleBoardPkg/Library/MemoryInitPeiLib/MemoryInitPeiLib.inf
 
   # 1/123 faster than Stm or Vstm version
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
@@ -167,7 +166,7 @@
   ExtractGuidedSectionLib|MdePkg/Library/DxeExtractGuidedSectionLib/DxeExtractGuidedSectionLib.inf
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
 #  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
-  PeCoffLib|BeagleBoardPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
+  PeCoffLib|Platform/BeagleBoard/BeagleBoardPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
 
   PerformanceLib|MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
 
@@ -196,7 +195,7 @@
   ReportStatusCodeLib|IntelFrameworkModulePkg/Library/DxeReportStatusCodeLibFramework/DxeReportStatusCodeLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
 #  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
-  PeCoffLib|BeagleBoardPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
+  PeCoffLib|Platform/BeagleBoard/BeagleBoardPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
 
 
 [LibraryClasses.ARM]
@@ -357,7 +356,7 @@
   #
   # SEC
   #
-  BeagleBoardPkg/PrePi/PeiUniCore.inf {
+  Platform/BeagleBoard/BeagleBoardPkg/PrePi/PeiUniCore.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
   }
@@ -369,7 +368,7 @@
     <LibraryClasses>
       PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
       NULL|MdeModulePkg/Library/DxeCrc32GuidedSectionExtractLib/DxeCrc32GuidedSectionExtractLib.inf
-      NULL|BeagleBoardPkg/Library/LzmaHobCustomDecompressLib/LzmaHobCustomDecompressLib.inf
+      NULL|Platform/BeagleBoard/BeagleBoardPkg/Library/LzmaHobCustomDecompressLib/LzmaHobCustomDecompressLib.inf
   }
 
   ArmPkg/Drivers/CpuDxe/CpuDxe.inf
@@ -413,7 +412,7 @@
   #
   # USB
   #
-  Omap35xxPkg/PciEmulation/PciEmulation.inf
+  Silicon/TexasInstruments/Omap35xxPkg/PciEmulation/PciEmulation.inf
   MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   MdeModulePkg/Bus/Pci/EhciDxe/EhciDxe.inf {
@@ -427,31 +426,31 @@
   #
   # Nand Flash
   #
-  Omap35xxPkg/Flash/Flash.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Flash/Flash.inf
 
   #
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
 
   #
   # I2C
   #
-  Omap35xxPkg/SmbusDxe/Smbus.inf
+  Silicon/TexasInstruments/Omap35xxPkg/SmbusDxe/Smbus.inf
 
   #
   # SoC Drivers
   #
-  Omap35xxPkg/Gpio/Gpio.inf
-  Omap35xxPkg/InterruptDxe/InterruptDxe.inf
-  Omap35xxPkg/TimerDxe/TimerDxe.inf
-  Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Gpio/Gpio.inf
+  Silicon/TexasInstruments/Omap35xxPkg/InterruptDxe/InterruptDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/TimerDxe/TimerDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
 
   #
   # Power IC
   #
-  Omap35xxPkg/TPS65950Dxe/TPS65950.inf
+  Silicon/TexasInstruments/Omap35xxPkg/TPS65950Dxe/TPS65950.inf
 
   #
   # Bds
@@ -472,6 +471,8 @@
   # Shell
   #
   ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf {
+    <LibraryClasses>
+      NetLib|NetworkPkg/Library/DxeNetLib/DxeNetLib.inf
     <PcdsFixedAtBuild>
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
   }
@@ -486,6 +487,7 @@
       NULL|ShellPkg/Library/UefiShellInstall1CommandsLib/UefiShellInstall1CommandsLib.inf
       NULL|ShellPkg/Library/UefiShellNetwork1CommandsLib/UefiShellNetwork1CommandsLib.inf
       HandleParsingLib|ShellPkg/Library/UefiHandleParsingLib/UefiHandleParsingLib.inf
+      NetLib|NetworkPkg/Library/DxeNetLib/DxeNetLib.inf
       PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
       BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
 
