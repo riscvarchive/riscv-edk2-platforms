@@ -25,7 +25,7 @@
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [Pcd.common]
   gArmTokenSpaceGuid.PcdCpuResetAddress
