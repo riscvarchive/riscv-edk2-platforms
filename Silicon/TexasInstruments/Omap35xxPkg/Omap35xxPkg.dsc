@@ -20,10 +20,8 @@
   DSC_SPECIFICATION              = 0x00010005
   OUTPUT_DIRECTORY               = Build/Omap35xxPkg
   SUPPORTED_ARCHITECTURES        = ARM
-  BUILD_TARGETS                  = DEBUG|RELEASE
+  BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
   SKUID_IDENTIFIER               = DEFAULT
-  DEFINE TARGET_HACK             = DEBUG
-
 
 [LibraryClasses.common]
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
@@ -43,8 +41,8 @@
   RealTimeClockLib|EmbeddedPkg/Library/TemplateRealTimeClockLib/TemplateRealTimeClockLib.inf
 
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
-  OmapLib|Omap35xxPkg/Library/OmapLib/OmapLib.inf
-  OmapDmaLib|Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
+  OmapLib|Silicon/TexasInstruments/Omap35xxPkg/Library/OmapLib/OmapLib.inf
+  OmapDmaLib|Silicon/TexasInstruments/Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
 
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
@@ -57,7 +55,7 @@
   UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
   DmaLib|EmbeddedPkg/Library/NonCoherentDmaLib/NonCoherentDmaLib.inf
 
-  TimerLib|Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
+  TimerLib|Silicon/TexasInstruments/Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
 
 #
 # Assume everything is fixed at build
@@ -160,24 +158,23 @@
 #
 ################################################################################
 [Components.common]
-  Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
-  Omap35xxPkg/Library/OmapLib/OmapLib.inf
-  Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/Omap35xxTimerLib/Omap35xxTimerLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/OmapLib/OmapLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/OmapDmaLib/OmapDmaLib.inf
 
-  Omap35xxPkg/Flash/Flash.inf
-  Omap35xxPkg/MMCHSDxe/MMCHS.inf
-  Omap35xxPkg/SmbusDxe/Smbus.inf
-  Omap35xxPkg/Gpio/Gpio.inf
-  Omap35xxPkg/InterruptDxe/InterruptDxe.inf
-  Omap35xxPkg/TimerDxe/TimerDxe.inf
-  Omap35xxPkg/TPS65950Dxe/TPS65950.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Flash/Flash.inf
+  Silicon/TexasInstruments/Omap35xxPkg/SmbusDxe/Smbus.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Gpio/Gpio.inf
+  Silicon/TexasInstruments/Omap35xxPkg/InterruptDxe/InterruptDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/TimerDxe/TimerDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/TPS65950Dxe/TPS65950.inf
 
-  Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
-  Omap35xxPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
-  Omap35xxPkg/Library/GdbSerialLib/GdbSerialLib.inf
-  Omap35xxPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
-  Omap35xxPkg/Library/SerialPortLib/SerialPortLib.inf
-  Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
-  Omap35xxPkg/PciEmulation/PciEmulation.inf
+  Silicon/TexasInstruments/Omap35xxPkg/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/DebugAgentTimerLib/DebugAgentTimerLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/GdbSerialLib/GdbSerialLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/Library/SerialPortLib/SerialPortLib.inf
+  Silicon/TexasInstruments/Omap35xxPkg/MmcHostDxe/MmcHostDxe.inf
+  Silicon/TexasInstruments/Omap35xxPkg/PciEmulation/PciEmulation.inf
 
 

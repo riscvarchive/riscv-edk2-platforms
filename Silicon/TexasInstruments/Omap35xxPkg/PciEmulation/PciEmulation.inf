@@ -20,10 +20,10 @@
   PciEmulation.c
 
 [Packages]
-  MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   BaseLib

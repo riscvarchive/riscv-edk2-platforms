@@ -23,9 +23,9 @@
 
 [Packages]
   ArmPkg/ArmPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
-  MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   BaseLib

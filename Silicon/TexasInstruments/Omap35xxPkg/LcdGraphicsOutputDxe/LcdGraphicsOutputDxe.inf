@@ -18,12 +18,12 @@
   LcdGraphicsOutputBlt.c
 
 [Packages]
-  MdePkg/MdePkg.dec
-  MdeModulePkg/MdeModulePkg.dec
-  ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  ArmPkg/ArmPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   ArmLib

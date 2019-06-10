@@ -18,10 +18,10 @@
   OmapDmaLib.c
 
 [Packages]
-  MdePkg/MdePkg.dec
-  EmbeddedPkg/EmbeddedPkg.dec
   ArmPkg/ArmPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   DebugLib

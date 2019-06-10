@@ -19,9 +19,9 @@
   Gpio.c
 
 [Packages]
-  MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   IoLib

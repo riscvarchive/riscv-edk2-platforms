@@ -20,7 +20,7 @@
 
 [Packages]
   MdePkg/MdePkg.dec
-  Omap35xxPkg/Omap35xxPkg.dec
+  Silicon/TexasInstruments/Omap35xxPkg/Omap35xxPkg.dec
 
 [LibraryClasses]
   PcdLib
