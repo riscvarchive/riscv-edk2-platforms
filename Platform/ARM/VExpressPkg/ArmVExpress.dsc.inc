@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2019, ARM Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -16,6 +16,9 @@
   DEFINE NETWORK_IP6_ENABLE             = FALSE
   DEFINE NETWORK_TLS_ENABLE             = FALSE
   DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
+
+[BuildOptions.common]
+  *_*_*_CC_FLAGS = -DDISABLE_NEW_DEPRECATED_INTERFACES
 
 [BuildOptions.common.EDKII.DXE_CORE,BuildOptions.common.EDKII.DXE_DRIVER,BuildOptions.common.EDKII.UEFI_DRIVER,BuildOptions.common.EDKII.UEFI_APPLICATION]
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
