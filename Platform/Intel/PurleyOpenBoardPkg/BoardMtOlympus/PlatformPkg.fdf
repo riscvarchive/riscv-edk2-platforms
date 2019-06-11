@@ -194,9 +194,7 @@ READ_STATUS        = TRUE
 READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 
-FILE RAW = 197DB236-F856-4924-90F8-CDF12FB875F3 {
-  $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/X64/Microcode.bin
-}
+INF RuleOverride = MICROCODE $(SILICON_BIN_PKG)/Microcode/Microcode.inf
 
 [FV.FvPreMemory]
 FvAlignment        = 16
