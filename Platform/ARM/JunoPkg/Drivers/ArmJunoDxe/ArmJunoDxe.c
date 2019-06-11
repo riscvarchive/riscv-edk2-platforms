@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2013-2017, ARM Limited. All rights reserved.
+*  Copyright (c) 2013-2019, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -407,7 +407,6 @@ ArmJunoEntryPoint (
   EFI_PHYSICAL_ADDRESS  HypBase;
   CHAR16                *TextDevicePath;
   UINTN                 TextDevicePathSize;
-  VOID                  *Buffer;
   UINT32                JunoRevision;
   EFI_EVENT             EndOfDxeEvent;
 
@@ -495,7 +494,7 @@ ArmJunoEntryPoint (
   //
   if (JunoRevision != JUNO_REVISION_R0) {
     // Enable PCI enumeration
-    PcdSetBool (PcdPciDisableBusEnumeration, FALSE);
+    PcdSetBoolS (PcdPciDisableBusEnumeration, FALSE);
 
     //
     // Create an event belonging to the "gEfiEndOfDxeEventGroupGuid" group.
@@ -531,8 +530,11 @@ ArmJunoEntryPoint (
   TextDevicePath = (CHAR16*)FixedPcdGetPtr (PcdJunoFdtDevicePath);
   if (TextDevicePath != NULL) {
     TextDevicePathSize = StrSize (TextDevicePath);
-    Buffer = PcdSetPtr (PcdFdtDevicePaths, &TextDevicePathSize, TextDevicePath);
-    Status = (Buffer != NULL) ? EFI_SUCCESS : EFI_BUFFER_TOO_SMALL;
+    Status = PcdSetPtrS (
+               PcdFdtDevicePaths,
+               &TextDevicePathSize,
+               TextDevicePath
+               );
   } else {
     Status = EFI_NOT_FOUND;
   }
