@@ -1,11 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -65,21 +62,6 @@ typedef struct {
 } BIOS_ID_IMAGE;
 
 #pragma pack()
-
-/**
-  This function returns BIOS ID by searching HOB or FV.
-
-  @param[in]  BiosIdImage         The BIOS ID got from HOB or FV
-
-  @retval  EFI_SUCCESS            All parameters were valid and BIOS ID has been got.
-  @retval  EFI_NOT_FOUND          BiosId image is not found, and no parameter will be modified.
-  @retval  EFI_INVALID_PARAMETER  The parameter is NULL.
-
-**/
-EFI_STATUS
-GetBiosId (
-  OUT BIOS_ID_IMAGE     *BiosIdImage
-  );
 
 /**
   This function returns the Version & Release Date and Time by getting and converting

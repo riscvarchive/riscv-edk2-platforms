@@ -1,11 +1,8 @@
 /*++
 
-Copyright (c) 2009 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2009 - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -166,7 +163,6 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   SMBIOS_TABLE_TYPE0    *SmbiosRecord;
   EFI_SMBIOS_HANDLE     SmbiosHandle;
   EFI_MISC_BIOS_VENDOR *ForType0InputData;
-  BIOS_ID_IMAGE         BiosIdImage;
   UINT16                UVerStr[32];
   UINTN                 LoopIndex;
   UINTN                 CopyIndex;
@@ -183,7 +179,6 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   if (RecordData == NULL) {
     return EFI_INVALID_PARAMETER;
   }
-  GetBiosId (&BiosIdImage);
 
   //
   //  Add VLV2 BIOS Version and Release data

@@ -1,11 +1,8 @@
 #/*++
 #
-# Copyright (c)  2010  - 2014, Intel Corporation. All rights reserved
-#                                                                                  
+# Copyright (c)  2010  - 2019, Intel Corporation. All rights reserved
+#
 # SPDX-License-Identifier: BSD-2-Clause-Patent
-
-#                                                                                  
-
 #
 #  Module Name:
 #
@@ -34,17 +31,3 @@
   MdeModulePkg/MdeModulePkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
-
-[LibraryClasses]
-  HobLib
-
-[Guids]
-  gEfiBiosIdGuid
-
-[Protocols]
-  gEfiLoadedImageProtocolGuid
-  gEfiFirmwareVolume2ProtocolGuid
-
-[Depex]
-  gEfiLoadedImageProtocolGuid AND
-  gEfiFirmwareVolume2ProtocolGuid

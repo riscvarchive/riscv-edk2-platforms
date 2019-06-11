@@ -137,19 +137,15 @@ if /i "%~1"=="/IA32" (
 :: Required argument(s)
 if "%~1"=="" goto Usage
 
-::Remove the values for Platform_Type and Build_Target from BiosIdX.env and stage in Conf\
 if "%Arch%"=="IA32" (
-    findstr /b /v "BOARD_ID  BUILD_TYPE" %PLATFORM_PACKAGE%\BiosIdR.env > %WORKSPACE%\Conf\BiosId.env
     echo DEFINE X64_CONFIG = FALSE  >> %auto_config_inc%
 ) else if "%Arch%"=="X64" (
-    findstr /b /v "BOARD_ID  BUILD_TYPE" %PLATFORM_PACKAGE%\BiosIdx64R.env > %WORKSPACE%\Conf\BiosId.env
     echo DEFINE X64_CONFIG = TRUE  >> %auto_config_inc%
 )
 
 :: -- Build flags settings for each Platform --
-echo Setting  %1  platform configuration and BIOS ID...
+echo Setting  %1  platform configuration...
 if /i "%~1" == "MNW2" (
-    echo BOARD_ID = MNW2MAX >> %WORKSPACE%\Conf\BiosId.env
     echo DEFINE ENBDT_PF_BUILD = TRUE   >> %auto_config_inc%
     
 ) else (
@@ -160,10 +156,8 @@ set Platform_Type=%~1
 
 if /i "%~2" == "RELEASE" (
     set target=RELEASE
-    echo BUILD_TYPE = R >> %WORKSPACE%\Conf\BiosId.env
 ) else (
     set target=DEBUG
-    echo BUILD_TYPE = D >> %WORKSPACE%\Conf\BiosId.env
 )
 
 ::**********************************************************************

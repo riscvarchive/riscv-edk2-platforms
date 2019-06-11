@@ -73,9 +73,9 @@
   EfiRegTableLib
   BiosIdLib
   BaseCryptLib
+  HobLib
 
 [Guids]
-  gEfiBiosIdGuid
   gEfiPlatformBootModeGuid
   gEfiBoardFeaturesGuid
   gItkDataVarGuid

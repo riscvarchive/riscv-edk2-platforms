@@ -97,11 +97,6 @@ for (( i=1; i<=$#; ))
         rm -r Build
       fi
       shift
-    elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/ECP" ]; then
-      ECP_SOURCE=$WORKSPACE/EdkCompatibilityPkgEcp
-      EDK_SOURCE=$WORKSPACE/EdkCompatibilityPkgEcp
-      echo DEFINE ECP_BUILD_ENABLE = TRUE >> $auto_config_inc
-      shift
     elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/X64" ]; then
       Arch=X64
       shift
@@ -112,10 +107,6 @@ for (( i=1; i<=$#; ))
       break
     fi
   done
-
-
-
-
 
 ## Required argument(s)
 if [ "$2" == "" ]; then
@@ -203,54 +194,19 @@ fi
 ##**********************************************************************
 ## Build BIOS
 ##**********************************************************************
-echo Skip "Running UniTool..."
-echo "Make GenBiosId Tool..."
-BUILD_PATH=Build/$PLATFORM_PACKAGE/"$TARGET"_"$TOOL_CHAIN_TAG"
-if [ ! -d "$BUILD_PATH/$Arch" ]; then
-  mkdir -p $BUILD_PATH/$Arch
-fi
-if [ -e "$BUILD_PATH/$Arch/BiosId.bin" ]; then
-  rm -f $BUILD_PATH/$Arch/BiosId.bin
-fi
-
-
-./$PLATFORM_PACKAGE/GenBiosId -i Conf/BiosId.env -o $BUILD_PATH/$Arch/BiosId.bin
-
-
 echo "Invoking EDK2 build..."
 build
-
-if [ $SpiLock == "1" ]; then
-  IFWI_HEADER_FILE=./$PLATFORM_PACKAGE/Stitch/IFWIHeader/IFWI_HEADER_SPILOCK.bin
-else
-  IFWI_HEADER_FILE=./$PLATFORM_PACKAGE/Stitch/IFWIHeader/IFWI_HEADER.bin
-fi
-
-echo $IFWI_HEADER_FILE
 
 ##**********************************************************************
 ## Post Build processing and cleanup
 ##**********************************************************************
-
 echo Skip "Running fce..."
 
-echo Skip "Running KeyEnroll..."
+##**********************************************************************
+## Build Capsules
+##**********************************************************************
+build -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
 
-## Set the Board_Id, Build_Type, Version_Major, and Version_Minor environment variables
-VERSION_MAJOR=$(grep '^VERSION_MAJOR' Conf/BiosId.env | cut -d ' ' -f 3 | cut -c 1-4)
-VERSION_MINOR=$(grep '^VERSION_MINOR' Conf/BiosId.env | cut -d ' ' -f 3 | cut -c 1-2)
-BOARD_ID=$(grep '^BOARD_ID' Conf/BiosId.env | cut -d ' ' -f 3 | cut -c 1-7)
-BIOS_Name="$BOARD_ID"_"$Arch"_"$BUILD_TYPE"_"$VERSION_MAJOR"_"$VERSION_MINOR".ROM
-BIOS_ID="$BOARD_ID"_"$Arch"_"$BUILD_TYPE"_"$VERSION_MAJOR"_"$VERSION_MINOR"_GCC.bin
-SEC_VERSION=1.0.2.1060v5
-cat $IFWI_HEADER_FILE ../Vlv2Binaries/Vlv2SocBinPkg/SEC/$SEC_VERSION/VLV_SEC_REGION.bin ../Vlv2Binaries/Vlv2SocBinPkg/SEC/$SEC_VERSION/Vacant.bin $BUILD_PATH/FV/VLV.fd > ./$PLATFORM_PACKAGE/Stitch/$BIOS_ID
-
-
-echo Skip "Running BIOS_Signing ..."
-
-echo
-echo Build location:     $BUILD_PATH
-echo BIOS ROM Created:   $BIOS_Name
 echo
 echo -------------------- The EDKII BIOS build has successfully completed. --------------------
 echo
