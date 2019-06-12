@@ -101,7 +101,7 @@ return back to the minimum platform caller.
   * ``git clone https://github.com/tianocore/edk2-non-osi.git -b devel-MinPlatform``
 
 * FSP repository
-  * ``git clone https://github.com/IntelFsp/FSP.git -b Kabylake``
+  * ``git clone https://github.com/IntelFsp/FSP.git``
 
 ### Build
 
@@ -132,7 +132,8 @@ return back to the minimum platform caller.
   | --capsule             | capsule build enabled               |
   | --silent              | silent build enabled                |
   | --performance         | performance build enabled           |
-  | --fsp                 | fsp build enabled                   |
+  | --fsp                 | fsp wrapper build enabled           |
+  | --fspapi              | API mode fsp wrapper build enabled  |
   |                                                             |
 
 * For more information on build options
@@ -140,6 +141,8 @@ return back to the minimum platform caller.
 
 * Note
   * Python 2.7.16 and Python 3.7.3 compatible
+  * Some dependency Python scripts might only support 2.x or 3.x, if that happened use
+    "py -2" or "py -3" to launch build_bios.py
   * This python build script has been tested on Windows 10 and Ubuntu 16.04.5 LTS
   * See [cross-platform limitations](#Known-limitations)
 
@@ -186,12 +189,7 @@ return back to the minimum platform caller.
   </pre>
 
 **Building with the batch scripts**
-For KabylakeOpenBoardPkg
-1. Open command window, go to the workspace directory, e.g. c:\Kabylake.
-2. Type "cd edk2-platforms\Platform\Intel\KabylakeOpenBoardPkg\KabylakeRvp3".
-3. Type "GitEdk2MinKabylake.bat" to setup GIT environment.
-4. Type "prep" and make prebuild finish for debug build, "prep r" for release build.
-5. Type "bld" to build Kaby Lake reference platform UEFI firmware image.
+KabylakeOpenBoardPkg does not support batch scripts, please use build_bios.py.
 
 For PurleyOpenBoardPkg
 1. Open command window, go to the workspace directory, e.g. c:\Purley.
