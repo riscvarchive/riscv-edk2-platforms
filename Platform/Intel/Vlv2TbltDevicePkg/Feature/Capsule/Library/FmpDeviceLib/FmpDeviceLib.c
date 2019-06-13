@@ -32,11 +32,11 @@ typedef struct {
 } UPDATE_CONFIG_DATA;
 
 UPDATE_CONFIG_DATA mUpdateConfigData[] = {
-  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00000000, 0x00040000, 0x00000000 },
-  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x000C0000, 0x00050000, 0x000C0000 },
-  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00110000, 0x00210000, 0x00110000 },
-  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00320000, 0x00070000, 0x00320000 },
-  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00390000, 0x00070000, 0x00390000 }
+  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00400000, 0x00040000, 0x00400000 },
+  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x004C0000, 0x00050000, 0x004C0000 },
+  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00510000, 0x00210000, 0x00510000 },
+  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00720000, 0x00070000, 0x00720000 },
+  { PlatformFirmwareTypeSystemFirmware, FlashAddressTypeRelativeAddress, 0x00790000, 0x00070000, 0x00790000 }
 };
 
 /**
@@ -95,7 +95,7 @@ FmpDeviceGetSize (
   if (Size == NULL) {
     return EFI_INVALID_PARAMETER;
   }
-  *Size = PcdGet32 (PcdBiosRomBase);
+  *Size = PcdGet32 (PcdBiosRomSize);
   return EFI_SUCCESS;
 }
 

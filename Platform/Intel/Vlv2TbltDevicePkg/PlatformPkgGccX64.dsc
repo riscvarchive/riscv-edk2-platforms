@@ -118,7 +118,6 @@
   DxeServicesTableLib|MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf
   UefiCpuLib|UefiCpuPkg/Library/BaseUefiCpuLib/BaseUefiCpuLib.inf
   UefiUsbLib|MdePkg/Library/UefiUsbLib/UefiUsbLib.inf
-  GenericBdsLib|$(PLATFORM_PACKAGE)/Override/IntelFrameworkModulePkg/Library/GenericBdsLib/GenericBdsLib.inf
   BmpSupportLib|MdeModulePkg/Library/BaseBmpSupportLib/BaseBmpSupportLib.inf
   SafeIntLib|MdePkg/Library/BaseSafeIntLib/BaseSafeIntLib.inf
   FlashDeviceLib|Vlv2TbltDevicePkg/Library/FlashDeviceLib/FlashDeviceLib.inf
@@ -522,6 +521,8 @@
   # Set SMM stack size to 16 KB.
   #
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmStackSize|0x4000
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
 
   #
   # Clear unused single certificate PCD
@@ -933,19 +934,18 @@
   }
   MdeModulePkg/Universal/Metronome/Metronome.inf
 
-  IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf{
+  MdeModulePkg/Universal/BdsDxe/BdsDxe.inf {
     <LibraryClasses>
-      OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
-      IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
-      BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
-      PlatformBdsLib|$(PLATFORM_PACKAGE)/Library/PlatformBdsLib/PlatformBdsLib.inf
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-      PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-      SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+      PlatformBootManagerLib|Vlv2TbltDevicePkg/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
       Tpm2DeviceLib|SecurityPkg/Library/Tpm2DeviceLibTcg2/Tpm2DeviceLibTcg2.inf
   }
-
-  $(PLATFORM_PACKAGE)/UiApp/UiApp.inf
+  MdeModulePkg/Logo/LogoDxe.inf
+  MdeModulePkg/Application/UiApp/UiApp.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/DeviceManagerUiLib/DeviceManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootManagerUiLib/BootManagerUiLib.inf
+      NULL|MdeModulePkg/Library/BootMaintenanceManagerUiLib/BootMaintenanceManagerUiLib.inf
+  }
 
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf

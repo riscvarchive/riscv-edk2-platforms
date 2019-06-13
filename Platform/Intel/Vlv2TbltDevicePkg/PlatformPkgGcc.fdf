@@ -9,34 +9,32 @@
 #**/
 
 [Defines]
-DEFINE FLASH_BASE       = 0xFFC00000     #The base address of the 4Mb FLASH Device.
-DEFINE FLASH_SIZE       = 0x00400000     #The flash size in bytes of the 4Mb FLASH Device.
-DEFINE FLASH_BLOCK_SIZE = 0x1000        #The block size in bytes of the 4Mb FLASH Device.
-DEFINE FLASH_NUM_BLOCKS = 0x400           #The number of blocks in 4Mb FLASH Device.
-DEFINE FLASH_AREA_BASE_ADDRESS                                = 0xFF800000
-DEFINE FLASH_AREA_SIZE                                        = 0x00800000
+DEFINE FLASH_BASE       = 0xFF800000     #The base address of the 8Mb FLASH Device.
+DEFINE FLASH_SIZE       = 0x00800000     #The flash size in bytes of the 8Mb FLASH Device.
+DEFINE FLASH_BLOCK_SIZE = 0x1000         #The block size in bytes of the 8Mb FLASH Device.
+DEFINE FLASH_NUM_BLOCKS = 0x800          #The number of blocks in 8Mb FLASH Device.
 
-DEFINE FLASH_REGION_VLVMICROCODE_OFFSET                       = 0x00000000
+DEFINE FLASH_REGION_VLVMICROCODE_OFFSET                       = 0x00400000
 DEFINE FLASH_REGION_VLVMICROCODE_SIZE                         = 0x00040000
 DEFINE FLASH_REGION_VLVMICROCODE_BASE                         = 0xFFC00000
 
-DEFINE FLASH_REGION_VPD_OFFSET                                = 0x00040000
+DEFINE FLASH_REGION_VPD_OFFSET                                = 0x00440000
 DEFINE FLASH_REGION_VPD_SIZE                                  = 0x0003E000
 
-DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_OFFSET = 0x0007E000
+DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_OFFSET = 0x0047E000
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_SIZE   = 0x00002000
 
 
-DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_OFFSET   = 0x00080000
+DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_OFFSET   = 0x00480000
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_SIZE     = 0x00040000
 
-DEFINE FLASH_REGION_FVMAIN_OFFSET                             = 0x00110000
-DEFINE FLASH_REGION_FVMAIN_SIZE                               = 0x00215000
+DEFINE FLASH_REGION_FVMAIN_OFFSET                             = 0x00510000
+DEFINE FLASH_REGION_FVMAIN_SIZE                               = 0x00210000
 
-DEFINE FLASH_REGION_FV_RECOVERY2_OFFSET                       = 0x00325000
-DEFINE FLASH_REGION_FV_RECOVERY2_SIZE                         = 0x0006B000
+DEFINE FLASH_REGION_FV_RECOVERY2_OFFSET                       = 0x00720000
+DEFINE FLASH_REGION_FV_RECOVERY2_SIZE                         = 0x00070000
 
-DEFINE FLASH_REGION_FV_RECOVERY_OFFSET                        = 0x00390000
+DEFINE FLASH_REGION_FV_RECOVERY_OFFSET                        = 0x00790000
 DEFINE FLASH_REGION_FV_RECOVERY_SIZE                          = 0x00070000
 
 ################################################################################
@@ -62,8 +60,11 @@ NumBlocks     = $(FLASH_NUM_BLOCKS)          #The number of blocks in 3Mb FLASH 
 #
 #Flash location override based on actual flash map
 #
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress            = $(FLASH_AREA_BASE_ADDRESS)
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize                   = $(FLASH_AREA_SIZE)
+SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress            = $(FLASH_BASE)
+SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize                   = $(FLASH_SIZE)
+
+SET gPlatformModuleTokenSpaceGuid.PcdBiosRomBase                     = $(FLASH_BASE)
+SET gPlatformModuleTokenSpaceGuid.PcdBiosRomSize                     = $(FLASH_SIZE)
 
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(FLASH_REGION_VLVMICROCODE_BASE) + 0x60
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(FLASH_REGION_VLVMICROCODE_SIZE) - 0x60
@@ -84,9 +85,12 @@ SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(FLASH_REGION_VL
 # Fv Size can be adjusted; FVMAIN_COMPACT can be reduced to 0x120000, and FV_RECOVERY can be enlarged to 0x80000
 #
 ################################################################################
-# Since the Fce tool don't have gcc version, we can't handle default variable in Linux,
-# so we hardcode the default value of variable here.
-# Please note that we MUST update the binary once the default value is changed.
+
+  #
+  # IFWI Header
+  #
+0x0000|0x1000
+FILE=Vlv2TbltDevicePkg/Stitch/IFWIHeader/IFWI_HEADER.bin
 
 #
   # CPU Microcodes
@@ -347,12 +351,9 @@ INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 INF UefiCpuPkg/CpuDxe/CpuDxe.inf
 INF UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
 INF MdeModulePkg/Universal/Metronome/Metronome.inf
-INF IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf
-!if $(ARCH) == IA32
-INF USE=IA32 MdeModulePkg/Logo/Logo.inf
-!else
-INF USE=X64 MdeModulePkg/Logo/Logo.inf
-!endif
+INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+INF MdeModulePkg/Logo/LogoDxe.inf
+INF MdeModulePkg/Application/UiApp/UiApp.inf
 INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf

@@ -9,12 +9,10 @@
 #**/
 
 [Defines]
-DEFINE FLASH_BASE       = 0xFF800000     #The base address of the 4Mb FLASH Device.
-DEFINE FLASH_SIZE       = 0x00800000     #The flash size in bytes of the 4Mb FLASH Device.
-DEFINE FLASH_BLOCK_SIZE = 0x1000        #The block size in bytes of the 4Mb FLASH Device.
-DEFINE FLASH_NUM_BLOCKS = 0x800           #The number of blocks in 4Mb FLASH Device.
-DEFINE FLASH_AREA_BASE_ADDRESS                                = 0xFF800000
-DEFINE FLASH_AREA_SIZE                                        = 0x00800000
+DEFINE FLASH_BASE       = 0xFF800000     #The base address of the 8Mb FLASH Device.
+DEFINE FLASH_SIZE       = 0x00800000     #The flash size in bytes of the 8Mb FLASH Device.
+DEFINE FLASH_BLOCK_SIZE = 0x1000         #The block size in bytes of the 8Mb FLASH Device.
+DEFINE FLASH_NUM_BLOCKS = 0x800          #The number of blocks in 8Mb FLASH Device.
 
 DEFINE FLASH_REGION_VLVMICROCODE_OFFSET                       = 0x00400000
 DEFINE FLASH_REGION_VLVMICROCODE_SIZE                         = 0x00040000
@@ -62,8 +60,11 @@ NumBlocks     = $(FLASH_NUM_BLOCKS)          #The number of blocks in 3Mb FLASH 
 #
 #Flash location override based on actual flash map
 #
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress            = $(FLASH_AREA_BASE_ADDRESS)
-SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize                   = $(FLASH_AREA_SIZE)
+SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaBaseAddress            = $(FLASH_BASE)
+SET gPlatformModuleTokenSpaceGuid.PcdFlashAreaSize                   = $(FLASH_SIZE)
+
+SET gPlatformModuleTokenSpaceGuid.PcdBiosRomBase                     = $(FLASH_BASE)
+SET gPlatformModuleTokenSpaceGuid.PcdBiosRomSize                     = $(FLASH_SIZE)
 
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(FLASH_REGION_VLVMICROCODE_BASE) + 0x60
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(FLASH_REGION_VLVMICROCODE_SIZE) - 0x60
@@ -401,12 +402,9 @@ INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 INF UefiCpuPkg/CpuDxe/CpuDxe.inf
 INF UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
 INF MdeModulePkg/Universal/Metronome/Metronome.inf
-INF IntelFrameworkModulePkg/Universal/BdsDxe/BdsDxe.inf
-!if $(ARCH) == IA32
-INF USE=IA32 MdeModulePkg/Logo/Logo.inf
-!else
-INF USE=X64 MdeModulePkg/Logo/Logo.inf
-!endif
+INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
+INF MdeModulePkg/Logo/LogoDxe.inf
+INF MdeModulePkg/Application/UiApp/UiApp.inf
 INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
