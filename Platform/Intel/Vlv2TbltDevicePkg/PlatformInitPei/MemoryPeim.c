@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2016, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -40,19 +38,10 @@ Abstract:
 
 EFI_MEMORY_TYPE_INFORMATION mDefaultMemoryTypeInformation[] = {
   { EfiACPIReclaimMemory,       0x40  },    // 0x40 pages = 256k for ASL
-  { EfiACPIMemoryNVS,           0x100 },    // 0x100 pages = 1 MB for S3, SMM, HII, etc
-  { EfiReservedMemoryType,      0x600 },    // 48k for BIOS Reserved
-  { EfiMemoryMappedIO,          0     },
-  { EfiMemoryMappedIOPortSpace, 0     },
-  { EfiPalCode,                 0     },
-  { EfiRuntimeServicesCode,     0x200 },
+  { EfiACPIMemoryNVS,           0x40  },    // 0x40 pages = 256k MB for S3, SMM, HII, etc
+  { EfiReservedMemoryType,      0x80  },    // 512k for BIOS Reserved
+  { EfiRuntimeServicesCode,     0x100 },
   { EfiRuntimeServicesData,     0x100 },
-  { EfiLoaderCode,              0x100 },
-  { EfiLoaderData,              0x100 },
-  { EfiBootServicesCode,        0x800 },
-  { EfiBootServicesData,        0x2500},
-  { EfiConventionalMemory,      0     },
-  { EfiUnusableMemory,          0     },
   { EfiMaxMemoryType,           0     }
 };
 
