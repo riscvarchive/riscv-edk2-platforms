@@ -1,0 +1,19 @@
+## @file
+# This package provides UI related modules.
+#
+# The DEC files are used by the utilities that parse DSC and
+# INF files to generate AutoGen.c and AutoGen.h files
+# for the build infrastructure.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION = 0x00010017
+  PACKAGE_NAME      = UserInterfaceFeaturePkg
+  PACKAGE_VERSION   = 0.1
+  PACKAGE_GUID      = 5A92199C-C2ED-4A3F-9ED0-C278DEA0DA47
+
