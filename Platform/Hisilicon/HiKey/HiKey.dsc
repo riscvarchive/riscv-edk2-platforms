@@ -246,7 +246,7 @@
   #
   # AX88772 Ethernet Driver
   #
-  OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
+  Drivers/OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning

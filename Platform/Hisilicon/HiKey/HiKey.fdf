@@ -158,7 +158,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # AX88772 Ethernet Driver for Apple Ethernet Adapter
   #
-  INF OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
+  INF Drivers/OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning
