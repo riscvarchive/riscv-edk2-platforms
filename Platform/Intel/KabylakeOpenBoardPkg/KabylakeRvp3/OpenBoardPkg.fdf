@@ -226,7 +226,13 @@ READ_LOCK_STATUS   = TRUE
 FvNameGuid         = FC8FE6B5-CD9B-411E-BD8F-31824D0CDE3D
 
 INF  UefiCpuPkg/SecCore/SecCore.inf
+!if (gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode == FALSE) || (gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1)
+#
+# PeiMain is needed only for FSP API mode or EDK2 build,
+# in FSP dispatch mode the one inside FSP Binary is launched.
+#
 INF  MdeModulePkg/Core/Pei/PeiMain.inf
+!endif
 !include $(PLATFORM_PACKAGE)/Include/Fdf/CorePreMemoryInclude.fdf
 
 INF $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
