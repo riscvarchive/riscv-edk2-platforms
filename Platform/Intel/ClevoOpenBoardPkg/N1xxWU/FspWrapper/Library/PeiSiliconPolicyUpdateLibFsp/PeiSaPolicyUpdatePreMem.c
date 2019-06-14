@@ -39,8 +39,15 @@ PeiFspSaPolicyUpdatePreMem (
 {
   VOID                        *Buffer;
 
-  CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr00, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
-  CopyMem((VOID *)(UINTN)FspmUpd->FspmConfig.MemorySpdPtr10, (VOID *)(UINTN)PcdGet32 (PcdMrcSpdData), PcdGet16 (PcdMrcSpdDataSize));
+//
+// Update UPD:DqPinsInterleaved
+//
+  FspmUpd->FspmConfig.DqPinsInterleaved = (UINT8)PcdGetBool(PcdMrcDqPinsInterleaved);
+
+  //
+  // Update UPD:DqPinsInterleaved
+  //
+  FspmUpd->FspmConfig.CaVrefConfig = PcdGet8(PcdMrcCaVrefConfig);
 
   DEBUG((DEBUG_INFO, "Updating Dq Byte Map and DQS Byte Swizzling Settings...\n"));
   Buffer = (VOID *) (UINTN) PcdGet32 (PcdMrcDqByteMap);

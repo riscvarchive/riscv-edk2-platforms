@@ -96,6 +96,9 @@
   gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
   gBoardModuleTokenSpaceGuid.PcdMrcSpdData
   gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
+  gBoardModuleTokenSpaceGuid.PcdMrcCaVrefConfig
+  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleavedControl
+  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleaved
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress      ## CONSUMES
   gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable        ## CONSUMES

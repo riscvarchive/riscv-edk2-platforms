@@ -64,6 +64,9 @@
   gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize
   gBoardModuleTokenSpaceGuid.PcdMrcSpdData
   gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
+  gBoardModuleTokenSpaceGuid.PcdMrcCaVrefConfig
+  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleavedControl
+  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleaved
 
   # PEG Reset By GPIO
   gBoardModuleTokenSpaceGuid.PcdPcie0WakeGpioNo

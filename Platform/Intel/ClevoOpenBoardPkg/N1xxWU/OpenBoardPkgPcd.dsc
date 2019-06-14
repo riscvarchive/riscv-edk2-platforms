@@ -43,7 +43,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
-  gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
+  gSiPkgTokenSpaceGuid.PcdSiPciExpressRegionLength|0x10000000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF00000

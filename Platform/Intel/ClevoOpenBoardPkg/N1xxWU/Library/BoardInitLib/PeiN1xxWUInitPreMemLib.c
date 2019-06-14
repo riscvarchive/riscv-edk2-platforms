@@ -44,6 +44,15 @@ GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompResistorSklRvp1[SA_MRC_MAX_RCOMP
 //
 GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompTargetSklRvp1[SA_MRC_MAX_RCOMP_TARGETS] = { 100, 40, 40, 23, 40 };
 
+//
+// Reference RCOMP resistors on motherboard - for SKL RVP2
+//
+GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompResistorSklRvp2[SA_MRC_MAX_RCOMP] = { 121, 81, 100 };
+//
+// RCOMP target values for RdOdt, WrDS, WrDSCmd, WrDSCtl, WrDSClk - for SKL RVP2
+//
+GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompTargetSklRvp2[SA_MRC_MAX_RCOMP_TARGETS] = { 100, 40, 20, 20, 26 };
+
 /**
   N 1XX WU board configuration init function for PEI pre-memory phase.
 
@@ -81,20 +90,17 @@ N1xxWUInitPreMem (
   //
   PcdSet8S (PcdSaMiscUserBd, 5);
 
-  PcdSet8S (PcdMrcSpdAddressTable0, 0xA2);
-  PcdSet8S (PcdMrcSpdAddressTable1, 0xA0);
-  PcdSet8S (PcdMrcSpdAddressTable2, 0xA2);
-  PcdSet8S (PcdMrcSpdAddressTable3, 0xA0);
+  PcdSet8S (PcdMrcSpdAddressTable0, 0xA0);
+  PcdSet8S (PcdMrcSpdAddressTable1, 0xA2);
+  PcdSet8S (PcdMrcSpdAddressTable2, 0xA4);
+  PcdSet8S (PcdMrcSpdAddressTable3, 0xA6);
 
-  PcdSet32S (PcdMrcDqByteMap, (UINTN) mDqByteMapSklRvp3);
-  PcdSet16S (PcdMrcDqByteMapSize, sizeof (mDqByteMapSklRvp3));
-  PcdSet32S (PcdMrcDqsMapCpu2Dram, (UINTN) mDqsMapCpu2DramSklRvp3);
-  PcdSet16S (PcdMrcDqsMapCpu2DramSize, sizeof (mDqsMapCpu2DramSklRvp3));
-  PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorSklRvp1);
-  PcdSet32S (PcdMrcRcompTarget, (UINTN) RcompTargetSklRvp1);
 
-  PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd110);
-  PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3Spd110Size);
+  PcdSetBoolS(PcdMrcDqPinsInterleavedControl, TRUE);
+  PcdSetBoolS(PcdMrcDqPinsInterleaved, TRUE);
+  PcdSet32S(PcdMrcRcompResistor, (UINTN)RcompResistorSklRvp2);
+  PcdSet32S(PcdMrcRcompTarget, (UINTN)RcompTargetSklRvp2);
+  PcdSet8S(PcdMrcCaVrefConfig, 2); // DDR4 boards
 
   PcdSetBoolS (PcdIoExpanderPresent, TRUE);
 

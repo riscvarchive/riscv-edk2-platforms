@@ -120,7 +120,7 @@
   #
   # PEI phase common
   #
-  SerialPortLib|$(PLATFORM_BOARD_PACKAGE)/Library/PeiSerialPortLibSpiFlash/PeiSerialPortLibSpiFlash.inf
+  SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
   DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
   FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
 !if $(TARGET) == DEBUG
@@ -209,7 +209,7 @@
 # Platform
 #
   $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
-  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
+  $(PROJECT)/Override/Platform/Intel/MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
       BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
@@ -221,7 +221,14 @@
     <LibraryClasses>
       SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPreMemSiliconPolicyInitLibDependency.inf
   }
-  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf{
+    <LibraryClasses>
+  #  #
+    # Hook a library constructor to update some policy fields when policy installed.
+    #
+    NULL|$(PROJECT)/FspWrapper/Library/PeiSiliconPolicyNotifyLib/PeiPreMemSiliconPolicyNotifyLib.inf
+  }
+
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
 !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
