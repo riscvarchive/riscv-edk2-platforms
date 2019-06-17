@@ -343,6 +343,7 @@ def build(config):
     print(" SILENT_MODE    = ", config.get("SILENT_MODE"))
     print(" REBUILD_MODE   = ", config.get("REBUILD_MODE"))
     print(" BUILD_ROM_ONLY = ", config.get("BUILD_ROM_ONLY"))
+    print(" BINARY_CACHE_CMD_LINE = ", config.get("HASH"), config.get("BINARY_CACHE_CMD_LINE"))
     print("==========================================")
 
     command = ["build", "-n", config["NUMBER_OF_PROCESSORS"]]
@@ -352,6 +353,10 @@ def build(config):
 
     if config["EXT_BUILD_FLAGS"] and config["EXT_BUILD_FLAGS"] != "":
         command.append(config["EXT_BUILD_FLAGS"])
+
+    if config.get('BINARY_CACHE_CMD_LINE'):
+        command.append(config['HASH'])
+        command.append(config['BINARY_CACHE_CMD_LINE'])
 
     if config.get("SILENT_MODE", "FALSE") == "TRUE":
         command.append("--silent")
@@ -858,6 +863,17 @@ def get_cmd_config_arguments(arguments):
     if arguments.fspapi is True:
         result["API_MODE_FSP_WRAPPER_BUILD"] = "TRUE"
 
+    if not arguments.UseHashCache:
+        result['BINARY_CACHE_CMD_LINE'] = ''
+    elif arguments.BinCacheDest:
+        result['HASH'] = '--hash'
+        result['BINARY_CACHE_CMD_LINE'] = '--binary-destination=%s' % arguments.BinCacheDest
+    elif arguments.BinCacheSource:
+        result['HASH'] = '--hash'
+        result['BINARY_CACHE_CMD_LINE'] = '--binary-source=%s' % arguments.BinCacheSource
+    else:
+        result['BINARY_CACHE_CMD_LINE'] = ''
+
     return result
 
 
@@ -933,6 +949,17 @@ def get_cmd_arguments(build_config):
 
     parser.add_argument("--fspapi", help="API mode fsp wrapper build enabled",
                         action='store_true', dest="fspapi")
+
+    parser.add_argument("--hash", action="store_true", dest="UseHashCache", default=False,
+                        help="Enable hash-based caching during build process.")
+
+    parser.add_argument("--binary-destination", help="Generate a cache of binary \
+                            files in the specified directory.",
+                        action='store', dest="BinCacheDest")
+
+    parser.add_argument("--binary-source", help="Consume a cache of binary files \
+                                from the specified directory.",
+                        action='store', dest="BinCacheSource")
 
     return parser.parse_args()
 
