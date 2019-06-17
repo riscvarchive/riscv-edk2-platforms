@@ -51,6 +51,7 @@
   ## This PCD sepcifies the start index in CMOS, it will occupy 1 bytes space.
   gDebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugPortFunctionIndex|0x5B|UINT8|0x00000008
 
+[PcdsFixedAtBuild,PcdsPatchableInModule,PcdsDynamic,PcdsDynamicEx]
   ## This PCD specifies AcpiDebug feature is enable/disable.
   gDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugEnable|FALSE|BOOLEAN|0x00000009
   ## This PCD specifies AcpiDebug buffer size.
