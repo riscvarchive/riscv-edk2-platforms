@@ -134,6 +134,9 @@ return back to the minimum platform caller.
   | --performance         | performance build enabled           |
   | --fsp                 | fsp wrapper build enabled           |
   | --fspapi              | API mode fsp wrapper build enabled  |
+  | --hash                | Enable hash-based caching           |
+  | --binary-destination  | create cache in specified directory |
+  | --binary-source       | Consume cache from directory        |
   |                                                             |
 
 * For more information on build options
@@ -196,7 +199,9 @@ For PurleyOpenBoardPkg
 2. Type "cd edk2-platforms\Platform\Intel\PurleyOpenBoardPkg\BoardMtOlympus".
 3. Type "GitEdk2MinMtOlympus.bat" to setup GIT environment.
 4. Type "bld" to build Purley Mt Olympus board UEFI firmware image, "bld release" for release build, "bld clean" to
-   remove intermediate files.
+   remove intermediate files."bld cache-produce" Generate a cache of binary files in the specified directory,
+   "bld cache-consume" Consume a cache of binary files from the specified directory, BINARY_CACHE_PATH is empty,
+   used "BinCache" as default path.
 
 The validated version of iasl compiler that can build MinPurley is 20180629. Older version may generate ACPI build
 errors.
