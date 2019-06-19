@@ -968,12 +968,6 @@
 
   Vlv2TbltDevicePkg/PlatformSetupDxe/PlatformSetupDxe.inf
 
-!if $(DATAHUB_ENABLE) == TRUE
-  IntelFrameworkModulePkg/Universal/DataHubDxe/DataHubDxe.inf {
-    <PcdsFixedAtBuild>
-      gEfiMdePkgTokenSpaceGuid.PcdMaximumLinkedListLength|0
-  }
-!endif
   MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
   Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/PchS3SupportDxe.inf
   PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
@@ -1196,7 +1190,6 @@
   MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
   Vlv2TbltDevicePkg/SmBiosMiscDxe/SmBiosMiscDxe.inf
 
-  Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHITECTURE)/SmbiosMemory.inf
   #
   # CPU/FW Microde
   #

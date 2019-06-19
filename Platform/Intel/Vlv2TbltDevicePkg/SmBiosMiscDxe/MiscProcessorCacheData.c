@@ -1,11 +1,8 @@
 /*++
 
-Copyright (c) 2012 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2012 - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -28,6 +25,4 @@ Abstract:
 //
 // Static (possibly build generated) Processor cache data.
 //
-MISC_SMBIOS_TABLE_DATA(EFI_CACHE_VARIABLE_RECORD, MiscProcessorCache) = {
-0
-};
+MISC_SMBIOS_TABLE_DATA(UINTN, MiscProcessorCache) = 0;

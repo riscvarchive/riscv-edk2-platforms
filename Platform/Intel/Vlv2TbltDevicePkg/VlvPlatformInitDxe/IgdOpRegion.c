@@ -35,8 +35,6 @@ Abstract:
 #include <PiDxe.h>
 #include <PchRegs.h>
 
-#include <Guid/DataHubRecords.h>
-
 #include <Protocol/IgdOpRegion.h>
 #include <Protocol/FirmwareVolume2.h>
 #include <Protocol/PlatformGopPolicy.h>
@@ -66,7 +64,6 @@ extern DXE_VLV_PLATFORM_POLICY_PROTOCOL  *DxePlatformSaPolicy;
 //
 
 IGD_OPREGION_PROTOCOL mIgdOpRegion;
-EFI_GUID              mMiscSubClass = EFI_MISC_SUBCLASS_GUID;
 EFI_EVENT             mConOutEvent;
 EFI_EVENT             mSetGOPverEvent;
 VOID                  *mConOutReg;

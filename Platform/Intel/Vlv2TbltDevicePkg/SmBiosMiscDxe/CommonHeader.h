@@ -3,11 +3,10 @@
 
   This file includes package header files, library classes and protocol, PPI & GUID definitions.
 
-  Copyright (c) 2006  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
 **/
 
 #ifndef __COMMON_HEADER_H_
@@ -15,11 +14,10 @@
 
 
 
-#include <FrameworkDxe.h>
+#include <PiDxe.h>
 #include <IndustryStandard/SmBios.h>
 #include <Protocol/Smbios.h>
 
-#include <Guid/DataHubRecords.h>
 #include <Guid/MdeModuleHii.h>
 
 #include <Library/DebugLib.h>
@@ -35,5 +33,7 @@
 #include <PchRegs.h>
 #include <Library/PchPlatformLib.h>
 #include <Library/PrintLib.h>
+
+#include "DataHubRecords.h"
 
 #endif

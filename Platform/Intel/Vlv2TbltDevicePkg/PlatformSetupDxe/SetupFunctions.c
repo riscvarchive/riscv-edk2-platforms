@@ -1,11 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -52,34 +49,3 @@ SwapEntries (
 
   return;
 }
-
-UINT32
-ConvertBase10ToRaw (
-  IN  EFI_EXP_BASE10_DATA             *Data)
-{
-  UINTN         Index;
-  UINT32        RawData;
-
-  RawData = Data->Value;
-  for (Index = 0; Index < (UINTN) Data->Exponent; Index++) {
-     RawData *= 10;
-  }
-
-  return  RawData;
-}
-
-UINT32
-ConvertBase2ToRaw (
-  IN  EFI_EXP_BASE2_DATA             *Data)
-{
-  UINTN         Index;
-  UINT32        RawData;
-
-  RawData = Data->Value;
-  for (Index = 0; Index < (UINTN) Data->Exponent; Index++) {
-     RawData <<= 1;
-  }
-
-  return  RawData;
-}
-

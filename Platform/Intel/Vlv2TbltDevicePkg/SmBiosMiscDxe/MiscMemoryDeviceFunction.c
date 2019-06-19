@@ -1,11 +1,8 @@
 /*++
 
-Copyright (c) 2006  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -22,8 +19,6 @@ Abstract:
 
 #include "CommonHeader.h"
 #include "MiscSubclassDriver.h"
-#include <Protocol/DataHub.h>
-#include <Guid/DataHubRecords.h>
 #include <Protocol/MemInfo.h>
 
 
@@ -45,13 +40,6 @@ enum {
     DDRType_DDR4 = 6
 };
 
-
-typedef struct {
-  EFI_PHYSICAL_ADDRESS        MemoryArrayStartAddress;
-  EFI_PHYSICAL_ADDRESS        MemoryArrayEndAddress;
-  EFI_INTER_LINK_DATA         PhysicalMemoryArrayLink;
-  UINT16                      MemoryArrayPartitionWidth;
-} EFI_MEMORY_ARRAY_START_ADDRESS;
 
 /**
   This function makes boot time changes to the contents of the
@@ -108,6 +96,7 @@ MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
     EFI_STATUS                      Status;
     STRING_REF                      TokenToGet;
     SMBIOS_TABLE_TYPE17             *SmbiosRecord;
+    SMBIOS_TABLE_TYPE19             *SmbiosRecord19;
     EFI_SMBIOS_HANDLE               SmbiosHandle;
     EFI_MEMORY_ARRAY_LINK_DATA      *ForType17InputData;
     UINT16                          DdrFreq=0;
@@ -117,6 +106,7 @@ MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
 
     UINT8                           Dimm;
     UINT8                           NumSlots;
+    UINT64                          TotalMemorySize;
     STRING_REF                      DevLocator[] = {
       STRING_TOKEN(STR_MISC_MEM_DEV_LOCATOR0), STRING_TOKEN(STR_MISC_MEM_DEV_LOCATOR1)
     };
@@ -183,137 +173,193 @@ MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
           break;
     }
 
-    for (Dimm = 0; Dimm < NumSlots; Dimm++) {
-    //
-    // Memory Device Locator
-    //
-    TokenToGet = DevLocator[Dimm];
-    MemDevice = SmbiosMiscGetString (TokenToGet);
-    MemDeviceStrLen = StrLen(MemDevice);
-    if (MemDeviceStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    TokenToGet = DevLocator[Dimm];
-    MemDevice = SmbiosMiscGetString (TokenToGet);
-    MemDeviceStrLen = StrLen(MemDevice);
-    if (MemDeviceStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Memory Bank Locator
-    //
-    TokenToGet = BankLocator[Dimm];
-    MemBankLocator = SmbiosMiscGetString (TokenToGet);
-    MemBankLocatorStrLen = StrLen(MemBankLocator);
-    if (MemBankLocatorStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Memory Manufacturer
-    //
-    TokenToGet = STRING_TOKEN (STR_MISC_MEM_MANUFACTURER);
-    MemManufacturer = SmbiosMiscGetString (TokenToGet);
-    MemManufacturerStrLen = StrLen(MemManufacturer);
-    if (MemManufacturerStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Memory Serial Number
-    //
-    TokenToGet = STRING_TOKEN (STR_MISC_MEM_SERIAL_NO);
-    MemSerialNumber = SmbiosMiscGetString (TokenToGet);
-    MemSerialNumberStrLen = StrLen(MemSerialNumber);
-    if (MemSerialNumberStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Memory Asset Tag Number
-    //
-    TokenToGet = STRING_TOKEN (STR_MISC_MEM_ASSET_TAG);
-    MemAssetTag = SmbiosMiscGetString (TokenToGet);
-    MemAssetTagStrLen = StrLen(MemAssetTag);
-    if (MemAssetTagStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Memory Part Number
-    //
-    TokenToGet = STRING_TOKEN (STR_MISC_MEM_PART_NUMBER);
-    MemPartNumber = SmbiosMiscGetString (TokenToGet);
-    MemPartNumberStrLen = StrLen(MemPartNumber);
-    if (MemPartNumberStrLen > SMBIOS_STRING_MAX_LENGTH) {
-      return EFI_UNSUPPORTED;
-    }
-
-    //
-    // Two zeros following the last string.
-    //
-    SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE17) + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
-    ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE17) +  MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
-
-    SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_MEMORY_DEVICE;
-    SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE17);
-
-    //
-    // Make handle chosen by smbios protocol.add automatically.
-    //
-    SmbiosRecord->Hdr.Handle = 0;
-
-    //
-    // Memory Array Handle will be the 3rd optional string following the formatted structure.
-    //
     GetType16Hndl( Smbios, &Type16Handle);
-    SmbiosRecord->MemoryArrayHandle = Type16Handle;
+    TotalMemorySize = 0;
+    for (Dimm = 0; Dimm < NumSlots; Dimm++) {
+      //
+      // Memory Device Locator
+      //
+      TokenToGet = DevLocator[Dimm];
+      MemDevice = SmbiosMiscGetString (TokenToGet);
+      MemDeviceStrLen = StrLen(MemDevice);
+      if (MemDeviceStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
 
-    //
-    // Memory Size
-    //
-    if ((MemInfoHob->MemInfoData.dimmSize[Dimm])!=0){
-    SmbiosRecord->TotalWidth = 32;
-    SmbiosRecord->DataWidth = 32;
-    SmbiosRecord->Size = MemInfoHob->MemInfoData.dimmSize[Dimm];
-    SmbiosRecord->Speed = DdrFreq;
-    SmbiosRecord->ConfiguredMemoryClockSpeed = DdrFreq;
-    SmbiosRecord->FormFactor = EfiMemoryFormFactorDimm;
+      TokenToGet = DevLocator[Dimm];
+      MemDevice = SmbiosMiscGetString (TokenToGet);
+      MemDeviceStrLen = StrLen(MemDevice);
+      if (MemDeviceStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Memory Bank Locator
+      //
+      TokenToGet = BankLocator[Dimm];
+      MemBankLocator = SmbiosMiscGetString (TokenToGet);
+      MemBankLocatorStrLen = StrLen(MemBankLocator);
+      if (MemBankLocatorStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Memory Manufacturer
+      //
+      TokenToGet = STRING_TOKEN (STR_MISC_MEM_MANUFACTURER);
+      MemManufacturer = SmbiosMiscGetString (TokenToGet);
+      MemManufacturerStrLen = StrLen(MemManufacturer);
+      if (MemManufacturerStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Memory Serial Number
+      //
+      TokenToGet = STRING_TOKEN (STR_MISC_MEM_SERIAL_NO);
+      MemSerialNumber = SmbiosMiscGetString (TokenToGet);
+      MemSerialNumberStrLen = StrLen(MemSerialNumber);
+      if (MemSerialNumberStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Memory Asset Tag Number
+      //
+      TokenToGet = STRING_TOKEN (STR_MISC_MEM_ASSET_TAG);
+      MemAssetTag = SmbiosMiscGetString (TokenToGet);
+      MemAssetTagStrLen = StrLen(MemAssetTag);
+      if (MemAssetTagStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Memory Part Number
+      //
+      TokenToGet = STRING_TOKEN (STR_MISC_MEM_PART_NUMBER);
+      MemPartNumber = SmbiosMiscGetString (TokenToGet);
+      MemPartNumberStrLen = StrLen(MemPartNumber);
+      if (MemPartNumberStrLen > SMBIOS_STRING_MAX_LENGTH) {
+        return EFI_UNSUPPORTED;
+      }
+
+      //
+      // Two zeros following the last string.
+      //
+      SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE17) + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
+      ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE17) +  MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
+
+      SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_MEMORY_DEVICE;
+      SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE17);
+
+      //
+      // Make handle chosen by smbios protocol.add automatically.
+      //
+      SmbiosRecord->Hdr.Handle = 0;
+
+      //
+      // Memory Array Handle will be the 3rd optional string following the formatted structure.
+      //
+      SmbiosRecord->MemoryArrayHandle = Type16Handle;
+
+      //
+      // Memory Size
+      //
+      if ((MemInfoHob->MemInfoData.dimmSize[Dimm])!=0){
+        SmbiosRecord->TotalWidth = 32;
+        SmbiosRecord->DataWidth = 32;
+        SmbiosRecord->Size = MemInfoHob->MemInfoData.dimmSize[Dimm];
+        SmbiosRecord->Speed = DdrFreq;
+        SmbiosRecord->ConfiguredMemoryClockSpeed = DdrFreq;
+        SmbiosRecord->FormFactor = EfiMemoryFormFactorDimm;
+      }
+
+      SmbiosRecord->DeviceSet =(UINT8) ForType17InputData->MemoryDeviceSet;
+      SmbiosRecord->DeviceLocator= 1;
+      SmbiosRecord->BankLocator = 2;
+
+
+      SmbiosRecord->Manufacturer = 3;
+      SmbiosRecord->SerialNumber= 4;
+      SmbiosRecord->AssetTag= 5;
+      SmbiosRecord->PartNumber= 6;
+      SmbiosRecord->Attributes = (UINT8) ForType17InputData->MemoryState;
+      SmbiosRecord->MemoryType = MemoryType;
+
+      OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
+      UnicodeStrToAsciiStr(MemDevice, OptionalStrStart);
+      UnicodeStrToAsciiStr(MemBankLocator, OptionalStrStart + MemDeviceStrLen + 1);
+      UnicodeStrToAsciiStr(MemManufacturer, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1);
+      UnicodeStrToAsciiStr(MemSerialNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1);
+      UnicodeStrToAsciiStr(MemAssetTag, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1);
+      UnicodeStrToAsciiStr(MemPartNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1+ MemAssetTagStrLen+1 );
+
+      //
+      // Now we have got the full smbios record, call smbios protocol to add this record.
+      //
+      SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
+      Status = Smbios-> Add(
+                          Smbios,
+                          NULL,
+                          &SmbiosHandle,
+                          (EFI_SMBIOS_TABLE_HEADER *) SmbiosRecord
+                          );
+
+      if ((SmbiosRecord->Size & BIT15) != 0) {
+        //
+        // Size is in KB
+        //
+        TotalMemorySize = TotalMemorySize + LShiftU64 (SmbiosRecord->Size, 10);
+      } else {
+        //
+        // Size is in MB
+        //
+        TotalMemorySize = TotalMemorySize + LShiftU64 (SmbiosRecord->Size, 20);
+      }
+
+      FreePool(SmbiosRecord);
     }
 
-    SmbiosRecord->DeviceSet =(UINT8) ForType17InputData->MemoryDeviceSet;
-    SmbiosRecord->DeviceLocator= 1;
-    SmbiosRecord->BankLocator = 2;
-
-
-    SmbiosRecord->Manufacturer = 3;
-    SmbiosRecord->SerialNumber= 4;
-    SmbiosRecord->AssetTag= 5;
-    SmbiosRecord->PartNumber= 6;
-    SmbiosRecord->Attributes = (UINT8) ForType17InputData->MemoryState;
-    SmbiosRecord->MemoryType = MemoryType;
-
-    OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(MemDevice, OptionalStrStart);
-    UnicodeStrToAsciiStr(MemBankLocator, OptionalStrStart + MemDeviceStrLen + 1);
-    UnicodeStrToAsciiStr(MemManufacturer, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1);
-    UnicodeStrToAsciiStr(MemSerialNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1);
-    UnicodeStrToAsciiStr(MemAssetTag, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1);
-    UnicodeStrToAsciiStr(MemPartNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1+ MemAssetTagStrLen+1 );
+    //
+    // Allocate and zero SMBIOS TYPE 19 Record
+    //
+    SmbiosRecord19 = AllocateZeroPool (sizeof (SMBIOS_TABLE_TYPE19));
+    ASSERT (SmbiosRecord19 != NULL);
 
     //
-    // Now we have got the full smbios record, call smbios protocol to add this record.
+    // Fill in SMBIOS type 19 information
+    //
+    SmbiosRecord19->Hdr.Type = SMBIOS_TYPE_MEMORY_ARRAY_MAPPED_ADDRESS;
+    SmbiosRecord19->Hdr.Length = (UINT8) sizeof (SMBIOS_TABLE_TYPE19);
+    SmbiosRecord19->Hdr.Handle = 0;
+
+    SmbiosRecord19->MemoryArrayHandle       = Type16Handle;
+    SmbiosRecord19->PartitionWidth          = NumSlots;
+    if (TotalMemorySize <= SIZE_4TB) {
+      SmbiosRecord19->StartingAddress         = 0x0;
+      //
+      // Convert bytes to KB
+      //
+      SmbiosRecord19->EndingAddress           = (UINT32)RShiftU64 (TotalMemorySize, 10) - 1;
+      SmbiosRecord19->ExtendedStartingAddress = 0;
+      SmbiosRecord19->ExtendedEndingAddress   = 0;
+    } else {
+      SmbiosRecord19->StartingAddress         = 0xffffffff;
+      SmbiosRecord19->EndingAddress           = 0xffffffff;
+      SmbiosRecord19->ExtendedStartingAddress = 0;
+      SmbiosRecord19->ExtendedEndingAddress   = TotalMemorySize - 1;
+    }
+
+    //
+    // Add SMBIOS type 19 record to SMBIOS table.
     //
     SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
-    Status = Smbios-> Add(
-                        Smbios,
-                        NULL,
-                        &SmbiosHandle,
-                        (EFI_SMBIOS_TABLE_HEADER *) SmbiosRecord
-                        );
-    FreePool(SmbiosRecord);
-    }
+    Smbios->Add(
+              Smbios,
+              NULL,
+              &SmbiosHandle,
+              (EFI_SMBIOS_TABLE_HEADER *)SmbiosRecord19
+              );
+
     return Status;
 }

@@ -17,7 +17,6 @@ Abstract:
 #include "CommonHeader.h"
 
 #include "MiscSubclassDriver.h"
-#include <Protocol/DataHub.h>
 #include <Library/HiiLib.h>
 #include <Library/PrintLib.h>
 #include <Protocol/PciRootBridgeIo.h>

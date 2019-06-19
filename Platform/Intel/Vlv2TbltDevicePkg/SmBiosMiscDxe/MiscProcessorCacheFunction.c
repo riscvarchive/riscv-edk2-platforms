@@ -1,11 +1,8 @@
 /*++
 
-Copyright (c) 2006  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -20,170 +17,144 @@ Abstract:
 --*/
 #include "CommonHeader.h"
 #include "MiscSubclassDriver.h"
-#include <Protocol/DataHub.h>
-#include <Guid/DataHubRecords.h>
-
-UINT32
-ConvertBase2ToRaw (
-  IN  EFI_EXP_BASE2_DATA             *Data)
-{
-  UINTN         Index;
-  UINT32        RawData;
-
-  RawData = Data->Value;
-  for (Index = 0; Index < (UINTN) Data->Exponent; Index++) {
-     RawData <<= 1;
-  }
-
-  return  RawData;
-}
-
+#include <Register/Cpuid.h>
 
 MISC_SMBIOS_TABLE_FUNCTION(MiscProcessorCache)
 {
 	EFI_SMBIOS_HANDLE     SmbiosHandle;
-	SMBIOS_TABLE_TYPE7            *SmbiosRecordL1;
-	SMBIOS_TABLE_TYPE7            *SmbiosRecordL2;
+	SMBIOS_TABLE_TYPE7            *SmbiosRecord;
 
 	EFI_CACHE_SRAM_TYPE_DATA      CacheSramType;
 	CHAR16                          *SocketDesignation;
 	CHAR8                           *OptionalStrStart;
 	UINTN                           SocketStrLen;
 	STRING_REF                      TokenToGet;
-	EFI_DATA_HUB_PROTOCOL           *DataHub;
-	UINT64                          MonotonicCount;
-	EFI_DATA_RECORD_HEADER          *Record;
-	EFI_SUBCLASS_TYPE1_HEADER       *DataHeader;
-	UINT8                           *SrcData;
-	EFI_STATUS                      Status;
+  UINT32                          SubIndex;
+  CPUID_CACHE_PARAMS_EAX          CacheParamsEax;
+  CPUID_CACHE_PARAMS_EBX          CacheParamsEbx;
+  UINT32                          RegisterEcx;
+  CPUID_CACHE_PARAMS_EDX          CacheParamsEdx;
+  UINT8                           SystemCacheType;
+  UINTN                           Size;
 
 	//
-	// Memory Device LOcator
+	// Memory Device Locator
 	//
-	DEBUG ((EFI_D_ERROR, "type 7\n"));
-
 	TokenToGet = STRING_TOKEN (STR_SOCKET_DESIGNATION);
 	SocketDesignation = SmbiosMiscGetString (TokenToGet);
 	SocketStrLen = StrLen(SocketDesignation);
 	if (SocketStrLen > SMBIOS_STRING_MAX_LENGTH) {
-	return EFI_UNSUPPORTED;
+	  return EFI_UNSUPPORTED;
 	}
 
-	SmbiosRecordL1 = AllocatePool(sizeof (SMBIOS_TABLE_TYPE7) + 7 + 1 + 1);
-	ASSERT (SmbiosRecordL1 != NULL);
-	ZeroMem(SmbiosRecordL1, sizeof (SMBIOS_TABLE_TYPE7) + 7 + 1 + 1);
+  //
+  // Retrieve cache level information using CPUID
+  //
+  for (SubIndex = 0; ; SubIndex++) {
+    AsmCpuidEx (
+      CPUID_CACHE_PARAMS,
+      SubIndex,
+      &CacheParamsEax.Uint32,
+      &CacheParamsEbx.Uint32,
+      &RegisterEcx,
+      &CacheParamsEdx.Uint32
+      );
+    //
+    // Terminate loop when CacheType is CPUID_CACHE_PARAMS_CACHE_TYPE_NULL
+    //
+    if (CacheParamsEax.Bits.CacheType == CPUID_CACHE_PARAMS_CACHE_TYPE_NULL) {
+      break;
+    }
 
-	SmbiosRecordL2 = AllocatePool(sizeof (SMBIOS_TABLE_TYPE7) + 7 + 1 + 1);
-	ASSERT (SmbiosRecordL2 != NULL);
-	ZeroMem(SmbiosRecordL2, sizeof (SMBIOS_TABLE_TYPE7) + 7 + 1 + 1);
+    //
+    // Allocate and zero SMBIOS TYPE 7 Record
+    //
+	  SmbiosRecord = AllocateZeroPool (sizeof (SMBIOS_TABLE_TYPE7) + 7 + 1 + 1);
+	  ASSERT (SmbiosRecord != NULL);
 
-	//
-	// Get the Data Hub Protocol. Assume only one instance
-	//
-	Status = gBS->LocateProtocol (
-	                &gEfiDataHubProtocolGuid,
-	                NULL,
-	                (VOID **)&DataHub
-	                );
-	ASSERT_EFI_ERROR(Status);
+    //
+    // Compute cache size in bytes
+    //
+    Size = (CacheParamsEbx.Bits.Ways + 1) *
+           (CacheParamsEbx.Bits.LinePartitions + 1) *
+           (CacheParamsEbx.Bits.LineSize + 1) *
+           (RegisterEcx + 1);
+    DEBUG ((DEBUG_INFO, "MiscProcessorCache(): Cache Type = %d  Cache Level = %d  Size = %x\n", CacheParamsEax.Bits.CacheType, CacheParamsEax.Bits.CacheLevel, Size));
 
-	MonotonicCount = 0;
-	Record = NULL;
+    //
+    // Determine SMBIOS SystemCacheType
+    //
+    switch (CacheParamsEax.Bits.CacheType) {
+    case 1:
+      SystemCacheType = CacheTypeData;
+      break;
+    case 2:
+      SystemCacheType = CacheTypeInstruction;
+      break;
+    case 3:
+      SystemCacheType = CacheTypeUnified;
+      break;
+    default:
+      SystemCacheType = CacheTypeUnknown;
+    }
 
-	do {
-	Status = DataHub->GetNextRecord (
-	                    DataHub,
-	                    &MonotonicCount,
-	                    NULL,
-	                    &Record
-	                    );
-		if (!EFI_ERROR(Status)) {
-			if (Record->DataRecordClass == EFI_DATA_RECORD_CLASS_DATA) {
-				DataHeader  = (EFI_SUBCLASS_TYPE1_HEADER *)(Record + 1);
-				SrcData     = (UINT8  *)(DataHeader + 1);
-				if (CompareGuid(&Record->DataRecordGuid, &gEfiCacheSubClassGuid) && (DataHeader->RecordType == CacheSizeRecordType)) {
-          			if (DataHeader->SubInstance == EFI_CACHE_L1) {
-						SmbiosRecordL1->InstalledSize += (UINT16) (ConvertBase2ToRaw((EFI_EXP_BASE2_DATA *)SrcData) >> 10);
-						SmbiosRecordL1->MaximumCacheSize = SmbiosRecordL1->InstalledSize;
-          			}
-         			 else if (DataHeader->SubInstance == EFI_CACHE_L2) {
-						SmbiosRecordL2->InstalledSize += (UINT16) (ConvertBase2ToRaw((EFI_EXP_BASE2_DATA *)SrcData) >> 10);
-						SmbiosRecordL2->MaximumCacheSize = SmbiosRecordL2->InstalledSize;
-          			} else {
-           				 continue;
-          			}
-		  		}
-	      	}
-    	}
-	} while (!EFI_ERROR(Status) && (MonotonicCount != 0));
+    //
+    // Update cache sizes in KB
+    //
+    switch (CacheParamsEax.Bits.CacheLevel) {
+    case 1:
+      SmbiosRecord->InstalledSize      = (UINT16)(Size >> 10);
+      SmbiosRecord->MaximumCacheSize   = SmbiosRecord->InstalledSize;
+      SmbiosRecord->SystemCacheType    = SystemCacheType;
+      SmbiosRecord->Associativity      = CacheAssociativity8Way;
+      SmbiosRecord->CacheConfiguration = 0x0180;
+      break;
+    case 2:
+      SmbiosRecord->InstalledSize      = (UINT16)(Size >> 10);
+      SmbiosRecord->MaximumCacheSize   = SmbiosRecord->InstalledSize;
+      SmbiosRecord->SystemCacheType    = SystemCacheType;
+      SmbiosRecord->Associativity      = CacheAssociativity16Way;
+      SmbiosRecord->CacheConfiguration = 0x0281;
+	    //
+	    //VLV2 incorporates two SLM modules (quad cores) in the SoC.
+      // 2 cores share BIU/L2 cache
+	    //
+	    SmbiosRecord->InstalledSize    = SmbiosRecord->InstalledSize / 2;
+	    SmbiosRecord->MaximumCacheSize = SmbiosRecord->InstalledSize;
+      break;
+    default:
+      DEBUG ((DEBUG_ERROR, "MiscProcessorCache(): Unexpected cache level %d\n", CacheParamsEax.Bits.CacheLevel));
+      break;
+    }
 
-	//
-	//Filling SMBIOS type 7 information for different cache levels.
-	//
+	  //
+	  //Filling SMBIOS type 7 information for different cache levels.
+	  //
+	  SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_CACHE_INFORMATION;
+	  SmbiosRecord->Hdr.Length = (UINT8) sizeof (SMBIOS_TABLE_TYPE7);
+	  SmbiosRecord->Hdr.Handle = 0;
 
-	SmbiosRecordL1->Hdr.Type = EFI_SMBIOS_TYPE_CACHE_INFORMATION;
-	SmbiosRecordL1->Hdr.Length = (UINT8) sizeof (SMBIOS_TABLE_TYPE7);
-	SmbiosRecordL1->Hdr.Handle = 0;
+	  SmbiosRecord->SocketDesignation = 0x01;
+	  SmbiosRecord->CacheSpeed = 0;
+	  ZeroMem (&CacheSramType, sizeof (EFI_CACHE_SRAM_TYPE_DATA));
+	  CacheSramType.Synchronous = 1;
+	  CopyMem(&SmbiosRecord->SupportedSRAMType, &CacheSramType, 2);
+	  CopyMem(&SmbiosRecord->CurrentSRAMType, &CacheSramType, 2);
+	  SmbiosRecord->ErrorCorrectionType = EfiCacheErrorSingleBit;
 
-	SmbiosRecordL1->Associativity = CacheAssociativity8Way;
-	SmbiosRecordL1->SystemCacheType = CacheTypeUnknown;
-	SmbiosRecordL1->SocketDesignation = 0x01;
-	SmbiosRecordL1->CacheSpeed = 0;
-	SmbiosRecordL1->CacheConfiguration = 0x0180;
-	ZeroMem (&CacheSramType, sizeof (EFI_CACHE_SRAM_TYPE_DATA));
-	CacheSramType.Synchronous = 1;
-	CopyMem(&SmbiosRecordL1->SupportedSRAMType, &CacheSramType, 2);
-	CopyMem(&SmbiosRecordL1->CurrentSRAMType, &CacheSramType, 2);
-	SmbiosRecordL1->ErrorCorrectionType = EfiCacheErrorSingleBit;
+	  //
+	  // Adding SMBIOS type 7 records to SMBIOS table.
+	  //
+	  SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
+	  OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
+	  UnicodeStrToAsciiStr(SocketDesignation, OptionalStrStart);
 
-
-	SmbiosRecordL2->Hdr.Type = EFI_SMBIOS_TYPE_CACHE_INFORMATION;
-	SmbiosRecordL2->Hdr.Length = (UINT8) sizeof (SMBIOS_TABLE_TYPE7);
-	SmbiosRecordL2->Hdr.Handle = 0;
-
-	SmbiosRecordL2->Associativity = CacheAssociativity16Way;
-	SmbiosRecordL2->SystemCacheType = CacheTypeInstruction;
-	SmbiosRecordL2->SocketDesignation = 0x01;
-	SmbiosRecordL2->CacheSpeed = 0;
-	SmbiosRecordL2->CacheConfiguration = 0x0281;
-	ZeroMem (&CacheSramType, sizeof (EFI_CACHE_SRAM_TYPE_DATA));
-	CacheSramType.Synchronous = 1;
-	CopyMem(&SmbiosRecordL2->SupportedSRAMType, &CacheSramType, 2);
-	CopyMem(&SmbiosRecordL2->CurrentSRAMType, &CacheSramType, 2);
-	SmbiosRecordL2->ErrorCorrectionType = EfiCacheErrorSingleBit;
-
-
-
-	//
-	//Adding SMBIOS type 7 records to SMBIOS table.
-	//
-	SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
-	OptionalStrStart = (CHAR8 *)(SmbiosRecordL1 + 1);
-	UnicodeStrToAsciiStr(SocketDesignation, OptionalStrStart);
-
-	Smbios-> Add(
-	           Smbios,
-	           NULL,
-	           &SmbiosHandle,
-	           (EFI_SMBIOS_TABLE_HEADER *) SmbiosRecordL1
-	           );
-
-	//
-	//VLV2 incorporates two SLM modules (quad cores) in the SoC. 2 cores share BIU/L2 cache
-	//
-	SmbiosRecordL2->InstalledSize = (SmbiosRecordL2->InstalledSize)/2;
-	SmbiosRecordL2->MaximumCacheSize = SmbiosRecordL2->InstalledSize;
-	SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
-
-	OptionalStrStart = (CHAR8 *)(SmbiosRecordL2 + 1);
-	UnicodeStrToAsciiStr(SocketDesignation, OptionalStrStart);
-
-	Smbios-> Add(
-	           Smbios,
-	           NULL,
-	           &SmbiosHandle,
-	           (EFI_SMBIOS_TABLE_HEADER *) SmbiosRecordL2
-	           );
-
+	  Smbios->Add(
+	            Smbios,
+	            NULL,
+	            &SmbiosHandle,
+	            (EFI_SMBIOS_TABLE_HEADER *) SmbiosRecord
+	            );
+  }
 	return EFI_SUCCESS;
 }

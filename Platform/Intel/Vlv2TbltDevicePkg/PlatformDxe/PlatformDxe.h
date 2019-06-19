@@ -43,8 +43,6 @@ Abstract:
 #include <Protocol/CpuIo2.h>
 #include <Guid/GlobalVariable.h>
 #include <Guid/BoardFeatures.h>
-#include <Guid/DataHubRecords.h>
-#include <Protocol/DataHub.h>
 #include <Protocol/PciIo.h>
 #include <Protocol/Speaker.h>
 #include <IndustryStandard/Pci22.h>

@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -23,12 +21,8 @@ Abstract:
 
 #include "PchRegs.h"
 #include "PlatformDxe.h"
-#include <Guid/IdccData.h>
 #include <Guid/EfiVpdData.h>
-#include <Protocol/DataHub.h>
 
-
-extern EFI_GUID mPlatformDriverGuid;
 
 //
 // Global module data
@@ -52,8 +46,6 @@ InitializeBoardId (
 {
 
   UINT32                        BoardIdBufferSize;
-  EFI_IDCC_BOARD_FORM_FACTOR    IdccBoardFormFactor;
-  EFI_DATA_HUB_PROTOCOL         *DataHub;
   EFI_STATUS                    Status;
   DMI_DATA                      DmiDataVariable;
   UINTN                         Size;
@@ -186,38 +178,5 @@ InitializeBoardId (
          BoardIdBufferSize,
          &mBoardFeatures
          );
-
-  //
-  // Get the Data Hub protocol
-  //
-  Status = gBS->LocateProtocol (
-                  &gEfiDataHubProtocolGuid,
-                  NULL,
-                  (VOID **) &DataHub
-                  );
-  if (!(EFI_ERROR(Status))) {
-    //
-    // Fill out data
-    //
-    IdccBoardFormFactor.IdccHeader.Type = EFI_IDCC_BOARD_FORM_FACTOR_TYPE;
-    IdccBoardFormFactor.IdccHeader.RecordLength = sizeof(EFI_IDCC_BOARD_FORM_FACTOR);
-    if ((mBoardFeatures & B_BOARD_FEATURES_FORM_FACTOR_ATX) || (mBoardFeatures & B_BOARD_FEATURES_FORM_FACTOR_MICRO_ATX)) {
-        IdccBoardFormFactor.BoardFormFactor = ATX_FORM_FACTOR; // ATX
-    } else {
-        IdccBoardFormFactor.BoardFormFactor = BTX_FORM_FACTOR; // BTX
-    }
-
-    //
-    // Publish the Board Form Factor value for IDCC
-    //
-    Status = DataHub->LogData (
-                        DataHub,
-                        &gIdccDataHubGuid,
-                        &mPlatformDriverGuid,
-                        EFI_DATA_RECORD_CLASS_DATA,
-                        &IdccBoardFormFactor,
-                        sizeof(EFI_IDCC_BOARD_FORM_FACTOR)
-                        );
-  }
 }
 

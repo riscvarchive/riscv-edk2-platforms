@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -75,71 +73,6 @@ EFI_CLOCK_PLATFORM_INFO mAtxClockSettings = {
   sizeof(mAtxSxClocks) / sizeof(mAtxSxClocks[0])
 };
 
-#if defined( RVP_SUPPORT ) && RVP_SUPPORT
-//
-// RVP Clock Settings
-//
-// Static clock table.
-//  This should be used to define any clock settings that are static
-//  (Always On or Always Off).  Dynamic clocks should be set to enabled
-//  in this table.
-//
-//UPSD_TBD Check with Jan if any porting required.
-//
-EFI_STATIC_SIGNALS mRvpStaticClocks[] = {
-  {SrcClk11,  Enabled,  All},     // Not used/not present but leave coding enabled
-  {SrcClk10,  Enabled,  All},     // Not used/not present but leave coding enabled
-  {SrcClk9,   Enabled,  All},     // Not used/not present but leave coding enabled
-  {SrcClk8,   Enabled,  All},     // ICHSATAII
-  {SrcClk7,   Enabled,  All},     // DPL_REFSSCLKIN
-  {SrcClk6,   Enabled,  All},     // 100M_MCH
-  {SrcClk5,   Enabled,  All},     // Mini-PCIe  //TODO PNV: Need to check ICH GPIO38:
-                                                // 0: turn on; 1: turn off
-  {SrcClk4,   Enabled,  All},     // ICHSATA
-  {SrcClk3,   Enabled,  All},     // 100M_ICH
-  {SrcClk2,   Enabled,  All},     // 100M_LAN
-  {SrcClk1,   Enabled,  All},     // 25M_LAN
-  {SrcClk0,   Enabled,  All},     // 96M_DREF
-  {Ref0,      Enabled,  All},
-  {Dot96,     Enabled,  All},
-  {Usb48,     Enabled,  All},
-  {PciClkF5,  Enabled,  All},     // 33M_ICH
-  {PciClk0,   Enabled,  All},     // 33M_RISER
-  {PciClk1,   Enabled,  All},     // 33M_RISER
-  {PciClk2,   Enabled,  All},     // VDD_Clock
-  {PciClk3,   Enabled,  All},     // 33M_S1
-  {PciClk4,   Enabled,  All},     // 33M_PA
-};
-
-//
-// Dynamic clock table
-// This is used to determine if a clock should be left on or turned off based
-// on the presence of a device.  The bridge information is used so the bus
-// number for the device to be detected can be found.
-//
-
-//
-// ClockSxInfo Table
-// This is a list of clocks that need to be set to a known state when the
-// system enters S4 or S5.
-//
-EFI_STATIC_SIGNALS mRvpSxClocks[] = {
-  {SaveClockConfiguration, Disabled, All}
-};
-
-//
-// RVP settings structure
-//
-EFI_CLOCK_PLATFORM_INFO mRvpClockSettings = {
-  mRvpStaticClocks,
-  sizeof(mRvpStaticClocks) / sizeof(mRvpStaticClocks[0]),
-  0,  // No clocks will be turned off mRvpDynamicClocks,
-  0, // No clocks will be turned off sizeof(mRvpDynamicClocks) / sizeof(mRvpDynamicClocks[0]),
-  mRvpSxClocks,
-  sizeof(mRvpSxClocks) / sizeof(mRvpSxClocks[0])
-};
-#endif
-
 VOID
 InitializeClockRouting(
   )
@@ -165,12 +98,6 @@ InitializeClockRouting(
                   );
   if (!EFI_ERROR (Status)) {
 
-#if defined( RVP_SUPPORT ) && RVP_SUPPORT
-    if (BoardIdVar & B_BOARD_FEATURES_RVP) {
-      ClockPolicy = &mRvpClockSettings;
-    }
-#else
-
     //
     // Isolate board type information
     //
@@ -183,9 +110,6 @@ InitializeClockRouting(
         BoardIdVar == B_BOARD_FEATURES_FORM_FACTOR_MICRO_ATX) {
       ClockPolicy = &mAtxClockSettings;
     }
-
-#endif
-
   }
 
   Handle = NULL;

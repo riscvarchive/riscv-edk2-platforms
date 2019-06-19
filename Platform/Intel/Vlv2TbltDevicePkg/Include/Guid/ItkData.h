@@ -1,10 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -14,16 +12,8 @@ Abstract:
 
 --*/
 
-#ifndef _ITKDATAHUB_GUID_H_
-#define _ITKDATAHUB_GUID_H_
-
-//
-// This GUID is for the ITK related data found in the Data Hub {E7060843-A336-4d5b-9598-13402F5D7375}
-//
-#define ITK_DATA_HUB_GUID \
-  { 0xe7060843, 0xa336, 0x4d5b, 0x95, 0x98, 0x13, 0x40, 0x2f, 0x5d, 0x73, 0x75 }
-
-extern EFI_GUID gItkDataHubGuid;
+#ifndef _ITKDATA_GUID_H_
+#define _ITKDATA_GUID_H_
 
 //
 // This GUID is for the ITK related data found in a Variable  {3812723D-7E48-4e29-BC27-F5A39AC94EF1}

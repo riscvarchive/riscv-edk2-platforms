@@ -1,11 +1,8 @@
 /*++
 
-Copyright (c) 2006  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -23,9 +20,9 @@ Abstract:
 #include "MiscSubclassDriver.h"
 
 #include <Protocol/MpService.h>
-#include <Protocol/DataHub.h>
-#include <Guid/DataHubRecords.h>
 #include <Library/CpuIA32.h>
+#include <Library/TimerLib.h>
+#include <Register/Cpuid.h>
 
 #define EfiProcessorFamilyIntelAtomProcessor    0x2B
 
@@ -75,33 +72,6 @@ GetCacheHandle (
   *Handle = 0xFFFF;
 }
 
-
-/**
-  This function makes boot time changes to the contents of the
-  MiscProcessorInformation (Type 4).
-
-  @param  RecordData                 Pointer to copy of RecordData from the Data Table.
-
-  @retval EFI_SUCCESS                All parameters were valid.
-  @retval EFI_UNSUPPORTED            Unexpected RecordType value.
-  @retval EFI_INVALID_PARAMETER      Invalid parameter was found.
-
-**/
-UINT32
-ConvertBase10ToRaw (
-  IN  EFI_EXP_BASE10_DATA             *Data)
-{
-  UINTN         Index;
-  UINT32        RawData;
-
-  RawData = Data->Value;
-  for (Index = 0; Index < (UINTN) Data->Exponent; Index++) {
-     RawData *= 10;
-  }
-
-  return  RawData;
-}
-
 #define BSEL_CR_OVERCLOCK_CONTROL	0xCD
 #define	FUSE_BSEL_MASK				0x03
 
@@ -137,6 +107,96 @@ DetermineiFsbFromMsr (
 
 }
 
+CHAR16 *
+CpuidSocVendorBrandString (
+  VOID
+  )
+{
+  UINT32  MaximumExtendedFunction;
+  //
+  // Array to store brand string from 3 brand string leafs with
+  // 4 32-bit brand string values per leaf and an extra value to
+  // null terminate the string.
+  //
+  UINT32  BrandString[3 * 4 + 1];
+  CHAR8   *AsciiBrandString;
+  CHAR16  *UnicodeBrandString;
+  UINTN   Length;
+
+  AsmCpuid (CPUID_EXTENDED_FUNCTION, &MaximumExtendedFunction, NULL, NULL, NULL);
+
+  ZeroMem (&BrandString, sizeof (BrandString));
+  if (CPUID_BRAND_STRING1 <= MaximumExtendedFunction) {
+    AsmCpuid (
+      CPUID_BRAND_STRING1,
+      &BrandString[0],
+      &BrandString[1],
+      &BrandString[2],
+      &BrandString[3]
+      );
+  }
+  if (CPUID_BRAND_STRING2 <= MaximumExtendedFunction) {
+    AsmCpuid (
+      CPUID_BRAND_STRING2,
+      &BrandString[4],
+      &BrandString[5],
+      &BrandString[6],
+      &BrandString[7]
+      );
+  }
+  if (CPUID_BRAND_STRING3 <= MaximumExtendedFunction) {
+    AsmCpuid (
+      CPUID_BRAND_STRING3,
+      &BrandString[8],
+      &BrandString[9],
+      &BrandString[10],
+      &BrandString[11]
+      );
+  }
+
+  //
+  // Skip spaces at the beginning of the brand string
+  //
+  for (AsciiBrandString = (CHAR8 *)BrandString; *AsciiBrandString == ' '; AsciiBrandString++);
+
+  DEBUG ((DEBUG_INFO, "Processor Brand String = %a\n", AsciiBrandString));
+
+  //
+  // Convert ASCII brand string to an allocated Unicode brand string
+  //
+  Length = AsciiStrLen (AsciiBrandString) + 1;
+  UnicodeBrandString = AllocatePool (Length * sizeof (CHAR16));
+  AsciiStrToUnicodeStrS (AsciiBrandString, UnicodeBrandString, Length);
+
+  DEBUG ((DEBUG_INFO, "Processor Unicode Brand String = %s\n", UnicodeBrandString));
+
+  return UnicodeBrandString;
+}
+
+UINT64
+MeasureTscFrequency (
+  VOID
+  )
+{
+  EFI_TPL  CurrentTpl;
+  UINT64   BeginValue;
+  UINT64   EndValue;
+  UINT64   Frequency;
+
+  //
+  // Wait for 10000us = 10ms for the calculation
+  // It needs a precise timer to calculate the ticks
+  //
+  CurrentTpl = gBS->RaiseTPL (TPL_HIGH_LEVEL);
+  BeginValue = AsmReadTsc ();
+  MicroSecondDelay (10000);
+  EndValue   = AsmReadTsc ();
+  gBS->RestoreTPL (CurrentTpl);
+  Frequency = MultU64x32 (EndValue - BeginValue, 1000);
+  Frequency = DivU64x32 (Frequency, 10);
+  return Frequency;
+}
+
 MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
 {
     CHAR8                           *OptionalStrStart;
@@ -152,7 +212,7 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     UINTN                           SocketStrLen=0;
     UINTN                           AssetTagStrLen=0;
     UINTN                           PartNumberStrLen=0;
-    UINTN                           ProcessorVoltage=0xAE;
+    UINTN                           ProcessorVoltage=(BIT7 | 9);
     UINT32                          Eax01;
     UINT32                          Ebx01;
     UINT32                          Ecx01;
@@ -169,16 +229,7 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     UINTN                           NumberOfProcessors=0;
     UINT64                          Frequency = 0;
     EFI_MP_SERVICES_PROTOCOL        *MpService;
-    EFI_DATA_HUB_PROTOCOL           *DataHub;
-    UINT64                          MonotonicCount;
-    EFI_DATA_RECORD_HEADER          *Record;
-    EFI_SUBCLASS_TYPE1_HEADER       *DataHeader;
-    UINT8                           *SrcData;
-    EFI_PROCESSOR_VERSION_DATA      *ProcessorVersion;
-    CHAR16                          *NewStringToken;
-    STRING_REF                      TokenToUpdate;
     PROCESSOR_ID_DATA               *ProcessorId = NULL;
-
 
     //
     // First check for invalid parameters.
@@ -193,59 +244,6 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     if (ProcessorId == NULL) {
       return EFI_INVALID_PARAMETER;
     }
-
-    //
-    // Get the Data Hub Protocol. Assume only one instance
-    //
-    Status = gBS->LocateProtocol (
-                    &gEfiDataHubProtocolGuid,
-                    NULL,
-                    (VOID **)&DataHub
-                    );
-    ASSERT_EFI_ERROR(Status);
-
-    MonotonicCount = 0;
-    Record = NULL;
-
-    do {
-      Status = DataHub->GetNextRecord (
-                          DataHub,
-                          &MonotonicCount,
-                          NULL,
-                          &Record
-                          );
-       if (!EFI_ERROR(Status)) {
-         if (Record->DataRecordClass == EFI_DATA_RECORD_CLASS_DATA) {
-
-            DataHeader  = (EFI_SUBCLASS_TYPE1_HEADER *)(Record + 1);
-            SrcData     = (UINT8  *)(DataHeader + 1);
-
-            //
-            // Processor
-            //
-            if (CompareGuid(&Record->DataRecordGuid, &gEfiProcessorSubClassGuid)) {
-              CopyMem (&mProcessorProducerGuid, &Record->ProducerName, sizeof(EFI_GUID));
-              switch (DataHeader->RecordType) {
-                case ProcessorVoltageRecordType:
-                  ProcessorVoltage = (((EFI_EXP_BASE10_DATA *)SrcData)->Value)/100 + 0x80;
-                  break;
-                case ProcessorCoreFrequencyRecordType:
-                  DEBUG ((EFI_D_ERROR, "ProcessorCoreFrequencyRecordType SrcData1 =%d\n", ConvertBase10ToRaw((EFI_EXP_BASE10_DATA *)SrcData)/1000000));
-                  Frequency = (ConvertBase10ToRaw((EFI_EXP_BASE10_DATA *)SrcData)/1000000);
-                  break;
-                case ProcessorVersionRecordType:
-                  ProcessorVersion = (EFI_PROCESSOR_VERSION_DATA *)SrcData;
-                  NewStringToken = HiiGetPackageString(&mProcessorProducerGuid, *ProcessorVersion, NULL);
-                  TokenToUpdate = (STRING_REF)STR_MISC_PROCESSOR_VERSION;
-                  HiiSetString(mHiiHandle, TokenToUpdate, NewStringToken, NULL);
-                  break;
-                default:
-                  break;
-              }
-            }
-          }
-        }
-    } while (!EFI_ERROR(Status) && (MonotonicCount != 0));
 
     //
     // Token to get for Socket Name
@@ -270,8 +268,7 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     //
     // Token to get for Processor Version
     //
-    TokenToGet = STRING_TOKEN (STR_MISC_PROCESSOR_VERSION);
-    Version = SmbiosMiscGetString (TokenToGet);
+    Version = CpuidSocVendorBrandString ();
     VersionStrLen = StrLen(Version);
     if (VersionStrLen > SMBIOS_STRING_MAX_LENGTH) {
         return EFI_UNSUPPORTED;
@@ -372,10 +369,12 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     SmbiosRecord -> ProcessorFamily2 = ForType4InputData-> VariableRecord.ProcessorFamily;
 
     //
-    // Processor speed
+    // Processor speed in MHz
     //
-    SmbiosRecord-> CurrentSpeed = *(UINT16*) & Frequency;
-    SmbiosRecord-> MaxSpeed = *(UINT16*) & Frequency;
+    Frequency = MeasureTscFrequency ();
+    Frequency = DivU64x32 (Frequency, 1000000);
+    SmbiosRecord-> CurrentSpeed = (UINT16)Frequency;
+    SmbiosRecord-> MaxSpeed = (UINT16)Frequency;
 
     //
     // Processor Characteristics

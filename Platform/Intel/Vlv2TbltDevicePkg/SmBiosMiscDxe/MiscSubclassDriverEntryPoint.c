@@ -1,11 +1,8 @@
 /** @file
 
-Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -13,8 +10,8 @@ Module Name:
 
 Abstract:
 
-  This driver parses the mMiscSubclassDataTable structure and reports
-  any generated data to the DataHub.
+  This driver parses the mMiscSubclassDataTable structure to
+  produce SMBIOS records.
 
 
 **/
@@ -99,7 +96,7 @@ Error:
 
 /**
   Standard EFI driver point.  This driver parses the mMiscSubclassDataTable
-  structure and reports any generated data to the DataHub.
+  structure to produce SMBIOS records.
 
   @param ImageHandle   - Handle for the image of this driver
   @param SystemTable   - Pointer to the EFI System Table

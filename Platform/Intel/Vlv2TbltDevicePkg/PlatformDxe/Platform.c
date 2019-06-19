@@ -55,7 +55,6 @@ GPIO_CONF_PAD_INIT mTB_BL_GpioInitData_SC_TRI_Exit_boot_Service[] =
 
 
 EFI_GUID mSystemHiiExportDatabase = EFI_HII_EXPORT_DATABASE_GUID;
-EFI_GUID mPlatformDriverGuid = EFI_PLATFORM_DRIVER_GUID;
 SYSTEM_CONFIGURATION  mSystemConfiguration;
 EFI_HANDLE            mImageHandle;
 BOOLEAN               mMfgMode = FALSE;

@@ -1,11 +1,8 @@
 /** @file
 
-Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -13,9 +10,8 @@ Module Name:
 
 Abstract:
 
-  Create the mMiscSubclassDataTable structure, and it is used to report
-  any generate data to the DataHub.
-
+  Create the mMiscSubclassDataTable structure used to produce
+  SMBIOS records.
 
 **/
 
@@ -31,7 +27,7 @@ MISC_SMBIOS_TABLE_EXTERNS(EFI_MISC_BIOS_VENDOR_DATA, MiscBiosVendor, MiscBiosVen
 MISC_SMBIOS_TABLE_EXTERNS(EFI_MISC_SYSTEM_MANUFACTURER_DATA, MiscSystemManufacturer, MiscSystemManufacturer);
 MISC_SMBIOS_TABLE_EXTERNS(EFI_MISC_BASE_BOARD_MANUFACTURER_DATA, MiscBaseBoardManufacturer, MiscBaseBoardManufacturer);
 MISC_SMBIOS_TABLE_EXTERNS(EFI_MISC_CHASSIS_MANUFACTURER_DATA, MiscChassisManufacturer, MiscChassisManufacturer);
-MISC_SMBIOS_TABLE_EXTERNS(EFI_CACHE_VARIABLE_RECORD, MiscProcessorCache, MiscProcessorCache); //type 7
+MISC_SMBIOS_TABLE_EXTERNS(UINTN, MiscProcessorCache, MiscProcessorCache); //type 7
 MISC_SMBIOS_TABLE_EXTERNS(EFI_CPU_DATA_RECORD, MiscProcessorInformation, MiscProcessorInformation); //type 4
 MISC_SMBIOS_TABLE_EXTERNS(EFI_MEMORY_ARRAY_LOCATION_DATA, MiscPhysicalMemoryArray,MiscPhysicalMemoryArray);
 MISC_SMBIOS_TABLE_EXTERNS(EFI_MEMORY_ARRAY_LINK_DATA, MiscMemoryDevice, MiscMemoryDevice);

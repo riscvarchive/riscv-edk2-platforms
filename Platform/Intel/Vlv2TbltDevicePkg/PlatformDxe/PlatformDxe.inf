@@ -35,7 +35,6 @@
   ClockControl.c
   Platform.c
   IchRegTable.c
-  IdccInfo.c
   IchPlatformPolicy.c
   PciDevice.c
   SlotConfig.c
@@ -80,7 +79,6 @@
   gEfiBoardFeaturesGuid
   gItkDataVarGuid
   gDmiDataGuid
-  gIdccDataHubGuid
   gEfiPciLanInfoGuid
   gEfiNormalSetupGuid
   gEfiGlobalVariableGuid

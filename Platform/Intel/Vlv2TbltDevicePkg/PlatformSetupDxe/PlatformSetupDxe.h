@@ -25,10 +25,8 @@
 #include <Protocol/DevicePathToText.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/PlatformDriverOverride.h>
-#include <Protocol/DataHub.h>
 #include <Guid/MdeModuleHii.h>
 #include <Guid/VariableFormat.h>
-#include <Guid/DataHubRecords.h>
 
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
