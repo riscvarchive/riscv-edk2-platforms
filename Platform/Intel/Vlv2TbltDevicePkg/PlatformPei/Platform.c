@@ -813,14 +813,6 @@ PeiInitPlatform (
     sizeof (EFI_PLATFORM_INFO_HOB)
     );
 
-  //
-  // Set the new boot mode for MRC
-  //
-#ifdef NOCS_S3_SUPPORT
-  Status = UpdateBootMode (PeiServices);
-  ASSERT_EFI_ERROR (Status);
-#endif
-
   DEBUG((EFI_D_INFO, "Setup MMIO size ... \n\n"));
 
   //

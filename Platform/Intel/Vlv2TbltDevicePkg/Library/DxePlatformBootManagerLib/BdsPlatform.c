@@ -1,7 +1,7 @@
 /** @file
   This file include all platform action which can be customized by IBV/OEM.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -1164,7 +1164,7 @@ PlatformBootManagerBeforeConsole (
   // Fill ConIn/ConOut in Full Configuration boot mode
   //
   gBootMode = GetBootModeHob();
-  DEBUG ((DEBUG_INFO, "PlatformBootManagerInit - %x\n", gBootMode));
+  DEBUG ((DEBUG_INFO, "PlatformBootManagerBeforeConsole: BootMode = %x\n", gBootMode));
 
   if (gBootMode == BOOT_WITH_FULL_CONFIGURATION ||
       gBootMode == BOOT_WITH_DEFAULT_SETTINGS ||
@@ -1263,7 +1263,18 @@ ConnectSequence (
   IN EFI_BOOT_MODE         BootMode
   )
 {
-  EfiBootManagerConnectAll ();
+  switch (BootMode) {
+  case BOOT_ASSUMING_NO_CONFIGURATION_CHANGES:
+  case BOOT_WITH_MINIMAL_CONFIGURATION:
+  case BOOT_ON_S4_RESUME:
+    break;
+  case BOOT_WITH_FULL_CONFIGURATION:
+  case BOOT_WITH_FULL_CONFIGURATION_PLUS_DIAGNOSTICS:
+  case BOOT_WITH_DEFAULT_SETTINGS:
+  default:
+    EfiBootManagerConnectAll ();
+    break;
+  }
 }
 
 /**
@@ -1311,6 +1322,7 @@ PlatformBootManagerAfterConsole (
   VOID
   )
 {
+  EFI_STATUS                    Status;
   EFI_BOOT_MODE                 LocalBootMode;
 
   DEBUG ((DEBUG_INFO, "PlatformBootManagerAfterConsole\n"));
@@ -1319,7 +1331,7 @@ PlatformBootManagerAfterConsole (
   // Get current Boot Mode
   //
   LocalBootMode = gBootMode;
-  DEBUG ((DEBUG_INFO, "Current local bootmode - %x\n", LocalBootMode));
+  DEBUG ((DEBUG_INFO, "PlatformBootManagerAfterConsole: BootMode = %x\n", gBootMode));
 
   //
   // Logo show
@@ -1370,6 +1382,19 @@ PlatformBootManagerAfterConsole (
     //
 
     break;
+  }
+
+  //
+  // Use a DynamicHii type pcd to save the boot status, which is used to
+  // control configuration mode, such as FULL/MINIMAL/NO_CHANGES configuration.
+  //
+  DEBUG ((DEBUG_INFO, "PcdBootState = %d\n", PcdGetBool(PcdBootState)));
+  if (PcdGetBool(PcdBootState)) {
+    Status = PcdSetBoolS(PcdBootState, FALSE);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "Set PcdBootState to FALSE failed.\n"));
+    }
+    DEBUG ((DEBUG_INFO, "PcdBootState = %d\n", PcdGetBool(PcdBootState)));
   }
 
   Print (L"Press F7 for BootMenu!\n");

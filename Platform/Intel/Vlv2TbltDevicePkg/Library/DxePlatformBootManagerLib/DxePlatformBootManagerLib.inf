@@ -1,7 +1,7 @@
 ### @file
 # Component name for module DxePlatformBootManagerLib
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -48,6 +48,7 @@
   MdeModulePkg/MdeModulePkg.dec
   SecurityPkg/SecurityPkg.dec
   MinPlatformPkg/MinPlatformPkg.dec
+  Vlv2TbltDevicePkg/PlatformPkg.dec
 
 [Pcd]
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable                    ## CONSUMES
@@ -66,6 +67,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTrustedConsoleInputDevicePath  ## CONSUMES
   gMinPlatformPkgTokenSpaceGuid.PcdTrustedConsoleOutputDevicePath ## CONSUMES
   gMinPlatformPkgTokenSpaceGuid.PcdTrustedStorageDevicePath       ## CONSUMES
+  gPlatformModuleTokenSpaceGuid.PcdBootState
 
 [Sources]
   BdsPlatform.c

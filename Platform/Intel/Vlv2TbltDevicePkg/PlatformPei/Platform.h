@@ -1,11 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 **/
 
@@ -23,26 +20,6 @@ typedef struct {
 } STALL_CALLBACK_STATE_INFORMATION;
 
 #define STALL_PEIM_FROM_THIS(a) CR (a, STALL_CALLBACK_STATE_INFORMATION, StallNotify, STALL_PEIM_SIGNATURE)
-
-#ifdef NOCS_S3_SUPPORT
-
-/**
-  Peform the boot mode determination logic
-  If the box is closed, then
-  1. If it's first time to boot, it's boot with full config .
-  2. If the ChassisIntrution is selected, force to be a boot with full config
-  3. Otherwise it's boot with no change.
-
-  @param  PeiServices General purpose services available to every PEIM.
-  @param  BootMode The detected boot mode.
-
-  @retval EFI_SUCCESS if the boot mode could be set
-**/
-EFI_STATUS
-UpdateBootMode (
-  IN CONST EFI_PEI_SERVICES     **PeiServices
-  );
-#endif
 
 /**
   This function reset the entire platform, including all processor and devices, and

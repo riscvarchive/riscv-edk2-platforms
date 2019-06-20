@@ -1448,60 +1448,9 @@ CheckSystemConfigLoad(SYSTEM_CONFIGURATION *SystemConfigPtr)
   }
 }
 
-
-//
-// "SecureBootEnable" variable for the Secure boot feature enable/disable.
-//
-#define EFI_SECURE_BOOT_ENABLE_NAME      L"SecureBootEnable"
-extern EFI_GUID gEfiSecureBootEnableDisableGuid;
-
-
 VOID
 CheckSystemConfigSave(SYSTEM_CONFIGURATION *SystemConfigPtr)
 {
-  EFI_STATUS              Status;
-  UINT8                   SecureBootCfg;
-  BOOLEAN                 SecureBootNotFound;
-  UINTN                   DataSize;
-
-
-    //
-    // Secure Boot configuration changes
-	//
-    DataSize = sizeof(SecureBootCfg);
-    SecureBootNotFound = FALSE;
-    Status = gRT->GetVariable (
-                    EFI_SECURE_BOOT_ENABLE_NAME,
-                    &gEfiSecureBootEnableDisableGuid,
-                    NULL,
-                    &DataSize,
-                    &SecureBootCfg
-                    );
-
-    if (EFI_ERROR(Status)) {
-      SecureBootNotFound = TRUE;
-    }
-    if (SecureBootNotFound) {
-      Status = gRT->GetVariable (
-                      EFI_SECURE_BOOT_ENABLE_NAME,
-                      &gEfiSecureBootEnableDisableGuid,
-                      NULL,
-                      &DataSize,
-                      &SecureBootCfg
-                      );
-      ASSERT_EFI_ERROR(Status);
-    }
-    if ((SecureBootCfg) != SystemConfigPtr->SecureBoot) {
-      SecureBootCfg = !SecureBootCfg;
-      Status = gRT->SetVariable (
-                      EFI_SECURE_BOOT_ENABLE_NAME,
-                      &gEfiSecureBootEnableDisableGuid,
-                      EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS,
-                      sizeof (UINT8),
-                      &SecureBootCfg
-                      );
-    }
-
 }
 
 VOID

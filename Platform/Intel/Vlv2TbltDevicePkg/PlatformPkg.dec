@@ -161,6 +161,14 @@
   gPlatformModuleTokenSpaceGuid.PcdInConfigMode|FALSE|BOOLEAN|0x80000001
   gPlatformModuleTokenSpaceGuid.PcdConnectUSBKeyboardonWaitForKeyStroke|FALSE|BOOLEAN|0x80000002
   gPlatformModuleTokenSpaceGuid.PcdEnableWatchdogSwSmiInputValue|0|UINT8|0x80000003
+
+  ## Indicates if the machine has completed one boot cycle before.
+  #  After the complete boot, BootState will be set to FALSE.<BR><BR>
+  #   TRUE  - The complete boot cycle has not happened before.<BR>
+  #   FALSE - The complete boot cycle has happened before.<BR>
+  # @Prompt Boot State Flag
+  gPlatformModuleTokenSpaceGuid.PcdBootState|TRUE|BOOLEAN|0x80000004
+
 #
 #device firmware update support
 #

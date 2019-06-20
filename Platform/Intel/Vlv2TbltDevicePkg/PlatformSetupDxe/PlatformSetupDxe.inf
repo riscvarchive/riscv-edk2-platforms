@@ -93,7 +93,6 @@
   gEfiIfrTianoGuid                              ## CONSUMES ## Guid
   gEfiPlatformInfoGuid
   gEfiNormalSetupGuid
-  gEfiSecureBootEnableDisableGuid
   gOsSelectionVariableGuid
   gEfiGlobalVariableGuid
 

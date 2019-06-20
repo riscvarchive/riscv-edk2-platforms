@@ -84,7 +84,6 @@
   gEfiGlobalVariableGuid
   gEfiEventExitBootServicesGuid
   gEfiVlv2VariableGuid
-  gEfiSecureBootEnableDisableGuid
   gEfiEndOfDxeEventGroupGuid
 
 [Protocols]

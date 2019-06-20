@@ -1,10 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2018, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 Module Name:
 
@@ -84,6 +82,7 @@ CapsulePpiNotifyCallback (
     if (Status == EFI_SUCCESS) {
       if (Capsule->CheckCapsuleUpdate ((EFI_PEI_SERVICES**)PeiServices) == EFI_SUCCESS) {
         BootMode = BOOT_ON_FLASH_UPDATE;
+        DEBUG ((EFI_D_ERROR, "Setting BootMode to BOOT_ON_FLASH_UPDATE\n"));
         Status = (*PeiServices)->SetBootMode((const EFI_PEI_SERVICES **)PeiServices, BootMode);
         ASSERT_EFI_ERROR (Status);
       }
@@ -92,98 +91,6 @@ CapsulePpiNotifyCallback (
 
   return Status;
 }
-
-#ifdef NOCS_S3_SUPPORT
-EFI_STATUS
-UpdateBootMode (
-  IN CONST EFI_PEI_SERVICES     **PeiServices
-  )
-{
-  EFI_STATUS      Status;
-  EFI_BOOT_MODE   BootMode;
-  UINT16          SleepType;
-  CHAR16          *strBootMode;
-
-  Status = (*PeiServices)->GetBootMode(PeiServices, &BootMode);
-  ASSERT_EFI_ERROR (Status);
-  if (BootMode  == BOOT_IN_RECOVERY_MODE){
-    return Status;
-  }
-
-  //
-  // Let's assume things are OK if not told otherwise
-  //
-  BootMode = BOOT_WITH_FULL_CONFIGURATION;
-
-  if (GetSleepTypeAfterWakeup (PeiServices, &SleepType)) {
-    switch (SleepType) {
-      case V_PCH_ACPI_PM1_CNT_S3:
-        BootMode = BOOT_ON_S3_RESUME;
-        Status = (*PeiServices)->NotifyPpi (PeiServices, &mCapsuleNotifyList[0]);
-        ASSERT_EFI_ERROR (Status);
-        break;
-
-      case V_PCH_ACPI_PM1_CNT_S4:
-        BootMode = BOOT_ON_S4_RESUME;
-        break;
-
-      case V_PCH_ACPI_PM1_CNT_S5:
-        BootMode = BOOT_ON_S5_RESUME;
-        break;
-    } // switch (SleepType)
-  }
-
-  if (IsFastBootEnabled (PeiServices)) {
-    DEBUG ((EFI_D_INFO, "Prioritizing Boot mode to BOOT_WITH_MINIMAL_CONFIGURATION\n"));
-    PrioritizeBootMode (&BootMode, BOOT_WITH_MINIMAL_CONFIGURATION);
-  }
-
-  switch (BootMode) {
-    case BOOT_WITH_FULL_CONFIGURATION:
-      strBootMode = L"BOOT_WITH_FULL_CONFIGURATION";
-      break;
-    case BOOT_WITH_MINIMAL_CONFIGURATION:
-      strBootMode = L"BOOT_WITH_MINIMAL_CONFIGURATION";
-      break;
-    case BOOT_ASSUMING_NO_CONFIGURATION_CHANGES:
-      strBootMode = L"BOOT_ASSUMING_NO_CONFIGURATION_CHANGES";
-      break;
-    case BOOT_WITH_FULL_CONFIGURATION_PLUS_DIAGNOSTICS:
-      strBootMode = L"BOOT_WITH_FULL_CONFIGURATION_PLUS_DIAGNOSTICS";
-      break;
-    case BOOT_WITH_DEFAULT_SETTINGS:
-      strBootMode = L"BOOT_WITH_DEFAULT_SETTINGS";
-      break;
-    case BOOT_ON_S4_RESUME:
-      strBootMode = L"BOOT_ON_S4_RESUME";
-      break;
-    case BOOT_ON_S5_RESUME:
-      strBootMode = L"BOOT_ON_S5_RESUME";
-      break;
-    case BOOT_ON_S2_RESUME:
-      strBootMode = L"BOOT_ON_S2_RESUME";
-      break;
-    case BOOT_ON_S3_RESUME:
-      strBootMode = L"BOOT_ON_S3_RESUME";
-
-      break;
-    case BOOT_ON_FLASH_UPDATE:
-      strBootMode = L"BOOT_ON_FLASH_UPDATE";
-      break;
-    case BOOT_IN_RECOVERY_MODE:
-      strBootMode = L"BOOT_IN_RECOVERY_MODE";
-      break;
-    default:
-      strBootMode = L"Unknown boot mode";
-  } // switch (BootMode)
-
-  DEBUG ((EFI_D_ERROR, "Setting BootMode to %s\n", strBootMode));
-  Status = (*PeiServices)->SetBootMode(PeiServices, BootMode);
-  ASSERT_EFI_ERROR (Status);
-
-  return Status;
-}
-#endif
 
 /**
   Get sleep type after wakeup

@@ -680,6 +680,7 @@
 [PcdsDynamicHii.common.DEFAULT]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
   gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
+  gPlatformModuleTokenSpaceGuid.PcdBootState|L"BootState"|gPlatformModuleTokenSpaceGuid|0x0|TRUE
 
 [PcdsDynamicDefault.common.DEFAULT]
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0
@@ -733,6 +734,7 @@
   gEfiVLVTokenSpaceGuid.PcdCpuLockBoxDataAddress|0
   gEfiVLVTokenSpaceGuid.PcdCpuSmramCpuDataAddress|0
   gEfiVLVTokenSpaceGuid.PcdCpuLockBoxSize|0
+  gEfiSecurityPkgTokenSpaceGuid.PcdUserPhysicalPresence|TRUE
 
 [PcdsDynamicExDefault.X64.DEFAULT]
 !if $(RECOVERY_ENABLE)
