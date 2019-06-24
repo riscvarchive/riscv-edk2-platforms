@@ -89,7 +89,7 @@ for (( i=1; i<=$#; ))
       Build_Flags="$Build_Flags --quiet"
       shift
     elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/L" ]; then
-      Build_Flags="$Build_Flags -j EKD2.log"
+      Build_Flags="$Build_Flags -j EDK2.log"
       shift
     elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/C" ]; then
       echo Removing previous build files ...
