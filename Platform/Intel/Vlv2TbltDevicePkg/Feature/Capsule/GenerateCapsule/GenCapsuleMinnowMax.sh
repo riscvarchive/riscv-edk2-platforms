@@ -13,7 +13,10 @@ FMP_CAPSULE_VERSION=0x0000000C
 FMP_CAPSULE_STRING=0.0.0.12
 FMP_CAPSULE_NAME="Intel MinnowMax DEBUG UEFI $FMP_CAPSULE_STRING"
 FMP_CAPSULE_LSV=0x00000000
-FMP_CAPSULE_PAYLOAD=$WORKSPACE/Build/Vlv2TbltDevicePkg/DEBUG_GCC49/FV/Vlv.ROM
+FMP_CAPSULE_PAYLOAD=$WORKSPACE/Build/Vlv2TbltDevicePkg/DEBUG_${TOOL_CHAIN_TAG}/FV/Vlv.ROM
+FMP_CAPSULE_DIR=$WORKSPACE/Build/Vlv2TbltDevicePkg/Capsules/
+
+PKCS7SIGN_DIR=$WORKSPACE/edk2/BaseTools/Source/Python/Pkcs7Sign/
 
 if [ ! -e "$FMP_CAPSULE_PAYLOAD" ] ; then
   return
@@ -34,12 +37,8 @@ if [ -e NewCert.pem ]; then
     --signer-private-cert=NewCert.pem \
     --other-public-cert=NewSub.pub.pem \
     --trusted-public-cert=NewRoot.pub.pem \
-    -o $FMP_CAPSULE_FILE \
+    -o $FMP_CAPSULE_DIR/NewCert/$FMP_CAPSULE_FILE \
     $FMP_CAPSULE_PAYLOAD
-
-  cp $FMP_CAPSULE_FILE $WORKSPACE/Build/Vlv2TbltDevicePkg/Capsules/NewCert
-
-  rm $FMP_CAPSULE_FILE
 fi
 
 #
@@ -53,13 +52,8 @@ GenerateCapsule \
   --lsv $FMP_CAPSULE_LSV \
   --capflag PersistAcrossReset \
   --capflag InitiateReset \
-  --signer-private-cert=$WORKSPACE/edk2/BaseTools/Source/Python/Pkcs7Sign/TestCert.pem \
-  --other-public-cert=$WORKSPACE/edk2/BaseTools/Source/Python/Pkcs7Sign/TestSub.pub.pem \
-  --trusted-public-cert=$WORKSPACE/edk2/BaseTools/Source/Python/Pkcs7Sign/TestRoot.pub.pem \
-  -o $FMP_CAPSULE_FILE \
+  --signer-private-cert=$PKCS7SIGN_DIR/TestCert.pem \
+  --other-public-cert=$PKCS7SIGN_DIR/TestSub.pub.pem \
+  --trusted-public-cert=$PKCS7SIGN_DIR/TestRoot.pub.pem \
+  -o $FMP_CAPSULE_DIR/TestCert/$FMP_CAPSULE_FILE \
   $FMP_CAPSULE_PAYLOAD
-
-cp $FMP_CAPSULE_FILE $WORKSPACE/Build/Vlv2TbltDevicePkg/Capsules/TestCert
-
-rm $FMP_CAPSULE_FILE
-
