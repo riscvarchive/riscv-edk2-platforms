@@ -1,11 +1,9 @@
 /** @file
   Gpio setting for multiplatform..
 
-  Copyright (c) 2013 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
@@ -24,8 +22,6 @@
 //
 //AlpineValley platform code end
 //
-
-EFI_GUID  gPeiSmbusPpiGuid               = EFI_PEI_SMBUS_PPI_GUID;
 
 /**
   @param None
@@ -66,7 +62,7 @@ ConfigurePlatformSysCtrlGpio (
 
   Status = (**PeiServices).LocatePpi (
                             (const EFI_PEI_SERVICES **)PeiServices,
-                            &gPeiSmbusPpiGuid,
+                            &gEfiPeiSmbus2PpiGuid,
                             0,
                             NULL,
                             (void **)&SmbusPpi
@@ -92,7 +88,7 @@ ConfigurePlatformSysCtrlGpio (
 static EFI_PEI_NOTIFY_DESCRIPTOR    mNotifyList[] = {
   {
     EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK| EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST,
-    &gEfiPeiSmbusPpiGuid,
+    &gEfiPeiSmbus2PpiGuid,
     ConfigurePlatformSysCtrlGpio
   }
 };

@@ -59,7 +59,7 @@ Abstract:
 #include <Ppi/Speaker.h>
 #include <Guid/MemoryTypeInformation.h>
 #include <Ppi/Cache.h>
-#include <Ppi/Smbus.h>
+#include <Ppi/Smbus2.h>
 #include <Library/PchPlatformLib.h>
 #include <Ppi/SmbusPolicy.h>
 #include <Ppi/Reset.h>
@@ -1453,14 +1453,6 @@ EFIAPI
 SetDxeCacheMode (
   IN  CONST EFI_PEI_SERVICES    **PeiServices
   );
-
-EFI_STATUS
-GPIO_initialization (
-  IN EFI_PEI_SERVICES                   **PeiServices,
-  IN EFI_PEI_NOTIFY_DESCRIPTOR          *NotifyDescriptor,
-  IN VOID                               *SmbusPpi
-  );
-
 
 BOOLEAN
 IsRtcUipAlwaysSet (

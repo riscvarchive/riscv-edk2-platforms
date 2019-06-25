@@ -3,11 +3,10 @@
 
   This file includes package header files, library classes.
 
-  Copyright (c) 2010 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2010 - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
 **/
 
 #ifndef _BOARD_CLK_GEN_H_
@@ -17,8 +16,7 @@
 #include <Library/HobLib.h>
 #include <Library/IoLib.h>
 #include <Library/DebugLib.h>
-#include <Library/SmbusLib.h>
-#include <Ppi/Smbus.h>
+#include <Ppi/Smbus2.h>
 #include <IndustryStandard/SmBus.h>
 #include <Guid/PlatformInfo.h>
 

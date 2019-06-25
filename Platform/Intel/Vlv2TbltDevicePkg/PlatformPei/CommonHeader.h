@@ -42,7 +42,6 @@
 #include <Library/PciLib.h>
 #include <Library/ReportStatusCodeLib.h>
 #include <Library/PcdLib.h>
-#include <Library/SmbusLib.h>
 #include <Library/TimerLib.h>
 #include <Library/PrintLib.h>
 #include <Library/ResetSystemLib.h>

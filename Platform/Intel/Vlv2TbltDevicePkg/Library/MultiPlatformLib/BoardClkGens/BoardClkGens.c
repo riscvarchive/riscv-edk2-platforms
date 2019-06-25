@@ -1,11 +1,9 @@
 /** @file
   Clock generator setting for multiplatform.
 
-  Copyright (c) 2010 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
-  SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2010 - 2019, Intel Corporation. All rights reserved.<BR>
 
-                                                                                   
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
@@ -44,7 +42,7 @@ CLOCK_GENERATOR_DETAILS   mSupportedClockGeneratorTable[] =
 EFI_STATUS
 ConfigureClockGenerator (
   IN     EFI_PEI_SERVICES              **PeiServices,
-  IN     EFI_PEI_SMBUS_PPI                 *SmbusPpi,
+  IN     EFI_PEI_SMBUS2_PPI            *SmbusPpi,
   IN     CLOCK_GENERATOR_TYPE          ClockType,
   IN     UINT8                         ClockAddress,
   IN     UINTN                         ConfigurationTableLength,
@@ -76,7 +74,6 @@ ConfigureClockGenerator (
   Length = sizeof (Buffer);
   Command = 0;
   Status = SmbusPpi->Execute (
-    PeiServices,
     SmbusPpi,
     SlaveAddress,
     Command,
@@ -116,7 +113,6 @@ ConfigureClockGenerator (
   Buffer[30] = 0x00;
 
   Status = SmbusPpi->Execute (
-    PeiServices,
     SmbusPpi,
     SlaveAddress,
     Command,
@@ -127,7 +123,6 @@ ConfigureClockGenerator (
     );
 #else
   Status = SmbusPpi->Execute (
-    PeiServices,
     SmbusPpi,
     SlaveAddress,
     Command,
@@ -142,7 +137,6 @@ ConfigureClockGenerator (
     Command = 4;
     Length = 1;
   Status = SmbusPpi->Execute (
-    PeiServices,
     SmbusPpi,
     SlaveAddress,
     Command,
@@ -164,7 +158,6 @@ ConfigureClockGenerator (
     Length = sizeof (Buffer);
       Command = 0;
       Status =  SmbusPpi->Execute (
-        PeiServices,
         SmbusPpi,
         SlaveAddress,
         Command,
@@ -201,7 +194,7 @@ ConfigureClockGenerator (
 UINT8
 ReadClockGeneratorID (
   IN     EFI_PEI_SERVICES              **PeiServices,
-  IN     EFI_PEI_SMBUS_PPI                 *SmbusPpi,
+  IN     EFI_PEI_SMBUS2_PPI            *SmbusPpi,
   IN     UINT8                         ClockAddress
   )
 {
@@ -217,7 +210,6 @@ ReadClockGeneratorID (
   Length = sizeof (Buffer);
   Command = 0;
   SmbusPpi->Execute (
-    PeiServices,
     SmbusPpi,
     SlaveAddress,
     Command,
@@ -289,7 +281,7 @@ ConfigurePlatformClocks (
   //
   Status = (**PeiServices).LocatePpi (
                              (CONST EFI_PEI_SERVICES **) PeiServices,
-                             &gEfiPeiSmbusPpiGuid,
+                             &gEfiPeiSmbus2PpiGuid,
                              0,
                              NULL,
                              &SmbusPpi
@@ -300,8 +292,7 @@ ConfigurePlatformClocks (
   SlaveAddress.SmbusDeviceAddress = ClockAddress >> 1;
   Length = 1;
   Command = 0x87;   //Control Register 7 Vendor ID Check
-  Status = ((EFI_PEI_SMBUS_PPI *) SmbusPpi)->Execute (
-                                               PeiServices,
+  Status = ((EFI_PEI_SMBUS2_PPI *) SmbusPpi)->Execute (
                                                SmbusPpi,
                                                SlaveAddress,
                                                Command,
@@ -405,7 +396,7 @@ ConfigurePlatformClocks (
 static EFI_PEI_NOTIFY_DESCRIPTOR    mNotifyList[] = {
   {
     EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK| EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST,
-    &gEfiPeiSmbusPpiGuid,
+    &gEfiPeiSmbus2PpiGuid,
     ConfigurePlatformClocks
   }
 };

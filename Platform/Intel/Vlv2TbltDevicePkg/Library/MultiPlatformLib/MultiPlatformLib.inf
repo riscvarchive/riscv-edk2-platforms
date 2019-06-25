@@ -54,7 +54,6 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
 
 [LibraryClasses]
@@ -64,6 +63,7 @@
 
 [Ppis]
   gEfiPeiReadOnlyVariable2PpiGuid
+  gEfiPeiSmbus2PpiGuid
 
 [Pcd.common]
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress

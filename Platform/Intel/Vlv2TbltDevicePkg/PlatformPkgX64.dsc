@@ -171,7 +171,7 @@
   #
   # ICH
   #
-  SmbusLib|Vlv2TbltDevicePkg/Library/SmbusLib/SmbusLib.inf
+  SmbusLib|MdePkg/Library/BaseSmbusLibNull/BaseSmbusLibNull.inf
   SmmLib|Vlv2TbltDevicePkg/Library/PchSmmLib/PchSmmLib.inf
 
   #

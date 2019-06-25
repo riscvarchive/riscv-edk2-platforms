@@ -72,7 +72,6 @@
   DebugLib
   HobLib
   IoLib
-  MultiPlatformLib
   MtrrLib
   PerformanceLib
   MonoStatusCodeLib

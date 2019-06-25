@@ -3,11 +3,10 @@
 
   This file includes package header files, library classes.
 
-  Copyright (c) 2013 - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
 **/
 
 #ifndef _BOARDGPIOS_H_
@@ -20,7 +19,7 @@
 #include <Library/IoLib.h>
 #include <Library/HobLib.h>
 #include <Guid/PlatformInfo.h>
-#include <Ppi/Smbus.h>
+#include <Ppi/Smbus2.h>
 #include <Ppi/ReadOnlyVariable2.h>
 #include <Guid/SetupVariable.h>
 
