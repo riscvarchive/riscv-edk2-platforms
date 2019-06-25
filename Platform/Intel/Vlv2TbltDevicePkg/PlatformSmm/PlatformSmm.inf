@@ -36,6 +36,7 @@
 [LibraryClasses]
   UefiDriverEntryPoint
   UefiBootServicesTableLib
+  SmmServicesTableLib
   DebugLib
   IoLib
   BaseLib
@@ -52,15 +53,14 @@
 [Protocols]
   gEfiSmmIchnDispatchProtocolGuid
   gEfiGlobalNvsAreaProtocolGuid
-  gEfiSmmSwDispatchProtocolGuid
-  gEfiSmmPowerButtonDispatchProtocolGuid
-  gEfiSmmSxDispatchProtocolGuid
+  gEfiSmmSwDispatch2ProtocolGuid
+  gEfiSmmPowerButtonDispatch2ProtocolGuid
+  gEfiSmmSxDispatch2ProtocolGuid
   gEfiSmmVariableProtocolGuid
 
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
 
@@ -68,11 +68,11 @@
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
 
 [Depex]
-  gEfiSmmAccess2ProtocolGuid               AND
-  gEfiSmmPowerButtonDispatchProtocolGuid  AND
-  gEfiSmmSxDispatchProtocolGuid           AND
+  gEfiSmmAccess2ProtocolGuid              AND
+  gEfiSmmPowerButtonDispatch2ProtocolGuid AND
+  gEfiSmmSxDispatch2ProtocolGuid          AND
   gEfiSmmIchnDispatchProtocolGuid         AND
-  gEfiSmmSwDispatchProtocolGuid           AND
+  gEfiSmmSwDispatch2ProtocolGuid          AND
   gEfiVariableArchProtocolGuid            AND
   gEfiVariableWriteArchProtocolGuid       AND
   gEfiGlobalNvsAreaProtocolGuid

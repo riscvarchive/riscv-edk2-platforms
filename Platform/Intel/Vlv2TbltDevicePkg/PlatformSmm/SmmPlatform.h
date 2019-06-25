@@ -21,18 +21,16 @@ Abstract:
 
 
 
-#include <Protocol/SmmBase.h>
-#include <Protocol/FirmwareVolume.h>
-#include <Protocol/SmmPowerButtonDispatch.h>
-#include <Protocol/SmmSxDispatch.h>
-#include <Protocol/SmmSwDispatch.h>
+#include <Protocol/SmmBase2.h>
+#include <Protocol/SmmPowerButtonDispatch2.h>
+#include <Protocol/SmmSxDispatch2.h>
 #include <Protocol/SmmSwDispatch2.h>
 #include <Protocol/SmmIchnDispatch.h>
-#include <Protocol/SmmAccess.h>
+#include <Protocol/SmmAccess2.h>
 #include <Protocol/SmmVariable.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Protocol/LoadedImage.h>
-#include "Protocol/GlobalNvsArea.h"
+#include <Protocol/GlobalNvsArea.h>
 #include <Guid/SetupVariable.h>
 #include <Guid/EfiVpdData.h>
 #include <Guid/PciLanInfo.h>
@@ -42,6 +40,7 @@ Abstract:
 #include "PlatformBaseAddresses.h"
 
 #include <Library/UefiBootServicesTableLib.h>
+#include <Library/SmmServicesTableLib.h>
 #include <Library/S3BootScriptLib.h>
 #include <Library/IoLib.h>
 #include <Library/DebugLib.h>
@@ -130,53 +129,59 @@ extern EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL *mPciRootBridgeIo;
 //
 // Callback function prototypes
 //
-VOID
+EFI_STATUS
 EFIAPI
 PowerButtonCallback (
-  IN  EFI_HANDLE                              DispatchHandle,
-  IN  EFI_SMM_POWER_BUTTON_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
-VOID
-S5SleepWakeOnLanCallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
-  );
-
-VOID
+EFI_STATUS
 EFIAPI
 S5SleepAcLossCallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
 
-VOID
+EFI_STATUS
 EFIAPI    
 S4S5CallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
-VOID
+EFI_STATUS
 EFIAPI    
 EnableAcpiCallback (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SW_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
-VOID
+EFI_STATUS
 EFIAPI
 DisableAcpiCallback (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SW_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
-VOID
+EFI_STATUS
 EFIAPI
 SmmReadyToBootCallback (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SW_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
 VOID
@@ -185,53 +190,24 @@ DummyTco1Callback (
   IN  EFI_SMM_ICHN_DISPATCH_CONTEXT           *DispatchContext
   );
 
-
-VOID
-PerrSerrCallback (
-  IN  EFI_HANDLE                              DispatchHandle,
-  IN  EFI_SMM_ICHN_DISPATCH_CONTEXT           *DispatchContext
-  );
-
-VOID
-RiCallback (
-  IN  EFI_HANDLE                              DispatchHandle,
-  IN  EFI_SMM_ICHN_DISPATCH_CONTEXT           *DispatchContext
-  );
-
-
 VOID
 SetAfterG3On (
   BOOLEAN Enable
   );
 
-VOID
-TurnOffVregUsb (
-  );
-
-VOID
-PStateSupportCallback (
-  IN  EFI_HANDLE                              DispatchHandle,
-  IN  EFI_SMM_SW_DISPATCH_CONTEXT             *DispatchContext
-  );
-
-VOID
-PStateTransitionCallback (
-  IN  EFI_HANDLE                              DispatchHandle,
-  IN  EFI_SMM_SW_DISPATCH_CONTEXT             *DispatchContext
-  );
-
 EFI_STATUS
 EFIAPI    
 SxSleepEntryCallBack (
-  IN  EFI_HANDLE                    DispatchHandle,
-  IN  EFI_SMM_SX_DISPATCH_CONTEXT   *DispatchContext
+  IN EFI_HANDLE  DispatchHandle,
+  IN CONST VOID  *Context         OPTIONAL,
+  IN OUT VOID    *CommBuffer      OPTIONAL,
+  IN OUT UINTN   *CommBufferSize  OPTIONAL
   );
 
 EFI_STATUS
 SaveRuntimeScriptTable (
   VOID
   );
-
 
 #endif
 
