@@ -4,10 +4,12 @@
 # ICH SMM Library that layers on top of the I/O Library to directly
 #  access SMM power management registers.
 # Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
-#                                                                                  
+#                                                                                  
+
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 
-#                                                                                  
+#                                                                                  
+
 #
 #
 #
@@ -30,7 +32,7 @@
 
 [Sources]
   PchSmmLib.c
-
+  CommonHeader.h
 
 [Packages]
   MdePkg/MdePkg.dec

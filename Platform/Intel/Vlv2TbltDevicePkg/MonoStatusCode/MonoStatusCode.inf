@@ -29,6 +29,7 @@
   PlatformStatusCode.c
   PlatformStatusCode.h
   PeiPostCode.c
+  EfiStatusCode.h
 
 [Packages]
   MdePkg/MdePkg.dec

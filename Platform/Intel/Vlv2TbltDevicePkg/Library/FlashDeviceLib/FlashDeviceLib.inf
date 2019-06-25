@@ -26,7 +26,7 @@
 
 [Sources]
   FlashDeviceLib.c
-
+  SpiChipDefinitions.h
 
 [Packages]
   MdePkg/MdePkg.dec
