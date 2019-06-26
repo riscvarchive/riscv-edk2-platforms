@@ -30,7 +30,7 @@ Abstract:
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/DebugLib.h>
-#include <Protocol/FirmwareVolume.h>
+#include <Protocol/FirmwareVolume2.h>
 #include <Library/PcdLib.h>
 #include <IndustryStandard/HighPrecisionEventTimerTable.h>
 #include <IndustryStandard/Acpi.h>

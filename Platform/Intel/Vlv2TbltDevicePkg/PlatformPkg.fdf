@@ -504,7 +504,7 @@ INF RuleOverride = BINARY Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/$(DXE_ARCHI
   #
 INF MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
 INF MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
-INF IntelFrameworkModulePkg/Universal/Acpi/AcpiSupportDxe/AcpiSupportDxe.inf
+INF MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
 INF RuleOverride = ACPITABLE2 Vlv2DeviceRefCodePkg/ValleyView2Soc/CPU/PowerManagement/AcpiTables/PowerManagementAcpiTables.inf
 
 INF RuleOverride = ACPITABLE Vlv2DeviceRefCodePkg/AcpiTablesPCAT/AcpiTables.inf

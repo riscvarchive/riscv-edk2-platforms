@@ -35,8 +35,7 @@ Abstract:
 #include <Guid/SetupVariable.h>
 #include <Guid/PlatformInfo.h>
 #include <Guid/BoardFeatures.h>
-#include <Protocol/AcpiSupport.h>
-#include <Protocol/AcpiS3Save.h>
+#include <Protocol/AcpiTable.h>
 #include <Library/CpuIA32.h>
 #include <SetupMode.h>
 #include <Guid/AcpiTableStorage.h>
@@ -142,15 +141,15 @@ LocateSupportProtocol (
     //
     // See if it has the ACPI storage file.
     //
-    Status = ((EFI_FIRMWARE_VOLUME_PROTOCOL *) (*Instance))->ReadFile (
-                                                              *Instance,
-                                                              &gEfiAcpiTableStorageGuid,
-                                                              NULL,
-                                                              &Size,
-                                                              &FileType,
-                                                              &Attributes,
-                                                              &FvStatus
-                                                              );
+    Status = ((EFI_FIRMWARE_VOLUME2_PROTOCOL *) (*Instance))->ReadFile (
+                                                                *Instance,
+                                                                &gEfiAcpiTableStorageGuid,
+                                                                NULL,
+                                                                &Size,
+                                                                &FileType,
+                                                                &Attributes,
+                                                                &FvStatus
+                                                                );
 
     //
     // If we found it, then we are done.
@@ -633,13 +632,11 @@ OnReadyToBoot (
   )
 {
   EFI_STATUS                  Status;
-  EFI_ACPI_TABLE_VERSION      TableVersion;
-  EFI_ACPI_SUPPORT_PROTOCOL   *AcpiSupport;
   SYSTEM_CONFIGURATION        SetupVarBuffer;
   UINTN                       VariableSize;
   EFI_PLATFORM_CPU_INFO       *PlatformCpuInfoPtr = NULL;
   EFI_PLATFORM_CPU_INFO       PlatformCpuInfo;
-  EFI_PEI_HOB_POINTERS          GuidHob;
+  EFI_PEI_HOB_POINTERS        GuidHob;
 
   if (mFirstNotify) {
     return;
@@ -701,23 +698,6 @@ OnReadyToBoot (
               );
     ASSERT_EFI_ERROR (Status);
   }
-
-  //
-  // Find the AcpiSupport protocol.
-  //
-  Status = LocateSupportProtocol (&gEfiAcpiSupportProtocolGuid, (VOID **) &AcpiSupport, 0);
-  ASSERT_EFI_ERROR (Status);
-
-  TableVersion = EFI_ACPI_TABLE_VERSION_2_0;
-
-  //
-  // Publish ACPI 1.0 or 2.0 Tables.
-  //
-  Status = AcpiSupport->PublishTables (
-                          AcpiSupport,
-                          TableVersion
-                          );
-  ASSERT_EFI_ERROR (Status);
 }
 
 VOID
@@ -759,8 +739,8 @@ AcpiPlatformEntryPoint (
 {
   EFI_STATUS                    Status;
   EFI_STATUS                    AcpiStatus;
-  EFI_ACPI_SUPPORT_PROTOCOL     *AcpiSupport;
-  EFI_FIRMWARE_VOLUME2_PROTOCOL  *FwVol;
+  EFI_ACPI_TABLE_PROTOCOL       *AcpiTable;
+  EFI_FIRMWARE_VOLUME2_PROTOCOL *FwVol;
   INTN                          Instance;
   EFI_ACPI_COMMON_HEADER        *CurrentTable;
   UINTN                         TableHandle;
@@ -821,9 +801,9 @@ AcpiPlatformEntryPoint (
   }
 
   //
-  // Find the AcpiSupport protocol.
+  // Find the AcpiTable protocol.
   //
-  Status = LocateSupportProtocol (&gEfiAcpiSupportProtocolGuid, (VOID **) &AcpiSupport, 0);
+  Status = LocateSupportProtocol (&gEfiAcpiTableProtocolGuid, (VOID **) &AcpiTable, 0);
   ASSERT_EFI_ERROR (Status);
 
   //
@@ -1171,11 +1151,10 @@ AcpiPlatformEntryPoint (
           // Add the table.
           //
           TableHandle = 0;
-          AcpiStatus = AcpiSupport->SetAcpiTable (
-                                      AcpiSupport,
+          AcpiStatus = AcpiTable->InstallAcpiTable (
+                                      AcpiTable,
                                       CurrentTable,
-                                      TRUE,
-                                      TableVersion,
+                                      Size,
                                       &TableHandle
                                       );
           ASSERT_EFI_ERROR (AcpiStatus);
@@ -1189,21 +1168,6 @@ AcpiPlatformEntryPoint (
     }
   }
 
-  //
-  // Publish ACPI 1.0 or 2.0 Tables.
-  //
-//  Status = AcpiSupport->PublishTables (
-//                          AcpiSupport,
-//                          TableVersion
-//                          );
-//  ASSERT_EFI_ERROR (Status);
-
-//  Status = EfiCreateEventReadyToBootEx (
-//             TPL_NOTIFY,
-//             OnReadyToBoot,
-//             NULL,
-//             &Event
-//             );
   Event = NULL;
   OnReadyToBoot (Event, NULL);
 

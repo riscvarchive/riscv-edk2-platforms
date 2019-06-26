@@ -34,7 +34,6 @@
 [Packages]
   Vlv2TbltDevicePkg/PlatformPkg.dec
   MdePkg/MdePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
@@ -64,7 +63,7 @@
 [Protocols]
   gEnhancedSpeedstepProtocolGuid
   gEfiPlatformCpuProtocolGuid
-  gEfiAcpiSupportProtocolGuid
+  gEfiAcpiTableProtocolGuid
   gEfiFirmwareVolume2ProtocolGuid
   gEfiMpServiceProtocolGuid
   gEfiGlobalNvsAreaProtocolGuid
@@ -78,5 +77,5 @@
 [Depex]
   gEfiVariableArchProtocolGuid        AND
   gEfiVariableWriteArchProtocolGuid   AND
-  gEfiAcpiSupportProtocolGuid AND
+  gEfiAcpiTableProtocolGuid AND
   gEfiMpServiceProtocolGuid
