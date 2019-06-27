@@ -19,6 +19,8 @@ function Usage ( ) {
   exit 0
 }
 
+set -e
+
 ## Assign initial values
 exitCode=0
 Build_Flags=
