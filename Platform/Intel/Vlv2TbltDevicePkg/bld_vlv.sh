@@ -170,12 +170,19 @@ sed -i '/^MAX_CONCURRENT_THREAD_NUMBER/d' Conf/target.txt
 
 gcc_version=$(gcc -v 2>&1 | tail -1 | awk '{print $3}')
 case $gcc_version in
-    4.9.*|4.1[0-9].*|5.*.*|6.*.*)
-      TARGET_TOOLS=GCC49
-      ;;
-    *)
-      TARGET_TOOLS=GCC48
-      ;;
+      [1-3].*|4.[0-7].*)
+        echo MNW2 requires GCC4.8 or later
+        exit 1
+        ;;
+      4.8.*)
+        TARGET_TOOLS=GCC48
+        ;;
+      4.9.*|6.[0-2].*)
+        TARGET_TOOLS=GCC49
+        ;;
+      *)
+        TARGET_TOOLS=GCC5
+        ;;
 esac
 
 ACTIVE_PLATFORM=$PLATFORM_PACKAGE/PlatformPkgGcc"$Arch".dsc
