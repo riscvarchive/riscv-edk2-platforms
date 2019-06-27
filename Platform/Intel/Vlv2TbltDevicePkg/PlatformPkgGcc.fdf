@@ -479,6 +479,13 @@ INF  MdeModulePkg/Bus/Pci/PciSioSerialDxe/PciSioSerialDxe.inf
 !endif
 
 #
+# eMMC/SD Card
+#
+INF MdeModulePkg/Bus/Pci/SdMmcPciHcDxe/SdMmcPciHcDxe.inf
+INF MdeModulePkg/Bus/Sd/EmmcDxe/EmmcDxe.inf
+INF MdeModulePkg/Bus/Sd/SdDxe/SdDxe.inf
+
+#
 # IDE/SCSI/AHCI
 #
 INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
