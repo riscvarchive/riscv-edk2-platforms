@@ -48,16 +48,10 @@ set EDK_SETUP_OPTION=
 @rem if python is installed, disable the binary base tools.
 if defined PYTHON_HOME (
   set EDK_TOOLS_BIN=
-  set EDK_SETUP_OPTION=--nt32
+  set EDK_SETUP_OPTION=Rebuild
 )
 pushd %WORKSPACE%\edk2
 call edksetup.bat %EDK_SETUP_OPTION%
-popd
-pushd %WORKSPACE%
-@rem if python is installed, nmake BaseTools source and enable BaseTools source build
-@if defined PYTHON_HOME (
-  nmake -f %BASE_TOOLS_PATH%\Makefile
-)
 popd
 
 set openssl_path=%WORKSPACE%
