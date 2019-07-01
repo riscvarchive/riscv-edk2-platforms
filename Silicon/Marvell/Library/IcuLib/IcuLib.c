@@ -280,8 +280,8 @@ ArmadaIcuInitialize (
   if (CpCount > ICU_MAX_SUPPORTED_UNITS) {
     DEBUG ((DEBUG_ERROR,
       "%a: Default ICU to GIC mapping is available for maximum %d CP110 units",
-      ICU_MAX_SUPPORTED_UNITS,
-      __FUNCTION__));
+      __FUNCTION__,
+      ICU_MAX_SUPPORTED_UNITS));
     CpCount = ICU_MAX_SUPPORTED_UNITS;
   }
 
