@@ -349,26 +349,36 @@ EFI_STATUS
 EFIAPI
 ArmadaSoCDescSdMmcGet (
   IN OUT MV_SOC_SDMMC_DESC  **SdMmcDesc,
-  IN OUT UINTN               *DescCount
+  IN OUT UINTN               *Count
   )
 {
-  MV_SOC_SDMMC_DESC *Desc;
-  UINTN Index;
+  MV_SOC_SDMMC_DESC *SdMmc;
+  UINTN CpCount, CpIndex;
 
-  Desc = AllocateZeroPool (MV_SOC_MAX_SDMMC_COUNT * sizeof (MV_SOC_SDMMC_DESC));
-  if (Desc == NULL) {
+  CpCount = FixedPcdGet8 (PcdMaxCpCount);
+
+  *Count = CpCount * MV_SOC_SDMMC_PER_CP_COUNT + MV_SOC_AP806_COUNT;
+  SdMmc = AllocateZeroPool (*Count * sizeof (MV_SOC_SDMMC_DESC));
+  if (SdMmc == NULL) {
     DEBUG ((DEBUG_ERROR, "%a: Cannot allocate memory\n", __FUNCTION__));
     return EFI_OUT_OF_RESOURCES;
   }
 
-  for (Index = 0; Index < MV_SOC_MAX_SDMMC_COUNT; Index++) {
-    Desc[Index].SdMmcBaseAddress = MV_SOC_SDMMC_BASE (Index);
-    Desc[Index].SdMmcMemSize = SIZE_1KB;
-    Desc[Index].SdMmcDmaType = NonDiscoverableDeviceDmaTypeCoherent;
-  }
+  *SdMmcDesc = SdMmc;
 
-  *SdMmcDesc = Desc;
-  *DescCount = MV_SOC_MAX_SDMMC_COUNT;
+  /* AP80x controller */
+  SdMmc->SdMmcBaseAddress = MV_SOC_AP80X_SDMMC_BASE;
+  SdMmc->SdMmcMemSize = SIZE_1KB;
+  SdMmc->SdMmcDmaType = NonDiscoverableDeviceDmaTypeCoherent;
+  SdMmc++;
+
+  /* CP11x controllers */
+  for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
+    SdMmc->SdMmcBaseAddress = MV_SOC_CP_SDMMC_BASE (CpIndex);
+    SdMmc->SdMmcMemSize = SIZE_1KB;
+    SdMmc->SdMmcDmaType = NonDiscoverableDeviceDmaTypeCoherent;
+    SdMmc++;
+  }
 
   return EFI_SUCCESS;
 }

@@ -139,11 +139,9 @@ SetSdMmcPhyMpp (
   case 0:
     Offset = SD_MMC_PHY_AP_MPP_OFFSET;
     break;
-  case 1:
+  default:
     Offset = SD_MMC_PHY_CP0_MPP_OFFSET;
     break;
-  default:
-    return;
   }
 
   /*
