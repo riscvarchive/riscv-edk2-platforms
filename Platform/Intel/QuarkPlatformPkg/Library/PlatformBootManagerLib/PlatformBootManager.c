@@ -2,7 +2,7 @@
 This file include all platform action which can be customized
 by IBV/OEM.
 
-Copyright (c) 2015 - 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2015 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -199,7 +199,6 @@ PlatformBootManagerBeforeConsole (
   EFI_BOOT_MANAGER_LOAD_OPTION  BootOption;
   ESRT_MANAGEMENT_PROTOCOL      *EsrtManagement;
   EFI_BOOT_MODE                 BootMode;
-  EFI_ACPI_S3_SAVE_PROTOCOL     *AcpiS3Save;
   EFI_HANDLE                    Handle;
   EFI_EVENT                     EndOfDxeEvent;
 
@@ -272,14 +271,6 @@ PlatformBootManagerBeforeConsole (
       EsrtManagement->SyncEsrtFmp();
     }
     break;
-  }
-
-  //
-  // Prepare for S3
-  //
-  Status = gBS->LocateProtocol (&gEfiAcpiS3SaveProtocolGuid, NULL, (VOID **)&AcpiS3Save);
-  if (!EFI_ERROR (Status)) {
-    AcpiS3Save->S3Save (AcpiS3Save, NULL);
   }
 
   //

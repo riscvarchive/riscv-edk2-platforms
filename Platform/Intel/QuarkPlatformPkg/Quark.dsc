@@ -302,6 +302,11 @@
 !endif
 
 [LibraryClasses.IA32.DXE_RUNTIME_DRIVER]
+!if $(LOGGING)
+  DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
+!else
+  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+!endif
   ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
   QNCAccessLib|QuarkSocPkg/QuarkNorthCluster/Library/QNCAccessLib/RuntimeQNCAccessLib.inf
   PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
@@ -340,7 +345,7 @@
 
 [PcdsFixedAtBuild]
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|1
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdS3AcpiReservedMemorySize|0x20000
+  gQuarkPlatformTokenSpaceGuid.PcdS3AcpiReservedMemorySize|0x20000
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|TRUE
 !if $(LOGGING)
   !if $(SOURCE_DEBUG_ENABLE)
@@ -462,7 +467,7 @@
 !else
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5
 !endif
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBootState|L"BootState"|gQuarkPlatformTokenSpaceGuid|0x0|TRUE
+  gQuarkPlatformTokenSpaceGuid.PcdBootState|L"BootState"|gQuarkPlatformTokenSpaceGuid|0x0|TRUE
 
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0
@@ -668,6 +673,7 @@
      NULL|SecurityPkg/Library/DxeImageAuthenticationStatusLib/DxeImageAuthenticationStatusLib.inf
  }
   UefiCpuPkg/CpuDxe/CpuDxe.inf
+  UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
   MdeModulePkg/Universal/Metronome/Metronome.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
@@ -758,8 +764,7 @@
   #
   QuarkPlatformPkg/Platform/Dxe/SaveMemoryConfig/SaveMemoryConfig.inf
   MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
-#  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf {
-  QuarkPlatformPkg/Acpi/Dxe/BootScriptExecutorDxe/BootScriptExecutorDxe.inf {
+  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf {
     <LibraryClasses>
       !if $(LOGGING)
         DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
@@ -772,7 +777,6 @@
       !endif
   }
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-  IntelFrameworkModulePkg/Universal/Acpi/AcpiS3SaveDxe/AcpiS3SaveDxe.inf
   QuarkPlatformPkg/Acpi/AcpiTables/AcpiTables.inf
   QuarkPlatformPkg/Acpi/Dxe/AcpiPlatform/AcpiPlatform.inf
 
@@ -869,12 +873,6 @@
   MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
-
-  #
-  # Capsule update
-  #
-  IntelFrameworkModulePkg/Universal/FirmwareVolume/FwVolDxe/FwVolDxe.inf
-  IntelFrameworkModulePkg/Universal/FirmwareVolume/UpdateDriverDxe/UpdateDriverDxe.inf
 
   #
   # Trusted Platform Module

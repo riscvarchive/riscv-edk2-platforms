@@ -3,7 +3,7 @@
 #
 # This is the driver that locates the MemoryConfigurationData Variable, if it
 #  exists, and reports the data to the DataHub.
-# Copyright (c) 2013 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -31,7 +31,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
   QuarkPlatformPkg/QuarkPlatformPkg.dec
 

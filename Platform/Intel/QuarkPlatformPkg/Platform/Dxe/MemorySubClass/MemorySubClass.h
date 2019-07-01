@@ -1,7 +1,7 @@
 /** @file
 Header file for MemorySubClass Driver.
 
-Copyright (c) 2013-2015 Intel Corporation.
+Copyright (c) 2013-2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -13,7 +13,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 //
 // The package level header files this module uses
 //
-#include <FrameworkDxe.h>
+#include <PiDxe.h>
 //
 // The protocols, PPI and GUID definitions for this module
 //
@@ -21,7 +21,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Protocol/Smbios.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Protocol/SmbusHc.h>
-#include <Guid/DataHubRecords.h>
+#include <DataHubRecords.h>
 #include <Guid/MemoryConfigData.h>
 #include <Protocol/HiiDatabase.h>
 #include <Guid/MdeModuleHii.h>

@@ -73,8 +73,6 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   UefiCpuPkg/UefiCpuPkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   QuarkPlatformPkg/QuarkPlatformPkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
 
@@ -112,7 +110,6 @@
   gEfiMemoryConfigDataGuid                      # SOMETIMES_PRODUCED  Hob: GUID_EXTENSION
   gEfiSmmPeiSmramMemoryReserveGuid              # ALWAYS_PRODUCED  Hob: GUID_EXTENSION
   gEfiFirmwareFileSystem2Guid                   # ALWAYS_CONSUMED
-  gEfiCapsuleGuid                               # ALWAYS_CONSUMED
   gPeiCapsuleOnDataCDGuid
   gPeiCapsuleOnFatIdeDiskGuid
   gPeiCapsuleOnFatUsbDiskGuid
@@ -180,7 +177,7 @@
   gQuarkPlatformTokenSpaceGuid.PcdFlashFvRecoveryBase
   gQuarkPlatformTokenSpaceGuid.PcdFlashFvMainSize
   gQuarkPlatformTokenSpaceGuid.PcdFlashFvMainBase
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBootState
+  gQuarkPlatformTokenSpaceGuid.PcdBootState
   gQuarkPlatformTokenSpaceGuid.PcdFlashFvPayloadBase
   gQuarkPlatformTokenSpaceGuid.PcdFlashFvPayloadSize
   gQuarkPlatformTokenSpaceGuid.PcdEnableFastBoot

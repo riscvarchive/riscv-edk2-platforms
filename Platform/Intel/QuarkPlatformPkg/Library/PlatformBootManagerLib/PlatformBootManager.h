@@ -1,7 +1,7 @@
 /** @file
 Head file for BDS Platform specific code
 
-Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2015 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -13,7 +13,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/PlatformBootManagerLib.h>
 
 #include <Protocol/FirmwareVolume2.h>
-#include <Protocol/AcpiS3Save.h>
 #include <Protocol/DxeSmmReadyToLock.h>
 #include <Protocol/EsrtManagement.h>
 #include <Guid/DebugAgentGuid.h>

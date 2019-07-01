@@ -1,7 +1,7 @@
 ## @file
 #  Include all platform action which can be customized by IBV/OEM.
 #
-#  Copyright (c) 2012 - 2016, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2012 - 2019, Intel Corporation. All rights reserved.<BR>
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -29,8 +29,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   SourceLevelDebugPkg/SourceLevelDebugPkg.dec
   QuarkPlatformPkg/QuarkPlatformPkg.dec
   SecurityPkg/SecurityPkg.dec
@@ -54,7 +52,6 @@
 
 [Protocols]
   gEfiFirmwareVolume2ProtocolGuid
-  gEfiAcpiS3SaveProtocolGuid
   gEfiDxeSmmReadyToLockProtocolGuid
   gEsrtManagementProtocolGuid
 
@@ -73,7 +70,7 @@
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultParity
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultStopBits
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBootState
+  gQuarkPlatformTokenSpaceGuid.PcdBootState
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiRsa2048Sha256TestPublicKeyFileGuid
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiPkcs7TestPublicKeyFileGuid

@@ -1,7 +1,7 @@
 /** @file
 Header file for SMM S3 Handler Driver.
 
-Copyright (c) 2013-2015 Intel Corporation.
+Copyright (c) 2013-2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -18,7 +18,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 //
 #include <Protocol/SmmSxDispatch2.h>
 #include <Protocol/SmmSwDispatch2.h>
-#include <Protocol/FirmwareVolume.h>
+#include <Protocol/FirmwareVolume2.h>
 #include <Protocol/GlobalNvsArea.h>
 #include <Protocol/PciRootBridgeIo.h>
 #include <Library/UefiDriverEntryPoint.h>

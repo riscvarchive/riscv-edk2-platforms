@@ -3,7 +3,7 @@ Common header file shared by all source files.
 
 This file includes package header files, library classes and protocol, PPI & GUID definitions.
 
-Copyright (c) 2013-2015 Intel Corporation.
+Copyright (c) 2013-2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -13,11 +13,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 
 
-#include <FrameworkDxe.h>
+#include <PiDxe.h>
 #include <IndustryStandard/SmBios.h>
 #include <Protocol/Smbios.h>
 #include <Guid/MdeModuleHii.h>
-#include <Guid/DataHubRecords.h>
+#include <DataHubRecords.h>
 
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiBootServicesTableLib.h>

@@ -298,7 +298,6 @@
 
 [PcdsFixedAtBuild]
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|1
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdS3AcpiReservedMemorySize|0x20000
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|FALSE
 !if $(LOGGING)
   !if $(SOURCE_DEBUG_ENABLE)
@@ -420,7 +419,7 @@
 !else
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5
 !endif
-  gEfiIntelFrameworkModulePkgTokenSpaceGuid.PcdBootState|L"BootState"|gQuarkPlatformTokenSpaceGuid|0x0|TRUE
+  gQuarkPlatformTokenSpaceGuid.PcdBootState|L"BootState"|gQuarkPlatformTokenSpaceGuid|0x0|TRUE
 
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0

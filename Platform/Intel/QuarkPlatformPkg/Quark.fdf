@@ -2,7 +2,7 @@
 # FDF file of Clanton Peak CRB platform with 32-bit DXE
 #
 # This package provides QuarkNcSocId platform specific modules.
-# Copyright (c) 2013 - 2018 Intel Corporation.
+# Copyright (c) 2013 - 2019 Intel Corporation.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -454,6 +454,7 @@ INF  MdeModulePkg/Universal/SectionExtractionDxe/SectionExtractionDxe.inf
 
 INF  MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 INF  UefiCpuPkg/CpuDxe/CpuDxe.inf
+INF  UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
 INF  MdeModulePkg/Universal/Metronome/Metronome.inf
 INF  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 INF  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
@@ -492,10 +493,8 @@ INF  QuarkPlatformPkg/Platform/Dxe/Setup/DxePlatform.inf
 #
 INF  QuarkPlatformPkg/Platform/Dxe/SaveMemoryConfig/SaveMemoryConfig.inf
 INF  MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
-#INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
-INF  QuarkPlatformPkg/Acpi/Dxe/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+INF  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
 INF  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-INF  IntelFrameworkModulePkg/Universal/Acpi/AcpiS3SaveDxe/AcpiS3SaveDxe.inf
 INF  QuarkPlatformPkg/Acpi/Dxe/AcpiPlatform/AcpiPlatform.inf
 INF  RuleOverride = ACPITABLE QuarkPlatformPkg/Acpi/AcpiTables/AcpiTables.inf
 

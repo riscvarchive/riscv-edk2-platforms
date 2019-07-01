@@ -3,7 +3,7 @@ Common header file shared by all source files.
 
 This file includes package header files, library classes and protocol, PPI & GUID definitions.
 
-Copyright (c) 2013 - 2016 Intel Corporation.
+Copyright (c) 2013 - 2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -24,7 +24,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <Guid/AcpiS3Context.h>
 #include <Ppi/AtaController.h>
-#include <Guid/Capsule.h>
 #include <Ppi/MasterBootMode.h>
 #include <Guid/MemoryTypeInformation.h>
 #include <Guid/RecoveryDevice.h>
@@ -33,7 +32,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Guid/CapsuleVendor.h>
 #include <Guid/QuarkCapsuleGuid.h>
 #include <Ppi/ReadOnlyVariable2.h>
-#include <Ppi/FvLoadFile.h>
 #include <Guid/SmramMemoryReserve.h>
 #include <Ppi/DeviceRecoveryModule.h>
 #include <Ppi/Capsule.h>

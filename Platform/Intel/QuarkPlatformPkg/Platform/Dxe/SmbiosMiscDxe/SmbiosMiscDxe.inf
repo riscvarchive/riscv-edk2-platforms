@@ -15,7 +15,7 @@
 #  32  | Boot Information  | 0x1A   | BootInformationStatus
 #  The uni files tagged with "ToolCode="DUMMY"" are included by SmbiosMiscStrings.uni file which is input
 #  file for StrGather tool.
-# Copyright (c) 2013 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -69,7 +69,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   QuarkPlatformPkg/QuarkPlatformPkg.dec
 
 [LibraryClasses]
