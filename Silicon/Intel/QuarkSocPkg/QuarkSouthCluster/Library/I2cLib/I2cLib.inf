@@ -8,7 +8,7 @@
 # 1. I2C Read (byte, multi-byte)
 # 2. I2C Write (byte, multi-byte)
 #
-# Copyright (c) 2013 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -35,8 +35,6 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
-  IntelFrameworkModulePkg/IntelFrameworkModulePkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
 
 [LibraryClasses]

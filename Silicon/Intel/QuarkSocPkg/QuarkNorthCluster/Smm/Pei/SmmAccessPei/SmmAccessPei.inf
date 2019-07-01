@@ -1,7 +1,7 @@
 ## @file
 # Component description file for SmmAccessPei module
 #
-# Copyright (c) 2013-2015 Intel Corporation.
+# Copyright (c) 2013-2019 Intel Corporation.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -21,7 +21,6 @@ ENTRY_POINT          = SmmAccessPeiEntryPoint
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
 
 [LibraryClasses]

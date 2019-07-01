@@ -3,7 +3,7 @@
 #
 # This driver is responsible for the registration of child drivers
 #  and the abstraction of the ICH SMI sources.
-# Copyright (c) 2013 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -43,7 +43,6 @@
   MdePkg/MdePkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
 
 [LibraryClasses]
   UefiDriverEntryPoint

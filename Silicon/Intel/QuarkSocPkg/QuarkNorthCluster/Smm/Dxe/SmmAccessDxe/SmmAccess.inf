@@ -22,7 +22,6 @@
 
 [Packages]
   MdePkg/MdePkg.dec
-  IntelFrameworkPkg/IntelFrameworkPkg.dec
   QuarkSocPkg/QuarkSocPkg.dec
 
 [LibraryClasses]
