@@ -18,11 +18,11 @@ $(APPLICATIONS): $(MAKEROOT)/bin
 .PHONY: subdirs $(SUBDIRS)
 subdirs: $(SUBDIRS)
 $(SUBDIRS):
-    $(MAKE) -C $@
+	$(MAKE) -C $@
 
 .PHONY: $(patsubst %,%-clean,$(sort $(SUBDIRS)))
 $(patsubst %,%-clean,$(sort $(SUBDIRS))):
-    -$(MAKE) -C $(@:-clean=) clean
+	-$(MAKE) -C $(@:-clean=) clean
 
 clean: $(patsubst %,%-clean,$(sort $(SUBDIRS)))
 
