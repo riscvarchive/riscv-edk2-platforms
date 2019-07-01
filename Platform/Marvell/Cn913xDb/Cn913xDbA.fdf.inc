@@ -12,7 +12,9 @@
   # DTB
   INF RuleOverride = DTB Silicon/Marvell/OcteonTx/DeviceTree/T91/$(PLATFORM_NAME).inf
 
+!ifndef $(CN9132)
 !if $(ARCH) == AARCH64
   # ACPI support
   INF RuleOverride = ACPITABLE Silicon/Marvell/OcteonTx/AcpiTables/T91/$(PLATFORM_NAME).inf
+!endif
 !endif

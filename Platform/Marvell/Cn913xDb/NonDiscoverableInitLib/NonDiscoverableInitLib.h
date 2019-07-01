@@ -17,5 +17,9 @@
 #define CN9130_DB_SDMMC_VCCQ_PIN     15
 #define CN9131_DB_VBUS0_PIN          3
 #define CN9131_DB_VBUS0_LIMIT_PIN    2
+#define CN9132_DB_VBUS0_PIN          2
+#define CN9132_DB_VBUS0_LIMIT_PIN    0
+#define CN9132_DB_VBUS1_PIN          3
+#define CN9132_DB_VBUS1_LIMIT_PIN    1
 
 #endif
