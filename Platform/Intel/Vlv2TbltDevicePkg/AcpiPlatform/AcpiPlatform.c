@@ -747,7 +747,6 @@ AcpiPlatformEntryPoint (
   UINT32                        FvStatus;
   UINTN                         Size;
   EFI_EVENT                     Event;
-  EFI_ACPI_TABLE_VERSION        TableVersion;
   UINTN                         VarSize;
   UINTN                         SysCfgSize;
   EFI_HANDLE                    Handle;
@@ -759,7 +758,6 @@ AcpiPlatformEntryPoint (
 
   mFirstNotify      = FALSE;
 
-  TableVersion      = EFI_ACPI_TABLE_VERSION_2_0;
   Instance          = 0;
   CurrentTable      = NULL;
   TableHandle       = 0;
