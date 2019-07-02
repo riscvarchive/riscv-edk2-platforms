@@ -199,6 +199,8 @@ echo Skip "Running fce..."
 ##**********************************************************************
 ## Build Capsules
 ##**********************************************************************
+cp -f $WORKSPACE/Build/Vlv2TbltDevicePkg/${TARGET}_${TOOL_CHAIN_TAG}/FV/VLV.fd \
+      $WORKSPACE/Build/Vlv2TbltDevicePkg/${TARGET}_${TOOL_CHAIN_TAG}/FV/Vlv.ROM
 build -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
 
 echo
