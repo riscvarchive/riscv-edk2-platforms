@@ -52,14 +52,14 @@ AddSmbiosManuCallback (
   UINTN                             PdNameStrLen;
   UINTN                             SerialNumStrLen;
   UINTN                             SkuNumberStrLen;
-  UINTN				                FamilyNameStrLen;
+  UINTN                             FamilyNameStrLen;
   EFI_STATUS                        Status;
   EFI_STRING                        Manufacturer;
   EFI_STRING                        ProductName;
   EFI_STRING                        Version;
   EFI_STRING                        SerialNumber;
   EFI_STRING                        SkuNumber;
-  EFI_STRING			            FamilyName;
+  EFI_STRING                        FamilyName;
   STRING_REF                        TokenToGet;
   EFI_SMBIOS_HANDLE                 SmbiosHandle;
   SMBIOS_TABLE_TYPE1                *SmbiosRecord;
@@ -323,40 +323,37 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
 {
   EFI_STATUS                    Status;
   static BOOLEAN                CallbackIsInstalledManu = FALSE;
-  VOID                           *AddSmbiosManuCallbackNotifyReg;
-  EFI_EVENT                      AddSmbiosManuCallbackEvent;
+  VOID                          *AddSmbiosManuCallbackNotifyReg;
+  EFI_EVENT                     AddSmbiosManuCallbackEvent;
 
 
   if (CallbackIsInstalledManu == FALSE) {
     CallbackIsInstalledManu = TRUE;        	// Prevent more than 1 callback.
     DEBUG ((EFI_D_INFO, "Create Smbios Manu callback.\n"));
 
-  //
-  // gEfiDxeSmmReadyToLockProtocolGuid is ready
-  //
-  Status = gBS->CreateEvent (
-                  EVT_NOTIFY_SIGNAL,
-                  TPL_CALLBACK,
-                  (EFI_EVENT_NOTIFY)AddSmbiosManuCallback,
-                  RecordData,
-                  &AddSmbiosManuCallbackEvent
-                  );
+    //
+    // gEfiDxeSmmReadyToLockProtocolGuid is ready
+    //
+    Status = gBS->CreateEvent (
+                    EVT_NOTIFY_SIGNAL,
+                    TPL_CALLBACK,
+                    (EFI_EVENT_NOTIFY)AddSmbiosManuCallback,
+                    RecordData,
+                    &AddSmbiosManuCallbackEvent
+                    );
 
-  ASSERT_EFI_ERROR (Status);
-  if (EFI_ERROR (Status)) {
+    ASSERT_EFI_ERROR (Status);
+    if (EFI_ERROR (Status)) {
+      return Status;
+    }
+
+    Status = gBS->RegisterProtocolNotify (
+                    &gEfiDxeSmmReadyToLockProtocolGuid,
+                    AddSmbiosManuCallbackEvent,
+                    &AddSmbiosManuCallbackNotifyReg
+                    );
     return Status;
-
-  }
-
-  Status = gBS->RegisterProtocolNotify (
-                  &gEfiDxeSmmReadyToLockProtocolGuid,
-                  AddSmbiosManuCallbackEvent,
-                  &AddSmbiosManuCallbackNotifyReg
-                  );
-
-  return Status;
   }
 
   return EFI_SUCCESS;
-
 }
