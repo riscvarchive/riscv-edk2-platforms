@@ -67,9 +67,6 @@ PLATFORM_PACKAGE=Vlv2TbltDevicePkg
 config_file=$WORKSPACE/$PLATFORM_PACKAGE/PlatformPkgConfig.dsc
 auto_config_inc=$WORKSPACE/$PLATFORM_PACKAGE/AutoPlatformCFG.txt
 
-## default ECP (override with /ECP flag)
-EDK_SOURCE=$WORKSPACE/EdkCompatibilityPkg
-
 ## create new AutoPlatformCFG.txt file
 if [ -f "$auto_config_inc" ]; then
   rm $auto_config_inc
