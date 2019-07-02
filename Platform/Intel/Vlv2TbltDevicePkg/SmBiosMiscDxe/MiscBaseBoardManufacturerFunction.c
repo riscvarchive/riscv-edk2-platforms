@@ -130,11 +130,15 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
   //
   //Get the MAC string
   //
-  Status = NetLibGetMacString (
-             *Handles,
-             NULL,
-             &MacStr
-             );
+  if (Handles == NULL) {
+    Status = EFI_NOT_FOUND;
+  } else {
+    Status = NetLibGetMacString (
+               *Handles,
+               NULL,
+               &MacStr
+               );
+  }
   if (EFI_ERROR (Status)) {	
     MacStr = L"000000000000";
   }
