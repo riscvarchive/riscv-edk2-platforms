@@ -199,7 +199,7 @@ echo Skip "Running fce..."
 ##**********************************************************************
 ## Build Capsules
 ##**********************************************************************
-build -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
+build -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
 
 echo
 echo -------------------- The EDKII BIOS build has successfully completed. --------------------
