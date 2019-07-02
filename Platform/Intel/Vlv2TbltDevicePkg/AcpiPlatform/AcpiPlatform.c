@@ -1152,7 +1152,7 @@ AcpiPlatformEntryPoint (
           AcpiStatus = AcpiTable->InstallAcpiTable (
                                       AcpiTable,
                                       CurrentTable,
-                                      Size,
+                                      CurrentTable->Length,
                                       &TableHandle
                                       );
           ASSERT_EFI_ERROR (AcpiStatus);
