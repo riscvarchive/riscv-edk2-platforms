@@ -53,10 +53,6 @@ if [ -e $CORE_PATH/Conf/target.txt ]; then
   rm $CORE_PATH/Conf/target.txt
 fi
 
-if [ -e $CORE_PATH/Conf/BiosId.env ]; then
-  rm $CORE_PATH/Conf/BiosId.env
-fi
-
 if [ -e $CORE_PATH/Conf/tools_def.txt ]; then
   rm $CORE_PATH/Conf/tools_def.txt
 fi
@@ -119,18 +115,11 @@ if [ "$2" == "" ]; then
   Usage
 fi
 
-## Remove the values for Platform_Type and Build_Target from BiosIdX.env and stage in Conf
 if [ $Arch == "IA32" ]; then
-  cp $PLATFORM_PKG_PATH/BiosIdR.env Conf/BiosId.env
-  echo DEFINE X64_CONFIG = FALSE      >> $auto_config_inc
+  echo DEFINE X64_CONFIG = FALSE >> $auto_config_inc
 else
-  cp $PLATFORM_PKG_PATH/BiosIdx64R.env Conf/BiosId.env
-  echo DEFINE X64_CONFIG = TRUE       >> $auto_config_inc
+  echo DEFINE X64_CONFIG = TRUE  >> $auto_config_inc
 fi
-sed -i '/^BOARD_ID/d' Conf/BiosId.env
-sed -i '/^BUILD_TYPE/d' Conf/BiosId.env
-
-
 
 ## -- Build flags settings for each Platform --
 ##    AlpineValley (ALPV):  SVP_PF_BUILD = TRUE,   ENBDT_PF_BUILD = FALSE,  TABLET_PF_BUILD = FALSE,  BYTI_PF_BUILD = FALSE, IVI_PF_BUILD = FALSE
@@ -141,25 +130,17 @@ sed -i '/^BUILD_TYPE/d' Conf/BiosId.env
 ##            FFD8 (BLAK):  SVP_PF_BUILD = FALSE,  ENBDT_PF_BUILD = FALSE,  TABLET_PF_BUILD = TRUE,   BYTI_PF_BUILD = FALSE, IVI_PF_BUILD = FALSE
 echo "Setting  $1  platform configuration and BIOS ID..."
 if [ "$(echo $1 | tr 'a-z' 'A-Z')" == "MNW2" ]; then
-  echo BOARD_ID = MNW2MAX             >> Conf/BiosId.env
-  echo DEFINE ENBDT_PF_BUILD = TRUE  >> $auto_config_inc
+  echo DEFINE ENBDT_PF_BUILD = TRUE >> $auto_config_inc
 else
   echo "Error - Unsupported PlatformType: $1"
   Usage
 fi
 
-Platform_Type=$1
-
 if [ "$(echo $2 | tr 'a-z' 'A-Z')" == "RELEASE" ]; then
   export TARGET=RELEASE
-  BUILD_TYPE=R
-  echo BUILD_TYPE = R >> Conf/BiosId.env
 else
   export TARGET=DEBUG
-  BUILD_TYPE=D
-  echo BUILD_TYPE = D >> Conf/BiosId.env
 fi
-
 
 ##**********************************************************************
 ## Additional EDK Build Setup/Configuration
