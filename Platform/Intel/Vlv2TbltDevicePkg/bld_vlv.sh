@@ -26,7 +26,6 @@ echo -e $(date)
 ##**********************************************************************
 ## Initial Setup
 ##**********************************************************************
-export WORKSPACE=$(pwd)
 #build_threads=($NUMBER_OF_PROCESSORS)+1
 Build_Flags=
 exitCode=0
@@ -38,31 +37,31 @@ export PLATFORM_PATH=$WORKSPACE/edk2-platforms/Platform/Intel/
 export SILICON_PATH=$WORKSPACE/edk2-platforms/Silicon/Intel/
 export BINARY_PATH=$WORKSPACE/edk2-non-osi/Silicon/Intel/
 export PACKAGES_PATH=$PLATFORM_PATH:$SILICON_PATH:$BINARY_PATH:$CORE_PATH
-cd ./edk2
 
 ## Clean up previous build files.
-if [ -e $CORE_PATH/EDK2.log ]; then
-  rm $CORE_PATH/EDK2.log
+if [ -e $WORKSPACE/EDK2.log ]; then
+  rm $WORKSPACE/EDK2.log
 fi
 
-if [ -e $CORE_PATH/Unitool.log ]; then
-  rm $CORE_PATH/Unitool.log
+if [ -e $WORKSPACE/Unitool.log ]; then
+  rm $WORKSPACE/Unitool.log
 fi
 
-if [ -e $CORE_PATH/Conf/target.txt ]; then
-  rm $CORE_PATH/Conf/target.txt
+if [ -e $WORKSPACE/Conf/target.txt ]; then
+  rm $WORKSPACE/Conf/target.txt
 fi
 
-if [ -e $CORE_PATH/Conf/tools_def.txt ]; then
-  rm $CORE_PATH/Conf/tools_def.txt
+if [ -e $WORKSPACE/Conf/tools_def.txt ]; then
+  rm $WORKSPACE/Conf/tools_def.txt
 fi
 
-if [ -e $CORE_PATH/Conf/build_rule.txt ]; then
-  rm $CORE_PATH/Conf/build_rule.txt
+if [ -e $WORKSPACE/Conf/build_rule.txt ]; then
+  rm $WORKSPACE/Conf/build_rule.txt
 fi
 
 ## Setup EDK environment. Edksetup puts new copies of target.txt, tools_def.txt, build_rule.txt in WorkSpace\Conf
 ## Also run edksetup as soon as possible to avoid it from changing environment variables we're overriding
+cd $CORE_PATH
 . edksetup.sh BaseTools
 make -C BaseTools
 
@@ -71,6 +70,8 @@ PLATFORM_PACKAGE=Vlv2TbltDevicePkg
 PLATFORM_PKG_PATH=$PLATFORM_PATH/$PLATFORM_PACKAGE
 config_file=$PLATFORM_PKG_PATH/PlatformPkgConfig.dsc
 auto_config_inc=$PLATFORM_PKG_PATH/AutoPlatformCFG.txt
+
+cd $PLATFORM_PKG_PATH
 
 ## create new AutoPlatformCFG.txt file
 if [ -f "$auto_config_inc" ]; then
@@ -149,11 +150,11 @@ echo "Ensuring correct build directory is present for GenBiosId..."
 
 echo Modifying Conf files for this build...
 ## Remove lines with these tags from target.txt
-sed -i '/^ACTIVE_PLATFORM/d' Conf/target.txt
-sed -i '/^TARGET /d' Conf/target.txt
-sed -i '/^TARGET_ARCH/d' Conf/target.txt
-sed -i '/^TOOL_CHAIN_TAG/d' Conf/target.txt
-sed -i '/^MAX_CONCURRENT_THREAD_NUMBER/d' Conf/target.txt
+sed -i '/^ACTIVE_PLATFORM/d' $WORKSPACE/Conf/target.txt
+sed -i '/^TARGET /d' $WORKSPACE/Conf/target.txt
+sed -i '/^TARGET_ARCH/d' $WORKSPACE/Conf/target.txt
+sed -i '/^TOOL_CHAIN_TAG/d' $WORKSPACE/Conf/target.txt
+sed -i '/^MAX_CONCURRENT_THREAD_NUMBER/d' $WORKSPACE/Conf/target.txt
 
 gcc_version=$(gcc -v 2>&1 | tail -1 | awk '{print $3}')
 case $gcc_version in
@@ -174,15 +175,15 @@ esac
 
 ACTIVE_PLATFORM=$PLATFORM_PKG_PATH/PlatformPkgGcc"$Arch".dsc
 export TOOL_CHAIN_TAG=$TARGET_TOOLS
-MAX_CONCURRENT_THREAD_NUMBER=1
-echo ACTIVE_PLATFORM = $ACTIVE_PLATFORM                           >> Conf/target.txt
-echo TARGET          = $TARGET                                    >> Conf/target.txt
-echo TOOL_CHAIN_TAG  = $TOOL_CHAIN_TAG                            >> Conf/target.txt
-echo MAX_CONCURRENT_THREAD_NUMBER = $MAX_CONCURRENT_THREAD_NUMBER >> Conf/target.txt
+MAX_CONCURRENT_THREAD_NUMBER=8
+echo ACTIVE_PLATFORM = $ACTIVE_PLATFORM                           >> $WORKSPACE/Conf/target.txt
+echo TARGET          = $TARGET                                    >> $WORKSPACE/Conf/target.txt
+echo TOOL_CHAIN_TAG  = $TOOL_CHAIN_TAG                            >> $WORKSPACE/Conf/target.txt
+echo MAX_CONCURRENT_THREAD_NUMBER = $MAX_CONCURRENT_THREAD_NUMBER >> $WORKSPACE/Conf/target.txt
 if [ $Arch == "IA32" ]; then
-  echo TARGET_ARCH   = IA32                                       >> Conf/target.txt
+  echo TARGET_ARCH   = IA32                                       >> $WORKSPACE/Conf/target.txt
 else
-  echo TARGET_ARCH   = IA32 X64                                   >> Conf/target.txt
+  echo TARGET_ARCH   = IA32 X64                                   >> $WORKSPACE/Conf/target.txt
 fi
 
 ##**********************************************************************

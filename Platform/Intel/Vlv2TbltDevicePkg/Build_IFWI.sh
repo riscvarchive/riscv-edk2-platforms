@@ -85,13 +85,10 @@ else
   IFWI_Suffix="/S $3"
 fi
 
-## Go to root directory
-cd ../../..
-
 ## Build BIOS
 echo "======================================================================"
 echo "Build_IFWI:  Calling BIOS build Script..."
-./Platform/Intel/$PLATFORM_PACKAGE/bld_vlv.sh $Build_Flags $Platform_Type $Build_Target
+. bld_vlv.sh $Build_Flags $Platform_Type $Build_Target
 
 echo
 echo Finished Building BIOS.
