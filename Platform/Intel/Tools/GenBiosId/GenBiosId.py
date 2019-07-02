@@ -16,7 +16,7 @@ import struct
 import datetime
 import argparse
 import platform
-
+from collections import OrderedDict
 try:
     from configparser import ConfigParser
 except:
@@ -24,8 +24,6 @@ except:
 
 # Config message
 _BIOS_Signature = "$IBIOSI$"
-_SectionKeyName = '__name__'
-_SectionName = 'config'
 
 _ConfigItem = {
     "BOARD_ID": {'Value': '', 'Length': 7},
@@ -121,20 +119,26 @@ def CheckOptions(Options):
         EdkLogger("GenBiosId", FILE_NOT_FOUND, ExtraData="Input file not found")
     return InputFile, OutputFile, OutputTextFile
 
+# Read input file and get config
+def ReadInputFile(InputFile):
+    InputDict = OrderedDict()
+    with open(InputFile) as File:
+        FileLines = File.readlines()
+    for Line in FileLines:
+        if Line.strip().startswith('#'):
+            continue
+        if '=' in Line:
+            Key, Value = Line.split('=')
+            InputDict[Key.strip()] = Value.strip()
+    return InputDict
+
 
 # Parse the input file and extract the information
-def ParserInputFile(InputFile):
-    cf = ConfigParser()
-    cf.optionxform = str
-    cf.read(InputFile)
-    if _SectionName not in cf._sections:
-        EdkLogger("GenBiosId", FORMAT_NOT_SUPPORTED, ExtraData=_ConfigSectionNotDefine)
-    for Item in cf._sections[_SectionName]:
-        if Item == _SectionKeyName:
-            continue
+def ParserInputFile(InputDict):
+    for Item in InputDict:
         if Item not in _ConfigItem:
             EdkLogger("GenBiosId", FORMAT_INVALID, ExtraData=_ConfigItemInvalid % Item)
-        _ConfigItem[Item]['Value'] = cf._sections[_SectionName][Item]
+        _ConfigItem[Item]['Value'] = InputDict[Item]
         if len(_ConfigItem[Item]['Value']) != _ConfigItem[Item]['Length']:
             EdkLogger("GenBiosId", FORMAT_INVALID, ExtraData=_ConfigLenInvalid % Item)
     for Item in _ConfigItem:
@@ -168,7 +172,8 @@ def PrintOutputFile(OutputFile, OutputTextFile, Id_Str):
 def Main():
     Options = MyOptionParser()
     InputFile, OutputFile, OutputTextFile = CheckOptions(Options)
-    Id_Str = ParserInputFile(InputFile)
+    InputDict = ReadInputFile(InputFile)
+    Id_Str = ParserInputFile(InputDict)
     PrintOutputFile(OutputFile, OutputTextFile, Id_Str)
     return 0
 
