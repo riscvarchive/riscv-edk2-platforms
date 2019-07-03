@@ -6,7 +6,7 @@ function Usage ( ) {
   echo
   echo "Script to build BIOS firmware and stitch the entire IFWI."
   echo
-  echo "Usage: Build_IFWI.bat [options]  PlatformType  BuildTarget  "
+  echo "Usage: Build_IFWI.sh [options]  PlatformType  BuildTarget  "
   echo
   echo 
   echo "       /yL [option]  :   Enable SPI lock"
@@ -27,6 +27,18 @@ Build_Flags=
 Stitch_Flags=
 Arch=X64
 PLATFORM_PACKAGE=Vlv2TbltDevicePkg
+
+## Check whether WORKSPACE is set or not
+if [[ -z "$WORKSPACE" ]]; then
+  echo "Please export WORKSPACE before running Build_IFWI.sh"
+  echo "See the details in Readme.md"
+  exit 1
+fi
+
+## Create $WORKSPACE/Conf if necessary
+if [ ! -d $WORKSPACE/Conf ]; then
+  mkdir $WORKSPACE/Conf
+fi
 
 ## Parse Optional arguments
 if [ "$1" == "/?" ]; then
