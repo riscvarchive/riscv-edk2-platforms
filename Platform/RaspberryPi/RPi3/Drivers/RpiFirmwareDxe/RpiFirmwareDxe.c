@@ -799,8 +799,9 @@ STATIC
 EFI_STATUS
 EFIAPI
 RpiFirmwareSetClockRate (
-  IN  UINT32 ClockId,
-  IN  UINT32 ClockRate
+  IN  UINT32  ClockId,
+  IN  UINT32  ClockRate,
+  IN  BOOLEAN SkipTurbo
   )
 {
   RPI_FW_SET_CLOCK_RATE_CMD   *Cmd;
@@ -822,6 +823,7 @@ RpiFirmwareSetClockRate (
   Cmd->TagHead.TagValueSize   = 0;
   Cmd->TagBody.ClockId        = ClockId;
   Cmd->TagBody.ClockRate      = ClockRate;
+  Cmd->TagBody.SkipTurbo      = SkipTurbo ? 1 : 0;
   Cmd->EndTag                 = 0;
 
   Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);

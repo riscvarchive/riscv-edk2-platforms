@@ -393,6 +393,7 @@
   #
 
   gRaspberryPiTokenSpaceGuid.PcdCpuClock|L"CpuClock"|gConfigDxeFormSetGuid|0x0|0
+  gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock|L"CustomCpuClock"|gConfigDxeFormSetGuid|0x0|600
 
   #
   # SD-related.

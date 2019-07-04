@@ -54,6 +54,7 @@
 
 [Pcd]
   gRaspberryPiTokenSpaceGuid.PcdCpuClock
+  gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan
   gRaspberryPiTokenSpaceGuid.PcdMmcForce1Bit
   gRaspberryPiTokenSpaceGuid.PcdMmcForceDefaultSpeed

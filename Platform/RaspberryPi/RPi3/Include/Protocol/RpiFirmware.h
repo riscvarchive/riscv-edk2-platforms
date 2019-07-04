@@ -44,7 +44,8 @@ typedef
 EFI_STATUS
 (EFIAPI *SET_CLOCK_RATE) (
   IN  UINT32    ClockId,
-  OUT UINT32    ClockRate
+  OUT UINT32    ClockRate,
+  IN  BOOLEAN   SkipTurbo
   );
 
 typedef
