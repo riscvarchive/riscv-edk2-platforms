@@ -26,9 +26,9 @@ It also provides support for ATF ([Arm Trusted Platform](https://github.com/ARM-
 HDMI and the mini-UART serial port can be used for output devices, with mirrored output.
 USB keyboards and the mini-UART serial port can be used as input.
 
-On a freshly built firmware, the default is to boot the UEFI shell.
-To change the default boot order (for instance to boot uSD media by default) you
-will need to edit the preferences in _Boot Maintenance Manager_.
+The default for the firmware is to first attempt boot from SD then USB. The UEFI
+Shell can also be accessed by pressing F1. To change the boot order you can edit
+the preferences in the _Boot Maintenance Manager_ menu.
 
 For additional information about the tested systems and how to set them up,
 please see [Systems.md](./Systems.md).
