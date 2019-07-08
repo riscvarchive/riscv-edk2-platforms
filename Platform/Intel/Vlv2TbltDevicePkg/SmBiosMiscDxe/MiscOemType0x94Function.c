@@ -29,7 +29,6 @@ Abstract:
 #include <Protocol/I2cBus.h>
 
 #include <Library/IoLib.h>
-#include <Library/CpuIA32.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Guid/PlatformInfo.h>
 #include <Guid/SetupVariable.h>
@@ -73,7 +72,6 @@ SB_REV  SBRevisionTable[] = {
 #define PREFIX_ZERO   0x20
 
 #define ICH_REG_REV                 0x08
-#define MSR_IA32_PLATFORM_ID        0x17
 #define CHARACTER_NUMBER_FOR_VALUE  30
 
 
@@ -565,7 +563,7 @@ UpdatePlatformInformation (
   //
   //CPU flavor
   //
-  CpuFlavor = RShiftU64 (EfiReadMsr (MSR_IA32_PLATFORM_ID), 50) & 0x07;
+  CpuFlavor = RShiftU64 (AsmReadMsr64 (MSR_IA32_PLATFORM_ID), 50) & 0x07;
 
   switch(CpuFlavor){
     case 0x0:
@@ -661,9 +659,9 @@ UpdatePlatformInformation (
   //
   // Microcode Revision
   //
-  EfiWriteMsr (EFI_MSR_IA32_BIOS_SIGN_ID, 0);
-  EfiCpuid (EFI_CPUID_VERSION_INFO, NULL);
-  MicroCodeVersion = (UINT32) RShiftU64 (EfiReadMsr (EFI_MSR_IA32_BIOS_SIGN_ID), 32);
+  AsmWriteMsr64 (MSR_IA32_BIOS_SIGN_ID, 0);
+  AsmCpuid (CPUID_VERSION_INFO, NULL, NULL, NULL, NULL);
+  MicroCodeVersion = (UINT32) RShiftU64 (AsmReadMsr64 (MSR_IA32_BIOS_SIGN_ID), 32);
   UnicodeSPrint (Buffer, sizeof (Buffer), L"%x", MicroCodeVersion);
   HiiSetString(mHiiHandle,STRING_TOKEN(STR_MISC_PROCESSOR_MICROCODE_VALUE), Buffer, NULL);
 

@@ -124,7 +124,8 @@ MemoryDiscoveredPpiNotifyCallback (
 {
   EFI_STATUS                  Status;
   EFI_BOOT_MODE               BootMode;
-  EFI_CPUID_REGISTER          FeatureInfo;
+  UINT32                      MaximumExtendedFunction;
+  CPUID_VIR_PHY_ADDRESS_SIZE_EAX  Eax;
   UINT8                       CpuAddressWidth;
   UINT16                      Pm1Cnt;
   EFI_PEI_HOB_POINTERS        Hob;
@@ -279,10 +280,10 @@ MemoryDiscoveredPpiNotifyCallback (
   // Create a CPU hand-off information
   //
   CpuAddressWidth = 32;
-  AsmCpuid (EFI_CPUID_EXTENDED_FUNCTION, &FeatureInfo.RegEax, &FeatureInfo.RegEbx, &FeatureInfo.RegEcx, &FeatureInfo.RegEdx);
-  if (FeatureInfo.RegEax >= EFI_CPUID_VIRT_PHYS_ADDRESS_SIZE) {
-    AsmCpuid (EFI_CPUID_VIRT_PHYS_ADDRESS_SIZE, &FeatureInfo.RegEax, &FeatureInfo.RegEbx, &FeatureInfo.RegEcx, &FeatureInfo.RegEdx);
-    CpuAddressWidth = (UINT8) (FeatureInfo.RegEax & 0xFF);
+  AsmCpuid (CPUID_EXTENDED_FUNCTION, &MaximumExtendedFunction, NULL, NULL, NULL);
+  if (MaximumExtendedFunction >= CPUID_VIR_PHY_ADDRESS_SIZE) {
+    AsmCpuid (CPUID_VIR_PHY_ADDRESS_SIZE, &Eax.Uint32, NULL, NULL, NULL);
+    CpuAddressWidth = (UINT8) (Eax.Bits.PhysicalAddressBits);
   }
 
   BuildCpuHob(CpuAddressWidth, 16);

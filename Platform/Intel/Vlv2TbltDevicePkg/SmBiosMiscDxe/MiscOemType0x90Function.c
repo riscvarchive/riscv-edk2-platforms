@@ -23,8 +23,9 @@ Abstract:
 
 #include "MiscSubclassDriver.h"
 #include <Library/PrintLib.h>
-#include <Library/CpuIA32.h>
 #include <Protocol/DxeSmmReadyToLock.h>
+#include <Register/Cpuid.h>
+#include <Register/Msr.h>
 
 
 VOID
@@ -32,18 +33,24 @@ GetCPUStepping ( )
 {
   CHAR16    Buffer[40];
 
-  UINT16                                FamilyId;
-  UINT8                                 Model;
-  UINT8                                 SteppingId;
-  UINT8                                 ProcessorType;
+  UINT32                                FamilyId;
+  UINT32                                Model;
+  UINT32                                SteppingId;
+  CPUID_VERSION_INFO_EAX  Eax;
+  CPUID_VERSION_INFO_EBX  Ebx;
+  CPUID_VERSION_INFO_ECX  Ecx;
+  CPUID_VERSION_INFO_EDX  Edx;
 
-
-  EfiCpuVersion (&FamilyId, &Model, &SteppingId, &ProcessorType);
-
-  //
-  //we need raw Model data
-  //
-  Model = Model & 0xf;
+  AsmCpuid (CPUID_VERSION_INFO, &Eax.Uint32, &Ebx.Uint32, &Ecx.Uint32, &Edx.Uint32);
+  FamilyId = Eax.Bits.FamilyId;
+  if (Eax.Bits.FamilyId == 0x0F) {
+    FamilyId |= (Eax.Bits.ExtendedFamilyId << 4);
+  }
+  Model = Eax.Bits.Model;
+  if (Eax.Bits.FamilyId == 0x06 || Eax.Bits.FamilyId == 0x0f) {
+    Model |= (Eax.Bits.ExtendedModelId << 4);
+  }
+  SteppingId = Eax.Bits.SteppingId;
 
   //
   //Family/Model/Step
@@ -243,9 +250,9 @@ GetUcodeVersion()
   //
   // Microcode Revision
   //
-  EfiWriteMsr (EFI_MSR_IA32_BIOS_SIGN_ID, 0);
-  EfiCpuid (EFI_CPUID_VERSION_INFO, NULL);
-  MicroCodeVersion = (UINT32) RShiftU64 (EfiReadMsr (EFI_MSR_IA32_BIOS_SIGN_ID), 32);
+  AsmWriteMsr64 (MSR_IA32_BIOS_SIGN_ID, 0);
+  AsmCpuid (CPUID_VERSION_INFO, NULL, NULL, NULL, NULL);
+  MicroCodeVersion = (UINT32) RShiftU64 (AsmReadMsr64 (MSR_IA32_BIOS_SIGN_ID), 32);
   UnicodeSPrint (Buffer, sizeof (Buffer), L"%x", MicroCodeVersion);
   HiiSetString(mHiiHandle,STRING_TOKEN(STR_MISC_UCODE_VERSION), Buffer, NULL);
 }

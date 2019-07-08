@@ -27,6 +27,8 @@ Revision History:
 #include <IndustryStandard/SmBios.h>
 #include <Library/IoLib.h>
 #include <Guid/GlobalVariable.h>
+#include <Register/Cpuid.h>
+#include <Register/Msr.h>
 
 #include "Valleyview.h"
 #include "VlvAccess.h"
@@ -74,7 +76,6 @@ SB_REV  SBRevisionTable[] = {
 #define PREFIX_ZERO   0x20
 
 #define ICH_REG_REV                 0x08
-#define MSR_IA32_PLATFORM_ID        0x17
 
 
 BOOLEAN                         mSetupInfoDone = FALSE;
@@ -495,7 +496,7 @@ UpdateAdditionalInformation (
       GetOptionalStringByIndex ((CHAR8*)((UINT8*)Type4Record + Type4Record->Hdr.Length), StrIndex, &ProcessorVersion);
       HiiSetString (mHiiHandle, STR_PROCESSOR_VERSION_VALUE, ProcessorVersion, NULL);
 
-      MicrocodeRevision = (UINT32) RShiftU64 (AsmReadMsr64 (EFI_MSR_IA32_BIOS_SIGN_ID), 32);
+      MicrocodeRevision = (UINT32) RShiftU64 (AsmReadMsr64 (MSR_IA32_BIOS_SIGN_ID), 32);
       UnicodeSPrint (NewString, sizeof (NewString), L"%8x", MicrocodeRevision);
       HiiSetString (mHiiHandle, STR_PROCESSOR_MICROCODE_VALUE, NewString, NULL);
     }
@@ -590,22 +591,29 @@ VOID
 UpdateCPUInformation ()
 {
   CHAR16								Buffer[40];
-  UINT16                                FamilyId;
-  UINT8                                 Model;
-  UINT8                                 SteppingId;
-  UINT8                                 ProcessorType;
+  UINT32                                FamilyId;
+  UINT32                                Model;
+  UINT32                                SteppingId;
   EFI_STATUS                            Status;
   EFI_MP_SERVICES_PROTOCOL              *MpService;
   UINTN                                 MaximumNumberOfCPUs;
   UINTN                                 NumberOfEnabledCPUs;
   UINT32								Buffer32 = 0xFFFFFFFF;   // Keep buffer with unknown device
+  CPUID_VERSION_INFO_EAX  Eax;
+  CPUID_VERSION_INFO_EBX  Ebx;
+  CPUID_VERSION_INFO_ECX  Ecx;
+  CPUID_VERSION_INFO_EDX  Edx;
 
-  EfiCpuVersion (&FamilyId, &Model, &SteppingId, &ProcessorType);
-
-  //
-  //we need raw Model data
-  //
-  Model = Model & 0xf;
+  AsmCpuid (CPUID_VERSION_INFO, &Eax.Uint32, &Ebx.Uint32, &Ecx.Uint32, &Edx.Uint32);
+  FamilyId = Eax.Bits.FamilyId;
+  if (Eax.Bits.FamilyId == 0x0F) {
+    FamilyId |= (Eax.Bits.ExtendedFamilyId << 4);
+  }
+  Model = Eax.Bits.Model;
+  if (Eax.Bits.FamilyId == 0x06 || Eax.Bits.FamilyId == 0x0f) {
+    Model |= (Eax.Bits.ExtendedModelId << 4);
+  }
+  SteppingId = Eax.Bits.SteppingId;
 
   //
   //Family/Model/Step
@@ -633,7 +641,7 @@ UpdateCPUInformation ()
   //
   // Update Mobile / Desktop / Tablet SKU
   //
-  Buffer32 =(UINT32) RShiftU64 (EfiReadMsr (MSR_IA32_PLATFORM_ID), 50) & 0x07;
+  Buffer32 =(UINT32) RShiftU64 (AsmReadMsr64 (MSR_IA32_PLATFORM_ID), 50) & 0x07;
 
   switch(Buffer32){
       case 0x0:
@@ -903,7 +911,7 @@ UpdatePlatformInformation (
   // VLV-QC Desktop       010
   // VLV-QC Notebook      011
   //
-  CpuFlavor = RShiftU64 (EfiReadMsr (MSR_IA32_PLATFORM_ID), 50) & 0x07;
+  CpuFlavor = RShiftU64 (AsmReadMsr64 (MSR_IA32_PLATFORM_ID), 50) & 0x07;
 
   switch(CpuFlavor){
     case 0x0:
@@ -1038,9 +1046,9 @@ UpdatePlatformInformation (
   //
   // Microcode Revision
   //
-  EfiWriteMsr (EFI_MSR_IA32_BIOS_SIGN_ID, 0);
-  EfiCpuid (EFI_CPUID_VERSION_INFO, NULL);
-  MicroCodeVersion = (UINT32) RShiftU64 (EfiReadMsr (EFI_MSR_IA32_BIOS_SIGN_ID), 32);
+  AsmWriteMsr64 (MSR_IA32_BIOS_SIGN_ID, 0);
+  AsmCpuid (CPUID_VERSION_INFO, NULL, NULL, NULL, NULL);
+  MicroCodeVersion = (UINT32) RShiftU64 (AsmReadMsr64 (MSR_IA32_BIOS_SIGN_ID), 32);
   UnicodeSPrint (Buffer, sizeof (Buffer), L"%x", MicroCodeVersion);
   HiiSetString(mHiiHandle,STRING_TOKEN(STR_PROCESSOR_MICROCODE_VALUE), Buffer, NULL);
 

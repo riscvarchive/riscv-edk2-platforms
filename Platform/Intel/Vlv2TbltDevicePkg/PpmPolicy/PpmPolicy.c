@@ -18,14 +18,11 @@ Abstract:
 #include <Protocol/MpService.h>
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
-#include <Library/CpuIA32.h>
+#include <Register/Cpuid.h>
+#include <Register/Msr.h>
 
 #include <PchRegs.h>
 #include <Library/PchPlatformLib.h>
-
-#define EFI_CPUID_FAMILY                      0x0F00
-#define EFI_CPUID_MODEL                       0x00F0
-#define EFI_CPUID_STEPPING                    0x000F
 
 EFI_STATUS 
 EFIAPI
@@ -36,7 +33,6 @@ PpmPolicyEntry(
 {
   EFI_BOOT_SERVICES        *pBS;
   EFI_MP_SERVICES_PROTOCOL *MpService;
-  EFI_CPUID_REGISTER        Cpuid01 = { 0, 0, 0, 0};
   EFI_HANDLE                Handle;
   EFI_STATUS                Status;
   UINTN                     CpuCount;
@@ -70,13 +66,13 @@ PpmPolicyEntry(
   //
   // Store the CPUID for use by SETUP items.
   //
-  AsmCpuid (EFI_CPUID_VERSION_INFO, &Cpuid01.RegEax, &Cpuid01.RegEbx, &Cpuid01.RegEcx, &Cpuid01.RegEdx);
+  AsmCpuid (CPUID_VERSION_INFO, NULL, NULL, NULL, NULL);
 
   mDxePlatformPpmPolicy.Revision                       = PPM_PLATFORM_POLICY_PROTOCOL_REVISION_4;
 
   //Read CPU Mobile feature from PLATFORM_ID_MSR MSR(0x17) NOTFB_I_AM_NOT_MOBILE_FUSE_CLIAMC00H Bit 28
   //Bit Description: { Disables Mobile features 0 = I am NOT a mobile part 1 = I am a mobile part (default)"}
-  CPUMobileFeature = ((RShiftU64 (AsmReadMsr64(EFI_MSR_IA32_PLATFORM_ID), 28)) & 0x1);
+  CPUMobileFeature = ((RShiftU64 (AsmReadMsr64(MSR_IA32_PLATFORM_ID), 28)) & 0x1);
 
   if (!EFI_ERROR(Status)) {
     if (CPUMobileFeature == 1){//CPU mobile feature

@@ -1,11 +1,8 @@
 /*++
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
 
 Module Name:
 
@@ -21,7 +18,6 @@ Abstract:
 #define _PLATFORM_CPU_INFO_GUID_H_
 
 #include "CpuType.h"
-#include <Library/CpuIA32.h>
 
 #define EFI_PLATFORM_CPU_INFO_GUID \
   {\
@@ -94,6 +90,14 @@ typedef struct {
   UINT8               NumIntThresholds;         // EBX [3:0]
   UINT8               HwCoordinationFeedback;   // ECX [0]
 } EFI_CPU_POWER_MANAGEMENT; // CPUID.6.EAX
+
+
+typedef struct {
+  UINT32  RegEax;
+  UINT32  RegEbx;
+  UINT32  RegEcx;
+  UINT32  RegEdx;
+} EFI_CPUID_REGISTER;
 
 //
 // IMPORTANT: Each CPU feature enabling entry is assumed a tri-state variable.

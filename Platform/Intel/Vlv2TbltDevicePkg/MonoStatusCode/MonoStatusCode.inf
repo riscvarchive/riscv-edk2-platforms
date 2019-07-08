@@ -58,7 +58,6 @@
   gEfiSerialPortTokenSpaceGuid.PcdStatusCodeUseRam
 
 [Guids]
-  gEfiPlatformCpuInfoGuid
   gEfiStatusCodeDataTypeStringGuid              ## CONSUMES
 
 [Depex]

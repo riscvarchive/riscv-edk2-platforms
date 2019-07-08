@@ -41,7 +41,6 @@
 #include <Library/DxeServicesTableLib.h>
 #include <Library/HiiLib.h>
 #include <Library/BiosIdLib.h>
-#include <Library/CpuIA32.h>
 #include <Library/HobLib.h>
 #include <Guid/PlatformInfo.h>
 #include <IndustryStandard/Pci22.h>

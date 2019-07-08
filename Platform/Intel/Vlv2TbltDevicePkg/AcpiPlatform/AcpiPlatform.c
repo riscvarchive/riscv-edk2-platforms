@@ -36,7 +36,6 @@ Abstract:
 #include <Guid/PlatformInfo.h>
 #include <Guid/BoardFeatures.h>
 #include <Protocol/AcpiTable.h>
-#include <Library/CpuIA32.h>
 #include <SetupMode.h>
 #include <Guid/AcpiTableStorage.h>
 #include <Guid/EfiVpdData.h>

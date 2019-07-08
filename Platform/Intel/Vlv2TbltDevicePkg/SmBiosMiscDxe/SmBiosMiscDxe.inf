@@ -103,7 +103,6 @@
   UefiLib
   BiosIdLib
   PrintLib
-  CpuIA32Lib
   PchPlatformLib
   NetLib
   HobLib

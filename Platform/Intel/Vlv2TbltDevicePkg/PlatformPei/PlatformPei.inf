@@ -100,7 +100,6 @@
   gEfiSetupVariableGuid
   gEfiPlatformInfoGuid
   gEfiPlatformBootModeGuid
-  gEfiPlatformCpuInfoGuid
   gEfiGlobalVariableGuid
   gRecoveryOnFatFloppyDiskGuid
   gRecoveryOnFatUsbDiskGuid

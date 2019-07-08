@@ -63,6 +63,10 @@ for (( i=1; i<=$#; ))
       Arch=X64
       Build_Flags="$Build_Flags /x64"
       shift
+    elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/IA32" ]; then
+      Arch=IA32
+      Build_Flags="$Build_Flags /IA32"
+      shift
     elif [ "$1" == "/nG" ]; then
       Stitch_Flags="$Stitch_Flags /nG"
       shift

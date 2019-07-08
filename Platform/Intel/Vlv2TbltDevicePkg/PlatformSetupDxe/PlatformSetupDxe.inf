@@ -61,6 +61,7 @@
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
   SecurityPkg/SecurityPkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec
   BoardModulePkg/BoardModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec    #for PchAccess.h
@@ -79,7 +80,6 @@
   UefiRuntimeServicesTableLib
   PrintLib
   BiosIdLib
-  CpuIA32Lib
   IoLib
   HobLib
 

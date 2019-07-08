@@ -53,7 +53,7 @@ Abstract:
 #include <Library/BaseLib.h>
 #include <Library/PeiServicesLib.h>
 #include <Library/MtrrLib.h>
-#include <Library/CpuIA32.h>
+#include <Register/Cpuid.h>
 
 #include <IndustryStandard/Pci22.h>
 #include <Ppi/Speaker.h>
@@ -94,8 +94,6 @@ Abstract:
 #define SMBIOS_WAKEUP_TYPE_POWER_SWITCH       0x06
 #define SMBIOS_WAKEUP_TYPE_PCI_PME            0x07
 #define SMBIOS_WAKEUP_TYPE_AC_POWER_RESTORED  0x08
-
-#define EFI_CPUID_VIRT_PHYS_ADDRESS_SIZE       0x80000008
 
 //
 // Defines for stall ppi

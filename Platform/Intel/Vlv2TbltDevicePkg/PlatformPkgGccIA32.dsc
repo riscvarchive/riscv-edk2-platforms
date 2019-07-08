@@ -18,8 +18,8 @@
   PLATFORM_GUID                       = 465B0A0B-7AC1-443b-8F67-7B8DEC145F90
   PLATFORM_VERSION                    = 0.1
   DSC_SPECIFICATION                   = 0x00010005
-  OUTPUT_DIRECTORY                    = Build/Vlv2TbltDevicePkg
-  SUPPORTED_ARCHITECTURES             = IA32|X64
+  OUTPUT_DIRECTORY                    = Build/Vlv2TbltDevicePkgIA32
+  SUPPORTED_ARCHITECTURES             = IA32
   BUILD_TARGETS                       = DEBUG|RELEASE
   SKUID_IDENTIFIER                    = DEFAULT
 
@@ -36,15 +36,13 @@
   !include Vlv2TbltDevicePkg/AutoPlatformCFG.txt
   !include Vlv2TbltDevicePkg/PlatformPkgConfig.dsc
 
-  DEFINE PLATFORMX64_ENABLE = TRUE
-
 !if $(X64_CONFIG) == TRUE
   DEFINE      DXE_ARCHITECTURE        = X64
 !else
   DEFINE      DXE_ARCHITECTURE        = IA32
 !endif
 
-  FLASH_DEFINITION                    = Vlv2TbltDevicePkg/PlatformPkg.fdf
+  FLASH_DEFINITION                    = Vlv2TbltDevicePkg/PlatformPkgGcc.fdf
 !if $(LFMA_ENABLE) == TRUE
   FIX_LOAD_TOP_MEMORY_ADDRESS         = 0xFFFFFFFFFFFFFFFF
   DEFINE   TOP_MEMORY_ADDRESS         = 0xFFFFFFFFFFFFFFFF
@@ -294,7 +292,7 @@
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
 !endif
 
-[LibraryClasses.X64]
+[LibraryClasses.IA32]
   #
   # DXE phase common
   #
@@ -318,7 +316,7 @@
 
   HashLib|SecurityPkg/Library/HashLibBaseCryptoRouter/HashLibBaseCryptoRouterDxe.inf
 
-[LibraryClasses.X64.DXE_DRIVER]
+[LibraryClasses.IA32.DXE_DRIVER]
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   PerformanceLib|MdePkg/Library/BasePerformanceLibNull/BasePerformanceLibNull.inf
@@ -334,7 +332,7 @@
 
   FlashDeviceLib|Vlv2TbltDevicePkg/Library/FlashDeviceLib/FlashDeviceLibDxe.inf
 
-[LibraryClasses.X64.DXE_CORE]
+[LibraryClasses.IA32.DXE_CORE]
   HobLib|MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
   MemoryAllocationLib|MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib.inf
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
@@ -347,7 +345,7 @@
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/DxeDebugAgentLib.inf
 !endif
 
-[LibraryClasses.X64.DXE_SMM_DRIVER]
+[LibraryClasses.IA32.DXE_SMM_DRIVER]
   MmServicesTableLib|MdePkg/Library/MmServicesTableLib/MmServicesTableLib.inf
   SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/SmmReportStatusCodeLib/SmmReportStatusCodeLib.inf
@@ -369,7 +367,7 @@
 !endif
   CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/SmmCpuExceptionHandlerLib.inf
 
-[LibraryClasses.X64.SMM_CORE]
+[LibraryClasses.IA32.SMM_CORE]
   MemoryAllocationLib|MdeModulePkg/Library/PiSmmCoreMemoryAllocationLib/PiSmmCoreMemoryAllocationLib.inf
   SmmServicesTableLib|MdeModulePkg/Library/PiSmmCoreSmmServicesTableLib/PiSmmCoreSmmServicesTableLib.inf
   ReportStatusCodeLib|MdeModulePkg/Library/SmmReportStatusCodeLib/SmmReportStatusCodeLib.inf
@@ -386,7 +384,7 @@
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
 !endif
 
-[LibraryClasses.X64.DXE_RUNTIME_DRIVER]
+[LibraryClasses.IA32.DXE_RUNTIME_DRIVER]
   ReportStatusCodeLib|MdeModulePkg/Library/RuntimeDxeReportStatusCodeLib/RuntimeDxeReportStatusCodeLib.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
@@ -410,7 +408,7 @@
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/DxeDebugAgentLib.inf
 !endif
 
-[LibraryClasses.X64.UEFI_APPLICATION]
+[LibraryClasses.IA32.UEFI_APPLICATION]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
 
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
@@ -431,7 +429,7 @@
 #
 # If PcdDxeIplSwitchToLongMode is TRUE, DxeIpl will load a 64-bit DxeCore and switch to long mode to hand over to DxeCore.
 #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdDxeIplSwitchToLongMode|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdDxeIplSwitchToLongMode|FALSE
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserGrayOutTextStatement|TRUE
 
@@ -771,7 +769,7 @@
 !if $(RC_BINARY_RELEASE) == TRUE
   Vlv2TbltDevicePkg/PlatformPei/PlatformPei.inf {
     <BuildOptions>
-      *_*_IA32_CC_FLAGS      = /DRC_BINARY_RELEASE
+      *_*_IA32_CC_FLAGS      = -DRC_BINARY_RELEASE
   !if $(TARGET) == DEBUG
       <PcdsFixedAtBuild>
         gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x2E
@@ -876,7 +874,7 @@
 !if $(PERFORMANCE_ENABLE) == TRUE
   MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
 !endif
-[Components.X64]
+[Components.IA32]
   #
   # EDK II Related Platform codes
   #
@@ -907,19 +905,6 @@
       DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
 !endif
   }
-
-!if $(CAPSULE_ENABLE) == TRUE
-  MdeModulePkg/Universal/CapsulePei/CapsuleX64.inf {
-    <LibraryClasses>
-      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
-      MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
-      HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
-      CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/SecPeiCpuExceptionHandlerLib.inf
-!if $(SOURCE_DEBUG_ENABLE) == TRUE
-      DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
-!endif
-  }
-!endif
 
   MdeModulePkg/Universal/ReportStatusCodeRouter/Smm/ReportStatusCodeRouterSmm.inf
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf{
@@ -1259,14 +1244,14 @@
   DEFINE MINNOW2_FSP_OPTION =
 
 !if $(ENBDT_PF_BUILD) == TRUE
-  DEFINE ENBDT_PF_ENABLE = /DENBDT_PF_ENABLE=1
+  DEFINE ENBDT_PF_ENABLE = -DENBDT_PF_ENABLE=1
 !else
-  DEFINE ENBDT_PF_ENABLE = /DENBDT_PF_ENABLE=0
+  DEFINE ENBDT_PF_ENABLE = -DENBDT_PF_ENABLE=0
 !endif
 
 
 !if $(CLKGEN_CONFIG_EXTRA_ENABLE) == TRUE
-  DEFINE CLKGEN_CONFIG_EXTRA_BUILD_OPTION = /DCLKGEN_CONFIG_EXTRA=1
+  DEFINE CLKGEN_CONFIG_EXTRA_BUILD_OPTION = -DCLKGEN_CONFIG_EXTRA=1
 !else
   DEFINE CLKGEN_CONFIG_EXTRA_BUILD_OPTION =
 !endif
@@ -1274,29 +1259,29 @@
 
 
 !if $(PCIESC_ENABLE) == TRUE
-  DEFINE PCIESC_SUPPORT_BUILD_OPTION = /DPCIESC_SUPPORT=1
+  DEFINE PCIESC_SUPPORT_BUILD_OPTION = -DPCIESC_SUPPORT=1
 !else
   DEFINE PCIESC_SUPPORT_BUILD_OPTION =
 !endif
 !if $(SATA_ENABLE) == TRUE
-  DEFINE SATA_SUPPORT_BUILD_OPTION = /DSATA_SUPPORT=1
+  DEFINE SATA_SUPPORT_BUILD_OPTION = -DSATA_SUPPORT=1
 !else
   DEFINE SATA_SUPPORT_BUILD_OPTION =
 !endif
 !if $(ENBDT_S3_SUPPORT) == TRUE
-  DEFINE ENBDT_S3_SUPPORT_OPTIONS = /DNOCS_S3_SUPPORT
+  DEFINE ENBDT_S3_SUPPORT_OPTIONS = -DNOCS_S3_SUPPORT
 !else
   DEFINE ENBDT_S3_SUPPORT_OPTIONS =
 !endif
 
 !if $(X64_CONFIG) == TRUE
-  DEFINE X64_BUILD_ENABLE = /DX64_BUILD_ENABLE=1
+  DEFINE X64_BUILD_ENABLE = -DX64_BUILD_ENABLE=1
 !else
   DEFINE X64_BUILD_ENABLE =
 !endif
 
 !if $(TPM_ENABLED) == TRUE
-  DEFINE DSC_TPM_BUILD_OPTIONS = /DTPM_ENABLED
+  DEFINE DSC_TPM_BUILD_OPTIONS = -DTPM_ENABLED
 !else
   DEFINE DSC_TPM_BUILD_OPTIONS =
 !endif
@@ -1307,13 +1292,12 @@
   DEFINE PDB_BUILD_OPTION = /Zi
 !endif
 
+  GCC:*_*_*_CC_FLAGS = -Wno-missing-braces
 !if $(SOURCE_DEBUG_ENABLE) == TRUE
   MSFT:*_*_X64_GENFW_FLAGS  = --keepexceptiontable
   GCC:*_*_X64_GENFW_FLAGS   = --keepexceptiontable
   INTEL:*_*_X64_GENFW_FLAGS = --keepexceptiontable
-!if $(TARGET) == DEBUG
-  DEFINE SOURCE_LEVEL_DEBUG_BUILD_OPTIONS = /Od /Oy-
-!endif
+  DEFINE SOURCE_LEVEL_DEBUG_BUILD_OPTIONS =
 !else
   DEFINE SOURCE_LEVEL_DEBUG_BUILD_OPTIONS =
 
@@ -1336,7 +1320,7 @@
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000
 
 [BuildOptions.Common.EDKII]
-  *_*_IA32_ASM_FLAGS     = $(VP_BUILD_OPTIONS) /D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h /DNOCS_S3_SUPPORT
+  *_*_IA32_ASM_FLAGS     = $(VP_BUILD_OPTIONS) -D EDKII_GLUE_PciExpressBaseAddress=$(PLATFORM_PCIEXPRESS_BASE)h -DNOCS_S3_SUPPORT
 
   *_*_IA32_CC_FLAGS      = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS)
   *_*_IA32_VFRPP_FLAGS   = $(EDK_EDKII_DSC_FEATURE_BUILD_OPTIONS)

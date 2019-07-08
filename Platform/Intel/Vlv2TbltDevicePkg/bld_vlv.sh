@@ -104,6 +104,9 @@ for (( i=1; i<=$#; ))
     elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/X64" ]; then
       Arch=X64
       shift
+    elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/IA32" ]; then
+      Arch=IA32
+      shift
     elif [ "$(echo $1 | tr 'a-z' 'A-Z')" == "/YL" ]; then
       SpiLock=1
       shift      
@@ -243,11 +246,11 @@ build
 ##**********************************************************************
 echo Skip "Running fce..."
 
+cp -f $BUILD_PATH/FV/VLV.fd $BUILD_PATH/FV/Vlv.ROM
+
 ##**********************************************************************
 ## Build Capsules
 ##**********************************************************************
-cp -f $WORKSPACE/Build/Vlv2TbltDevicePkg/${TARGET}_${TOOL_CHAIN_TAG}/FV/VLV.fd \
-      $WORKSPACE/Build/Vlv2TbltDevicePkg/${TARGET}_${TOOL_CHAIN_TAG}/FV/Vlv.ROM
 build -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
 
 echo

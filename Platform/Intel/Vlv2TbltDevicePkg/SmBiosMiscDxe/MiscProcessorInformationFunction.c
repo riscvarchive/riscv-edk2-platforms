@@ -20,7 +20,6 @@ Abstract:
 #include "MiscSubclassDriver.h"
 
 #include <Protocol/MpService.h>
-#include <Library/CpuIA32.h>
 #include <Library/TimerLib.h>
 #include <Register/Cpuid.h>
 
@@ -102,7 +101,7 @@ DetermineiFsbFromMsr (
   // Determine the processor core frequency
   //
   UINT64	Temp;
-  Temp = (EfiReadMsr (BSEL_CR_OVERCLOCK_CONTROL)) & FUSE_BSEL_MASK;
+  Temp = (AsmReadMsr64 (BSEL_CR_OVERCLOCK_CONTROL)) & FUSE_BSEL_MASK;
   return miFSBFrequencyTable[(UINT32)(Temp)];
 
 }
