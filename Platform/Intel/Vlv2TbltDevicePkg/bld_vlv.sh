@@ -66,6 +66,7 @@ cd $CORE_PATH
 make -C BaseTools
 
 ## Define platform specific environment variables.
+PLATFORM_NAME=Vlv2TbltDevicePkg
 PLATFORM_PACKAGE=Vlv2TbltDevicePkg
 PLATFORM_PKG_PATH=$PLATFORM_PATH/$PLATFORM_PACKAGE
 config_file=$PLATFORM_PKG_PATH/PlatformPkgConfig.dsc
@@ -185,6 +186,51 @@ if [ $Arch == "IA32" ]; then
 else
   echo TARGET_ARCH   = IA32 X64                                   >> $WORKSPACE/Conf/target.txt
 fi
+
+
+## Set and Create $BUILD_PATH if necessary
+if [ ! -d ${WORKSPACE}/Build ]; then
+  mkdir ${WORKSPACE}/Build
+fi
+
+if [ $Arch == "IA32" ]; then
+  if [ ! -d ${WORKSPACE}/Build/${PLATFORM_NAME}IA32 ]; then
+    mkdir ${WORKSPACE}/Build/${PLATFORM_NAME}IA32
+  fi
+  BUILD_PATH=${WORKSPACE}/Build/${PLATFORM_NAME}IA32/${TARGET}_${TOOL_CHAIN_TAG}
+else
+  if [ ! -d ${WORKSPACE}/Build/${PLATFORM_NAME} ]; then
+    mkdir ${WORKSPACE}/Build/${PLATFORM_NAME}
+  fi
+  BUILD_PATH=${WORKSPACE}/Build/${PLATFORM_NAME}/${TARGET}_${TOOL_CHAIN_TAG}
+fi
+
+if [ ! -d $BUILD_PATH ]; then
+  mkdir $BUILD_PATH
+fi
+
+##**********************************************************************
+## Generate BIOS ID
+##**********************************************************************
+
+echo BOARD_ID       = MNW2MAX >  $BUILD_PATH/BiosId.env
+echo BOARD_REV      = 1       >> $BUILD_PATH/BiosId.env
+if [ $Arch == "IA32" ]; then
+  echo BOARD_EXT      = I32   >> $BUILD_PATH/BiosId.env
+fi
+if [ $Arch == "X64" ]; then
+  echo BOARD_EXT      = X64   >> $BUILD_PATH/BiosId.env
+fi
+echo VERSION_MAJOR  = 0090    >> $BUILD_PATH/BiosId.env
+if [ $TARGET == "DEBUG" ]; then
+  echo BUILD_TYPE     = D     >> $BUILD_PATH/BiosId.env
+fi
+if [ $TARGET == "RELEASE" ]; then
+  echo BUILD_TYPE     = R     >> $BUILD_PATH/BiosId.env
+fi
+echo VERSION_MINOR  = 01      >> $BUILD_PATH/BiosId.env
+
+python $WORKSPACE/edk2-platforms/Platform/Intel/Tools/GenBiosId/GenBiosId.py -i $BUILD_PATH/BiosId.env -o $BUILD_PATH/BiosId.bin -ot $BUILD_PATH/BiosId.txt
 
 ##**********************************************************************
 ## Build BIOS

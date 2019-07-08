@@ -81,12 +81,13 @@
   MiscMemoryDeviceFunction.c
 
 [Packages]
-  MdeModulePkg/MdeModulePkg.dec
-  Vlv2TbltDevicePkg/PlatformPkg.dec
   MdePkg/MdePkg.dec
-  Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
   NetworkPkg/NetworkPkg.dec
   UefiCpuPkg/UefiCpuPkg.dec
+  BoardModulePkg/BoardModulePkg.dec
+  Vlv2TbltDevicePkg/PlatformPkg.dec
+  Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
 
 [LibraryClasses]
   HiiLib
@@ -120,7 +121,6 @@
   gMemInfoProtocolGuid
   gEfiTdtOperationProtocolGuid
   gDxePchPlatformPolicyProtocolGuid
-  gEfiSpiProtocolGuid
   gEfiSimpleNetworkProtocolGuid
 
 [Pcd]

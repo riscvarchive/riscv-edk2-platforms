@@ -48,10 +48,11 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  Vlv2TbltDevicePkg/PlatformPkg.dec
-  Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
   SecurityPkg/SecurityPkg.dec
   CryptoPkg/CryptoPkg.dec
+  BoardModulePkg/BoardModulePkg.dec
+  Vlv2TbltDevicePkg/PlatformPkg.dec
+  Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
 
 [LibraryClasses]
   BaseLib

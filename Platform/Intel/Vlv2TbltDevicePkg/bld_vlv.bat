@@ -207,11 +207,15 @@ if defined VS140COMNTOOLS (
 )
 
 echo Ensuring correct build directory is present
+if not exist %WORKSPACE%\Build mkdir %WORKSPACE%\Build
 if "%Arch%"=="IA32" (
+  if not exist %WORKSPACE%\Build\%PLATFORM_NAME%IA32 mkdir %WORKSPACE%\Build\%PLATFORM_NAME%IA32
   set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%IA32\%TARGET%_%TOOL_CHAIN_TAG%
 ) else (
+  if not exist %WORKSPACE%\Build\%PLATFORM_NAME% mkdir %WORKSPACE%\Build\%PLATFORM_NAME%
   set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%\%TARGET%_%TOOL_CHAIN_TAG%
 )
+if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 
 echo Modifing Conf files for this build...
 :: Remove lines with these tags from target.txt
@@ -233,6 +237,29 @@ if %Source% == 0 (
 echo MAX_CONCURRENT_THREAD_NUMBER = %build_threads%                      >> %WORKSPACE%\Conf\target.txt.tmp
 
 move /Y %WORKSPACE%\Conf\target.txt.tmp %WORKSPACE%\Conf\target.txt >nul
+
+::**********************************************************************
+:: Generate BIOS ID
+::**********************************************************************
+
+echo BOARD_ID       = MNW2MAX >  %BUILD_PATH%/BiosId.env
+echo BOARD_REV      = 1       >> %BUILD_PATH%/BiosId.env
+if "%Arch%"=="IA32" (
+  echo BOARD_EXT      = I32   >> %BUILD_PATH%/BiosId.env
+)
+if "%Arch%"=="X64" (
+  echo BOARD_EXT      = X64   >> %BUILD_PATH%/BiosId.env
+)
+echo VERSION_MAJOR  = 0090    >> %BUILD_PATH%/BiosId.env
+if "%TARGET%"=="DEBUG" (
+  echo BUILD_TYPE     = D     >> %BUILD_PATH%/BiosId.env
+)
+if "%TARGET%"=="RELEASE" (
+  echo BUILD_TYPE     = R     >> %BUILD_PATH%/BiosId.env
+)
+echo VERSION_MINOR  = 01      >> %BUILD_PATH%/BiosId.env
+
+%WORKSPACE%\edk2-platforms\Platform\Intel\Tools\GenBiosId\GenBiosId.py -i %BUILD_PATH%/BiosId.env -o %BUILD_PATH%/BiosId.bin -ot %BUILD_PATH%/BiosId.txt
 
 ::**********************************************************************
 :: Build BIOS

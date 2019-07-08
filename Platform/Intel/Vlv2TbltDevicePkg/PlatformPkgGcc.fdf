@@ -331,6 +331,13 @@ APRIORI DXE {
   INF  MdeModulePkg/Universal/StatusCodeHandler/RuntimeDxe/StatusCodeHandlerRuntimeDxe.inf
   }
 
+#
+# gBiosIdGuid
+#
+FILE FREEFORM = C3E36D09-8294-4b97-A857-D5288FE33E28 {
+    SECTION RAW = $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/BiosId.bin
+  }
+
   #
   # EDK II Related Platform codes
   #

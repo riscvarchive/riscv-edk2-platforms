@@ -60,9 +60,10 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  SecurityPkg/SecurityPkg.dec
+  BoardModulePkg/BoardModulePkg.dec
   Vlv2TbltDevicePkg/PlatformPkg.dec
   Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec    #for PchAccess.h
-  SecurityPkg/SecurityPkg.dec
 
 [LibraryClasses]
   BaseLib

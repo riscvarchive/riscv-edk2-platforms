@@ -163,12 +163,6 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   SMBIOS_TABLE_TYPE0    *SmbiosRecord;
   EFI_SMBIOS_HANDLE     SmbiosHandle;
   EFI_MISC_BIOS_VENDOR *ForType0InputData;
-  UINT16                UVerStr[32];
-  UINTN                 LoopIndex;
-  UINTN                 CopyIndex;
-  MANIFEST_OEM_DATA     *IFWIVerStruct;
-  UINT8                 *Data8 = NULL;
-  UINT16                SpaceVer[2]={0x0020,0x0000};
   UINT16                BIOSVersionTemp[100];
 
   ForType0InputData        = (EFI_MISC_BIOS_VENDOR *)RecordData;
@@ -208,49 +202,8 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   TokenToGet = STRING_TOKEN (STR_MISC_BIOS_VERSION);
   Version = SmbiosMiscGetString (TokenToGet);
 
-  ZeroMem (UVerStr, 2*32);
-  ZeroMem (BIOSVersionTemp, 2*100);
+  ZeroMem (BIOSVersionTemp, sizeof (BIOSVersionTemp));
   StrCat (BIOSVersionTemp,Version);
-  Data8 = AllocatePool (SECTOR_SIZE_4KB);
-  ZeroMem (Data8, SECTOR_SIZE_4KB);
-
-  Status = gBS->LocateProtocol (
-                  &gEfiSpiProtocolGuid,
-                  NULL,
-                 (VOID **)&mSpiProtocol
-                 );
-  if (!EFI_ERROR(Status)) {
-    //
-    // Get data form SPI ROM.
-    //
-    Status = FlashRead (
-               MEM_IFWIVER_START,
-               Data8,
-               SECTOR_SIZE_4KB,
-               EnumSpiRegionAll
-               );
-    if (!EFI_ERROR(Status)) {
-      for(LoopIndex = 0; LoopIndex <= SECTOR_SIZE_4KB; LoopIndex++) {
-        IFWIVerStruct = (MANIFEST_OEM_DATA *)(Data8 + LoopIndex);
-        if(IFWIVerStruct->Signature == SIGNATURE_32('$','F','U','D')) {
-          DEBUG ((EFI_D_ERROR, "the IFWI Length is:%d\n", IFWIVerStruct->IFWIVersionLen));
-          if(IFWIVerStruct->IFWIVersionLen < 32) {
-            for(CopyIndex = 0; CopyIndex < IFWIVerStruct->IFWIVersionLen; CopyIndex++) {
-              UVerStr[CopyIndex] = (UINT16)IFWIVerStruct->IFWIVersion[CopyIndex];
-            }
-            UVerStr[CopyIndex] = 0x0000;
-            DEBUG ((EFI_D_ERROR, "The IFWI Version is :%s,the IFWI Length is:%d\n", UVerStr,IFWIVerStruct->IFWIVersionLen));
-            StrCat(BIOSVersionTemp,SpaceVer);
-            StrCat(BIOSVersionTemp,UVerStr);
-            DEBUG ((EFI_D_ERROR, "The BIOS and IFWI Version is :%s\n", BIOSVersionTemp));
-          }
-          break;
-        }
-      }
-    }
-  }
-  FreePool(Data8);
-
   VerStrLen = StrLen(BIOSVersionTemp);
   if (VerStrLen > SMBIOS_STRING_MAX_LENGTH) {
     return EFI_UNSUPPORTED;

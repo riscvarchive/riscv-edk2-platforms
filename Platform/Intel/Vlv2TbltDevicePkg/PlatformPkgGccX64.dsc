@@ -221,7 +221,7 @@
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
 !endif
 
- BiosIdLib|Vlv2TbltDevicePkg/Library/BiosIdLib/BiosIdLib.inf
+ BiosIdLib|BoardModulePkg/Library/BiosIdLib/DxeBiosIdLib.inf
  CpuIA32Lib|Vlv2TbltDevicePkg/Library/CpuIA32Lib/CpuIA32Lib.inf
 
   StallSmmLib|Vlv2TbltDevicePkg/Library/StallSmmLib/StallSmmLib.inf
