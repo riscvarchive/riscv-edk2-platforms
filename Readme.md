@@ -83,7 +83,8 @@ target-specific binutils. These are included with any prepackaged GCC toolchain
    1. [edk2-non-osi](https://github.com/tianocore/edk2-non-osi) (if building
       platforms that need it)
    ```
-   $ git clone https://github.com/tianocore/edk2.git --recursive
+   $ git clone https://github.com/tianocore/edk2.git
+   $ git submodule update --init
    ...
    $ git clone https://github.com/tianocore/edk2-platforms.git
    ...
