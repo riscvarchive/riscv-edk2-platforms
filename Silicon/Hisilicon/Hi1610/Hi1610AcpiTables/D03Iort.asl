@@ -1,7 +1,9 @@
 /*
  * Intel ACPI Component Architecture
  * iASL Compiler/Disassembler version 20151124-64
- * Copyright (c) 2000 - 2015 Intel Corporation
+ * Copyright (c) 2015 Intel Corporation
+ *
+ * SPDX-License-Identifier: BSD-2-Clause-Patent
  *
  * Template for [IORT] ACPI Table (static data table)
  * Format: [ByteLength]  FieldName : HexFieldValue
