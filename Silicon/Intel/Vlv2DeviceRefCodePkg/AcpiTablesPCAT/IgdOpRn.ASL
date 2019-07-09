@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c)  1999  - 2014, Intel Corporation. All rights reserved
+Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -69,22 +69,6 @@ Field(IGDP, AnyAcc, NoLock, Preserve)
   Offset(0xFC),
   ASLS,   32,    // Reg 0xFC, Address of the IGD OpRegion
 }
-
-Method (MCHK, 0, Serialized)
-{
-
-  If (LNotEqual (MADR, 0xFFFFFFFF))
-  {
-    OperationRegion(IGMM,SystemMemory,MADR,0x3000)
-    Field(IGMM,AnyAcc, NoLock, Preserve)
-    {
-      Offset(0X20C8),
-      ,    4,
-      DCFE,    4,                     // DISPLAY_CLOCK_FREQUENCY_ENCODING
-    }
-  }
-}
-
 
 //  Define an OperationRegion to cover the IGD OpRegion layout.
 

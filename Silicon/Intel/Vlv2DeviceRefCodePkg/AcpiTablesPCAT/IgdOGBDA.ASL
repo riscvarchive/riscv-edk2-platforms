@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c)  1999  - 2014, Intel Corporation. All rights reserved
+Copyright (c)  1999  - 2019, Intel Corporation. All rights reserved
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -125,7 +125,17 @@ Method (GBDA, 0, Serialized)
 
     // Report the graphics frequency based on DISPLAY_CLOCK_FREQUENCY_ENCODING [MMADR+0x20C8]
 
-    Or(ShiftLeft(Derefof(Index(CDCT, \_SB.PCI0.GFX0.MCHK.DCFE)), 21),PARM, PARM)
+    If (LNotEqual (MADR, 0xFFFFFFFF))
+      {
+        OperationRegion(IGMM,SystemMemory,MADR,0x3000)
+        Field(IGMM,AnyAcc, NoLock, Preserve)
+        {
+          Offset(0X20C8),
+          ,    4,
+          DCFE,    4,                     // DISPLAY_CLOCK_FREQUENCY_ENCODING
+        }
+        Or(ShiftLeft(Derefof(Index(CDCT, DCFE)), 21),PARM, PARM)
+      }
 
     Store(1, GESF)                  // Set the modified settings flag
     Return(SUCC)
