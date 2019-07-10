@@ -9,15 +9,9 @@
 
 SetLocal EnableDelayedExpansion EnableExtensions
 
-@REM Go to work space directory.
-cd ..
-cd ..
-
 :: Assign initial values
 set exitCode=0
 set "Build_Flags= "
-set "Stitch_Flags= "
-set Arch=X64
 set PLATFORM_PACKAGE=Vlv2TbltDevicePkg
 
 set PLATFORM_PATH=%WORKSPACE%
@@ -42,11 +36,6 @@ if not exist %PLATFORM_PATH%\%PLATFORM_PACKAGE% (
 :OptLoop
 if /i "%~1"=="/?" goto Usage
 
-if /i "%~1"=="/q" (
-    set Build_Flags=%Build_Flags% /q
-    shift
-    goto OptLoop
-)
 if /i "%~1"=="/l" (
     set Build_Flags=%Build_Flags% /l
     shift
@@ -67,49 +56,13 @@ if /i "%~1" == "/c" (
     shift
     goto OptLoop
 )
-if /i "%~1" == "/ECP" (
-    set Build_Flags=%Build_Flags% /ecp
-    shift
-    goto OptLoop
-)
-
-if /i "%~1"=="/s" (
-    set Build_Flags=%Build_Flags% /s
-    shift
-    goto OptLoop
-)
-
 if /i "%~1"=="/x64" (
-    set Arch=X64
     set Build_Flags=%Build_Flags% /x64
     shift
     goto OptLoop
 )
-
 if /i "%~1"=="/IA32" (
-    set Arch=IA32
     set Build_Flags=%Build_Flags% /IA32
-    shift
-    goto OptLoop
-)
-
-if /i "%~1"=="/nG" (
-    set Stitch_Flags=%Stitch_Flags% /nG
-    shift
-    goto OptLoop
-)
-if /i "%~1"=="/nM" (
-    set Stitch_Flags=%Stitch_Flags% /nM
-    shift
-    goto OptLoop
-)
-if /i "%~1"=="/nB" (
-    set Stitch_Flags=%Stitch_Flags% /nB
-    shift
-    goto OptLoop
-)
-if /i "%~1"=="/yL" (
-    set Stitch_Flags=%Stitch_Flags% /yL
     shift
     goto OptLoop
 )
@@ -125,7 +78,7 @@ set Build_Target=%~2
 echo ======================================================================
 echo Build_IFWI:  Calling BIOS build Script...
 
-call %PLATFORM_PATH%\%PLATFORM_PACKAGE%\bld_vlv.bat %Build_Flags%  %Platform_Type% %Build_Target%
+call %PLATFORM_PATH%\%PLATFORM_PACKAGE%\bld_vlv.bat %Build_Flags% %Platform_Type% %Build_Target%
 
 if %ERRORLEVEL% NEQ 0 (
     echo echo  -- Error Building BIOS  & echo.
@@ -139,23 +92,21 @@ goto Exit
 :Usage
 echo Script to build BIOS firmware and stitch the entire IFWI.
 echo.
-echo Usage: Build_IFWI.bat [options]  PlatformType  BuildTarget  [IFWI Suffix]
+echo Usage: Build_IFWI.bat [options]  PlatformType  BuildTarget
 echo.
-echo        /c     CleanAll before building
-echo        /x64   Set Arch to X64  (default: X64)
-echo        /IA32  Set Arch to IA32 (default: X64)
-echo        /yL    Enable SPI lock
-echo. 
-echo        Platform Types:   MNW2
-echo        Build Targets:    Release, Debug
-echo        IFWI Suffix:      Suffix to append to end of IFWI filename (default: MM_DD_YYYY)
+echo    /c    CleanAll
+echo    /l    Generate build log file
+echo    /y    Generate build report file
+echo    /m    Enable multi-processor build
+echo    /IA32 Set Arch to IA32 (default: X64)
+echo    /X64  Set Arch to X64 (default: X64)
 echo.
-echo        See  Stitch/Stitch_Config.txt  for additional stitching settings.
+echo        Platform Types:  MNW2
+echo        Build Targets:   Debug, Release  (default: Debug)
 echo.
-echo        If capsule update is needed, please update CAPSULE_ENABLE = TRUE in Config.dsc.
-echo        If recovery is needed, please update RECOVERY_ENABLE = TRUE in Config.dsc.
-echo        If either of above is TRUE, please set OPENSSL_PATH in windows evironment
-echo        and put openssl.exe there, to generate final capsule image.
+echo Examples:
+echo    Build_IFWI.bat MNW2 debug           : X64 Debug build for MinnowMax
+echo    Build_IFWI.bat /IA32 MNW2 release   : IA32 Release build for MinnowMax
 echo.
 set exitCode=1
 
