@@ -277,7 +277,11 @@ if %ERRORLEVEL% NEQ 0 goto BldFail
 ::echo FD successfully updated with default Hii values.
 
 @REM build capsule here
-call build -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
+if "%Arch%"=="X64" (
+  echo Invoking EDK2 build for capsules...
+  echo build -t %TOOL_CHAIN_TAG% -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
+  call build -t %TOOL_CHAIN_TAG% -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
+)
 
 goto Exit
 

@@ -224,7 +224,11 @@ cp -f $BUILD_PATH/FV/VLV.fd $BUILD_PATH/FV/Vlv.ROM
 ##**********************************************************************
 ## Build Capsules
 ##**********************************************************************
-build -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
+if [ $Arch == "X64" ]; then
+  echo "Invoking EDK2 build for capsules..."
+  echo build -t $TOOL_CHAIN_TAG -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
+  build -t $TOOL_CHAIN_TAG -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
+fi
 
 echo
 echo -------------------- The EDKII BIOS build has successfully completed. --------------------
