@@ -1,12 +1,8 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
-
-                                                                                   
-
-Module Name:
 
 **/
 
@@ -154,95 +150,7 @@ SystemConfigExtractConfig (
   OUT EFI_STRING                             *Results
   )
 {
-  EFI_STATUS                       Status;
-  EFI_CALLBACK_INFO                *Private;
-  EFI_HII_CONFIG_ROUTING_PROTOCOL  *HiiConfigRouting;
-  EFI_STRING                       ConfigRequestHdr;
-  EFI_STRING                       ConfigRequest;
-  BOOLEAN                          AllocatedRequest;
-  UINTN                            Size;
-  UINTN                            BufferSize;
-  VOID                             *SystemConfigPtr;
-
-
-  if (Progress == NULL || Results == NULL) {
-    return EFI_INVALID_PARAMETER;
-  }
-
-  *Progress = Request;
-  if ((Request != NULL) && !HiiIsConfigHdrMatch (Request, &mSystemConfigGuid, mVariableName)) {
-    return EFI_NOT_FOUND;
-  }
-
-  ConfigRequestHdr = NULL;
-  ConfigRequest    = NULL;
-  Size             = 0;
-  AllocatedRequest = FALSE;
-
-  Private          = EFI_CALLBACK_INFO_FROM_THIS (This);
-
-  SetupInfo();
-
-  HiiConfigRouting = Private->HiiConfigRouting;
-  ConfigRequest = Request;
-  if ((Request == NULL) || (StrStr (Request, L"OFFSET") == NULL)) {
-    //
-    // Request has no request element, construct full request string.
-    // Allocate and fill a buffer large enough to hold the <ConfigHdr> template
-    // followed by "&OFFSET=0&WIDTH=WWWWWWWWWWWWWWWW" followed by a Null-terminator
-    //
-    ConfigRequestHdr = HiiConstructConfigHdr (&mSystemConfigGuid, mVariableName, Private->DriverHandle);
-    Size = (StrLen (ConfigRequestHdr) + 32 + 1) * sizeof (CHAR16);
-    ConfigRequest = AllocateZeroPool (Size);
-    ASSERT (ConfigRequest != NULL);
-    AllocatedRequest = TRUE;
-    BufferSize = sizeof (SYSTEM_CONFIGURATION);
-    UnicodeSPrint (ConfigRequest, Size, L"%s&OFFSET=0&WIDTH=%016LX", ConfigRequestHdr, (UINT64)BufferSize);
-    FreePool (ConfigRequestHdr);
-  }
-  SystemConfigPtr = GetVariable(mSetupName, &mNormalSetupGuid);
-
-
-  if (SystemConfigPtr == NULL) {
-    ZeroMem(&Private->FakeNvData, sizeof(SYSTEM_CONFIGURATION));
-    ZeroMem(&Private->BackupNvData, sizeof(SYSTEM_CONFIGURATION));
-  } else {
-    CheckSystemConfigLoad(SystemConfigPtr);
-    CopyMem(&Private->FakeNvData, SystemConfigPtr, sizeof(SYSTEM_CONFIGURATION));
-    CopyMem(&Private->BackupNvData, SystemConfigPtr, sizeof(SYSTEM_CONFIGURATION));
-    FreePool(SystemConfigPtr);
-  }
-
-  //
-  // Convert buffer data to <ConfigResp> by helper function BlockToConfig()
-  //
-  Status = HiiConfigRouting->BlockToConfig (
-                               HiiConfigRouting,
-                               ConfigRequest,
-                               (UINT8 *) &Private->FakeNvData,
-                               sizeof (SYSTEM_CONFIGURATION),
-                               Results,
-                               Progress
-                               );
-
-  //
-  // Free the allocated config request string.
-  //
-  if (AllocatedRequest) {
-    FreePool (ConfigRequest);
-    ConfigRequest = NULL;
-  }
-
-  //
-  // Set Progress string to the original request string.
-  //
-  if (Request == NULL) {
-    *Progress = NULL;
-  } else if (StrStr (Request, L"OFFSET") == NULL) {
-    *Progress = Request + StrLen (Request);
-  }
-
-  return Status;
+  return EFI_UNSUPPORTED;
 }
 
 /**
@@ -268,48 +176,7 @@ SystemConfigRouteConfig (
   OUT EFI_STRING                             *Progress
   )
 {
-  EFI_CALLBACK_INFO                         *Private;
-  SYSTEM_CONFIGURATION                       *FakeNvData;
-
-  if (Configuration == NULL || Progress == NULL) {
-    return EFI_INVALID_PARAMETER;
-  }
-  *Progress = Configuration;
-
-  if (!HiiIsConfigHdrMatch (Configuration, &mSystemConfigGuid, mVariableName)) {
-    return EFI_NOT_FOUND;
-  }
-
-  *Progress = Configuration + StrLen (Configuration);
-  Private    = EFI_CALLBACK_INFO_FROM_THIS (This);
-  FakeNvData = &Private->FakeNvData;
-  if (!HiiGetBrowserData (&mSystemConfigGuid, mVariableName, sizeof (SYSTEM_CONFIGURATION), (UINT8 *) FakeNvData)) {
-    //
-    // FakeNvData can't be got from SetupBrowser, which doesn't need to be set.
-    //
-    return EFI_SUCCESS;
-  }
-
-  if (Private->FakeNvData.ReservedO != Private->BackupNvData.ReservedO) {
-    Private->BackupNvData.ReservedO = Private->FakeNvData.ReservedO;
-    LoadLpssDefaultValues (Private);
-
-    //
-    // Pass changed uncommitted data back to Form Browser
-    //
-    HiiSetBrowserData (&mSystemConfigGuid, mVariableName, sizeof (SYSTEM_CONFIGURATION), (UINT8 *) FakeNvData, NULL);
-  }
-
-  gRT->SetVariable(
-         mSetupName,
-         &mNormalSetupGuid,
-         EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS,
-         sizeof(SYSTEM_CONFIGURATION),
-         &Private->FakeNvData
-         );
-
-  CheckSystemConfigSave(&Private->FakeNvData);
-  return EFI_SUCCESS;
+  return EFI_UNSUPPORTED;
 }
 
 /**
@@ -621,8 +488,6 @@ SystemConfigCallback (
                           );
         }
 
-        FreePool (FakeNvData);
-
         DataSize = sizeof(OsSelection);
         Status = gRT->GetVariable(
                         L"OsSelection",
@@ -642,6 +507,8 @@ SystemConfigCallback (
                           &OsSelection
                           );
         }
+
+        FreePool (FakeNvData);
 
         //
         // Reset system

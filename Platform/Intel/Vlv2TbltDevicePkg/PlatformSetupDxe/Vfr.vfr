@@ -1,16 +1,13 @@
 //
+// Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
 //
-//
-// Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-//                                                                                  
 // SPDX-License-Identifier: BSD-2-Clause-Patent
+//
 
-//                                                                                  
-//
-//
+#include <Uefi/UefiMultiPhase.h>
+#include <Guid/SetupVariable.h>
 #include "Configuration.h"
 #include "PlatformSetupDxeStrDefs.h"
-#include "Guid/SetupVariable.h"
 
 formset
   guid     = SYSTEM_CONFIGURATION_GUID,
@@ -20,7 +17,11 @@ formset
   subclass = 0,
 
 
-  varstore SYSTEM_CONFIGURATION, name = Setup, guid = SYSTEM_CONFIGURATION_GUID;
+  efivarstore SYSTEM_CONFIGURATION,
+    attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+    name = Setup,
+    guid = SYSTEM_CONFIGURATION_GUID;
+
   form formid = ROOT_FORM_ID,
     title    = STRING_TOKEN(STR_SYSTEM_SETUP_TITLE);
 

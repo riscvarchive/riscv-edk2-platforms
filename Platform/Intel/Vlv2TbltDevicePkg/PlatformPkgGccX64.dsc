@@ -22,6 +22,7 @@
   SUPPORTED_ARCHITECTURES             = IA32|X64
   BUILD_TARGETS                       = DEBUG|RELEASE
   SKUID_IDENTIFIER                    = DEFAULT
+  VPD_TOOL_GUID                       = 8C3D856A-9BE6-468E-850A-24F7A8D38E08
 
   DEFINE RC_BINARY_RELEASE        = TRUE
   #
@@ -52,6 +53,10 @@
 ################################################################################
 [SkuIds]
   0|DEFAULT              # The entry: 0|DEFAULT is reserved and always required.
+
+[DefaultStores]
+  0|STANDARD             # UEFI Standard default  0|STANDARD is reserved.
+  1|MANUFACTURING        # UEFI Manufacturing default 1|MANUFACTURING is reserved.
 
 ################################################################################
 #
@@ -722,6 +727,15 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{GUID("4096267b-da0a-42eb-b5eb-fef31d207cb4")}|VOID*|0x10
 !endif
 
+[PcdsDynamicExVpd.common.DEFAULT]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdNvStoreDefaultValueBuffer|*
+
+[PcdsDynamicExHii.common.DEFAULT.STANDARD]
+  !include Vlv2TbltDevicePkg/PlatformSetupDefaults.dsc
+
+[PcdsDynamicExHii.common.DEFAULT.MANUFACTURING]
+  !include Vlv2TbltDevicePkg/PlatformSetupDefaults.dsc
+
 [Components.IA32]
 
   Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/SecCore.inf
@@ -1238,8 +1252,6 @@
 !else
   DEFINE CLKGEN_CONFIG_EXTRA_BUILD_OPTION =
 !endif
-
-
 
 !if $(PCIESC_ENABLE) == TRUE
   DEFINE PCIESC_SUPPORT_BUILD_OPTION = -DPCIESC_SUPPORT=1

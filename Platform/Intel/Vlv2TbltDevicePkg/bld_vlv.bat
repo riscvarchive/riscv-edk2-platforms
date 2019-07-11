@@ -229,7 +229,7 @@ if "%GenReport%"=="TRUE" (
 ::**********************************************************************
 
 echo BOARD_ID       = MNW2MAX >  %BUILD_PATH%/BiosId.env
-echo BOARD_REV      = 1       >> %BUILD_PATH%/BiosId.env
+echo BOARD_REV      = W       >> %BUILD_PATH%/BiosId.env
 if "%Arch%"=="IA32" (
   echo BOARD_EXT      = I32   >> %BUILD_PATH%/BiosId.env
 )
@@ -259,24 +259,11 @@ call build %Build_Flags%
 
 if %ERRORLEVEL% NEQ 0 goto BldFail
 
+copy %BUILD_PATH%\FV\VLV.fd %BUILD_PATH%\FV\Vlv.ROM
+
 ::**********************************************************************
-:: Post Build processing and cleanup
+:: Build Capsules
 ::**********************************************************************
-
-echo Running fce...
-
-pushd %PLATFORM_PACKAGE%
-:: Extract Hii data from build and store in HiiDefaultData.txt
-%PLATFORM_PACKAGE%\fce read -i %BUILD_PATH%\FV\Vlv.fd > %BUILD_PATH%\FV\HiiDefaultData.txt
-
-:: save changes to VlvXXX.fd
-%PLATFORM_PACKAGE%\fce update -i %BUILD_PATH%\FV\Vlv.fd -s %BUILD_PATH%\FV\HiiDefaultData.txt -o %BUILD_PATH%\FV\Vlv.ROM
-popd
-
-if %ERRORLEVEL% NEQ 0 goto BldFail
-::echo FD successfully updated with default Hii values.
-
-@REM build capsule here
 if "%Arch%"=="X64" (
   echo Invoking EDK2 build for capsules...
   echo build -t %TOOL_CHAIN_TAG% -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc

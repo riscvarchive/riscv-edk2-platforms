@@ -168,6 +168,18 @@
   # @Prompt Boot State Flag
   gPlatformModuleTokenSpaceGuid.PcdBootState|TRUE|BOOLEAN|0x80000004
 
+[PcdsFixedAtBuild,PcdsPatchableInModule,PcdsDynamic,PcdsDynamicEx]
+  gPlatformModuleTokenSpaceGuid.PcdSetup|{0}|SYSTEM_CONFIGURATION|0x80000005 {
+    <HeaderFiles>
+      Include/Guid/SetupVariable.h
+    <Packages>
+      MdePkg/MdePkg.dec
+      MdeModulePkg/MdeModulePkg.dec
+      BoardModulePkg/BoardModulePkg.dec
+      Vlv2TbltDevicePkg/PlatformPkg.dec
+      Vlv2DeviceRefCodePkg/Vlv2DeviceRefCodePkg.dec
+  }
+
 #
 #device firmware update support
 #

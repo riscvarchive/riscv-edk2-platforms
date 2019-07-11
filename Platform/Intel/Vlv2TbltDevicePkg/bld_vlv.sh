@@ -189,7 +189,7 @@ fi
 ##**********************************************************************
 
 echo BOARD_ID       = MNW2MAX >  $BUILD_PATH/BiosId.env
-echo BOARD_REV      = 1       >> $BUILD_PATH/BiosId.env
+echo BOARD_REV      = L       >> $BUILD_PATH/BiosId.env
 if [ $Arch == "IA32" ]; then
   echo BOARD_EXT      = I32   >> $BUILD_PATH/BiosId.env
 fi
@@ -213,11 +213,6 @@ python $WORKSPACE/edk2-platforms/Platform/Intel/Tools/GenBiosId/GenBiosId.py -i 
 echo "Invoking EDK2 build..."
 echo build $Build_Flags
 build $Build_Flags
-
-##**********************************************************************
-## Post Build processing and cleanup
-##**********************************************************************
-echo Skip "Running fce..."
 
 cp -f $BUILD_PATH/FV/VLV.fd $BUILD_PATH/FV/Vlv.ROM
 

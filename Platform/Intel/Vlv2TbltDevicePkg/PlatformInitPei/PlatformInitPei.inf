@@ -102,6 +102,8 @@ ENTRY_POINT               = PlatformEarlyInitEntry
 [Pcd]
   gEfiVLVTokenSpaceGuid.PcdMeasuredBootEnable
   gPlatformModuleTokenSpaceGuid.PcdBootState
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetNvStoreDefaultId
+  gPlatformModuleTokenSpaceGuid.PcdSetup
 
 [Depex]
   gEfiPeiReadOnlyVariable2PpiGuid  AND gPeiCachePpiGuid

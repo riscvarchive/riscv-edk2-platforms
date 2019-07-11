@@ -180,20 +180,16 @@ GetSetupVariable (
                        &VariableSize,
                        SystemConfiguration
                        );
-  if (EFI_ERROR (Status) || VariableSize != sizeof(SYSTEM_CONFIGURATION)) {
-    //The setup variable is corrupted
-    VariableSize = sizeof(SYSTEM_CONFIGURATION);
-    Status = Variable->GetVariable(
-              Variable,
-              L"SetupRecovery",
-              &gEfiSetupVariableGuid,
-              NULL,
-              &VariableSize,
-              SystemConfiguration
-              );
-    ASSERT_EFI_ERROR (Status);
-  }  
-  return Status;
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+  if (VariableSize != sizeof(SYSTEM_CONFIGURATION)) {
+    //
+    // The setup variable is corrupted
+    //
+    return EFI_NOT_FOUND;
+  }
+  return EFI_SUCCESS;
 }
 
 EFI_STATUS
@@ -856,7 +852,21 @@ PlatformEarlyInitEntry (
   //
   // Get setup variable. This can only be done after BootMode is updated
   //
-  GetSetupVariable (PeiServices, &SystemConfiguration);
+  Status = GetSetupVariable (PeiServices, &SystemConfiguration);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_INFO, "PlatformEarlyInitEntry: Setup Variable does not exist.\n"));
+    DEBUG ((DEBUG_INFO, "PlatformEarlyInitEntry: Set PcdNvStoreDefaultId to STANDARD\n"));
+    //
+    // Set the default NV store to STANDARD defaults
+    //
+    PcdSet16S (PcdSetNvStoreDefaultId, 0x0000);
+
+    //
+    // Get setup variable. Must succeed at this point.
+    //
+    Status = GetSetupVariable (PeiServices, &SystemConfiguration);
+    ASSERT_EFI_ERROR (Status);
+  }
 
   CheckOsSelection(PeiServices, &SystemConfiguration);
 

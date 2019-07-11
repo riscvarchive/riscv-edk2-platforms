@@ -18,12 +18,11 @@ DEFINE FLASH_REGION_VLVMICROCODE_OFFSET                       = 0x00400000
 DEFINE FLASH_REGION_VLVMICROCODE_SIZE                         = 0x00040000
 DEFINE FLASH_REGION_VLVMICROCODE_BASE                         = 0xFFC00000
 
-DEFINE FLASH_REGION_VPD_OFFSET                                = 0x00440000
-DEFINE FLASH_REGION_VPD_SIZE                                  = 0x0003E000
+DEFINE FLASH_REGION_NV_STORAGE_VARIABLE_OFFSET                = 0x00440000
+DEFINE FLASH_REGION_NV_STORAGE_VARIABLE_SIZE                  = 0x0003E000
 
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_OFFSET = 0x0047E000
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_SIZE   = 0x00002000
-
 
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_OFFSET   = 0x00480000
 DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_SIZE     = 0x00040000
@@ -31,8 +30,11 @@ DEFINE FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_SIZE     = 0x00040000
 DEFINE FLASH_REGION_FVMAIN_OFFSET                             = 0x00510000
 DEFINE FLASH_REGION_FVMAIN_SIZE                               = 0x00210000
 
-DEFINE FLASH_REGION_FV_RECOVERY2_OFFSET                       = 0x00720000
-DEFINE FLASH_REGION_FV_RECOVERY2_SIZE                         = 0x00070000
+DEFINE FLASH_REGION_VPD_OFFSET                                = 0x00720000
+DEFINE FLASH_REGION_VPD_SIZE                                  = 0x00010000
+
+DEFINE FLASH_REGION_FV_RECOVERY2_OFFSET                       = 0x00730000
+DEFINE FLASH_REGION_FV_RECOVERY2_SIZE                         = 0x00060000
 
 DEFINE FLASH_REGION_FV_RECOVERY_OFFSET                        = 0x00790000
 DEFINE FLASH_REGION_FV_RECOVERY_SIZE                          = 0x00070000
@@ -92,24 +94,72 @@ SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(FLASH_REGION_VL
 0x0000|0x1000
 FILE=Vlv2TbltDevicePkg/Stitch/IFWIHeader/IFWI_HEADER.bin
 
-#
+  #
   # CPU Microcodes
   #
 
 $(FLASH_REGION_VLVMICROCODE_OFFSET)|$(FLASH_REGION_VLVMICROCODE_SIZE)
 gPlatformModuleTokenSpaceGuid.PcdFlashMicroCodeAddress|gPlatformModuleTokenSpaceGuid.PcdFlashMicroCodeSize
 FV = MICROCODE_FV
-$(FLASH_REGION_VPD_OFFSET)|$(FLASH_REGION_VPD_SIZE)
+$(FLASH_REGION_NV_STORAGE_VARIABLE_OFFSET)|$(FLASH_REGION_NV_STORAGE_VARIABLE_SIZE)
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
-FILE = Vlv2TbltDevicePkg/Stitch/Gcc/NvStorageVariable.bin
+#NV_VARIABLE_STORE
+DATA = {
+  ## This is the EFI_FIRMWARE_VOLUME_HEADER
+  # ZeroVector []
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  # FileSystemGuid: gEfiSystemNvDataFvGuid         =
+  #  { 0xFFF12B8D, 0x7696, 0x4C8B, { 0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50 }}
+  0x8D, 0x2B, 0xF1, 0xFF, 0x96, 0x76, 0x8B, 0x4C,
+  0xA9, 0x85, 0x27, 0x47, 0x07, 0x5B, 0x4F, 0x50,
+  # FvLength: 0x80000
+  0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00,
+  #Signature "_FVH"       #Attributes
+  0x5f, 0x46, 0x56, 0x48, 0xff, 0xfe, 0x04, 0x00,
+  #HeaderLength #CheckSum #ExtHeaderOffset #Reserved #Revision
+  0x48, 0x00, 0x2A, 0x09, 0x00, 0x00, 0x00, 0x02,
+  #Blockmap[0]: 7 Blocks * 0x10000 Bytes / Block
+  0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+  #Blockmap[1]: End
+  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+  ## This is the VARIABLE_STORE_HEADER
+!if $(SECURE_BOOT_ENABLE) == TRUE
+  #Signature: gEfiAuthenticatedVariableGuid =
+  #  { 0xaaf32c78, 0x947b, 0x439a, { 0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92 }}
+  0x78, 0x2c, 0xf3, 0xaa, 0x7b, 0x94, 0x9a, 0x43,
+  0xa1, 0x80, 0x2e, 0x14, 0x4e, 0xc3, 0x77, 0x92,
+!else
+  #Signature: gEfiVariableGuid =
+  #  { 0xddcf3616, 0x3275, 0x4164, { 0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d }}
+  0x16, 0x36, 0xcf, 0xdd, 0x75, 0x32, 0x64, 0x41,
+  0x98, 0xb6, 0xfe, 0x85, 0x70, 0x7f, 0xfe, 0x7d,
+!endif
+  #Size: 0x3E000 (gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize) - 0x48 (size of EFI_FIRMWARE_VOLUME_HEADER) = 0x03DFB8
+  # This can speed up the Variable Dispatch a bit.
+  0xB8, 0xDF, 0x03, 0x00,
+  #FORMATTED: 0x5A #HEALTHY: 0xFE #Reserved: UINT16 #Reserved1: UINT32
+  0x5A, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
+
 
 $(FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_OFFSET)|$(FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_WORKING_SIZE)
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
-FILE = Vlv2TbltDevicePkg/Stitch/Gcc/NvStorageFtwWorking.bin
+#NV_FTW_WORKING
+DATA = {
+  # EFI_FAULT_TOLERANT_WORKING_BLOCK_HEADER->Signature = gEdkiiWorkingBlockSignatureGuid         =
+  #  { 0x9e58292b, 0x7c68, 0x497d, { 0xa0, 0xce, 0x65,  0x0, 0xfd, 0x9f, 0x1b, 0x95 }}
+  0x2B, 0x29, 0x58, 0x9E, 0x68, 0x7C, 0x7D, 0x49,
+  0xA0, 0xCE, 0x65, 0x0,  0xFD, 0x9F, 0x1B, 0x95,
+
+  # Crc:UINT32            #WorkingBlockValid:1, WorkingBlockInvalid:1, Reserved
+  0xE2, 0x33, 0xF2, 0x3,  0xFE, 0xFF, 0xFF, 0xFF,
+  # WriteQueueSize: UINT64 #Size: 0x2000 - 0x20 (FTW_WORKING_HEADER) = 0x1FE0
+  0xE0, 0x1F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+}
 
 $(FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_OFFSET)|$(FLASH_REGION_NVSTORAGE_SUBREGION_NV_FTW_SPARE_SIZE)
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
-FILE = Vlv2TbltDevicePkg/Stitch/Gcc/NvStorageFtwSpare.bin
 
   #
   # Main Block
@@ -117,6 +167,10 @@ FILE = Vlv2TbltDevicePkg/Stitch/Gcc/NvStorageFtwSpare.bin
 $(FLASH_REGION_FVMAIN_OFFSET)|$(FLASH_REGION_FVMAIN_SIZE)
 gPlatformModuleTokenSpaceGuid.PcdFlashFvMainBase|gPlatformModuleTokenSpaceGuid.PcdFlashFvMainSize
 FV = FVMAIN_COMPACT
+
+$(FLASH_REGION_VPD_OFFSET)|$(FLASH_REGION_VPD_SIZE)
+gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress
+FILE = $(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/FV/8C3D856A-9BE6-468E-850A-24F7A8D38E08.bin
 
   #
   # FV Recovery#2
@@ -223,7 +277,10 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
 
+
+
 INF Vlv2TbltDevicePkg/PlatformInitPei/PlatformInitPei.inf
+
 INF RuleOverride = BINARY Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchSmbusArpDisabled.inf
 INF RuleOverride = BINARY Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/VlvInitPeim.inf
 INF RuleOverride = BINARY Vlv2SocBinPkg/$(DXE_ARCHITECTURE)$(TARGET)/IA32/PchInitPeim.inf
