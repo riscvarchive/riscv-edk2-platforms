@@ -179,13 +179,8 @@ if defined VS140COMNTOOLS (
 
 echo Ensuring correct build directory is present
 if not exist %WORKSPACE%\Build mkdir %WORKSPACE%\Build
-if "%Arch%"=="IA32" (
-  if not exist %WORKSPACE%\Build\%PLATFORM_NAME%IA32 mkdir %WORKSPACE%\Build\%PLATFORM_NAME%IA32
-  set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%IA32\%TARGET%_%TOOL_CHAIN_TAG%
-) else (
-  if not exist %WORKSPACE%\Build\%PLATFORM_NAME% mkdir %WORKSPACE%\Build\%PLATFORM_NAME%
-  set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%\%TARGET%_%TOOL_CHAIN_TAG%
-)
+if not exist %WORKSPACE%\Build\%PLATFORM_NAME%%Arch% mkdir %WORKSPACE%\Build\%PLATFORM_NAME%%Arch%
+set BUILD_PATH=%WORKSPACE%\Build\%PLATFORM_NAME%%Arch%\%TARGET%_%TOOL_CHAIN_TAG%
 if not exist %BUILD_PATH% mkdir %BUILD_PATH%
 
 ::**********************************************************************
@@ -215,8 +210,9 @@ if "%Arch%"=="IA32" (
     set Build_Flags=%Build_Flags% -a IA32 -a X64
 )
 set Build_Flags=%Build_Flags% -t %TOOL_CHAIN_TAG%
-set Build_Flags=%Build_Flags% -p %PLATFORM_PACKAGE%/PlatformPkg%Arch%.dsc
 set Build_Flags=%Build_Flags% -n %build_threads%
+set Capsule_Build_Flags=%Build_Flags%
+set Build_Flags=%Build_Flags% -p %PLATFORM_PACKAGE%/PlatformPkg%Arch%.dsc
 if "%GenLog%"=="TRUE" (
   set Build_Flags=%Build_Flags% -j %BUILD_PATH%\%PLATFORM_NAME%.log
 )
@@ -264,11 +260,9 @@ copy %BUILD_PATH%\FV\VLV.fd %BUILD_PATH%\FV\Vlv.ROM
 ::**********************************************************************
 :: Build Capsules
 ::**********************************************************************
-if "%Arch%"=="X64" (
-  echo Invoking EDK2 build for capsules...
-  echo build -t %TOOL_CHAIN_TAG% -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
-  call build -t %TOOL_CHAIN_TAG% -p %PLATFORM_PACKAGE%\PlatformCapsule.dsc
-)
+echo Invoking EDK2 build for capsules...
+echo build %Capsule_Build_Flags% -p %PLATFORM_PACKAGE%\PlatformCapsule%Arch%.dsc
+call build %Capsule_Build_Flags% -p %PLATFORM_PACKAGE%\PlatformCapsule%Arch%.dsc
 
 goto Exit
 

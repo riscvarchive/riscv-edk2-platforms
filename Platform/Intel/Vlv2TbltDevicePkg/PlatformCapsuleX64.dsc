@@ -1,9 +1,10 @@
 #/** @file
 # Platform capsule description.
 #
-# Copyright (c) 2016, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2016 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
+#
 #
 #**/
 
@@ -11,12 +12,12 @@
   PLATFORM_NAME                  = Vlv2TbltDevicePkg
   PLATFORM_GUID                  = EE87F258-6ECC-4415-B1D8-23771BEE26E7
   PLATFORM_VERSION               = 0.1
-  FLASH_DEFINITION               = Vlv2TbltDevicePkg/PlatformCapsuleGcc.fdf
-  OUTPUT_DIRECTORY               = Build/Vlv2TbltDevicePkg
+  FLASH_DEFINITION               = Vlv2TbltDevicePkg/PlatformCapsule.fdf
+  OUTPUT_DIRECTORY               = Build/Vlv2TbltDevicePkgX64
   SUPPORTED_ARCHITECTURES        = IA32|X64
   BUILD_TARGETS                  = DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
-  POSTBUILD                      = Vlv2TbltDevicePkg/Feature/Capsule/GenerateCapsule/GenCapsuleAll.sh
+  POSTBUILD                      = Vlv2TbltDevicePkg/Feature/Capsule/GenerateCapsule/GenCapsuleAll.bat
 
 ###################################################################################################
 #

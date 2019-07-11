@@ -1,7 +1,7 @@
 ## @file
 # FDF file of Platform capsule.
 #
-# Copyright (c) 2016 Intel Corporation.
+# Copyright (c) 2016 - 2019, Intel Corporation.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -27,10 +27,6 @@ READ_LOCK_STATUS   = TRUE
 
 FILE RAW = AF9C9EB2-12AD-4D3E-A4D4-96F6C9966215 { # PcdEdkiiSystemFirmwareFileGuid
     $(WORKSPACE)/$(OUTPUT_DIRECTORY)/$(TARGET)_$(TOOL_CHAIN_TAG)/FV/Vlv.ROM
-  }
-
-FILE RAW = 812136D3-4D3A-433A-9418-29BB9BF78F6E { # gEdkiiSystemFmpCapsuleConfigFileGuid
-    Vlv2TbltDevicePkg/Feature/Capsule/SystemFirmwareUpdateConfig/SystemFirmwareUpdateConfig.ini
   }
 
 [FmpPayload.FmpPayloadSystemFirmwareRsa2048]

@@ -134,17 +134,10 @@ if [ ! -d ${WORKSPACE}/Build ]; then
   mkdir ${WORKSPACE}/Build
 fi
 
-if [ $Arch == "IA32" ]; then
-  if [ ! -d ${WORKSPACE}/Build/${PLATFORM_NAME}IA32 ]; then
-    mkdir ${WORKSPACE}/Build/${PLATFORM_NAME}IA32
-  fi
-  BUILD_PATH=${WORKSPACE}/Build/${PLATFORM_NAME}IA32/${TARGET}_${TOOL_CHAIN_TAG}
-else
-  if [ ! -d ${WORKSPACE}/Build/${PLATFORM_NAME} ]; then
-    mkdir ${WORKSPACE}/Build/${PLATFORM_NAME}
-  fi
-  BUILD_PATH=${WORKSPACE}/Build/${PLATFORM_NAME}/${TARGET}_${TOOL_CHAIN_TAG}
+if [ ! -d ${WORKSPACE}/Build/${PLATFORM_NAME}${Arch} ]; then
+  mkdir ${WORKSPACE}/Build/${PLATFORM_NAME}${Arch}
 fi
+BUILD_PATH=${WORKSPACE}/Build/${PLATFORM_NAME}${Arch}/${TARGET}_${TOOL_CHAIN_TAG}
 
 if [ ! -d $BUILD_PATH ]; then
   mkdir $BUILD_PATH
@@ -175,8 +168,9 @@ else
   Build_Flags="$Build_Flags -a IA32 -a X64"
 fi
 Build_Flags="$Build_Flags -t $TOOL_CHAIN_TAG"
-Build_Flags="$Build_Flags -p ${PLATFORM_PKG_PATH}/PlatformPkgGcc${Arch}.dsc"
 Build_Flags="$Build_Flags -n $build_threads"
+Capsule_Build_Flags="$Build_Flags"
+Build_Flags="$Build_Flags -p ${PLATFORM_PKG_PATH}/PlatformPkg${Arch}.dsc"
 if [ $GenLog == "TRUE" ]; then
   Build_Flags="$Build_Flags -j ${BUILD_PATH}/${PLATFORM_NAME}.log"
 fi
@@ -219,11 +213,9 @@ cp -f $BUILD_PATH/FV/VLV.fd $BUILD_PATH/FV/Vlv.ROM
 ##**********************************************************************
 ## Build Capsules
 ##**********************************************************************
-if [ $Arch == "X64" ]; then
-  echo "Invoking EDK2 build for capsules..."
-  echo build -t $TOOL_CHAIN_TAG -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
-  build -t $TOOL_CHAIN_TAG -p $PLATFORM_PKG_PATH/PlatformCapsuleGcc.dsc
-fi
+echo "Invoking EDK2 build for capsules..."
+echo build $Capsule_Build_Flags -p $PLATFORM_PKG_PATH/PlatformCapsule${Arch}.dsc
+build      $Capsule_Build_Flags -p $PLATFORM_PKG_PATH/PlatformCapsule${Arch}.dsc
 
 echo
 echo -------------------- The EDKII BIOS build has successfully completed. --------------------
