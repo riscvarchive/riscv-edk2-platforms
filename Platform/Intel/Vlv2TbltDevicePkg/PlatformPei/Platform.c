@@ -813,6 +813,12 @@ PeiInitPlatform (
     sizeof (EFI_PLATFORM_INFO_HOB)
     );
 
+  //
+  // Set the new boot mode for MRC
+  //
+  Status = UpdateBootMode (PeiServices);
+  ASSERT_EFI_ERROR (Status);
+
   DEBUG((EFI_D_INFO, "Setup MMIO size ... \n\n"));
 
   //

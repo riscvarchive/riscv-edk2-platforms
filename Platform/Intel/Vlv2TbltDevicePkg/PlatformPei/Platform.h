@@ -22,6 +22,23 @@ typedef struct {
 #define STALL_PEIM_FROM_THIS(a) CR (a, STALL_CALLBACK_STATE_INFORMATION, StallNotify, STALL_PEIM_SIGNATURE)
 
 /**
+  Peform the boot mode determination logic
+  If the box is closed, then
+  1. If it's first time to boot, it's boot with full config .
+  2. If the ChassisIntrution is selected, force to be a boot with full config
+  3. Otherwise it's boot with no change.
+
+  @param  PeiServices General purpose services available to every PEIM.
+  @param  BootMode The detected boot mode.
+
+  @retval EFI_SUCCESS if the boot mode could be set
+**/
+EFI_STATUS
+UpdateBootMode (
+  IN CONST EFI_PEI_SERVICES     **PeiServices
+  );
+
+/**
   This function reset the entire platform, including all processor and devices, and
   reboots the system.
   
