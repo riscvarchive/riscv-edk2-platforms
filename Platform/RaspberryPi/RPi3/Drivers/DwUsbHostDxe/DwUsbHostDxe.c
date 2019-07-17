@@ -318,13 +318,21 @@ DwHcTransfer (
     Ret = Wait4Chhltd (DwHc, Timeout, Channel, &Sub, Pid, IgnoreAck, &Split);
 
     if (Ret == XFER_NOT_HALTED) {
-      /*
-       * FIXME: do proper channel reset.
-       */
-      MmioWrite32 (DwHc->DwUsbBase + HCCHAR (Channel), DWC2_HCCHAR_CHDIS);
-
       *TransferResult = EFI_USB_ERR_TIMEOUT;
-      Status = EFI_DEVICE_ERROR;
+      MmioOr32 (DwHc->DwUsbBase + HCCHAR (Channel), DWC2_HCCHAR_CHDIS);
+      Status = gBS->SetTimer (Timeout, TimerRelative,
+                              EFI_TIMER_PERIOD_MILLISECONDS (1));
+      ASSERT_EFI_ERROR (Status);
+      if (EFI_ERROR (Status)) {
+        break;
+      }
+      Status = Wait4Bit (Timeout, DwHc->DwUsbBase + HCINT (Channel),
+                         DWC2_HCINT_CHHLTD, 1);
+      if (Status == EFI_SUCCESS) {
+        Status = EFI_TIMEOUT;
+      } else {
+        Status = EFI_DEVICE_ERROR;
+      }
       break;
     } else if (Ret == XFER_STALL) {
       *TransferResult = EFI_USB_ERR_STALL;
