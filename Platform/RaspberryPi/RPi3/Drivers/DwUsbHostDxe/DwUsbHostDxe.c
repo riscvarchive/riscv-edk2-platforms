@@ -74,9 +74,6 @@ Wait4Bit (
     }
   } while (EFI_ERROR (gBS->CheckEvent (Timeout)));
 
-  DEBUG ((DEBUG_ERROR, "Wait4Bit: %a timeout (reg:0x%x, value:0x%x, mask:0x%x)\n",
-    Set ? "set" : "clear", Reg, Set ? Value : ~Value, Mask));
-
   return EFI_TIMEOUT;
 }
 
@@ -99,7 +96,6 @@ Wait4Chhltd (
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + HCINT (Channel),
                      DWC2_HCINT_CHHLTD, 1);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Channel %u did not halt\n", Channel));
     return XFER_NOT_HALTED;
   }
 
@@ -331,6 +327,7 @@ DwHcTransfer (
       if (Status == EFI_SUCCESS) {
         Status = EFI_TIMEOUT;
       } else {
+        DEBUG ((DEBUG_ERROR, "Channel %u did not halt\n", Channel));
         Status = EFI_DEVICE_ERROR;
       }
       break;
