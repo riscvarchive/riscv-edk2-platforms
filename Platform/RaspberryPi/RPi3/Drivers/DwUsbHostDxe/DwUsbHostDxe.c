@@ -53,7 +53,7 @@ DwCoreInit (
   IN EFI_EVENT        Timeout
   );
 
-UINT32
+EFI_STATUS
 Wait4Bit (
   IN  EFI_EVENT Timeout,
   IN  UINT32    Reg,
@@ -70,14 +70,14 @@ Wait4Bit (
     }
 
     if ((Value & Mask) == Mask) {
-      return 0;
+      return EFI_SUCCESS;
     }
   } while (EFI_ERROR (gBS->CheckEvent (Timeout)));
 
   DEBUG ((DEBUG_ERROR, "Wait4Bit: %a timeout (reg:0x%x, value:0x%x, mask:0x%x)\n",
     Set ? "set" : "clear", Reg, Set ? Value : ~Value, Mask));
 
-  return 1;
+  return EFI_TIMEOUT;
 }
 
 CHANNEL_HALT_REASON
@@ -91,13 +91,14 @@ Wait4Chhltd (
   IN  SPLIT_CONTROL   *Split
   )
 {
-  INT32   Ret;
+  EFI_STATUS Status;
   UINT32  Hcint, Hctsiz;
   UINT32  HcintCompHltAck = DWC2_HCINT_XFERCOMP;
 
   MicroSecondDelay (100);
-  Ret = Wait4Bit (Timeout, DwHc->DwUsbBase + HCINT (Channel), DWC2_HCINT_CHHLTD, 1);
-  if (Ret) {
+  Status = Wait4Bit (Timeout, DwHc->DwUsbBase + HCINT (Channel),
+                     DWC2_HCINT_CHHLTD, 1);
+  if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Channel %u did not halt\n", Channel));
     return XFER_NOT_HALTED;
   }
@@ -204,7 +205,7 @@ DwCoreReset (
   IN  EFI_EVENT Timeout
   )
 {
-  UINT32  Status;
+  EFI_STATUS Status;
 
   Status = Wait4Bit (Timeout, DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_AHBIDLE, 1);
   if (Status) {
@@ -1261,7 +1262,7 @@ DwFlushTxFifo (
   IN INT32 Num
   )
 {
-  UINT32 Status;
+  EFI_STATUS Status;
 
   MmioWrite32 (DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_TXFFLSH |
     (Num << DWC2_GRSTCTL_TXFNUM_OFFSET));
@@ -1279,7 +1280,7 @@ DwFlushRxFifo (
   IN  EFI_EVENT Timeout
   )
 {
-  UINT32 Status;
+  EFI_STATUS Status;
 
   MmioWrite32 (DwHc->DwUsbBase + GRSTCTL, DWC2_GRSTCTL_RXFFLSH);
 
