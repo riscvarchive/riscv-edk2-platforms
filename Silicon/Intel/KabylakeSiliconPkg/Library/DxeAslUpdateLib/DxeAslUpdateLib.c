@@ -6,7 +6,7 @@
 
   This library uses the ACPI Support protocol.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -59,6 +59,7 @@ InitializeAslUpdateLib (
   @param[in] Length            - length of data to be overwritten
 
   @retval EFI_SUCCESS          - The function completed successfully.
+  @retval EFI_NOT_FOUND        - Failed to locate AcpiTable.
 **/
 EFI_STATUS
 UpdateNameAslCode (
@@ -72,6 +73,7 @@ UpdateNameAslCode (
   UINT8                       *CurrPtr;
   UINT32                      *Signature;
   UINT8                       *DsdtPointer;
+  UINT8                       *EndPointer;
   UINTN                       Handle;
   UINT8                       DataSize;
 
@@ -99,11 +101,15 @@ UpdateNameAslCode (
   /// Point to the beginning of the DSDT table
   ///
   CurrPtr = (UINT8 *) Table;
+  if (CurrPtr == NULL) {
+    return EFI_NOT_FOUND;
+  }
 
   ///
   /// Loop through the ASL looking for values that we must fix up.
   ///
-  for (DsdtPointer = CurrPtr; DsdtPointer <= (CurrPtr + ((EFI_ACPI_COMMON_HEADER *) CurrPtr)->Length); DsdtPointer++) {
+  EndPointer = CurrPtr + ((EFI_ACPI_COMMON_HEADER *) CurrPtr)->Length;
+  for (DsdtPointer = CurrPtr; DsdtPointer < EndPointer; DsdtPointer++) {
     ///
     /// Get a pointer to compare for signature
     ///
