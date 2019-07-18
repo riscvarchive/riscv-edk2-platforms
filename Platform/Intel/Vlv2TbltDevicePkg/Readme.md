@@ -57,12 +57,15 @@ powershell Expand-Archive nasm-2.13.03-win64.zip .
 
 set WORKSPACE=%CD%
 set PACKAGES_PATH=%WORKSPACE%\edk2;%WORKSPACE%\edk2-platforms\Silicon\Intel;%WORKSPACE%\edk2-platforms\Platform\Intel;%WORKSPACE%\edk2-non-osi\Silicon\Intel
+set EDK_TOOLS_PATH=%WORKSPACE%\edk2\BaseTools
 path=%path%;%WORKSPACE%\openssl-1.0.2r-x64_86-win64
 set NASM_PREFIX=%WORKSPACE%\nasm-2.13.03\
 
-cd edk2-platforms\Platform\Intel\Vlv2TbltDevicePkg
+cd %WORKSPACE%\edk2
 
-Build_IFWI.bat /m MNW2 Debug
+edksetup.bat Rebuild
+
+build -a IA32 -a X64 -n 5 -t VS2015x86 -b DEBUG -p Vlv2TbltDevicePkg\PlatformPkgX64.dsc
 ```
 
 Once all the code and tools are downloaded and installed, only the following
@@ -72,8 +75,14 @@ directory used to install the source and binaries.
 ```
 set WORKSPACE=%CD%
 set PACKAGES_PATH=%WORKSPACE%\edk2;%WORKSPACE%\edk2-platforms\Silicon\Intel;%WORKSPACE%\edk2-platforms\Platform\Intel;%WORKSPACE%\edk2-non-osi\Silicon\Intel
+set EDK_TOOLS_PATH=%WORKSPACE%\edk2\BaseTools
 path=%path%;%WORKSPACE%\openssl-1.0.2r-x64_86-win64
 set NASM_PREFIX=%WORKSPACE%\nasm-2.13.03\
+
+cd %WORKSPACE%\edk2
+
+edksetup.bat Rebuild
+
 ```
 
 Once the environment is setup, the MinnowBoard MAX firmware and capsules can be
@@ -82,38 +91,42 @@ rebuilt using the following commands.
 * Build X64 Debug Image with report file
 
 ```
-cd edk2-platforms\Platform\Intel\Vlv2TbltDevicePkg
-Build_IFWI.bat /m /y MNW2 Debug
+build -a IA32 -a X64 -n 5 -t VS2015x86 -b DEBUG -p Vlv2TbltDevicePkg\PlatformPkgX64.dsc -y Vlv.report
 ```
 
 * Build X64 Release Image with build log
 
 ```
-cd edk2-platforms\Platform\Intel\Vlv2TbltDevicePkg
-Build_IFWI.bat /m /l MNW2 Release
+build -a IA32 -a X64 -n 5 -t VS2015x86 -b RELEASE Vlv2TbltDevicePkg\PlatformPkgX64.dsc -j Vlv.log
 ```
 
 * Build IA32 Debug Image
 
 ```
-cd edk2-platforms\Platform\Intel\Vlv2TbltDevicePkg
-Build_IFWI.bat /m /IA32 MNW2 Debug
+build -a IA32 -n 5 -t VS2015x86 -b DEBUG -p Vlv2TbltDevicePkg\PlatformPkgIA32.dsc
 ```
 
 The generated firmware image is the build output directory below WORKSPACE.  For
 exampple, the X64 Debug Image is at:
 
-`Build\Vlv2TbltDevicePkg\DEBUG_VS2015x86\FV\Vlv.ROM`
+`Build\Vlv2TbltDevicePkgX64\DEBUG_VS2015x86\FV\Vlv.fd`
 
 And the IA32 Release image is at:
 
-`Build\Vlv2TbltDevicePkgIA32\RELEASE_VS2015x86\FV\Vlv.ROM`
+`Build\Vlv2TbltDevicePkgIA32\RELEASE_VS2015x86\FV\Vlv.fd`
 
 The X64 CapsuleApp and generated UEFI Capsules are in the directory
 
-`Build\Vlv2TbltDevicePkg\Capsules`
+`Build\Vlv2TbltDevicePkgX64\Capsules`
 
 # Linux Pre-requisites
+
+* git
+* python
+* iasl
+* nasm
+* openssl
+* gcab
 
 # Download and Build MinnowMax using Linux/GCC
 
@@ -132,10 +145,12 @@ git clone https://github.com/tianocore/edk2-platforms.git
 git clone https://github.com/tianocore/edk2-non-osi.git
 
 export WORKSPACE=$PWD
+export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms/Silicon/Intel:$WORKSPACE/edk2-platforms/Platform/Intel:$WORKSPACE/edk2-non-osi/Silicon/Intel
+cd $WORKSPACE/edk2
 
-cd edk2-platforms/Platform/Intel/Vlv2TbltDevicePkg
+. edksetup.sh
 
-./Build_IFWI.sh /m MNW2 Debug
+build -a IA32 -a X64 -n 5 -t GCC5 -b DEBUG -p Vlv2TbltDevicePkg/PlatformPkgX64.dsc
 ```
 
 Once all the code is downloaded and installed, only the following commands are
@@ -143,7 +158,11 @@ required to setup the environment.  Run these from the same directory used to
 install the source and binaries.
 
 ```
-export WORKSPACE=$PWD/edk2
+export WORKSPACE=$PWD
+export PACKAGES_PATH=$WORKSPACE/edk2:$WORKSPACE/edk2-platforms/Silicon/Intel:$WORKSPACE/edk2-platforms/Platform/Intel:$WORKSPACE/edk2-non-osi/Silicon/Intel
+cd $WORKSPACE/edk2
+
+. edksetup.sh
 ```
 
 Once the environment is setup, the MinnowBoard MAX firmware and capsules can be
@@ -152,36 +171,33 @@ rebuilt using the following commands.
 * Build X64 Debug Image with report file
 
 ```
-cd edk2-platforms/Platform/Intel/Vlv2TbltDevicePkg
-./Build_IFWI.sh /m /y MNW2 Debug
+build -a IA32 -a X64 -n 5 -t GCC5 -b DEBUG -p Vlv2TbltDevicePkg/PlatformPkgX64.dsc -y Vlv.report
 ```
 
 * Build X64 Release Image with build log
 
 ```
-cd edk2-platforms/Platform/Intel/Vlv2TbltDevicePkg
-./Build_IFWI.sh /m /l MNW2 Release
+build -a IA32 -a X64 -n 5 -t GCC5 -b RELEASE -p Vlv2TbltDevicePkg/PlatformPkgX64.dsc -j Vlv.log
 ```
 
 * Build IA32 Debug Image
 
 ```
-cd edk2-platforms/Platform/Intel/Vlv2TbltDevicePkg
-./Build_IFWI.sh /m /IA32 MNW2 Debug
+build -a IA32 -n 5 -t GCC5 -b DEBUG -p Vlv2TbltDevicePkg/PlatformPkgIA32.dsc
 ```
 
 The generated firmware image is the build output directory below WORKSPACE.  For
 exampple, the X64 Debug Image is at:
 
-`Build/Vlv2TbltDevicePkg/DEBUG_GCC5/FV/Vlv.ROM`
+`Build/Vlv2TbltDevicePkgX64/DEBUG_GCC5/FV/Vlv.fd`
 
 And the IA32 Release image is at:
 
-`Build/Vlv2TbltDevicePkgIA32/RELEASE_GCC5/FV/Vlv.ROM`
+`Build/Vlv2TbltDevicePkgIA32/RELEASE_GCC5/FV/Vlv.fd`
 
 The X64 CapsuleApp and generated UEFI Capsules are in the directory
 
-`Build/Vlv2TbltDevicePkg/Capsules`
+`Build/Vlv2TbltDevicePkgX64/Capsules`
 
 # Use DediProg to update FLASH image on a MinnowBoard MAX Target
 
@@ -192,7 +208,7 @@ The X64 CapsuleApp and generated UEFI Capsules are in the directory
 * Boot MinnowBoard MAX to the Boot Manager
 * Boot the `EFI Internal Shell` boot option
 * Mount the USB FLASH Drive (usually `FS1`)
-* Use `cd` command to go to `Capsules/TestCert` directory
+* Use `cd` command to go to `Capsules/TestCert_*` directory
 * Run the following command to apply all four capsules
 
 ```

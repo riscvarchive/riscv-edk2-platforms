@@ -23,6 +23,8 @@
   BUILD_TARGETS                       = DEBUG|RELEASE
   SKUID_IDENTIFIER                    = DEFAULT
   VPD_TOOL_GUID                       = 8C3D856A-9BE6-468E-850A-24F7A8D38E08
+  PREBUILD                            = python Vlv2TbltDevicePkg/PreBuild.py
+  POSTBUILD                           = python Vlv2TbltDevicePkg/Feature/Capsule/GenerateCapsule/GenCapsuleAll.py
 
   DEFINE RC_BINARY_RELEASE        = TRUE
   #
@@ -213,7 +215,7 @@
   TpmMeasurementLib|MdeModulePkg/Library/TpmMeasurementLibNull/TpmMeasurementLibNull.inf
 !endif
 
- BiosIdLib|BoardModulePkg/Library/BiosIdLib/DxeBiosIdLib.inf
+  BiosIdLib|BoardModulePkg/Library/BiosIdLib/DxeBiosIdLib.inf
 
   StallSmmLib|Vlv2TbltDevicePkg/Library/StallSmmLib/StallSmmLib.inf
 
@@ -241,6 +243,10 @@
   Tcg2PpVendorLib|SecurityPkg/Library/Tcg2PpVendorLibNull/Tcg2PpVendorLibNull.inf
 
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
+
+!if $(RECOVERY_ENABLE)
+  EdkiiSystemCapsuleLib|SignedCapsulePkg/Library/EdkiiSystemCapsuleLib/EdkiiSystemCapsuleLib.inf
+!endif
 
 [LibraryClasses.IA32.SEC]
 !if $(PERFORMANCE_ENABLE) == TRUE
@@ -718,11 +724,10 @@
   gEfiVLVTokenSpaceGuid.PcdCpuSmramCpuDataAddress|0
   gEfiVLVTokenSpaceGuid.PcdCpuLockBoxSize|0
   gEfiSecurityPkgTokenSpaceGuid.PcdUserPhysicalPresence|TRUE
-
-[PcdsDynamicExDefault.X64.DEFAULT]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{GUID("$(FMP_MINNOW_MAX_SYSTEM)")}|VOID*|0x10
 !if $(RECOVERY_ENABLE)
+  gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareFileGuid|{GUID("AF9C9EB2-12AD-4D3E-A4D4-96F6C9966215")}|VOID*|0x10
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid|{GUID("4096267b-da0a-42eb-b5eb-fef31d207cb4")}|VOID*|0x10
 !endif
 
 [PcdsDynamicExVpd.common.DEFAULT]
