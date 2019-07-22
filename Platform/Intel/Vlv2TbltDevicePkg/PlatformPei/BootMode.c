@@ -205,9 +205,9 @@ GetSleepTypeAfterWakeup (
   // VLV BIOS Specification 0.6.2 - Section 18.4, "Power Failure Consideration"
   //
   // When the SUS_PWR_FLR bit is set, it indicates the SUS well power is lost.
-  // This bit is in the SUS Well and defaults to 1’b1 based on RSMRST# assertion (not cleared by any type of reset).
+  // This bit is in the SUS Well and defaults to 1'b1 based on RSMRST# assertion (not cleared by any type of reset).
   // System BIOS should follow cold boot path if SUS_PWR_FLR (PBASE + 0x20[14]),
-  // GEN_RST_STS (PBASE + 0x20[9]) or PWRBTNOR_STS (ABASE + 0x00[11]) is set to 1’b1
+  // GEN_RST_STS (PBASE + 0x20[9]) or PWRBTNOR_STS (ABASE + 0x00[11]) is set to 1'b1
   // regardless of the value in the SLP_TYP (ABASE + 0x04[12:10]) field.
   //
   GenPmCon1 = MmioRead16 (PMC_BASE_ADDRESS + R_PCH_PMC_GEN_PMCON_1);

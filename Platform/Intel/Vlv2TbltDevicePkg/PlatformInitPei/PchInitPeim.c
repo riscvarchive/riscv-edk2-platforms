@@ -461,7 +461,7 @@ UARTInit (
       if (SystemConfiguration->LpssHsuart0Enabled == 1){
         //
         //Valleyview BIOS Specification Vol2,17.2
-        //LPSS_UART1 ¨C set each pad PAD_CONF0.Func_Pin_Mux to function 1:
+        //LPSS_UART1 C set each pad PAD_CONF0.Func_Pin_Mux to function 1:
         //
         MmioAnd8 (IO_BASE_ADDRESS + 0x0090, (UINT8)~0x07);
         MmioOr8 (IO_BASE_ADDRESS + 0x0090, 0x01);
