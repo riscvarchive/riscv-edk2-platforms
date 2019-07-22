@@ -55,7 +55,7 @@ PciWrite (
 
   if (OPCODE_FLAGS (Entry->OpCode) & OPCODE_FLAG_S3SAVE) {
     Status = S3BootScriptSavePciCfgWrite (
-              (EFI_BOOT_SCRIPT_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
+              (S3_BOOT_SCRIPT_LIB_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
               (UINT64) Entry->PciAddress,
               1,
               &Entry->Data
@@ -111,7 +111,7 @@ PciReadModifyWrite (
 
   if (OPCODE_FLAGS (Entry->OpCode) & OPCODE_FLAG_S3SAVE) {
     Status = S3BootScriptSavePciCfgReadWrite (
-              (EFI_BOOT_SCRIPT_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
+              (S3_BOOT_SCRIPT_LIB_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
               (UINT64) Entry->PciAddress,
               &Entry->OrMask,
               &Entry->AndMask
@@ -167,7 +167,7 @@ MemReadModifyWrite (
 
   if (OPCODE_FLAGS (Entry->OpCode) & OPCODE_FLAG_S3SAVE) {
     Status = S3BootScriptSaveMemReadWrite (
-              (EFI_BOOT_SCRIPT_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
+              (S3_BOOT_SCRIPT_LIB_WIDTH) (OPCODE_EXTRA_DATA (Entry->OpCode)),
               Entry->MemAddress,
               &Entry->OrMask,
               &Entry->AndMask
