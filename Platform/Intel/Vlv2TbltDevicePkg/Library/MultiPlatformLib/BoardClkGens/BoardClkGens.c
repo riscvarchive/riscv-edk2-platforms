@@ -12,10 +12,6 @@
 #include <Ppi/ReadOnlyVariable2.h>
 #include <Library/BaseMemoryLib.h>
 
-#ifndef __GNUC__
-#pragma optimize( "", off )
-#endif
-
 #define CLKGEN_EN 1
 #define EFI_DEBUG 1
 
@@ -415,7 +411,3 @@ InstallPlatformClocksNotify (
   return EFI_SUCCESS;
 
 }
-
-#ifndef __GNUC__
-#pragma optimize( "", on )
-#endif

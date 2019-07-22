@@ -28,17 +28,5 @@ PlatformCpuInit (
   IN EFI_PLATFORM_CPU_INFO       *PlatformCpuInfo
   )
 {
-  BOOLEAN                     ResetRequired;
-
-  //
-  // Variable initialization
-  //
-  ResetRequired = FALSE;
-
-
-  if (ResetRequired) {
-    CpuOnlyReset(PeiServices);
-  }
-
   return EFI_SUCCESS;
 }

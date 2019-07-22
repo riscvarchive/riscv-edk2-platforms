@@ -17,15 +17,6 @@ Abstract:
 
 #include "PlatformEarlyInit.h"
 
-#ifdef __GNUC__
-#pragma GCC push_options
-#pragma GCC optimize ("O0")
-#else
-#pragma optimize ("", off)
-#endif
-
-
-
 static EFI_PEI_STALL_PPI  mStallPpi = {
   PEI_STALL_RESOLUTION,
   Stall
@@ -963,40 +954,3 @@ PlatformEarlyInitEntry (
 
   return Status;
 }
-
-EFI_STATUS
-EFIAPI
-CpuOnlyReset (
-  IN CONST EFI_PEI_SERVICES   **PeiServices
-  )
-{
-//  MsgBus32Write(CDV_UNIT_PUNIT, PUNIT_CPU_RST, 0x01)
-#ifdef __GNUC__
-  __asm__
-  (
-   "xorl %ecx, %ecx\n"
-   "1:hlt; hlt; hlt\n"
-   "jmp 1b\n"
-  );
-#else
-  _asm {
-    xor   ecx, ecx
-  HltLoop:
-    hlt
-    hlt
-    hlt
-    loop  HltLoop
-  }
-#endif
-  //
-  // If we get here we need to mark it as a failure.
-  //
-  return EFI_UNSUPPORTED;
-}
-
-
-#ifdef __GNUC__
-#pragma GCC pop_options
-#else
-#pragma optimize ("", on)
-#endif

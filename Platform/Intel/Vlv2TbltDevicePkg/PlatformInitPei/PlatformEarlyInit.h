@@ -1377,12 +1377,6 @@ IsA16Inverted (
 
 EFI_STATUS
 EFIAPI
-CpuOnlyReset (
-  IN CONST EFI_PEI_SERVICES   **PeiServices
-  );
-
-EFI_STATUS
-EFIAPI
 InitLan (
   IN CONST EFI_PEI_SERVICES          **PeiServices,
   IN SYSTEM_CONFIGURATION      *Buffer

@@ -51,9 +51,6 @@ CHAR16    gACPIOSFRRefDataBlockVariableName[] = ACPI_OSFR_REF_DATA_BLOCK_VARIABL
 CHAR16    gACPIOSFRMfgStringVariableName[] = ACPI_OSFR_MFG_STRING_VARIABLE_NAME;
 
 EFI_GLOBAL_NVS_AREA_PROTOCOL            mGlobalNvsArea;
-#ifndef __GNUC__
-#pragma optimize("", off)
-#endif
 BOOLEAN                   mFirstNotify;
 EFI_PLATFORM_INFO_HOB     *mPlatformInfo;
 EFI_GUID                  mSystemConfigurationGuid = SYSTEM_CONFIGURATION_GUID;
