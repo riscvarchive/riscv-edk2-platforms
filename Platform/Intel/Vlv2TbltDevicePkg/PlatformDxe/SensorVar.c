@@ -85,6 +85,7 @@ SENSOR_INFO_VAR               mSensorInfoData =
     }
 };
 
+#if defined(SENSOR_INFO_VAR_SUPPORT) && SENSOR_INFO_VAR_SUPPORT != 0
 /**
 
   Write the Sensor Info variable if it does not already exist.
@@ -109,4 +110,5 @@ InitializeSensorInfoVariable (
          &mSensorInfoData
          );
 }
+#endif
 
