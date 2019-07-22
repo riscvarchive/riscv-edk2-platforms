@@ -968,25 +968,25 @@ PchInitBeforeBoot()
   // Saved SPI Opcode menu to fix EFI variable unable to write after S3 resume.
   //
   S3BootScriptSaveMemWrite (
-                         EfiBootScriptWidthUint32,
+                         S3BootScriptWidthUint32,
                          (UINTN)(SPI_BASE_ADDRESS + (R_PCH_SPI_OPMENU0)),
                          1,
                          (VOID *)(UINTN)(SPI_BASE_ADDRESS + (R_PCH_SPI_OPMENU0)));
 
   S3BootScriptSaveMemWrite (
-                         EfiBootScriptWidthUint32,
+                         S3BootScriptWidthUint32,
                          (UINTN)(SPI_BASE_ADDRESS + (R_PCH_SPI_OPMENU1)),
                          1,
                          (VOID *)(UINTN)(SPI_BASE_ADDRESS + (R_PCH_SPI_OPMENU1)));
 
   S3BootScriptSaveMemWrite (
-                         EfiBootScriptWidthUint16,
+                         S3BootScriptWidthUint16,
                          (UINTN)(SPI_BASE_ADDRESS + R_PCH_SPI_OPTYPE),
                          1,
                          (VOID *)(UINTN)(SPI_BASE_ADDRESS + R_PCH_SPI_OPTYPE));
 
   S3BootScriptSaveMemWrite (
-                         EfiBootScriptWidthUint16,
+                         S3BootScriptWidthUint16,
                          (UINTN)(SPI_BASE_ADDRESS + R_PCH_SPI_PREOP),
                          1,
                          (VOID *)(UINTN)(SPI_BASE_ADDRESS + R_PCH_SPI_PREOP));
@@ -995,7 +995,7 @@ PchInitBeforeBoot()
   // Saved MTPMC_1 for S3 resume.
   //
   S3BootScriptSaveMemWrite (
-                         EfiBootScriptWidthUint32,
+                         S3BootScriptWidthUint32,
                          (UINTN)(PMC_BASE_ADDRESS + R_PCH_PMC_MTPMC1),
                          1,
                          (VOID *)(UINTN)(PMC_BASE_ADDRESS + R_PCH_PMC_MTPMC1));
