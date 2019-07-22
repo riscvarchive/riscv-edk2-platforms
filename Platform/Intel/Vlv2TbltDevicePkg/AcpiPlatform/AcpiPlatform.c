@@ -63,6 +63,15 @@ SYSTEM_CONFIGURATION      mSystemConfig;
 UINT8 mSmbusRsvdAddresses[] = PLATFORM_SMBUS_RSVD_ADDRESSES;
 UINT8 mNumberSmbusAddress = sizeof( mSmbusRsvdAddresses ) / sizeof( mSmbusRsvdAddresses[0] );
 
+EFI_ACPI_OSFR_OCUR_OBJECT  mOcurObjectTemplate = {
+  {0xB46F133D, 0x235F, 0x4634, 0x9F, 0x03, 0xB1, 0xC0, 0x1C, 0x54, 0x78, 0x5B},
+  0,
+  0,
+  0,
+  0,
+  0
+};
+
 /**
   Locate the first instance of a protocol.  If the protocol requested is an
   FV protocol, then it will return the first FV that contains the ACPI table
@@ -203,7 +212,6 @@ PlatformUpdateTables (
   EFI_ACPI_3_0_FIXED_ACPI_DESCRIPTION_TABLE                   *Facp;
   EFI_ACPI_OSFR_TABLE                                         *OsfrTable;
   EFI_ACPI_OSFR_OCUR_OBJECT                                   *pOcurObject;
-  EFI_ACPI_OSFR_OCUR_OBJECT                                   OcurObject = {{0xB46F133D, 0x235F, 0x4634, 0x9F, 0x03, 0xB1, 0xC0, 0x1C, 0x54, 0x78, 0x5B}, 0, 0, 0, 0, 0};
   CHAR16                                                      *OcurMfgStringBuffer = NULL;
   CHAR16                                                      *OcurModelStringBuffer = NULL;
   UINT8                                                       *OcurRefDataBlockBuffer = NULL;
@@ -554,7 +562,7 @@ PlatformUpdateTables (
             (UINT32) (sizeof (EFI_ACPI_OSFR_TABLE_FIXED_PORTION) + sizeof (UINT32));
           pOcurObject = (EFI_ACPI_OSFR_OCUR_OBJECT *)((UINTN) OsfrTable + sizeof (EFI_ACPI_OSFR_TABLE_FIXED_PORTION) + \
             sizeof (UINT32));
-          CopyMem (pOcurObject, &OcurObject, sizeof (EFI_ACPI_OSFR_OCUR_OBJECT));
+          CopyMem (pOcurObject, &mOcurObjectTemplate, sizeof (EFI_ACPI_OSFR_OCUR_OBJECT));
           pOcurObject->ManufacturerNameStringOffset = (UINT32)((UINTN) pOcurObject - (UINTN) OsfrTable + \
             sizeof (EFI_ACPI_OSFR_OCUR_OBJECT));
           pOcurObject->ModelNameStringOffset = (UINT32)((UINTN) pOcurObject - (UINTN) OsfrTable + \

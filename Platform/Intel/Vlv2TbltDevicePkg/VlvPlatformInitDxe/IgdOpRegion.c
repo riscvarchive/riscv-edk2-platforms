@@ -573,7 +573,7 @@ GetVBiosVbtCallback (
         return EFI_SUCCESS;
       }
     }
-    if ((VBiosPtr == NULL) ) {
+    if (VBiosPtr == NULL) {
       //
       // Intel video BIOS not found.
       //

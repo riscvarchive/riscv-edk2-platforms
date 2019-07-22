@@ -250,7 +250,7 @@ GetPciRom (
     //
     // Do not run RAID or AHCI Option ROM if IDE
     //
-    if ( (DeviceClass == ((PCI_CLASS_MASS_STORAGE << 8 ) | PCI_CLASS_MASS_STORAGE_IDE)) ) {
+    if (DeviceClass == ((PCI_CLASS_MASS_STORAGE << 8 ) | PCI_CLASS_MASS_STORAGE_IDE)) {
       return EFI_NOT_FOUND;
     }
 

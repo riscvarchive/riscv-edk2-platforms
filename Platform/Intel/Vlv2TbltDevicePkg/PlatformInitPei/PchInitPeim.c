@@ -514,7 +514,7 @@ IchRcrbInit (
   //
   // Initial RCBA according to the PeiRCBA table
   //
-  if ((BootMode == BOOT_ON_S3_RESUME)) {
+  if (BootMode == BOOT_ON_S3_RESUME) {
     //
     // We are resuming from S3
     // Enable HPET if enabled in Setup
