@@ -25,6 +25,69 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL   *mFwProtocol;
 
 STATIC
 VOID
+FixEthernetAliases (
+  VOID
+)
+{
+  INTN          Aliases;
+  CONST CHAR8   *Ethernet;
+  CONST CHAR8   *Ethernet0;
+  CONST CHAR8   *Alias;
+  UINTN         CopySize;
+  CHAR8         *Copy;
+  INTN          Retval;
+
+  //
+  // Look up the 'ethernet[0]' aliases
+  //
+  Aliases = fdt_path_offset (mFdtImage, "/aliases");
+  if (Aliases < 0) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate '/aliases'\n", __FUNCTION__));
+    return;
+  }
+  Ethernet = fdt_getprop (mFdtImage, Aliases, "ethernet", NULL);
+  Ethernet0 = fdt_getprop (mFdtImage, Aliases, "ethernet0", NULL);
+  Alias = Ethernet ? Ethernet : Ethernet0;
+  if (!Alias) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate 'ethernet[0]' alias\n", __FUNCTION__));
+    return;
+  }
+
+  //
+  // Create copy for fdt_setprop
+  //
+  CopySize = AsciiStrSize (Alias);
+  Copy = AllocateCopyPool (CopySize, Alias);
+  if (!Copy) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to copy '%a'\n", __FUNCTION__, Alias));
+    return;
+  }
+
+  //
+  // Create missing aliases
+  //
+  if (!Ethernet) {
+    Retval = fdt_setprop (mFdtImage, Aliases, "ethernet", Copy, CopySize);
+    if (Retval != 0) {
+      DEBUG ((DEBUG_ERROR, "%a: failed to create 'ethernet' alias (%d)\n",
+        __FUNCTION__, Retval));
+    }
+    DEBUG ((DEBUG_INFO, "%a: created 'ethernet' alias '%a'\n", __FUNCTION__, Copy));
+  }
+  if (!Ethernet0) {
+    Retval = fdt_setprop (mFdtImage, Aliases, "ethernet0", Copy, CopySize);
+    if (Retval != 0) {
+      DEBUG ((DEBUG_ERROR, "%a: failed to create 'ethernet0' alias (%d)\n",
+        __FUNCTION__, Retval));
+    }
+    DEBUG ((DEBUG_INFO, "%a: created 'ethernet0' alias '%a'\n", __FUNCTION__, Copy));
+  }
+
+  FreePool (Copy);
+}
+
+STATIC
+VOID
 UpdateMacAddress (
   VOID
   )
@@ -342,6 +405,7 @@ FdtDxeInitialize (
   SanitizePSCI ();
   CleanMemoryNodes ();
   CleanSimpleFramebuffer ();
+  FixEthernetAliases ();
   UpdateMacAddress ();
   if (Internal) {
     /*
