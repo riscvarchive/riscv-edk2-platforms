@@ -267,7 +267,7 @@ INF $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.in
 
 !if gSiPkgTokenSpaceGuid.PcdPeiDisplayEnable == TRUE
 FILE FREEFORM = 4ad46122-ffeb-4a52-bfb0-518cfca02db0 {
-  SECTION RAW = $(PLATFORM_FSP_BIN_PACKAGE)/SampleCode/Vbt/Vbt.bin
+  SECTION RAW = N1xxWU/Gop/Vbt.bin
   SECTION UI  = "Vbt"
 }
 FILE FREEFORM = 7BB28B99-61BB-11D5-9A5D-0090273FC14D {

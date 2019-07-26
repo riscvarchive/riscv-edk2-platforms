@@ -120,6 +120,7 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
     config["PACKAGES_PATH"] += os.pathsep + \
         os.path.join(config["WORKSPACE"], "edk2")
     config["PACKAGES_PATH"] += os.pathsep + os.path.join(config["WORKSPACE"])
+    config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_PLATFORM_BIN"]
     config["EDK_TOOLS_PATH"] = os.path.join(config["WORKSPACE"],
                                             config["EDK_TOOLS_PATH"])
     config["BASE_TOOLS_PATH"] = config["EDK_TOOLS_PATH"]
