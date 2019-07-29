@@ -304,21 +304,18 @@ def build(config):
                    os.path.join(config['WORKSPACE_PLATFORM'],
                                 config['PLATFORM_PACKAGE'],
                                 'Tools', 'Fsp',
-                                'RebaseAndPatchFspBinBaseAddress.py'),
+                                'RebaseFspBinBaseAddress.py'),
                    os.path.join(config['WORKSPACE_PLATFORM'],
                                 config['FLASH_MAP_FDF']),
                    os.path.join(config['WORKSPACE_FSP_BIN'],
                                 config['FSP_BIN_PKG']),
                    "Fsp.fd",
-                   os.path.join(config['WORKSPACE_PLATFORM'],
-                                config['PROJECT'],
-                                config['BOARD_PKG_PCD_DSC']),
                    "0x0"]
 
         _, _, _, return_code = execute_script(command, config, shell=False)
 
         if return_code != 0:
-            print("ERROR:RebaseAndPatchFspBinBaseAddress failed")
+            print("ERROR:RebaseFspBinBaseAddress failed")
             sys.exit(return_code)
 
         # create Fsp_Rebased.fd which is Fsp_Rebased_S.fd +
