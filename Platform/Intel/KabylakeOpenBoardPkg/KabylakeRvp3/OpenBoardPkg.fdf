@@ -53,6 +53,9 @@ SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeSize    = gSiPkgTokenSpaceG
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeOffset  = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashCodeCacheAddress = gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress
 SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashCodeCacheSize    = gSiPkgTokenSpaceGuid.PcdFlashAreaSize
+SET gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress       = $(gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress) + $(gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTOffset)
+SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress       = $(gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress) + $(gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMOffset)
+SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress       = $(gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress) + $(gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspSOffset)
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaBaseAddress    = gSiPkgTokenSpaceGuid.PcdFlashAreaBaseAddress
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaSize           = gSiPkgTokenSpaceGuid.PcdFlashAreaSize
 ################################################################################

@@ -144,8 +144,11 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
   !endif
 
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFE00000
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0
 
   ## Specifies timeout value in microseconds for the BSP to detect all APs for the first time.
   # @Prompt Timeout for the BSP to detect all APs for the first time.
@@ -252,7 +255,10 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 !endif
 
 [PcdsDynamicDefault]
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFDA0000
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0
   # Platform will pre-allocate UPD buffer and pass it to FspWrapper
   # Those dummy address will be patched before FspWrapper executing
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress|0xFFFFFFFF
