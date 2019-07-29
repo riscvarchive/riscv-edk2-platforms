@@ -109,8 +109,11 @@
   gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
   !endif
 
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEBC000
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFE00000
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0
 
   ## Specifies max supported number of Logical Processors.
   # @Prompt Configure max supported number of Logical Processorss
@@ -201,7 +204,10 @@
 !endif
 
 [PcdsDynamicDefault]
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFDA0000
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0
   # Platform will pre-allocate UPD buffer and pass it to FspWrapper
   # Those dummy address will be patched before FspWrapper executing
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress|0xFFFFFFFF
