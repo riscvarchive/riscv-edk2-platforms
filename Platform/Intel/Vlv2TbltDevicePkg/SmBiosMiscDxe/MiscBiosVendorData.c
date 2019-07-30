@@ -87,7 +87,10 @@ MISC_SMBIOS_TABLE_DATA(EFI_MISC_BIOS_VENDOR_DATA, MiscBiosVendor)
 //
     1,    // BiosBootSpecIsSupported           :1
     1,    // FunctionKeyNetworkBootIsSupported :1
-    0x1     // Reserved                          :19  Bit 2 is SMBiosIsTargContDistEnabled
+    1,    // TargetContentDistributionEnabled  :1
+    1,    // UefiSpecificationSupported        :1
+    0,    // VirtualMachineSupported           :1
+    0     // Reserved                          :19
   },
   {       // BiosCharacteristics2
     0x0001,// BiosReserved                      :16  Bit 0 is BIOS Splash Screen

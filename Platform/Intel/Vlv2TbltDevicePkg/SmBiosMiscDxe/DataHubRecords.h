@@ -1742,7 +1742,10 @@ typedef struct {
   UINT64                            SmartBatteryIsSupported           :1;
   UINT64                            BiosBootSpecIsSupported           :1;
   UINT64                            FunctionKeyNetworkBootIsSupported :1;
-  UINT64                            Reserved                          :22;
+  UINT64                            TargetContentDistributionEnabled  :1;
+  UINT64                            UefiSpecificationSupported        :1;
+  UINT64                            VirtualMachineSupported           :1;
+  UINT64                            Reserved                          :19;
 } EFI_MISC_BIOS_CHARACTERISTICS;
 
 typedef struct {
