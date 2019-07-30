@@ -370,28 +370,28 @@ if __name__ == '__main__':
     #
     # Generate capsules for the Red Sample Device
     #
-    GenCapsuleSampleDevice('Red','72E2945A-00DA-448E-9AA7-075AD840F9D4',0x00000010,0x00000000, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Red','72E2945A-00DA-448E-9AA7-075AD840F9D4',0x00000011,0x00000000, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Red','72E2945A-00DA-448E-9AA7-075AD840F9D4',0x00000012,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Red','72e2945a-00da-448e-9aa7-075ad840f9d4',0x00000010,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Red','72e2945a-00da-448e-9aa7-075ad840f9d4',0x00000011,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Red','72e2945a-00da-448e-9aa7-075ad840f9d4',0x00000012,0x00000000, CapsulesPath, CapsulesSubDir)
 
     #
     # Generate capsules for the Green Sample Device
     #
-    GenCapsuleSampleDevice('Green','79179BFD-704D-4C90-9E02-0AB8D968C18A',0x00000020,0x00000020, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Green','79179BFD-704D-4C90-9E02-0AB8D968C18A',0x00000021,0x00000020, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Green','79179BFD-704D-4C90-9E02-0AB8D968C18A',0x00000022,0x00000020, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Green','79179bfd-704d-4c90-9e02-0ab8d968c18a',0x00000020,0x00000020, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Green','79179bfd-704d-4c90-9e02-0ab8d968c18a',0x00000021,0x00000020, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Green','79179bfd-704d-4c90-9e02-0ab8d968c18a',0x00000022,0x00000020, CapsulesPath, CapsulesSubDir)
 
     #
     # Generate capsules for the Blue Sample Device
     #
-    GenCapsuleSampleDevice('Blue','149DA854-7D19-4FAA-A91E-862EA1324BE6',0x00000010,0x00000000, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Blue','149DA854-7D19-4FAA-A91E-862EA1324BE6',0x00000011,0x00000000, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Blue','149DA854-7D19-4FAA-A91E-862EA1324BE6',0x00000012,0x00000012, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Blue','149DA854-7D19-4FAA-A91E-862EA1324BE6',0x00000013,0x00000012, CapsulesPath, CapsulesSubDir)
-    GenCapsuleSampleDevice('Blue','149DA854-7D19-4FAA-A91E-862EA1324BE6',0x00000014,0x00000012, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Blue','149da854-7d19-4faa-a91e-862ea1324be6',0x00000010,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Blue','149da854-7d19-4faa-a91e-862ea1324be6',0x00000011,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Blue','149da854-7d19-4faa-a91e-862ea1324be6',0x00000012,0x00000012, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Blue','149da854-7d19-4faa-a91e-862ea1324be6',0x00000013,0x00000012, CapsulesPath, CapsulesSubDir)
+    GenCapsuleSampleDevice('Blue','149da854-7d19-4faa-a91e-862ea1324be6',0x00000014,0x00000012, CapsulesPath, CapsulesSubDir)
 
     #
     # Generate capsules for Minnow Max Firmware Updates
     #
     RomFileName = os.path.join (EdkiiBuildOutput, 'FV', 'VLV.fd')
-    GenCapsuleDevice('MinnowMax', RomFileName,'4096267B-DA0A-42EB-B5EB-FEF31D207CB4',0x0000000C,0x00000000, CapsulesPath, CapsulesSubDir)
+    GenCapsuleDevice('MinnowMax', RomFileName,'4096267b-da0a-42eb-b5eb-fef31d207cb4',0x0000000C,0x00000000, CapsulesPath, CapsulesSubDir)
