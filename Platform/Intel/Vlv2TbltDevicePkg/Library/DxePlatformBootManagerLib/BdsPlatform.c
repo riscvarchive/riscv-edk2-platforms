@@ -1299,7 +1299,7 @@ IsNeedSortBootOption (
   //
   if ((BootOptionCount > 1) &&
       (((StrnCmp (BootOptions->Description, L"Enter Setup", StrLen (L"Enter Setup"))) == 0) ||
-       ((StrnCmp (BootOptions->Description, L"BootManagerMenuApp", StrLen (L"BootManagerMenuApp"))) == 0))) {
+       ((StrnCmp (BootOptions->Description, L"Boot Device List", StrLen (L"Boot Device List"))) == 0))) {
     return TRUE;
   }
 
@@ -1374,9 +1374,6 @@ PlatformBootManagerAfterConsole (
     //
     EfiBootManagerRefreshAllBootOption ();
 
-    if (IsNeedSortBootOption()) {
-      EfiBootManagerSortLoadOptionVariable (LoadOptionTypeBoot, CompareBootOption);
-    }
     //
     // PXE boot option may appear after boot option enumeration
     //
@@ -1400,7 +1397,9 @@ PlatformBootManagerAfterConsole (
   Print (L"Press F7 for BootMenu!\n");
 
   EfiBootManagerRefreshAllBootOption ();
-  EfiBootManagerSortLoadOptionVariable (LoadOptionTypeBoot, CompareBootOption);
+  if (IsNeedSortBootOption()) {
+    EfiBootManagerSortLoadOptionVariable (LoadOptionTypeBoot, CompareBootOption);
+  }
 }
 
 /**
