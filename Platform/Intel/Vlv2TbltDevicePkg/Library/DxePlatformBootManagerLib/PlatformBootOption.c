@@ -10,12 +10,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <Library/PcdLib.h>
 
-BOOLEAN    mContinueBoot  = FALSE;
-BOOLEAN    mBootMenuBoot  = FALSE;
-BOOLEAN    mPxeBoot       = FALSE;
-BOOLEAN    mHotKeypressed = FALSE;
-EFI_EVENT  HotKeyEvent    = NULL;
-
 UINTN      mBootMenuOptionNumber;
 
 EFI_DEVICE_PATH_PROTOCOL *
@@ -396,21 +390,6 @@ RegisterBootOptionHotkey (
   }
 }
 
-EFI_STATUS
-EFIAPI
-DetectKeypressCallback (
-  IN EFI_KEY_DATA     *KeyData
-)
-{
-  mHotKeypressed = TRUE;
-
-  if (HotKeyEvent != NULL) {
-    gBS->SignalEvent(HotKeyEvent);
-  }
-
-  return EFI_SUCCESS;
-}
-
 /**
   This function is called after all the boot options are enumerated and ordered properly.
 **/
@@ -419,46 +398,32 @@ RegisterStaticHotkey (
   VOID
   )
 {
-
   EFI_INPUT_KEY                 Enter;
-  EFI_KEY_DATA                  F2;
-  EFI_KEY_DATA                  F7;
-  BOOLEAN                       EnterSetup;
+  EFI_INPUT_KEY                 F2;
+  EFI_INPUT_KEY                 F7;
   EFI_STATUS                    Status;
   EFI_BOOT_MANAGER_LOAD_OPTION  BootOption;
-
-  EnterSetup = FALSE;
 
   //
   // [Enter]
   //
-  mContinueBoot = !EnterSetup;
-  if (mContinueBoot) {
-    Enter.ScanCode    = SCAN_NULL;
-    Enter.UnicodeChar = CHAR_CARRIAGE_RETURN;
-    EfiBootManagerRegisterContinueKeyOption (0, &Enter, NULL);
-  }
-
+  Enter.ScanCode    = SCAN_NULL;
+  Enter.UnicodeChar = CHAR_CARRIAGE_RETURN;
+  EfiBootManagerRegisterContinueKeyOption (0, &Enter, NULL);
 
   //
   // [F2]/[F7]
   //
-  F2.Key.ScanCode    = SCAN_F2;
-  F2.Key.UnicodeChar = CHAR_NULL;
-  F2.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID;
-  F2.KeyState.KeyToggleState = 0;
+  F2.ScanCode    = SCAN_F2;
+  F2.UnicodeChar = CHAR_NULL;
   Status = EfiBootManagerGetBootManagerMenu (&BootOption);
   ASSERT_EFI_ERROR (Status);
-  RegisterBootOptionHotkey ((UINT16) BootOption.OptionNumber, &F2.Key, TRUE);
+  RegisterBootOptionHotkey ((UINT16) BootOption.OptionNumber, &F2, TRUE);
   EfiBootManagerFreeLoadOption (&BootOption);
 
-  F7.Key.ScanCode    = SCAN_F7;
-  F7.Key.UnicodeChar = CHAR_NULL;
-  F7.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID;
-  F7.KeyState.KeyToggleState = 0;
-  mBootMenuBoot  = !EnterSetup;
-  RegisterBootOptionHotkey ((UINT16) mBootMenuOptionNumber, &F7.Key, mBootMenuBoot);
-
+  F7.ScanCode    = SCAN_F7;
+  F7.UnicodeChar = CHAR_NULL;
+  RegisterBootOptionHotkey ((UINT16) mBootMenuOptionNumber, &F7, TRUE);
 }
 
 UINT8
