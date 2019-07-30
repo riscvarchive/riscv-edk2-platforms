@@ -417,7 +417,8 @@ INF UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
 INF MdeModulePkg/Universal/Metronome/Metronome.inf
 INF MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
 INF MdeModulePkg/Logo/LogoDxe.inf
-INF MdeModulePkg/Application/UiApp/UiApp.inf
+INF RuleOverride = UI MdeModulePkg/Application/UiApp/UiApp.inf
+INF MdeModulePkg/Application/BootManagerMenuApp/BootManagerMenuApp.inf
 INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
 INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
