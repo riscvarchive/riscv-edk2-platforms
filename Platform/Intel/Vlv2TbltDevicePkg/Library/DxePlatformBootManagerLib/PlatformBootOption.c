@@ -499,11 +499,10 @@ BootOptionType (
   Returns the priority number.
   OptionType                 EFI
   ------------------------------------
-  PXE                         2
-  DVD                         4
-  USB                         6
-  NVME                        7
-  HDD                         8
+  HDD                         2
+  USB                         4
+  SATA/NVME/SD                6
+  PXE/HTTP                    8
   EFI Shell                   9
   Others                      100
 
@@ -518,21 +517,23 @@ BootOptionPriority (
     // EFI boot options
     //
     switch (BootOptionType (BootOption->FilePath)) {
-    case MSG_MAC_ADDR_DP:
-    case MSG_VLAN_DP:
-    case MSG_IPv4_DP:
-    case MSG_IPv6_DP:
-      return 2;
+    case MSG_USB_DP:
+      return 4;
 
     case MSG_SATA_DP:
     case MSG_ATAPI_DP:
     case MSG_UFS_DP:
     case MSG_NVME_NAMESPACE_DP:
-      return 4;
-
-    case MSG_USB_DP:
+    case MSG_SD_DP:
+    case MSG_EMMC_DP:
       return 6;
 
+    case MSG_MAC_ADDR_DP:
+    case MSG_VLAN_DP:
+    case MSG_IPv4_DP:
+    case MSG_IPv6_DP:
+    case MSG_URI_DP:
+      return 8;
     }
     if (StrCmp (BootOption->Description, INTERNAL_UEFI_SHELL_NAME) == 0) {
       if (PcdGetBool (PcdBootToShellOnly)) {
@@ -541,7 +542,7 @@ BootOptionPriority (
       return 9;
     }
     if (StrCmp (BootOption->Description, UEFI_HARD_DRIVE_NAME) == 0) {
-      return 8;
+      return 2;
     }
     return 100;
 }
