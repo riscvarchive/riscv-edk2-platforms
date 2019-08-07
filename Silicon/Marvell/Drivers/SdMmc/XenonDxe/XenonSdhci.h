@@ -55,6 +55,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define SDHC_CAP_SDR50                BIT32
 #define SDHC_CAP_SDR104               BIT33
 #define SDHC_CAP_DDR50                BIT34
+#define SDHC_CAP_HS400                BIT63
 #define SDHC_MAX_CURRENT_CAP          0x0048
 #define SDHC_FORCE_EVT_AUTO_CMD       0x0050
 #define SDHC_FORCE_EVT_ERR_INT        0x0052

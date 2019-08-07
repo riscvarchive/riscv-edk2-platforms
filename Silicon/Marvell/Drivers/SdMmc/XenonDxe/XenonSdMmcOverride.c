@@ -330,7 +330,8 @@ XenonSdMmcCapability (
     Capability &= ~(UINT64)(SDHC_CAP_VOLTAGE_33 | SDHC_CAP_VOLTAGE_30);
   } else {
     Capability &= ~(UINT64)(SDHC_CAP_SDR104 | SDHC_CAP_DDR50 |
-                            SDHC_CAP_SDR50 | SDHC_CAP_VOLTAGE_18);
+                            SDHC_CAP_SDR50 | SDHC_CAP_HS400 |
+                            SDHC_CAP_VOLTAGE_18);
   }
 
   if (!SdMmcDesc.Xenon8BitBusEnabled) {
@@ -338,7 +339,7 @@ XenonSdMmcCapability (
   }
 
   if (SdMmcDesc.XenonSlowModeEnabled) {
-    Capability &= ~(UINT64)(SDHC_CAP_SDR104 | SDHC_CAP_DDR50);
+    Capability &= ~(UINT64)(SDHC_CAP_SDR104 | SDHC_CAP_DDR50 | SDHC_CAP_HS400);
   }
 
   Capability &= ~(UINT64)(SDHC_CAP_SLOT_TYPE_MASK);
