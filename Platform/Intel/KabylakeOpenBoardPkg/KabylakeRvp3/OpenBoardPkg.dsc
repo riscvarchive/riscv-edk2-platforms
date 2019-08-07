@@ -62,7 +62,7 @@
 ################################################################################
 [Defines]
   PLATFORM_NAME                       = $(PLATFORM_PACKAGE)
-  PLATFORM_GUID                       = 465B0A0B-7AC1-443b-8F67-7B8DEC145F90
+  PLATFORM_GUID                       = 8470676C-18E8-467F-B126-28DB1941AA5A
   PLATFORM_VERSION                    = 0.1
   DSC_SPECIFICATION                   = 0x00010005
   OUTPUT_DIRECTORY                    = Build/$(PROJECT)
