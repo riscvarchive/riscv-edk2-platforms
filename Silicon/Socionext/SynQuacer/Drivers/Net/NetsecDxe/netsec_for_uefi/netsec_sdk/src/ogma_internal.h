@@ -111,6 +111,8 @@ struct ogma_ctrl_s{
 
     pfdep_phys_addr_t dummy_desc_entry_phys_addr;
 
+    ogma_uint8 phy_addr;
+
 #ifdef OGMA_CONFIG_REC_STAT
     /**
      * Statistics information.

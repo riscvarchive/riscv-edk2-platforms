@@ -40,14 +40,12 @@
  **********************************************************************/
 static void ogma_set_phy_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr,
     ogma_uint16 value
     );
 
 static ogma_uint16 ogma_get_phy_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr
     );
 
@@ -57,14 +55,12 @@ void ogma_dump_gmac_stat (ogma_ctrl_t *ctrl_p);
 
 static void ogma_set_phy_target_mmd_reg_addr (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     );
 
 static void ogma_set_phy_mmd_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr,
     ogma_uint16 value
@@ -72,7 +68,6 @@ static void ogma_set_phy_mmd_reg_sub (
 
 static ogma_uint16 ogma_get_phy_mmd_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     );
@@ -435,7 +430,6 @@ ogma_err_t ogma_set_gmac_mode (
 
 static void ogma_set_phy_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr,
     ogma_uint16 value
     )
@@ -447,7 +441,7 @@ static void ogma_set_phy_reg_sub (
                       OGMA_GMAC_REG_ADDR_GDR,
                       value);
 
-    cmd = ( ( phy_addr << OGMA_GMAC_GAR_REG_SHIFT_PA) |
+    cmd = ( ( ctrl_p->param.phy_addr << OGMA_GMAC_GAR_REG_SHIFT_PA) |
             ( reg_addr << OGMA_GMAC_GAR_REG_SHIFT_GR) |
             ( OGMA_CLOCK_RANGE_IDX << OGMA_GMAC_GAR_REG_SHIFT_CR) |
             OGMA_GMAC_GAR_REG_GW |
@@ -466,7 +460,6 @@ static void ogma_set_phy_reg_sub (
 
 void ogma_set_phy_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr,
     ogma_uint16 value
     )
@@ -476,27 +469,25 @@ void ogma_set_phy_reg (
 
     if (( ctrl_p == NULL)
         || ( !ctrl_p->param.use_gmac_flag)
-        || ( phy_addr >= 32)
         || ( reg_addr >= 32) ) {
         pfdep_print( PFDEP_DEBUG_LEVEL_FATAL,
                      "An error occurred at ogma_set_phy_reg.\nPlease set valid argument.\n");
         return;
     }
 
-    ogma_set_phy_reg_sub( ctrl_p, phy_addr, reg_addr, value);
+    ogma_set_phy_reg_sub( ctrl_p, reg_addr, value);
 
 }
 
 static ogma_uint16 ogma_get_phy_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr
     )
 {
 
     ogma_uint32 cmd;
 
-    cmd = ( ( phy_addr << OGMA_GMAC_GAR_REG_SHIFT_PA) |
+    cmd = ( ( ctrl_p->param.phy_addr << OGMA_GMAC_GAR_REG_SHIFT_PA) |
             ( reg_addr << OGMA_GMAC_GAR_REG_SHIFT_GR) |
             ( OGMA_CLOCK_RANGE_IDX << OGMA_GMAC_GAR_REG_SHIFT_CR) |
             OGMA_GMAC_GAR_REG_GB);
@@ -516,7 +507,6 @@ static ogma_uint16 ogma_get_phy_reg_sub (
 
 ogma_uint16 ogma_get_phy_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr
     )
 {
@@ -525,14 +515,13 @@ ogma_uint16 ogma_get_phy_reg (
 
     if ( ( ctrl_p == NULL)
          || ( !ctrl_p->param.use_gmac_flag)
-         || ( phy_addr >= 32)
          || ( reg_addr >= 32) ) {
         pfdep_print( PFDEP_DEBUG_LEVEL_FATAL,
                      "An error occurred at ogma_get_phy_reg.\nPlease set valid argument.\n");
         return 0;
     }
 
-    value = ogma_get_phy_reg_sub(ctrl_p, phy_addr, reg_addr);
+    value = ogma_get_phy_reg_sub(ctrl_p, reg_addr);
 
 
     return value;
@@ -702,7 +691,6 @@ ogma_err_t ogma_get_gmac_status (
 
 static void ogma_set_phy_target_mmd_reg_addr (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     )
@@ -713,21 +701,20 @@ static void ogma_set_phy_target_mmd_reg_addr (
     cmd = ( ogma_uint32)dev_addr;
 
     /*set command to MMD access control register */
-    ogma_set_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_MMD_AC, cmd);
+    ogma_set_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_MMD_AC, cmd);
 
     /* set MMD access address data register Write reg_addr */
-    ogma_set_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_MMD_AAD, reg_addr);
+    ogma_set_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_MMD_AAD, reg_addr);
 
     /* write value to MMD ADDR */
     cmd = ( (1U << 14) | dev_addr);
 
     /* set command to MMD access control register */
-    ogma_set_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_MMD_AC, cmd);
+    ogma_set_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_MMD_AC, cmd);
 }
 
 static void ogma_set_phy_mmd_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr,
     ogma_uint16 value
@@ -735,30 +722,27 @@ static void ogma_set_phy_mmd_reg_sub (
 {
     /* set target mmd reg_addr */
     ogma_set_phy_target_mmd_reg_addr( ctrl_p,
-                                      phy_addr,
                                       dev_addr,
                                       reg_addr);
 
     /* Write value to MMD access address data register */
-    ogma_set_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_MMD_AAD, value);
+    ogma_set_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_MMD_AAD, value);
 
 }
 
 static ogma_uint16 ogma_get_phy_mmd_reg_sub (
     ogma_ctrl_t *ctrl_p,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     )
 {
     /* set target mmd reg_addr */
     ogma_set_phy_target_mmd_reg_addr( ctrl_p,
-                                      phy_addr,
                                       dev_addr,
                                       reg_addr);
 
     /* Read value for MMD access address data register */
-    return ogma_get_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_MMD_AAD);
+    return ogma_get_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_MMD_AAD);
 }
 
 ogma_err_t ogma_set_gmac_lpictrl_reg (
@@ -878,7 +862,6 @@ ogma_err_t ogma_get_gmac_lpitimer_reg (
 
 void ogma_set_phy_mmd_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr,
     ogma_uint16 value
@@ -890,8 +873,7 @@ void ogma_set_phy_mmd_reg (
         return;
     }
 
-    if ( ( phy_addr > 31U) ||
-         ( dev_addr > 31U) ) {
+    if ( dev_addr > 31U) {
         return;
     }
 
@@ -900,7 +882,6 @@ void ogma_set_phy_mmd_reg (
     }
 
     ogma_set_phy_mmd_reg_sub ( ctrl_p,
-                               phy_addr,
                                dev_addr,
                                reg_addr,
                                value);
@@ -911,7 +892,6 @@ void ogma_set_phy_mmd_reg (
 
 ogma_uint16 ogma_get_phy_mmd_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     )
@@ -923,8 +903,7 @@ ogma_uint16 ogma_get_phy_mmd_reg (
         return 0;
     }
 
-    if ( ( phy_addr > 31U) ||
-         ( dev_addr > 31U) ) {
+    if ( dev_addr > 31U) {
         return 0;
     }
 
@@ -933,7 +912,6 @@ ogma_uint16 ogma_get_phy_mmd_reg (
     }
 
     value = ogma_get_phy_mmd_reg_sub ( ctrl_p,
-                                       phy_addr,
                                        dev_addr,
                                        reg_addr);
 
@@ -943,7 +921,6 @@ ogma_uint16 ogma_get_phy_mmd_reg (
 
 ogma_err_t ogma_get_phy_link_status (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_phy_link_status_t *phy_link_status_p
     )
 {
@@ -955,10 +932,6 @@ ogma_err_t ogma_get_phy_link_status (
         return OGMA_ERR_PARAM;
     }
 
-    if ( phy_addr >= 32) {
-        return OGMA_ERR_RANGE;
-    }
-
     if ( !ctrl_p->param.use_gmac_flag) {
         return OGMA_ERR_NOTAVAIL;
     }
@@ -966,17 +939,17 @@ ogma_err_t ogma_get_phy_link_status (
     pfdep_memset( phy_link_status_p, 0, sizeof( ogma_phy_link_status_t) );
 
     /* Read PHY CONTROL Register */
-    tmp = ogma_get_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_CONTROL);
+    tmp = ogma_get_phy_reg_sub( ctrl_p,  OGMA_PHY_REG_ADDR_CONTROL);
 
     /* Read PHY STATUS Register */
-    value = ogma_get_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_STATUS);
+    value = ogma_get_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_STATUS);
 
     /* check latched_link_down_flag */
     if ( ( value & ( 1U << OGMA_PHY_STATUS_REG_LINK_STATUS) ) == 0) {
         phy_link_status_p->latched_link_down_flag = OGMA_TRUE;
 
         /* Read PHY STATUS Register */
-        value = ogma_get_phy_reg_sub( ctrl_p, phy_addr, OGMA_PHY_REG_ADDR_STATUS);
+        value = ogma_get_phy_reg_sub( ctrl_p, OGMA_PHY_REG_ADDR_STATUS);
 
     }
 
@@ -1036,12 +1009,10 @@ ogma_err_t ogma_get_phy_link_status (
 
             /* Read MASTER-SLAVE Control Register */
             value = ogma_get_phy_reg_sub( ctrl_p,
-                                          phy_addr,
                                           OGMA_PHY_REG_ADDR_MASTER_SLAVE_CONTROL);
 
             /* Read MASTER-SLAVE Status Register */
             tmp = ogma_get_phy_reg_sub( ctrl_p,
-                                        phy_addr,
                                         OGMA_PHY_REG_ADDR_MASTER_SLAVE_STATUS);
 
             /* Check Current Link Speed */
@@ -1061,12 +1032,10 @@ ogma_err_t ogma_get_phy_link_status (
 
                 /* Read Auto-Negotiation Advertisement register */
                 value = ogma_get_phy_reg_sub( ctrl_p,
-                                              phy_addr,
                                               OGMA_PHY_REG_ADDR_AUTO_NEGO_ABILTY);
 
                 /* Read Auto-Negotiation Link Partner Base Page Ability register */
                 tmp = ogma_get_phy_reg_sub( ctrl_p,
-                                             phy_addr,
                                              OGMA_PHY_REG_ADDR_AUTO_NEGO_LINK_PATNER_ABILTY);
 
                 value = ( ( ( value & tmp) >> OGMA_PHY_ANA_REG_TAF) &
@@ -1109,13 +1078,11 @@ ogma_err_t ogma_get_phy_link_status (
 
         /* Read EEE advertisement register */
         value = ogma_get_phy_mmd_reg_sub( ctrl_p,
-                                          phy_addr,
                                           OGMA_PHY_DEV_ADDR_AUTO_NEGO,
                                           OGMA_PHY_AUTO_NEGO_REG_ADDR_EEE_ADVERTISE);
 
         /* Read EEE link partner ability register */
         tmp = ogma_get_phy_mmd_reg_sub( ctrl_p,
-                                        phy_addr,
                                         OGMA_PHY_DEV_ADDR_AUTO_NEGO,
                                         OGMA_PHY_AUTO_NEGO_REG_ADDR_EEE_LP_ABILITY);
 

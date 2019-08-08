@@ -318,6 +318,7 @@ struct ogma_param_s{
     ogma_desc_ring_param_t desc_ring_param[OGMA_DESC_RING_ID_MAX+1];
     ogma_gmac_config_t gmac_config;
     ogma_uint8 mac_addr[6];
+    ogma_uint8 phy_addr;
 };
 
 struct ogma_tx_pkt_ctrl_s{
@@ -412,14 +413,12 @@ ogma_err_t ogma_set_gmac_mode (
 
 void ogma_set_phy_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr,
     ogma_uint16 value
     );
 
 ogma_uint16 ogma_get_phy_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 reg_addr
     );
 
@@ -660,7 +659,6 @@ ogma_err_t ogma_get_gmac_lpitimer_reg (
 
 void ogma_set_phy_mmd_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr,
     ogma_uint16 value
@@ -668,14 +666,12 @@ void ogma_set_phy_mmd_reg (
 
 ogma_uint16 ogma_get_phy_mmd_reg (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_uint8 dev_addr,
     ogma_uint16 reg_addr
     );
 
 ogma_err_t ogma_get_phy_link_status (
     ogma_handle_t ogma_handle,
-    ogma_uint8 phy_addr,
     ogma_phy_link_status_t *phy_link_status_p
     );
 

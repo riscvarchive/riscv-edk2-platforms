@@ -70,8 +70,6 @@ typedef struct {
   NON_DISCOVERABLE_DEVICE           *Dev;
 
   NETSEC_DEVICE_PATH                DevicePath;
-
-  UINTN                             PhyAddress;
 } NETSEC_DRIVER;
 
 #define NETSEC_SIGNATURE            SIGNATURE_32('n', 't', 's', 'c')

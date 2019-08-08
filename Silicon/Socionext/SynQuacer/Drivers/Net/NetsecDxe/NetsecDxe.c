@@ -59,6 +59,8 @@ Probe (
   // phy-interface
   Param.gmac_config.phy_interface = OGMA_PHY_INTERFACE_RGMII;
 
+  Param.phy_addr = LanDriver->Dev->Resources[2].AddrRangeMin;
+
   // Read and save the Permanent MAC Address
   EepromBase = LanDriver->Dev->Resources[1].AddrRangeMin;
   GetCurrentMacAddress (EepromBase, LanDriver->SnpMode.PermanentAddress.Addr);
@@ -106,8 +108,6 @@ Probe (
       ogma_err));
     return EFI_DEVICE_ERROR;
   }
-
-  LanDriver->PhyAddress = LanDriver->Dev->Resources[2].AddrRangeMin;
 
   ogma_enable_top_irq (LanDriver->Handle,
                        OGMA_TOP_IRQ_REG_NRM_RX | OGMA_TOP_IRQ_REG_NRM_TX);
@@ -280,7 +280,7 @@ SnpInitialize (
     ReturnUnlock (EFI_DEVICE_ERROR);
   }
 
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle, LanDriver->PhyAddress,
+  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
                &phy_link_status);
   if (ogma_err != OGMA_ERR_OK) {
     DEBUG ((DEBUG_ERROR,
@@ -438,7 +438,7 @@ NetsecPollPhyStatus (
   LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
 
   // Update the media status
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle, LanDriver->PhyAddress,
+  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
                &phy_link_status);
   if (ogma_err != OGMA_ERR_OK) {
     DEBUG ((DEBUG_ERROR,
@@ -662,7 +662,7 @@ SnpGetStatus (
   LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
 
   // Update the media status
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle, LanDriver->PhyAddress,
+  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
                &phy_link_status);
   if (ogma_err != OGMA_ERR_OK) {
     DEBUG ((DEBUG_ERROR,

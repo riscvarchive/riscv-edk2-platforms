@@ -388,6 +388,12 @@ ogma_err_t ogma_init (
         return OGMA_ERR_DATA;
     }
 
+    if ( param_p->phy_addr >= 32) {
+        pfdep_print( PFDEP_DEBUG_LEVEL_FATAL,
+                     "Error: phy_addr out of range\n");
+        return OGMA_ERR_DATA;
+    }
+
     ogma_err = ogma_probe_hardware( base_addr);
 
     if ( ogma_err != OGMA_ERR_OK) {
