@@ -169,6 +169,98 @@ ExitUnlock:
   return Status;
 }
 
+EFI_STATUS
+EFIAPI
+NetsecUpdateLink (
+  IN  EFI_SIMPLE_NETWORK_PROTOCOL    *Snp
+  )
+{
+  NETSEC_DRIVER                 *LanDriver;
+  ogma_phy_link_status_t        phy_link_status;
+  ogma_gmac_mode_t              ogma_gmac_mode;
+  ogma_err_t                    ogma_err;
+  BOOLEAN                       ValidFlag;
+  ogma_gmac_mode_t              GmacMode;
+  BOOLEAN                       RxRunningFlag;
+  BOOLEAN                       TxRunningFlag;
+  EFI_STATUS                    ErrorStatus;
+
+  LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
+
+  // Update the media status
+  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
+               &phy_link_status);
+  if (ogma_err != OGMA_ERR_OK) {
+    DEBUG ((DEBUG_ERROR,
+      "NETSEC: ogma_get_phy_link_status failed with error code: %d\n",
+      (INT32)ogma_err));
+    ErrorStatus = EFI_DEVICE_ERROR;
+    goto Fail;
+  }
+
+  // Update the GMAC status
+  ogma_err = ogma_get_gmac_status (LanDriver->Handle, &ValidFlag, &GmacMode,
+               &RxRunningFlag, &TxRunningFlag);
+  if (ogma_err != OGMA_ERR_OK) {
+    DEBUG ((DEBUG_ERROR,
+      "NETSEC: ogma_get_gmac_status failed with error code: %d\n",
+      (INT32)ogma_err));
+    ErrorStatus = EFI_DEVICE_ERROR;
+    goto Fail;
+  }
+
+  // Stop GMAC when GMAC is running and physical link is down
+  if (RxRunningFlag && TxRunningFlag && !phy_link_status.up_flag) {
+    ogma_err = ogma_stop_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_stop_gmac() failed with error status %d\n",
+        ogma_err));
+      ErrorStatus = EFI_DEVICE_ERROR;
+      goto Fail;
+    }
+  }
+
+  // Start GMAC when GMAC is stopped and physical link is up
+  if (!RxRunningFlag && !TxRunningFlag && phy_link_status.up_flag) {
+    ZeroMem (&ogma_gmac_mode, sizeof (ogma_gmac_mode_t));
+    ogma_gmac_mode.link_speed = phy_link_status.link_speed;
+    ogma_gmac_mode.half_duplex_flag = (ogma_bool)phy_link_status.half_duplex_flag;
+    if (!phy_link_status.half_duplex_flag && FixedPcdGet8 (PcdFlowCtrl)) {
+      ogma_gmac_mode.flow_ctrl_enable_flag     = FixedPcdGet8 (PcdFlowCtrl);
+      ogma_gmac_mode.flow_ctrl_start_threshold = FixedPcdGet16 (PcdFlowCtrlStartThreshold);
+      ogma_gmac_mode.flow_ctrl_stop_threshold  = FixedPcdGet16 (PcdFlowCtrlStopThreshold);
+      ogma_gmac_mode.pause_time                = FixedPcdGet16 (PcdPauseTime);
+    }
+
+    ogma_err = ogma_set_gmac_mode (LanDriver->Handle, &ogma_gmac_mode);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_set_gmac() failed with error status %d\n",
+        (INT32)ogma_err));
+      ErrorStatus = EFI_DEVICE_ERROR;
+      goto Fail;
+    }
+
+    ogma_err = ogma_start_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
+    if (ogma_err != OGMA_ERR_OK) {
+      DEBUG ((DEBUG_ERROR,
+        "NETSEC: ogma_start_gmac() failed with error status %d\n",
+        (INT32)ogma_err));
+      ErrorStatus = EFI_DEVICE_ERROR;
+      goto Fail;
+    }
+  }
+
+  /* Updating link status for external guery */
+  Snp->Mode->MediaPresent = phy_link_status.up_flag;
+  return EFI_SUCCESS;
+
+Fail:
+  Snp->Mode->MediaPresent = FALSE;
+  return ErrorStatus;
+}
+
 /*
  *  UEFI Initialize() function
  */
@@ -185,9 +277,9 @@ SnpInitialize (
   EFI_TPL                 SavedTpl;
   EFI_STATUS              Status;
 
-  ogma_phy_link_status_t  phy_link_status;
   ogma_err_t              ogma_err;
-  ogma_gmac_mode_t        ogma_gmac_mode;
+
+  UINT32                  Index;
 
   // Check Snp Instance
   if (Snp == NULL) {
@@ -271,48 +363,18 @@ SnpInitialize (
   ogma_disable_desc_ring_irq (LanDriver->Handle, OGMA_DESC_RING_ID_NRM_TX,
                               OGMA_CH_IRQ_REG_EMPTY);
 
-  // Stop and restart the physical link
-  ogma_err = ogma_stop_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_stop_gmac() failed with error status %d\n",
-      ogma_err));
-    ReturnUnlock (EFI_DEVICE_ERROR);
-  }
+  // Wait for media linking up
+  for (Index = 0; Index < (UINT32)FixedPcdGet8 (PcdMediaDetectTimeoutOnBoot) * 10; Index++) {
+    Status = NetsecUpdateLink (Snp);
+    if (Status != EFI_SUCCESS) {
+      ReturnUnlock (EFI_DEVICE_ERROR);
+    }
 
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
-               &phy_link_status);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_get_phy_link_status() failed error code %d\n",
-      (INT32)ogma_err));
-    ReturnUnlock (EFI_DEVICE_ERROR);
-  }
+    if (Snp->Mode->MediaPresent) {
+      break;
+    }
 
-  SetMem (&ogma_gmac_mode, sizeof (ogma_gmac_mode_t), 0);
-  ogma_gmac_mode.link_speed = phy_link_status.link_speed;
-  ogma_gmac_mode.half_duplex_flag = (ogma_bool)phy_link_status.half_duplex_flag;
-  if ((!phy_link_status.half_duplex_flag) && FixedPcdGet8 (PcdFlowCtrl)) {
-    ogma_gmac_mode.flow_ctrl_enable_flag     = FixedPcdGet8 (PcdFlowCtrl);
-    ogma_gmac_mode.flow_ctrl_start_threshold = FixedPcdGet16 (PcdFlowCtrlStartThreshold);
-    ogma_gmac_mode.flow_ctrl_stop_threshold  = FixedPcdGet16 (PcdFlowCtrlStopThreshold);
-    ogma_gmac_mode.pause_time                = FixedPcdGet16 (PcdPauseTime);
-  }
-
-  ogma_err = ogma_set_gmac_mode (LanDriver->Handle, &ogma_gmac_mode);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_set_gmac() failed with error status %d\n",
-      (INT32)ogma_err));
-    ReturnUnlock (EFI_DEVICE_ERROR);
-  }
-
-  ogma_err = ogma_start_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_start_gmac() failed with error status %d\n",
-      (INT32)ogma_err));
-    ReturnUnlock (EFI_DEVICE_ERROR);
+    MicroSecondDelay(100000);
   }
 
   // Declare the driver as initialized
@@ -420,14 +482,6 @@ NetsecPollPhyStatus (
   )
 {
   EFI_SIMPLE_NETWORK_PROTOCOL   *Snp;
-  NETSEC_DRIVER                 *LanDriver;
-  ogma_phy_link_status_t        phy_link_status;
-  ogma_gmac_mode_t              ogma_gmac_mode;
-  ogma_err_t                    ogma_err;
-  BOOLEAN                       ValidFlag;
-  ogma_gmac_mode_t              GmacMode;
-  BOOLEAN                       RxRunningFlag;
-  BOOLEAN                       TxRunningFlag;
 
   Snp = (EFI_SIMPLE_NETWORK_PROTOCOL *)Context;
   if (Snp == NULL) {
@@ -435,66 +489,7 @@ NetsecPollPhyStatus (
     return;
   }
 
-  LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
-
-  // Update the media status
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
-               &phy_link_status);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_get_phy_link_status failed with error code: %d\n",
-      (INT32)ogma_err));
-    return;
-  }
-
-  // Update the GMAC status
-  ogma_err = ogma_get_gmac_status (LanDriver->Handle, &ValidFlag, &GmacMode,
-               &RxRunningFlag, &TxRunningFlag);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_get_gmac_status failed with error code: %d\n",
-      (INT32)ogma_err));
-    return;
-  }
-
-  // Stop GMAC when GMAC is running and physical link is down
-  if (RxRunningFlag && TxRunningFlag && !phy_link_status.up_flag) {
-    ogma_err = ogma_stop_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
-    if (ogma_err != OGMA_ERR_OK) {
-      DEBUG ((DEBUG_ERROR,
-        "NETSEC: ogma_stop_gmac() failed with error status %d\n",
-        ogma_err));
-      return;
-    }
-  }
-
-  // Start GMAC when GMAC is stopped and physical link is up
-  if (!RxRunningFlag && !TxRunningFlag && phy_link_status.up_flag) {
-    ZeroMem (&ogma_gmac_mode, sizeof (ogma_gmac_mode_t));
-    ogma_gmac_mode.link_speed = phy_link_status.link_speed;
-    ogma_gmac_mode.half_duplex_flag = (ogma_bool)phy_link_status.half_duplex_flag;
-    if (!phy_link_status.half_duplex_flag && FixedPcdGet8 (PcdFlowCtrl)) {
-      ogma_gmac_mode.flow_ctrl_enable_flag     = FixedPcdGet8 (PcdFlowCtrl);
-      ogma_gmac_mode.flow_ctrl_start_threshold = FixedPcdGet16 (PcdFlowCtrlStartThreshold);
-      ogma_gmac_mode.flow_ctrl_stop_threshold  = FixedPcdGet16 (PcdFlowCtrlStopThreshold);
-      ogma_gmac_mode.pause_time                = FixedPcdGet16 (PcdPauseTime);
-    }
-
-    ogma_err = ogma_set_gmac_mode (LanDriver->Handle, &ogma_gmac_mode);
-    if (ogma_err != OGMA_ERR_OK) {
-      DEBUG ((DEBUG_ERROR,
-        "NETSEC: ogma_set_gmac() failed with error status %d\n",
-        (INT32)ogma_err));
-      return;
-    }
-
-    ogma_err = ogma_start_gmac (LanDriver->Handle, OGMA_TRUE, OGMA_TRUE);
-    if (ogma_err != OGMA_ERR_OK) {
-      DEBUG ((DEBUG_ERROR,
-        "NETSEC: ogma_start_gmac() failed with error status %d\n",
-        (INT32)ogma_err));
-    }
-  }
+  NetsecUpdateLink (Snp);
 }
 
 /*
@@ -631,7 +626,6 @@ SnpGetStatus (
   pfdep_pkt_handle_t        pkt_handle;
   LIST_ENTRY                *Link;
 
-  ogma_phy_link_status_t  phy_link_status;
   ogma_err_t              ogma_err;
 
   // Check preliminaries
@@ -660,18 +654,6 @@ SnpGetStatus (
 
   // Find the LanDriver structure
   LanDriver = INSTANCE_FROM_SNP_THIS (Snp);
-
-  // Update the media status
-  ogma_err = ogma_get_phy_link_status (LanDriver->Handle,
-               &phy_link_status);
-  if (ogma_err != OGMA_ERR_OK) {
-    DEBUG ((DEBUG_ERROR,
-      "NETSEC: ogma_get_phy_link_status failed with error code: %d\n",
-      (INT32)ogma_err));
-    ReturnUnlock (EFI_DEVICE_ERROR);
-  }
-
-  Snp->Mode->MediaPresent = phy_link_status.up_flag;
 
   ogma_err = ogma_clean_tx_desc_ring (LanDriver->Handle,
                                       OGMA_DESC_RING_ID_NRM_TX);

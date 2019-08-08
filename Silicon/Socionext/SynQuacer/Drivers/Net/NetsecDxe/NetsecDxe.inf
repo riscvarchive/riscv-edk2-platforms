@@ -61,4 +61,5 @@
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStartThreshold
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStopThreshold
   gNetsecDxeTokenSpaceGuid.PcdJumboPacket
+  gNetsecDxeTokenSpaceGuid.PcdMediaDetectTimeoutOnBoot
   gNetsecDxeTokenSpaceGuid.PcdPauseTime

@@ -137,6 +137,7 @@
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrl|0
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStartThreshold|36
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStopThreshold|48
+  gNetsecDxeTokenSpaceGuid.PcdMediaDetectTimeoutOnBoot|5
   gNetsecDxeTokenSpaceGuid.PcdPauseTime|256
 
   gSynQuacerTokenSpaceGuid.PcdNetsecEepromBase|0x08080000
