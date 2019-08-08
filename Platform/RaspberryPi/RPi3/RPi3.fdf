@@ -300,7 +300,7 @@ READ_LOCK_STATUS   = TRUE
   INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/LogoDxe/LogoDxe.inf
 
   #
-  # FDT (GUID matches mRaspberryPiFfsFileGuid in RaspberryPiPlatformDxe)
+  # FDT (GUID matches gRaspberryPiFdtFileGuid in FdtDxe)
   #
   FILE FREEFORM = DF5DA223-1D27-47C3-8D1B-9A41B55A18BC {
     SECTION RAW = Platform/RaspberryPi/$(PLATFORM_NAME)/DeviceTree/bcm2710-rpi-3-b.dtb

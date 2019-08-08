@@ -18,8 +18,8 @@ Raspberry Pi is a trademark of the [Raspberry Pi Foundation](http://www.raspberr
 
 This firmware, that has been validated to compile against the current
 [edk2](https://github.com/tianocore/edk2)/[edk2-platforms](https://github.com/tianocore/edk2-platforms),
-should be able to boot Linux (SUSE, Ubuntu), NetBSD, FreeBSD as well as Windows 10 ARM64
-(full GUI version).
+should be able to boot Linux (Debian, Ubuntu, SUSE), NetBSD, FreeBSD as well as Windows
+10 ARM64 (full GUI version).
 
 It also provides support for ATF ([Arm Trusted Platform](https://github.com/ARM-software/arm-trusted-firmware)).
 
