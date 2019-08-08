@@ -138,8 +138,12 @@
 /* bit fields for PHY CONTROL Register */
 #define OGMA_PHY_CONTROL_REG_SPEED_SELECTION_MSB (6)
 #define OGMA_PHY_CONTROL_REG_DUPLEX_MODE         (8)
+#define OGMA_PHY_CONTROL_REG_ISOLATE             (10)
+#define OGMA_PHY_CONTROL_REG_POWER_DOWN          (11)
 #define OGMA_PHY_CONTROL_REG_AUTO_NEGO_ENABLE    (12)
 #define OGMA_PHY_CONTROL_REG_SPEED_SELECTION_LSB (13)
+#define OGMA_PHY_CONTROL_REG_LOOPBACK            (14)
+#define OGMA_PHY_CONTROL_REG_RESET               (15)
 
 /* bit fields for PHY STATUS Register */
 #define OGMA_PHY_STATUS_REG_LINK_STATUS       (2)

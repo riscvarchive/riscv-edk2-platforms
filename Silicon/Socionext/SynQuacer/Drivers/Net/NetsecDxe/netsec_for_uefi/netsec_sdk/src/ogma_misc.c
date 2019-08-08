@@ -327,6 +327,60 @@ STATIC ogma_uint32 ogma_calc_pkt_ctrl_reg_param (
     return param;
 }
 
+STATIC
+void
+ogma_pre_init_microengine (
+  ogma_handle_t ogma_handle
+  )
+{
+  UINT16 Data;
+
+  /* Remove dormant settings */
+  Data = ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+         ~((1U << OGMA_PHY_CONTROL_REG_POWER_DOWN) |
+         (1U << OGMA_PHY_CONTROL_REG_ISOLATE));
+
+  ogma_set_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL, Data);
+
+  while ((ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+          ((1U << OGMA_PHY_CONTROL_REG_POWER_DOWN) |
+           (1U << OGMA_PHY_CONTROL_REG_ISOLATE))) != 0);
+
+  /* Put phy in loopback mode to guarantee RXCLK input */
+  Data |= (1U << OGMA_PHY_CONTROL_REG_LOOPBACK);
+
+  ogma_set_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL, Data);
+
+  while ((ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+          (1U << OGMA_PHY_CONTROL_REG_LOOPBACK)) == 0);
+}
+
+STATIC
+void
+ogma_post_init_microengine (
+  IN ogma_handle_t ogma_handle
+  )
+{
+  UINT16 Data;
+
+  /* Get phy back to normal operation */
+  Data = ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+         ~(1U << OGMA_PHY_CONTROL_REG_LOOPBACK);
+
+  ogma_set_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL, Data);
+
+  while ((ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+          (1U << OGMA_PHY_CONTROL_REG_LOOPBACK)) != 0);
+
+  Data |= (1U << OGMA_PHY_CONTROL_REG_RESET);
+
+  /* Apply software reset */
+  ogma_set_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL, Data);
+
+  while ((ogma_get_phy_reg (ogma_handle, OGMA_PHY_REG_ADDR_CONTROL) &
+          (1U << OGMA_PHY_CONTROL_REG_RESET)) != 0);
+}
+
 ogma_err_t ogma_init (
     void *base_addr,
     pfdep_dev_handle_t dev_handle,
@@ -551,6 +605,17 @@ ogma_err_t ogma_init (
     ogma_write_reg( ctrl_p, OGMA_REG_ADDR_DMA_TMR_CTRL,
                     ( ogma_uint32)( ( OGMA_CONFIG_CLK_HZ / OGMA_CLK_MHZ) - 1) );
 
+    /*
+     * Do pre-initialization tasks for microengine
+     *
+     * In particular, we put phy in loopback mode
+     * in order to make sure RXCLK keeps provided to mac
+     * irrespective of phy link status,
+     * which is required for microengine intialization.
+     * This will be disabled once microengine initialization complete.
+     */
+    ogma_pre_init_microengine (ctrl_p);
+
     /* start microengines */
     ogma_write_reg( ctrl_p, OGMA_REG_ADDR_DIS_CORE, 0);
 
@@ -572,6 +637,13 @@ ogma_err_t ogma_init (
         ogma_err = OGMA_ERR_INVALID;
         goto err;
     }
+
+    /*
+     * Do post-initialization tasks for microengine
+     *
+     * We put phy in normal mode and apply reset.
+     */
+    ogma_post_init_microengine (ctrl_p);
 
     /* clear microcode load end status */
     ogma_write_reg( ctrl_p, OGMA_REG_ADDR_TOP_STATUS,
