@@ -1,7 +1,9 @@
 # **EDK II Minimum Platform Firmware for Intel(R) Platforms**
 
 The Minimum Platform is a software architecture that guides uniform delivery of Intel platforms enabling firmware
-solutions for basic boot functionality with extensibility built-in.
+solutions for basic boot functionality with extensibility built-in. Please see the
+[EDK II Minimum Platform Draft Specification](https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification/)
+for more details.
 
 Package maintainers for the Minimum Platform projects are listed in Maintainers.txt.
 
@@ -98,7 +100,7 @@ return back to the minimum platform caller.
   * ``git clone https://github.com/tianocore/edk2-platforms.git``
 
 * edk2-non-osi repository
-  * ``git clone https://github.com/tianocore/edk2-non-osi.git -b devel-MinPlatform``
+  * ``git clone https://github.com/tianocore/edk2-non-osi.git``
 
 * FSP repository
   * ``git clone https://github.com/IntelFsp/FSP.git``

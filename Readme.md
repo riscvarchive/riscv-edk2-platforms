@@ -223,8 +223,8 @@ they will be documented with the platform.
 * [D05](Platform/Hisilicon/D05)
 * [HiKey](Platform/Hisilicon/HiKey)
 
-## [Intel](Platform/Intel/Readme.md)
-### Minimum Platforms
+## Intel
+### [Minimum Platforms](Platform/Intel/Readme.md)
 * [Clevo](Platform/Intel/ClevoOpenBoardPkg)
 * [Kaby Lake](Platform/Intel/KabylakeOpenBoardPkg)
 * [Purley](Platform/Intel/PurleyOpenBoardPkg)
