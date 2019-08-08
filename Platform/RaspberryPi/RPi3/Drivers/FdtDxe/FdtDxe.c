@@ -13,6 +13,7 @@
 #include <Library/DxeServicesLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiLib.h>
 #include <libfdt.h>
 
 #include <Protocol/RpiFirmware.h>
@@ -24,7 +25,7 @@ STATIC VOID                             *mFdtImage;
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL   *mFwProtocol;
 
 STATIC
-VOID
+EFI_STATUS
 FixEthernetAliases (
   VOID
 )
@@ -36,6 +37,7 @@ FixEthernetAliases (
   UINTN         CopySize;
   CHAR8         *Copy;
   INTN          Retval;
+  EFI_STATUS    Status;
 
   //
   // Look up the 'ethernet[0]' aliases
@@ -43,14 +45,14 @@ FixEthernetAliases (
   Aliases = fdt_path_offset (mFdtImage, "/aliases");
   if (Aliases < 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to locate '/aliases'\n", __FUNCTION__));
-    return;
+    return EFI_NOT_FOUND;
   }
   Ethernet = fdt_getprop (mFdtImage, Aliases, "ethernet", NULL);
   Ethernet0 = fdt_getprop (mFdtImage, Aliases, "ethernet0", NULL);
   Alias = Ethernet ? Ethernet : Ethernet0;
   if (!Alias) {
     DEBUG ((DEBUG_ERROR, "%a: failed to locate 'ethernet[0]' alias\n", __FUNCTION__));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   //
@@ -60,15 +62,17 @@ FixEthernetAliases (
   Copy = AllocateCopyPool (CopySize, Alias);
   if (!Copy) {
     DEBUG ((DEBUG_ERROR, "%a: failed to copy '%a'\n", __FUNCTION__, Alias));
-    return;
+    return EFI_OUT_OF_RESOURCES;
   }
 
   //
   // Create missing aliases
   //
+  Status = EFI_SUCCESS;
   if (!Ethernet) {
     Retval = fdt_setprop (mFdtImage, Aliases, "ethernet", Copy, CopySize);
     if (Retval != 0) {
+      Status = EFI_NOT_FOUND;
       DEBUG ((DEBUG_ERROR, "%a: failed to create 'ethernet' alias (%d)\n",
         __FUNCTION__, Retval));
     }
@@ -77,6 +81,7 @@ FixEthernetAliases (
   if (!Ethernet0) {
     Retval = fdt_setprop (mFdtImage, Aliases, "ethernet0", Copy, CopySize);
     if (Retval != 0) {
+      Status = EFI_NOT_FOUND;
       DEBUG ((DEBUG_ERROR, "%a: failed to create 'ethernet0' alias (%d)\n",
         __FUNCTION__, Retval));
     }
@@ -84,10 +89,11 @@ FixEthernetAliases (
   }
 
   FreePool (Copy);
+  return Status;
 }
 
 STATIC
-VOID
+EFI_STATUS
 UpdateMacAddress (
   VOID
   )
@@ -103,7 +109,7 @@ UpdateMacAddress (
   Node = fdt_path_offset (mFdtImage, "ethernet");
   if (Node < 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to locate 'ethernet' alias\n", __FUNCTION__));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   //
@@ -112,7 +118,7 @@ UpdateMacAddress (
   Status = mFwProtocol->GetMacAddress (MacAddress);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a: failed to retrieve MAC address\n", __FUNCTION__));
-    return;
+    return Status;
   }
 
   Retval = fdt_setprop (mFdtImage, Node, "mac-address", MacAddress,
@@ -120,16 +126,17 @@ UpdateMacAddress (
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to create 'mac-address' property (%d)\n",
       __FUNCTION__, Retval));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   DEBUG ((DEBUG_INFO, "%a: setting MAC address to %02x:%02x:%02x:%02x:%02x:%02x\n",
     __FUNCTION__, MacAddress[0], MacAddress[1], MacAddress[2], MacAddress[3],
     MacAddress[4], MacAddress[5]));
+  return EFI_SUCCESS;
 }
 
 STATIC
-VOID
+EFI_STATUS
 CleanMemoryNodes (
   VOID
   )
@@ -139,7 +146,7 @@ CleanMemoryNodes (
 
   Node = fdt_path_offset (mFdtImage, "/memory");
   if (Node < 0) {
-    return;
+    return EFI_SUCCESS;
   }
 
   /*
@@ -150,11 +157,14 @@ CleanMemoryNodes (
   Retval = fdt_del_node (mFdtImage, Node);
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove /memory\n"));
+    return EFI_NOT_FOUND;
   }
+
+  return EFI_SUCCESS;
 }
 
 STATIC
-VOID
+EFI_STATUS
 SanitizePSCI (
   VOID
   )
@@ -166,7 +176,7 @@ SanitizePSCI (
   Root = fdt_path_offset (mFdtImage, "/");
   ASSERT (Root >= 0);
   if (Root < 0) {
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Node = fdt_path_offset (mFdtImage, "/psci");
@@ -177,41 +187,42 @@ SanitizePSCI (
   ASSERT (Node >= 0);
   if (Node < 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't find/create /psci\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Retval = fdt_setprop_string (mFdtImage, Node, "compatible", "arm,psci-1.0");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't set /psci compatible property\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Retval = fdt_setprop_string (mFdtImage, Node, "method", "smc");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't set /psci method property\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Root = fdt_path_offset (mFdtImage, "/cpus");
   if (Root < 0) {
     DEBUG ((DEBUG_ERROR, "No CPUs to update with PSCI enable-method?\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Node = fdt_first_subnode (mFdtImage, Root);
   while (Node >= 0) {
     if (fdt_setprop_string (mFdtImage, Node, "enable-method", "psci") != 0) {
       DEBUG ((DEBUG_ERROR, "Failed to update enable-method for a CPU\n"));
-      return;
+      return EFI_NOT_FOUND;
     }
 
     fdt_delprop (mFdtImage, Node, "cpu-release-addr");
     Node = fdt_next_subnode (mFdtImage, Node);
   }
+  return EFI_SUCCESS;
 }
 
 STATIC
-VOID
+EFI_STATUS
 CleanSimpleFramebuffer (
   VOID
   )
@@ -225,7 +236,7 @@ CleanSimpleFramebuffer (
    */
   Node = fdt_path_offset (mFdtImage, "display0");
   if (Node < 0) {
-    return;
+    return EFI_SUCCESS;
   }
 
   /*
@@ -236,25 +247,28 @@ CleanSimpleFramebuffer (
   Retval = fdt_del_node (mFdtImage, Node);
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove display0\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Node = fdt_path_offset (mFdtImage, "/aliases");
   if (Node < 0) {
     DEBUG ((DEBUG_ERROR, "Couldn't find /aliases to remove display0\n"));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   Retval = fdt_delprop (mFdtImage, Node, "display0");
   if (Retval != 0) {
     DEBUG ((DEBUG_ERROR, "Failed to remove display0 alias\n"));
+    return EFI_NOT_FOUND;
   }
+
+  return EFI_SUCCESS;
 }
 
 #define MAX_CMDLINE_SIZE    512
 
 STATIC
-VOID
+EFI_STATUS
 UpdateBootArgs (
   VOID
   )
@@ -270,7 +284,7 @@ UpdateBootArgs (
   Node = fdt_path_offset (mFdtImage, "/chosen");
   if (Node < 0) {
     DEBUG ((DEBUG_ERROR, "%a: failed to locate /chosen node\n", __FUNCTION__));
-    return;
+    return EFI_NOT_FOUND;
   }
 
   //
@@ -282,7 +296,7 @@ UpdateBootArgs (
   CommandLine = AllocatePool (MAX_CMDLINE_SIZE) + 4;
   if (!CommandLine) {
     DEBUG ((DEBUG_ERROR, "%a: failed to allocate memory\n", __FUNCTION__));
-    return;
+    return EFI_OUT_OF_RESOURCES;
   }
 
   //
@@ -291,12 +305,12 @@ UpdateBootArgs (
   Status = mFwProtocol->GetCommandLine (MAX_CMDLINE_SIZE, CommandLine + 4);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a: failed to retrieve command line\n", __FUNCTION__));
-    return;
+    return Status;
   }
 
   if (AsciiStrLen (CommandLine + 4) == 0) {
     DEBUG ((DEBUG_INFO, "%a: empty command line received\n", __FUNCTION__));
-    return;
+    return EFI_SUCCESS;
   }
 
   CommandLine[3] = ' ';
@@ -331,6 +345,7 @@ UpdateBootArgs (
   DEBUG_CODE_END ();
 
   FreePool (CommandLine - 4);
+  return EFI_SUCCESS;
 }
 
 
@@ -402,16 +417,39 @@ FdtDxeInitialize (
   Retval = fdt_open_into (FdtImage, mFdtImage, FdtSize);
   ASSERT (Retval == 0);
 
-  SanitizePSCI ();
-  CleanMemoryNodes ();
-  CleanSimpleFramebuffer ();
-  FixEthernetAliases ();
-  UpdateMacAddress ();
+  Status = SanitizePSCI ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to sanitize PSCI (error %d)\n", Status);
+  }
+
+  Status = CleanMemoryNodes ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to clean memory nodes (error %d)\n", Status);
+  }
+
+  Status = CleanSimpleFramebuffer ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to clean frame buffer (error %d)\n", Status);
+  }
+
+  Status = FixEthernetAliases ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to fix ethernet aliases (error %d)\n", Status);
+  }
+
+  Status = UpdateMacAddress ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to update MAC address (error %d)\n", Status);
+  }
+
   if (Internal) {
     /*
      * A GPU-provided DTB already has the full command line.
      */
-    UpdateBootArgs ();
+    Status = UpdateBootArgs ();
+    if (EFI_ERROR (Status)) {
+      Print (L"Failed to update boot arguments (error %d)\n", Status);
+    }
   }
 
   DEBUG ((DEBUG_INFO, "Installed FDT is at %p\n", mFdtImage));
