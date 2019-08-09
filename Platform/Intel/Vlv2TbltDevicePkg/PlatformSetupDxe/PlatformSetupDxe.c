@@ -150,6 +150,7 @@ SystemConfigExtractConfig (
   OUT EFI_STRING                             *Results
   )
 {
+  SetupInfo();
   return EFI_UNSUPPORTED;
 }
 
