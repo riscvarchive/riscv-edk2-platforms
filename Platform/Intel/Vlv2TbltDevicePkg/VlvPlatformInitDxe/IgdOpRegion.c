@@ -493,9 +493,10 @@ SetGOPVersionCallback (
   IN VOID      *Context
   )
 {
-  CHAR16                GopVersion[16] = {0};
+  CHAR16                GopVersion[16];
   EFI_STATUS            Status;
 
+  ZeroMem (GopVersion, sizeof (GopVersion));
   Status = GetGOPDriverVersion(GopVersion);
   if(!EFI_ERROR(Status)) {
     StrCpy((CHAR16*)&(mIgdOpRegion.OpRegion->Header.GOPV[0]), GopVersion);
