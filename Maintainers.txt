@@ -125,9 +125,14 @@ Silicon/Intel/Vlv2DeviceRefCodePkg
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
 
+Silicon/Intel/CoffeelakeSiliconPkg
+M: Chasel Chiu <chasel.chiu@intel.com>
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+
 Silicon/Intel/KabylakeSiliconPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael A Kubacki <michael.a.kubacki@intel.com>
+M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 
 Silicon/Intel/LewisburgPkg
