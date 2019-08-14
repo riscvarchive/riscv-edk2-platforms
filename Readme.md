@@ -228,6 +228,7 @@ they will be documented with the platform.
 * [Clevo](Platform/Intel/ClevoOpenBoardPkg)
 * [Kaby Lake](Platform/Intel/KabylakeOpenBoardPkg)
 * [Purley](Platform/Intel/PurleyOpenBoardPkg)
+* [Whiskey Lake](Platform/Intel/WhiskeylakeOpenBoardPkg)
 
 For more information, see the
 [EDK II Minimum Platform Specification](https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification).

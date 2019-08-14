@@ -53,9 +53,10 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 
 ## Board Support
+* The `ClevoOpenBoardPkg` contains board implementations for Clevo systems.
 * The `KabylakeOpenBoardPkg` contains board implementations for Kaby Lake systems.
 * The `PurleyOpenBoardPkg` contains board implementations for Purley systems.
-* The `ClevoOpenBoardPkg` contains board implementations for Clevo systems.
+* The `WhiskeylakeOpenBoardPkg` contains board implementations for Whiskey Lake systems.
 
 ## Board Package Organization
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
@@ -189,7 +190,12 @@ return back to the minimum platform caller.
           |       |        |                |---build_config.cfg: BoardMtOlympus specific
           |       |        |                |                     build settings, environment variables.
           |       |        |                |---build_board.py: Optional board-specific pre-build,
-          |       |        |                |                   build, post-build and clean functions.
+          |       |        |                                    build, post-build and clean functions.
+          |       |        |
+          |       |        |------WhiskeylakeOpenBoardPkg
+          |       |        |        |------WhiskeylakeURvp
+          |       |        |                |---build_config.cfg: WhiskeylakeURvp specific build
+          |       |        |                                      settings environment variables.
           |------FSP
   </pre>
 
@@ -222,6 +228,15 @@ Users can also flash the UEFI firmware image to the highest area of the flash re
 
 ### **Known limitations**
 
+**ClevoOpenBoardPkg**
+1. Currently, support is only being added for the N1xxWU series of boards.
+2. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015 compiler.
+3. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
+4. The build was tested with NASM version 2.11.08.
+5. The firmware project has not been tested on an actual board, it *should not* be expected to boot.
+6. The firmware project applies to all Clevo supported board configurations but is only being tested on System 76 Galago
+  Pro devices.
+
 **KabylakeOpenBoardPkg**
 1. This firmware project has only been tested on the Intel KabylakeRvp3 board.
 2. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
@@ -235,14 +250,13 @@ Users can also flash the UEFI firmware image to the highest area of the flash re
 2. This firmware project has only been tested booting to Microsoft Windows Server 2016 with NVME on M.2 slot.
 3. This firmware project build has only been tested using the Microsoft Visual Studio 2015 compiler.
 
-**ClevoOpenBoardPkg**
-1. Currently, support is only being added for the N1xxWU series of boards.
-2. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015 compiler.
-3. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
-4. The build was tested with NASM version 2.11.08.
-5. The firmware project has not been tested on an actual board, it *should not* be expected to boot.
-6. The firmware project applies to all Clevo supported board configurations but is only being tested on System 76 Galago
-  Pro devices.
+**WhiskeylakeOpenBoardPkg**
+1. This firmware project has only been tested on the Intel WhiskeylakeURvp board.
+2. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
+  Device.
+3. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015.
+4. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
+5. The build was tested with NASM version 2.11.08.
 
 ### **Planned Activities**
 * Replace the batch build scripts with cross-platform Python build scripts.
