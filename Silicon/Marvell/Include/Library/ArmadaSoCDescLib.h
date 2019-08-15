@@ -109,8 +109,8 @@ typedef enum {
 
 typedef struct {
   ICU_GROUP Group;
-  UINTN     SetSpiAddr;
-  UINTN     ClrSpiAddr;
+  EFI_PHYSICAL_ADDRESS SetSpiAddr;
+  EFI_PHYSICAL_ADDRESS ClrSpiAddr;
 } ICU_MSI;
 
 typedef struct {

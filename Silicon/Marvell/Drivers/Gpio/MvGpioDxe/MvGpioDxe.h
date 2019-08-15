@@ -36,7 +36,7 @@ typedef struct {
   EMBEDDED_GPIO     GpioProtocol;
   GPIO_CONTROLLER  *SoCGpio;
   UINTN             GpioDeviceCount;
-  UINTN             Signature;
+  UINT64            Signature;
   EFI_HANDLE        Handle;
 } MV_GPIO;
 

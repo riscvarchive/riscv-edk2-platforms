@@ -22,7 +22,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 typedef struct {
   MARVELL_BOARD_DESC_PROTOCOL   BoardDescProtocol;
-  UINTN                   Signature;
+  UINT64                  Signature;
   EFI_HANDLE              Handle;
   EFI_LOCK                Lock;
 } MV_BOARD_DESC;
