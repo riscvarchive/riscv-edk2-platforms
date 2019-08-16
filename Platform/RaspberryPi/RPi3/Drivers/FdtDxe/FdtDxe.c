@@ -366,9 +366,11 @@ FdtDxeInitialize (
   )
 {
   EFI_STATUS Status;
+  EFI_GUID   *FdtGuid;
   VOID       *FdtImage;
   UINTN      FdtSize;
   INT32      Retval;
+  UINT32     BoardRevision;
   BOOLEAN    Internal;
 
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid, NULL,
@@ -386,16 +388,58 @@ FdtDxeInitialize (
     DEBUG ((DEBUG_INFO, "Device Tree passed via config.txt (0x%lx bytes)\n", FdtSize));
     Status = EFI_SUCCESS;
   } else {
+    /*
+     * Use one of the embedded FDT's.
+     */
     Internal = TRUE;
     DEBUG ((DEBUG_INFO, "No/Bad Device Tree found at address 0x%p (%a), "
-      "trying internal one...\n", FdtImage, fdt_strerror (Retval)));
-    Status = GetSectionFromAnyFv (&gRaspberryPiFdtFileGuid, EFI_SECTION_RAW, 0,
-               &FdtImage, &FdtSize);
-    if (Status == EFI_SUCCESS) {
-      if (fdt_check_header (FdtImage) != 0) {
-        Status = EFI_INCOMPATIBLE_VERSION;
+      "looking up internal one...\n", FdtImage, fdt_strerror (Retval)));
+    /*
+     * Query the board revision to differentiate between models.
+     */
+    Status = mFwProtocol->GetModelRevision (&BoardRevision);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "Failed to get board type: %r\n", Status));
+      DEBUG ((DEBUG_INFO, "Using default internal Device Tree\n"));
+      FdtGuid = &gRaspberryPiDefaultFdtGuid;
+    } else {
+      // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+      switch ((BoardRevision >> 4) & 0xFF) {
+      case 0x08:
+        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 3 Model B internal Device Tree\n"));
+        FdtGuid = &gRaspberryPi3ModelBFdtGuid;
+        break;
+      case 0x0D:
+        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 3 Model B+ internal Device Tree\n"));
+        FdtGuid = &gRaspberryPi3ModelBPlusFdtGuid;
+        break;
+      case 0x11:
+        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 4 Model B internal Device Tree\n"));
+        FdtGuid = &gRaspberryPi4ModelBFdtGuid;
+        break;
+      default:
+        DEBUG ((DEBUG_INFO, "Using default internal Device Tree\n"));
+        FdtGuid = &gRaspberryPiDefaultFdtGuid;
+        break;
       }
     }
+    do {
+      Status = GetSectionFromAnyFv (FdtGuid, EFI_SECTION_RAW, 0, &FdtImage, &FdtSize);
+      if (Status == EFI_SUCCESS) {
+        if (fdt_check_header (FdtImage) != 0) {
+          Status = EFI_INCOMPATIBLE_VERSION;
+        }
+      }
+      // No retry needed if we are successful or are dealing with the default Fdt.
+      if ( (Status == EFI_SUCCESS) ||
+           (CompareGuid (FdtGuid, &gRaspberryPiDefaultFdtGuid)) )
+        break;
+      // Otherwise, try one more time with the default Fdt. An example of this
+      // is if we detected a non-default Fdt, that isn't included in the FDF.
+      DEBUG ((DEBUG_INFO, "Internal Device Tree was not found for this platform, "
+        "falling back to default...\n"));
+      FdtGuid = &gRaspberryPiDefaultFdtGuid;
+    } while (1);
   }
 
   if (EFI_ERROR (Status)) {
