@@ -1,0 +1,53 @@
+## @file
+# Component information file for WhiskeylakeURvpInitLib in PEI post memory phase.
+#
+#
+#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PeiBoardPostMemInitLib
+  FILE_GUID                      = 7fcc3900-d38d-419f-826b-72481e8b5509
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = BoardInitLib
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  BaseMemoryLib
+  HdaVerbTableLib
+  MemoryAllocationLib
+  GpioExpanderLib
+  PcdLib
+
+[Packages]
+  MinPlatformPkg/MinPlatformPkg.dec
+  WhiskeylakeOpenBoardPkg/OpenBoardPkg.dec
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  SecurityPkg/SecurityPkg.dec
+  CoffeelakeSiliconPkg/SiPkg.dec
+
+[Sources]
+  PeiWhiskeylakeURvpInitPostMemLib.c
+  PeiBoardInitPostMemLib.c
+
+[Pcd]
+  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable
+  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableSize
+  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableTouchPanel
+
+  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable
+  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTableSize
+
+  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTable
+  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize
+
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpm2CurrentIrqNum
+
