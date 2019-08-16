@@ -383,12 +383,12 @@ FdtDxeInitialize (
      * Have FDT passed via config.txt.
      */
     FdtSize = fdt_totalsize (FdtImage);
-    DEBUG ((DEBUG_INFO, "DTB passed via config.txt of 0x%lx bytes\n", FdtSize));
+    DEBUG ((DEBUG_INFO, "Device Tree passed via config.txt (0x%lx bytes)\n", FdtSize));
     Status = EFI_SUCCESS;
   } else {
     Internal = TRUE;
-    DEBUG ((DEBUG_INFO, "No/bad FDT at %p (%a), trying internal DTB...\n",
-      FdtImage, fdt_strerror (Retval)));
+    DEBUG ((DEBUG_INFO, "No/Bad Device Tree found at address 0x%p (%a), "
+      "trying internal one...\n", FdtImage, fdt_strerror (Retval)));
     Status = GetSectionFromAnyFv (&gRaspberryPiFdtFileGuid, EFI_SECTION_RAW, 0,
                &FdtImage, &FdtSize);
     if (Status == EFI_SUCCESS) {
@@ -399,7 +399,7 @@ FdtDxeInitialize (
   }
 
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Failed to locate device tree: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Failed to locate Device Tree: %r\n", Status));
     return Status;
   }
 
@@ -410,7 +410,7 @@ FdtDxeInitialize (
   Status = gBS->AllocatePages (AllocateAnyPages, EfiBootServicesData,
                   EFI_SIZE_TO_PAGES (FdtSize), (EFI_PHYSICAL_ADDRESS*)&mFdtImage);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Failed to allocate new device tree: %r\n", Status));
+    DEBUG ((DEBUG_ERROR, "Failed to allocate Device Tree: %r\n", Status));
     return Status;
   }
 
@@ -419,27 +419,27 @@ FdtDxeInitialize (
 
   Status = SanitizePSCI ();
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to sanitize PSCI (error %d)\n", Status);
+    Print (L"Failed to sanitize PSCI: %r\n", Status);
   }
 
   Status = CleanMemoryNodes ();
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to clean memory nodes (error %d)\n", Status);
+    Print (L"Failed to clean memory nodes: %r\n", Status);
   }
 
   Status = CleanSimpleFramebuffer ();
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to clean frame buffer (error %d)\n", Status);
+    Print (L"Failed to clean frame buffer: %r\n", Status);
   }
 
   Status = FixEthernetAliases ();
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to fix ethernet aliases (error %d)\n", Status);
+    Print (L"Failed to fix ethernet aliases: %r\n", Status);
   }
 
   Status = UpdateMacAddress ();
   if (EFI_ERROR (Status)) {
-    Print (L"Failed to update MAC address (error %d)\n", Status);
+    Print (L"Failed to update MAC address: %r\n", Status);
   }
 
   if (Internal) {
@@ -448,11 +448,11 @@ FdtDxeInitialize (
      */
     Status = UpdateBootArgs ();
     if (EFI_ERROR (Status)) {
-      Print (L"Failed to update boot arguments (error %d)\n", Status);
+      Print (L"Failed to update boot arguments: %r\n", Status);
     }
   }
 
-  DEBUG ((DEBUG_INFO, "Installed FDT is at %p\n", mFdtImage));
+  DEBUG ((DEBUG_INFO, "Installed Device Tree at address 0x%p\n", mFdtImage));
   Status = gBS->InstallConfigurationTable (&gFdtTableGuid, mFdtImage);
   ASSERT_EFI_ERROR (Status);
 
