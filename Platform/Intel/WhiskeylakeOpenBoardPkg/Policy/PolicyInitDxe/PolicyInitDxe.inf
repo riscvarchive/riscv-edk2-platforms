@@ -1,0 +1,176 @@
+## @file
+# Module Information file for the PolicyInit DXE driver.
+#
+#
+#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010017
+  BASE_NAME                      = PolicyInitDxe
+  FILE_GUID                      = 490D0119-4448-440D-8F5C-F58FB53EE057
+  VERSION_STRING                 = 1.0
+  MODULE_TYPE                    = DXE_DRIVER
+  ENTRY_POINT                    = PolicyInitDxeEntryPoint
+
+[LibraryClasses]
+  BaseLib
+  BaseMemoryLib
+  CpuPlatformLib
+  DebugLib
+  DxeServicesTableLib
+  IoLib
+  MemoryAllocationLib
+  DxeSaPolicyLib
+  DxePchPolicyLib
+  PcdLib
+  DxePolicyBoardConfigLib
+  DxePolicyUpdateLib
+  UefiBootServicesTableLib
+  UefiDriverEntryPoint
+  UefiLib
+  UefiRuntimeServicesTableLib
+  ConfigBlockLib
+  DevicePathLib
+  DxeTbtPolicyLib
+  PchPcieRpLib
+
+[Packages]
+  MdePkg/MdePkg.dec
+  CoffeelakeSiliconPkg/SiPkg.dec
+  WhiskeylakeOpenBoardPkg/OpenBoardPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
+
+[Pcd]
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress                     ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase                          ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize                          ## CONSUMES
+  gBoardModuleTokenSpaceGuid.PcdIntelGopEnable
+  gBoardModuleTokenSpaceGuid.PcdPlatformFlavor
+  gBoardModuleTokenSpaceGuid.PcdPlatformType
+  gBoardModuleTokenSpaceGuid.PcdEcPresent
+  gIntelSiliconPkgTokenSpaceGuid.PcdIntelGraphicsVbtFileGuid
+  gBoardModuleTokenSpaceGuid.PcdTbtEnable
+  gSiPkgTokenSpaceGuid.PcdCpuSmmMsrSaveStateEnable                      ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdCpuSmmCodeAccessCheckEnable                   ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdCpuSmmUseDelayIndication                      ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdCpuSmmUseBlockIndication                      ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdCpuSmmUseSmmEnableIndication                  ## CONSUMES
+
+  gBoardModuleTokenSpaceGuid.PcdVirtualButtonVolumeUpSupport
+  gBoardModuleTokenSpaceGuid.PcdVirtualButtonVolumeDownSupport
+  gBoardModuleTokenSpaceGuid.PcdVirtualButtonHomeButtonSupport
+  gBoardModuleTokenSpaceGuid.PcdVirtualButtonRotationLockSupport
+  gBoardModuleTokenSpaceGuid.PcdSlateModeSwitchSupport
+  gBoardModuleTokenSpaceGuid.PcdAcDcAutoSwitchSupport
+  gBoardModuleTokenSpaceGuid.PcdPmPowerButtonGpioPin
+  gBoardModuleTokenSpaceGuid.PcdAcpiEnableAllButtonSupport
+  gBoardModuleTokenSpaceGuid.PcdAcpiHidDriverButtonSupport
+  gBoardModuleTokenSpaceGuid.PcdTsOnDimmTemperature
+  gBoardModuleTokenSpaceGuid.PcdBatteryPresent
+
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCSupport
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCEcLess
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF3Support
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF4Support
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF5Support
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF6Support
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF7Support
+  gBoardModuleTokenSpaceGuid.PcdEcHotKeyF8Support
+
+  #
+  # PSS Board Configuration.
+  #
+  gBoardModuleTokenSpaceGuid.PcdPssReadSN
+  gBoardModuleTokenSpaceGuid.PcdPssI2cBusNumber
+  gBoardModuleTokenSpaceGuid.PcdPssI2cSlaveAddress
+
+  gBoardModuleTokenSpaceGuid.PcdXhciAcpiTableSignature
+  gBoardModuleTokenSpaceGuid.PcdPreferredPmProfile
+  gBoardModuleTokenSpaceGuid.PcdFingerPrintSleepGpio
+  gBoardModuleTokenSpaceGuid.PcdFingerPrintIrqGpio
+  gBoardModuleTokenSpaceGuid.PcdGnssResetGpio
+  gBoardModuleTokenSpaceGuid.PcdTouchpadIrqGpio
+  gBoardModuleTokenSpaceGuid.PcdTouchpanelIrqGpio
+
+  gBoardModuleTokenSpaceGuid.PcdHdaI2sCodecIrqGpio
+  gBoardModuleTokenSpaceGuid.PcdHdaI2sCodecI2cBusNumber
+  gBoardModuleTokenSpaceGuid.PcdBleUsbPortNumber
+  gBoardModuleTokenSpaceGuid.PcdEcSmiGpio
+  gBoardModuleTokenSpaceGuid.PcdEcLowPowerExitGpio
+  gBoardModuleTokenSpaceGuid.PcdHidI2cIntPad
+  gBoardModuleTokenSpaceGuid.PcdDetectPs2KbOnCmdAck
+  gBoardModuleTokenSpaceGuid.PcdSpdAddressOverride
+  gBoardModuleTokenSpaceGuid.PcdDDISelection
+  gBoardModuleTokenSpaceGuid.PcdGfxCrbDetectGpio
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort1
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort1Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort1Proterties
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort2
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort2Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort2Proterties
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort3
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort3Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort3Proterties
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort4
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort4Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort4Proterties
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort5
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort5Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort5Proterties
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort6
+  gBoardModuleTokenSpaceGuid.PcdUsbTypeCPort6Pch
+  gBoardModuleTokenSpaceGuid.PcdUsbCPort6Proterties
+  gBoardModuleTokenSpaceGuid.PcdMipiCam0LinkUsed
+  gBoardModuleTokenSpaceGuid.PcdMipiCam1LinkUsed
+  gBoardModuleTokenSpaceGuid.PcdMipiCam2LinkUsed
+  gBoardModuleTokenSpaceGuid.PcdMipiCam3LinkUsed
+  gPlatformModuleTokenSpaceGuid.PcdH8S2113Present
+  gPlatformModuleTokenSpaceGuid.PcdNat87393Present
+  gPlatformModuleTokenSpaceGuid.PcdNct677FPresent
+  gBoardModuleTokenSpaceGuid.PcdConvertableDockSupport
+  gBoardModuleTokenSpaceGuid.PcdSmcRuntimeSciPin
+  gBoardModuleTokenSpaceGuid.PcdRealBattery1Control
+  gBoardModuleTokenSpaceGuid.PcdRealBattery2Control
+  gBoardModuleTokenSpaceGuid.PcdDimmPopulationError
+  gBoardModuleTokenSpaceGuid.PcdBtIrqGpio
+  gBoardModuleTokenSpaceGuid.PcdBtRfKillGpio
+  gBoardModuleTokenSpaceGuid.PcdWhlErbRtd3TableEnable
+  gBoardModuleTokenSpaceGuid.PcdTypeCPortsSupported
+  gBoardModuleTokenSpaceGuid.PcdMipiCamSensor
+  gBoardModuleTokenSpaceGuid.PcdH8S2113SIO
+  gBoardModuleTokenSpaceGuid.PcdNCT6776FCOM
+  gBoardModuleTokenSpaceGuid.PcdNCT6776FSIO
+  gBoardModuleTokenSpaceGuid.PcdNCT6776FHWMON
+  gBoardModuleTokenSpaceGuid.PcdGpioTier2WakeEnable
+  gBoardModuleTokenSpaceGuid.PcdFunctionGopVbtSpecificUpdate
+
+[Sources]
+  PolicyInitDxe.c
+  SaPolicyInitDxe.c
+  SiliconPolicyInitDxe.c
+  GopPolicyInitDxe.c
+  PchPolicyInitDxe.c
+  CpuPolicyInitDxe.c
+  BoardInitLib.c
+
+[Protocols]
+  gEfiFirmwareVolume2ProtocolGuid               ## CONSUMES
+  gDxeMePolicyGuid                              ## PRODUCES
+  gSaPolicyProtocolGuid                         ## CONSUMES
+  gPchPolicyProtocolGuid                        ## CONSUMES
+  gDxeSiPolicyProtocolGuid                      ## PRODUCES
+  gGopPolicyProtocolGuid                        ## PRODUCES
+  gDxeCpuPolicyProtocolGuid                     ## PRODUCES
+
+[Guids]
+  gCpuSmmGuid                                   ## CONSUMES
+  gSiMemoryInfoDataGuid
+
+[Depex]
+  gEfiVariableArchProtocolGuid
+
