@@ -47,6 +47,11 @@ Drivers/OptionRomPkg
 W: https://github.com/tianocore/tianocore.github.io/wiki/OptionRomPkg
 M: Ray Ni <ray.ni@intel.com>
 
+Drivers/DisplayLink
+M: Leif Lindholm <leif.lindholm@linaro.org>
+M: Ard Bieshuevel <ard.bieshuevel@linaro.org>
+R: Andy Hayes <andy.hayes@displaylink.com>
+
 Platform
 M: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 M: Leif Lindholm <leif.lindholm@linaro.org>
