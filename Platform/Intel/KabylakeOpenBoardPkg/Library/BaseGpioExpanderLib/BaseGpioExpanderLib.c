@@ -1,7 +1,7 @@
 /** @file
   Support for IO expander TCA6424.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -70,12 +70,11 @@ GpioExpGetRegister (
   IN UINT8 Register
   )
 {
-  EFI_STATUS Status;
   UINT8 WriBuf[1];
   UINT8 ReBuf[1] = {0};
 
   WriBuf[0] = Register;
-  Status = I2cWriteRead( Bar0, TCA6424_I2C_ADDRESS+Address, 1, WriBuf, 1, ReBuf, WAIT_1_SECOND);
+  I2cWriteRead (Bar0, TCA6424_I2C_ADDRESS + Address, 1, WriBuf, 1, ReBuf, WAIT_1_SECOND);
 
   return ReBuf[0];
 }
@@ -99,13 +98,12 @@ GpioExpSetRegister (
   IN UINT8 Value
   )
 {
-  EFI_STATUS Status;
   UINT8 WriBuf[2];
 
   WriBuf[0] = Register;
   WriBuf[1] = Value;
-  Status = I2cWriteRead( Bar0, TCA6424_I2C_ADDRESS+Address, 2, WriBuf, 0, NULL, WAIT_1_SECOND);
 
+  I2cWriteRead (Bar0, TCA6424_I2C_ADDRESS + Address, 2, WriBuf, 0, NULL, WAIT_1_SECOND);
 }
 /**
   Set the input register to a give value mentioned in the function.
