@@ -1,4 +1,4 @@
-# **EDK II Minimum Platform Firmware for Intel(R) Platforms**
+# **EDK II Minimum Platform Firmware for Intel&reg; Platforms**
 
 The Minimum Platform is a software architecture that guides uniform delivery of Intel platforms enabling firmware
 solutions for basic boot functionality with extensibility built-in. Please see the
@@ -200,7 +200,8 @@ return back to the minimum platform caller.
   </pre>
 
 **Building with the batch scripts**
-KabylakeOpenBoardPkg does not support batch scripts, please use build_bios.py.
+Only PurleyOpenBoardPkg still supports batch script build. Future board packages must only use the Python build
+infrastructure.
 
 For PurleyOpenBoardPkg
 1. Open command window, go to the workspace directory, e.g. c:\Purley.
@@ -213,18 +214,6 @@ For PurleyOpenBoardPkg
 
 The validated version of iasl compiler that can build MinPurley is 20180629. Older version may generate ACPI build
 errors.
-
-For ClevoOpenBoardPkg
-1. Open command window, go to the workspace directory, e.g. c:\Clevo.
-2. Type "cd edk2-platforms\Platform\Intel\ClevoOpenBoardPkg\N1xxWU".
-3. Type "GitEdk2Clevo.bat" to setup GIT environment.
-4. Type "bld" to build Clevo UEFI firmware image, "bld release" for release build, "bld clean" to remove intermediate
-files.
-
-Users with access to the Intel proprietary FITC tool and ME ingredients can build full images for flash  (BIOS + ME +
-DESC).
-
-Users can also flash the UEFI firmware image to the highest area of the flash region directly.
 
 ### **Known limitations**
 
@@ -257,6 +246,17 @@ Users can also flash the UEFI firmware image to the highest area of the flash re
 3. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015.
 4. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
 5. The build was tested with NASM version 2.11.08.
+
+### **Firmware Image Flashing**
+
+The full Intel firmware image on a flash device is called the Integrated Firmware Image (IFWI). Users with access to the Intel
+proprietary FITC tool and ME ingredients can build full IFWI images that may be flashed (Descriptor, UEFI FW, ME FW, etc.).
+
+Users without such access can directly flash a custom built UEFI FW image over the highest area of the flash region directly.
+It is always recommended to have a hardware flash programmer accessible to recover the firmware image. The original full flash
+image should always be backed up so it may be flashed again for recovery. Please be aware that if a system supports a technology
+that authenticates the initial firmware boot image such as Boot Guard, it will fail to boot with a custom firmware image
+that is not signed properly.
 
 ### **Planned Activities**
 * Replace the batch build scripts with cross-platform Python build scripts.
