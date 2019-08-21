@@ -1,7 +1,7 @@
 ### @file
 # Component description file for Smbios Misc module.
 #
-# Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2018-2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -23,6 +23,7 @@
 
 [Sources]
   SmbiosBasicEntryPoint.c
+  SmbiosBasic.h
   Type0BiosVendorFunction.c
   Type1SystemManufacturerFunction.c
   Type2BaseBoardManufacturerFunction.c
