@@ -96,3 +96,6 @@
 
   DebugFeaturePkg/AcpiDebug/AcpiDebugDxe.inf
   DebugFeaturePkg/AcpiDebug/AcpiDebugSmm.inf
+
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
