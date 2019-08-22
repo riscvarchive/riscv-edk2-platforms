@@ -148,3 +148,6 @@
   AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
   AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
   AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
+
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
