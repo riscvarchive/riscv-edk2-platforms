@@ -76,3 +76,5 @@
   UserInterfaceFeaturePkg/UserAuthentication/UserAuthentication2Dxe.inf
   UserInterfaceFeaturePkg/UserAuthentication/UserAuthenticationSmm.inf
 
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
