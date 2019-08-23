@@ -2,7 +2,7 @@
   This is the driver that publishes the SMM Access Protocol
   instance for System Agent.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -61,7 +61,7 @@ SmmAccessDriverEntryPoint (
   ///
   /// Get Hob list
   ///
-  Hob = GetFirstGuidHob (&gEfiSmmPeiSmramMemoryReserveGuid);
+  Hob = GetFirstGuidHob (&gEfiSmmSmramMemoryGuid);
   if (Hob == NULL) {
     DEBUG ((DEBUG_ERROR, "SmramMemoryReserve HOB not found\n"));
     return EFI_NOT_FOUND;

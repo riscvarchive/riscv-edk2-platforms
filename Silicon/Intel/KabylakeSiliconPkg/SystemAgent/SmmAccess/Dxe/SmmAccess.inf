@@ -3,7 +3,7 @@
 #
 # {1323C7F8-DAD5-4126-A54B-7A05FBF4151}
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -42,7 +42,7 @@ gEfiSmmAccess2ProtocolGuid       ## PRODUCES
 
 
 [Guids]
-gEfiSmmPeiSmramMemoryReserveGuid
+gEfiSmmSmramMemoryGuid
 
 
 [Depex]
