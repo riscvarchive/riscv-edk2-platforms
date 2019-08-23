@@ -108,7 +108,7 @@
   gEfiAcpiVariableGuid                          # ALWAYS_CONSUMED L"AcpiGlobalVariab"
   gEfiMemoryTypeInformationGuid                 # ALWAYS_CONSUMED L"MemoryTypeInformation"
   gEfiMemoryConfigDataGuid                      # SOMETIMES_PRODUCED  Hob: GUID_EXTENSION
-  gEfiSmmPeiSmramMemoryReserveGuid              # ALWAYS_PRODUCED  Hob: GUID_EXTENSION
+  gEfiSmmSmramMemoryGuid                        # ALWAYS_PRODUCED  Hob: GUID_EXTENSION
   gEfiFirmwareFileSystem2Guid                   # ALWAYS_CONSUMED
   gPeiCapsuleOnDataCDGuid
   gPeiCapsuleOnFatIdeDiskGuid

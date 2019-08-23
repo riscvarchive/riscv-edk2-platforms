@@ -3,7 +3,7 @@ ACPISMM Driver implementation file.
 
 This is QNC Smm platform driver
 
-Copyright (c) 2013-2016 Intel Corporation.
+Copyright (c) 2013-2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -225,7 +225,7 @@ Returns:
   //
   // Get Hob list for SMRAM desc
   //
-  GuidHob    = GetFirstGuidHob (&gEfiSmmPeiSmramMemoryReserveGuid);
+  GuidHob    = GetFirstGuidHob (&gEfiSmmSmramMemoryGuid);
   ASSERT (GuidHob);
   DescriptorBlock = GET_GUID_HOB_DATA (GuidHob);
   ASSERT (DescriptorBlock);

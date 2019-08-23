@@ -56,7 +56,7 @@
   gEfiSmmSwDispatch2ProtocolGuid
 
 [Guids]
-  gEfiSmmPeiSmramMemoryReserveGuid
+  gEfiSmmSmramMemoryGuid
   gQncS3CodeInLockBoxGuid
   gQncS3ContextInLockBoxGuid
 

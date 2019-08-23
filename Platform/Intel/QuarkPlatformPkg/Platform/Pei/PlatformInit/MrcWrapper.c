@@ -1,7 +1,7 @@
 /** @file
 Framework PEIM to initialize memory on a Quark Memory Controller.
 
-Copyright (c) 2013 - 2016, Intel Corporation.
+Copyright (c) 2013 - 2019, Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -836,7 +836,7 @@ InstallEfiMemory (
   BufferSize += ((SmramRanges - 1) * sizeof (EFI_SMRAM_DESCRIPTOR));
 
   Hob.Raw = BuildGuidHob (
-              &gEfiSmmPeiSmramMemoryReserveGuid,
+              &gEfiSmmSmramMemoryGuid,
               BufferSize
               );
   ASSERT (Hob.Raw);
@@ -958,7 +958,7 @@ InstallS3Memory (
   }
 
   Hob.Raw = BuildGuidHob (
-              &gEfiSmmPeiSmramMemoryReserveGuid,
+              &gEfiSmmSmramMemoryGuid,
               BufferSize
               );
   ASSERT (Hob.Raw);
@@ -1546,7 +1546,7 @@ InfoPostInstallMemory (
         }
       }
     } else if (Hob.Header->HobType == EFI_HOB_TYPE_GUID_EXTENSION) {
-      if (CompareGuid (&(Hob.Guid->Name), &gEfiSmmPeiSmramMemoryReserveGuid)) {
+      if (CompareGuid (&(Hob.Guid->Name), &gEfiSmmSmramMemoryGuid)) {
         SmramHobDescriptorBlock = (VOID*) (Hob.Raw + sizeof (EFI_HOB_GUID_TYPE));
         if (SmramDescriptorPtr != NULL) {
           *SmramDescriptorPtr = SmramHobDescriptorBlock->Descriptor;
