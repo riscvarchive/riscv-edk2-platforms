@@ -11,6 +11,7 @@
 #define _GPIO_LIB_H_
 
 #include <GpioConfig.h>
+#include <Uefi.h>
 
 #define GPIO_NAME_LENGTH_MAX  32
 

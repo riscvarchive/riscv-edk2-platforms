@@ -9,7 +9,9 @@
 #ifndef _HDAUDIO_CONFIG_H_
 #define _HDAUDIO_CONFIG_H_
 
+#include <ConfigBlock.h>
 #include <PchHda.h>
+#include <Uefi.h>
 
 #define HDAUDIO_PREMEM_CONFIG_REVISION 1
 #define HDAUDIO_CONFIG_REVISION 2

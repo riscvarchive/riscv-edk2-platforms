@@ -353,10 +353,8 @@ LoadLanConfigDefault (
   )
 {
   PCH_LAN_CONFIG  *LanConfig;
-  UINT16          LpcDid;
 
   LanConfig = ConfigBlockPointer;
-  LpcDid    = PchGetLpcDid ();
 
   DEBUG ((DEBUG_INFO, "LanConfig->Header.GuidHob.Name = %g\n", &LanConfig->Header.GuidHob.Name));
   DEBUG ((DEBUG_INFO, "LanConfig->Header.GuidHob.Header.HobLength = 0x%x\n", LanConfig->Header.GuidHob.Header.HobLength));

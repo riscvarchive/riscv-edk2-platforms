@@ -41,6 +41,7 @@ SaInitEntryPointDxe (
   SaInitEntryPoint ();
 
   Status = SaAcpiInit (ImageHandle);
+  ASSERT_EFI_ERROR (Status);
 
   ///
   /// Create PCI Enumeration Completed callback for SA
