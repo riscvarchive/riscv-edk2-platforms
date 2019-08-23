@@ -135,6 +135,76 @@ UpdateMacAddress (
   return EFI_SUCCESS;
 }
 
+//
+// Add "bcm2835-usb" to the USB compatible property list, if not present.
+// Required because some Linux kernels can't handle USB devices otherwise.
+//
+STATIC
+EFI_STATUS
+AddUsbCompatibleProperty (
+  VOID
+  )
+{
+  CONST CHAR8   Prop[]    = "brcm,bcm2708-usb";
+  CONST CHAR8   NewProp[] = "brcm,bcm2835-usb";
+  CONST CHAR8   *List;
+  CHAR8         *NewList;
+  INT32         ListSize;
+  INTN          Node;
+  INTN          Retval;
+
+  // Locate the node that the 'usb' alias refers to
+  Node = fdt_path_offset (mFdtImage, "usb");
+  if (Node < 0) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate 'usb' alias\n", __FUNCTION__));
+    return EFI_NOT_FOUND;
+  }
+
+  // Get the property list. This is a list of NUL terminated strings.
+  List = fdt_getprop (mFdtImage, Node, "compatible", &ListSize);
+  if (List == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to locate properties\n", __FUNCTION__));
+    return EFI_NOT_FOUND;
+  }
+
+  // Check if the compatible value we plan to add is already present
+  if (fdt_stringlist_contains (List, ListSize, NewProp)) {
+    DEBUG ((DEBUG_INFO, "%a: property '%a' is already set.\n",
+      __FUNCTION__, NewProp));
+    return EFI_SUCCESS;
+  }
+
+  // Make sure the compatible device is what we expect
+  if (!fdt_stringlist_contains (List, ListSize, Prop)) {
+    DEBUG ((DEBUG_ERROR, "%a: property '%a' is missing!\n",
+      __FUNCTION__, Prop));
+    return EFI_NOT_FOUND;
+  }
+
+  // Add the new NUL terminated entry to our list
+  DEBUG ((DEBUG_INFO, "%a: adding '%a' to the properties\n",
+    __FUNCTION__, NewProp));
+
+  NewList = AllocatePool (ListSize + sizeof (NewProp));
+  if (NewList == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to allocate memory\n", __FUNCTION__));
+    return EFI_OUT_OF_RESOURCES;;
+  }
+  CopyMem (NewList, List, ListSize);
+  CopyMem (&NewList[ListSize], NewProp, sizeof (NewProp));
+
+  Retval = fdt_setprop (mFdtImage, Node, "compatible", NewList,
+             ListSize + sizeof (NewProp));
+  FreePool (NewList);
+  if (Retval != 0) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to update properties (%d)\n",
+      __FUNCTION__, Retval));
+    return EFI_NOT_FOUND;
+  }
+
+  return EFI_SUCCESS;
+}
+
 STATIC
 EFI_STATUS
 CleanMemoryNodes (
@@ -484,6 +554,11 @@ FdtDxeInitialize (
   Status = UpdateMacAddress ();
   if (EFI_ERROR (Status)) {
     Print (L"Failed to update MAC address: %r\n", Status);
+  }
+
+  Status = AddUsbCompatibleProperty ();
+  if (EFI_ERROR (Status)) {
+    Print (L"Failed to update USB compatible properties: %r\n", Status);
   }
 
   if (Internal) {
