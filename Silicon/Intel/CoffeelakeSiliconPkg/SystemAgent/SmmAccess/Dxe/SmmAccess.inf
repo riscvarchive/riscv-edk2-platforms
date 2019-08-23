@@ -41,7 +41,7 @@ gEfiSmmAccess2ProtocolGuid       ## PRODUCES
 
 
 [Guids]
-gEfiSmmPeiSmramMemoryReserveGuid
+gEfiSmmSmramMemoryGuid
 
 
 [Depex]

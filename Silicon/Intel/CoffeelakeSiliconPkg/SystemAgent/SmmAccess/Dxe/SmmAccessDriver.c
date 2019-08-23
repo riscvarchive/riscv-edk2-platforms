@@ -49,7 +49,7 @@ SmmAccessDriverEntryPoint (
   ///
   /// Get Hob list
   ///
-  Hob = GetFirstGuidHob (&gEfiSmmPeiSmramMemoryReserveGuid);
+  Hob = GetFirstGuidHob (&gEfiSmmSmramMemoryGuid);
   if (Hob == NULL) {
     DEBUG ((DEBUG_WARN, "SmramMemoryReserve HOB not found\n"));
     return EFI_NOT_FOUND;
