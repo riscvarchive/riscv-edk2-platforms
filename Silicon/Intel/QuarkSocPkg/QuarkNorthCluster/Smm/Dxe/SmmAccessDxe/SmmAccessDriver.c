@@ -75,7 +75,7 @@ Returns:
   //
   // Get Hob list
   //
-  GuidHob    = GetFirstGuidHob (&gEfiSmmPeiSmramMemoryReserveGuid);
+  GuidHob    = GetFirstGuidHob (&gEfiSmmSmramMemoryGuid);
   DescriptorBlock = GET_GUID_HOB_DATA (GuidHob);
   ASSERT (DescriptorBlock);
 

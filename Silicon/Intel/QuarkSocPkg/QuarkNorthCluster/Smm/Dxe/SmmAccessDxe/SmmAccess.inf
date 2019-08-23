@@ -42,7 +42,7 @@
   gEfiSmmAccess2ProtocolGuid
 
 [Guids]
-  gEfiSmmPeiSmramMemoryReserveGuid
+  gEfiSmmSmramMemoryGuid
 
 [Depex]
   gEfiPciRootBridgeIoProtocolGuid

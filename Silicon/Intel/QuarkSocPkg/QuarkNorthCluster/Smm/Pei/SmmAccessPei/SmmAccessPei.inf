@@ -34,7 +34,7 @@ ENTRY_POINT          = SmmAccessPeiEntryPoint
   SmmLib
 
 [Guids]
-  gEfiSmmPeiSmramMemoryReserveGuid             # ALWAYS_CONSUMED
+  gEfiSmmSmramMemoryGuid             # ALWAYS_CONSUMED
 
 [Ppis]
   gPeiSmmAccessPpiGuid                         # ALWAYS_PRODUCED

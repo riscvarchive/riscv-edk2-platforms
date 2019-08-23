@@ -2,7 +2,7 @@
 This is the driver that publishes the SMM Access Ppi
 instance for the Quark SOC.
 
-Copyright (c) 2013-2015 Intel Corporation.
+Copyright (c) 2013-2019 Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -325,7 +325,7 @@ Returns:
   //
   // Get Hob list
   //
-  GuidHob    = GetFirstGuidHob (&gEfiSmmPeiSmramMemoryReserveGuid);
+  GuidHob    = GetFirstGuidHob (&gEfiSmmSmramMemoryGuid);
   DescriptorBlock = GET_GUID_HOB_DATA (GuidHob);
   ASSERT (DescriptorBlock);
 
