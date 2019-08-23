@@ -20,17 +20,18 @@
 
 [LibraryClasses]
   BaseLib
-  DebugLib
   BaseMemoryLib
+  DebugLib
+  GpioLib
   MemoryAllocationLib
-  PcdLib
   MultiBoardInitSupportLib
-  StallPpiLib
+  OcWdtLib
+  PcdLib
   PchResetLib
   PeiPlatformHookLib
-  PlatformHookLib
   PeiPolicyInitLib
-  OcWdtLib
+  PlatformHookLib
+  StallPpiLib
 
 [Packages]
   MinPlatformPkg/MinPlatformPkg.dec
@@ -47,6 +48,7 @@
   BoardSaInitPreMemLib.c
   BoardPchInitPreMemLib.c
   BoardFuncInitPreMem.c
+  GpioTableWhlUDdr4PreMem.c
 
 [Ppis]
   gEfiPeiReadOnlyVariable2PpiGuid

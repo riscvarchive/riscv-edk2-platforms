@@ -25,14 +25,12 @@
 #include <SioRegs.h>
 #include <Library/PchPcrLib.h>
 #include <IoExpander.h>
-#include "PeiWhiskeylakeURvpInitLib.h"
-#include "GpioTableDefault.h"
-#include "GpioTableWhlUDdr4.h"
 #include <AttemptUsbFirst.h>
 #include <PeiPlatformHookLib.h>
 #include <Library/PeiPolicyInitLib.h>
 #include <Library/PchInfoLib.h>
 #include <FirwmareConfigurations.h>
+#include "WhiskeylakeURvpInit.h"
 
 EFI_STATUS
 BoardFunctionInit(
@@ -49,7 +47,7 @@ GPIO init function for PEI post memory phase.
 EFI_STATUS
 BoardGpioInit(
   IN UINT16 BoardId
-)
+  )
 {
   //
   // GPIO Table Init.
@@ -57,16 +55,16 @@ BoardGpioInit(
   switch (BoardId) {
 
     case BoardIdWhiskeyLakeRvp:
-      PcdSet32S(PcdBoardGpioTable, (UINTN)mGpioTableWhlUDdr4_0);
-      PcdSet16S(PcdBoardGpioTableSize, sizeof(mGpioTableWhlUDdr4_0) / sizeof(GPIO_INIT_CONFIG));
-      PcdSet32S(PcdBoardGpioTable2, (UINTN)mGpioTableWhlUDdr4);
-      PcdSet16S(PcdBoardGpioTable2Size, sizeof(mGpioTableWhlUDdr4) / sizeof(GPIO_INIT_CONFIG));
+      PcdSet32S (PcdBoardGpioTable, (UINTN) mGpioTableWhlUDdr4_0);
+      PcdSet16S (PcdBoardGpioTableSize, mGpioTableWhlUDdr4_0Size);
+      PcdSet32S (PcdBoardGpioTable2, (UINTN) mGpioTableWhlUDdr4);
+      PcdSet16S (PcdBoardGpioTable2Size, mGpioTableWhlUDdr4Size);
       break;
 
     default:
-      DEBUG((DEBUG_INFO, "For Unknown Board ID..Use Default GPIO Table...\n"));
-      PcdSet32S(PcdBoardGpioTable, (UINTN)mGpioTableDefault);
-      PcdSet16S(PcdBoardGpioTableSize, sizeof(mGpioTableDefault) / sizeof(GPIO_INIT_CONFIG));
+      DEBUG ((DEBUG_INFO, "For Unknown Board ID..Use Default GPIO Table...\n"));
+      PcdSet32S (PcdBoardGpioTable, (UINTN) mGpioTableDefault);
+      PcdSet16S (PcdBoardGpioTableSize, mGpioTableDefaultSize);
       break;
   }
 
@@ -148,31 +146,36 @@ BoardSecurityInit (
 }
 
 /**
-WhiskeyLake board configuration init function for PEI post memory phase.
+  Board configuration initialization in the post-memory boot phase.
 
-@param[in]  Content  pointer to the buffer contain init information for board init.
-
-@retval EFI_SUCCESS             The function completed successfully.
-@retval EFI_INVALID_PARAMETER   The parameter is NULL.
 **/
-EFI_STATUS
-BoardConfigInit(
+VOID
+BoardConfigInit (
   VOID
-)
+  )
 {
   EFI_STATUS  Status;
   UINT16      BoardId;
 
   BoardId = BoardIdWhiskeyLakeRvp;
 
-  Status = BoardGpioInit(BoardId);
-  Status = TouchPanelGpioInit(BoardId);
-  Status = HdaVerbTableInit(BoardId);
-  Status = BoardMiscInit(BoardId);
-  Status = BoardFunctionInit(BoardId);
-  Status = BoardSecurityInit(BoardId);
+  Status = BoardGpioInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
 
-  return EFI_SUCCESS;
+  Status = TouchPanelGpioInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = HdaVerbTableInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = BoardMiscInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = BoardFunctionInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = BoardSecurityInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
 }
 
 //@todo Review this functionality and if it is required for WHL SDS

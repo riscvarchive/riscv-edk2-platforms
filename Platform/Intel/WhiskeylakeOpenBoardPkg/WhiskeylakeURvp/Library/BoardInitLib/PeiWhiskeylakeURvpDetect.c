@@ -27,7 +27,7 @@
 #include <SioRegs.h>
 #include <Library/PchPcrLib.h>
 
-#include "PeiWhiskeylakeURvpInitLib.h"
+#include "WhiskeylakeURvpInit.h"
 
 #include <ConfigBlock.h>
 #include <ConfigBlock/MemoryConfig.h>

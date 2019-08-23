@@ -9,6 +9,8 @@
 #ifndef _BOARD_FUNC_H_
 #define _BOARD_FUNC_H_
 
+#include <Uefi.h>
+
 EFI_STATUS
 PeiBoardSpecificInitPostMemNull (
   VOID

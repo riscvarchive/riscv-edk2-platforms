@@ -24,7 +24,6 @@
 #include <PlatformBoardConfig.h>
 #include <Library/CnviLib.h>
 #include <Register/PchRegsLpcCnl.h>
-#include <Ppi/PeiTbtPolicy.h>
 #include <PcieDeviceOverrideTable.h>
 
 VOID
@@ -275,7 +274,6 @@ UpdatePeiPchPolicy (
   EFI_STATUS                      Status;
   UINT8                           Index;
   DMI_HW_WIDTH_CONTROL            *DmiHaAWC;
-  UINT16                          LpcDid;
   PCH_GENERAL_CONFIG              *PchGeneralConfig;
   PCH_PCIE_CONFIG                 *PcieRpConfig;
   PCH_SATA_CONFIG                 *SataConfig;
@@ -295,7 +293,6 @@ UpdatePeiPchPolicy (
   USB_CONFIG                      *UsbConfig;
   PCH_ESPI_CONFIG                 *EspiConfig;
   PCH_CNVI_CONFIG                 *CnviConfig;
-  PEI_TBT_POLICY                  *PeiTbtPolicy;
   SI_PREMEM_POLICY_PPI            *SiPreMemPolicyPpi;
 
   Status = GetConfigBlock ((VOID *) SiPolicy, &gPchGeneralConfigGuid, (VOID *) &PchGeneralConfig);
@@ -344,9 +341,6 @@ UpdatePeiPchPolicy (
                 (VOID **) &SiPreMemPolicyPpi
                 );
   ASSERT_EFI_ERROR (Status);
-
-  PeiTbtPolicy = NULL;
-  LpcDid = PchGetLpcDid ();
 
   DmiConfig->PwrOptEnable = TRUE;
   PmConfig->PchSlpS3MinAssert = 0;

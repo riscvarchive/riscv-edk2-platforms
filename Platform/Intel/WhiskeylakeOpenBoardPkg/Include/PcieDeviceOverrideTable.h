@@ -9,7 +9,7 @@
 #ifndef _PCIE_DEVICE_OVERRIDE_TABLE_H_
 #define _PCIE_DEVICE_OVERRIDE_TABLE_H_
 
-#include <ConfigBlock/PcieRpconfig.h>
+#include <ConfigBlock/PcieRpConfig.h>
 #include <IndustryStandard/Pci22.h>
 
 #define PCI_CLASS_NETWORK             0x02

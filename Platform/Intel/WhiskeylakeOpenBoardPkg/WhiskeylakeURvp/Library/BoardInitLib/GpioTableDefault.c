@@ -1,13 +1,9 @@
 /** @file
   GPIO definition table
 
-
   Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
-
-#ifndef _GPIO_TABLE_DEFAULT_H_
-#define _GPIO_TABLE_DEFAULT_H_
 
 #include <GpioPinsCnlLp.h>
 #include <Library/GpioLib.h>
@@ -18,8 +14,7 @@
 //
 // CNL U DRR4 Board GPIO table configuration is used as default
 //
-
-GLOBAL_REMOVE_IF_UNREFERENCED GPIO_INIT_CONFIG mGpioTableDefault[] =
+GPIO_INIT_CONFIG mGpioTableDefault[] =
 {
 //                      Pmode,  GPI_IS,  GpioDir,  GPIOTxState,  RxEvCfg,  GPIRoutConfig,  PadRstCfg,  Term,
   //{GPIO_CNL_LP_GPP_A0,  { GpioPadModeNotUsed,  GpioHostOwnDefault,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioHostDeepReset,  GpioTermNone }},
@@ -215,11 +210,4 @@ GLOBAL_REMOVE_IF_UNREFERENCED GPIO_INIT_CONFIG mGpioTableDefault[] =
   //(Default HW)  {GPIO_CNL_LP_GPD11,  { GpioPadModeNative1,  GpioHostOwnGpio,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioResetDefault,  GpioTermNone }},  //LANPHY_EN
   {GPIO_CNL_LP_PECI,  { GpioHardwareDefault,  GpioHostOwnDefault,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioHostDeepReset,  GpioTermWpd20K }}, // 20K PD for PECI
 };
-
-GLOBAL_REMOVE_IF_UNREFERENCED GPIO_INIT_CONFIG mGpioTablePreMemDefault[] =
-{
-  {END_OF_GPIO_TABLE,  {GpioPadModeGpio,    GpioHostOwnGpio, GpioDirNone,  GpioOutDefault, GpioIntDis, GpioDswReset,  GpioTermNone}},//Marking End of Table
-};
-
-#endif
-
+UINT16 mGpioTableDefaultSize = sizeof (mGpioTableDefault) / sizeof (GPIO_INIT_CONFIG);

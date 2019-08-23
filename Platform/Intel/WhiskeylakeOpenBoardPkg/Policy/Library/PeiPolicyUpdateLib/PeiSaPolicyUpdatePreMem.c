@@ -1,9 +1,10 @@
 /** @file
-Do Platform Stage System Agent initialization.
+  Platform Stage System Agent initialization.
 
 
   Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
+
 **/
 
 #include "PeiSaPolicyUpdate.h"
@@ -26,7 +27,7 @@ Do Platform Stage System Agent initialization.
 /// Memory Reserved should be between 125% to 150% of the Current required memory
 /// otherwise BdsMisc.c would do a reset to make it 125% to avoid s4 resume issues.
 ///
-GLOBAL_REMOVE_IF_UNREFERENCED EFI_MEMORY_TYPE_INFORMATION mDefaultMemoryTypeInformation[] = {
+GLOBAL_REMOVE_IF_UNREFERENCED STATIC EFI_MEMORY_TYPE_INFORMATION mDefaultMemoryTypeInformation[] = {
   { EfiACPIReclaimMemory,   FixedPcdGet32 (PcdPlatformEfiAcpiReclaimMemorySize) },  // ASL
   { EfiACPIMemoryNVS,       FixedPcdGet32 (PcdPlatformEfiAcpiNvsMemorySize) },      // ACPI NVS (including S3 related)
   { EfiReservedMemoryType,  FixedPcdGet32 (PcdPlatformEfiReservedMemorySize) },     // BIOS Reserved (including S3 related)
@@ -34,7 +35,6 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_MEMORY_TYPE_INFORMATION mDefaultMemoryTypeInfo
   { EfiRuntimeServicesCode, FixedPcdGet32 (PcdPlatformEfiRtCodeMemorySize) },       // Runtime Service Code
   { EfiMaxMemoryType, 0 }
 };
-
 
 /**
   UpdatePeiSaPolicyPreMem performs SA PEI Policy initialization
@@ -57,7 +57,6 @@ UpdatePeiSaPolicyPreMem (
   UINTN                           DataSize;
   EFI_MEMORY_TYPE_INFORMATION     MemoryData[EfiMaxMemoryType + 1];
   EFI_BOOT_MODE                   BootMode;
-  UINT8                           MorControl;
   UINT32                          TraceHubTotalMemSize;
   GRAPHICS_PEI_PREMEM_CONFIG      *GtPreMemConfig = NULL;
   MEMORY_CONFIGURATION            *MemConfig = NULL;
@@ -67,15 +66,9 @@ UpdatePeiSaPolicyPreMem (
   OVERCLOCKING_PREMEM_CONFIG      *OcPreMemConfig = NULL;
   VTD_CONFIG                      *Vtd = NULL;
   UINT32                          ProcessorTraceTotalMemSize;
-  UINT16                          AdjustedMmioSize;
-  CPU_FAMILY                      CpuFamilyId;
-  CPU_STEPPING                    CpuStepping;
 
   TraceHubTotalMemSize = 0;
   ProcessorTraceTotalMemSize = 0;
-  AdjustedMmioSize = PcdGet16 (PcdSaMiscMmioSizeAdjustment);
-  CpuFamilyId = GetCpuFamily();
-  CpuStepping = GetCpuStepping();
 
   DEBUG((DEBUG_INFO, "Entering Get Config Block function call from UpdatePeiSaPolicyPreMem\n"));
 
@@ -106,7 +99,6 @@ UpdatePeiSaPolicyPreMem (
   Status = GetConfigBlock((VOID *) SiPreMemPolicyPpi, &gVtdConfigGuid, (VOID *)&Vtd);
   ASSERT_EFI_ERROR(Status);
 
-
   RcompData = MemConfigNoCrc->RcompData;
 
   //
@@ -124,7 +116,6 @@ UpdatePeiSaPolicyPreMem (
   ASSERT_EFI_ERROR(Status);
 
   MiscPeiPreMemConfig->S3DataPtr = NULL;
-  MorControl = 0;
   MiscPeiPreMemConfig->UserBd = 0; // It's a CRB mobile board by default (btCRBMB)
 
   PcdSetBoolS (PcdMobileDramPresent, (BOOLEAN) (MemConfig->MobilePlatform));

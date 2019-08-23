@@ -227,10 +227,6 @@ InitCommonPlatformPcd (
   )
 {
   PCD64_BLOB Data64;
-  TBT_INFO_HOB  *TbtInfoHob = NULL;
-
-  TbtInfoHob = (TBT_INFO_HOB *) GetFirstGuidHob (&gTbtInfoHobGuid);
-
 
   //
   // Enable EC SMI# for SMI

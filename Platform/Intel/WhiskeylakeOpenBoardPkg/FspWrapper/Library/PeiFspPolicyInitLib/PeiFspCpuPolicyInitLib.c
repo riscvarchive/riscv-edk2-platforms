@@ -173,7 +173,7 @@ EFI_SEC_PLATFORM_INFORMATION_RECORD2 * GetSecPlatformInformation2(
   // Retrieve BIST data from SecPlatform2
   //
   Status = SecPlatformInformation2Ppi->PlatformInformation2 (
-                                         PeiServices,
+                                         (CONST EFI_PEI_SERVICES  **) PeiServices,
                                          &InformationSize,
                                          SecPlatformInformation2
                                          );
@@ -240,7 +240,7 @@ EFI_SEC_PLATFORM_INFORMATION_RECORD2 * GetSecPlatformInformationInfoInFormat2(
   // Retrieve BIST data from SecPlatform
   //
   Status = SecPlatformInformationPpi->PlatformInformation (
-                                        PeiServices,
+                                        (CONST EFI_PEI_SERVICES  **) PeiServices,
                                         &InformationSize,
                                         SecPlatformInformation
                                         );

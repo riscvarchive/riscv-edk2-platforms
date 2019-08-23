@@ -16,7 +16,7 @@
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
 
-#include <WhiskeylakeURvpId.h>
+#include <PlatformBoardId.h>
 
 EFI_STATUS
 EFIAPI

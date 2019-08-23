@@ -13,7 +13,12 @@
 #include <Library/HdaVerbTableLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
-#include "PchHdaVerbTables.h"
+
+extern HDAUDIO_VERB_TABLE HdaVerbTableDisplayAudio;
+extern HDAUDIO_VERB_TABLE HdaVerbTableAlc274;
+extern HDAUDIO_VERB_TABLE HdaVerbTableAlc700;
+extern HDAUDIO_VERB_TABLE HdaVerbTableAlc701;
+extern HDAUDIO_VERB_TABLE WhlHdaVerbTableAlc700;
 
 /**
   Add verb table helper function.

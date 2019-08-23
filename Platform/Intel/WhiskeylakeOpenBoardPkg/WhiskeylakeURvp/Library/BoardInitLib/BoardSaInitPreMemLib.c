@@ -6,11 +6,11 @@
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-#include "BoardInitLib.h"
 #include "BoardSaConfigPreMem.h"
+#include "SaPolicyCommon.h"
+#include "WhiskeylakeURvpInit.h"
 #include <PlatformBoardConfig.h>
 #include <Library/CpuPlatformLib.h>
-#include "SaPolicyCommon.h"
 
 //
 // Display DDI settings for WHL ERB
@@ -74,10 +74,8 @@ MrcConfigInit (
   )
 {
   CPU_FAMILY    CpuFamilyId;
-  CPU_STEPPING  CpuStepping;
 
   CpuFamilyId = GetCpuFamily();
-  CpuStepping = GetCpuStepping();
 
   if (CpuFamilyId == EnumCpuCflDtHalo) {
     PcdSetBoolS (PcdDualDimmPerChannelBoardType, TRUE);

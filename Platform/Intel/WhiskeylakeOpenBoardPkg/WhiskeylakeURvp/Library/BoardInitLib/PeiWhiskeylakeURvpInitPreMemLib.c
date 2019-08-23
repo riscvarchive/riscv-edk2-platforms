@@ -27,7 +27,7 @@
 #include <SioRegs.h>
 #include <Library/PchPcrLib.h>
 
-#include "PeiWhiskeylakeURvpInitLib.h"
+#include "WhiskeylakeURvpInit.h"
 #include <ConfigBlock.h>
 #include <ConfigBlock/MemoryConfig.h>
 #include <Library/PeiServicesLib.h>
@@ -274,36 +274,51 @@ EarlyPlatformPchInit(
 }
 
 /**
-Board init function for PEI pre-memory phase.
+  Board configuration initialization in the pre-memory boot phase.
 
-@param  Content  pointer to the buffer contain init information for board init.
-
-@retval EFI_SUCCESS             The function completed successfully.
-@retval EFI_INVALID_PARAMETER   The parameter is NULL.
 **/
-EFI_STATUS
-BoardConfigInitPreMem(
+VOID
+BoardConfigInitPreMem (
   VOID
-)
+  )
 {
   EFI_STATUS Status;
   UINT16 BoardId;
 
   BoardId = BoardIdWhiskeyLakeRvp;
 
-  Status = MrcConfigInit(BoardId);
-  Status = SaGpioConfigInit(BoardId);
-  Status = SaMiscConfigInit(BoardId);
-  Status = RootPortClkInfoInit(BoardId);
-  Status = UsbConfigInit(BoardId);
-  Status = GpioGroupTierInit(BoardId);
-  Status = GpioTablePreMemInit(BoardId);
-  Status = PchPmConfigInit(BoardId);
-  Status = BoardMiscInitPreMem(BoardId);
-  Status = SaDisplayConfigInit(BoardId);
-  Status = BoardFunctionInitPreMem(BoardId);
+  Status = MrcConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
 
-  return EFI_SUCCESS;
+  Status = SaGpioConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = SaMiscConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = RootPortClkInfoInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = UsbConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = GpioGroupTierInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = GpioTablePreMemInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = PchPmConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = BoardMiscInitPreMem (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = SaDisplayConfigInit (BoardId);
+  ASSERT_EFI_ERROR (Status);
+
+  Status = BoardFunctionInitPreMem (BoardId);
+  ASSERT_EFI_ERROR (Status);
 }
 
 /**
@@ -328,7 +343,6 @@ PlatformInitPreMemCallBack(
   EFI_STATUS                        Status;
   UINT16                            ABase;
   UINT8                             FwConfig;
-  UINT8                             SynchDelay;
 
   //
   // Init Board Config Pcd.
@@ -337,7 +351,6 @@ PlatformInitPreMemCallBack(
 
   DEBUG((DEBUG_ERROR, "Fail to get System Configuration and set the configuration to production mode!\n"));
   FwConfig = FwConfigProduction;
-  SynchDelay = 0;
   PcdSetBoolS(PcdPcieWwanEnable, FALSE);
   PcdSetBoolS(PcdWwanResetWorkaround, FALSE);
 
@@ -586,18 +599,16 @@ WhiskeylakeURvpBoardDebugInit (
   VOID
   )
 {
-  UINT64                            LpcBaseAddress;
-
   ///
   /// LPC I/O Configuration
   ///
-  PchLpcIoDecodeRangesSet(
+  PchLpcIoDecodeRangesSet (
     (V_LPC_CFG_IOD_LPT_378 << N_LPC_CFG_IOD_LPT) |
     (V_LPC_CFG_IOD_COMB_3E8 << N_LPC_CFG_IOD_COMB) |
     (V_LPC_CFG_IOD_COMA_3F8 << N_LPC_CFG_IOD_COMA)
-  );
+    );
 
-  PchLpcIoEnableDecodingSet(
+  PchLpcIoEnableDecodingSet (
     B_LPC_CFG_IOE_ME2 |
     B_LPC_CFG_IOE_SE |
     B_LPC_CFG_IOE_ME1 |
@@ -608,18 +619,7 @@ WhiskeylakeURvpBoardDebugInit (
     B_LPC_CFG_IOE_PPE |
     B_LPC_CFG_IOE_CBE |
     B_LPC_CFG_IOE_CAE
-  );
-
-  ///
-  /// Enable LPC IO decode for EC access
-  ///
-  LpcBaseAddress = PCI_SEGMENT_LIB_ADDRESS(
-    DEFAULT_PCI_SEGMENT_NUMBER_PCH,
-    DEFAULT_PCI_BUS_NUMBER_PCH,
-    PCI_DEVICE_NUMBER_PCH_LPC,
-    PCI_FUNCTION_NUMBER_PCH_LPC,
-    0
-  );
+    );
 
   return EFI_SUCCESS;
 }

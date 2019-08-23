@@ -6,7 +6,6 @@
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-#include "BoardInitLib.h"
 #include "BoardFunc.h"
 
 /**

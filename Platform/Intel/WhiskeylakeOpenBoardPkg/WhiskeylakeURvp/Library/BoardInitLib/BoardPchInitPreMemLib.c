@@ -1,17 +1,17 @@
 /** @file
- Source code for the board PCH configuration Pcd init functions for Pre-Mmeory Init phase.
+ Source code for the board PCH configuration Pcd init functions for Pre-Memory Init phase.
 
 
   Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-#include "BoardInitLib.h"
+#include "WhiskeylakeURvpInit.h"
 #include <GpioPinsCnlLp.h>
 #include <GpioPinsCnlH.h>
 #include <PlatformBoardConfig.h>        // for USB 20 AFE & Root Port Clk Info.
-#include "GpioTableWhlUDdr4PreMem.h"
 #include <Library/BaseMemoryLib.h>
+#include <Library/GpioLib.h>
 
 /**
   Board Root Port Clock Info configuration init function for PEI pre-memory phase.
@@ -346,11 +346,11 @@ GpioTablePreMemInit (
   switch (BoardId) {
     case BoardIdWhiskeyLakeRvp:
       PcdSet32S (PcdBoardGpioTablePreMem, (UINTN) mGpioTableWhlUDdr4PreMem);
-      PcdSet16S (PcdBoardGpioTablePreMemSize, sizeof (mGpioTableWhlUDdr4PreMem) / sizeof (GPIO_INIT_CONFIG));
+      PcdSet16S (PcdBoardGpioTablePreMemSize, mGpioTableWhlUDdr4PreMemSize);
       PcdSet32S (PcdBoardGpioTableWwanOnEarlyPreMem, (UINTN) mGpioTableWhlUDdr4WwanOnEarlyPreMem);
-      PcdSet16S (PcdBoardGpioTableWwanOnEarlyPreMemSize, sizeof (mGpioTableWhlUDdr4WwanOnEarlyPreMem) / sizeof (GPIO_INIT_CONFIG));
+      PcdSet16S (PcdBoardGpioTableWwanOnEarlyPreMemSize, mGpioTableWhlUDdr4WwanOnEarlyPreMemSize);
       PcdSet32S (PcdBoardGpioTableWwanOffEarlyPreMem, (UINTN) mGpioTableWhlUDdr4WwanOffEarlyPreMem);
-      PcdSet16S (PcdBoardGpioTableWwanOffEarlyPreMemSize, sizeof (mGpioTableWhlUDdr4WwanOffEarlyPreMem) / sizeof (GPIO_INIT_CONFIG));
+      PcdSet16S (PcdBoardGpioTableWwanOffEarlyPreMemSize, mGpioTableWhlUDdr4WwanOffEarlyPreMemSize);
       break;
 
     default:

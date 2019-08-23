@@ -17,12 +17,12 @@
 DEC_SPECIFICATION = 0x00010017
 PACKAGE_NAME = OpenBoardPkg
 PACKAGE_VERSION = 0.1
-PACKAGE_GUID = 0A8BA6E8-C8AC-4AC1-87AC-52772FA6AE5E
+PACKAGE_GUID = 8FE3E02F-BC79-41F2-9A0D-10140B292472
 
 [Includes]
 Include
-WhiskeylakeURvp\Include
-Features\Tbt\Include
+Features/Tbt/Include
+WhiskeylakeURvp/Include
 
 [Guids]
 

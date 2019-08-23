@@ -19,11 +19,12 @@
 
 [LibraryClasses]
   BaseLib
-  DebugLib
   BaseMemoryLib
+  DebugLib
+  GpioExpanderLib
+  GpioLib
   HdaVerbTableLib
   MemoryAllocationLib
-  GpioExpanderLib
   PcdLib
 
 [Packages]
@@ -37,6 +38,8 @@
 [Sources]
   PeiWhiskeylakeURvpInitPostMemLib.c
   PeiBoardInitPostMemLib.c
+  GpioTableDefault.c
+  GpioTableWhiskeylakeUDdr4Rvp.c
 
 [Pcd]
   gBoardModuleTokenSpaceGuid.PcdBoardGpioTable
@@ -50,4 +53,3 @@
   gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize
 
   gEfiSecurityPkgTokenSpaceGuid.PcdTpm2CurrentIrqNum
-

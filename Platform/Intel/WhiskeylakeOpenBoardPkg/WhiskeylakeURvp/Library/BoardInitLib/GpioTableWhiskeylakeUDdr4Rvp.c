@@ -1,19 +1,16 @@
 /** @file
-  GPIO definition table for WhiskeyLake U Ddr4 RVP
-
+  GPIO definition table for Whiskey Lake U DDR4 RVP
 
   Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
-**/
 
-#ifndef _CANNONLAKE_U_DDR4_GPIO_TABLE_H_
-#define _CANNONLAKE_U_DDR4_GPIO_TABLE_H_
+**/
 
 #include <GpioPinsCnlLp.h>
 #include <Library/GpioLib.h>
 #include <GpioConfig.h>
 
-static GPIO_INIT_CONFIG mGpioTableWhlUDdr4_0[] =
+GPIO_INIT_CONFIG mGpioTableWhlUDdr4_0[] =
 {
 //                      Pmode,  GPI_IS,  GpioDir,  GPIOTxState,  RxEvCfg,  GPIRoutConfig,  PadRstCfg,  Term,
   //{GPIO_CNL_LP_GPP_A0,  { GpioPadModeNotUsed,  GpioHostOwnDefault,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioHostDeepReset,  GpioTermNone }},
@@ -220,8 +217,9 @@ static GPIO_INIT_CONFIG mGpioTableWhlUDdr4_0[] =
   //(Default HW)  {GPIO_CNL_LP_GPD11,  { GpioPadModeNative1,  GpioHostOwnGpio,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioResetDefault,  GpioTermNone }},  //LANPHY_EN
   {GPIO_CNL_LP_PECI,  { GpioHardwareDefault,  GpioHostOwnDefault,  GpioDirDefault,  GpioOutDefault,  GpioIntDefault,  GpioHostDeepReset,  GpioTermWpd20K }}, // 20K PD for PECI
 };
+UINT16 mGpioTableWhlUDdr4_0Size = sizeof (mGpioTableWhlUDdr4_0) / sizeof (GPIO_INIT_CONFIG);
 
-static GPIO_INIT_CONFIG mGpioTableCflUDdr4[] = {
+GPIO_INIT_CONFIG mGpioTableCflUDdr4[] = {
   //                       Pmode,                GPI_IS,             GpioDir,        GPIOTxState,    RxEvCfg/GPIRoutConfig,          PadRstCfg,        Term,
   // WiGig start
   {GPIO_CNL_LP_GPP_A16,  { GpioPadModeGpio,      GpioHostOwnGpio,     GpioDirOut,    GpioOutHigh, GpioIntDefault,               GpioPlatformReset,  GpioTermWpu20K }}, //M.2_WIGIG_PWREN / WFCAM_PWREN on CNL U
@@ -249,8 +247,9 @@ static GPIO_INIT_CONFIG mGpioTableCflUDdr4[] = {
   {GPIO_CNL_LP_GPP_H17,  { GpioPadModeGpio,      GpioHostOwnGpio,    GpioDirNone, GpioOutDefault, GpioIntDis,                   GpioPlatformReset,  GpioTermNone   }}  //Unused so disabled / Not used on CNL U
   // Unused end
 };
+UINT16 mGpioTableCflUDdr4Size = sizeof (mGpioTableCflUDdr4) / sizeof (GPIO_INIT_CONFIG);
 
-static GPIO_INIT_CONFIG mGpioTableWhlUDdr4[] = {
+GPIO_INIT_CONFIG mGpioTableWhlUDdr4[] = {
   //                       Pmode,                GPI_IS,             GpioDir,        GPIOTxState,    RxEvCfg/GPIRoutConfig,          PadRstCfg,        Term,
   // WiGig start
   {GPIO_CNL_LP_GPP_A16,  { GpioPadModeGpio, GpioHostOwnGpio,     GpioDirOut,    GpioOutHigh, GpioIntDefault,             GpioPlatformReset,  GpioTermWpu20K }}, //M.2_WIGIG_PWREN / WFCAM_PWREN on CNL U
@@ -278,7 +277,4 @@ static GPIO_INIT_CONFIG mGpioTableWhlUDdr4[] = {
   {GPIO_CNL_LP_GPP_F3,   { GpioPadModeGpio, GpioHostOwnGpio,    GpioDirNone, GpioOutDefault, GpioIntDis,                 GpioPlatformReset,  GpioTermWpu20K }}  //Unused so disabled / WF_CLK_EN on CNL U
   // Unused end
 };
-
-
-#endif // _CANNONLAKE_U_DDR4_GPIO_TABLE_H_
-
+UINT16 mGpioTableWhlUDdr4Size = sizeof (mGpioTableWhlUDdr4) / sizeof (GPIO_INIT_CONFIG);
