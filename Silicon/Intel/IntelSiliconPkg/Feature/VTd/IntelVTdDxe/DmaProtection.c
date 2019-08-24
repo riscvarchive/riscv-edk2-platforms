@@ -158,10 +158,13 @@ ProcessRequestedAccessAttribute (
 }
 
 /**
-  return the UEFI memory information.
+  Return UEFI memory map information.
 
-  @param[out] Below4GMemoryLimit  The below 4GiB memory limit
-  @param[out] Above4GMemoryLimit  The above 4GiB memory limit
+  @param[out] Below4GMemoryLimit  The below 4GiB memory limit address or 0 if insufficient resources exist to
+                                  determine the address.
+  @param[out] Above4GMemoryLimit  The above 4GiB memory limit address or 0 if insufficient resources exist to
+                                  determine the address.
+
 **/
 VOID
 ReturnUefiMemoryMap (
@@ -206,7 +209,11 @@ ReturnUefiMemoryMap (
     // we process bogus entries and create bogus E820 entries.
     //
     EfiMemoryMap = (EFI_MEMORY_DESCRIPTOR *) AllocatePool (EfiMemoryMapSize);
-    ASSERT (EfiMemoryMap != NULL);
+    if (EfiMemoryMap == NULL) {
+      ASSERT (EfiMemoryMap != NULL);
+      return;
+    }
+
     Status = gBS->GetMemoryMap (
                     &EfiMemoryMapSize,
                     EfiMemoryMap,
@@ -218,7 +225,6 @@ ReturnUefiMemoryMap (
       FreePool (EfiMemoryMap);
     }
   } while (Status == EFI_BUFFER_TOO_SMALL);
-
   ASSERT_EFI_ERROR (Status);
 
   //
@@ -242,9 +248,6 @@ ReturnUefiMemoryMap (
     NextEfiEntry  = NEXT_MEMORY_DESCRIPTOR (EfiEntry, EfiDescriptorSize);
   }
 
-  //
-  //
-  //
   DEBUG ((DEBUG_INFO, "MemoryMap:\n"));
   EfiEntry        = EfiMemoryMap;
   EfiMemoryMapEnd = (EFI_MEMORY_DESCRIPTOR *) ((UINT8 *) EfiMemoryMap + EfiMemoryMapSize);
