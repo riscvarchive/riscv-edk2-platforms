@@ -300,13 +300,16 @@ UserAuthenticationCallback (
         switch (mUserAuthenticationData->PasswordState) {
         case BROWSER_STATE_VALIDATE_PASSWORD:
           UserInputPassword = HiiGetString (mUserAuthenticationData->HiiHandle, Value->string, NULL);
+          if (UserInputPassword == NULL) {
+            return EFI_UNSUPPORTED;
+          }
           if ((StrLen (UserInputPassword) >= PASSWORD_MAX_SIZE)) {
             Status = EFI_NOT_READY;
             break;
           }
           if (UserInputPassword[0] == 0) {
             //
-            // Setup will use a NULL password to check whether the old password is set,
+            // Setup will use an empty password to check whether the old password is set,
             // If the validation is successful, means there is no old password, return
             // success to set the new password. Or need to return EFI_NOT_READY to
             // let user input the old password.
@@ -343,6 +346,9 @@ UserAuthenticationCallback (
 
         case BROWSER_STATE_SET_PASSWORD:
           UserInputPassword = HiiGetString (mUserAuthenticationData->HiiHandle, Value->string, NULL);
+          if (UserInputPassword == NULL) {
+            return EFI_UNSUPPORTED;
+          }
           if ((StrLen (UserInputPassword) >= PASSWORD_MAX_SIZE)) {
             Status = EFI_NOT_READY;
             break;
