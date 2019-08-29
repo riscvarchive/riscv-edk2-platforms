@@ -75,6 +75,7 @@ AddComponentConfigBlocks (
   // Loop to identify each config block from ComponentBlocks[] Table and add each of them
   //
   for (BlockCount = 0 ; BlockCount < TotalBlockCount; BlockCount++) {
+    ZeroMem (&ConfigBlockBuf, sizeof (CONFIG_BLOCK));
     CopyMem (&(ConfigBlockBuf.Header.GuidHob.Name), ComponentBlocks[BlockCount].Guid, sizeof (EFI_GUID));
     ConfigBlockBuf.Header.GuidHob.Header.HobLength = ComponentBlocks[BlockCount].Size;
     ConfigBlockBuf.Header.Revision        = ComponentBlocks[BlockCount].Revision;
