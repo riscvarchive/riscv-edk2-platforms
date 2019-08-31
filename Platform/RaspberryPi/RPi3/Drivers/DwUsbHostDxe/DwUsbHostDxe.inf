@@ -16,6 +16,8 @@
   ENTRY_POINT                    = DwUsbHostEntryPoint
 
 [Sources.common]
+  DwcHw.h
+  DwUsbHostDxe.h
   DwUsbHostDxe.c
   DriverBinding.c
   ComponentName.c

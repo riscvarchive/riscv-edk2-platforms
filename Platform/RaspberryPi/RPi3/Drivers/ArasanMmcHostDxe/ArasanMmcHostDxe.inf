@@ -16,6 +16,7 @@
   ENTRY_POINT                    = MMCInitialize
 
 [Sources.common]
+  ArasanMmcHostDxe.h
   ArasanMmcHostDxe.c
 
 [Packages]

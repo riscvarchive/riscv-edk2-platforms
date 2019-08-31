@@ -23,6 +23,7 @@
 
 [Sources]
   ConfigDxe.c
+  ConfigDxeFormSetGuid.h
   ConfigDxeHii.vfr
   ConfigDxeHii.uni
 

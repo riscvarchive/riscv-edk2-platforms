@@ -26,6 +26,7 @@
 #
 
 [Sources]
+  DisplayDxe.h
   DisplayDxe.c
   Screenshot.c
   ComponentName.c

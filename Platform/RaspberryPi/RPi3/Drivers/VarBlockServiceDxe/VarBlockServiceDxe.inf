@@ -27,6 +27,7 @@
 
 [Sources]
   FvbInfo.c
+  VarBlockService.h
   VarBlockService.c
   VarBlockServiceDxe.c
   FileIo.c

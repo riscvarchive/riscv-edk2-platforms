@@ -25,6 +25,7 @@
 #
 
 [Sources]
+  PlatformBm.h
   PlatformBm.c
 
 [Packages]
