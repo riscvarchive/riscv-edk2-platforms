@@ -131,7 +131,7 @@ Returns:
         ElogStat = 1;
       }
 
-      CopyMem (&SetBmcGlobalEnables, (UINT8 *)&GetBmcGlobalEnables + sizeof(UINT8), sizeof(UINT8));
+      CopyMem (&SetBmcGlobalEnables, (UINT8 *)&GetBmcGlobalEnables + 1, sizeof(UINT8));
       SetBmcGlobalEnables.SetEnables.Bits.SystemEventLogging = ElogStat;
 
       Status = IpmiSetBmcGlobalEnables (&SetBmcGlobalEnables, &CompletionCode);
