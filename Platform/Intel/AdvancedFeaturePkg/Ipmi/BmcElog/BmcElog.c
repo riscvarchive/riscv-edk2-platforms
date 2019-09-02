@@ -59,6 +59,7 @@ Returns:
   IPMI_CLEAR_SEL_RESPONSE  ClearSelResponse;
 
   Counter   = 0x200;
+  ZeroMem (&ClearSelResponse, sizeof(ClearSelResponse));
 
   while (TRUE) {
     ZeroMem (&ClearSel, sizeof(ClearSel));
