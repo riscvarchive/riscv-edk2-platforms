@@ -155,7 +155,7 @@ GPIO_INIT_CONFIG mGpioTableN1xxWU[] =
   {GPIO_SKL_LP_GPP_C16, {GpioPadModeGpio,    GpioHostOwnGpio,    GpioDirOut,     GpioOutLow,     GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //I2C0_SDA
   {GPIO_SKL_LP_GPP_C17, {GpioPadModeGpio,    GpioHostOwnGpio,    GpioDirOut,     GpioOutDefault, GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //I2C0_SCL
   {GPIO_SKL_LP_GPP_C18, {GpioPadModeGpio,    GpioHostOwnGpio,    GpioDirOut,     GpioOutDefault, GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //I2C1_SDA
-  {GPIO_SKL_LP_GPP_C19, GpioPadModeGpio,     GpioHostOwnAcpi,    GpioDirInInv,   GpioOutDefault, GpioIntLevel | GpioIntSci, GpioHostDeepReset, GpioTermNone}, //I2C1_SCL
+  {GPIO_SKL_LP_GPP_C19, {GpioPadModeGpio,    GpioHostOwnAcpi,    GpioDirInInv,   GpioOutDefault, GpioIntLevel | GpioIntSci, GpioHostDeepReset, GpioTermNone}}, //I2C1_SCL
   {GPIO_SKL_LP_GPP_C20, {GpioPadModeNative1, GpioHostOwnDefault, GpioDirDefault, GpioOutLow,     GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //UART2_RXD
   {GPIO_SKL_LP_GPP_C21, {GpioPadModeNative1, GpioHostOwnDefault, GpioDirDefault, GpioOutDefault, GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //UART2_TXD
   {GPIO_SKL_LP_GPP_C22, {GpioPadModeNative1, GpioHostOwnDefault, GpioDirNone,    GpioOutDefault, GpioIntDis, GpioHostDeepReset, GpioTermNone}}, //UART2_RTSB
