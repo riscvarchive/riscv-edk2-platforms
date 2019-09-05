@@ -103,6 +103,10 @@ M: Chasel Chiu <chasel.chiu@intel.com>
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
+Platform/Intel/SimicsOpenBoardPkg
+M: Wei David Y <david.y.wei@intel.com>
+M: Agyeman Prince <prince.agyeman@intel.com>
+
 Platform/Intel/Tools
 M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
@@ -154,6 +158,14 @@ Silicon/Intel/PurleySktPkg
 M: Gillispie, Thad <thad.gillispie@intel.com>
 M: Bu, Daocheng <daocheng.bu@intel.com>
 M: Oram, Isaac W <isaac.w.oram@intel.com>
+
+Silicon/Intel/SimicsX58SktPkg
+M: Wei David Y <david.y.wei@intel.com>
+M: Agyeman Prince <prince.agyeman@intel.com>
+
+Silicon/Intel/SimicsIch10Pkg
+M: Wei David Y <david.y.wei@intel.com>
+M: Agyeman Prince <prince.agyeman@intel.com>
 
 Silicon/Intel/Tools
 M: Bob Feng <bob.c.feng@intel.com>
