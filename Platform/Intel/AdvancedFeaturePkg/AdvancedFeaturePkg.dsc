@@ -107,6 +107,7 @@
   PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
+  SmmAccessLib|IntelSiliconPkg/Feature/SmmAccess/Library/PeiSmmAccessLib/PeiSmmAccessLib.inf
 
 [LibraryClasses.common.DXE_CORE,LibraryClasses.common.DXE_SMM_DRIVER,LibraryClasses.common.SMM_CORE,LibraryClasses.common.DXE_DRIVER,LibraryClasses.common.DXE_RUNTIME_DRIVER,LibraryClasses.common.UEFI_DRIVER,LibraryClasses.common.UEFI_APPLICATION]
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
@@ -148,6 +149,8 @@
   AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
   AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
   AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
+
+  AdvancedFeaturePkg/S3/S3Pei.inf
 
 [BuildOptions]
   *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
