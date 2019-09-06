@@ -69,10 +69,10 @@
   gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
 !else
   #
-  # FSP Dispatch mode will share the same stack with boot loader,
-  # here temporary ram size is used by FSP heap and can be smaller
+  # FSP Dispatch mode will share the same stack and heap with boot loader,
+  # no separate temporary ram required by FSP.
   #
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize        | 0x00010000
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize        | 0
 
   #
   # In FSP Dispatch mode boot loader stack size must be big enough for executing
