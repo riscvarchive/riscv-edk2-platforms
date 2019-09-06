@@ -202,7 +202,8 @@ AllocateAcpiDebugMemory (
 
     Status = PcdSet32S (PcdAcpiDebugAddress, (UINT32) AcpiDebugAddress);
     ASSERT_EFI_ERROR (Status);
-    if (EFI_ERROR (Status)) {
+
+    if (EFI_ERROR (Status)) {
       gBS->FreePages (AcpiDebugAddress, PagesNum);
       return 0;
     }
@@ -487,14 +488,15 @@ InitializeAcpiDebugSmm (
   if (EFI_ERROR (Status)) {
     return Status;
   }
-  
+
   Status = SmmBase2->InSmm (SmmBase2, &InSmm);
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
   }
 
-  ASSERT (InSmm);
+  ASSERT (InSmm);
+
   if (!InSmm) {
     return EFI_UNSUPPORTED;
   }
@@ -519,4 +521,3 @@ InitializeAcpiDebugSmm (
 
   return Status;
 }
-
