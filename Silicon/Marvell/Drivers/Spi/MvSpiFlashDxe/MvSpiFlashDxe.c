@@ -388,7 +388,7 @@ MvSpiFlashUpdateWithProgress (
   UINT8 *TmpBuf;
 
   SectorSize = Slave->Info->SectorSize;
-  SectorNum = ByteCount / SectorSize;
+  SectorNum = (ByteCount / SectorSize) + 1;
   ToUpdate = SectorSize;
 
   TmpBuf = (UINT8 *)AllocateZeroPool (SectorSize);
