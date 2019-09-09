@@ -419,8 +419,12 @@ MvPhyInit (
   PhyDev = AllocateZeroPool (sizeof (PHY_DEVICE));
   PhyDev->Addr = PhySmiAddresses[PhyIndex];
   PhyDev->Connection = PhyConnection;
-  DEBUG((DEBUG_INFO, "MvPhyDxe: PhyAddr is %d, connection %d\n",
-        PhyDev->Addr, PhyConnection));
+  PhyDev->MdioIndex = MdioIndex;
+  DEBUG ((DEBUG_INFO,
+    "MvPhyDxe: MdioIndex is %d, PhyAddr is %d, connection %d\n",
+    PhyDev->MdioIndex,
+    PhyDev->Addr,
+    PhyConnection));
   *OutPhyDev = PhyDev;
 
   DeviceIds = PcdGetPtr (PcdPhyDeviceIds);
