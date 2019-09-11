@@ -11,7 +11,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <PiDxe.h>
 #include <Protocol/Smbios.h>
-#include <IndustryStandard/Smbios.h>
+#include <IndustryStandard/SmBios.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/DebugLib.h>
 #include <Library/BaseLib.h>
