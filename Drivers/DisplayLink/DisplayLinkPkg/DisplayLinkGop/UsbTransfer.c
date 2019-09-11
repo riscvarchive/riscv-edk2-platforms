@@ -107,7 +107,7 @@ DlUsbSendControlWriteMessage (
   UINT32                 UsbStatus;
   EFI_USB_DEVICE_REQUEST UsbRequest;
 
-  ZeroMem (&Request, sizeof (Request));
+  ZeroMem (&UsbRequest, sizeof (UsbRequest));
   UsbRequest.RequestType = USB_REQ_TYPE_VENDOR | USB_TARGET_INTERFACE;
   UsbRequest.Index = Device->InterfaceDescriptor.InterfaceNumber;
   UsbRequest.Request = Request;
