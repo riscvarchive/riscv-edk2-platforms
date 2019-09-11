@@ -495,29 +495,6 @@ FindPeiCoreImageBaseInFv (
   return EFI_SUCCESS;
 }
 
-
-/**
-  Reads 8-bits of CMOS data.
-
-  Reads the 8-bits of CMOS data at the location specified by Index.
-  The 8-bit read value is returned.
-
-  @param  Index  The CMOS location to read.
-
-  @return The value read.
-
-**/
-STATIC
-UINT8
-CmosRead8 (
-  IN UINTN        Index
-  )
-{
-  IoWrite8 (0x70, (UINT8) Index);
-  return IoRead8 (0x71);
-}
-
-
 STATIC
 BOOLEAN
 IsS3Resume (

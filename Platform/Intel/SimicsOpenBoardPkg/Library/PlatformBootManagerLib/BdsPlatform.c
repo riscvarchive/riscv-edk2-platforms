@@ -316,12 +316,6 @@ ConnectRootBridge (
   IN VOID        *Context
   );
 
-STATIC
-VOID
-SaveS3BootScript (
-  VOID
-  );
-
 //
 // BDS Platform Functions
 //
@@ -1295,38 +1289,6 @@ PlatformBdsConnectSequence (
 
   PciAcpiInitialization ();
 }
-
-/**
-  Save the S3 boot script.
-
-  Note that DxeSmmReadyToLock must be signaled after this function returns;
-  otherwise the script wouldn't be saved actually.
-**/
-STATIC
-VOID
-SaveS3BootScript (
-  VOID
-  )
-{
-  EFI_STATUS                 Status;
-  EFI_S3_SAVE_STATE_PROTOCOL *BootScript;
-  STATIC CONST UINT8         Info[] = { 0xDE, 0xAD, 0xBE, 0xEF };
-
-  Status = gBS->LocateProtocol (&gEfiS3SaveStateProtocolGuid, NULL,
-                  (VOID **) &BootScript);
-  ASSERT_EFI_ERROR (Status);
-
-  //
-  // Despite the opcode documentation in the PI spec, the protocol
-  // implementation embeds a deep copy of the info in the boot script, rather
-  // than storing just a pointer to runtime or NVS storage.
-  //
-  Status = BootScript->Write(BootScript, EFI_BOOT_SCRIPT_INFORMATION_OPCODE,
-                         (UINT32) sizeof Info,
-                         (EFI_PHYSICAL_ADDRESS)(UINTN) &Info);
-  ASSERT_EFI_ERROR (Status);
-}
-
 
 /**
   Do the platform specific action after the console is ready
