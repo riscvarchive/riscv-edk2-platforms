@@ -131,7 +131,6 @@ SmmControl2DxeTrigger (
   IN UINTN                            ActivationInterval OPTIONAL
   )
 {
-  EFI_STATUS  Status;
   //
   // No support for queued or periodic activation.
   //
@@ -141,7 +140,7 @@ SmmControl2DxeTrigger (
   ///
   /// Clear any pending the APM SMI
   ///
-  Status = SmmClear();
+  SmmClear();
   //
   // The so-called "Advanced Power Management Status Port Register" is in fact
   // a generic data passing register, between the caller and the SMI
@@ -181,8 +180,6 @@ SmmControl2DxeClear (
   IN BOOLEAN                          Periodic OPTIONAL
   )
 {
-  EFI_STATUS  Status;
-
   if (Periodic) {
     return EFI_INVALID_PARAMETER;
   }
@@ -201,7 +198,7 @@ SmmControl2DxeClear (
   //
   // So, nothing to do here.
   //
-  Status = SmmClear();
+  SmmClear();
 
   return EFI_SUCCESS;
 }

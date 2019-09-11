@@ -637,7 +637,6 @@ SendSpiCmd (
   EFI_STATUS      Status;
   UINT32          Index;
   SPI_INSTANCE    *SpiInstance;
-  UINTN           SpiBaseAddress;
   UINTN           PchSpiBar0;
   UINT32          HardwareSpiAddr;
   UINT32          FlashRegionSize;
@@ -648,9 +647,7 @@ SendSpiCmd (
 
   Status            = EFI_SUCCESS;
   SpiInstance       = SPI_INSTANCE_FROM_SPIPROTOCOL (This);
-  SpiBaseAddress    = SpiInstance->PchSpiBase;
   PchSpiBar0        = AcquireSpiBar0 (SpiInstance);
-  SpiBaseAddress    = SpiInstance->PchSpiBase;
   ABase             = SpiInstance->PchAcpiBase;
 
   //
