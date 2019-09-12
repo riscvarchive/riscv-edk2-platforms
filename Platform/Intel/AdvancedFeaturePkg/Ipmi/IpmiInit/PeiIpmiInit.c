@@ -1,7 +1,7 @@
 /** @file
-    IPMI stack initialization in PEI.
+  IPMI stack initialization in PEI.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -27,7 +27,7 @@ Routine Description:
 
 Arguments:
 
-Returns: 
+Returns:
   Status
 
 --*/
@@ -35,7 +35,7 @@ Returns:
   EFI_STATUS                   Status;
   IPMI_GET_DEVICE_ID_RESPONSE  BmcInfo;
   UINT32                       Retries;
-  
+
   //
   // Set up a loop to retry for up to 30 seconds. Calculate retries not timeout
   // so that in case KCS is not enabled and EfiIpmiSendCommand() returns
@@ -71,9 +71,10 @@ Returns:
   The entry point of the Ipmi PEIM.
 
   @param  FileHandle  Handle of the file being invoked.
-  @param  PeiServices Describes the list of possible PEI Services. 
+  @param  PeiServices Describes the list of possible PEI Services.
 
   @retval EFI_SUCCESS   Indicates that Ipmi initialization completed successfully.
+  @retval Others        Indicates that Ipmi initialization could not complete successfully.
 **/
 EFI_STATUS
 EFIAPI
@@ -85,11 +86,11 @@ PeimIpmiInterfaceInit (
   BOOLEAN      UpdateMode;
   EFI_STATUS   Status;
 
-  DEBUG((EFI_D_ERROR,"IPMI Peim:Get BMC Device Id\n"));
+  DEBUG ((DEBUG_INFO, "IPMI Peim:Get BMC Device Id\n"));
 
   //
   // Get the Device ID and check if the system is in Force Update mode.
   //
   Status = GetDeviceId (&UpdateMode);
-  return EFI_SUCCESS;
+  return Status;
 }

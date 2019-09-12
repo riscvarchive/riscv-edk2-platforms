@@ -1,7 +1,7 @@
 /** @file
   IPMI Os watchdog timer Driver.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -93,11 +93,12 @@ Arguments:
   SystemTable - Pointer to the System Table
 
 Returns:
-  EFI_SUCCESS     - Protocol successfully started and installed.
+  @retval EFI_SUCCESS           Protocol successfully started and installed.
+  @retval EFI_OUT_OF_RESOURCES  The event could not be allocated.
 
 --*/
 {
-  EFI_STATUS                     Status;
+  EFI_STATUS  Status;
 
   Status = gBS->CreateEvent (
                   EVT_SIGNAL_EXIT_BOOT_SERVICES,
@@ -107,5 +108,5 @@ Returns:
                   &mExitBootServicesEvent
                   );
 
-  return EFI_SUCCESS;
+  return Status;
 }

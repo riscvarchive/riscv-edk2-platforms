@@ -1,7 +1,7 @@
 /** @file
   BMC ACPI.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -154,7 +154,7 @@ UpdateDeviceSsdtTable (
       IoRsc->BaseAddressMax = PcdGet16(PcdIpmiIoBaseAddress);
     }
   }
-  
+
   return EFI_SUCCESS;
 }
 
@@ -202,7 +202,7 @@ BmcAcpiEntryPoint (
   //
   // Locate the firmware volume protocol
   //
-  Status = LocateSupportProtocol (&gEfiFirmwareVolume2ProtocolGuid, &FwVol, 1);
+  Status = LocateSupportProtocol (&gEfiFirmwareVolume2ProtocolGuid, (VOID **) &FwVol, 1);
   if (EFI_ERROR (Status)) {
     return Status;
   }
@@ -216,7 +216,15 @@ BmcAcpiEntryPoint (
   while (!EFI_ERROR (Status)) {
     CurrentTable = NULL;
 
-    Status = FwVol->ReadSection (FwVol, &gEfiCallerIdGuid, EFI_SECTION_RAW, Instance, &CurrentTable, (UINTN *) &Size, &FvStatus);
+    Status = FwVol->ReadSection (
+                      FwVol,
+                      &gEfiCallerIdGuid,
+                      EFI_SECTION_RAW,
+                      Instance,
+                      (VOID **) &CurrentTable,
+                      (UINTN *) &Size,
+                      &FvStatus
+                      );
     if (!EFI_ERROR (Status)) {
       //
       // Perform any table specific updates.

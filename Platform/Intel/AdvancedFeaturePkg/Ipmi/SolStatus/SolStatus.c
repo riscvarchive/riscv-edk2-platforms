@@ -1,7 +1,7 @@
 /** @file
   IPMI Serial Over Lan Driver.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -70,7 +70,7 @@ GetSOLStatus (
   if (Status == EFI_SUCCESS) {
     *Data = GetConfigurationParametersResponse.ParameterData[0];
   }
-  
+
   return Status;
 }
 
@@ -132,11 +132,11 @@ SolStatusEntryPoint (
   IN EFI_SYSTEM_TABLE   *SystemTable
   )
 /*++
-  
+
   Routine Description:
     This is the standard EFI driver point. This function intitializes
     the private data required for creating SOL Status Driver.
-    
+
   Arguments:
     ImageHandle     - Handle for the image of this driver
     SystemTable     - Pointer to the EFI System Table
@@ -149,18 +149,14 @@ SolStatusEntryPoint (
 {
   EFI_STATUS  Status = EFI_SUCCESS;
   UINT8       Channel;
-  BOOLEAN     Enabled = FALSE;
-  BOOLEAN     SOLEnabled = FALSE;
-  
-  for (Channel = 1; Channel <= PcdGet8(PcdMaxSOLChannels); Channel++) {
-    Status = GetSOLStatus (Channel, IPMI_SOL_CONFIGURATION_PARAMETER_SOL_ENABLE, &Enabled);
+  BOOLEAN     SolEnabled = FALSE;
+
+  for (Channel = 1; Channel <= PcdGet8 (PcdMaxSOLChannels); Channel++) {
+    Status = GetSOLStatus (Channel, IPMI_SOL_CONFIGURATION_PARAMETER_SOL_ENABLE, &SolEnabled);
     if (Status == EFI_SUCCESS) {
-      if (Enabled == TRUE) {
-        SOLEnabled = TRUE;
-	    }  
-      DEBUG ((EFI_D_ERROR, "SOL enabling status for channel %x is %x\n", Channel, Enabled));
+      DEBUG ((DEBUG_ERROR, "SOL enabling status for channel %x is %x\n", Channel, SolEnabled));
     } else {
-      DEBUG ((EFI_D_ERROR, "Failed to get channel %x SOL status from BMC!, status is %x\n", Channel, Status));
+      DEBUG ((DEBUG_ERROR, "Failed to get channel %x SOL status from BMC!, status is %x\n", Channel, Status));
     }
   }
 
