@@ -56,7 +56,42 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 * The `ClevoOpenBoardPkg` contains board implementations for Clevo systems.
 * The `KabylakeOpenBoardPkg` contains board implementations for Kaby Lake systems.
 * The `PurleyOpenBoardPkg` contains board implementations for Purley systems.
+* The `SimicsOpenBoardPkg` contains board implementations for the Simics hardware simulator.
 * The `WhiskeylakeOpenBoardPkg` contains board implementations for Whiskey Lake systems.
+
+### **Supported Hardware**
+
+#### Intel
+
+***Intel Reference and Validation Platform***
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| RVP 3                                 | Sky Lake, Kaby Lake, Kaby Lake Refresh     | KabylakeOpenBoardPkg         | KabylakeRvp3       |
+| WHL-U DDR4 RVP                        | Whiskey Lake                               | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
+
+*Note: RVP = Reference and Validation Platform*
+
+#### Microsoft
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| Mt. Olympus                           | Purley                                     | PurleyOpenBoardPkg           | BoardMtOlympus     |
+
+#### Simics
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| Simics Quick Start Package            | Nehalem                                    | SimicsOpenBoardPkg           | BoardX58Ich10      |
+
+#### System 76
+
+***Galago Pro Laptop***
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| galp2 (Clevo N130BU)                  | Kaby Lake                                  | ClevoOpenBoardPkg            | N1xxWU             |
+| galp3 & galp3-b (Clevo N1xxWU series) | Kaby Lake Refresh                          | ClevoOpenBoardPkg            | N1xxWU             |
 
 ## Board Package Organization
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
@@ -83,10 +118,19 @@ return back to the minimum platform caller.
   - Install into ```C:\ASL``` to match default tools_def.txt configuration.
 * NASM assembler:  Available from: http://www.nasm.us/
   - Install into ```C:\NASM``` to match default tools_def.txt configuration.
-* Python 2.7.6:  Available from: https://www.python.org/download/releases/2.7.6/
-  - Install into ```C:\Python27``` to match default tools_def.txt configuration.
-  - Add C:\Python27 to your path
-  - Other versions of 2.7 may also work fine.
+* Python 3.7.3:  Available from: https://www.python.org/downloads/release/python-373/
+  - Other versions of Python 3.x should be compatible.
+  - It is recommended to use the Python launcher to ensure the Python build script is launched using Python 3.
+    - E.g. "py -3.7 build_bios.py -l"
+
+## **Linux Build Instructions**
+
+### Pre-requisites
+
+ * Set up a EDK II build environment for Linux following the instructions in
+   [Using EDK II with Native GCC](https://github.com/tianocore/tianocore.github.io/wiki/Using-EDK-II-with-Native-GCC).
+ * Proceed to the [Common EDK II build instructions for Linux](https://github.com/tianocore/tianocore.github.io/wiki/Common-instructions)
+   to verify your basic EDK II build environment is set up properly.
 
 ### Download the required components
 
@@ -106,11 +150,11 @@ return back to the minimum platform caller.
 * FSP repository
   * ``git clone https://github.com/IntelFsp/FSP.git``
 
-### Build
+### Board Builds
 
 **Building with the python script**
 
-1. Open command window, go to the workspace directory, e.g. c:\Kabylake or ~/Kabylake in the case of a linux OS
+1. Open command window, go to the workspace directory, e.g. c:\Edk2Workspace or ~/Edk2Workspace in the case of a linux OS
 2. If using a linux OS
    * Type "cd edk2"
    * Type "source edksetup.sh"
@@ -146,11 +190,19 @@ return back to the minimum platform caller.
   * Type "python build_bios.py -h"
 
 * Note
-  * Python 2.7.16 and Python 3.7.3 compatible
-  * Some dependency Python scripts might only support 2.x or 3.x, if that happened use
-    "py -2" or "py -3" to launch build_bios.py
-  * This python build script has been tested on Windows 10 and Ubuntu 16.04.5 LTS
-  * See [cross-platform limitations](#Known-limitations)
+  * The Python build scripts were compatible with Python 2.7.16. But Python 2.x support is no longer maintained or recommended.
+
+  * This python build script has been tested on Windows 10 and Ubuntu 18.04.1 LTS.
+
+  * Unless otherwise noted, all boards build with the following components and versions:
+    * Linux build: Ubuntu 18.04.1 LTS with GCC version 5.4.0
+    * Windows build: Windows 10 with the Microsoft Visual Studio 2015 compiler
+    * iASL version: 20190816
+    * NASM version: 2.12.02
+
+  * Unless otherwise noted all boards have been tested for boot to Windows 10 x64 RS3.
+
+  * See [known limitations](#Known-limitations)
 
 * Configuration Files
   * The edk2-platforms\Platform\Intel\build.cfg file contains the default settings used by build_bios.py
@@ -185,6 +237,7 @@ return back to the minimum platform caller.
           |       |        |                  |                     build settings, environment variables.
           |       |        |                  |---build_board.py: Optional board-specific pre-build, build
           |       |        |                                      and clean post-build functions.
+          |       |        |
           |       |        |------PurleyOpenBoardPkg
           |       |        |       |------BoardMtOlympus
           |       |        |                |---build_config.cfg: BoardMtOlympus specific
@@ -192,19 +245,26 @@ return back to the minimum platform caller.
           |       |        |                |---build_board.py: Optional board-specific pre-build,
           |       |        |                                    build, post-build and clean functions.
           |       |        |
+          |       |        |------SimicsOpenBoardPkg
+          |       |        |       |------BoardX58Ich10
+          |       |        |                |---build_config.cfg: BoardX58Ich10 specific
+          |       |        |                |                     build settings, environment variables.
+          |       |        |
           |       |        |------WhiskeylakeOpenBoardPkg
           |       |        |        |------WhiskeylakeURvp
           |       |        |                |---build_config.cfg: WhiskeylakeURvp specific build
           |       |        |                                      settings environment variables.
+          |       |        |
           |------FSP
   </pre>
 
 **Building with the batch scripts**
+
 Only PurleyOpenBoardPkg still supports batch script build. Future board packages must only use the Python build
 infrastructure.
 
 For PurleyOpenBoardPkg
-1. Open command window, go to the workspace directory, e.g. c:\Purley.
+1. Open command window, go to the workspace directory, e.g. c:\Edk2Workspace.
 2. Type "cd edk2-platforms\Platform\Intel\PurleyOpenBoardPkg\BoardMtOlympus".
 3. Type "GitEdk2MinMtOlympus.bat" to setup GIT environment.
 4. Type "bld" to build Purley Mt Olympus board UEFI firmware image, "bld release" for release build, "bld clean" to
@@ -212,40 +272,43 @@ For PurleyOpenBoardPkg
    "bld cache-consume" Consume a cache of binary files from the specified directory, BINARY_CACHE_PATH is empty,
    used "BinCache" as default path.
 
-The validated version of iasl compiler that can build MinPurley is 20180629. Older version may generate ACPI build
+The validated version of iASL compiler that can build MinPurley is 20180629. Older version may generate ACPI build
 errors.
 
 ### **Known limitations**
 
 **ClevoOpenBoardPkg**
-1. Currently, support is only being added for the N1xxWU series of boards.
-2. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015 compiler.
-3. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
-4. The build was tested with NASM version 2.11.08.
-5. The firmware project has not been tested on an actual board, it *should not* be expected to boot.
-6. The firmware project applies to all Clevo supported board configurations but is only being tested on System 76 Galago
-  Pro devices.
+1. The firmware project has not been tested on the Galago Pro 3B.
 
 **KabylakeOpenBoardPkg**
-1. This firmware project has only been tested on the Intel KabylakeRvp3 board.
-2. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
-  Device.
-3. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015.
-4. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
-5. The build was tested with NASM version 2.11.08.
+1. This firmware project has only been tested for Microsoft Windows 10 x64 boot with AHCI mode and Integrated Graphic
+   Device.
 
 **PurleyOpenBoardPkg**
-1. This firmware project has only been tested on the Microsoft MtOlympus board.
-2. This firmware project has only been tested booting to Microsoft Windows Server 2016 with NVME on M.2 slot.
-3. This firmware project build has only been tested using the Microsoft Visual Studio 2015 compiler.
+1. This firmware project has only been tested booting to Microsoft Windows Server 2016 with NVME on M.2 slot.
+2. This firmware project does not build with the GCC compiler.
+3. This firmware project does not build with the Python build script infrastructure.
+
+**SimicsOpenBoardPkg**
+1. This firmware project has only been tested booting to Microsoft Windows 10 x64 and Ubuntu 17.10 with AHCI mode.
 
 **WhiskeylakeOpenBoardPkg**
-1. This firmware project has only been tested on the Intel WhiskeylakeURvp board.
-2. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
-  Device.
-3. The Windows build was tested on Windows 10 with Microsoft Visual Studio 2015.
-4. The Linux build was tested on Ubuntu 16.04.5 LTS with GCC version 5.4.0.
-5. The build was tested with NASM version 2.11.08.
+1. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
+   Device.
+
+### **Package Builds**
+
+In some cases, such as AdvancedFeaturePkg, a package may provide a set of functionality that is included in other
+packages. To test the build of the whole package, the "build" command should be used following the instructions below.
+
+1. Execute edksetup.bat (Windows) or edksetup.sh (Linux).
+2. Verify the "WORKSPACE" environment variable is set to the edk2 directory in your workspace.
+3. Set the "PACKAGES_PATH" environment variable to include the edk2-platforms/Platform/Intel and edk2-platforms/Silicon/Intel
+   directories.
+   * Windows example: set PACKAGES_PATH=c:\Edk2Workspace\edk2-platforms\Platform\Intel;c:\Edk2Workspace\edk2-platforms\Silicon\Intel
+4. Build the package by specifying the package DSC as the platform build target from the Platform/Intel or Silicon/Intel directory:
+   "build -p AdvancedFeaturePkg/AdvancedFeaturePkg.dsc"
+
 
 ### **Firmware Image Flashing**
 
@@ -259,14 +322,14 @@ that authenticates the initial firmware boot image such as Boot Guard, it will f
 that is not signed properly.
 
 ### **Planned Activities**
-* Replace the batch build scripts with cross-platform Python build scripts.
-* Publish a Minimum Platform specification to describe the architecture and interfaces in more detail.
+* Expand Intel's open source platform code presence through new platform and board support.
+* Expand advanced feature code and quality.
+* Support open source community continuous integration for Minimum Platform compliant boards.
 
 ### **Ideas**
 If you would like to help but are not sure where to start some areas currently identified for improvement include:
  * Adding board ports for more motherboards and systems
  * Adding Clang support
- * Adding GCC support
 
 Please feel free to contact Michael Kubacki (michael.a.kubacki at intel.com) and Isaac Oram (isaac.w.oram at intel.com)
 if you would like to discuss contribution ideas.
