@@ -449,7 +449,7 @@ QemuInitializeRam (
 	  SmramRanges = 1;
 
       Hob.Raw = BuildGuidHob(
-          &gEfiSmmPeiSmramMemoryReserveGuid,
+          &gEfiSmmSmramMemoryGuid,
           BufferSize
       );
       ASSERT(Hob.Raw);

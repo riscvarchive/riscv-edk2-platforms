@@ -39,7 +39,7 @@
 
 [Guids]
   gEfiMemoryTypeInformationGuid
-  gEfiSmmPeiSmramMemoryReserveGuid              ## CONSUMES
+  gEfiSmmSmramMemoryGuid              ## CONSUMES
 
 [LibraryClasses]
   BaseLib
