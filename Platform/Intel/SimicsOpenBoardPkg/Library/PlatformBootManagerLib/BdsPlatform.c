@@ -338,10 +338,18 @@ PlatformBootManagerBeforeConsole (
   VOID
   )
 {
-//  EFI_HANDLE    Handle;
-//  EFI_STATUS    Status;
+  EFI_BOOT_MANAGER_LOAD_OPTION  *NvBootOptions;
+  UINTN                         NvBootOptionCount;
+  UINTN                         Index;
+  EFI_STATUS                    Status;
 
-  DEBUG ((EFI_D_INFO, "PlatformBootManagerBeforeConsole\n"));
+  DEBUG ((DEBUG_INFO, "PlatformBootManagerBeforeConsole\n"));
+
+  NvBootOptions = EfiBootManagerGetLoadOptions (&NvBootOptionCount, LoadOptionTypeBoot);
+  for (Index = 0; Index < NvBootOptionCount; Index++) {
+    Status = EfiBootManagerDeleteLoadOptionVariable (NvBootOptions[Index].OptionNumber, LoadOptionTypeBoot);
+  }
+
   InstallDevicePathCallback ();
 
   VisitAllInstancesOfProtocol (&gEfiPciRootBridgeIoProtocolGuid,
