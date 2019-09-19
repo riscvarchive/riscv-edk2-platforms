@@ -148,6 +148,8 @@ if ((PcdGet8 (PcdSerialIoUartDebugEnable) == 1) &&
   }
 DEBUG_CODE_END();
 
+  FspsUpd->FspsConfig.PchSirqMode = PchContinuousMode;
+
   return EFI_SUCCESS;
 }
 
