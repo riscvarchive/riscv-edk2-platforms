@@ -1,7 +1,7 @@
 /** @file
     IPMI FRB PEIM.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -51,6 +51,7 @@ SetWatchDogTimer (
 }
 
 EFI_STATUS
+EFIAPI
 InitializeFrbPei (
   IN       EFI_PEI_FILE_HANDLE       FileHandle,
   IN CONST EFI_PEI_SERVICES          **PeiServices
