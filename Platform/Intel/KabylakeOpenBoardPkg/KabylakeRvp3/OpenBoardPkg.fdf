@@ -8,7 +8,7 @@
 ##
 
 [Defines]
-   !include $(PLATFORM_BOARD_PACKAGE)/Include/Fdf/FlashMapInclude.fdf
+   !include $(PROJECT)/Include/Fdf/FlashMapInclude.fdf
 
 ################################################################################
 #
