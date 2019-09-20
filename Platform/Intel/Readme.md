@@ -83,6 +83,15 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
 | Simics Quick Start Package            | Nehalem                                    | SimicsOpenBoardPkg           | BoardX58Ich10      |
 
+#### System 76
+
+***Galago Pro Laptop***
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| galp2                                 | Kaby Lake                                  | KabylakeOpenBoardPkg         | GalagoPro3         |
+| galp3 & galp3-b                       | Kaby Lake Refresh                          | KabylakeOpenBoardPkg         | GalagoPro3         |
+
 ## Board Package Organization
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
 * Only code usable across more than one board at the root level.
@@ -217,28 +226,31 @@ return back to the minimum platform caller.
           |       |        |                     post-build, and clean functions.
           |       |        |
           |       |        |------KabylakeOpenBoardPkg
-          |       |        |        |------KabylakeRvp3
-          |       |        |                  |---build_config.cfg: KabylakeRvp3 specific
-          |       |        |                  |                     build settings, environment variables.
-          |       |        |                  |---build_board.py: Optional board-specific pre-build, build
-          |       |        |                                      and clean post-build functions.
+          |       |        |       |------GalagoPro3
+          |       |        |       |       |---build_config.cfg: System 76 Galago Pro 3 specific build
+          |       |        |       |                             settings environment variables.
+          |       |        |       |------KabylakeRvp3
+          |       |        |               |---build_config.cfg: KabylakeRvp3 specific
+          |       |        |               |                     build settings, environment variables.
+          |       |        |               |---build_board.py: Optional board-specific pre-build, build
+          |       |        |                                   and clean post-build functions.
           |       |        |
           |       |        |------PurleyOpenBoardPkg
           |       |        |       |------BoardMtOlympus
-          |       |        |                |---build_config.cfg: BoardMtOlympus specific
-          |       |        |                |                     build settings, environment variables.
-          |       |        |                |---build_board.py: Optional board-specific pre-build,
-          |       |        |                                    build, post-build and clean functions.
+          |       |        |               |---build_config.cfg: BoardMtOlympus specific
+          |       |        |               |                     build settings, environment variables.
+          |       |        |               |---build_board.py: Optional board-specific pre-build,
+          |       |        |                                   build, post-build and clean functions.
           |       |        |
           |       |        |------SimicsOpenBoardPkg
           |       |        |       |------BoardX58Ich10
-          |       |        |                |---build_config.cfg: BoardX58Ich10 specific
-          |       |        |                |                     build settings, environment variables.
+          |       |        |               |---build_config.cfg: BoardX58Ich10 specific
+          |       |        |                                     build settings, environment variables.
           |       |        |
           |       |        |------WhiskeylakeOpenBoardPkg
-          |       |        |        |------WhiskeylakeURvp
-          |       |        |                |---build_config.cfg: WhiskeylakeURvp specific build
-          |       |        |                                      settings environment variables.
+          |       |        |       |------WhiskeylakeURvp
+          |       |        |               |---build_config.cfg: WhiskeylakeURvp specific build
+          |       |        |                                     settings environment variables.
           |       |        |
           |------FSP
   </pre>
@@ -263,6 +275,10 @@ errors.
 ### **Known limitations**
 
 **KabylakeOpenBoardPkg**
+*GalagoPro3*
+1. The firmware project has not been tested on the Galago Pro 3B.
+
+*KabylakeRvp3*
 1. This firmware project has only been tested for Microsoft Windows 10 x64 boot with AHCI mode and Integrated Graphic
    Device.
 

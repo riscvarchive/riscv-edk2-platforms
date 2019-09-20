@@ -87,6 +87,9 @@ M: Chasel Chiu <chasel.chiu@intel.com>
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
+Platform/Intel/KabylakeOpenBoardPkg/GalagoPro3
+R: Jeremy Soller <jeremy@system76.com>
+
 Platform/Intel/MinPlatformPkg
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Chasel Chiu <chasel.chiu@intel.com>
