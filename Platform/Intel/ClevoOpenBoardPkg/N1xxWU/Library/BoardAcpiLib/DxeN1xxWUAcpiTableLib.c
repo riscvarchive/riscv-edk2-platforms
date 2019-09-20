@@ -54,7 +54,7 @@ N1xxWUUpdateGlobalNvs (
   //
   mGlobalNvsArea.Area->LowPowerS0Idle = PcdGet8 (PcdLowPowerS0Idle);
 
-  mGlobalNvsArea.Area->Ps2MouseEnable     = FALSE;
+  mGlobalNvsArea.Area->Ps2MouseEnable     = PcdGet8 (PcdPs2KbMsEnable);
   mGlobalNvsArea.Area->Ps2KbMsEnable      = PcdGet8 (PcdPs2KbMsEnable);
 }
 

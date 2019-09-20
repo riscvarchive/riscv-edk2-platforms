@@ -55,10 +55,10 @@ scope (\_SB.PCI0.LPCB) {
 
       }
 
-      Device(PS2M)    // PS/2 Mouse
+      Device(SYNM)    // Synaptics Mouse
       {
-        Name(_HID,"MSFT0003")
-        Name(_CID,EISAID("PNP0F03"))
+        Name(_HID,"SYN1221")
+        Name(_CID,EISAID("PNP0F13"))
 
         Method(_STA)
         {
