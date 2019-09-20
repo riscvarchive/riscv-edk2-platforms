@@ -1,5 +1,5 @@
 ## @file
-# Module describe the entire platform configuration.
+# Declaration file for Kaby Lake based boards.
 #
 # The DEC files are used by the utilities that parse DSC and
 # INF files to generate AutoGen.c and AutoGen.h files
@@ -20,6 +20,7 @@ PACKAGE_GUID = 0A8BA6E8-C8AC-4AC1-87AC-52772FA6AE5E
 
 [Includes]
 Include
+GalagoPro3/Include
 KabylakeRvp3/Include
 Features/Tbt/Include
 
@@ -303,7 +304,6 @@ gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent|FALSE|BOOLEAN|0x000000EC
 
   gBoardModuleTokenSpaceGuid.PcdAcpiGnvsAddress|0|UINT64|0x40000013
 
-  # gIntelPeiGraphicsVbtGuid =  {0x4ad46122, 0xffeb, 0x4a52, {0xbf, 0xb0, 0x51, 0x8c, 0xfc, 0xa0, 0x2d, 0xb0}}
   gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid|{0x22, 0x61, 0xd4, 0x4a, 0xeb, 0xff, 0x52, 0x4a, 0xbf, 0xb0, 0x51, 0x8c, 0xfc, 0xa0, 0x2d, 0xb0}|VOID*|0x40000014
 
 [PcdsDynamicEx]
