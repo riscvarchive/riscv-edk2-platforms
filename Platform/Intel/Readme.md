@@ -53,7 +53,6 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 
 ## Board Support
-* The `ClevoOpenBoardPkg` contains board implementations for Clevo systems.
 * The `KabylakeOpenBoardPkg` contains board implementations for Kaby Lake systems.
 * The `PurleyOpenBoardPkg` contains board implementations for Purley systems.
 * The `SimicsOpenBoardPkg` contains board implementations for the Simics hardware simulator.
@@ -83,15 +82,6 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 | Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
 | Simics Quick Start Package            | Nehalem                                    | SimicsOpenBoardPkg           | BoardX58Ich10      |
-
-#### System 76
-
-***Galago Pro Laptop***
-
-| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
-----------------------------------------|--------------------------------------------|------------------------------|--------------------|
-| galp2 (Clevo N130BU)                  | Kaby Lake                                  | ClevoOpenBoardPkg            | N1xxWU             |
-| galp3 & galp3-b (Clevo N1xxWU series) | Kaby Lake Refresh                          | ClevoOpenBoardPkg            | N1xxWU             |
 
 ## Board Package Organization
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
@@ -226,11 +216,6 @@ return back to the minimum platform caller.
           |       |        |------build_bios.py: Main build script. Generic pre-build, build,
           |       |        |                     post-build, and clean functions.
           |       |        |
-          |       |        |------ClevoOpenBoardPkg
-          |       |        |        |------N1xxWU
-          |       |        |                |---build_config.cfg: N1xxWU specific build
-          |       |        |                                      settings environment variables.
-          |       |        |
           |       |        |------KabylakeOpenBoardPkg
           |       |        |        |------KabylakeRvp3
           |       |        |                  |---build_config.cfg: KabylakeRvp3 specific
@@ -276,9 +261,6 @@ The validated version of iASL compiler that can build MinPurley is 20180629. Old
 errors.
 
 ### **Known limitations**
-
-**ClevoOpenBoardPkg**
-1. The firmware project has not been tested on the Galago Pro 3B.
 
 **KabylakeOpenBoardPkg**
 1. This firmware project has only been tested for Microsoft Windows 10 x64 boot with AHCI mode and Integrated Graphic
