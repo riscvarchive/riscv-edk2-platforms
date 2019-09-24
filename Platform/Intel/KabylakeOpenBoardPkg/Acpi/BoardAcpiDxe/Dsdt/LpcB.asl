@@ -1,11 +1,12 @@
 /** @file
   ACPI DSDT table
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
+#include "PlatformBoardId.h"
 
 // LPC Bridge - Device 31, Function 0
 scope (\_SB.PCI0.LPCB) {
@@ -66,7 +67,43 @@ scope (\_SB.PCI0.LPCB) {
           {
             If (P2MK) //Ps2 Keyboard and Mouse Enable
             {
-              Return(0x000F)
+              If (LNotEqual(BDID,BoardIdGalagoPro3))
+              {
+                Return(0x000F)
+              }
+            }
+          }
+          Return(0x0000)
+        }
+
+        Name(_CRS,ResourceTemplate()
+        {
+          IRQ(Edge,ActiveHigh,Exclusive){0x0C}
+        })
+
+        Name(_PRS, ResourceTemplate(){
+          StartDependentFn(0, 0) {
+          IRQNoFlags(){12}
+          }
+          EndDependentFn()
+        })
+      }
+
+      Device(SYNM)    // Synaptics Mouse
+      {
+        Name(_HID,"SYN1221")
+        Name(_CID,EISAID("PNP0F13"))
+
+        Method(_STA)
+        {
+          If (P2ME) //Ps2 Mouse Enable
+          {
+            If (P2MK) //Ps2 Keyboard and Mouse Enable
+            {
+              If (LEqual(BDID,BoardIdGalagoPro3))
+              {
+                Return(0x000F)
+              }
             }
           }
           Return(0x0000)
