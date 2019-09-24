@@ -56,6 +56,8 @@ KabylakeRvp3UpdateGlobalNvs (
 
   mGlobalNvsArea.Area->Ps2MouseEnable     = FALSE;
   mGlobalNvsArea.Area->Ps2KbMsEnable      = PcdGet8 (PcdPs2KbMsEnable);
+
+  mGlobalNvsArea.Area->BoardId = (UINT8) LibPcdGetSku ();
 }
 
 EFI_STATUS

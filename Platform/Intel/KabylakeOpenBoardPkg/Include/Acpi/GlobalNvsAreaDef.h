@@ -1,7 +1,7 @@
 /** @file
   ACPI DSDT table
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -111,6 +111,7 @@ typedef struct {
   UINT8    TbtNativeOsHotPlug;                      ///< Offset 81      TbtNativeOsHotPlug
   UINT8    TbtSelector;                             ///< Offset 82      Thunderbolt(TM) Root port selector
   UINT8    TbtSelector1;                            ///< Offset 83      Thunderbolt(TM) Root port selector
+  UINT8    BoardId;                                 ///< Offset 84      Board ID
 } EFI_GLOBAL_NVS_AREA;
 
 #pragma pack(pop)

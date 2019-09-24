@@ -1,7 +1,7 @@
 /** @file
   ACPI DSDT table
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -111,4 +111,5 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
   Offset(81),     TNAT, 8,  // Offset(81),    TbtNativeOsHotPlug
   Offset(82),     TBSE, 8,  // Offset(82),    Thunderbolt(TM) Root port selector
   Offset(83),     TBS1, 8,  // Offset(83),    Thunderbolt(TM) Root port selector
+  Offset(84),     BDID, 8,  // Offset(84),    Board ID
   }
