@@ -14,7 +14,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
 
-#include <GalagoPro3Id.h>
+#include <PlatformBoardId.h>
 
 EFI_STATUS
 EFIAPI

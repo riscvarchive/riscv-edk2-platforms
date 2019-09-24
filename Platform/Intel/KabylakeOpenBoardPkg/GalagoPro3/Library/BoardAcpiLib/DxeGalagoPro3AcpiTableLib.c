@@ -18,7 +18,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/AslUpdateLib.h>
 #include <Protocol/GlobalNvsArea.h>
 
-#include <GalagoPro3Id.h>
+#include <PlatformBoardId.h>
 
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_GLOBAL_NVS_AREA_PROTOCOL              mGlobalNvsArea;
 

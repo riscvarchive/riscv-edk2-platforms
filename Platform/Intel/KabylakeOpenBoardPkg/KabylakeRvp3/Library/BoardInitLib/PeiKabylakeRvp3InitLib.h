@@ -18,7 +18,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <PchHsioPtssTables.h>
 #include <IoExpander.h>
 
-#include <KabylakeRvp3Id.h>
+#include <PlatformBoardId.h>
 
 extern const UINT8 mDqByteMapSklRvp3[2][6][2];
 extern const UINT8 mDqsMapCpu2DramSklRvp3[2][8];

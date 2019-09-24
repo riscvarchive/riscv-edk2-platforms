@@ -1,7 +1,7 @@
 /** @file
   Platform Hook Library instances
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -18,7 +18,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/AslUpdateLib.h>
 #include <Protocol/GlobalNvsArea.h>
 
-#include <KabylakeRvp3Id.h>
+#include <PlatformBoardId.h>
 
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_GLOBAL_NVS_AREA_PROTOCOL              mGlobalNvsArea;
 
@@ -43,7 +43,7 @@ KabylakeRvp3UpdateGlobalNvs (
   mGlobalNvsArea.Area->PowerState = 1; // AC =1; for mobile platform, will update this value in SmmPlatform.c
 
   mGlobalNvsArea.Area->NativePCIESupport        = PcdGet8 (PcdPciExpNative);
-  
+
   //
   // Enable APIC
   //
