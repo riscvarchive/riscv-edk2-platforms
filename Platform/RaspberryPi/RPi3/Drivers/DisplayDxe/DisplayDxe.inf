@@ -57,7 +57,7 @@
   gRaspberryPiFirmwareProtocolGuid
 
 [Pcd]
-  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableVModes
+  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot
 
 [Guids]

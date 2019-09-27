@@ -64,7 +64,7 @@
   gRaspberryPiTokenSpaceGuid.PcdMmcDisableMulti
   gRaspberryPiTokenSpaceGuid.PcdDebugEnableJTAG
   gRaspberryPiTokenSpaceGuid.PcdDebugShowUEFIExit
-  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableVModes
+  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot
 
 [FeaturePcd]
