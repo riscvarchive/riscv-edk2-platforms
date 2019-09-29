@@ -54,6 +54,10 @@
 [Protocols]
   gEdkiiPlatformVTdPolicyProtocolGuid = { 0x3d17e448, 0x466, 0x4e20, { 0x99, 0x9f, 0xb2, 0xe1, 0x34, 0x88, 0xee, 0x22 }}
 
+  ## Protocol for device security policy.
+  # Include/Protocol/PlatformDeviceSecurityPolicy.h
+  gEdkiiDeviceSecurityPolicyProtocolGuid = {0x7ea41a99, 0x5e32, 0x4c97, {0x88, 0xc4, 0xd6, 0xe7, 0x46, 0x84, 0x9, 0xd4}}
+
 [PcdsFixedAtBuild, PcdsPatchableInModule]
   ## Error code for VTd error.<BR><BR>
   #  EDKII_ERROR_CODE_VTD_ERROR = (EFI_IO_BUS_UNSPECIFIED | (EFI_OEM_SPECIFIC | 0x00000000)) = 0x02008000<BR>
