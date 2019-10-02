@@ -184,7 +184,7 @@ DisableBiosWriteProtect (
     B_PCH_SPI_BC_WPD
     );
 
-  ASSERT ((PciSegmentRead8 (SpiBaseAddress + R_PCH_SPI_BC) & B_PCH_SPI_BC_EISS) != 0);
+  ASSERT ((PciSegmentRead8 (SpiBaseAddress + R_PCH_SPI_BC) & B_PCH_SPI_BC_EISS) == 0);
 
   return EFI_SUCCESS;
 }
