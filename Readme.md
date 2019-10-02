@@ -227,6 +227,7 @@ they will be documented with the platform.
 ### [Minimum Platforms](Platform/Intel/Readme.md)
 * [Kaby Lake](Platform/Intel/KabylakeOpenBoardPkg)
 * [Purley](Platform/Intel/PurleyOpenBoardPkg)
+* [Simics](Platform/Intel/SimicsOpenBoardPkg)
 * [Whiskey Lake](Platform/Intel/WhiskeylakeOpenBoardPkg)
 
 For more information, see the
