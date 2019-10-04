@@ -23,7 +23,6 @@
   #
   # Platform On/Off features are defined here
   #
-  !include OpenBoardPkgConfig.dsc
   !include OpenBoardPkgPcd.dsc
 
 ################################################################################
