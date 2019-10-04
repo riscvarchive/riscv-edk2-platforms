@@ -39,7 +39,11 @@
   DEFINE NETWORK_TLS_ENABLE             = FALSE
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
   DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
+
+  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgConfig.dsc
+  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgPcd.dsc
   !include NetworkPkg/NetworkDefines.dsc.inc
+
 ################################################################################
 #
 # SKU Identification section - list of all SKU IDs supported by this Platform.
@@ -54,12 +58,9 @@
 #
 ################################################################################
 
-[PcdsFeatureFlag]
-  #
-  # Platform On/Off features are defined here
-  #
-  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgConfig.dsc
   !include MinPlatformPkg/Include/Dsc/CoreCommonLib.dsc
+  !include MinPlatformPkg/Include/Dsc/CorePeiLib.dsc
+  !include MinPlatformPkg/Include/Dsc/CoreDxeLib.dsc
   !include $(PCH_PKG)/IchCommonLib.dsc
 
 [LibraryClasses]
@@ -76,16 +77,12 @@
   SiliconPolicyInitLib|$(BOARD_PKG)/Policy/Library/SiliconPolicyInitLib/SiliconPolicyInitLib.inf
   SiliconPolicyUpdateLib|$(BOARD_PKG)/Policy/Library/SiliconPolicyUpdateLib/SiliconPolicyUpdateLib.inf
   PciSegmentInfoLib|MinPlatformPkg/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
-
-  !include MinPlatformPkg/Include/Dsc/CorePeiLib.dsc
-
   S3BootScriptLib|MdeModulePkg/Library/PiDxeS3BootScriptLib/DxeS3BootScriptLib.inf
   AslUpdateLib|MinPlatformPkg/Acpi/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf
   LogoLib|$(BOARD_PKG)/Library/DxeLogoLib/DxeLogoLib.inf
+
 [LibraryClasses.common.SEC]
   ExtractGuidedSectionLib|MdePkg/Library/BaseExtractGuidedSectionLib/BaseExtractGuidedSectionLib.inf
-
-[LibraryClasses.common.PEI_CORE]
 
 [LibraryClasses.common.PEIM]
   PeiResourcePublicationLib|MdePkg/Library/PeiResourcePublicationLib/PeiResourcePublicationLib.inf
@@ -97,15 +94,11 @@
 !endif
   TestPointLib|MinPlatformPkg/Test/Library/TestPointLib/PeiTestPointLib.inf
 
-  !include MinPlatformPkg/Include/Dsc/CoreDxeLib.dsc
-
 [LibraryClasses.common.DXE_DRIVER]
   PlatformBootManagerLib|$(BOARD_PKG)/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
 
 [LibraryClasses.common.DXE_SMM_DRIVER]
   SpiFlashCommonLib|$(PCH_PKG)/Library/SmmSpiFlashCommonLib/SmmSpiFlashCommonLib.inf
-
-  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgPcd.dsc
 
 [Components.IA32]
   $(BOARD_PKG)/SecCore/SecMain.inf {
