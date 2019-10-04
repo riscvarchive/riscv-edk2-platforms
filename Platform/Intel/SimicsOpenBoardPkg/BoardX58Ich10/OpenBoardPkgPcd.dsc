@@ -11,7 +11,50 @@
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform
 #
 ################################################################################
+[PcdsFixedAtBuild]
+  gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
+
 [PcdsFeatureFlag.common]
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|FALSE
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 1
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|TRUE
+!endif
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 2
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|TRUE
+!endif
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 3
+  gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|TRUE
+!endif
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 4
+  gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
+!endif
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 5
+  gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|TRUE
+  gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|TRUE
+!endif
+
+  !if $(TARGET) == DEBUG
+    gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|TRUE
+  !else
+    gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE
+  !endif
+
+  gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
+
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdNetworkEnable|TRUE
+  gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosEnable|TRUE
+
 !if $(TARGET) == RELEASE
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
 !else

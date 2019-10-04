@@ -40,7 +40,6 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
   DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
 
-  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgConfig.dsc
   !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgPcd.dsc
   !include NetworkPkg/NetworkDefines.dsc.inc
 
