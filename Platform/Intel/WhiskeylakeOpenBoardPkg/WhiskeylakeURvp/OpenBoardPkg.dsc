@@ -27,6 +27,7 @@
   # Platform On/Off features are defined here
   #
   !include OpenBoardPkgConfig.dsc
+  !include OpenBoardPkgPcd.dsc
 
 ################################################################################
 #
@@ -190,7 +191,6 @@
 [LibraryClasses.X64.DXE_RUNTIME_DRIVER]
   ResetSystemLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/DxeRuntimeResetSystemLib/DxeRuntimeResetSystemLib.inf
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-  !include OpenBoardPkgPcd.dsc
 
 [Components.IA32]
   #
