@@ -1,5 +1,5 @@
 ## @file
-#  Component description file for the SkyLake SiPkg PEI libraries.
+#  Build description file for Kaby Lake silicon PEI libraries.
 #
 # Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
@@ -7,6 +7,7 @@
 #
 ##
 
+[LibraryClasses]
 #
 # Silicon Init Pei Library
 #

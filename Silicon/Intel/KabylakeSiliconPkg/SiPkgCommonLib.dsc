@@ -1,11 +1,13 @@
 ## @file
-#  Component description file for the SkyLake SiPkg both Pei and Dxe libraries DSC file.
+#  Build description file for Kaby Lake silicon PEI and DXE libraries.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
+
+[LibraryClasses.common]
 #
 # Silicon Init Common Library
 #

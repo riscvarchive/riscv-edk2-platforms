@@ -1,12 +1,13 @@
 # @file
-#  Component description file for the SkyLake SiPkg DXE libraries.
+#  Build description file for Kaby Lake silicon DXE libraries.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
 
+[LibraryClasses.common.DXE_CORE,LibraryClasses.common.DXE_SMM_DRIVER,LibraryClasses.common.SMM_CORE,LibraryClasses.common.DXE_DRIVER,LibraryClasses.common.DXE_RUNTIME_DRIVER,LibraryClasses.common.UEFI_DRIVER]
 #
 # Silicon Init Dxe Library
 #
