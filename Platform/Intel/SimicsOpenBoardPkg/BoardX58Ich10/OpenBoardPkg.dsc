@@ -1,6 +1,7 @@
 ## @file
+#  The main build description file for the X58Ich10 board.
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -33,7 +34,7 @@
   DEFINE SMM_REQUIRE             = TRUE
 
   #
-  #PLATFORMX64_ENABLE is set to TRUE when PEI is IA32 and DXE is X64 platform
+  # PLATFORMX64_ENABLE is set to TRUE when PEI is IA32 and DXE is X64 platform
   #
   DEFINE PLATFORMX64_ENABLE             = TRUE
   DEFINE NETWORK_TLS_ENABLE             = FALSE
@@ -45,7 +46,7 @@
 
 ################################################################################
 #
-# SKU Identification section - list of all SKU IDs supported by this Platform.
+# SKU Identification section - list of all SKU IDs supported by this board.
 #
 ################################################################################
 [SkuIds]
@@ -53,173 +54,232 @@
 
 ################################################################################
 #
-# Library Class section - list of all Library Classes needed by this Platform.
+# Includes section - other DSC file contents included for this board build.
 #
 ################################################################################
 
-  !include MinPlatformPkg/Include/Dsc/CoreCommonLib.dsc
-  !include MinPlatformPkg/Include/Dsc/CorePeiLib.dsc
-  !include MinPlatformPkg/Include/Dsc/CoreDxeLib.dsc
-  !include $(PCH_PKG)/IchCommonLib.dsc
+#######################################
+# Library Includes
+#######################################
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CoreCommonLib.dsc
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiLib.dsc
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeLib.dsc
+!include $(PCH_PKG)/IchCommonLib.dsc
+
+#######################################
+# Component Includes
+#######################################
+[Components.IA32]
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
+!include $(SKT_PKG)/SktPkgPei.dsc
+
+[Components.X64]
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
+!include AdvancedFeaturePkg/Include/Dsc/CoreAdvancedDxeInclude.dsc
+
+#######################################
+# Build Option Includes
+#######################################
+!include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgBuildOption.dsc
+
+################################################################################
+#
+# Library Class section - list of all Library Classes needed by this board.
+#
+################################################################################
 
 [LibraryClasses]
-  ReportFvLib|$(BOARD_PKG)/Library/PeiReportFvLib/PeiReportFvLib.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
   BootLogoLib|MdeModulePkg/Library/BootLogoLib/BootLogoLib.inf
-  SerialPortLib|PcAtChipsetPkg/Library/SerialIoLib/SerialIoLib.inf
-  NvVarsFileLib|$(BOARD_PKG)/Library/NvVarsFileLib/NvVarsFileLib.inf
-  SerializeVariablesLib|$(BOARD_PKG)/Library/SerializeVariablesLib/SerializeVariablesLib.inf
-  DxeLoadLinuxLib|$(BOARD_PKG)/Library/LoadLinuxLib/DxeLoadLinuxLib.inf
   CpuExceptionHandlerLib|MdeModulePkg/Library/CpuExceptionHandlerLibNull/CpuExceptionHandlerLibNull.inf
+  S3BootScriptLib|MdeModulePkg/Library/PiDxeS3BootScriptLib/DxeS3BootScriptLib.inf
+  SerialPortLib|PcAtChipsetPkg/Library/SerialIoLib/SerialIoLib.inf
 
-  TestPointCheckLib|MinPlatformPkg/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
-  BoardInitLib|MinPlatformPkg/PlatformInit/Library/BoardInitLibNull/BoardInitLibNull.inf
+  #####################################
+  # Platform Package
+  #####################################
+  AslUpdateLib|$(PLATFORM_PACKAGE)/Acpi/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf
+  BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/BoardInitLibNull/BoardInitLibNull.inf
+  PciSegmentInfoLib|$(PLATFORM_PACKAGE)/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
+  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
+
+  #######################################
+  # Board Package
+  #######################################
+  DxeLoadLinuxLib|$(BOARD_PKG)/Library/LoadLinuxLib/DxeLoadLinuxLib.inf
+  LogoLib|$(BOARD_PKG)/Library/DxeLogoLib/DxeLogoLib.inf
+  NvVarsFileLib|$(BOARD_PKG)/Library/NvVarsFileLib/NvVarsFileLib.inf
+  ReportFvLib|$(BOARD_PKG)/Library/PeiReportFvLib/PeiReportFvLib.inf
+  SerializeVariablesLib|$(BOARD_PKG)/Library/SerializeVariablesLib/SerializeVariablesLib.inf
   SiliconPolicyInitLib|$(BOARD_PKG)/Policy/Library/SiliconPolicyInitLib/SiliconPolicyInitLib.inf
   SiliconPolicyUpdateLib|$(BOARD_PKG)/Policy/Library/SiliconPolicyUpdateLib/SiliconPolicyUpdateLib.inf
-  PciSegmentInfoLib|MinPlatformPkg/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
-  S3BootScriptLib|MdeModulePkg/Library/PiDxeS3BootScriptLib/DxeS3BootScriptLib.inf
-  AslUpdateLib|MinPlatformPkg/Acpi/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf
-  LogoLib|$(BOARD_PKG)/Library/DxeLogoLib/DxeLogoLib.inf
 
 [LibraryClasses.common.SEC]
+  #######################################
+  # Edk2 Packages
+  #######################################
   ExtractGuidedSectionLib|MdePkg/Library/BaseExtractGuidedSectionLib/BaseExtractGuidedSectionLib.inf
 
 [LibraryClasses.common.PEIM]
+  #######################################
+  # Edk2 Packages
+  #######################################
   PeiResourcePublicationLib|MdePkg/Library/PeiResourcePublicationLib/PeiResourcePublicationLib.inf
   MpInitLib|UefiCpuPkg/Library/MpInitLib/PeiMpInitLib.inf
 
-[LibraryClasses.IA32]
+  #####################################
+  # Platform Package
+  #####################################
 !if $(TARGET) == DEBUG
-  TestPointCheckLib|MinPlatformPkg/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
+  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
 !endif
-  TestPointLib|MinPlatformPkg/Test/Library/TestPointLib/PeiTestPointLib.inf
+  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/PeiTestPointLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
+  #######################################
+  # Board Package
+  #######################################
   PlatformBootManagerLib|$(BOARD_PKG)/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
 
 [LibraryClasses.common.DXE_SMM_DRIVER]
+  #######################################
+  # Silicon Initialization Package
+  #######################################
   SpiFlashCommonLib|$(PCH_PKG)/Library/SmmSpiFlashCommonLib/SmmSpiFlashCommonLib.inf
 
 [Components.IA32]
-  $(BOARD_PKG)/SecCore/SecMain.inf {
-    <LibraryClasses>
-      NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
-  }
-  !include $(SKT_PKG)/SktPkgPei.dsc
-  !include MinPlatformPkg/Include/Dsc/CorePeiInclude.dsc
-
-  $(BOARD_PKG)/SimicsPei/SimicsPei.inf {
-    <LibraryClasses>
-      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
-  }
-#  S3 SMM driver
-#  UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationPei.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
+  #  S3 SMM driver
+  #  @todo: UefiCpuPkg/PiSmmCommunication/PiSmmCommunicationPei.inf
   UefiCpuPkg/Universal/Acpi/S3Resume2Pei/S3Resume2Pei.inf {
     <LibraryClasses>
       LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxPeiLib.inf
   }
 
+  #######################################
+  # Silicon Initialization Package
+  #######################################
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   $(SKT_PKG)/Smm/Access/SmmAccessPei.inf {
     <LibraryClasses>
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
 !endif
-  $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
 
-  MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
+  #####################################
+  # Platform Package
+  #####################################
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
       BoardInitLib|$(BOARD_PKG)/$(BOARD_NAME)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
   }
-  MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
       BoardInitLib|$(BOARD_PKG)/$(BOARD_NAME)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
   }
-  MinPlatformPkg/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
-  MinPlatformPkg/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
+
+  #######################################
+  # Board Package
+  #######################################
+  $(BOARD_PKG)/SecCore/SecMain.inf {
+    <LibraryClasses>
+      NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+  }
+
+  $(BOARD_PKG)/SimicsPei/SimicsPei.inf {
+    <LibraryClasses>
+      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+  }
 
 [Components.X64]
-  !include MinPlatformPkg/Include/Dsc/CoreDxeInclude.dsc
-  !include AdvancedFeaturePkg/Include/Dsc/CoreAdvancedDxeInclude.dsc
-
-  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
-
-  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
-  #
-  # ISA Support
-  #
-  $(BOARD_PKG)/LegacySioDxe/LegacySioDxe.inf
-  MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf
-
-  $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
-  $(BOARD_PKG)/AcpiTables/AcpiTables.inf
-  #
-  # Video support
-  #
-  $(BOARD_PKG)/SimicsVideoDxe/SimicsVideoDxe.inf
-
-  MinPlatformPkg/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
-  MinPlatformPkg/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
-  $(BOARD_PKG)/SimicsDxe/SimicsDxe.inf
-  MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
-  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
-
-  SimicsIch10BinPkg/UndiBinary/UndiDxe.inf
-
-  #
-  # Shell
-  #
-  ShellPkg/Application/Shell/Shell.inf {
-   <PcdsFixedAtBuild>
-     gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
-   <LibraryClasses>
-     NULL|ShellPkg/Library/UefiShellLevel2CommandsLib/UefiShellLevel2CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellLevel1CommandsLib/UefiShellLevel1CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellLevel3CommandsLib/UefiShellLevel3CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellDriver1CommandsLib/UefiShellDriver1CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellInstall1CommandsLib/UefiShellInstall1CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellDebug1CommandsLib/UefiShellDebug1CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellNetwork1CommandsLib/UefiShellNetwork1CommandsLib.inf
-     NULL|ShellPkg/Library/UefiShellNetwork2CommandsLib/UefiShellNetwork2CommandsLib.inf
-     ShellCommandLib|ShellPkg/Library/UefiShellCommandLib/UefiShellCommandLib.inf
-     HandleParsingLib|ShellPkg/Library/UefiHandleParsingLib/UefiHandleParsingLib.inf
-     BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
-     ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
-     ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
-  }
-
-!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
-  $(SKT_PKG)/Smm/Access/SmmAccess2Dxe.inf
-  $(PCH_PKG)/SmmControl/RuntimeDxe/SmmControl2Dxe.inf
-  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
-  $(PCH_PKG)/Spi/Smm/PchSpiSmm.inf
-  MinPlatformPkg/Flash/SpiFvbService/SpiFvbServiceSmm.inf
-  UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
-  MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf {
-    <LibraryClasses>
-      LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxSmmLib.inf
-  }
-!endif
-  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+  MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf
+  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf {
     <LibraryClasses>
       PciHostBridgeLib|$(BOARD_PKG)/Library/PciHostBridgeLib/PciHostBridgeLib.inf
   }
-  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
-
-  UefiCpuPkg/CpuDxe/CpuDxe.inf
-  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
-  MdeModulePkg/Universal/PrintDxe/PrintDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
-  #
-  # ACPI Support
-  #
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
-  $(BOARD_PKG)/AcpiTables/MinPlatformAcpiTables/AcpiPlatform.inf
+  MdeModulePkg/Universal/Acpi/BootScriptExecutorDxe/BootScriptExecutorDxe.inf
+  MdeModulePkg/Universal/Acpi/S3SaveStateDxe/S3SaveStateDxe.inf
+  MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
+  MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
+  MdeModulePkg/Universal/PrintDxe/PrintDxe.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+  MdeModulePkg/Universal/LockBox/SmmLockBox/SmmLockBox.inf {
+    <LibraryClasses>
+      LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxSmmLib.inf
+  }
+  UefiCpuPkg/CpuS3DataDxe/CpuS3DataDxe.inf
+  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf
+!endif
+  UefiCpuPkg/CpuDxe/CpuDxe.inf
 
+  ShellPkg/Application/Shell/Shell.inf {
+    <PcdsFixedAtBuild>
+      gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+    <LibraryClasses>
+      NULL|ShellPkg/Library/UefiShellLevel2CommandsLib/UefiShellLevel2CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellLevel1CommandsLib/UefiShellLevel1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellLevel3CommandsLib/UefiShellLevel3CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellDriver1CommandsLib/UefiShellDriver1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellInstall1CommandsLib/UefiShellInstall1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellDebug1CommandsLib/UefiShellDebug1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellNetwork1CommandsLib/UefiShellNetwork1CommandsLib.inf
+      NULL|ShellPkg/Library/UefiShellNetwork2CommandsLib/UefiShellNetwork2CommandsLib.inf
+      ShellCommandLib|ShellPkg/Library/UefiShellCommandLib/UefiShellCommandLib.inf
+      HandleParsingLib|ShellPkg/Library/UefiHandleParsingLib/UefiHandleParsingLib.inf
+      BcfgCommandLib|ShellPkg/Library/UefiShellBcfgCommandLib/UefiShellBcfgCommandLib.inf
+      ShellCEntryLib|ShellPkg/Library/UefiShellCEntryLib/UefiShellCEntryLib.inf
+      ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
+  }
+
+  #######################################
+  # Silicon Initialization Package
+  #######################################
+  SimicsIch10BinPkg/UndiBinary/UndiDxe.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+  $(PCH_PKG)/SmmControl/RuntimeDxe/SmmControl2Dxe.inf
+  $(PCH_PKG)/Spi/Smm/PchSpiSmm.inf
+  $(SKT_PKG)/Smm/Access/SmmAccess2Dxe.inf
+!endif
+
+  #####################################
+  # Platform Package
+  #####################################
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+  $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
+!endif
+
+  #######################################
+  # Advanced Feature Package
+  #######################################
 !if gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosEnable == TRUE
   AdvancedFeaturePkg/Smbios/SmbiosBasicDxe/SmbiosBasicDxe.inf
 !endif
 
-  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgBuildOption.dsc
+  #######################################
+  # Board Package
+  #######################################
+  $(BOARD_PKG)/AcpiTables/AcpiTables.inf
+  $(BOARD_PKG)/AcpiTables/MinPlatformAcpiTables/AcpiPlatform.inf
+  $(BOARD_PKG)/LegacySioDxe/LegacySioDxe.inf
+  $(BOARD_PKG)/SimicsDxe/SimicsDxe.inf
+  $(BOARD_PKG)/SimicsVideoDxe/SimicsVideoDxe.inf
+  $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
