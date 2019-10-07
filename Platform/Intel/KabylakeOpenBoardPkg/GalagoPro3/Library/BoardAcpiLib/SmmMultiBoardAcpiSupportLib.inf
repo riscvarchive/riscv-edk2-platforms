@@ -37,7 +37,7 @@
   KabylakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
 
 [Protocols]
 

@@ -42,14 +42,14 @@
 [FixedPcd]
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableSize
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableTouchPanel
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableTouchPanel
 
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTableSize
 
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable
 
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTableSize

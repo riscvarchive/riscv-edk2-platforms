@@ -1,7 +1,7 @@
 ### @file
 # Platform Hook Library instance for SandyBridge Mobile/Desktop CRB.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -36,16 +36,16 @@
 
 [Pcd]
   gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress                         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioIndexPort                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioDataPort                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioIndexDefaultPort         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioDataDefaultPort          ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioIndexPort          ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioDataPort           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioIndexDefaultPort   ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioDataDefaultPort    ## CONSUMES
 
 [FixedPcd]
-  gBoardModuleTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcIoDecodeRange               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PchLpcIoEnableDecoding            ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort  ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSioBaseAddress           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcIoDecodeRange         ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PchLpcIoEnableDecoding      ## CONSUMES
 
 [Sources]
   BasePlatformHookLib.c

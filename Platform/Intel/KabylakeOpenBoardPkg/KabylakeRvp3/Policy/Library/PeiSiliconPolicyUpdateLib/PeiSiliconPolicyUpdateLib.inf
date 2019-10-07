@@ -53,34 +53,34 @@
   gSiPkgTokenSpaceGuid.PcdPeiMinMemorySize
   gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase
   gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize
-  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdData
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGraphicsVbtGuid
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdData
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdDataSize
 
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
 
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
 
   # SPD Address Table
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3

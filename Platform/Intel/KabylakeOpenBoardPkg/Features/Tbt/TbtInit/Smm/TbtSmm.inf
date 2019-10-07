@@ -43,11 +43,11 @@
   KabylakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdSwSmiDTbtEnumerate ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSwSmiDTbtEnumerate ## CONSUMES
 
 [FixedPcd]
   gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress       ## CONSUMES
-  
+
 [Sources]
   TbtSmiHandler.h
   TbtSmiHandler.c

@@ -46,5 +46,5 @@
 
 [Pcd]
   gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaBaseAddress           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageBase           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageSize           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageBase  ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageSize  ## CONSUMES

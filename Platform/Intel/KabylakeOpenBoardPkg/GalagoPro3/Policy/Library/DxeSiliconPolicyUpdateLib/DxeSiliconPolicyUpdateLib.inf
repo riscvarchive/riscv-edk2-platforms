@@ -32,8 +32,8 @@
   DxeSaPolicyUpdate.c
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdIntelGopEnable
-  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdIntelGopEnable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGraphicsVbtGuid
 
 [Protocols]
   gEfiFirmwareVolume2ProtocolGuid               ## CONSUMES

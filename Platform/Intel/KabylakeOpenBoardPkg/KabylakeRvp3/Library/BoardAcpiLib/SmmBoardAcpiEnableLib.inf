@@ -1,7 +1,7 @@
 ### @file
 # Platform Hook Library instance for SandyBridge Mobile/Desktop CRB.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -36,8 +36,8 @@
   KabylakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
-  
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
+
 [Protocols]
 
 [Sources]

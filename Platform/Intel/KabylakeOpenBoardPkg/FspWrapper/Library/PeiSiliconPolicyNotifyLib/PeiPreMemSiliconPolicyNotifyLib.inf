@@ -37,7 +37,7 @@
 
 [Pcd]
   # SPD Address Table
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3

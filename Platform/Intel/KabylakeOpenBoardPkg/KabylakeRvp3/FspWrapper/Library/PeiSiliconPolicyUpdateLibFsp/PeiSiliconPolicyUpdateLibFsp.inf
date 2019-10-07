@@ -90,55 +90,55 @@
   PeiLib
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
 
   # SPD Address Table
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3    ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0    ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable1    ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable2    ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3    ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdData
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdData
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdDataSize
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress      ## CONSUMES
   gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable        ## CONSUMES
   gSiPkgTokenSpaceGuid.PcdSerialIoUartNumber             ## CONSUMES
   gSiPkgTokenSpaceGuid.PcdSmmbaseSwSmi                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSaDdrFreqLimit           ## CONSUMES
-  
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSaDdrFreqLimit  ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
 
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable2
-  gBoardModuleTokenSpaceGuid.PcdExtHdaVerbTable
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable1
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable2
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable3
-  gBoardModuleTokenSpaceGuid.PcdDisplayAudioHdaVerbTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
 
-  gBoardModuleTokenSpaceGuid.PcdAudioConnector
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdExtHdaVerbTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable3
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDisplayAudioHdaVerbTable
 
-  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdAudioConnector
+
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGraphicsVbtGuid
 
 [Guids]
   gFspNonVolatileStorageHobGuid                 ## CONSUMES

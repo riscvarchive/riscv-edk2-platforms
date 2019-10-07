@@ -1,7 +1,7 @@
 ## @file
 # Component information file for KabylakeRvp3InitLib in PEI post memory phase.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -42,14 +42,14 @@
 [FixedPcd]
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableSize
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableTouchPanel
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableTouchPanel
 
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTableSize
 
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable
 
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTableSize

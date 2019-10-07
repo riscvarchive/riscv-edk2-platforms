@@ -36,11 +36,11 @@
   KabylakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdPs2KbMsEnable
-  gBoardModuleTokenSpaceGuid.PcdPciExpNative
-  gBoardModuleTokenSpaceGuid.PcdNativeAspmEnable
-  gBoardModuleTokenSpaceGuid.PcdLowPowerS0Idle
-  gBoardModuleTokenSpaceGuid.PcdAcpiGnvsAddress
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPs2KbMsEnable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPciExpNative
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdNativeAspmEnable
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLowPowerS0Idle
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiGnvsAddress
 
 [Sources]
   DxeGalagoPro3AcpiTableLib.c

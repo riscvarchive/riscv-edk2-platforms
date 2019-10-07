@@ -129,7 +129,7 @@
   PlatformSecLib|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/SecFspWrapperPlatformSecLib/SecFspWrapperPlatformSecLib.inf
 
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   DxeTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/DxeTbtPolicyLib/DxeTbtPolicyLib.inf
   TbtCommonLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiDxeSmmTbtCommonLib/TbtCommonLib.inf
 !endif
@@ -175,7 +175,7 @@
   # Board Package
   #######################################
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   PeiDTbtInitLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/Private/PeiDTbtInitLib/PeiDTbtInitLib.inf
   PeiTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiTbtPolicyLib/PeiTbtPolicyLib.inf
 !endif
@@ -262,7 +262,7 @@
   $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
   $(PROJECT)/Override/Platform/Intel/MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
@@ -271,7 +271,7 @@
 
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPostMemLib.inf
@@ -295,7 +295,7 @@
   # Board Package
   #######################################
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
 
@@ -369,7 +369,7 @@
 
   $(PLATFORM_PACKAGE)/Acpi/AcpiSmm/AcpiSmm.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardAcpiEnableLib|$(PROJECT)/Library/BoardAcpiLib/SmmBoardAcpiEnableLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardAcpiLib/SmmMultiBoardAcpiSupportLib.inf
@@ -378,7 +378,7 @@
 
   $(PLATFORM_PACKAGE)/Acpi/AcpiTables/AcpiPlatform.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf
@@ -391,7 +391,7 @@
   # Board Package
   #######################################
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Smm/TbtSmm.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/PciHotPlug/PciHotPlug.inf
@@ -400,7 +400,7 @@
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   $(PLATFORM_BOARD_PACKAGE)/Acpi/BoardAcpiDxe/BoardAcpiDxe.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf

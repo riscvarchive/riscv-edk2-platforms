@@ -133,8 +133,8 @@ gMinPlatformPkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareOffset|gEfiMdeModulePkgTo
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 #NV_FTW_SPARE
 
-gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageOffset|gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageSize
-gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageBase|gBoardModuleTokenSpaceGuid.PcdFlashNvDebugMessageSize
+gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageOffset|gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageSize
+gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageBase|gKabylakeOpenBoardPkgTokenSpaceGuid.PcdFlashNvDebugMessageSize
 #DEBUG_MESSAGE_AREA
 
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize
@@ -621,7 +621,7 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = 6053D78A-457E-4490-A237-31D0FBE2F305
 
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
 INF $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
 
@@ -663,7 +663,7 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = 11F6E304-43F9-4B2F-90AB-B8FFEAD6205D
 
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
 INF  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf
 INF  $(PLATFORM_BOARD_PACKAGE)/Features/PciHotPlug/PciHotPlug.inf
 INF  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Smm/TbtSmm.inf

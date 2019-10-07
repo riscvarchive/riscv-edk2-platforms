@@ -35,17 +35,17 @@
   KabylakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress                      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioIndexPort                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioDataPort                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioIndexDefaultPort         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioDataDefaultPort          ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress                         ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioIndexPort          ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioDataPort           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioIndexDefaultPort   ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioDataDefaultPort    ## CONSUMES
 
 [FixedPcd]
-  gBoardModuleTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcIoDecodeRange               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PchLpcIoEnableDecoding            ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort  ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSioBaseAddress           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcIoDecodeRange         ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PchLpcIoEnableDecoding      ## CONSUMES
 
 [Sources]
   BasePlatformHookLib.c

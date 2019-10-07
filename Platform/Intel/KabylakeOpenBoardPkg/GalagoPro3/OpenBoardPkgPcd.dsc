@@ -168,8 +168,8 @@
   ######################################
   # Board Configuration
   ######################################
-  gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport|TRUE
-  gBoardModuleTokenSpaceGuid.PcdTbtEnable|FALSE
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport|TRUE
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable|FALSE
 
 [PcdsFixedAtBuild.common]
   ######################################
@@ -378,34 +378,34 @@
   ######################################
 
   # Thunderbolt Configuration
-  gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignature|0
-  gBoardModuleTokenSpaceGuid.PcdDTbtAcpiGpeSignaturePorting|0
-  gBoardModuleTokenSpaceGuid.PcdDTbtAspm|0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad|0x02010011
-  gBoardModuleTokenSpaceGuid.PcdDTbtControllerEn|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtControllerType|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad|13
-  gBoardModuleTokenSpaceGuid.PcdDTbtGpioAccessType|0x2
-  gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieExtraBusRsvd|56
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax|26
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemRsvd|100
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax|28
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd|100
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieRpNumber|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtSecurityMode|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtWin10Support|0x0
-  gBoardModuleTokenSpaceGuid.PcdExpander|0x0
-  gBoardModuleTokenSpaceGuid.PcdPchPcieRootPortHpe|0x00000001
-  gBoardModuleTokenSpaceGuid.PcdRtd3Tbt|0x1
-  gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
-  gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReqDelay|0x0
-  gBoardModuleTokenSpaceGuid.PcdRtd3TbtOffDelay|5000
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcpiGpeSignature|0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcpiGpeSignaturePorting|0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAspm|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad|0x02010011
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtControllerEn|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtControllerType|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtForcepowerGpioPad|13
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtGpioAccessType|0x2
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtGpioLevel|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotNotify|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotSMI|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieExtraBusRsvd|56
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax|26
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieMemRsvd|100
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax|28
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemRsvd|100
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieRpNumber|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtSecurityMode|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtSetClkReq|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtWin10Support|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdExpander|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPchPcieRootPortHpe|0x00000001
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3Tbt|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReqDelay|0x0
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtOffDelay|5000
 
 [PcdsDynamicHii.X64.DEFAULT]
   ######################################
