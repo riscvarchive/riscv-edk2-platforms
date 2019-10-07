@@ -49,7 +49,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 typedef enum {
   MV_PHY_DEVICE_1512,
-  MV_PHY_DEVICE_1112
+  MV_PHY_DEVICE_1112,
+  MV_PHY_DEVICE_ID_MAX
 } MV_PHY_DEVICE_ID;
 
 typedef

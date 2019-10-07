@@ -396,7 +396,7 @@ MvPhyInit (
   PHY_DEVICE *PhyDev;
   UINT8 *DeviceIds;
   UINT8 MdioIndex;
-  INTN i;
+  UINT8 PhyId;
 
   Status = gBS->LocateProtocol (
       &gMarvellMdioProtocolGuid,
@@ -415,6 +415,17 @@ MvPhyInit (
     return EFI_INVALID_PARAMETER;
   }
 
+  DeviceIds = PcdGetPtr (PcdPhyDeviceIds);
+  PhyId = DeviceIds[PhyIndex];
+  if (PhyId >= MV_PHY_DEVICE_ID_MAX) {
+    DEBUG ((DEBUG_ERROR,
+      "%a, Incorrect PHY ID (0x%x) for PHY#%d\n",
+      __FUNCTION__,
+      PhyId,
+      PhyIndex));
+    return EFI_INVALID_PARAMETER;
+  }
+
   /* perform setup common for all PHYs */
   PhyDev = AllocateZeroPool (sizeof (PHY_DEVICE));
   PhyDev->Addr = PhySmiAddresses[PhyIndex];
@@ -427,20 +438,7 @@ MvPhyInit (
     PhyConnection));
   *OutPhyDev = PhyDev;
 
-  DeviceIds = PcdGetPtr (PcdPhyDeviceIds);
-  for (i = 0; i < PcdGetSize (PcdPhyDeviceIds); i++) {
-    /* find MvPhyDevices fitting entry */
-    if (MvPhyDevices[i].DevId == DeviceIds[i]) {
-      ASSERT (MvPhyDevices[i].DevInit != NULL);
-      /* proceed with PHY-specific initialization */
-      return MvPhyDevices[i].DevInit (Snp, PhyDev);
-    }
-  }
-
-  /* if we are here, no matching DevId was found */
-  Status = EFI_INVALID_PARAMETER;
-  FreePool (PhyDev);
-  return Status;
+  return MvPhyDevices[PhyId].DevInit (Snp, PhyDev);
 }
 
 EFI_STATUS
