@@ -50,12 +50,12 @@
   LogoLib
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdEmuVariableEvent
-  gBoardModuleTokenSpaceGuid.PcdOvmfFlashVariablesEnable
-  gBoardModuleTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdEmuVariableEvent
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdOvmfFlashVariablesEnable
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut
-  gBoardModuleTokenSpaceGuid.PcdShellFile
-  gBoardModuleTokenSpaceGuid.PcdLogoFile
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdShellFile
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdLogoFile
 
 [Pcd.IA32, Pcd.X64]
   gEfiMdePkgTokenSpaceGuid.PcdFSBClock

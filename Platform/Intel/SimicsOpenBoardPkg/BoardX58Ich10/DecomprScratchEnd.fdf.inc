@@ -45,7 +45,7 @@
 # The total size after decompression is (128 + PcdSimicsPeiMemFvSize + 16 +
 # PcdSimicsDxeMemFvSize).
 
-DEFINE OUTPUT_SIZE = (128 + gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvSize + 16 + gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvSize)
+DEFINE OUTPUT_SIZE = (128 + gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvSize + 16 + gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvSize)
 
 # LzmaCustomDecompressLib uses a constant scratch buffer size of 64KB; see
 # SCRATCH_BUFFER_REQUEST_SIZE in
@@ -58,10 +58,10 @@ DEFINE DECOMP_SCRATCH_SIZE = 0x00010000
 #
 # The calculation below mirrors DecompressMemFvs() [SimicsX58Pkg/Sec/SecMain.c].
 
-DEFINE OUTPUT_BASE                   = ($(MEMFD_BASE_ADDRESS) + gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvBase + 0x00100000)
+DEFINE OUTPUT_BASE                   = ($(MEMFD_BASE_ADDRESS) + gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvBase + 0x00100000)
 DEFINE DECOMP_SCRATCH_BASE_UNALIGNED = ($(OUTPUT_BASE) + $(OUTPUT_SIZE))
 DEFINE DECOMP_SCRATCH_BASE_ALIGNMENT = 0x000FFFFF
 DEFINE DECOMP_SCRATCH_BASE_MASK      = 0xFFF00000
 DEFINE DECOMP_SCRATCH_BASE           = (($(DECOMP_SCRATCH_BASE_UNALIGNED) + $(DECOMP_SCRATCH_BASE_ALIGNMENT)) & $(DECOMP_SCRATCH_BASE_MASK))
 
-SET gBoardModuleTokenSpaceGuid.PcdSimicsDecompressionScratchEnd = $(DECOMP_SCRATCH_BASE) + $(DECOMP_SCRATCH_SIZE)
+SET gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDecompressionScratchEnd = $(DECOMP_SCRATCH_BASE) + $(DECOMP_SCRATCH_SIZE)

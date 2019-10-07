@@ -48,9 +48,9 @@
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecuritySize      ## CONSUMES
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedBase      ## CONSUMES
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvSize
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvSize
-  gBoardModuleTokenSpaceGuid.PcdSimicsDecompressionScratchEnd
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDecompressionScratchEnd
   gSimicsX58PkgTokenSpaceGuid.PcdSmmSmramRequire

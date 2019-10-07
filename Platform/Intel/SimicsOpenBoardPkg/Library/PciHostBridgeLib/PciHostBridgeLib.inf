@@ -41,11 +41,11 @@
   PciLib
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdPciIoBase
-  gBoardModuleTokenSpaceGuid.PcdPciIoSize
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Base
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Size
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Base
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Size
-  gBoardModuleTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Base
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Size
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Base
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Size
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciDisableBusEnumeration

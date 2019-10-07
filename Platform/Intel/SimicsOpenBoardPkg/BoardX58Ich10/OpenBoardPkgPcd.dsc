@@ -235,13 +235,13 @@
   ######################################
   # Board Configuration
   ######################################
-  gBoardModuleTokenSpaceGuid.PcdPciIoBase|0x0
-  gBoardModuleTokenSpaceGuid.PcdPciIoSize|0x0
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Base|0x0
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Size|0x0
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Base|0x0
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Size|0x800000000
-  gBoardModuleTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId|0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoBase|0x0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoSize|0x0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Base|0x0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Size|0x0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Base|0x0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Size|0x800000000
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId|0
 
   ######################################
   # Advanced Feature Configuration

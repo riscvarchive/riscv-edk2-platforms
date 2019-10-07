@@ -80,23 +80,23 @@ BlockSize     = 0x10000
 NumBlocks     = 0xB0
 
 0x000000|0x006000
-gBoardModuleTokenSpaceGuid.PcdSimicsSecPageTablesBase|gBoardModuleTokenSpaceGuid.PcdSimicsSecPageTablesSize
+gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPageTablesBase|gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPageTablesSize
 
 0x006000|0x001000
-gBoardModuleTokenSpaceGuid.PcdSimicsLockBoxStorageBase|gBoardModuleTokenSpaceGuid.PcdSimicsLockBoxStorageSize
+gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsLockBoxStorageBase|gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsLockBoxStorageSize
 
 0x007000|0x001000
-gEfiMdePkgTokenSpaceGuid.PcdGuidedExtractHandlerTableAddress|gBoardModuleTokenSpaceGuid.PcdGuidedExtractHandlerTableSize
+gEfiMdePkgTokenSpaceGuid.PcdGuidedExtractHandlerTableAddress|gSimicsOpenBoardPkgTokenSpaceGuid.PcdGuidedExtractHandlerTableSize
 
 0x010000|0x008000
-gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamBase|gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamSize
+gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamBase|gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamSize
 
 0x020000|0x0E0000
-gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvBase|gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvSize
+gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvBase|gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvSize
 FV = FvPreMemory
 
 0x100000|0xA00000
-gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvBase|gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvSize
+gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvBase|gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvSize
 FV = DXEFV
 
 ################################################################################

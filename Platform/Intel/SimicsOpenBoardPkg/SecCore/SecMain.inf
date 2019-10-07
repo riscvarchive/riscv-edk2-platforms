@@ -58,16 +58,16 @@
   gEfiTemporaryRamSupportPpiGuid                # PPI ALWAYS_PRODUCED
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvSize
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvSize
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPageTablesBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamBase
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPageTablesBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamBase
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamSize
   gEfiMdePkgTokenSpaceGuid.PcdGuidedExtractHandlerTableAddress
-  gBoardModuleTokenSpaceGuid.PcdGuidedExtractHandlerTableSize
-  gBoardModuleTokenSpaceGuid.PcdSimicsDecompressionScratchEnd
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdGuidedExtractHandlerTableSize
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDecompressionScratchEnd
 
 [FeaturePcd]
   gSimicsX58PkgTokenSpaceGuid.PcdSmmSmramRequire

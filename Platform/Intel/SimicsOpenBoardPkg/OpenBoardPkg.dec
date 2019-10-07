@@ -17,57 +17,57 @@
   Include
 
 [Guids]
-  gBoardModuleTokenSpaceGuid  = {0xeed35f57, 0x4ff2, 0x4244, {0xb8, 0x3a, 0xea, 0x71, 0x5f, 0xd3, 0x59, 0xa5}}
+  gSimicsOpenBoardPkgTokenSpaceGuid  = {0x75fd61da, 0x3931, 0x49aa, {0x8f, 0x11, 0x18, 0x25, 0xf6, 0x31, 0x21, 0xd2}}
   gSimicsBoardConfigGuid  = {0xeed35f57, 0x4ff2, 0x4244, {0xb8, 0x3a, 0xea, 0x71, 0x5f, 0xd3, 0x59, 0xa5}}
 
 [PcdsFixedAtBuild]
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvBase|0x0|UINT32|0
-  gBoardModuleTokenSpaceGuid.PcdSimicsPeiMemFvSize|0x0|UINT32|1
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvBase|0x0|UINT32|0x15
-  gBoardModuleTokenSpaceGuid.PcdSimicsDxeMemFvSize|0x0|UINT32|0x16
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvBase|0x0|UINT32|0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvSize|0x0|UINT32|1
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvBase|0x0|UINT32|0x15
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDxeMemFvSize|0x0|UINT32|0x16
 
   #TODO: Remove these two when we integrate new PlatformPei
-  gBoardModuleTokenSpaceGuid.PcdSimicsMemFvBase|0x00800000|UINT32|2
-  gBoardModuleTokenSpaceGuid.PcdSimicsMemFvSize|0x00500000|UINT32|3
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsMemFvBase|0x00800000|UINT32|2
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsMemFvSize|0x00500000|UINT32|3
 
-  gBoardModuleTokenSpaceGuid.PcdSimicsFlashNvStorageEventLogBase|0x0|UINT32|0x8
-  gBoardModuleTokenSpaceGuid.PcdSimicsFlashNvStorageEventLogSize|0x0|UINT32|0x9
-  gBoardModuleTokenSpaceGuid.PcdSimicsFirmwareFdSize|0x0|UINT32|0xa
-  gBoardModuleTokenSpaceGuid.PcdSimicsFirmwareBlockSize|0|UINT32|0xb
-  gBoardModuleTokenSpaceGuid.PcdSimicsFlashNvStorageVariableBase|0x0|UINT32|0xc
-  gBoardModuleTokenSpaceGuid.PcdSimicsFlashNvStorageFtwSpareBase|0x0|UINT32|0xd
-  gBoardModuleTokenSpaceGuid.PcdSimicsFlashNvStorageFtwWorkingBase|0x0|UINT32|0xe
-  gBoardModuleTokenSpaceGuid.PcdSimicsFdBaseAddress|0x0|UINT32|0xf
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPageTablesBase|0x0|UINT32|0x11
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPageTablesSize|0x0|UINT32|0x12
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamBase|0x0|UINT32|0x13
-  gBoardModuleTokenSpaceGuid.PcdSimicsSecPeiTempRamSize|0x0|UINT32|0x14
-  gBoardModuleTokenSpaceGuid.PcdSimicsLockBoxStorageBase|0x0|UINT32|0x18
-  gBoardModuleTokenSpaceGuid.PcdSimicsLockBoxStorageSize|0x0|UINT32|0x19
-  gBoardModuleTokenSpaceGuid.PcdGuidedExtractHandlerTableSize|0x0|UINT32|0x1a
-  gBoardModuleTokenSpaceGuid.PcdSimicsDecompressionScratchEnd|0x0|UINT32|0x1f
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFlashNvStorageEventLogBase|0x0|UINT32|0x8
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFlashNvStorageEventLogSize|0x0|UINT32|0x9
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFirmwareFdSize|0x0|UINT32|0xa
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFirmwareBlockSize|0|UINT32|0xb
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFlashNvStorageVariableBase|0x0|UINT32|0xc
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFlashNvStorageFtwSpareBase|0x0|UINT32|0xd
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFlashNvStorageFtwWorkingBase|0x0|UINT32|0xe
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsFdBaseAddress|0x0|UINT32|0xf
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPageTablesBase|0x0|UINT32|0x11
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPageTablesSize|0x0|UINT32|0x12
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamBase|0x0|UINT32|0x13
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsSecPeiTempRamSize|0x0|UINT32|0x14
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsLockBoxStorageBase|0x0|UINT32|0x18
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsLockBoxStorageSize|0x0|UINT32|0x19
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdGuidedExtractHandlerTableSize|0x0|UINT32|0x1a
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsDecompressionScratchEnd|0x0|UINT32|0x1f
 
 [PcdsDynamic, PcdsDynamicEx]
 
   # TODO: investigate whether next two Pcds are needed
-  gBoardModuleTokenSpaceGuid.PcdEmuVariableEvent|0|UINT64|0x28
-  gBoardModuleTokenSpaceGuid.PcdOvmfFlashVariablesEnable|FALSE|BOOLEAN|0x10
-  gBoardModuleTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId|0|UINT16|0x1b
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdEmuVariableEvent|0|UINT64|0x28
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdOvmfFlashVariablesEnable|FALSE|BOOLEAN|0x10
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsX58HostBridgePciDevId|0|UINT16|0x1b
 
   ## The IO port aperture shared by all PCI root bridges.
   #
-  gBoardModuleTokenSpaceGuid.PcdPciIoBase|0x0|UINT64|0x22
-  gBoardModuleTokenSpaceGuid.PcdPciIoSize|0x0|UINT64|0x23
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoBase|0x0|UINT64|0x22
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciIoSize|0x0|UINT64|0x23
 
   ## The 32-bit MMIO aperture shared by all PCI root bridges.
   #
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Base|0x0|UINT64|0x24
-  gBoardModuleTokenSpaceGuid.PcdPciMmio32Size|0x0|UINT64|0x25
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Base|0x0|UINT64|0x24
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio32Size|0x0|UINT64|0x25
 
   ## The 64-bit MMIO aperture shared by all PCI root bridges.
   #
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Base|0x0|UINT64|0x26
-  gBoardModuleTokenSpaceGuid.PcdPciMmio64Size|0x0|UINT64|0x27
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Base|0x0|UINT64|0x26
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdPciMmio64Size|0x0|UINT64|0x27
 
 [PcdsFixedAtBuild, PcdsDynamic, PcdsDynamicEx, PcdsPatchableInModule]
   ## Pcd8259LegacyModeMask defines the default mask value for platform. This value is determined<BR><BR>
@@ -131,7 +131,7 @@
 [PcdsFixedAtBuild, PcdsPatchableInModule]
   ## FFS filename to find the shell application.
   # @Prompt FFS Name of Shell Application
-  gBoardModuleTokenSpaceGuid.PcdShellFile|{ 0x83, 0xA5, 0x04, 0x7C, 0x3E, 0x9E, 0x1C, 0x4F, 0xAD, 0x65, 0xE0, 0x52, 0x68, 0xD0, 0xB4, 0xD1 }|VOID*|0x40000004
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdShellFile|{ 0x83, 0xA5, 0x04, 0x7C, 0x3E, 0x9E, 0x1C, 0x4F, 0xAD, 0x65, 0xE0, 0x52, 0x68, 0xD0, 0xB4, 0xD1 }|VOID*|0x40000004
 
   ## ISA Bus features to support DMA, SlaveDMA and ISA Memory. <BR><BR>
   #  BIT0 indicates if DMA is supported<BR>
@@ -140,10 +140,10 @@
   #  Other BITs are reseved and must be zero.
   #  If more than one features are supported, the different BIT will be enabled at the same time.
   # @Prompt ISA Bus Features
-  # @Expression 0x80000002 | (gBoardModuleTokenSpaceGuid.PcdIsaBusSupportedFeatures & 0xF8) == 0
-  gBoardModuleTokenSpaceGuid.PcdIsaBusSupportedFeatures|0x05|UINT8|0x00010040
+  # @Expression 0x80000002 | (gSimicsOpenBoardPkgTokenSpaceGuid.PcdIsaBusSupportedFeatures & 0xF8) == 0
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdIsaBusSupportedFeatures|0x05|UINT8|0x00010040
 
-  gBoardModuleTokenSpaceGuid.PcdLogoFile |{ 0x99, 0x8b, 0xB2, 0x7B, 0xBB, 0x61, 0xD5, 0x11, 0x9A, 0x5D, 0x00, 0x90, 0x27, 0x3F, 0xC1, 0x4D }|VOID*|0x00010037
+  gSimicsOpenBoardPkgTokenSpaceGuid.PcdLogoFile |{ 0x99, 0x8b, 0xB2, 0x7B, 0xBB, 0x61, 0xD5, 0x11, 0x9A, 0x5D, 0x00, 0x90, 0x27, 0x3F, 0xC1, 0x4D }|VOID*|0x00010037
 
 [Protocols]
   ##
