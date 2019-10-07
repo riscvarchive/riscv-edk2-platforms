@@ -1,22 +1,24 @@
 ## @file
-#  Platform description.
+#  PCD configuration build description file for the WhiskeylakeURvp board.
 #
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
 #
-#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
-#
-#  SPDX-License-Identifier: BSD-2-Clause-Patent
-#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
 
 ################################################################################
 #
-# Pcd Section - list of all EDK II PCD Entries defined by this Platform
+# Pcd Section - list of all PCD Entries used by this board.
 #
 ################################################################################
-[PcdsFixedAtBuild]
+
+[PcdsFixedAtBuild.common]
+  ######################################
+  # Key Boot Stage and FSP configuration
+  ######################################
   #
-  # Please select BootStage here.
+  # Please select the Boot Stage here.
   # Stage 1 - enable debug (system deadloop after debug init)
   # Stage 2 - mem init (system deadloop after mem init)
   # Stage 3 - boot to shell only
@@ -25,12 +27,112 @@
   #
   gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
 
+  #
+  # 0: FSP Wrapper is running in Dispatch mode.
+  # 1: FSP Wrapper is running in API mode.
+  # Note: Dispatch mode is currently NOT supported for this board.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection|1
+
+  #
+  # FALSE: The board is not a FSP wrapper (FSP binary not used)
+  # TRUE:  The board is a FSP wrapper (FSP binary is used)
+  #
+  gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode|TRUE
+
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0
+
+  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF00000
+  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
+  gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
+  gSiPkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
+  gSiPkgTokenSpaceGuid.PcdTsegSize|0x1000000
+
+  #
+  # FSP API mode does not share stack with the boot loader,
+  # so FSP needs more temporary memory for FSP heap + stack size.
+  #
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize|0x26000
+  #
+  # FSP API mode does not need to enlarge the boot loader stack size
+  # since the stacks are separate.
+  #
+  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
+  gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
+
 [PcdsFeatureFlag.common]
+  ######################################
+  # Edk2 Configuration
+  ######################################
+  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreImageLoaderSearchTeSectionFirst|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|FALSE
+!if $(TARGET) == RELEASE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
+!else
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
+!endif
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmProfileEnable|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
+
+  ######################################
+  # Silicon Configuration
+  ######################################
+  # Build switches
+  gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
+
+  # CPU
+  gSiPkgTokenSpaceGuid.PcdCflCpuEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSourceDebugEnable|FALSE
+
+  # SA
+  gSiPkgTokenSpaceGuid.PcdGnaEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdIgdEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdIpuEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdPegEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSgEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSaDmiEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSaOcEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdVtdEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdPeiDisplayEnable|TRUE
+
+  # ME
+  gSiPkgTokenSpaceGuid.PcdAtaEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdPttEnable|FALSE
+  gSiPkgTokenSpaceGuid.PcdJhiEnable|TRUE
+
+  # Others
+  gSiPkgTokenSpaceGuid.PcdAcpiEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdBdatEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdCpuPowerOnConfigEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdIntegratedTouchEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdOcWdtEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdOverclockEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdPpmEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdS3Enable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSerialIoUartEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|FALSE
+  gSiPkgTokenSpaceGuid.PcdSiCsmEnable|FALSE
+  gSiPkgTokenSpaceGuid.PcdSmbiosEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdSmmVariableEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdTraceHubEnable|TRUE
+  gSiPkgTokenSpaceGuid.PcdUseHpetTimer|TRUE   # TRUE - HPET / FALSE - 8254 timer is used.
+
+  ######################################
+  # Platform Configuration
+  ######################################
+  gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
-  gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
-  gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|FALSE
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 1
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|TRUE
@@ -55,192 +157,76 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|TRUE
 !endif
 
-  gBoardModuleTokenSpaceGuid.PcdTbtEnable|FALSE
-  #
-  # More fine granularity control below:
-  #
-
-  gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport|TRUE
-
-#
-# TRUE is ENABLE. FALSE is DISABLE.
-#
-#
-# BIOS build switches configuration
-#
-  gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
-
-# CPU
-  gSiPkgTokenSpaceGuid.PcdSourceDebugEnable|FALSE
-
-# SA
-  gSiPkgTokenSpaceGuid.PcdIgdEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdPegEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSgEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSaDmiEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSaOcEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdVtdEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdPeiDisplayEnable|TRUE
-
-# ME
-  gSiPkgTokenSpaceGuid.PcdAtaEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdPttEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdJhiEnable|TRUE
-
-  gSiPkgTokenSpaceGuid.PcdAcpiEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdBdatEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdIntegratedTouchEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdCpuPowerOnConfigEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSiCsmEnable|FALSE
-  gSiPkgTokenSpaceGuid.PcdTraceHubEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdOverclockEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdPpmEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdS3Enable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSmbiosEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSmmVariableEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdUseHpetTimer|TRUE                       # TRUE - HPET / FALSE - 8254 timer is used.
-  gSiPkgTokenSpaceGuid.PcdOcWdtEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|FALSE
-
-  gSiPkgTokenSpaceGuid.PcdSerialIoUartEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdCflCpuEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdIpuEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdGnaEnable|TRUE
-
-#
-# Override some PCDs for specific build requirements.
-#
-  #
-  # Disable USB debug message when Source Level Debug is enabled
-  # because they cannot be enabled at the same time.
-  #
-
-    gSiPkgTokenSpaceGuid.PcdPttEnable|FALSE
-
-  !if $(TARGET) == DEBUG
-    gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
-  !else
-    gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
-  !endif
-
-  !if $(TARGET) == DEBUG
-    gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|TRUE
-  !else
-    gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE
-  !endif
-
-    gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
-
-  #gEfiMdeModulePkgTokenSpaceGuid.PcdFrameworkCompatibilitySupport|TRUE
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreImageLoaderSearchTeSectionFirst|FALSE
-!if $(TARGET) == RELEASE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
+!if $(TARGET) == DEBUG
+  gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|TRUE
 !else
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
+  gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE
 !endif
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|FALSE
 
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmProfileEnable|FALSE
-
-  gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
-
+  ######################################
+  # Board Configuration
+  ######################################
   gBoardModuleTokenSpaceGuid.PcdIntelGopEnable|TRUE
+  gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport|TRUE
+  gBoardModuleTokenSpaceGuid.PcdTbtEnable|FALSE
 
 [PcdsFixedAtBuild.common]
-  gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode|TRUE
-
-!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
-  gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
-  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
-!endif
-
-!if gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
-!endif
-
-  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuThreadCount|2
-  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuCoreCount|8
-  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
-
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
-  gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
-  gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
-  gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
-  gSiPkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
-  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF00000
-  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
-
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize        | 0x00026000
-
-  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x5000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
-  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400
-
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdAriSupport|FALSE
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmApSyncTimeout|10000
+  ######################################
+  # Edk2 Configuration
+  ######################################
 !if $(TARGET) == RELEASE
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x0
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x3
 !else
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x2F
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
 !endif
-  gEfiMdeModulePkgTokenSpaceGuid.PcdLoadModuleAtFixAddressEnable|$(TOP_MEMORY_ADDRESS)
-  gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserSubtitleTextColor|0x0
-  gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserFieldTextColor|0x01
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmStackSize|0x20000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdReclaimVariableSpaceAtEndOfDxe|TRUE
-
-#
-# 8MB Default
-#
-gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
-
-#
-# 16MB TSEG in Debug build only.
-#
-!if $(TARGET) == DEBUG
-  gSiPkgTokenSpaceGuid.PcdTsegSize|0x1000000
+!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
+  gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
 !endif
 
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBusNumber|0x0
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciDeviceNumber|0x1F
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciFunctionNumber|0x2
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset|0x44
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAriSupport|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserFieldTextColor|0x01
+  gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserSubtitleTextColor|0x0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
+  gEfiMdeModulePkgTokenSpaceGuid.PcdLoadModuleAtFixAddressEnable|$(TOP_MEMORY_ADDRESS)
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400
+!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
+!endif
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x5000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdReclaimVariableSpaceAtEndOfDxe|TRUE
+!if gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
+!endif
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
+!if $(TARGET) == DEBUG
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
+!endif
+
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset|0x00
+  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBusNumber|0x0
+  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciDeviceNumber|0x1F
+  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciEnableRegisterOffset|0x44
+  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciFunctionNumber|0x2
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddress|0x1800
-  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiPm1TmrOffset|0x08
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPortBaseAddressMask|0xFFFC
+  gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiPm1TmrOffset|0x08
 
-  !if $(TARGET) == RELEASE
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
-  !else
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
-  !endif
+  # Specifies timeout value in microseconds for the BSP to detect all APs for the first time.
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuApInitTimeOutInMicroSeconds|1000
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmApSyncTimeout|10000
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmStackSize|0x20000
 
-
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
-  !if $(TARGET) == RELEASE
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
-  !else
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
-  !endif
-
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0xFFEAC000
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress|0xFFDC0000
+  #
+  # In non-FSP build (EDK2 build) or FSP API mode below PCD are FixedAtBuild
+  # (They will be DynamicEx in FSP Dispatch mode)
+  #
 
   ## Specifies the size of the microcode Region.
   # @Prompt Microcode Region size.
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize|0
-
-  ## Specifies timeout value in microseconds for the BSP to detect all APs for the first time.
-  # @Prompt Timeout for the BSP to detect all APs for the first time.
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuApInitTimeOutInMicroSeconds|1000
 
   ## Specifies the AP wait loop state during POST phase.
   #  The value is defined as below.
@@ -250,6 +236,17 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   # @Prompt The AP wait loop state.
   gUefiCpuPkgTokenSpaceGuid.PcdCpuApLoopMode|2
 
+  ######################################
+  # Silicon Configuration
+  ######################################
+  gSiPkgTokenSpaceGuid.PcdPciExpressRegionLength|gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength
+
+  ######################################
+  # Platform Configuration
+  ######################################
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuCoreCount|8
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuThreadCount|2
 
   #
   # The PCDs are used to control the Windows SMM Security Mitigations Table - Protection Flags
@@ -261,6 +258,19 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
   # BIT3-31: Reserved
   #
   gMinPlatformPkgTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
+
+!if $(TARGET) == RELEASE
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
+!else
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
+!endif
+
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
+!if $(TARGET) == RELEASE
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
+!else
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0xE0
+!endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 1
   gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
@@ -287,75 +297,98 @@ gSiPkgTokenSpaceGuid.PcdTsegSize|0x800000
 !endif
 
 [PcdsFixedAtBuild.IA32]
+  ######################################
+  # Edk2 Configuration
+  ######################################
   gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|0x0
   gIntelFsp2PkgTokenSpaceGuid.PcdGlobalDataPointerAddress|0xFED00148
-  gMinPlatformPkgTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
   gIntelFsp2WrapperTokenSpaceGuid.PcdPeiMinMemSize|0x3800000
 
+  ######################################
+  # Platform Configuration
+  ######################################
+  gMinPlatformPkgTokenSpaceGuid.PcdPeiPhaseStackTop|0xA0000
+
 [PcdsFixedAtBuild.X64]
+  ######################################
+  # Edk2 Configuration
+  ######################################
+
   # Default platform supported RFC 4646 languages: (American) English
   gEfiMdePkgTokenSpaceGuid.PcdUefiVariableDefaultPlatformLangCodes|"en-US"
 
-
 [PcdsPatchableInModule.common]
+  ######################################
+  # Edk2 Configuration
+  ######################################
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0208
   gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
 
+  ######################################
+  # Silicon Configuration
+  ######################################
 !if $(TARGET) == DEBUG
   gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable|1
 !endif
 
-[PcdsDynamicHii.X64.DEFAULT]
-  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
-  gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
-
-!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
-  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
-!endif
-
 [PcdsDynamicDefault]
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0xFFD50000
-  # Platform will pre-allocate UPD buffer and pass it to FspWrapper
-  # Those dummy address will be patched before FspWrapper executing
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress|0x0
-  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsUpdDataAddress|0x0
-
-  ## Specifies max supported number of Logical Processors.
-  # @Prompt Configure max supported number of Logical Processors
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|16
-
-[PcdsDynamicDefault.common.DEFAULT]
-  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0x0
-  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutRow|0x0
+  ######################################
+  # Edk2 Configuration
+  ######################################
   gEfiMdeModulePkgTokenSpaceGuid.PcdAtaSmartEnable|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdConInConnectOnDemand|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0x0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutRow|0x0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0
+
   #
   #  Set video to native resolution as Windows 8 WHCK requirement.
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|0x0
 
-  gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0
-
   gEfiSecurityPkgTokenSpaceGuid.PcdTpm2CurrentIrqNum|0x00
 
-[PcdsDynamicDefault.common.DEFAULT]
+  #
+  # FSP Base address PCD will be updated in FDF basing on flash map.
+  #
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress|0
 
-  # Tbt
-  gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel | 0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad | 13
-  gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad | 0x02010011
-  gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport | 0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI | 0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify | 0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq| 0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtAspm | 0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch | 0x0
+  # Platform will pre-allocate UPD buffer and pass it to FspWrapper
+  # Those dummy address will be patched before FspWrapper executing
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspmUpdDataAddress|0x0
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspsUpdDataAddress|0x0
 
-  gBoardModuleTokenSpaceGuid.PcdRtd3Tbt | 0x1
-  gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq | 0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax | 26
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd | 100
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax | 28
   gUefiCpuPkgTokenSpaceGuid.PcdCpuApTargetCstate|0
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|16
 
+  ######################################
+  # Board Configuration
+  ######################################
+
+  # Thunderbolt Configuration
+  gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
+  gBoardModuleTokenSpaceGuid.PcdDTbtAspm|0x0
+  gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad|0x02010011
+  gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad|13
+  gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel|0x1
+  gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify|0x1
+  gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI|0x1
+  gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax|26
+  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax|28
+  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd|100
+  gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq|0x1
+  gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
+  gBoardModuleTokenSpaceGuid.PcdRtd3Tbt|0x1
+  gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
+
+[PcdsDynamicHii.X64.DEFAULT]
+  ######################################
+  # Edk2 Configuration
+  ######################################
+  gEfiMdePkgTokenSpaceGuid.PcdHardwareErrorRecordLevel|L"HwErrRecSupport"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"HwErrRecSupport"
+!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
+!else
+  gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
+!endif
