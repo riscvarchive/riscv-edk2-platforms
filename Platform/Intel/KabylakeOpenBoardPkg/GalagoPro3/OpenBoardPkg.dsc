@@ -1,5 +1,5 @@
 ## @file
-#  System 76 GalagoPro3 board description file.
+#  The main build description file for the GalagoPro3 board.
 #
 # Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
 #
@@ -7,11 +7,6 @@
 #
 ##
 [Defines]
-  #
-  # Set platform specific package/folder name, same as passed from PREBUILD script.
-  # PLATFORM_PACKAGE would be the same as PLATFORM_NAME as well as package build folder
-  # DEFINE only takes effect at R9 DSC and FDF.
-  #
   DEFINE      PLATFORM_PACKAGE                = MinPlatformPkg
   DEFINE      PLATFORM_SI_PACKAGE             = KabylakeSiliconPkg
   DEFINE      PLATFORM_SI_BIN_PACKAGE         = KabylakeSiliconBinPkg
@@ -21,7 +16,7 @@
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
 
   #
-  # Platform On/Off features are defined here
+  # Include PCD configuration for this board.
   #
   !include OpenBoardPkgPcd.dsc
 
@@ -53,8 +48,7 @@
 
 ################################################################################
 #
-# SKU Identification section - list of all SKU IDs supported by this
-#                              Platform.
+# SKU Identification section - list of all SKU IDs supported by this board.
 #
 ################################################################################
 [SkuIds]
@@ -63,220 +57,261 @@
 
 ################################################################################
 #
-# Library Class section - list of all Library Classes needed by this Platform.
+# Includes section - other DSC file contents included for this board build.
 #
 ################################################################################
 
+#######################################
+# Library Includes
+#######################################
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreCommonLib.dsc
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiLib.dsc
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeLib.dsc
+!include $(PLATFORM_SI_PACKAGE)/SiPkgCommonLib.dsc
+!include $(PLATFORM_SI_PACKAGE)/SiPkgPeiLib.dsc
+!include $(PLATFORM_SI_PACKAGE)/SiPkgDxeLib.dsc
+
+#######################################
+# Component Includes
+#######################################
+[Components.IA32]
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
+!include $(PLATFORM_SI_PACKAGE)/SiPkgPei.dsc
+
+[Components.X64]
+!include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
+!include $(PLATFORM_SI_PACKAGE)/SiPkgDxe.dsc
+
+#######################################
+# Build Option Includes
+#######################################
+!include $(PLATFORM_SI_PACKAGE)/SiPkgBuildOption.dsc
+!include OpenBoardPkgBuildOption.dsc
+
+################################################################################
+#
+# Library Class section - list of all Library Classes needed by this board.
+#
+################################################################################
 
 [LibraryClasses.common]
-
-  PeiLib|$(PLATFORM_PACKAGE)/Library/PeiLib/PeiLib.inf
-  ReportFvLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/PeiReportFvLib/PeiReportFvLib.inf
-
-  PciHostBridgeLib|$(PLATFORM_PACKAGE)/Pci/Library/PciHostBridgeLibSimple/PciHostBridgeLibSimple.inf
-  PciSegmentInfoLib|$(PLATFORM_PACKAGE)/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
-  PlatformBootManagerLib|$(PLATFORM_PACKAGE)/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
-  I2cAccessLib|$(PLATFORM_BOARD_PACKAGE)/Library/PeiI2cAccessLib/PeiI2cAccessLib.inf
-  GpioExpanderLib|$(PLATFORM_BOARD_PACKAGE)/Library/BaseGpioExpanderLib/BaseGpioExpanderLib.inf
-
-  PlatformHookLib|$(PROJECT)/Library/BasePlatformHookLib/BasePlatformHookLib.inf
-
-  FspWrapperHobProcessLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperHobProcessLib/PeiFspWrapperHobProcessLib.inf
-  PlatformSecLib|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/SecFspWrapperPlatformSecLib/SecFspWrapperPlatformSecLib.inf
-
+  #######################################
+  # Edk2 Packages
+  #######################################
   FspWrapperApiLib|IntelFsp2WrapperPkg/Library/BaseFspWrapperApiLib/BaseFspWrapperApiLib.inf
   FspWrapperApiTestLib|IntelFsp2WrapperPkg/Library/PeiFspWrapperApiTestLib/PeiFspWrapperApiTestLib.inf
 
-  FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
-  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibFsp/PeiSiliconPolicyInitLibFsp.inf
-  SiliconPolicyUpdateLib|$(PROJECT)/FspWrapper/Library/PeiSiliconPolicyUpdateLibFsp/PeiSiliconPolicyUpdateLibFsp.inf
-
+  #######################################
+  # Silicon Initialization Package
+  #######################################
   ConfigBlockLib|$(PLATFORM_SI_PACKAGE)/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
   SiliconInitLib|$(PLATFORM_SI_PACKAGE)/Library/SiliconInitLib/SiliconInitLib.inf
+  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibFsp/PeiSiliconPolicyInitLibFsp.inf
 
+  #####################################
+  # Platform Package
+  #####################################
   BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/BoardInitLibNull/BoardInitLibNull.inf
+  FspWrapperHobProcessLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperHobProcessLib/PeiFspWrapperHobProcessLib.inf
+  FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
+  PciHostBridgeLib|$(PLATFORM_PACKAGE)/Pci/Library/PciHostBridgeLibSimple/PciHostBridgeLibSimple.inf
+  PciSegmentInfoLib|$(PLATFORM_PACKAGE)/Pci/Library/PciSegmentInfoLibSimple/PciSegmentInfoLibSimple.inf
+  PeiLib|$(PLATFORM_PACKAGE)/Library/PeiLib/PeiLib.inf
+  PlatformBootManagerLib|$(PLATFORM_PACKAGE)/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
+  ReportFvLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/PeiReportFvLib/PeiReportFvLib.inf
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLibNull/TestPointCheckLibNull.inf
 
-# Tbt
+  #######################################
+  # Board Package
+  #######################################
+  GpioExpanderLib|$(PLATFORM_BOARD_PACKAGE)/Library/BaseGpioExpanderLib/BaseGpioExpanderLib.inf
+  I2cAccessLib|$(PLATFORM_BOARD_PACKAGE)/Library/PeiI2cAccessLib/PeiI2cAccessLib.inf
+  PlatformSecLib|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/SecFspWrapperPlatformSecLib/SecFspWrapperPlatformSecLib.inf
+
+  # Thunderbolt
 !if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
-  TbtCommonLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiDxeSmmTbtCommonLib/TbtCommonLib.inf
   DxeTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/DxeTbtPolicyLib/DxeTbtPolicyLib.inf
+  TbtCommonLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiDxeSmmTbtCommonLib/TbtCommonLib.inf
 !endif
-#
-# Silicon Init Package
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgCommonLib.dsc
+
+  #######################################
+  # Board-specific
+  #######################################
+  PlatformHookLib|$(PROJECT)/Library/BasePlatformHookLib/BasePlatformHookLib.inf
+  SiliconPolicyUpdateLib|$(PROJECT)/FspWrapper/Library/PeiSiliconPolicyUpdateLibFsp/PeiSiliconPolicyUpdateLibFsp.inf
 
 [LibraryClasses.IA32.SEC]
-  SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
-  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SecTestPointCheckLib.inf
-  SecBoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/SecBoardInitLibNull/SecBoardInitLibNull.inf
-
-[LibraryClasses.IA32]
-  #
-  # PEI phase common
-  #
   SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  SecBoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/SecBoardInitLibNull/SecBoardInitLibNull.inf
+  TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SecTestPointCheckLib.inf
+
+[LibraryClasses.common.PEIM]
+  #######################################
+  # Edk2 Packages
+  #######################################
   DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+  SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
   FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
+  MultiBoardInitSupportLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
+  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/PeiTestPointLib.inf
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
 !endif
-  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/PeiTestPointLib.inf
-  MultiBoardInitSupportLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
-  BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
 
-# Tbt
+  #######################################
+  # Board Package
+  #######################################
+  # Thunderbolt
 !if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
-  PeiTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiTbtPolicyLib/PeiTbtPolicyLib.inf
   PeiDTbtInitLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/Private/PeiDTbtInitLib/PeiDTbtInitLib.inf
+  PeiTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiTbtPolicyLib/PeiTbtPolicyLib.inf
 !endif
-#
-# Silicon Init Package
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgPeiLib.dsc
 
-[LibraryClasses.X64]
-  #
-  # DXE phase common
-  #
+[LibraryClasses.common.DXE_DRIVER]
+  #######################################
+  # Silicon Initialization Package
+  #######################################
+  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/DxeSiliconPolicyInitLib/DxeSiliconPolicyInitLib.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  BoardAcpiTableLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/DxeMultiBoardAcpiSupportLib.inf
+  BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/DxeMultiBoardInitSupportLib.inf
   FspWrapperPlatformLib|$(PLATFORM_PACKAGE)/FspWrapper/Library/DxeFspWrapperPlatformLib/DxeFspWrapperPlatformLib.inf
+  MultiBoardAcpiSupportLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/DxeMultiBoardAcpiSupportLib.inf
+  MultiBoardInitSupportLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/DxeMultiBoardInitSupportLib.inf
+  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/DxeTestPointLib.inf
+
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/DxeTestPointCheckLib.inf
 !endif
-  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/DxeTestPointLib.inf
-  MultiBoardInitSupportLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/DxeMultiBoardInitSupportLib.inf
-  BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/DxeMultiBoardInitSupportLib.inf
-  MultiBoardAcpiSupportLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/DxeMultiBoardAcpiSupportLib.inf
-  BoardAcpiTableLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/DxeMultiBoardAcpiSupportLib.inf
 
-  SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/DxeSiliconPolicyInitLib/DxeSiliconPolicyInitLib.inf
+  #######################################
+  # Board-specific
+  #######################################
   SiliconPolicyUpdateLib|$(PROJECT)/Policy/Library/DxeSiliconPolicyUpdateLib/DxeSiliconPolicyUpdateLib.inf
 
-#
-# Silicon Init Package
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgDxeLib.dsc
+[LibraryClasses.X64.DXE_RUNTIME_DRIVER]
+  #######################################
+  # Silicon Initialization Package
+  #######################################
+  ResetSystemLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/DxeRuntimeResetSystemLib/DxeRuntimeResetSystemLib.inf
 
 [LibraryClasses.X64.DXE_SMM_DRIVER]
+  #######################################
+  # Silicon Initialization Package
+  #######################################
   SpiFlashCommonLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/SmmSpiFlashCommonLib/SmmSpiFlashCommonLib.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  BoardAcpiEnableLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/SmmMultiBoardAcpiSupportLib.inf
+  MultiBoardAcpiSupportLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/SmmMultiBoardAcpiSupportLib.inf
+  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/SmmTestPointLib.inf
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SmmTestPointCheckLib.inf
 !endif
-  TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/SmmTestPointLib.inf
-  MultiBoardAcpiSupportLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/SmmMultiBoardAcpiSupportLib.inf
-  BoardAcpiEnableLib|$(PLATFORM_PACKAGE)/Acpi/Library/MultiBoardAcpiSupportLib/SmmMultiBoardAcpiSupportLib.inf
-
-[LibraryClasses.X64.DXE_RUNTIME_DRIVER]
-  ResetSystemLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/DxeRuntimeResetSystemLib/DxeRuntimeResetSystemLib.inf
 
 [Components.IA32]
+  #######################################
+  # Edk2 Packages
+  #######################################
+  UefiCpuPkg/SecCore/SecCore.inf {
+    <LibraryClasses>
+      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+  }
 
-#
-# Common
-#
-!include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
-
-  #
-  # Core
-  #
   MdeModulePkg/Universal/StatusCodeHandler/Pei/StatusCodeHandlerPei.inf {
     <LibraryClasses>
       DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
   }
 
-  #
-  # FSP wrapper SEC Core
-  #
-  UefiCpuPkg/SecCore/SecCore.inf {
-    <LibraryClasses>
-      #PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
-      PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
-  }
-
-#
-# Silicon
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgPei.dsc
-
-#
-# Platform
-#
-  $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
-  $(PROJECT)/Override/Platform/Intel/MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
-    <LibraryClasses>
-!if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
-      BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
-!else
-      NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
-!endif
-  }
   IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf {
     <LibraryClasses>
       SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPreMemSiliconPolicyInitLibDependency.inf
   }
-  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf{
-    <LibraryClasses>
-  #  #
-    # Hook a library constructor to update some policy fields when policy installed.
-    #
-    NULL|$(PROJECT)/FspWrapper/Library/PeiSiliconPolicyNotifyLib/PeiPreMemSiliconPolicyNotifyLib.inf
-  }
-
-  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
-    <LibraryClasses>
-!if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
-      BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
-!else
-      NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPostMemLib.inf
-!endif
-  }
-
   IntelFsp2WrapperPkg/FspsWrapperPeim/FspsWrapperPeim.inf {
     <LibraryClasses>
       SiliconPolicyInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconPolicyInitLibDependency/PeiPostMemSiliconPolicyInitLibDependency.inf
   }
-  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
 
-#
-# Security
-#
+  #######################################
+  # Silicon Initialization Package
+  #######################################
+  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
+  IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
+  $(PROJECT)/Override/Platform/Intel/MinPlatformPkg/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
+    <LibraryClasses>
+      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+        BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
+      !else
+        NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
+      !endif
+  }
+
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
+    <LibraryClasses>
+      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+        BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
+      !else
+        NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPostMemLib.inf
+      !endif
+  }
+
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf {
+    <LibraryClasses>
+    #
+    # Hook a library constructor to update some policy fields when policy is installed.
+    #
+    NULL|$(PROJECT)/FspWrapper/Library/PeiSiliconPolicyNotifyLib/PeiPreMemSiliconPolicyNotifyLib.inf
+  }
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPostMem.inf
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
-  IntelSiliconPkg/Feature/VTd/IntelVTdPmrPei/IntelVTdPmrPei.inf
-  IntelSiliconPkg/Feature/VTd/PlatformVTdInfoSamplePei/PlatformVTdInfoSamplePei.inf
-
-# Tbt
+  #######################################
+  # Board Package
+  #######################################
+  # Thunderbolt
 !if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
 
 [Components.X64]
-
-#
-# Common
-#
-!include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
-
-  UefiCpuPkg/CpuDxe/CpuDxe.inf
-  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
-
-  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
-  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
+  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
-  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
   MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
+  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
+  UefiCpuPkg/CpuDxe/CpuDxe.inf
 
-  #
-  # Shell
-  #
   ShellPkg/Application/Shell/Shell.inf {
    <PcdsFixedAtBuild>
      gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
@@ -296,88 +331,79 @@
      ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   }
 
-#
-# Silicon
-#
-!include $(PLATFORM_SI_PACKAGE)/SiPkgDxe.dsc
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf {
+    <PcdsPatchableInModule>
+      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080046
+    <LibraryClasses>
+      !if $(TARGET) == DEBUG
+        DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+      !endif
+  }
+!endif
 
-# Tbt
+  #######################################
+  # Silicon Initialization Package
+  #######################################
+  IntelSiliconPkg/Feature/VTd/IntelVTdDxe/IntelVTdDxe.inf
+  $(PLATFORM_SI_BIN_PACKAGE)/Microcode/MicrocodeUpdates.inf
+
+  #######################################
+  # Platform Package
+  #######################################
+  $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
+  $(PLATFORM_PACKAGE)/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
+  $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
+  $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
+  $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
+!endif
+
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+
+  $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
+  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
+
+  $(PLATFORM_PACKAGE)/Acpi/AcpiSmm/AcpiSmm.inf {
+    <LibraryClasses>
+      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+        BoardAcpiEnableLib|$(PROJECT)/Library/BoardAcpiLib/SmmBoardAcpiEnableLib.inf
+      !else
+        NULL|$(PROJECT)/Library/BoardAcpiLib/SmmMultiBoardAcpiSupportLib.inf
+      !endif
+  }
+
+  $(PLATFORM_PACKAGE)/Acpi/AcpiTables/AcpiPlatform.inf {
+    <LibraryClasses>
+      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+        BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
+      !else
+        NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf
+      !endif
+  }
+
+!endif
+
+  #######################################
+  # Board Package
+  #######################################
+  # Thunderbolt
 !if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Smm/TbtSmm.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/PciHotPlug/PciHotPlug.inf
 !endif
 
-#
-# Platform
-#
-  $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyDxe/SiliconPolicyDxe.inf
-  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitDxe/PlatformInitDxe.inf
-  IntelFsp2WrapperPkg/FspWrapperNotifyDxe/FspWrapperNotifyDxe.inf
-
-  $(PLATFORM_PACKAGE)/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf
-
-  $(PLATFORM_PACKAGE)/Test/TestPointStubDxe/TestPointStubDxe.inf
-  $(PLATFORM_PACKAGE)/Test/TestPointDumpApp/TestPointDumpApp.inf
-
-#
-# OS Boot
-#
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
-  $(PLATFORM_PACKAGE)/Acpi/AcpiTables/AcpiPlatform.inf {
-    <LibraryClasses>
-!if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
-      BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
-!else
-      NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf
-!endif
-  }
   $(PLATFORM_BOARD_PACKAGE)/Acpi/BoardAcpiDxe/BoardAcpiDxe.inf {
     <LibraryClasses>
-!if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
-      BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
-!else
-      NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf
-!endif
+      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+        BoardAcpiTableLib|$(PROJECT)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
+      !else
+        NULL|$(PROJECT)/Library/BoardAcpiLib/DxeMultiBoardAcpiSupportLib.inf
+      !endif
   }
-  $(PLATFORM_PACKAGE)/Acpi/AcpiSmm/AcpiSmm.inf {
-    <LibraryClasses>
-!if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
-      BoardAcpiEnableLib|$(PROJECT)/Library/BoardAcpiLib/SmmBoardAcpiEnableLib.inf
-!else
-      NULL|$(PROJECT)/Library/BoardAcpiLib/SmmMultiBoardAcpiSupportLib.inf
 !endif
-  }
-
-  $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
-  $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
-
-  UefiCpuPkg/PiSmmCpuDxeSmm/PiSmmCpuDxeSmm.inf {
-    <PcdsPatchableInModule>
-      gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80080046
-    <LibraryClasses>
-!if $(TARGET) == DEBUG
-      DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
-!endif
-  }
-
-!endif
-
-#
-# Security
-#
-  $(PLATFORM_PACKAGE)/Hsti/HstiIbvPlatformDxe/HstiIbvPlatformDxe.inf
-
-!if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
-  $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformDxe/Tcg2PlatformDxe.inf
-!endif
-
-  IntelSiliconPkg/Feature/VTd/IntelVTdDxe/IntelVTdDxe.inf
-
-#
-# Other
-#
-  $(PLATFORM_SI_BIN_PACKAGE)/Microcode/MicrocodeUpdates.inf
-
-!include $(PLATFORM_SI_PACKAGE)/SiPkgBuildOption.dsc
-!include OpenBoardPkgBuildOption.dsc
