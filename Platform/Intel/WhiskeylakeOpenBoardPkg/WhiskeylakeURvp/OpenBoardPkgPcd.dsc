@@ -166,9 +166,9 @@
   ######################################
   # Board Configuration
   ######################################
-  gBoardModuleTokenSpaceGuid.PcdIntelGopEnable|TRUE
-  gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport|TRUE
-  gBoardModuleTokenSpaceGuid.PcdTbtEnable|FALSE
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdIntelGopEnable|TRUE
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport|TRUE
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable|FALSE
 
 [PcdsFixedAtBuild.common]
   ######################################
@@ -367,20 +367,20 @@
   ######################################
 
   # Thunderbolt Configuration
-  gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtAspm|0x0
-  gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad|0x02010011
-  gBoardModuleTokenSpaceGuid.PcdDTbtForcepowerGpioPad|13
-  gBoardModuleTokenSpaceGuid.PcdDTbtGpioLevel|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax|26
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax|28
-  gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd|100
-  gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq|0x1
-  gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
-  gBoardModuleTokenSpaceGuid.PcdRtd3Tbt|0x1
-  gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAspm|0x0
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad|0x02010011
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtForcepowerGpioPad|13
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtGpioLevel|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotNotify|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotSMI|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax|26
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax|28
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemRsvd|100
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtSetClkReq|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3Tbt|0x1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
 
 [PcdsDynamicHii.X64.DEFAULT]
   ######################################

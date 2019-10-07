@@ -59,10 +59,10 @@
   PcdLib
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdHdaVerbTable2               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdExtHdaVerbTable             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable1         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable2         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdCommonHdaVerbTable3         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdDisplayAudioHdaVerbTable    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdHdaVerbTable2               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdExtHdaVerbTable             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable1         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable2         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdCommonHdaVerbTable3         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDisplayAudioHdaVerbTable    ## CONSUMES

@@ -40,19 +40,19 @@
 
 
 [Pcd]
-gBoardModuleTokenSpaceGuid.PcdDTbtSecurityMode           ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtWakeupSupport       ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtHotSMI              ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtHotNotify           ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtSetClkReq           ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtAspm                ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtAcDcSwitch          ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdRtd3Tbt                ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdRtd3TbtClkReq          ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax  ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemRsvd       ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax ## CONSUMES
-gBoardModuleTokenSpaceGuid.PcdDTbtPcieRpNumber
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtSecurityMode        ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtWakeupSupport       ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotSMI              ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtHotNotify           ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtSetClkReq           ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAspm                ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcDcSwitch          ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3Tbt                 ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReq           ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieMemAddrRngMax   ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemRsvd        ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPciePMemAddrRngMax  ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtPcieRpNumber
 
 [Sources]
   TbtCommonLib.c

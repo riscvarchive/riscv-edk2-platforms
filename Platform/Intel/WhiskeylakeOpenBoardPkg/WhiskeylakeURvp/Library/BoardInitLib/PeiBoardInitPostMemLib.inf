@@ -42,14 +42,14 @@
   GpioTableWhiskeylakeUDdr4Rvp.c
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableSize
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableTouchPanel
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableTouchPanel
 
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTableSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTableSize
 
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTable
-  gBoardModuleTokenSpaceGuid.PcdBoardUcmcGpioTableSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTable
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTableSize
 
   gEfiSecurityPkgTokenSpaceGuid.PcdTpm2CurrentIrqNum

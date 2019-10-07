@@ -71,174 +71,174 @@
   gPlatformModuleTokenSpaceGuid.PcdGmAdrAddress      ## CONSUMES
   gPlatformModuleTokenSpaceGuid.PcdEdramBaseAddress  ## CONSUMES
   gSiPkgTokenSpaceGuid.PcdSmbusBaseAddress           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardBomId           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent
-  gBoardModuleTokenSpaceGuid.PcdSaDdrFreqLimit       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardBomId           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdIoExpanderPresent
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaDdrFreqLimit       ## CONSUMES
 
   # SA Misc Config
-  gBoardModuleTokenSpaceGuid.PcdSaMiscUserBd                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSaMiscMmioSizeAdjustment       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompResistor               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMapSize               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram              ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize          ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleavedControl    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqPinsInterleaved           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdData                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaMiscUserBd                   ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaMiscMmioSizeAdjustment       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap                   ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMapSize               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize          ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqPinsInterleavedControl    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqPinsInterleaved           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdData                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdDataSize                 ## CONSUMES
 
   # Display DDI
-  gBoardModuleTokenSpaceGuid.PcdSaDisplayConfigTable           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSaDisplayConfigTableSize       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaDisplayConfigTable           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaDisplayConfigTableSize       ## CONSUMES
 
   # PEG Reset By GPIO
-  gBoardModuleTokenSpaceGuid.PcdPegGpioResetControl            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPegGpioResetSupoort            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPeg0ResetGpioPad               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPeg0ResetGpioActive            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPeg3ResetGpioPad               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPeg3ResetGpioActive            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPegGpioResetControl            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPegGpioResetSupoort            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPeg0ResetGpioPad               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPeg0ResetGpioActive            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPeg3ResetGpioPad               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPeg3ResetGpioActive            ## CONSUMES
 
   # PCIE RTD3 GPIO
-  gBoardModuleTokenSpaceGuid.PcdRootPortDev                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdRootPortFunc                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdRootPortIndex                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRootPortDev                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRootPortFunc                   ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRootPortIndex                  ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdPcie0GpioSupport               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0WakeGpioNo                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0HoldRstExpanderNo         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0HoldRstGpioNo             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0HoldRstActive             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0PwrEnableExpanderNo       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0PwrEnableGpioNo           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie0PwrEnableActive           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0GpioSupport               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0WakeGpioNo                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstExpanderNo         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstGpioNo             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstActive             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableExpanderNo       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableGpioNo           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableActive           ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdPcie1GpioSupport               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1WakeGpioNo                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1HoldRstExpanderNo         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1HoldRstGpioNo             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1HoldRstActive             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1PwrEnableExpanderNo       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1PwrEnableGpioNo           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie1PwrEnableActive           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1GpioSupport               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1WakeGpioNo                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1HoldRstExpanderNo         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1HoldRstGpioNo             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1HoldRstActive             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1PwrEnableExpanderNo       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1PwrEnableGpioNo           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie1PwrEnableActive           ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdPcie2GpioSupport               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2WakeGpioNo                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2HoldRstExpanderNo         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2HoldRstGpioNo             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2HoldRstActive             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2PwrEnableExpanderNo       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2PwrEnableGpioNo           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie2PwrEnableActive           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2GpioSupport               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2WakeGpioNo                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2HoldRstExpanderNo         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2HoldRstGpioNo             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2HoldRstActive             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2PwrEnableExpanderNo       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2PwrEnableGpioNo           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie2PwrEnableActive           ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdPcie3GpioSupport               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3WakeGpioNo                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3HoldRstExpanderNo         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3HoldRstGpioNo             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3HoldRstActive             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3PwrEnableExpanderNo       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3PwrEnableGpioNo           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcie3PwrEnableActive           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3GpioSupport               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3WakeGpioNo                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3HoldRstExpanderNo         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3HoldRstGpioNo             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3HoldRstActive             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3PwrEnableExpanderNo       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3PwrEnableGpioNo           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcie3PwrEnableActive           ## CONSUMES
 
   # SPD Address Table
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable1            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable2            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3            ## CONSUMES
 
   # CA Vref Configuration
-  gBoardModuleTokenSpaceGuid.PcdMrcCaVrefConfig                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdDualDimmPerChannelBoardType    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMobileDramPresent              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcCaVrefConfig                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDualDimmPerChannelBoardType    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMobileDramPresent              ## CONSUMES
 
   # PCIe Clock Info
-  gBoardModuleTokenSpaceGuid.PcdPcieClock0                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock1                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock2                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock3                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock4                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock5                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock6                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock7                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock8                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock9                     ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock10                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock11                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock12                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock13                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock14                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPcieClock15                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock0                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock1                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock2                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock3                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock4                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock5                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock6                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock7                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock8                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock9                     ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock10                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock11                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock12                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock13                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock14                    ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieClock15                    ## CONSUMES
 
   # USB 2.0 Port AFE
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port0Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port1Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port2Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port3Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port4Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port5Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port6Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port7Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port8Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port9Afe                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port10Afe                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port11Afe                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port12Afe                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port13Afe                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port14Afe                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20Port15Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port0Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port1Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port2Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port3Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port4Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port5Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port6Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port7Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port8Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port9Afe                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port10Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port11Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port12Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port13Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port14Afe                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20Port15Afe                 ## CONSUMES
 
   # USB 2.0 Port Over Current Pin
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort0       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort1       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort2       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort3       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort4       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort5       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort6       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort7       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort8       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort9       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort10      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort11      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort12      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort13      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort14      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb20OverCurrentPinPort15      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort0       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort1       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort2       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort3       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort4       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort5       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort6       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort7       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort8       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort9       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort10      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort11      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort12      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort13      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort14      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb20OverCurrentPinPort15      ## CONSUMES
 
   # USB 3.0 Port Over Current Pin
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort0       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort1       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort2       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort3       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort4       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort5       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort6       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort7       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort8       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdUsb30OverCurrentPinPort9       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort0       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort1       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort2       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort3       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort4       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort5       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort6       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort7       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort8       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort9       ## CONSUMES
 
   # Pch SerialIo I2c Pads Termination
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c0PadInternalTerm ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c1PadInternalTerm ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c2PadInternalTerm ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c3PadInternalTerm ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c4PadInternalTerm ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchSerialIoI2c5PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c0PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c1PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c2PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c3PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c4PadInternalTerm ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchSerialIoI2c5PadInternalTerm ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdEcPresent
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdEcPresent
 
-  gIntelSiliconPkgTokenSpaceGuid.PcdIntelGraphicsVbtFileGuid   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSmbusAlertEnable               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSataLedEnable                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdVrAlertEnable                  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSlpS0VmRuntimeControl          ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSlpS0Vm070VSupport             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSlpS0Vm075VSupport             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPchThermalHotEnable            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMemoryThermalSensorGpioCPmsyncEnable  ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMemoryThermalSensorGpioDPmsyncEnable  ## CONSUMES
+  gIntelSiliconPkgTokenSpaceGuid.PcdIntelGraphicsVbtFileGuid               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSmbusAlertEnable               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSataLedEnable                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdVrAlertEnable                  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSlpS0VmRuntimeControl          ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSlpS0Vm070VSupport             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSlpS0Vm075VSupport             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPchThermalHotEnable            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMemoryThermalSensorGpioCPmsyncEnable  ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMemoryThermalSensorGpioDPmsyncEnable  ## CONSUMES
   gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid   ## CONSUMES
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber           ## CONSUMES
 

@@ -38,7 +38,7 @@
   CoffeelakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
 
 [Protocols]
 

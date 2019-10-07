@@ -75,17 +75,17 @@
 [Pcd]
   gSiPkgTokenSpaceGuid.PcdTsegSize
   gSiPkgTokenSpaceGuid.PcdSmbusBaseAddress
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompResistor               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMapSize               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram              ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize          ## CONSUMES
-  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase              ## CONSUMES
-  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize              ## CONSUMES
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize           ## CONSUMES
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspReservedBufferSize         ## CONSUMES
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuApLoopMode                   ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor        ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget          ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMapSize        ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize   ## CONSUMES
+  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase                   ## CONSUMES
+  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize                   ## CONSUMES
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize                ## CONSUMES
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspReservedBufferSize              ## CONSUMES
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuApLoopMode                        ## CONSUMES
 
 [Ppis]
   gSiPolicyPpiGuid                        ## CONSUMES

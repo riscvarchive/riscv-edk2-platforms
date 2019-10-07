@@ -37,7 +37,7 @@ GpioLib
   IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Pcd]
-gBoardModuleTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad    ## CONSUMES
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtCioPlugEventGpioPad    ## CONSUMES
 
 [Sources]
 PeiTbtPolicyLib.c

@@ -37,16 +37,16 @@
 
 [Pcd]
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioIndexPort                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioDataPort                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioIndexPort       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioDataPort        ## CONSUMES
   gPlatformModuleTokenSpaceGuid.PcdDesktopLpcSioDataDefaultPort   ## CONSUMES
   gPlatformModuleTokenSpaceGuid.PcdDesktopLpcSioIndexDefaultPort  ## CONSUMES
 
 [FixedPcd]
-  gBoardModuleTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcIoDecodeRange               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PchLpcIoEnableDecoding            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcIoDecodeRange               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PchLpcIoEnableDecoding            ## CONSUMES
 
 [Sources]
   BasePlatformHookLib.c

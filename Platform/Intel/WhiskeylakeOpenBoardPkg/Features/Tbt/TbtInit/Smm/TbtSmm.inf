@@ -45,7 +45,7 @@
   CoffeelakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-#  gBoardModuleTokenSpaceGuid.PcdSwSmiDTbtEnumerate ## CONSUMES
+#  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSwSmiDTbtEnumerate ## CONSUMES
   gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength      ## CONSUMES
 
 [FixedPcd]

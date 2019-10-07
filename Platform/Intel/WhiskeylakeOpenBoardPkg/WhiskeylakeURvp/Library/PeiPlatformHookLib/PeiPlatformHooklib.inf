@@ -40,45 +40,45 @@
   CoffeelakeSiliconPkg/SiPkg.dec
 
 [Pcd]
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdDebugUsbUartEnable                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMipiCamGpioEnable                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable                    ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableSize                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable2                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTable2Size               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable                 ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTableSize             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable2                ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioExpanderTable2Size            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableTouchPanel          ## CONSUMES
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress                        ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort        ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSioBaseAddress                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdIoExpanderPresent              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDebugUsbUartEnable             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMipiCamGpioEnable              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable                 ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableSize             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable2                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable2Size            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTableSize          ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable2             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioExpanderTable2Size         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableTouchPanel       ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTablePreMem
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTablePreMemSize
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableWwanOnEarlyPreMem
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableWwanOnEarlyPreMemSize
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableWwanOffEarlyPreMem
-  gBoardModuleTokenSpaceGuid.PcdBoardGpioTableWwanOffEarlyPreMemSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTablePreMem
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTablePreMemSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableWwanOnEarlyPreMem
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableWwanOnEarlyPreMemSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableWwanOffEarlyPreMem
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTableWwanOffEarlyPreMemSize
 
   # GPIO Group Tier
-  gBoardModuleTokenSpaceGuid.PcdGpioGroupToGpeDw0              ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioGroupToGpeDw1              ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdGpioGroupToGpeDw2              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioGroupToGpeDw0              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioGroupToGpeDw1              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGpioGroupToGpeDw2              ## CONSUMES
 
   # Misc
-  gBoardModuleTokenSpaceGuid.PcdIoExpanderPresent              ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdPc8374SioKbcPresent            ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdOddPowerInitEnable             ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdIvCamInitPresent               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdRecoveryModeGpio               ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdCpuVboostEnable                ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdIoExpanderPresent              ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPc8374SioKbcPresent            ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdOddPowerInitEnable             ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdIvCamInitPresent               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRecoveryModeGpio               ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdCpuVboostEnable                ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdWwanBbrstGpio
-  gBoardModuleTokenSpaceGuid.PcdPcieWwanEnable
-  gBoardModuleTokenSpaceGuid.PcdWwanResetWorkaround
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdWwanBbrstGpio
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdPcieWwanEnable
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdWwanResetWorkaround
 
 [Sources]
   PeiPlatformHooklib.c

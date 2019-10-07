@@ -90,45 +90,45 @@
   PeiLib
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdData
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdDataSize
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdData
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdDataSize
 
 
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress      ## CONSUMES
-  gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable        ## CONSUMES
-  gSiPkgTokenSpaceGuid.PcdSerialIoUartNumber             ## CONSUMES
-  gSiPkgTokenSpaceGuid.PcdSmmbaseSwSmi                   ## CONSUMES
-  gBoardModuleTokenSpaceGuid.PcdSaDdrFreqLimit           ## CONSUMES
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress         ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable           ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdSerialIoUartNumber                ## CONSUMES
+  gSiPkgTokenSpaceGuid.PcdSmmbaseSwSmi                      ## CONSUMES
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSaDdrFreqLimit  ## CONSUMES
 
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable1Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowLpHsioPtssTable2Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable2Size
 
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
-  gBoardModuleTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable1Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdUnknowHHsioPtssTable2Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable1Size
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificHHsioPtssTable2Size
 
-  gBoardModuleTokenSpaceGuid.PcdGraphicsVbtGuid
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdGraphicsVbtGuid
 
   # SPD Address Table
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable0
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable1
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable2
-  gBoardModuleTokenSpaceGuid.PcdMrcSpdAddressTable3
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable1
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable2
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3
 
 [Guids]
   gFspNonVolatileStorageHobGuid                 ## CONSUMES

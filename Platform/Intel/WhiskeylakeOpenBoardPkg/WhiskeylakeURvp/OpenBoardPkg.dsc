@@ -130,7 +130,7 @@
   PlatformSecLib|$(PLATFORM_BOARD_PACKAGE)/FspWrapper/Library/SecFspWrapperPlatformSecLib/SecFspWrapperPlatformSecLib.inf
   TimerLib|$(PLATFORM_BOARD_PACKAGE)/Library/AcpiTimerLib/BaseAcpiTimerLib.inf
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   TbtCommonLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiDxeSmmTbtCommonLib/TbtCommonLib.inf
 !endif
 
@@ -169,7 +169,7 @@
   # Board Package
   #######################################
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   PeiDTbtInitLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/Private/PeiDTbtInitLib/PeiDTbtInitLib.inf
   PeiTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/PeiTbtPolicyLib/PeiTbtPolicyLib.inf
 !endif
@@ -282,7 +282,7 @@
   $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPreMemLib.inf
@@ -292,7 +292,7 @@
 
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardInitLib/PeiMultiBoardInitPostMemLib.inf
@@ -318,7 +318,7 @@
   # Board Package
   #######################################
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
 
@@ -397,7 +397,7 @@
 
   $(PLATFORM_PACKAGE)/Acpi/AcpiSmm/AcpiSmm.inf {
     <LibraryClasses>
-      !if gBoardModuleTokenSpaceGuid.PcdMultiBoardSupport == FALSE
+      !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport == FALSE
         BoardAcpiEnableLib|$(PROJECT)/Library/BoardAcpiLib/SmmBoardAcpiEnableLib.inf
       !else
         NULL|$(PROJECT)/Library/BoardAcpiLib/SmmMultiBoardAcpiSupportLib.inf
@@ -417,7 +417,7 @@
   }
 
   # Thunderbolt
-!if gBoardModuleTokenSpaceGuid.PcdTbtEnable == TRUE
+!if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Smm/TbtSmm.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf
   $(PLATFORM_BOARD_PACKAGE)/Features/PciHotPlug/PciHotPlug.inf

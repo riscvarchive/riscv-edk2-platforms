@@ -51,14 +51,14 @@
   gEfiGlobalNvsAreaProtocolGuid
 
 [Pcd]
-  gBoardModuleTokenSpaceGuid.PcdAcpiGnvsAddress
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiGnvsAddress
 
-  gBoardModuleTokenSpaceGuid.PcdAcpiSleepState
-  gBoardModuleTokenSpaceGuid.PcdAcpiHibernate
-  gBoardModuleTokenSpaceGuid.PcdLowPowerS0Idle
-  gBoardModuleTokenSpaceGuid.PcdDisableActiveTripPoints
-  gBoardModuleTokenSpaceGuid.PcdDisablePassiveTripPoints
-  gBoardModuleTokenSpaceGuid.PcdDisableCriticalTripPoints
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiSleepState
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiHibernate
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLowPowerS0Idle
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDisableActiveTripPoints
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDisablePassiveTripPoints
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDisableCriticalTripPoints
 
 [Depex]
   gEfiAcpiTableProtocolGuid           AND
