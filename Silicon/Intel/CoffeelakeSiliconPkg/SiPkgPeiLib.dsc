@@ -7,6 +7,7 @@
 #
 ##
 
+[LibraryClasses]
 #
 # Silicon Init Pei Library
 #

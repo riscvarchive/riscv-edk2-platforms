@@ -13,6 +13,7 @@
 #
 DEFINE  PCH = Cnl
 
+[LibraryClasses.common]
 #
 # Cpu
 #
