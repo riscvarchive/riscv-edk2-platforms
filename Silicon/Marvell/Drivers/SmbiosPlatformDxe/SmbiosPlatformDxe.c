@@ -101,10 +101,10 @@ STATIC SMBIOS_TABLE_TYPE1 mArmadaDefaultType1 = {
 };
 
 STATIC CHAR8 CONST *mArmadaDefaultType1Strings[] = {
-  "Marvell                        \0",/* Manufacturer */
-  "Armada 7k/8k Family Board      \0",/* Product Name placeholder*/
-  "Revision unknown               \0",/* Version placeholder */
-  "                               \0",/* 32 character buffer */
+  (CHAR8 CONST *)PcdGetPtr (PcdProductManufacturer),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductPlatformName),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductVersion),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductSerial),
   NULL
 };
 
@@ -129,10 +129,10 @@ STATIC SMBIOS_TABLE_TYPE2 mArmadaDefaultType2 = {
 };
 
 STATIC CHAR8 CONST *mArmadaDefaultType2Strings[] = {
-  "Marvell                        \0",/* Manufacturer */
-  "Armada 7k/8k Family Board      \0",/* Product Name placeholder*/
-  "Revision unknown               \0",/* Version placeholder */
-  "Serial Not Set                 \0",/* Serial */
+  (CHAR8 CONST *)PcdGetPtr (PcdProductManufacturer),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductPlatformName),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductVersion),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductSerial),
   "Base of Chassis                \0",/* Board location */
   NULL
 };
@@ -160,9 +160,9 @@ STATIC SMBIOS_TABLE_TYPE3 mArmadaDefaultType3 = {
 };
 
 STATIC CHAR8 CONST *mArmadaDefaultType3Strings[] = {
-  "Marvell                        \0",/* Manufacturer placeholder */
-  "Revision unknown               \0",/* Version placeholder */
-  "Serial Not Set                 \0",/* Serial placeholder */
+  (CHAR8 CONST *)PcdGetPtr (PcdProductManufacturer),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductVersion),
+  (CHAR8 CONST *)PcdGetPtr (PcdProductSerial),
   NULL
 };
 

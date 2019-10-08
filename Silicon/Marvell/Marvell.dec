@@ -169,6 +169,12 @@
   gMarvellTokenSpaceGuid.PcdPciEAhci|{ 0x0 }|VOID*|0x3000034
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x0 }|VOID*|0x3000035
 
+#Platform description
+  gMarvellTokenSpaceGuid.PcdProductManufacturer|"Marvell"|VOID*|0x50000100
+  gMarvellTokenSpaceGuid.PcdProductPlatformName|"Marvell Development Board"|VOID*|0x50000101
+  gMarvellTokenSpaceGuid.PcdProductSerial|"Serial Not Set"|VOID*|0x50000103
+  gMarvellTokenSpaceGuid.PcdProductVersion|"Revision unknown"|VOID*|0x50000102
+
 #RTC
   gMarvellTokenSpaceGuid.PcdRtcBaseAddress|0x0|UINT64|0x40000052
 

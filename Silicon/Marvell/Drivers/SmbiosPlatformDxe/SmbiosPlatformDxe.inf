@@ -36,6 +36,10 @@
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision
+  gMarvellTokenSpaceGuid.PcdProductManufacturer
+  gMarvellTokenSpaceGuid.PcdProductPlatformName
+  gMarvellTokenSpaceGuid.PcdProductSerial
+  gMarvellTokenSpaceGuid.PcdProductVersion
 
 [Protocols]
   gEfiSmbiosProtocolGuid                      # PROTOCOL ALWAYS_CONSUMED
