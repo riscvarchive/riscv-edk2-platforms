@@ -1,17 +1,24 @@
-EDK II Maintainers
-==================
+EDK II Platforms Maintainers
+============================
 
 This file provides information about the primary maintainers for
 EDK II Platforms.
 
 In general, you should not privately email the maintainer. You should
-email the edk2-devel list, but you can also Cc the maintainer.
+email the edk2-devel list, and Cc the package maintainers and
+reviewers.
+
+If the package maintainer wants to hand over the role to other people,
+the package maintainer should send the patch to update Maintainers.txt
+with new maintainer, and the new maintainer should follow up with
+an Acked-by or a Reviewed-by.
 
 Descriptions of section entries:
 
   L: Mailing list that is relevant to this area (default is edk2-devel)
      Patches and questions should be sent to the email list.
-  M: Cc address for patches and questions (ie, the package maintainer)
+  M: Package Maintainer: Cc address for patches and questions. Responsible
+     for reviewing and pushing package changes to source control.
   R: Package Reviewer: Cc address for patches and questions. Reviewers help
      maintainers review code, but don't have push access. A designated Package
      Reviewer is reasonably familiar with the Package (or some modules
@@ -29,9 +36,26 @@ Descriptions of section entries:
      Obsolete:   Old code. Something tagged obsolete generally means
                  it has been replaced by a better system and you
                  should be using that.
+  F: Files and directories with wildcard patterns.
+     A trailing slash includes all files and subdirectory files.
+     F:   MdeModulePkg/   all files in and below MdeModulePkg
+     F:   MdeModulePkg/*  all files in MdeModulePkg, but not below
+     F:   */Pci/*         all files in a directory called Pci, at any depth in
+                          the hierarchy, but not below
+     One pattern per line.  Multiple F: lines per section acceptable.
+  X: Files and directories that are NOT maintained, same rules as F:
+     Files exclusions are tested after file matches.
+     Can be useful for excluding a specific subdirectory, for instance:
+     F:   NetworkPkg/
+     X:   NetworkPkg/Ip6Dxe/
+     matches all files in and below NetworkPkg excluding NetworkPkg/Ip6Dxe/
+  Filenames not caught by any F: rule get matched as being located in the top-
+  level directory. (Internally, the script looks for a match called '<default>',
+  so please don't add a file called that in the top-level directory.)
 
-EDK II
-------
+
+EDK II Platforms
+----------------
 W: https://github.com/tianocore/tianocore.github.io/wiki/EDK-II
 L: https://edk2.groups.io/g/devel/
 T: git - https://github.com/tianocore/edk2-platforms.git
@@ -40,8 +64,8 @@ Responsible Disclosure, Reporting Security Issues
 -------------------------------------------------
 W: https://github.com/tianocore/tianocore.github.io/wiki/Security
 
-EDK II Packages:
-----------------
+EDK II Platforms Packages:
+--------------------------
 
 Drivers/OptionRomPkg
 W: https://github.com/tianocore/tianocore.github.io/wiki/OptionRomPkg
