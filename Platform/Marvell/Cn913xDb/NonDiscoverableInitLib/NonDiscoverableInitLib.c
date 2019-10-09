@@ -91,6 +91,33 @@ Cp0XhciInit (
            MV_GPIO_DRIVER_TYPE_PCA95XX);
 }
 
+STATIC CONST MV_GPIO_PIN mCp1XhciVbusPins[] = {
+  {
+    MV_GPIO_DRIVER_TYPE_SOC_CONTROLLER,
+    MV_GPIO_CP1_CONTROLLER0,
+    CN9131_DB_VBUS0_PIN,
+    TRUE,
+  },
+  {
+    MV_GPIO_DRIVER_TYPE_SOC_CONTROLLER,
+    MV_GPIO_CP1_CONTROLLER0,
+    CN9131_DB_VBUS0_LIMIT_PIN,
+    TRUE,
+  },
+};
+
+STATIC
+EFI_STATUS
+EFIAPI
+Cp1XhciInit (
+  IN  NON_DISCOVERABLE_DEVICE  *This
+  )
+{
+  return ConfigurePins (mCp1XhciVbusPins,
+           ARRAY_SIZE (mCp1XhciVbusPins),
+           MV_GPIO_DRIVER_TYPE_SOC_CONTROLLER);
+}
+
 STATIC CONST MV_GPIO_PIN mCp0SdMmcPins[] = {
   {
     MV_GPIO_DRIVER_TYPE_PCA95XX,
@@ -130,6 +157,8 @@ NonDiscoverableDeviceInitializerGet (
     case 0:
     case 1:
       return Cp0XhciInit;
+    case 2:
+      return Cp1XhciInit;
     }
   }
 

@@ -18,6 +18,8 @@
 
 #if defined(CN9130)
 #define ACPI_OEM_TABLE_ID        SIGNATURE_64('C','N','9','1','3','0',' ',' ')
+#elif defined (CN9131)
+#define ACPI_OEM_TABLE_ID        SIGNATURE_64('C','N','9','1','3','1',' ',' ')
 #endif
 
 /**
