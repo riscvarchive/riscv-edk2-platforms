@@ -45,6 +45,10 @@
 #
 ################################################################################
 [PcdsFixedAtBuild.common]
+  #Platform description
+  gMarvellTokenSpaceGuid.PcdProductPlatformName|"Armada 7040 DB"
+  gMarvellTokenSpaceGuid.PcdProductVersion|"Rev. 1.5"
+
   #CP110 count
   gMarvellTokenSpaceGuid.PcdMaxCpCount|1
 
