@@ -154,15 +154,6 @@ F: Platform/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
 
-Platform/Marvell
-F; Platform/Marvell/
-R: Marcin Wojtas <mw@semihalf.com>
-M: Leif Lindholm <leif.lindholm@linaro.org>
-
-Platform/SolidRun/Armada80x0McBin
-F: Platform/SolidRun/Armada80x0McBin/
-R: Marcin Wojtas <mw@semihalf.com>
-
 Silicon/Intel/IntelSiliconPkg
 F: Silicon/Intel/IntelSiliconPkg/
 M: Ray Ni <ray.ni@intel.com>
@@ -205,6 +196,9 @@ F: Silicon/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
 
-Silicon/Marvell
+Marvell platforms and silicon
+F: Platform/Marvell/
+F: Platform/SolidRun/Armada80x0McBin/
 F: Silicon/Marvell/
 R: Marcin Wojtas <mw@semihalf.com>
+M: Leif Lindholm <leif.lindholm@linaro.org>
