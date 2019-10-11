@@ -35,6 +35,7 @@
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiLib.h>
 #include <Library/BaseLib.h>
+#include <Library/PcdLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -104,16 +105,19 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
           //  VirtualMachineSupported              :1;
           //  ExtensionByte2Reserved               :3;
   },
-  0xFF,                    // SystemBiosMajorRelease
-  0xFF,                    // SystemBiosMinorRelease
-  0xFF,                    // EmbeddedControllerFirmwareMajorRelease
-  0xFF,                    // EmbeddedControllerFirmwareMinorRelease
+  0,                       // SystemBiosMajorRelease
+  0,                       // SystemBiosMinorRelease
+  0,                       // EmbeddedControllerFirmwareMajorRelease
+  0,                       // EmbeddedControllerFirmwareMinorRelease
 };
 
+CHAR8 mBiosVendor[128]  = "EDK2";
+CHAR8 mBiosVersion[128] = "EDK2-DEV";
+
 CHAR8 *mBIOSInfoType0Strings[] = {
-  "https://github.com/andreiw/RaspberryPiPkg",             // Vendor String
-  "Raspberry Pi 64-bit UEFI (" __DATE__ " " __TIME__ ")",  // BiosVersion String
-  __DATE__,
+  mBiosVendor,              // Vendor
+  mBiosVersion,             // Version
+  __DATE__ " " __TIME__,    // Release Date
   NULL
 };
 
@@ -132,42 +136,19 @@ SMBIOS_TABLE_TYPE1 mSysInfoType1 = {
   6,    // Family String
 };
 
-#define PROD_BASE     8
-#define PROD_KNOWN   13
-#define PROD_UNKNOWN 11
-CHAR8 *ProductNames[] = {
-  /* 8 */ "3",
-  /* 9 */ "Zero",
-  /* 10 */ "CM3",
-  /* 11 */ "???",
-  /* 12 */ "Zero W",
-  /* 13 */ "3B+"
-};
-
-#define MANU_UNKNOWN 0
-#define MANU_KNOWN   4
-#define MANU_BASE    1
-CHAR8 *ManufNames[] = {
-  "???",
-  /* 0 */ "Sony",
-  /* 1 */ "Egoman",
-  /* 2 */ "Embest",
-  /* 3 */ "Sony Japan",
-  /* 4 */ "Embest"
-};
-
-CHAR8 mSysInfoManufName[sizeof ("Sony Japan")];
-CHAR8 mSysInfoProductName[sizeof ("64-bit Raspberry Pi XXXXXX (rev. xxxxxxxx)")];
+CHAR8 mSysInfoManufName[128];
+CHAR8 mSysInfoProductName[128];
+CHAR8 mSysInfoVersionName[128];
 CHAR8 mSysInfoSerial[sizeof (UINT64) * 2 + 1];
 CHAR8 mSysInfoSKU[sizeof (UINT64) * 2 + 1];
 
 CHAR8 *mSysInfoType1Strings[] = {
   mSysInfoManufName,
   mSysInfoProductName,
-  mSysInfoProductName,
+  mSysInfoVersionName,
   mSysInfoSerial,
   mSysInfoSKU,
-  "edk2",
+  "Raspberry Pi",
   NULL
 };
 
@@ -180,7 +161,7 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
   2,    // ProductName String
   3,    // Version String
   4,    // SerialNumber String
-  5,    // AssetTag String
+  0,    // AssetTag String
   {     // FeatureFlag
     1,    //  Motherboard           :1;
     0,    //  RequiresDaughterCard  :1;
@@ -189,7 +170,7 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
     0,    //  HotSwappable          :1;
     0,    //  Reserved              :3;
   },
-  6,    // LocationInChassis String
+  0,                        // LocationInChassis String
   0,                        // ChassisHandle;
   BaseBoardTypeMotherBoard, // BoardType;
   0,                        // NumberOfContainedObjectHandles;
@@ -198,10 +179,8 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
 CHAR8 *mBoardInfoType2Strings[] = {
   mSysInfoManufName,
   mSysInfoProductName,
-  mSysInfoProductName,
+  mSysInfoVersionName,
   mSysInfoSerial,
-  "None",
-  mSysInfoSKU,
   NULL
 };
 
@@ -214,7 +193,7 @@ SMBIOS_TABLE_TYPE3 mEnclosureInfoType3 = {
   MiscChassisEmbeddedPc,    // Type;
   2,                        // Version String
   3,                        // SerialNumber String
-  4,                        // AssetTag String
+  0,                        // AssetTag String
   ChassisStateSafe,         // BootupState;
   ChassisStateSafe,         // PowerSupplyState;
   ChassisStateSafe,         // ThermalState;
@@ -230,7 +209,6 @@ CHAR8 *mEnclosureInfoType3Strings[] = {
   mSysInfoManufName,
   mSysInfoProductName,
   mSysInfoSerial,
-  "None",
   NULL
 };
 
@@ -306,9 +284,9 @@ SMBIOS_TABLE_TYPE4 mProcessorInfoType4 = {
   0,                      // L1CacheHandle;
   0,                      // L2CacheHandle;
   0,                      // L3CacheHandle;
-  4,                      // SerialNumber;
-  5,                      // AssetTag;
-  6,                      // PartNumber;
+  0,                      // SerialNumber;
+  0,                      // AssetTag;
+  0,                      // PartNumber;
   4,                      // CoreCount;
   4,                      // EnabledCoreCount;
   4,                      // ThreadCount;
@@ -316,13 +294,12 @@ SMBIOS_TABLE_TYPE4 mProcessorInfoType4 = {
   ProcessorFamilyARM,     // ARM Processor Family;
 };
 
+CHAR8 mCpuName[128] = "Unknown ARM CPU";
+
 CHAR8 *mProcessorInfoType4Strings[] = {
   "Socket",
-  "ARM",
-  "BCM2837 ARMv8",
-  "1.0",
-  "1.0",
-  "1.0",
+  "Broadcom",
+  mCpuName,
   NULL
 };
 
@@ -618,6 +595,29 @@ BIOSInfoUpdateSmbiosType0 (
   VOID
   )
 {
+  UINT32 FirmwareRevision = 0;
+  EFI_STATUS Status = EFI_SUCCESS;
+
+  // Populate the Firmware major and minor.
+  Status = mFwProtocol->GetFirmwareRevision (&FirmwareRevision);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to get firmware revision: %r\n", Status));
+  } else {
+    // This expects Broadcom / The Raspberry Pi Foundation to switch to
+    // less nonsensical VideoCore firmware revisions in the future...
+    mBIOSInfoType0.EmbeddedControllerFirmwareMajorRelease =
+      (UINT8)((FirmwareRevision >> 16) & 0xFF);
+    mBIOSInfoType0.EmbeddedControllerFirmwareMinorRelease =
+      (UINT8)(FirmwareRevision & 0xFF);
+  }
+
+  // mBiosVendor and mBiosVersion, which are referenced in mBIOSInfoType0Strings,
+  // are left unchanged if the following calls fail.
+  UnicodeStrToAsciiStrS ((CHAR16*)PcdGetPtr (PcdFirmwareVendor),
+    mBiosVendor, sizeof (mBiosVendor));
+  UnicodeStrToAsciiStrS ((CHAR16*)PcdGetPtr (PcdFirmwareVersionString),
+    mBiosVersion, sizeof (mBiosVersion));
+
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBIOSInfoType0, mBIOSInfoType0Strings, NULL);
 }
 
@@ -664,34 +664,25 @@ SysInfoUpdateSmbiosType1 (
   UINT32 BoardRevision = 0;
   EFI_STATUS Status = EFI_SUCCESS;
   UINT64 BoardSerial = 0;
-  UINTN Prod = PROD_UNKNOWN;
-  UINTN Manu = MANU_UNKNOWN;
+  INTN Prod = -1;
+  INTN Manu = -1;
 
   Status = mFwProtocol->GetModelRevision (&BoardRevision);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to get board model: %r\n", Status));
   } else {
     Prod = (BoardRevision >> 4) & 0xFF;
+    Manu = (BoardRevision >> 16) & 0x0F;
   }
 
-  if (Prod > PROD_KNOWN) {
-    Prod = PROD_UNKNOWN;
-  }
-  Prod -= PROD_BASE;
-  AsciiSPrint (mSysInfoProductName, sizeof (mSysInfoProductName),
-    "64-bit Raspberry Pi %a (rev. %x)", ProductNames[Prod], BoardRevision);
+  AsciiStrCpyS (mSysInfoProductName, sizeof (mSysInfoProductName),
+    mFwProtocol->GetModelName (Prod));
+  AsciiStrCpyS (mSysInfoManufName, sizeof (mSysInfoManufName),
+    mFwProtocol->GetManufacturerName (Manu));
+  AsciiSPrint (mSysInfoVersionName, sizeof (mSysInfoVersionName),
+    "%X", BoardRevision);
 
-  Manu = (BoardRevision >> 16) & 0xF;
-  if (Manu > MANU_KNOWN) {
-    Manu = MANU_UNKNOWN;
-  } else {
-    Manu += MANU_BASE;
-  }
-  AsciiSPrint (mSysInfoManufName, sizeof (mSysInfoManufName), "%a", ManufNames[Manu]);
-
-  I64ToHexString (mSysInfoSKU,
-    sizeof (mSysInfoSKU),
-    BoardRevision);
+  I64ToHexString (mSysInfoSKU, sizeof (mSysInfoSKU), BoardRevision);
 
   Status = mFwProtocol->GetSerial (&BoardSerial);
   if (EFI_ERROR (Status)) {
@@ -702,9 +693,11 @@ SysInfoUpdateSmbiosType1 (
 
   DEBUG ((DEBUG_ERROR, "Board Serial Number: %a\n", mSysInfoSerial));
 
-  mSysInfoType1.Uuid.Data1 = *(UINT32*)"RPi3";
+  mSysInfoType1.Uuid.Data1 = BoardRevision;
   mSysInfoType1.Uuid.Data2 = 0x0;
   mSysInfoType1.Uuid.Data3 = 0x0;
+  // Swap endianness, so that the serial is more user-friendly as a UUID
+  BoardSerial = SwapBytes64 (BoardSerial);
   CopyMem (mSysInfoType1.Uuid.Data4, &BoardSerial, sizeof (BoardSerial));
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mSysInfoType1, mSysInfoType1Strings, NULL);
@@ -762,6 +755,8 @@ ProcessorInfoUpdateSmbiosType4 (
     mProcessorInfoType4.CurrentSpeed = Rate / 1000000;
     DEBUG ((DEBUG_INFO, "Current CPU speed: %uHz\n", Rate));
   }
+
+  AsciiStrCpyS (mCpuName, sizeof (mCpuName), mFwProtocol->GetCpuName (-1));
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mProcessorInfoType4, mProcessorInfoType4Strings, NULL);
 }
