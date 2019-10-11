@@ -41,6 +41,8 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/PrintLib.h>
 
+#define SMB_IS_DIGIT(c)  (((c) >= '0') && ((c) <= '9'))
+
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
 
 /***********************************************************************
@@ -597,6 +599,9 @@ BIOSInfoUpdateSmbiosType0 (
 {
   UINT32 FirmwareRevision = 0;
   EFI_STATUS Status = EFI_SUCCESS;
+  INTN   i;
+  INTN   State = 0;
+  INTN   Value[2];
 
   // Populate the Firmware major and minor.
   Status = mFwProtocol->GetFirmwareRevision (&FirmwareRevision);
@@ -617,6 +622,46 @@ BIOSInfoUpdateSmbiosType0 (
     mBiosVendor, sizeof (mBiosVendor));
   UnicodeStrToAsciiStrS ((CHAR16*)PcdGetPtr (PcdFirmwareVersionString),
     mBiosVersion, sizeof (mBiosVersion));
+
+  // Look for a "x.y" numeric string anywhere in mBiosVersion and
+  // try to parse it to populate the BIOS major and minor.
+  for (i = 0; (i < AsciiStrLen (mBiosVersion)) && (State < 4); i++) {
+    switch (State) {
+    case 0:
+      if (!SMB_IS_DIGIT (mBiosVersion[i]))
+        break;
+      Value[0] = Value[1] = 0;
+      State++;
+      // Fall through
+    case 1:
+    case 3:
+      if (SMB_IS_DIGIT (mBiosVersion[i])) {
+        Value[State / 2] = (Value[State / 2] * 10) + (mBiosVersion[i] - '0');
+        if (Value[State / 2] > 255) {
+          while (SMB_IS_DIGIT (mBiosVersion[i + 1]))
+            i++;
+          // Reset our state (we may have something like "Firmware X83737.1 v1.23")
+          State = 0;
+        }
+      } else {
+        State++;
+      }
+      if (State != 2)
+        break;
+      // Fall through
+    case 2:
+      if ((mBiosVersion[i] == '.') && (SMB_IS_DIGIT (mBiosVersion[i + 1]))) {
+        State++;
+      } else {
+        State = 0;
+      }
+      break;
+    }
+  }
+  if ((State == 3) || (State == 4)) {
+    mBIOSInfoType0.SystemBiosMajorRelease = (UINT8)Value[0];
+    mBIOSInfoType0.SystemBiosMinorRelease = (UINT8)Value[1];
+  }
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBIOSInfoType0, mBIOSInfoType0Strings, NULL);
 }
