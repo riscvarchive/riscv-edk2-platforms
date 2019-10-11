@@ -866,16 +866,23 @@ MemArrMapInfoUpdateSmbiosType19 (
   )
 {
   EFI_STATUS Status;
-  UINT32 Base;
-  UINT32 Size;
+  UINT32 BoardRevision = 0;
 
-  Status = mFwProtocol->GetArmMem (&Base, &Size);
+  // Note: Type 19 addresses are expressed in KB, not bytes
+  // The memory layout used in all known Pi SoC's starts at 0
+  mMemArrMapInfoType19.StartingAddress = 0;
+  // The minimum RAM size used on any Raspberry Pi model is 256 MB
+  mMemArrMapInfoType19.EndingAddress = 256 * 1024;
+  Status = mFwProtocol->GetModelRevision (&BoardRevision);
   if (Status != EFI_SUCCESS) {
-    DEBUG ((DEBUG_ERROR, "Couldn't get the ARM memory size: %r\n", Status));
+    DEBUG ((DEBUG_WARNING, "Couldn't get the board memory size - defaulting to 256 MB: %r\n", Status));
   } else {
-    mMemArrMapInfoType19.StartingAddress = Base / 1024;
-    mMemArrMapInfoType19.EndingAddress = (Base + Size - 1) / 1024;
+    // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+    // Bits [20-22] indicate the amount of memory starting with 256MB (000b)
+    // and doubling in size for each value (001b = 512 MB, 010b = 1GB, etc.)
+    mMemArrMapInfoType19.EndingAddress <<= (BoardRevision >> 20) & 0x07;
   }
+  mMemArrMapInfoType19.EndingAddress -= 1;
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mMemArrMapInfoType19, mMemArrMapInfoType19Strings, NULL);
 }
