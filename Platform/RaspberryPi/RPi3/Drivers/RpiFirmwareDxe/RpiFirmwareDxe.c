@@ -393,7 +393,14 @@ RpiFirmwareGetSerial (
   }
 
   *Serial = Cmd->TagBody.Serial;
-  return EFI_SUCCESS;
+  // Some platforms return 0 for serial. For those, try to use the MAC address.
+  if (*Serial == 0) {
+    Status = RpiFirmwareGetMacAddress ((UINT8*) Serial);
+    // Convert to a more user-friendly value
+    *Serial = SwapBytes64 (*Serial << 16);
+  }
+
+  return Status;
 }
 
 #pragma pack()
