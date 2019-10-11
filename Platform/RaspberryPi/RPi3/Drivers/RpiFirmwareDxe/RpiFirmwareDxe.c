@@ -461,7 +461,7 @@ typedef struct {
   RPI_FW_TAG_HEAD           TagHead;
   RPI_FW_MODEL_REVISION_TAG TagBody;
   UINT32                    EndTag;
-} RPI_FW_GET_MODEL_REVISION_CMD;
+} RPI_FW_GET_REVISION_CMD;
 #pragma pack()
 
 STATIC
@@ -471,7 +471,7 @@ RpiFirmwareGetModelRevision (
   OUT   UINT32 *Revision
   )
 {
-  RPI_FW_GET_MODEL_REVISION_CMD *Cmd;
+  RPI_FW_GET_REVISION_CMD       *Cmd;
   EFI_STATUS                    Status;
   UINT32                        Result;
 
@@ -504,6 +504,156 @@ RpiFirmwareGetModelRevision (
 
   *Revision = Cmd->TagBody.Revision;
   return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
+EFIAPI
+RpiFirmwareGetFirmwareRevision (
+  OUT   UINT32 *Revision
+  )
+{
+  RPI_FW_GET_REVISION_CMD       *Cmd;
+  EFI_STATUS                    Status;
+  UINT32                        Result;
+
+  if (!AcquireSpinLockOrFail (&mMailboxLock)) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to acquire spinlock\n", __FUNCTION__));
+    return EFI_DEVICE_ERROR;
+  }
+
+  Cmd = mDmaBuffer;
+  ZeroMem (Cmd, sizeof (*Cmd));
+
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
+  Cmd->BufferHead.Response    = 0;
+  Cmd->TagHead.TagId          = RPI_MBOX_GET_REVISION;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
+  Cmd->TagHead.TagValueSize   = 0;
+  Cmd->EndTag                 = 0;
+
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
+
+  ReleaseSpinLock (&mMailboxLock);
+
+  if (EFI_ERROR (Status) ||
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: mailbox transaction error: Status == %r, Response == 0x%x\n",
+      __FUNCTION__, Status, Cmd->BufferHead.Response));
+    return EFI_DEVICE_ERROR;
+  }
+
+  *Revision = Cmd->TagBody.Revision;
+  return EFI_SUCCESS;
+}
+
+STATIC
+CHAR8*
+EFIAPI
+RpiFirmwareGetModelName (
+  IN INTN ModelId
+  )
+{
+  UINT32  Revision;
+
+  // If a negative ModelId is passed, detect it.
+  if ((ModelId < 0) && (RpiFirmwareGetModelRevision (&Revision) == EFI_SUCCESS)) {
+    ModelId = (Revision >> 4) & 0xFF;
+  }
+
+  switch (ModelId) {
+  // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+  case 0x00:
+    return "Raspberry Pi Model A";
+  case 0x01:
+    return "Raspberry Pi Model B";
+  case 0x02:
+    return "Raspberry Pi Model A+";
+  case 0x03:
+    return "Raspberry Pi Model B+";
+  case 0x04:
+    return "Raspberry Pi 2 Model B";
+  case 0x06:
+    return "Raspberry Pi Compute Module 1";
+  case 0x08:
+    return "Raspberry Pi 3 Model B";
+  case 0x09:
+    return "Raspberry Pi Zero";
+  case 0x0A:
+    return "Raspberry Pi Compute Module 3";
+  case 0x0C:
+    return "Raspberry Pi Zero W";
+  case 0x0D:
+    return "Raspberry Pi 3 Model B+";
+  case 0x0E:
+    return "Raspberry Pi 3 Model A+";
+  case 0x11:
+    return "Raspberry Pi 4 Model B";
+  default:
+    return "Unknown Raspberry Pi Model";
+  }
+}
+
+STATIC
+CHAR8*
+EFIAPI
+RpiFirmwareGetManufacturerName (
+  IN INTN ManufacturerId
+  )
+{
+  UINT32  Revision;
+
+  // If a negative ModelId is passed, detect it.
+  if ((ManufacturerId < 0) && (RpiFirmwareGetModelRevision (&Revision) == EFI_SUCCESS)) {
+    ManufacturerId = (Revision >> 16) & 0x0F;
+  }
+
+  switch (ManufacturerId) {
+  // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+  case 0x00:
+    return "Sony UK";
+  case 0x01:
+    return "Egoman";
+  case 0x02:
+  case 0x04:
+    return "Embest";
+  case 0x03:
+    return "Sony Japan";
+  case 0x05:
+    return "Stadium";
+  default:
+    return "Unknown Manufacturer";
+  }
+}
+
+STATIC
+CHAR8*
+EFIAPI
+RpiFirmwareGetCpuName (
+  IN INTN CpuId
+  )
+{
+  UINT32  Revision;
+
+  // If a negative CpuId is passed, detect it.
+  if ((CpuId < 0) && (RpiFirmwareGetModelRevision (&Revision) == EFI_SUCCESS)) {
+    CpuId = (Revision >> 12) & 0x0F;
+  }
+
+  switch (CpuId) {
+  // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+  case 0x00:
+    return "BCM2835 (ARM11)";
+  case 0x01:
+    return "BCM2836 (ARM Cortex-A7)";
+  case 0x02:
+    return "BCM2837 (ARM Cortex-A53)";
+  case 0x03:
+    return "BCM2711 (ARM Cortex-A72)";
+  default:
+    return "Unknown CPU Model";
+  }
 }
 
 #pragma pack()
@@ -1009,6 +1159,10 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareGetSerial,
   RpiFirmwareGetModel,
   RpiFirmwareGetModelRevision,
+  RpiFirmwareGetModelName,
+  RpiFirmwareGetFirmwareRevision,
+  RpiFirmwareGetManufacturerName,
+  RpiFirmwareGetCpuName,
   RpiFirmwareGetArmMemory
 };
 

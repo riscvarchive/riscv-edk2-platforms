@@ -97,6 +97,30 @@ EFI_STATUS
   );
 
 typedef
+CHAR8*
+(EFIAPI *GET_MODEL_NAME) (
+  INTN ModelId
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *GET_FIRMWARE_REVISION) (
+  UINT32 *Revision
+  );
+
+typedef
+CHAR8*
+(EFIAPI *GET_MANUFACTURER_NAME) (
+  INTN ManufacturerId
+  );
+
+typedef
+CHAR8*
+(EFIAPI *GET_CPU_NAME) (
+  INTN CpuId
+  );
+
+typedef
 EFI_STATUS
 (EFIAPI *GET_ARM_MEM) (
   UINT32 *Base,
@@ -104,21 +128,25 @@ EFI_STATUS
   );
 
 typedef struct {
-  SET_POWER_STATE    SetPowerState;
-  GET_MAC_ADDRESS    GetMacAddress;
-  GET_COMMAND_LINE   GetCommandLine;
-  GET_CLOCK_RATE     GetClockRate;
-  GET_CLOCK_RATE     GetMaxClockRate;
-  GET_CLOCK_RATE     GetMinClockRate;
-  SET_CLOCK_RATE     SetClockRate;
-  GET_FB             GetFB;
-  FREE_FB            FreeFB;
-  GET_FB_SIZE        GetFBSize;
-  SET_LED            SetLed;
-  GET_SERIAL         GetSerial;
-  GET_MODEL          GetModel;
-  GET_MODEL_REVISION GetModelRevision;
-  GET_ARM_MEM        GetArmMem;
+  SET_POWER_STATE       SetPowerState;
+  GET_MAC_ADDRESS       GetMacAddress;
+  GET_COMMAND_LINE      GetCommandLine;
+  GET_CLOCK_RATE        GetClockRate;
+  GET_CLOCK_RATE        GetMaxClockRate;
+  GET_CLOCK_RATE        GetMinClockRate;
+  SET_CLOCK_RATE        SetClockRate;
+  GET_FB                GetFB;
+  FREE_FB               FreeFB;
+  GET_FB_SIZE           GetFBSize;
+  SET_LED               SetLed;
+  GET_SERIAL            GetSerial;
+  GET_MODEL             GetModel;
+  GET_MODEL_REVISION    GetModelRevision;
+  GET_MODEL_NAME        GetModelName;
+  GET_FIRMWARE_REVISION GetFirmwareRevision;
+  GET_MANUFACTURER_NAME GetManufacturerName;
+  GET_CPU_NAME          GetCpuName;
+  GET_ARM_MEM           GetArmMem;
 } RASPBERRY_PI_FIRMWARE_PROTOCOL;
 
 extern EFI_GUID gRaspberryPiFirmwareProtocolGuid;
