@@ -1,5 +1,5 @@
 ## @file
-#  Platform description.
+#  Advanced Feature Package build description file.
 #
 # Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
@@ -24,8 +24,7 @@
 
 ################################################################################
 #
-# SKU Identification section - list of all SKU IDs supported by this
-#                              Platform.
+# SKU Identification section - list of all SKU IDs supported.
 #
 ################################################################################
 [SkuIds]
@@ -33,88 +32,93 @@
 
 ################################################################################
 #
-# Pcd Section - list of all EDK II PCD Entries defined by this Platform
+# Pcd Section - list of all EDK II PCD Entries defined by this package.
 #
 ################################################################################
-  
+
 [PcdsFeatureFlag]
 
 ################################################################################
 #
-# Library Class section - list of all Library Classes needed by this Platform.
+# Library Class section - list of all Library Classes needed by this package.
 #
 ################################################################################
 
 [LibraryClasses.common]
-
-  PeiCoreEntryPoint|MdePkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
-  PeimEntryPoint|MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
-  DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
-  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
-  UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
-  SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
-  PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
-
-  #
-  # Basic
-  #
+  #######################################
+  # Edk2 Packages
+  #######################################
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLibRepStr/BaseMemoryLibRepStr.inf
-
-  PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
-  CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
-  IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
-  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
-  PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
   BasePciLibPciExpress|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
-#  PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
-  PciCf8Lib|MdePkg/Library/BasePciCf8Lib/BasePciCf8Lib.inf
-  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
   CacheMaintenanceLib|MdePkg/Library/BaseCacheMaintenanceLib/BaseCacheMaintenanceLib.inf
-  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
-  PeCoffGetEntryPointLib|MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
-  SortLib|MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf
-  #
-  # UEFI & PI
-  #
-  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
-  UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
-  UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
-  UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
-  HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
-  UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
+  CpuLib|MdePkg/Library/BaseCpuLib/BaseCpuLib.inf
+  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
   DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
-
-  UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
-  PeiServicesTablePointerLib|MdePkg/Library/PeiServicesTablePointerLibIdt/PeiServicesTablePointerLibIdt.inf
-  PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
+  DxeCoreEntryPoint|MdePkg/Library/DxeCoreEntryPoint/DxeCoreEntryPoint.inf
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
   DxeServicesTableLib|MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf
-  UefiCpuLib|UefiCpuPkg/Library/BaseUefiCpuLib/BaseUefiCpuLib.inf
-
-  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
-  ReportStatusCodeLib|MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull.inf  
-
+  HiiLib|MdeModulePkg/Library/UefiHiiLib/UefiHiiLib.inf
+  IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
-
+  PciCf8Lib|MdePkg/Library/BasePciCf8Lib/BasePciCf8Lib.inf
+  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+  PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
+  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
+  PeCoffExtraActionLib|MdePkg/Library/BasePeCoffExtraActionLibNull/BasePeCoffExtraActionLibNull.inf
+  PeCoffGetEntryPointLib|MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
+  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
+  PeiCoreEntryPoint|MdePkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
+  PeimEntryPoint|MdePkg/Library/PeimEntryPoint/PeimEntryPoint.inf
+  PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
+  PeiServicesTablePointerLib|MdePkg/Library/PeiServicesTablePointerLibIdt/PeiServicesTablePointerLibIdt.inf
+  PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
+  ReportStatusCodeLib|MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull.inf
+  SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+  SortLib|MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf
   TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
+  UefiApplicationEntryPoint|MdePkg/Library/UefiApplicationEntryPoint/UefiApplicationEntryPoint.inf
+  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+  UefiCpuLib|UefiCpuPkg/Library/BaseUefiCpuLib/BaseUefiCpuLib.inf
+  UefiDecompressLib|MdePkg/Library/BaseUefiDecompressLib/BaseUefiDecompressLib.inf
+  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+  UefiHiiServicesLib|MdeModulePkg/Library/UefiHiiServicesLib/UefiHiiServicesLib.inf
+  UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
+  UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
+  UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
 
-  IpmiPlatformHookLib|AdvancedFeaturePkg/Ipmi/Library/IpmiPlatformHookLibNull/IpmiPlatformHookLibNull.inf
-  IpmiLib|AdvancedFeaturePkg/Ipmi/Library/IpmiLibNull/IpmiLibNull.inf
+  #######################################
+  # Advanced Feature Package
+  #######################################
   IpmiCommandLib|AdvancedFeaturePkg/Ipmi/Library/IpmiCommandLib/IpmiCommandLib.inf
+  IpmiLib|AdvancedFeaturePkg/Ipmi/Library/IpmiLibNull/IpmiLibNull.inf
+  IpmiPlatformHookLib|AdvancedFeaturePkg/Ipmi/Library/IpmiPlatformHookLibNull/IpmiPlatformHookLibNull.inf
 
 [LibraryClasses.common.SEC,LibraryClasses.common.PEI_CORE,LibraryClasses.common.PEIM]
-  PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
+  PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
+
+  #######################################
+  # Silicon Initialization Package
+  #######################################
   SmmAccessLib|IntelSiliconPkg/Feature/SmmAccess/Library/PeiSmmAccessLib/PeiSmmAccessLib.inf
 
 [LibraryClasses.common.DXE_CORE,LibraryClasses.common.DXE_SMM_DRIVER,LibraryClasses.common.SMM_CORE,LibraryClasses.common.DXE_DRIVER,LibraryClasses.common.DXE_RUNTIME_DRIVER,LibraryClasses.common.UEFI_DRIVER,LibraryClasses.common.UEFI_APPLICATION]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
-  PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
+  PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
 
 [LibraryClasses.common.DXE_SMM_DRIVER,LibraryClasses.common.SMM_CORE]
+  #######################################
+  # Edk2 Packages
+  #######################################
   SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
 
 ###################################################################################################
@@ -137,20 +141,25 @@
 ###################################################################################################
 
 [Components]
+  #######################################
+  # Advanced Feature Package
+  #######################################
 
-  AdvancedFeaturePkg/Smbios/SmbiosBasicDxe/SmbiosBasicDxe.inf
+  # Add library instances here that are not included in package components and should be tested
+  # in the package build.
 
-  AdvancedFeaturePkg/Ipmi/IpmiInit/PeiIpmiInit.inf
-  AdvancedFeaturePkg/Ipmi/IpmiInit/DxeIpmiInit.inf
-  AdvancedFeaturePkg/Ipmi/Frb/FrbPei.inf
+  # Add components here that should be included in the package build.
+  AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
+  AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
   AdvancedFeaturePkg/Ipmi/Frb/FrbDxe.inf
+  AdvancedFeaturePkg/Ipmi/Frb/FrbPei.inf
+  AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
+  AdvancedFeaturePkg/Ipmi/IpmiInit/DxeIpmiInit.inf
+  AdvancedFeaturePkg/Ipmi/IpmiInit/PeiIpmiInit.inf
   AdvancedFeaturePkg/Ipmi/OsWdt/OsWdt.inf
   AdvancedFeaturePkg/Ipmi/SolStatus/SolStatus.inf
-  AdvancedFeaturePkg/Ipmi/IpmiFru/IpmiFru.inf
-  AdvancedFeaturePkg/Ipmi/BmcElog/BmcElog.inf
-  AdvancedFeaturePkg/Ipmi/BmcAcpi/BmcAcpi.inf
-
   AdvancedFeaturePkg/S3/S3Pei.inf
+  AdvancedFeaturePkg/Smbios/SmbiosBasicDxe/SmbiosBasicDxe.inf
 
 [BuildOptions]
-  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
