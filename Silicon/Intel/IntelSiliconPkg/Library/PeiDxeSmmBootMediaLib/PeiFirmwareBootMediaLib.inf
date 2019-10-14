@@ -22,7 +22,6 @@
   LIBRARY_CLASS        = FirmwareBootMediaLib
 
 [Sources]
-  FirmwareBootMediaLib.c
   PeiFirmwareBootMediaLib.c
 
 [Packages]

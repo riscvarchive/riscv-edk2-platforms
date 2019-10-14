@@ -27,7 +27,6 @@
 #
 
 [Sources]
-  FirmwareBootMediaLib.c
   DxeSmmFirmwareBootMediaLib.c
 
 [Packages]
