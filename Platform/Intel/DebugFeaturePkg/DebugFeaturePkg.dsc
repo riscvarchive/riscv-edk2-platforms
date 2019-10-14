@@ -1,6 +1,6 @@
 ## @file
 # This package provides the modules that build for debug feature.
-# This DebugFeaturePkg should only depend on EDKII Core packages and MinPlatformPkg.
+# This package should only depend on EDKII Core packages and MinPlatformPkg.
 #
 # The DEC files are used by the utilities that parse DSC and
 # INF files to generate AutoGen.c and AutoGen.h files
@@ -23,46 +23,58 @@
   SKUID_IDENTIFIER               = DEFAULT
 
 [LibraryClasses]
-  #
-  # Entry point
-  #
-  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
+  #######################################
+  # Edk2 Packages
+  #######################################
   BaseLib|MdePkg/Library/BaseLib/BaseLib.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
-  PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
-  IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
-  PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
-  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
-  TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
-  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
-  DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
   DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
+  DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
+  IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
+  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+  PeiServicesLib|MdePkg/Library/PeiServicesLib/PeiServicesLib.inf
+  PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
+  TimerLib|MdePkg/Library/BaseTimerLibNullTemplate/BaseTimerLibNullTemplate.inf
+  UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
+  UefiDriverEntryPoint|MdePkg/Library/UefiDriverEntryPoint/UefiDriverEntryPoint.inf
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
   UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
 
 [LibraryClasses.common.PEIM]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
   MemoryAllocationLib|MdePkg/Library/PeiMemoryAllocationLib/PeiMemoryAllocationLib.inf
-  #Usb3DebugPortLib|DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPeiIoMmu.inf
-
-[LibraryClasses.IA32.PEIM, LibraryClasses.X64.PEIM]
   PeiServicesTablePointerLib|MdePkg/Library/PeiServicesTablePointerLibIdt/PeiServicesTablePointerLibIdt.inf
 
 [LibraryClasses.common.DXE_DRIVER]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
 [LibraryClasses.common.UEFI_DRIVER]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
 
 [LibraryClasses.common.DXE_SMM_DRIVER]
+  #######################################
+  # Edk2 Packages
+  #######################################
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
   MemoryAllocationLib|MdePkg/Library/SmmMemoryAllocationLib/SmmMemoryAllocationLib.inf
   SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
@@ -87,13 +99,20 @@
 ###################################################################################################
 
 [Components]
-  DebugFeaturePkg/Library/Usb3DebugPortParameterLibPcd/Usb3DebugPortParameterLibPcd.inf
-  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
-  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPeiIoMmu.inf
-  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxeIoMmu.inf
-  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPei.inf
-  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxe.inf
+  #######################################
+  # Debug Feature Package
+  #######################################
 
+  # Add library instances here that are not included in package components and should be tested
+  # in the package build.
+  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxe.inf
+  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxeIoMmu.inf
+  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
+  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPei.inf
+  DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPeiIoMmu.inf
+  DebugFeaturePkg/Library/Usb3DebugPortParameterLibPcd/Usb3DebugPortParameterLibPcd.inf
+
+  # Add components here that should be included in the package build.
   DebugFeaturePkg/AcpiDebug/AcpiDebugDxe.inf
   DebugFeaturePkg/AcpiDebug/AcpiDebugSmm.inf
 
