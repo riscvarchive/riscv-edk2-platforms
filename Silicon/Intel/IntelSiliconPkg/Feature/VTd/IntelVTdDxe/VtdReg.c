@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -309,6 +309,8 @@ DisableDmar (
   UINTN     Index;
   UINTN     SubIndex;
   UINT32    Reg32;
+  UINT32    Status;
+  UINT32    Command;
 
   for (Index = 0; Index < mVtdUnitNumber; Index++) {
     DEBUG((DEBUG_INFO, ">>>>>>DisableDmar() for engine [%d] \n", Index));
@@ -319,9 +321,31 @@ DisableDmar (
     FlushWriteBuffer (Index);
 
     //
-    // Disable VTd
+    // Disable Dmar
     //
-    MmioWrite32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GCMD_REG, B_GMCD_REG_SRTP);
+    //
+    // Set TE (Translation Enable: BIT31) of Global command register to zero
+    //
+    Reg32 = MmioRead32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GSTS_REG);
+    Status = (Reg32 & 0x96FFFFFF);       // Reset the one-shot bits
+    Command = (Status & ~B_GMCD_REG_TE);
+    MmioWrite32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GCMD_REG, Command);
+
+    //
+    // Poll on TE Status bit of Global status register to become zero
+    //
+    do {
+      Reg32 = MmioRead32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GSTS_REG);
+    } while ((Reg32 & B_GSTS_REG_TE) == B_GSTS_REG_TE);
+
+    //
+    // Set SRTP (Set Root Table Pointer: BIT30) of Global command register in order to update the root table pointerDisable VTd
+    //
+    Reg32 = MmioRead32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GSTS_REG);
+    Status = (Reg32 & 0x96FFFFFF);       // Reset the one-shot bits
+    Command = (Status | B_GMCD_REG_SRTP);
+    MmioWrite32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GCMD_REG, Command);
+
     do {
       Reg32 = MmioRead32 (mVtdUnitInformation[Index].VtdUnitBaseAddress + R_GSTS_REG);
     } while((Reg32 & B_GSTS_REG_RTPS) == 0);

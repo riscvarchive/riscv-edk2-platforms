@@ -1,7 +1,7 @@
 /** @file
   Platform VTd Info Sample PEI driver.
 
-  Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -166,15 +166,16 @@ EFI_PEI_PPI_DESCRIPTOR mPlatformVTdNoIgdInfoSampleDesc = {
 
 /**
   Initialize VTd register.
+  Initialize the VTd hardware unit which has INCLUDE_PCI_ALL set
 **/
 VOID
-InitDmar (
+InitGlobalVtd (
   VOID
   )
 {
   UINT32              MchBar;
 
-  DEBUG ((DEBUG_INFO, "InitDmar\n"));
+  DEBUG ((DEBUG_INFO, "InitGlobalVtd\n"));
 
   MchBar = PciRead32 (PCI_LIB_ADDRESS(0, 0, 0, R_SA_MCHBAR)) & ~BIT0;
   PciWrite32 (PCI_LIB_ADDRESS(0, 0, 0, R_SA_MCHBAR), 0xFED10000 | BIT0);
@@ -346,7 +347,7 @@ PlatformVTdInfoSampleInitialize (
   DEBUG ((DEBUG_INFO, "SiliconInitialized - %x\n", SiliconInitialized));
   if (!SiliconInitialized) {
     Status = PeiServicesNotifyPpi (&mSiliconInitializedNotifyList);
-    InitDmar ();
+    InitGlobalVtd ();
 
     Status = PeiServicesInstallPpi (&mPlatformVTdNoIgdInfoSampleDesc);
     ASSERT_EFI_ERROR (Status);
