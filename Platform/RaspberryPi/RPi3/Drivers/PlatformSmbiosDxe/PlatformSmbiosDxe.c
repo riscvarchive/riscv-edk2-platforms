@@ -875,7 +875,7 @@ MemArrMapInfoUpdateSmbiosType19 (
   mMemArrMapInfoType19.EndingAddress = 256 * 1024;
   Status = mFwProtocol->GetModelRevision (&BoardRevision);
   if (Status != EFI_SUCCESS) {
-    DEBUG ((DEBUG_WARNING, "Couldn't get the board memory size - defaulting to 256 MB: %r\n", Status));
+    DEBUG ((DEBUG_WARN, "Couldn't get the board memory size - defaulting to 256 MB: %r\n", Status));
   } else {
     // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
     // Bits [20-22] indicate the amount of memory starting with 256MB (000b)
