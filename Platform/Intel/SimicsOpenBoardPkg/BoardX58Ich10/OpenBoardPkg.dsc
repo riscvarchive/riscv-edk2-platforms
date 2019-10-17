@@ -42,8 +42,9 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
   DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
 
+  !include AdvancedFeaturePkg/TemporaryBuildWorkaround/TemporaryBuildWorkaround.dsc
   !include $(PROJECT)/OpenBoardPkgPcd.dsc
-  !include NetworkPkg/NetworkDefines.dsc.inc
+  !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
 ################################################################################
 #
@@ -80,7 +81,6 @@
 #        is completed
 [Components.X64]
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
-!include AdvancedFeaturePkg/Include/Dsc/CoreAdvancedDxeInclude.dsc
 
 #######################################
 # Build Option Includes
@@ -283,13 +283,6 @@
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitSmm/PlatformInitSmm.inf
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   $(PLATFORM_PACKAGE)/Flash/SpiFvbService/SpiFvbServiceSmm.inf
-!endif
-
-  #######################################
-  # Advanced Feature Package
-  #######################################
-!if gAdvancedFeaturePkgTokenSpaceGuid.PcdSmbiosEnable == TRUE
-  AdvancedFeaturePkg/Smbios/SmbiosBasicDxe/SmbiosBasicDxe.inf
 !endif
 
   #######################################
