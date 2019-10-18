@@ -314,6 +314,7 @@
   $(PLATFORM_PACKAGE)/Tcg/Tcg2PlatformPei/Tcg2PlatformPei.inf
 !endif
 
+
   #######################################
   # Board Package
   #######################################
@@ -321,6 +322,7 @@
 !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
+  $(PLATFORM_BOARD_PACKAGE)/BiosInfo/BiosInfo.inf
 
 [Components.X64]
   #######################################

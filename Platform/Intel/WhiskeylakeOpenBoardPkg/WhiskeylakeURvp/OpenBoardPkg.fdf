@@ -240,6 +240,7 @@ INF $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
 INF $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf
 INF IntelFsp2WrapperPkg/FspmWrapperPeim/FspmWrapperPeim.inf
 INF $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf
+INF $(PLATFORM_BOARD_PACKAGE)/BiosInfo/BiosInfo.inf
 
 [FV.FvPostMemoryUncompact]
 BlockSize          = $(FLASH_BLOCK_SIZE)
