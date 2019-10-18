@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -294,7 +294,7 @@ SetDmaProtectedRange (
   UINTN       Index;
   EFI_STATUS  Status;
 
-  DEBUG ((DEBUG_INFO, "SetDmaProtectedRange(0x%lx) - [0x%x, 0x%x] [0x%lx, 0x%lx]\n", EngineMask, LowMemoryBase, LowMemoryLength, HighMemoryBase, HighMemoryLength));
+  DEBUG ((DEBUG_INFO, "SetDmaProtectedRange(0x%lx) - [0x%x, 0x%x] [0x%016lx, 0x%016lx]\n", EngineMask, LowMemoryBase, LowMemoryLength, HighMemoryBase, HighMemoryLength));
 
   for (Index = 0; Index < VTdInfo->VTdEngineCount; Index++) {
     if ((EngineMask & LShiftU64(1, Index)) == 0) {

@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -20,7 +20,7 @@
 #include <Ppi/VtdInfo.h>
 #include <Ppi/MemoryDiscovered.h>
 #include <Ppi/EndOfPeiPhase.h>
-
+#include <Guid/VtdPmrInfoHob.h>
 #include "IntelVTdPmrPei.h"
 
 EFI_GUID mVTdInfoGuid = {
@@ -424,37 +424,79 @@ InitDmaProtection (
   UINTN                       MemoryAlignment;
   UINTN                       LowBottom;
   UINTN                       LowTop;
-  UINTN                       HighBottom;
+  UINT64                      HighBottom;
   UINT64                      HighTop;
   DMA_BUFFER_INFO             *DmaBufferInfo;
   VOID                        *Hob;
   EFI_PEI_PPI_DESCRIPTOR      *OldDescriptor;
   EDKII_IOMMU_PPI             *OldIoMmuPpi;
+  VTD_PMR_INFO_HOB            *VtdPmrHob;
+  VOID                        *VtdPmrHobPtr;
 
+  //
+  // Initialization
+  //
+  VtdPmrHob = NULL;
   Hob = GetFirstGuidHob (&mDmaBufferInfoGuid);
   DmaBufferInfo = GET_GUID_HOB_DATA(Hob);
+  VtdPmrHobPtr = GetFirstGuidHob (&gVtdPmrInfoDataHobGuid);
 
-  DEBUG ((DEBUG_INFO, " DmaBufferSize : 0x%x\n", DmaBufferInfo->DmaBufferSize));
+  /**
+  When gVtdPmrInfoDataHobGuid exists, it means:
+    1. Dma buffer is reserved by memory initialize code
+    2. PeiGetVtdPmrAlignmentLib is used to get alignment
+    3. PMR regions are determined by the system memory map
+    4. PMR regions will be conveyed through VTD_PMR_INFO_HOB
 
-  LowMemoryAlignment = GetLowMemoryAlignment (VTdInfo, VTdInfo->EngineMask);
-  HighMemoryAlignment = GetHighMemoryAlignment (VTdInfo, VTdInfo->EngineMask);
-  if (LowMemoryAlignment < HighMemoryAlignment) {
-    MemoryAlignment = (UINTN)HighMemoryAlignment;
+  When gVtdPmrInfoDataHobGuid dosen't exist, it means:
+    1. IntelVTdPmr driver will calcuate the PMR memory alignment
+    2. Dma buffer is reserved by AllocateAlignedPages()
+  **/
+  if (VtdPmrHobPtr == NULL) {
+    //
+    // Calcuate the PMR memory alignment
+    //
+    DEBUG ((DEBUG_INFO, "No special requirements for PMR memory\n"));
+    LowMemoryAlignment = GetLowMemoryAlignment (VTdInfo, VTdInfo->EngineMask);
+    HighMemoryAlignment = GetHighMemoryAlignment (VTdInfo, VTdInfo->EngineMask);
+    if (LowMemoryAlignment < HighMemoryAlignment) {
+      MemoryAlignment = (UINTN)HighMemoryAlignment;
+    } else {
+      MemoryAlignment = LowMemoryAlignment;
+    }
+    ASSERT (DmaBufferInfo->DmaBufferSize == ALIGN_VALUE(DmaBufferInfo->DmaBufferSize, MemoryAlignment));
+
+    //
+    // Allocate memory for DMA buffer
+    //
+    DmaBufferInfo->DmaBufferBase = (UINTN)AllocateAlignedPages (EFI_SIZE_TO_PAGES(DmaBufferInfo->DmaBufferSize), MemoryAlignment);
+    ASSERT (DmaBufferInfo->DmaBufferBase != 0);
+    if (DmaBufferInfo->DmaBufferBase == 0) {
+      DEBUG ((DEBUG_INFO, " InitDmaProtection : OutOfResource\n"));
+      return EFI_OUT_OF_RESOURCES;
+    }
+
+    LowBottom = 0;
+    LowTop = DmaBufferInfo->DmaBufferBase;
+    HighBottom = DmaBufferInfo->DmaBufferBase + DmaBufferInfo->DmaBufferSize;
+    HighTop = LShiftU64 (1, VTdInfo->HostAddressWidth + 1);
   } else {
-    MemoryAlignment = LowMemoryAlignment;
-  }
-  ASSERT (DmaBufferInfo->DmaBufferSize == ALIGN_VALUE(DmaBufferInfo->DmaBufferSize, MemoryAlignment));
-  DmaBufferInfo->DmaBufferBase = (UINTN)AllocateAlignedPages (EFI_SIZE_TO_PAGES(DmaBufferInfo->DmaBufferSize), MemoryAlignment);
-  ASSERT (DmaBufferInfo->DmaBufferBase != 0);
-  if (DmaBufferInfo->DmaBufferBase == 0) {
-    DEBUG ((DEBUG_INFO, " InitDmaProtection : OutOfResource\n"));
-    return EFI_OUT_OF_RESOURCES;
-  }
 
-  DEBUG ((DEBUG_INFO, " DmaBufferBase : 0x%x\n", DmaBufferInfo->DmaBufferBase));
+    //
+    // Get the PMR ranges information for the VTd PMR hob
+    //
+    VtdPmrHob = GET_GUID_HOB_DATA (VtdPmrHobPtr);
+    DmaBufferInfo->DmaBufferBase = VtdPmrHob->ProtectedLowLimit;
+    LowBottom = VtdPmrHob->ProtectedLowBase;
+    LowTop = VtdPmrHob->ProtectedLowLimit;
+    HighBottom = VtdPmrHob->ProtectedHighBase;
+    HighTop = VtdPmrHob->ProtectedHighLimit;
+  }
 
   DmaBufferInfo->DmaBufferCurrentTop = DmaBufferInfo->DmaBufferBase + DmaBufferInfo->DmaBufferSize;
   DmaBufferInfo->DmaBufferCurrentBottom = DmaBufferInfo->DmaBufferBase;
+  DEBUG ((DEBUG_INFO, " DmaBufferSize : 0x%x\n", DmaBufferInfo->DmaBufferSize));
+  DEBUG ((DEBUG_INFO, " DmaBufferBase : 0x%x\n", DmaBufferInfo->DmaBufferBase));
 
   //
   // (Re)Install PPI.
@@ -472,10 +514,6 @@ InitDmaProtection (
   }
   ASSERT_EFI_ERROR (Status);
 
-  LowBottom = 0;
-  LowTop = DmaBufferInfo->DmaBufferBase;
-  HighBottom = DmaBufferInfo->DmaBufferBase + DmaBufferInfo->DmaBufferSize;
-  HighTop = LShiftU64 (1, VTdInfo->HostAddressWidth + 1);
 
   Status = SetDmaProtectedRange (
              VTdInfo,
@@ -559,7 +597,7 @@ InitVTdPmrForAll (
   VTD_INFO                    *VTdInfo;
   UINTN                       LowBottom;
   UINTN                       LowTop;
-  UINTN                       HighBottom;
+  UINT64                      HighBottom;
   UINT64                      HighTop;
 
   Hob = GetFirstGuidHob (&mVTdInfoGuid);

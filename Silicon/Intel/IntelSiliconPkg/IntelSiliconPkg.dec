@@ -18,13 +18,17 @@
   Include
 
 [LibraryClasses.IA32, LibraryClasses.X64]
-  ## @libraryclass  Provides services to access Microcode region on flash device.
+  ## @libraryclass Provides services to access Microcode region on flash device.
   #
   MicrocodeFlashAccessLib|Include/Library/MicrocodeFlashAccessLib.h
 
-  ## @libraryclass  Provides services to identify the firmware boot media device.
+  ## @libraryclass Provides services to identify the firmware boot media device.
   #
   FirmwareBootMediaLib|Include/Library/FirmwareBootMediaLib.h
+
+  ## @libraryclass Provides services to access VTd PMR information
+  #
+  PeiGetVtdPmrAlignmentLib|Include/Library/PeiGetVtdPmrAlignmentLib.h
 
 [Guids]
   ## GUID for Package token space
@@ -40,6 +44,9 @@
   gMicrocodeFmpImageTypeIdGuid      = { 0x96d4fdcd, 0x1502, 0x424d, { 0x9d, 0x4c, 0x9b, 0x12, 0xd2, 0xdc, 0xae, 0x5c } }
 
   gFirmwareBootMediaHobGuid = { 0x8c7340ea, 0xde8b, 0x4e06, {0xa4, 0x78, 0xec, 0x8b, 0x62, 0xd7, 0xa, 0x8b } }
+
+  ## HOB GUID to get memory information after MRC is done. The hob data will be used to set the PMR ranges
+  gVtdPmrInfoDataHobGuid = {0x6fb61645, 0xf168, 0x46be, { 0x80, 0xec, 0xb5, 0x02, 0x38, 0x5e, 0xe7, 0xe7 } }
 
 [Ppis]
   gEdkiiVTdInfoPpiGuid = { 0x8a59fcb3, 0xf191, 0x400c, { 0x97, 0x67, 0x67, 0xaf, 0x2b, 0x25, 0x68, 0x4a } }

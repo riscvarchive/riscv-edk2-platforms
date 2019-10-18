@@ -4,7 +4,7 @@
 # This driver initializes VTd engine based upon EDKII_VTD_INFO_PPI
 # and provide DMA protection in PEI.
 #
-# Copyright (c) 2017 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -39,6 +39,9 @@
   HobLib
   IoLib
   CacheMaintenanceLib
+
+[Guids]
+  gVtdPmrInfoDataHobGuid              ## CONSUMES
 
 [Ppis]
   gEdkiiIoMmuPpiGuid                  ## PRODUCES
