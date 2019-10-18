@@ -370,6 +370,7 @@
 !if gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
   $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
+  $(PLATFORM_BOARD_PACKAGE)/BiosInfo/BiosInfo.inf
 
 [Components.X64]
   #######################################
