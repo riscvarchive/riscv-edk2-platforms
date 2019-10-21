@@ -104,6 +104,8 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
                                                 config["WORKSPACE_PLATFORM"])
     config["WORKSPACE_SILICON"] = os.path.join(config["WORKSPACE"],
                                                config["WORKSPACE_SILICON"])
+    config["WORKSPACE_FEATURES"] = os.path.join(config["WORKSPACE"],
+                                               config["WORKSPACE_FEATURES"])
     config["WORKSPACE_DRIVERS"] = os.path.join(config["WORKSPACE"],
                                                config["WORKSPACE_DRIVERS"])
     config["WORKSPACE_PLATFORM_BIN"] = \
@@ -117,6 +119,7 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
     config["PACKAGES_PATH"] = config["WORKSPACE_PLATFORM"]
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_SILICON"]
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_SILICON_BIN"]
+    config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_FEATURES"]
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_DRIVERS"]
     config["PACKAGES_PATH"] += os.pathsep + \
         os.path.join(config["WORKSPACE"], "FSP")
