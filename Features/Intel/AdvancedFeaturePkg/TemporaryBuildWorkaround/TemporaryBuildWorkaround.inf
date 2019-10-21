@@ -1,0 +1,57 @@
+### @file
+# Component information file for a temporary build workaround.
+#
+# The feature enable PCD for this package must be referenced in an INF to be
+# referenced in DSC/FDF files. This driver is only included in the build to
+# allow the PCD to be referenced. This driver is not included in the flash
+# image and does not affect the boot in any way.
+#
+# The request to update BaseTools to allow a PCD to be referenced in DSC/FDF
+# files without requiring the PCD to be referenced in an INF file is tracked
+# here: https://bugzilla.tianocore.org/show_bug.cgi?id=2270
+#
+# When the BaseTools update is complete, this file can entirely be removed
+# from this package.
+#
+# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+###
+
+[Defines]
+  INF_VERSION       = 0x00010017
+  BASE_NAME         = TemporaryBuildWorkaround
+  FILE_GUID         = 8846A81E-F552-4917-81F5-80B62E4EFBAC
+  VERSION_STRING    = 1.0
+  MODULE_TYPE       = PEIM
+  ENTRY_POINT       = TemporaryBuildWorkaroundEntry
+
+[LibraryClasses]
+  BaseLib
+  PeimEntryPoint
+
+[Packages]
+  MdePkg/MdePkg.dec
+  Debugging/AcpiDebugFeaturePkg/AcpiDebugFeaturePkg.dec
+  Debugging/Usb3DebugFeaturePkg/Usb3DebugFeaturePkg.dec
+  Network/NetworkFeaturePkg/NetworkFeaturePkg.dec
+  OutOfBandManagement/IpmiFeaturePkg/IpmiFeaturePkg.dec
+  PowerManagement/S3FeaturePkg/S3FeaturePkg.dec
+  SystemInformation/SmbiosFeaturePkg/SmbiosFeaturePkg.dec
+  UserInterface/UserAuthFeaturePkg/UserAuthFeaturePkg.dec
+
+[FeaturePcd]
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureEnable
+  gIpmiFeaturePkgTokenSpaceGuid.PcdIpmiFeatureEnable
+  gNetworkFeaturePkgTokenSpaceGuid.PcdNetworkFeatureEnable
+  gS3FeaturePkgTokenSpaceGuid.PcdS3FeatureEnable
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosFeatureEnable
+  gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugFeatureEnable
+  gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable
+
+[Sources]
+  TemporaryBuildWorkaround.c
+
+[Depex]
+ TRUE
