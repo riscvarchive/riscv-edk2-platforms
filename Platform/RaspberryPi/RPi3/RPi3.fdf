@@ -189,7 +189,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
   INF MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
   INF MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
+  INF Platform/RaspberryPi/Drivers/VarBlockServiceDxe/VarBlockServiceDxe.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
@@ -206,16 +206,16 @@ READ_LOCK_STATUS   = TRUE
   #
   INF MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   INF MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
+  INF Platform/RaspberryPi/Drivers/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/DisplayDxe/DisplayDxe.inf
+  INF Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
 
   INF UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
   INF Silicon/Broadcom/Bcm283x/Drivers/InterruptDxe/InterruptDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/FdtDxe/FdtDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/ConfigDxe/ConfigDxe.inf
+  INF Platform/RaspberryPi/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
+  INF Platform/RaspberryPi/Drivers/FdtDxe/FdtDxe.inf
+  INF Platform/RaspberryPi/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   INF MdeModulePkg/Universal/EbcDxe/EbcDxe.inf
@@ -247,7 +247,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # SMBIOS Support
   #
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
+  INF Platform/RaspberryPi/Drivers/PlatformSmbiosDxe/PlatformSmbiosDxe.inf
   INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
@@ -284,7 +284,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # USB Support
   #
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
+  INF Platform/RaspberryPi/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
@@ -293,14 +293,14 @@ READ_LOCK_STATUS   = TRUE
   #
   # SD/MMC support
   #
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/SdHostDxe/SdHostDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/MmcDxe/MmcDxe.inf
+  INF Platform/RaspberryPi/Drivers/SdHostDxe/SdHostDxe.inf
+  INF Platform/RaspberryPi/Drivers/ArasanMmcHostDxe/ArasanMmcHostDxe.inf
+  INF Platform/RaspberryPi/Drivers/MmcDxe/MmcDxe.inf
 
   #
   # Pi logo (splash screen)
   #
-  INF Platform/RaspberryPi/$(PLATFORM_NAME)/Drivers/LogoDxe/LogoDxe.inf
+  INF Platform/RaspberryPi/Drivers/LogoDxe/LogoDxe.inf
 
   #
   # Device Tree support (used by FdtDxe)
