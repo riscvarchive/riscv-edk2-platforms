@@ -138,35 +138,35 @@
   #
   # SMBIOS Type 0 BIOS Information Strings
   #
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosReleaseDate|"2008-12-23"|VOID*|0xD1000001
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosVersion|"PURLEY CV/CRB BIOS Internal"|VOID*|0xD1000002
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringVendor|"Intel Corporation"|VOID*|0xD1000003
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosReleaseDate|"01/01/2019"|VOID*|0xD1000001
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringBiosVersion|"1.0"|VOID*|0xD1000002
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType0StringVendor|"BIOS Vendor"|VOID*|0xD1000003
 
   #
   # SMBIOS Type 1 System Information Strings
   #
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringFamily|"Family"|VOID*|0xD1000004
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringManufacturer|"Intel Corporation"|VOID*|0xD1000005
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringProductName|"PURLEY"|VOID*|0xD1000006
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringFamily|"System Family"|VOID*|0xD1000004
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringManufacturer|"System Manufacturer"|VOID*|0xD1000005
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringProductName|"System Product Name"|VOID*|0xD1000006
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringSerialNumber|"UNKNOWN"|VOID*|0xD1000007
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringSKUNumber|"SKU Number"|VOID*|0xD1000008
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringVersion|"1.0"|VOID*|0xD1000009
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringSKUNumber|"System SKU Number"|VOID*|0xD1000008
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType1StringVersion|"System Version"|VOID*|0xD1000009
 
   #
   # SMBIOS Type 2 Base Board Information Strings
   #
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringAssetTag|"Base Board Asset Tag"|VOID*|0xD100000A
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringLocationInChassis|"Part Component"|VOID*|0xD100000B
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringManufacturer|"Intel Corporation"|VOID*|0xD100000C
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringProductName|"PURLEY"|VOID*|0xD100000D
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringSerialNumber|"SPRO03200016"|VOID*|0xD100000E
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringVersion|"E63448-400"|VOID*|0xD100000F
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringManufacturer|"Base Board Manufacturer"|VOID*|0xD100000C
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringProductName|"Base Board Product Name"|VOID*|0xD100000D
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringSerialNumber|"UNKNOWN"|VOID*|0xD100000E
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType2StringVersion|"Base Board Version"|VOID*|0xD100000F
 
   #
   # SMBIOS Type 3 System Enclosure Chassis Strings
   #
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringAssetTag|"Chassis Asset Tag"|VOID*|0xD1000011
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringManufacturer|"Intel Corporation"|VOID*|0xD1000012
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringManufacturer|"Chassis Manufacturer"|VOID*|0xD1000012
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringSerialNumber|"UNKNOWN"|VOID*|0xD1000013
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringSKUNumber|"SKU Number"|VOID*|0xD1000014
-  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringVersion|"0.1"|VOID*|0xD1000015
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringSKUNumber|"Chassis SKU Number"|VOID*|0xD1000014
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosType3StringVersion|"Chassis Version"|VOID*|0xD1000015
