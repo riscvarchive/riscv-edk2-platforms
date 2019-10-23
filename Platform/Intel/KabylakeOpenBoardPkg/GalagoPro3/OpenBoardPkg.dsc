@@ -14,6 +14,8 @@
   DEFINE      PLATFORM_BOARD_PACKAGE          = KabylakeOpenBoardPkg
   DEFINE      BOARD                           = GalagoPro3
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
+  DEFINE      PEI_ARCH                        = IA32
+  DEFINE      DXE_ARCH                        = X64
 
   #
   # Include PCD configuration for this board.
@@ -74,10 +76,14 @@
 #######################################
 # Component Includes
 #######################################
+# @todo: Change below line to [Components.$(PEI_ARCH)] after https://bugzilla.tianocore.org/show_bug.cgi?id=2308
+#        is completed
 [Components.IA32]
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CorePeiInclude.dsc
 !include $(PLATFORM_SI_PACKAGE)/SiPkgPei.dsc
 
+# @todo: Change below line to [Components.$(DXE_ARCH)] after https://bugzilla.tianocore.org/show_bug.cgi?id=2308
+#        is completed
 [Components.X64]
 !include $(PLATFORM_PACKAGE)/Include/Dsc/CoreDxeInclude.dsc
 !include $(PLATFORM_SI_PACKAGE)/SiPkgDxe.dsc
@@ -228,6 +234,11 @@
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/SmmTestPointCheckLib.inf
 !endif
 
+#######################################
+# PEI Components
+#######################################
+# @todo: Change below line to [Components.$(PEI_ARCH)] after https://bugzilla.tianocore.org/show_bug.cgi?id=2308
+#        is completed
 [Components.IA32]
   #######################################
   # Edk2 Packages
@@ -301,6 +312,11 @@
 !endif
   $(PLATFORM_BOARD_PACKAGE)/BiosInfo/BiosInfo.inf
 
+#######################################
+# DXE Components
+#######################################
+# @todo: Change below line to [Components.$(DXE_ARCH)] after https://bugzilla.tianocore.org/show_bug.cgi?id=2308
+#        is completed
 [Components.X64]
   #######################################
   # Edk2 Packages
