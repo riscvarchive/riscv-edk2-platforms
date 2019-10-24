@@ -293,7 +293,7 @@ FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
 
 [Rule.Common.SEC.RESET_VECTOR]
   FILE RAW = $(NAMED_GUID) {
-    RAW RAW      |.raw
+    RAW BIN   Align = 16   |.bin
   }
 
 [Rule.Common.SEC.RESET_SECMAIN]
