@@ -13,4 +13,4 @@
 # The code in this FV handles the initial firmware startup, and
 # decompresses the PEI and DXE FVs which handles the rest of the boot sequence.
 #
-INF  RuleOverride=RESET_VECTOR USE = IA32 UefiCpuPkg/ResetVector/Vtf0/Bin/ResetVector.inf
+INF  RuleOverride=RESET_VECTOR USE = IA32 UefiCpuPkg/ResetVector/Vtf0/Vtf0.inf

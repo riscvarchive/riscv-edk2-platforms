@@ -10,5 +10,5 @@
   #
   # SEC Phase modules
   #
-  UefiCpuPkg/ResetVector/Vtf0/Bin/ResetVector.inf
+  UefiCpuPkg/ResetVector/Vtf0/Vtf0.inf
   UefiCpuPkg/CpuMpPei/CpuMpPei.inf
