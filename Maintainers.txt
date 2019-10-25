@@ -124,6 +124,22 @@ F: Silicon/Hisilicon/
 M: Leif Lindholm <leif.lindholm@linaro.org>
 R: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
+Features/Intel
+F: Features/Intel/
+M: Michael Kubacki <michael.a.kubacki@intel.com>
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+R: Liming Gao <liming.gao@intel.com>
+
+Features/Intel/Debugging
+F: Features/Intel/Debugging/
+M: Eric Dong <eric.dong@intel.com>
+R: Liming Gao <liming.gao@intel.com>
+
+Features/Intel/UserInterface
+F: Features/Intel/UserInterface/
+M: Dandan Bi <dandan.bi@intel.com>
+R: Liming Gao <liming.gao@intel.com>
+
 Platform/Intel/QuarkPlatformPkg
 F: Platform/Intel/QuarkPlatformPkg/
 M: Michael D Kinney <michael.d.kinney@intel.com>
@@ -134,25 +150,9 @@ F: Platform/Intel/Vlv2TbltDevicePkg/
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
 
-Platform/Intel/AdvancedFeaturePkg
-F: Platform/Intel/AdvancedFeaturePkg/
-M: Michael Kubacki <michael.a.kubacki@intel.com>
-M: Sai Chaganty <rangasai.v.chaganty@intel.com>
-R: Liming Gao <liming.gao@intel.com>
-
 Platform/Intel/BoardModulePkg
 F: Platform/Intel/BoardModulePkg/
 M: Eric Dong <eric.dong@intel.com>
-R: Liming Gao <liming.gao@intel.com>
-
-Platform/Intel/DebugFeaturePkg
-F: Platform/Intel/DebugFeaturePkg/
-M: Eric Dong <eric.dong@intel.com>
-R: Liming Gao <liming.gao@intel.com>
-
-Platform/Intel/UserInterfaceFeaturePkg
-F: Platform/Intel/UserInterfaceFeaturePkg/
-M: Dandan Bi <dandan.bi@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
 Platform/Intel/KabylakeOpenBoardPkg
