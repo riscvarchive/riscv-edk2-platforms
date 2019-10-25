@@ -89,8 +89,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
 * Only code usable across more than one board at the root level.
 * Board-specific code in a directory. The directory name should match that of the board supported.
-* Features not essential to achieve stage 5 or earlier boots are maintained in a Features folder at the appropriate
-  level in the package hierarchy.
+* Features not essential to achieve stage 5 or earlier boots are maintained in edk2-platforms/Features/Intel.
 
 Shared resources in the package root directory can include interfaces described in header files, library instances,
 firmware modules, binaries, etc. The UEFI firmware implementation is built using the process described below from the
@@ -260,16 +259,17 @@ return back to the minimum platform caller.
 
 ### **Package Builds**
 
-In some cases, such as AdvancedFeaturePkg, a package may provide a set of functionality that is included in other
+In some cases, such as BoardModulePkg, a package may provide a set of functionality that is included in other
 packages. To test the build of the whole package, the "build" command should be used following the instructions below.
 
 1. Execute edksetup.bat (Windows) or edksetup.sh (Linux).
 2. Verify the "WORKSPACE" environment variable is set to the edk2 directory in your workspace.
-3. Set the "PACKAGES_PATH" environment variable to include the edk2-platforms/Platform/Intel and edk2-platforms/Silicon/Intel
-   directories.
-   * Windows example: set PACKAGES_PATH=c:\Edk2Workspace\edk2-platforms\Platform\Intel;c:\Edk2Workspace\edk2-platforms\Silicon\Intel
+3. Set the "PACKAGES_PATH" environment variable to include the edk2-platforms/Platform/Intel, edk2-platforms/Silicon/Intel,
+   and edk2-platforms/Features/Intel directories.
+   * Windows example: set PACKAGES_PATH=c:\Edk2Workspace\edk2-platforms\Platform\Intel;
+     c:\Edk2Workspace\edk2-platforms\Silicon\Intel;c:\Edk2Workspace\edk2-platforms\Features\Intel
 4. Build the package by specifying the package DSC as the platform build target from the Platform/Intel or Silicon/Intel directory:
-   "build -p AdvancedFeaturePkg/AdvancedFeaturePkg.dsc"
+   "build -p BoardModulePkg/BoardModulePkg.dsc -a IA32 -a X64"
 
 
 ### **Firmware Image Flashing**
