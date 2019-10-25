@@ -195,6 +195,18 @@ M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
 R: Yuwei Chen <yuwei.chen@intel.com>
 
+Platform/RISC-V/PlatformPkg
+F: Platform/RISC-V/PlatformPkg/
+M: Abner Chang <abner.chang@hpe.com>
+R: Daniel Schaefer <daniel.schaefer@hpe.com>
+R: Gilbert Chen <gilbert.chen@hpe.com>
+
+Platform/SiFive/U5Series
+F:Platform/SiFive/U5Series/
+M: Abner Chang <abner.chang@hpe.com>
+R: Gilbert Chen <gilbert.chen@hpe.com>
+R: Daniel Schaefer <daniel.schaefer@hpe.com>
+
 Silicon/Intel/IntelSiliconPkg
 F: Silicon/Intel/IntelSiliconPkg/
 M: Ray Ni <ray.ni@intel.com>
@@ -276,3 +288,15 @@ F: Silicon/NXP/Library/Pcf8563RealTimeClockLib/
 F: Silicon/Socionext/
 M: Ard Biesheuvel <ard.biesheuvel@arm.com>
 M: Leif Lindholm <leif@nuviainc.com>
+
+Silicon/RISC-V/ProcessorPkg
+F: Silicon/RISC-V/ProcessorPkg/
+M: Abner Chang <abner.chang@hpe.com>
+M: Daniel Schaefer <daniel.schaefer@hpe.com>
+R: Gilbert Chen <gilbert.chen@hpe.com>
+
+Silicon/SiFive
+F: Silicon/SiFive/
+M: Abner Chang <abner.chang@hpe.com>
+M: Gilbert Chen <gilbert.chen@hpe.com>
+R: Daniel Schaefer <daniel.schaefer@hpe.com>
