@@ -1,5 +1,5 @@
 /** @file
-  Platform Hook Library instances
+  Whiskey Lake U RVP SMM Multi-Board ACPI Support library
 
 
   Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
