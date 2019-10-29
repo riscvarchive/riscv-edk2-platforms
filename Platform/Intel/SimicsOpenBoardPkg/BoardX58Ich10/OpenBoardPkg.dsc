@@ -20,16 +20,17 @@
   DEFINE PCH_PKG               = SimicsIch10Pkg
   DEFINE DXE_ARCH              = X64
   DEFINE PEI_ARCH              = IA32
+  DEFINE PROJECT               = $(BOARD_PKG)/$(BOARD_NAME)
 
   PLATFORM_NAME                  = SimicsX58
   PLATFORM_GUID                  = EE8EBB5A-CC95-412f-9987-2AF70F88B69A
   PLATFORM_VERSION               = 0.1
   DSC_SPECIFICATION              = 0x00010005
-  OUTPUT_DIRECTORY               = Build/SimicsX58Ia32X64
+  OUTPUT_DIRECTORY               = Build/$(PROJECT)
   SUPPORTED_ARCHITECTURES        = IA32|X64
   BUILD_TARGETS                  = DEBUG|RELEASE|NOOPT
   SKUID_IDENTIFIER               = DEFAULT
-  FLASH_DEFINITION               = $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkg.fdf
+  FLASH_DEFINITION               = $(PROJECT)/OpenBoardPkg.fdf
 
   DEFINE SMM_REQUIRE             = TRUE
 
@@ -41,7 +42,7 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
   DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
 
-  !include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgPcd.dsc
+  !include $(PROJECT)/OpenBoardPkgPcd.dsc
   !include NetworkPkg/NetworkDefines.dsc.inc
 
 ################################################################################
@@ -80,7 +81,7 @@
 #######################################
 # Build Option Includes
 #######################################
-!include $(BOARD_PKG)/$(BOARD_NAME)/OpenBoardPkgBuildOption.dsc
+!include $(PROJECT)/OpenBoardPkgBuildOption.dsc
 
 ################################################################################
 #
@@ -175,11 +176,11 @@
   #####################################
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPreMem.inf {
     <LibraryClasses>
-      BoardInitLib|$(BOARD_PKG)/$(BOARD_NAME)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
+      BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPreMemLib.inf
   }
   $(PLATFORM_PACKAGE)/PlatformInit/PlatformInitPei/PlatformInitPostMem.inf {
     <LibraryClasses>
-      BoardInitLib|$(BOARD_PKG)/$(BOARD_NAME)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
+      BoardInitLib|$(PROJECT)/Library/BoardInitLib/PeiBoardInitPostMemLib.inf
   }
   $(PLATFORM_PACKAGE)/PlatformInit/ReportFv/ReportFvPei.inf
   $(PLATFORM_PACKAGE)/PlatformInit/SiliconPolicyPei/SiliconPolicyPeiPreMem.inf

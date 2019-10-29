@@ -13,7 +13,7 @@
 # Build the variable store and the firmware code as one unified flash device
 # image.
 #
-[FD.SIMICSX58IA32X64]
+[FD.BOARDX58ICH10]
 BaseAddress   = $(FW_BASE_ADDRESS)
 Size          = $(FW_SIZE)
 ErasePolarity = 1
