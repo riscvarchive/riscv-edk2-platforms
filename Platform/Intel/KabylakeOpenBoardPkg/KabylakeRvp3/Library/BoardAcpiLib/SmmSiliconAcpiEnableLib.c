@@ -1,7 +1,7 @@
 /** @file
-  Platform Hook Library instances
+  Kaby Lake RVP 3 SMM Silicon ACPI Enable library
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -68,7 +68,7 @@ SiliconEnableAcpi (
                      PCI_DEVICE_NUMBER_PCH_LPC,
                      PCI_FUNCTION_NUMBER_PCH_LPC
                      );
-  
+
   //
   // Get the ACPI Base Address
   //
@@ -127,7 +127,7 @@ SiliconEnableAcpi (
   OutputValue = IoRead32 (AcpiBaseAddr + 0x38);
   OutputValue = OutputValue & ~(1 << (UINTN) PcdGet8 (PcdSmcExtSmiBitPosition));
   IoWrite32 (AcpiBaseAddr + 0x38, OutputValue);
-  
+
 
   //
   // Enable SCI
@@ -149,7 +149,7 @@ SiliconDisableAcpi (
 {
   UINT16                              AcpiBaseAddr;
   UINT32                              Pm1Cnt;
-  
+
   //
   // Get the ACPI Base Address
   //

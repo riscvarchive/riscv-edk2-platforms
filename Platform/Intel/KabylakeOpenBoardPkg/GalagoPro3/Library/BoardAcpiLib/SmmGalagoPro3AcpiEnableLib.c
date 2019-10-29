@@ -1,5 +1,5 @@
 /** @file
-  Platform Hook Library instances
+  System 76 Galago Pro 3 Board ACPI Enable library
 
 Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent

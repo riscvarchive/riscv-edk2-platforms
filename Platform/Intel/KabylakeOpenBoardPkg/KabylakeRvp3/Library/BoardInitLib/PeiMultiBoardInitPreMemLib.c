@@ -1,5 +1,5 @@
 /** @file
-  Platform Hook Library instances
+  Kaby Lake RVP 3 Multi-Board Initialization Pre-Memory library
 
 Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent

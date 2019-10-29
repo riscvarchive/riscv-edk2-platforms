@@ -1,5 +1,5 @@
 ### @file
-# Platform Hook Library instance for Kaby Lake RVP3.
+# Kaby Lake RVP 3 Board ACPI library
 #
 # Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
