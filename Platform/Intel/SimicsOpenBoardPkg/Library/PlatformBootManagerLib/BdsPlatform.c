@@ -348,6 +348,15 @@ PlatformBootManagerBeforeConsole (
   NvBootOptions = EfiBootManagerGetLoadOptions (&NvBootOptionCount, LoadOptionTypeBoot);
   for (Index = 0; Index < NvBootOptionCount; Index++) {
     Status = EfiBootManagerDeleteLoadOptionVariable (NvBootOptions[Index].OptionNumber, LoadOptionTypeBoot);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((
+        DEBUG_ERROR,
+        "%a: removing Boot#%04x %r\n",
+        __FUNCTION__,
+        (UINT32) NvBootOptions[Index].OptionNumber,
+        Status
+        ));
+    }
   }
 
   InstallDevicePathCallback ();
