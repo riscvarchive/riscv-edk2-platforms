@@ -623,6 +623,8 @@ READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = 6053D78A-457E-4490-A237-31D0FBE2F305
 
+!include AdvancedFeaturePkg/Include/PreMemory.fdf
+
 !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
 INF $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Pei/PeiTbtInit.inf
 !endif
@@ -648,6 +650,8 @@ READ_STATUS        = TRUE
 READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 FvNameGuid         = BE3DF86F-E464-44A3-83F7-0D27E6B88C27
+
+!include AdvancedFeaturePkg/Include/PostMemory.fdf
 
 !if gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable == TRUE
 INF  $(PLATFORM_BOARD_PACKAGE)/Features/Tbt/TbtInit/Dxe/TbtDxe.inf

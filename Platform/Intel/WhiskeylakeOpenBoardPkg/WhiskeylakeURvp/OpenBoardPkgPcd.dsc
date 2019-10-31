@@ -24,6 +24,7 @@
   # Stage 3 - boot to shell only
   # Stage 4 - boot to OS
   # Stage 5 - boot to OS with security boot enabled
+  # Stage 6 - boot with advanced features enabled
   #
   gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
 
