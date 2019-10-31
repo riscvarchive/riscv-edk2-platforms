@@ -16,37 +16,31 @@
   DEFINE      PROJECT                         = $(PLATFORM_BOARD_PACKAGE)/$(BOARD)
   DEFINE      PEI_ARCH                        = IA32
   DEFINE      DXE_ARCH                        = X64
-
-  #
-  # Include PCD configuration for this board.
-  #
-  !include OpenBoardPkgPcd.dsc
-
-################################################################################
-#
-# Defines Section - statements that will be processed to create a Makefile.
-#
-################################################################################
-[Defines]
-  PLATFORM_NAME                       = $(PLATFORM_PACKAGE)
-  PLATFORM_GUID                       = 7324F33D-4E96-4F8B-A550-544DE6162AB7
-  PLATFORM_VERSION                    = 0.1
-  DSC_SPECIFICATION                   = 0x00010005
-  OUTPUT_DIRECTORY                    = Build/$(PROJECT)
-  SUPPORTED_ARCHITECTURES             = IA32|X64
-  BUILD_TARGETS                       = DEBUG|RELEASE
-  SKUID_IDENTIFIER                    = ALL
-
-
-  FLASH_DEFINITION                    = $(PROJECT)/OpenBoardPkg.fdf
-
-  FIX_LOAD_TOP_MEMORY_ADDRESS         = 0x0
-  DEFINE   TOP_MEMORY_ADDRESS         = 0x0
+  DEFINE      TOP_MEMORY_ADDRESS              = 0x0
 
   #
   # Default value for OpenBoardPkg.fdf use
   #
   DEFINE BIOS_SIZE_OPTION = SIZE_60
+
+  PLATFORM_NAME                               = $(PLATFORM_PACKAGE)
+  PLATFORM_GUID                               = 7324F33D-4E96-4F8B-A550-544DE6162AB7
+  PLATFORM_VERSION                            = 0.1
+  DSC_SPECIFICATION                           = 0x00010005
+  OUTPUT_DIRECTORY                            = Build/$(PROJECT)
+  SUPPORTED_ARCHITECTURES                     = IA32|X64
+  BUILD_TARGETS                               = DEBUG|RELEASE
+  SKUID_IDENTIFIER                            = ALL
+
+  FLASH_DEFINITION                            = $(PROJECT)/OpenBoardPkg.fdf
+  FIX_LOAD_TOP_MEMORY_ADDRESS                 = 0x0
+
+  #
+  # Include PCD configuration for this board.
+  #
+  !include AdvancedFeaturePkg/TemporaryBuildWorkaround/TemporaryBuildWorkaround.dsc
+  !include OpenBoardPkgPcd.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
 ################################################################################
 #
