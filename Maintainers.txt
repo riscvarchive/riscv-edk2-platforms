@@ -96,11 +96,6 @@ M: Chasel Chiu <chasel.chiu@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
-Platform/Intel/PurleyOpenBoardPkg
-M: Shifei A Lu <shifei.a.lu@intel.com>
-M: Xiaohu Zhou <bowen.zhou@intel.com>
-M: Isaac W Oram <isaac.w.oram@intel.com>
-
 Platform/Intel/WhiskeylakeOpenBoardPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Michael Kubacki <michael.a.kubacki@intel.com>
@@ -146,21 +141,6 @@ Silicon/Intel/KabylakeSiliconPkg
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
-
-Silicon/Intel/LewisburgPkg
-M: Piwko, Maciej <maciej.piwko@intel.com>
-M: Bu, Daocheng <daocheng.bu@intel.com>
-M: Oram, Isaac W <isaac.w.oram@intel.com>
-
-Silicon/Intel/PurleyRcPkg
-M: Gillispie, Thad <thad.gillispie@intel.com>
-M: Bu, Daocheng <daocheng.bu@intel.com>
-M: Oram, Isaac W <isaac.w.oram@intel.com>
-
-Silicon/Intel/PurleySktPkg
-M: Gillispie, Thad <thad.gillispie@intel.com>
-M: Bu, Daocheng <daocheng.bu@intel.com>
-M: Oram, Isaac W <isaac.w.oram@intel.com>
 
 Silicon/Intel/SimicsX58SktPkg
 M: Wei David Y <david.y.wei@intel.com>
