@@ -22,13 +22,13 @@
 #include <Library/PeimEntryPoint.h>
 #include <Library/PeiServicesLib.h>
 #include <Library/ResourcePublicationLib.h>
+#include <Library/CmosAccessLib.h>
 #include <Guid/MemoryTypeInformation.h>
 #include <Ppi/MasterBootMode.h>
 #include <IndustryStandard/Pci22.h>
 #include <SimicsPlatforms.h>
 
 #include "Platform.h"
-#include "Cmos.h"
 
 EFI_MEMORY_TYPE_INFORMATION mDefaultMemoryTypeInformation[] = {
   { EfiACPIMemoryNVS,       0x004 },
@@ -524,7 +524,7 @@ DebugDumpCmos (
   VOID
   )
 {
-  UINT32 Loop;
+  UINT8 Loop;
 
   DEBUG ((EFI_D_INFO, "CMOS:\n"));
 

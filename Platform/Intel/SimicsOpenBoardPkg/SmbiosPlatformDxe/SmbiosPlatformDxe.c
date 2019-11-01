@@ -10,35 +10,11 @@
 #include "SmbiosPlatformDxe.h"
 
 
-/**
-Reads 8-bits of CMOS data.
-
-Reads the 8-bits of CMOS data at the location specified by Index.
-The 8-bit read value is returned.
-
-@param  Index  The CMOS location to read.
-
-@return The value read.
-
-**/
-UINT8
-EFIAPI
-CmosRead8(
-  IN      UINTN                     Index
-  )
-{
-  IoWrite8(0x70, (UINT8)Index);
-  return IoRead8(0x71);
-}
-
 UINT32
 GetSystemMemorySizeBelow4gb(
   VOID
   )
 {
-  UINT8 Cmos0x34;
-  UINT8 Cmos0x35;
-
   //
   // CMOS 0x34/0x35 specifies the system memory above 16 MB.
   // * CMOS(0x35) is the high byte
@@ -47,11 +23,7 @@ GetSystemMemorySizeBelow4gb(
   // * Since this is memory above 16MB, the 16MB must be added
   //   into the calculation to get the total memory size.
   //
-
-  Cmos0x34 = (UINT8)CmosRead8(0x34);
-  Cmos0x35 = (UINT8)CmosRead8(0x35);
-
-  return (UINT32)(((UINTN)((Cmos0x35 << 8) + Cmos0x34) << 16) + SIZE_16MB);
+  return (UINT32) (((UINTN) CmosRead16 (0x34) << 16) + SIZE_16MB);
 }
 
 STATIC
@@ -61,8 +33,6 @@ GetSystemMemorySizeAbove4gb(
 )
 {
   UINT32 Size;
-  UINTN  CmosIndex;
-
   //
   // CMOS 0x5b-0x5d specifies the system memory above 4GB MB.
   // * CMOS(0x5d) is the most significant size byte
@@ -70,11 +40,7 @@ GetSystemMemorySizeAbove4gb(
   // * CMOS(0x5b) is the least significant size byte
   // * The size is specified in 64kb chunks
   //
-
-  Size = 0;
-  for (CmosIndex = 0x5d; CmosIndex >= 0x5b; CmosIndex--) {
-    Size = (UINT32)(Size << 8) + (UINT32)CmosRead8(CmosIndex);
-  }
+  Size = (CmosRead16 (0x5c) << 8) + CmosRead8 (0x5b);
 
   return LShiftU64(Size, 16);
 }

@@ -23,7 +23,6 @@
 #
 
 [Sources]
-  Cmos.c
   FeatureControl.c
   MemDetect.c
   Platform.c
@@ -36,6 +35,7 @@
   MinPlatformPkg/MinPlatformPkg.dec
   SimicsX58SktPkg/SktPkg.dec
   SimicsIch10Pkg/Ich10Pkg.dec
+  BoardModulePkg/BoardModulePkg.dec
 
 [Guids]
   gEfiMemoryTypeInformationGuid
@@ -53,6 +53,7 @@
   PeimEntryPoint
   MtrrLib
   PcdLib
+  CmosAccessLib
 
 [Pcd]
   gSimicsOpenBoardPkgTokenSpaceGuid.PcdSimicsPeiMemFvBase
