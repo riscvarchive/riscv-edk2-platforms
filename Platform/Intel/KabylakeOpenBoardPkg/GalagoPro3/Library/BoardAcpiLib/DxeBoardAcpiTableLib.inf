@@ -33,9 +33,10 @@
   MinPlatformPkg/MinPlatformPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
+  BoardModulePkg/BoardModulePkg.dec
 
 [Pcd]
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPs2KbMsEnable
+  gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable
   gMinPlatformPkgTokenSpaceGuid.PcdPciExpNative
   gMinPlatformPkgTokenSpaceGuid.PcdNativeAspmEnable
   gMinPlatformPkgTokenSpaceGuid.PcdLowPowerS0Idle

@@ -382,6 +382,11 @@
   MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
+  MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf
+  MdeModulePkg/Universal/BdsDxe/BdsDxe.inf{
+    <LibraryClasses>
+      NULL|BoardModulePkg/Library/BdsPs2KbcLib/BdsPs2KbcLib.inf
+  }
   UefiCpuPkg/CpuDxe/CpuDxe.inf
 
 !if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
@@ -486,3 +491,4 @@
       !endif
   }
 !endif
+  BoardModulePkg/LegacySioDxe/LegacySioDxe.inf

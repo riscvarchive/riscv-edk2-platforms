@@ -288,8 +288,6 @@ gKabylakeOpenBoardPkgTokenSpaceGuid.PcdBoardUcmcGpioTableSize|0|UINT16|0x0000001
 # Misc
 gKabylakeOpenBoardPkgTokenSpaceGuid.PcdIoExpanderPresent|FALSE|BOOLEAN|0x000000EC
 
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPs2KbMsEnable|1|UINT8|0x40000009
-
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiSleepState|1|UINT8|0x40000002
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiHibernate|1|UINT8|0x40000003
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLowPowerS0Idle|0|UINT8|0x40000004
