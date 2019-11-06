@@ -283,7 +283,6 @@
   #######################################
   $(BOARD_PKG)/AcpiTables/AcpiTables.inf
   $(BOARD_PKG)/AcpiTables/MinPlatformAcpiTables/AcpiPlatform.inf
-  $(BOARD_PKG)/LegacySioDxe/LegacySioDxe.inf
   $(BOARD_PKG)/SimicsDxe/SimicsDxe.inf
   $(BOARD_PKG)/SimicsVideoDxe/SimicsVideoDxe.inf
   $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf

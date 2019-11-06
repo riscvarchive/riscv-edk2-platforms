@@ -213,7 +213,6 @@ INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 INF  MinPlatformPkg/Flash/SpiFvbService/SpiFvbServiceSmm.inf
 INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
 
-INF  $(BOARD_PKG)/LegacySioDxe/LegacySioDxe.inf
 INF  MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf
 
 INF  $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
