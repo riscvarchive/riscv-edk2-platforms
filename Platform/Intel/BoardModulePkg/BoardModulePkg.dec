@@ -45,3 +45,25 @@
 
   ## {7F4EE1A3-C1F3-43E4-BA1A-39DCDE46C343}
   gBoardModulePkgTokenSpaceGuid = { 0x7f4ee1a3, 0xc1f3, 0x43e4, { 0xba, 0x1a, 0x39, 0xdc, 0xde, 0x46, 0xc3, 0x43 } }
+
+[PcdsFixedAtBuild]
+  ## PcdPs2KbMsEnable 0x0:Disable, 0x1:Enable
+  gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable|0x00|UINT8|0x00000001
+
+  ## SuperIo Pci ISA Bridge info. It is an array that contains the Segment, Bus, Device and Function
+  #  information describing the PCI Device Info. The first byte is the segment number,
+  #  the second is the bus number, third byte is the device number, the fourth byte
+  #  is the Function.
+  gBoardModulePkgTokenSpaceGuid.PcdSuperIoPciIsaBridgeDevice|{0xFF, 0xFF, 0xFF, 0xFF}|VOID*|0x00000002
+
+  ## PcdUart1Enable 0x0:Disable, 0x1:Enable
+  gBoardModulePkgTokenSpaceGuid.PcdUart1Enable|0x00|UINT8|0x00000003
+  gBoardModulePkgTokenSpaceGuid.PcdUart1IrqMask|0x0010|UINT16|0x00000004
+  gBoardModulePkgTokenSpaceGuid.PcdUart1IoPort|0x03F8|UINT16|0x00000005
+  gBoardModulePkgTokenSpaceGuid.PcdUart1Length|0x08|UINT8|0x00000006
+
+  ## PcdUart2Enable 0x0:Disable, 0x1:Enable
+  gBoardModulePkgTokenSpaceGuid.PcdUart2Enable|0x00|UINT8|0x00000007
+  gBoardModulePkgTokenSpaceGuid.PcdUart2IrqMask|0x0008|UINT16|0x00000008
+  gBoardModulePkgTokenSpaceGuid.PcdUart2IoPort|0x02F8|UINT16|0x00000009
+  gBoardModulePkgTokenSpaceGuid.PcdUart2Length|0x08|UINT8|0x0000000A
