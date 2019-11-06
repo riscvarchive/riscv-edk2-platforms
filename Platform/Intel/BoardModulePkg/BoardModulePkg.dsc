@@ -88,3 +88,4 @@
   BoardModulePkg/Library/BiosIdLib/PeiBiosIdLib.inf
 
   BoardModulePkg/Library/PeiFirmwareBootMediaInfoLib/PeiFirmwareBootMediaInfoLib.inf
+  BoardModulePkg/Library/BdsPs2KbcLib/BdsPs2KbcLib.inf
