@@ -296,6 +296,12 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
+  ######################################
+  # Board Configuration
+  ######################################
+  gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable|1
+  gBoardModulePkgTokenSpaceGuid.PcdSuperIoPciIsaBridgeDevice|{0x00, 0x00, 0x1F, 0x00}
+
 [PcdsFixedAtBuild.IA32]
   ######################################
   # Edk2 Configuration
