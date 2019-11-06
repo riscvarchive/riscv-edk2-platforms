@@ -107,6 +107,27 @@ SioDriverEntryPoint (
 
 
 /**
+  Compares a PCI to ISA bridge device segment, bus, device and function to the
+  PcdSuperIoPciIsaBridgeDevice values.
+
+  @param[in]  CurrentDevice       The device to be compared with the PcdSuperIoPciIsaBridgeDevice information
+  @retval     TRUE                This device matches PcdSuperIoPciIsaBridgeDevice values
+  @retval     FALSE               This device does not match the PcdSuperIoPciIsaBridgeDevice values
+**/
+BOOLEAN
+EFIAPI
+SioDeviceEnabled (
+  IN SIO_PCI_ISA_BRIDGE_DEVICE_INFO *CurrentDevice
+){
+    SIO_PCI_ISA_BRIDGE_DEVICE_INFO *Device = \
+      (SIO_PCI_ISA_BRIDGE_DEVICE_INFO *) FixedPcdGetPtr (PcdSuperIoPciIsaBridgeDevice);
+    if(CompareMem (Device, CurrentDevice, sizeof (SIO_PCI_ISA_BRIDGE_DEVICE_INFO)) == 0) {
+      return TRUE;
+    }
+    return FALSE;
+}
+
+/**
   Test to see if this driver supports Controller Handle.
 
   @param[in]  This                Protocol instance pointer.
@@ -138,6 +159,7 @@ SioDriverSupported (
   UINTN                     BusNumber;
   UINTN                     DeviceNumber;
   UINTN                     FunctionNumber;
+  SIO_PCI_ISA_BRIDGE_DEVICE_INFO  SioDevice;
 
   //
   // If RemainingDevicePath is not NULL, it should verify that the first device
@@ -248,6 +270,24 @@ SioDriverSupported (
             Status = EFI_SUCCESS;
           } else {
             Status = EFI_UNSUPPORTED;
+          }
+        }
+        if(!EFI_ERROR (Status)) {
+          Status = PciIo->GetLocation (
+                            PciIo,
+                            &SegmentNumber,
+                            &BusNumber,
+                            &DeviceNumber,
+                            &FunctionNumber
+                            );
+          if(!EFI_ERROR (Status)) {
+            SioDevice.Segment = (UINT8) SegmentNumber;
+            SioDevice.Bus = (UINT8) BusNumber;
+            SioDevice.Device = (UINT8) DeviceNumber;
+            SioDevice.Funtion = (UINT8) FunctionNumber;
+            if(!SioDeviceEnabled (&SioDevice)) {
+              Status = EFI_UNSUPPORTED;
+            }
           }
         }
       }

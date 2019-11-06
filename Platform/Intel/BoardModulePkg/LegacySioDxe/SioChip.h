@@ -24,6 +24,8 @@ UINT8
 #define RESOURCE_DMA   BIT2
 #define RESOURCE_MEM   BIT3
 
+#define DEVICE_ENABLED  0x01
+#define DEVICE_INFO_END { { 0xFFFFFFFF, 0xFFFFFFFF } }
 #pragma pack(1)
 
 typedef struct {
@@ -45,6 +47,13 @@ typedef struct {
   ACPI_RESOURCE_HEADER_PTR    Resources;
   ACPI_RESOURCE_HEADER_PTR    PossibleResources;
 } DEVICE_INFO;
+
+typedef struct {
+  UINT8 Segment;
+  UINT8 Bus;
+  UINT8 Device;
+  UINT8 Funtion;
+} SIO_PCI_ISA_BRIDGE_DEVICE_INFO;
 
 /**
   Return the supported devices.
@@ -169,7 +178,6 @@ ReadRegister (
 //
 // Internal function
 //
-
 
 /**
   Find Super I/O controller.

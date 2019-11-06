@@ -19,12 +19,31 @@
 ACPI_SIO_RESOURCES_IO_IRQ      mCom1Resources = {
   {
     { ACPI_FIXED_LOCATION_IO_PORT_DESCRIPTOR },
-    0x3f8,
-    8
+      FixedPcdGet16 (PcdUart1IoPort),
+      FixedPcdGet8 (PcdUart1Length)
+    },
+    {
+      { ACPI_IRQ_NOFLAG_DESCRIPTOR },
+      FixedPcdGet16 (PcdUart1IrqMask)
+    },
+    {
+      ACPI_END_TAG_DESCRIPTOR,
+      0
+    }
+};
+
+//
+// COM 2 UART Controller
+//
+ACPI_SIO_RESOURCES_IO_IRQ      mCom2Resources = {
+  {
+    { ACPI_FIXED_LOCATION_IO_PORT_DESCRIPTOR },
+    FixedPcdGet16 (PcdUart2IoPort),
+    FixedPcdGet8 (PcdUart2Length)
   },
   {
     { ACPI_IRQ_NOFLAG_DESCRIPTOR },
-    BIT4    // IRQ4
+    FixedPcdGet16 (PcdUart2IrqMask),
   },
   {
     ACPI_END_TAG_DESCRIPTOR,
@@ -74,6 +93,7 @@ ACPI_SIO_RESOURCES_IO_IRQ      mMouseResources = {
 // Table of SIO Controllers
 //
 DEVICE_INFO    mDeviceInfo[] = {
+#if FixedPcdGet8 (PcdUart1Enable) == DEVICE_ENABLED
   {
     {
       EISA_PNP_ID(0x501),
@@ -84,6 +104,20 @@ DEVICE_INFO    mDeviceInfo[] = {
     { (ACPI_SMALL_RESOURCE_HEADER *) &mCom1Resources },
     { (ACPI_SMALL_RESOURCE_HEADER *) &mCom1Resources }
   },  // COM 1 UART Controller
+#endif
+#if FixedPcdGet8 (PcdUart2Enable) == DEVICE_ENABLED
+  {
+    {
+      EISA_PNP_ID(0x501),
+      0
+    },
+    0,
+    RESOURCE_IO | RESOURCE_IRQ,
+    { (ACPI_SMALL_RESOURCE_HEADER *) &mCom2Resources },
+    { (ACPI_SMALL_RESOURCE_HEADER *) &mCom2Resources }
+  },  // COM 2 UART Controller
+#endif
+#if FixedPcdGet8 (PcdPs2KbMsEnable) == DEVICE_ENABLED
   {
     {
       EISA_PNP_ID(0x303),
@@ -103,9 +137,29 @@ DEVICE_INFO    mDeviceInfo[] = {
     0,  // Cannot change resource
     { (ACPI_SMALL_RESOURCE_HEADER *) &mMouseResources },
     { (ACPI_SMALL_RESOURCE_HEADER *) &mMouseResources }
-  }  // PS/2 Mouse Controller
+  },  // PS/2 Mouse Controller
+#endif
+  DEVICE_INFO_END
 };
 
+
+
+/**
+  Gets the number of devices in Table of SIO Controllers mDeviceInfo
+
+  @retval     Number of enabled devices in Table of SIO Controllers.
+**/
+UINTN
+EFIAPI
+GetDeviceCount (
+  VOID
+){
+   UINTN        Count;
+   // Get mDeviceInfo item count
+   // -1 to account for for the end device info
+   Count = ARRAY_SIZE (mDeviceInfo) - 1;
+   return Count;
+}
 
 /**
   Return the supported devices.
@@ -128,7 +182,7 @@ DeviceGetList (
   //
   // Allocate enough memory for simplicity
   //
-  DeviceCount =  sizeof (mDeviceInfo) / sizeof (mDeviceInfo[0]);
+  DeviceCount = GetDeviceCount ();
   LocalDevices = AllocatePool (sizeof (EFI_SIO_ACPI_DEVICE_ID) * DeviceCount);
   ASSERT (LocalDevices != NULL);
   if (LocalDevices == NULL) {
@@ -174,8 +228,10 @@ DeviceSearch (
   )
 {
   UINTN       Index;
+  UINTN       DeviceCount;
 
-  for (Index = 0; Index < sizeof (mDeviceInfo) / sizeof (mDeviceInfo[0]); Index++) {
+  DeviceCount = GetDeviceCount ();
+  for (Index = 0; Index < DeviceCount; Index++) {
     if (CompareMem (Device, &mDeviceInfo[Index].Device, sizeof (*Device)) == 0) {
       return &mDeviceInfo[Index];
     }

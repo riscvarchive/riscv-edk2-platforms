@@ -34,6 +34,7 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  BoardModulePkg/BoardModulePkg.dec
 
 [Sources]
   SioChip.c
@@ -43,6 +44,18 @@
   SioDriver.c
   SioDriver.h
   ComponentName.c
+
+[Pcd]
+  gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable
+  gBoardModulePkgTokenSpaceGuid.PcdUart1Enable
+  gBoardModulePkgTokenSpaceGuid.PcdUart1IrqMask
+  gBoardModulePkgTokenSpaceGuid.PcdUart1IoPort
+  gBoardModulePkgTokenSpaceGuid.PcdUart1Length
+  gBoardModulePkgTokenSpaceGuid.PcdUart2Enable
+  gBoardModulePkgTokenSpaceGuid.PcdUart2IrqMask
+  gBoardModulePkgTokenSpaceGuid.PcdUart2IoPort
+  gBoardModulePkgTokenSpaceGuid.PcdUart2Length
+  gBoardModulePkgTokenSpaceGuid.PcdSuperIoPciIsaBridgeDevice
 
 [Protocols]
   gEfiPciIoProtocolGuid                         ## CONSUMES
