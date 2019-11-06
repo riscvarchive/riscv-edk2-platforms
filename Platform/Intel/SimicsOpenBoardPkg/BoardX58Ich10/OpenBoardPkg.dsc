@@ -286,3 +286,4 @@
   $(BOARD_PKG)/SimicsDxe/SimicsDxe.inf
   $(BOARD_PKG)/SimicsVideoDxe/SimicsVideoDxe.inf
   $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
+  BoardModulePkg/LegacySioDxe/LegacySioDxe.inf

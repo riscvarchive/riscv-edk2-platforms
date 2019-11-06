@@ -196,6 +196,12 @@
   gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuThreadCount|4
   gMinPlatformPkgTokenSpaceGuid.PcdPcIoApicAddressBase|0xFEC01000
 
+  ######################################
+  # Board Configuration
+  ######################################
+  gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable|1
+  gBoardModulePkgTokenSpaceGuid.PcdSuperIoPciIsaBridgeDevice|{0x00, 0x00, 0x1F, 0x00}
+
 [PcdsFixedAtBuild.X64]
   ######################################
   # Edk2 Configuration
