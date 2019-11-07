@@ -47,13 +47,11 @@ DetectPs2Keyboard (
   )
 {
   UINT32                TimeOut;
-  UINT32                RegEmptied;
   UINT8                 Data;
   UINT32                SumTimeOut;
   BOOLEAN               FoundPs2Kbc;
 
   TimeOut     = 0;
-  RegEmptied  = 0;
   FoundPs2Kbc       = FALSE;
 
   //
