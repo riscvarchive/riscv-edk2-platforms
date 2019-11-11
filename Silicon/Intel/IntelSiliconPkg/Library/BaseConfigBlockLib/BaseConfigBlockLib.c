@@ -1,11 +1,10 @@
 /** @file
   Library functions for Config Block management.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+SPDX-License-Identifier: BSD-2-Clause-Patent
 
-  SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
-
 #include <ConfigBlock.h>
 #include <Library/ConfigBlockLib.h>
 #include <Library/BaseMemoryLib.h>
@@ -35,13 +34,11 @@ CreateConfigBlockTable (
   ConfigBlkTblHdrSize = (UINT32)(sizeof (CONFIG_BLOCK_TABLE_HEADER));
 
   if (TotalSize <= (ConfigBlkTblHdrSize + sizeof (CONFIG_BLOCK_HEADER))) {
-    DEBUG ((DEBUG_ERROR, "Invalid Parameter\n"));
     return EFI_INVALID_PARAMETER;
   }
 
   ConfigBlkTblAddrPtr = (CONFIG_BLOCK_TABLE_HEADER *)AllocateZeroPool (TotalSize);
   if (ConfigBlkTblAddrPtr == NULL) {
-    DEBUG ((DEBUG_ERROR, "Could not allocate memory.\n"));
     return EFI_OUT_OF_RESOURCES;
   }
   ConfigBlkTblAddrPtr->NumberOfBlocks = 0;
@@ -78,14 +75,11 @@ AddConfigBlock (
   ConfigBlkTblAddrPtr = (CONFIG_BLOCK_TABLE_HEADER *)ConfigBlockTableAddress;
   ConfigBlkAddrPtr = (CONFIG_BLOCK *)(*ConfigBlockAddress);
   ConfigBlkSize = ConfigBlkAddrPtr->Header.GuidHob.Header.HobLength;
-  DEBUG ((DEBUG_INFO, "Config Block GUID: %g / Config Block Size: 0x%x bytes\n", &(ConfigBlkAddrPtr->Header.GuidHob.Name), ConfigBlkSize));
+
   if ((ConfigBlkSize % 4) != 0) {
-    DEBUG ((DEBUG_ERROR, "Config Block must be multiples of 4 bytes\n"));
     return EFI_INVALID_PARAMETER;
   }
   if (ConfigBlkTblAddrPtr->AvailableSize < ConfigBlkSize) {
-    DEBUG ((DEBUG_ERROR, "Config Block Table is full and cannot add new Config Block.\n"));
-    DEBUG ((DEBUG_ERROR, "Available Config Block Size: 0x%x bytes / Requested Config Block Size: 0x%x bytes\n", ConfigBlkTblAddrPtr->AvailableSize, ConfigBlkSize));
     return EFI_OUT_OF_RESOURCES;
   }
 
@@ -96,7 +90,6 @@ AddConfigBlock (
   ConfigBlkTblAddrPtr->AvailableSize = ConfigBlkTblAddrPtr->AvailableSize - ConfigBlkSize;
 
   *ConfigBlockAddress = (VOID *) TempConfigBlk;
-  DEBUG ((DEBUG_INFO, "Config Block Address: 0x%x / Available Config Block Size: 0x%x bytes\n", (UINT32)(UINTN)*ConfigBlockAddress, ConfigBlkTblAddrPtr->AvailableSize));
   return EFI_SUCCESS;
 }
 
@@ -141,6 +134,6 @@ GetConfigBlock (
     }
     ConfigBlkOffset = ConfigBlkOffset + TempConfigBlk->Header.GuidHob.Header.HobLength;
   }
-  DEBUG ((DEBUG_ERROR, "Could not find the config block.\n"));
+
   return EFI_NOT_FOUND;
 }
