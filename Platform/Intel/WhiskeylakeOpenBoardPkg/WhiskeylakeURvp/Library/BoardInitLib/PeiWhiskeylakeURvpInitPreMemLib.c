@@ -68,84 +68,84 @@ GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompResistorSklRvp1[SA_MRC_MAX_RCOMP
 GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompTargetSklRvp1[SA_MRC_MAX_RCOMP_TARGETS] = { 100, 40, 40, 23, 40 };
 
 GLOBAL_REMOVE_IF_UNREFERENCED MEMORY_MAP MmioMap[] = {
-  { FixedPcdGet64(PcdApicLocalAddress), FixedPcdGet32(PcdApicLocalMmioSize) },
-  { FixedPcdGet64(PcdMchBaseAddress), FixedPcdGet32(PcdMchMmioSize) },
-  { FixedPcdGet64(PcdDmiBaseAddress), FixedPcdGet32(PcdDmiMmioSize) },
-  { FixedPcdGet64(PcdEpBaseAddress), FixedPcdGet32(PcdEpMmioSize) },
-  { FixedPcdGet64(PcdGdxcBaseAddress), FixedPcdGet32(PcdGdxcMmioSize) }
+  { FixedPcdGet64 (PcdApicLocalAddress),  FixedPcdGet32 (PcdApicLocalMmioSize) },
+  { FixedPcdGet64 (PcdMchBaseAddress),    FixedPcdGet32 (PcdMchMmioSize) },
+  { FixedPcdGet64 (PcdDmiBaseAddress),    FixedPcdGet32 (PcdDmiMmioSize) },
+  { FixedPcdGet64 (PcdEpBaseAddress),     FixedPcdGet32 (PcdEpMmioSize) },
+  { FixedPcdGet64 (PcdGdxcBaseAddress),   FixedPcdGet32 (PcdGdxcMmioSize) }
 };
 
 EFI_STATUS
-MrcConfigInit(
+MrcConfigInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-SaGpioConfigInit(
+SaGpioConfigInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-  SaMiscConfigInit(
-IN UINT16         BoardId
-);
+SaMiscConfigInit (
+  IN UINT16         BoardId
+  );
 
 EFI_STATUS
-  RootPortClkInfoInit(
-IN UINT16 BoardId
-);
-
-EFI_STATUS
-  UsbConfigInit(
-IN UINT16 BoardId
-);
-
-EFI_STATUS
-GpioGroupTierInit(
+RootPortClkInfoInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-GpioTablePreMemInit(
+UsbConfigInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-PchPmConfigInit(
+GpioGroupTierInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-SaDisplayConfigInit(
+GpioTablePreMemInit (
   IN UINT16 BoardId
-);
+  );
 
 EFI_STATUS
-BoardFunctionInitPreMem(
+PchPmConfigInit (
   IN UINT16 BoardId
-);
+  );
+
+EFI_STATUS
+SaDisplayConfigInit (
+  IN UINT16 BoardId
+  );
+
+EFI_STATUS
+BoardFunctionInitPreMem (
+  IN UINT16 BoardId
+  );
 
 EFI_STATUS
 EFIAPI
-PlatformInitPreMemCallBack(
+PlatformInitPreMemCallBack (
   IN CONST EFI_PEI_SERVICES      **PeiServices,
   IN EFI_PEI_NOTIFY_DESCRIPTOR   *NotifyDescriptor,
   IN VOID                        *Ppi
-);
+  );
 
 EFI_STATUS
 EFIAPI
-MemoryDiscoveredPpiNotify(
+MemoryDiscoveredPpiNotify (
   IN CONST EFI_PEI_SERVICES      **PeiServices,
   IN EFI_PEI_NOTIFY_DESCRIPTOR   *NotifyDescriptor,
   IN VOID                        *Ppi
-);
+  );
 
 EFI_STATUS
 EFIAPI
-PchReset(
+PchReset (
   IN CONST EFI_PEI_SERVICES    **PeiServices
-);
+  );
 
 static EFI_PEI_RESET_PPI mResetPpi = {
   PchReset
@@ -172,16 +172,16 @@ static EFI_PEI_NOTIFY_DESCRIPTOR mMemDiscoveredNotifyList = {
 };
 
 /**
-Board misc init function for PEI pre-memory phase.
+  Board misc init function for PEI pre-memory phase.
 
-@param[in]  BoardId   An unsigned integer represent the board id.
+  @param[in]  BoardId       An unsigned integer represent the board id.
 
-@retval EFI_SUCCESS   The function completed successfully.
+  @retval     EFI_SUCCESS   The function completed successfully.
 **/
 EFI_STATUS
-BoardMiscInitPreMem(
+BoardMiscInitPreMem (
   IN UINT16 BoardId
-)
+  )
 {
   PCD64_BLOB PcdData;
 
@@ -211,22 +211,22 @@ BoardMiscInitPreMem(
       // power. An alternative way to contol modem power is to toggle FCP_OFF via GPP_D13
       // but board rework is required.
       //
-      PcdSet32S(PcdWwanFullCardPowerOffGpio, GPIO_CNL_LP_GPP_D16);
-      PcdSet32S(PcdWwanBbrstGpio, GPIO_CNL_LP_GPP_F1);
-      PcdSet32S(PcdWwanPerstGpio, GPIO_CNL_LP_GPP_E15);
-      PcdSet8S(PcdWwanPerstGpioPolarity, 1);
+      PcdSet32S (PcdWwanFullCardPowerOffGpio, GPIO_CNL_LP_GPP_D16);
+      PcdSet32S (PcdWwanBbrstGpio, GPIO_CNL_LP_GPP_F1);
+      PcdSet32S (PcdWwanPerstGpio, GPIO_CNL_LP_GPP_E15);
+      PcdSet8S (PcdWwanPerstGpioPolarity, 1);
       break;
 
     default:
       break;
   }
 
-  PcdSet64S(PcdRecoveryModeGpio, PcdData.Blob);
+  PcdSet64S (PcdRecoveryModeGpio, PcdData.Blob);
 
   //
   // Pc8374SioKbc Present
   //
-  PcdSetBoolS(PcdPc8374SioKbcPresent, FALSE);
+  PcdSetBoolS (PcdPc8374SioKbcPresent, FALSE);
 
   return EFI_SUCCESS;
 }
@@ -279,23 +279,23 @@ BoardConfigInitPreMem (
 }
 
 /**
-This function handles PlatformInit task after PeiReadOnlyVariable2 PPI produced
+  This function handles PlatformInit task after PeiReadOnlyVariable2 PPI produced
 
-@param[in]  PeiServices   Pointer to PEI Services Table.
-@param[in]  NotifyDesc    Pointer to the descriptor for the Notification event that
-                          caused this function to execute.
-@param[in]  Ppi           Pointer to the PPI data associated with this function.
+  @param[in]  PeiServices   Pointer to PEI Services Table.
+  @param[in]  NotifyDesc    Pointer to the descriptor for the Notification event that
+                            caused this function to execute.
+  @param[in]  Ppi           Pointer to the PPI data associated with this function.
 
-@retval     EFI_SUCCESS  The function completes successfully
-@retval     others
+  @retval     EFI_SUCCESS  The function completes successfully
+  @retval     others       Failure
 **/
 EFI_STATUS
 EFIAPI
-PlatformInitPreMemCallBack(
+PlatformInitPreMemCallBack (
   IN CONST EFI_PEI_SERVICES     **PeiServices,
   IN EFI_PEI_NOTIFY_DESCRIPTOR  *NotifyDescriptor,
   IN VOID                       *Ppi
-)
+  )
 {
   EFI_STATUS                        Status;
   UINT8                             FwConfig;
@@ -303,33 +303,33 @@ PlatformInitPreMemCallBack(
   //
   // Init Board Config Pcd.
   //
-  BoardConfigInitPreMem();
+  BoardConfigInitPreMem ();
 
-  DEBUG((DEBUG_ERROR, "Fail to get System Configuration and set the configuration to production mode!\n"));
+  DEBUG ((DEBUG_ERROR, "Fail to get System Configuration and set the configuration to production mode!\n"));
   FwConfig = FwConfigProduction;
-  PcdSetBoolS(PcdPcieWwanEnable, FALSE);
-  PcdSetBoolS(PcdWwanResetWorkaround, FALSE);
+  PcdSetBoolS (PcdPcieWwanEnable, FALSE);
+  PcdSetBoolS (PcdWwanResetWorkaround, FALSE);
 
   //
   // Early Board Configuration before memory is ready.
   //
-  Status = BoardInitEarlyPreMem();
-  ASSERT_EFI_ERROR(Status);
+  Status = BoardInitEarlyPreMem ();
+  ASSERT_EFI_ERROR (Status);
 
   ///
   /// If there was unexpected reset but no WDT expiration and no resume from S3/S4,
   /// clear unexpected reset status and enforce expiration. This is to inform Firmware
   /// which has no access to unexpected reset status bit, that something went wrong.
   ///
-  OcWdtResetCheck();
+  OcWdtResetCheck ();
 
-  Status = OcWdtInit();
-  ASSERT_EFI_ERROR(Status);
+  Status = OcWdtInit ();
+  ASSERT_EFI_ERROR (Status);
 
   //
   // Initialize Intel PEI Platform Policy
   //
-  PeiPolicyInitPreMem(FwConfig);
+  PeiPolicyInitPreMem (FwConfig);
 
   ///
   /// Configure GPIO and SIO
@@ -340,56 +340,55 @@ PlatformInitPreMemCallBack(
   ///
   /// Install Pre Memory PPIs
   ///
-  Status = PeiServicesInstallPpi(&mPreMemPpiList[0]);
-  ASSERT_EFI_ERROR(Status);
+  Status = PeiServicesInstallPpi (&mPreMemPpiList[0]);
+  ASSERT_EFI_ERROR (Status);
 
   return Status;
 }
 
 /**
-Provide hard reset PPI service.
-To generate full hard reset, write 0x0E to PCH RESET_GENERATOR_PORT (0xCF9).
+  Provide hard reset PPI service.
+  To generate full hard reset, write 0x0E to PCH RESET_GENERATOR_PORT (0xCF9).
 
-@param[in]  PeiServices       General purpose services available to every PEIM.
+  @param[in]  PeiServices       General purpose services available to every PEIM.
 
-@retval     Not return        System reset occured.
-@retval     EFI_DEVICE_ERROR  Device error, could not reset the system.
+  @retval     Not return        System reset occured.
+  @retval     EFI_DEVICE_ERROR  Device error, could not reset the system.
 **/
 EFI_STATUS
 EFIAPI
-PchReset(
+PchReset (
   IN CONST EFI_PEI_SERVICES    **PeiServices
-)
+  )
 {
-  DEBUG((DEBUG_INFO, "Perform Cold Reset\n"));
-  IoWrite8(RESET_GENERATOR_PORT, 0x0E);
+  DEBUG ((DEBUG_INFO, "Perform Cold Reset\n"));
+  IoWrite8 (RESET_GENERATOR_PORT, 0x0E);
 
-  CpuDeadLoop();
+  CpuDeadLoop ();
 
   ///
   /// System reset occured, should never reach at this line.
   ///
-  ASSERT_EFI_ERROR(EFI_DEVICE_ERROR);
-
+  ASSERT_EFI_ERROR (EFI_DEVICE_ERROR);
   return EFI_DEVICE_ERROR;
 }
 
 /**
-Install Firmware Volume Hob's once there is main memory
+  Install Firmware Volume Hob's once there is main memory
 
-@param[in]  PeiServices       General purpose services available to every PEIM.
-@param[in]  NotifyDescriptor  Notify that this module published.
-@param[in]  Ppi               PPI that was installed.
+  @param[in]  PeiServices       General purpose services available to every PEIM.
+  @param[in]  NotifyDescriptor  Notify that this module published.
+  @param[in]  Ppi               PPI that was installed.
 
-@retval     EFI_SUCCESS       The function completed successfully.
+  @retval     EFI_SUCCESS       The function completed successfully.
 **/
 EFI_STATUS
 EFIAPI
-MemoryDiscoveredPpiNotify(
+MemoryDiscoveredPpiNotify (
   IN CONST EFI_PEI_SERVICES     **PeiServices,
   IN EFI_PEI_NOTIFY_DESCRIPTOR  *NotifyDescriptor,
   IN VOID                       *Ppi
-)
+  )
 {
   EFI_STATUS                    Status;
   EFI_BOOT_MODE                 BootMode;
@@ -400,12 +399,12 @@ MemoryDiscoveredPpiNotify(
 
   Index = 0;
 
-  Status = PeiServicesGetBootMode(&BootMode);
-  ASSERT_EFI_ERROR(Status);
+  Status = PeiServicesGetBootMode (&BootMode);
+  ASSERT_EFI_ERROR (Status);
 
-  AsmCpuid(0x80000000, &RegEax, NULL, NULL, NULL);
+  AsmCpuid (0x80000000, &RegEax, NULL, NULL, NULL);
   if (RegEax >= 0x80000008) {
-    AsmCpuid(0x80000008, &RegEax, NULL, NULL, NULL);
+    AsmCpuid (0x80000008, &RegEax, NULL, NULL, NULL);
     PhysicalAddressBits = (UINT8)RegEax;
   }
   else {
@@ -415,68 +414,68 @@ MemoryDiscoveredPpiNotify(
   ///
   /// Create a CPU hand-off information
   ///
-  BuildCpuHob(PhysicalAddressBits, 16);
+  BuildCpuHob (PhysicalAddressBits, 16);
 
   ///
   /// Build Memory Mapped IO Resource which is used to build E820 Table in LegacyBios.
   ///
-  PcieMmioMap.BaseAddress = FixedPcdGet64(PcdPciExpressBaseAddress);
-  PcieMmioMap.Length = PcdGet32(PcdPciExpressRegionLength);
+  PcieMmioMap.BaseAddress = FixedPcdGet64 (PcdPciExpressBaseAddress);
+  PcieMmioMap.Length = PcdGet32 (PcdPciExpressRegionLength);
 
-  BuildResourceDescriptorHob(
+  BuildResourceDescriptorHob (
     EFI_RESOURCE_MEMORY_MAPPED_IO,
-    (EFI_RESOURCE_ATTRIBUTE_PRESENT |
-     EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-     EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
+     (EFI_RESOURCE_ATTRIBUTE_PRESENT      |
+      EFI_RESOURCE_ATTRIBUTE_INITIALIZED  |
+      EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
     PcieMmioMap.BaseAddress,
     PcieMmioMap.Length
-  );
-  BuildMemoryAllocationHob(
+    );
+  BuildMemoryAllocationHob (
     PcieMmioMap.BaseAddress,
     PcieMmioMap.Length,
     EfiMemoryMappedIO
-  );
+    );
   for (Index = 0; Index < sizeof(MmioMap) / (sizeof(MEMORY_MAP)); Index++) {
-    BuildResourceDescriptorHob(
+    BuildResourceDescriptorHob (
       EFI_RESOURCE_MEMORY_MAPPED_IO,
-      (EFI_RESOURCE_ATTRIBUTE_PRESENT |
-       EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-       EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
+       (EFI_RESOURCE_ATTRIBUTE_PRESENT      |
+        EFI_RESOURCE_ATTRIBUTE_INITIALIZED  |
+        EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
       MmioMap[Index].BaseAddress,
       MmioMap[Index].Length
-    );
-    BuildMemoryAllocationHob(
+      );
+    BuildMemoryAllocationHob (
       MmioMap[Index].BaseAddress,
       MmioMap[Index].Length,
       EfiMemoryMappedIO
-    );
+      );
   }
 
   //
   // Report resource HOB for flash FV
   //
-  BuildResourceDescriptorHob(
+  BuildResourceDescriptorHob (
     EFI_RESOURCE_MEMORY_MAPPED_IO,
-    (EFI_RESOURCE_ATTRIBUTE_PRESENT |
-     EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-     EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
-    (UINTN)FixedPcdGet32(PcdFlashAreaBaseAddress),
-    (UINTN)FixedPcdGet32(PcdFlashAreaSize)
-  );
-  BuildMemoryAllocationHob(
-    (UINTN)FixedPcdGet32(PcdFlashAreaBaseAddress),
-    (UINTN)FixedPcdGet32(PcdFlashAreaSize),
-    EfiMemoryMappedIO
-  );
+     (EFI_RESOURCE_ATTRIBUTE_PRESENT      |
+      EFI_RESOURCE_ATTRIBUTE_INITIALIZED  |
+      EFI_RESOURCE_ATTRIBUTE_UNCACHEABLE),
+    (UINTN) FixedPcdGet32 (PcdFlashAreaBaseAddress),
+    (UINTN) FixedPcdGet32 (PcdFlashAreaSize)
+    );
 
-  BuildFvHob(
-    (UINTN)FixedPcdGet32(PcdFlashAreaBaseAddress),
-    (UINTN)FixedPcdGet32(PcdFlashAreaSize)
-  );
+  BuildMemoryAllocationHob (
+    (UINTN) FixedPcdGet32 (PcdFlashAreaBaseAddress),
+    (UINTN) FixedPcdGet32 (PcdFlashAreaSize),
+    EfiMemoryMappedIO
+    );
+
+  BuildFvHob (
+    (UINTN)FixedPcdGet32 (PcdFlashAreaBaseAddress),
+    (UINTN)FixedPcdGet32 (PcdFlashAreaSize)
+    );
 
   return Status;
 }
-
 
 /**
   Board configuration init function for PEI pre-memory phase.
@@ -495,26 +494,26 @@ WhiskeylakeURvpInitPreMem (
   ///
   /// Install Stall PPI
   ///
-  Status = InstallStallPpi();
-  ASSERT_EFI_ERROR(Status);
+  Status = InstallStallPpi ();
+  ASSERT_EFI_ERROR (Status);
 
   //
   // Install PCH RESET PPI and EFI RESET2 PeiService
   //
-  Status = PchInitializeReset();
-  ASSERT_EFI_ERROR(Status);
+  Status = PchInitializeReset ();
+  ASSERT_EFI_ERROR (Status);
 
   ///
   /// Performing PlatformInitPreMemCallBack after PeiReadOnlyVariable2 PPI produced
   ///
-  Status = PeiServicesNotifyPpi(&mPreMemNotifyList);
+  Status = PeiServicesNotifyPpi (&mPreMemNotifyList);
 
   ///
   /// After code reorangized, memorycallback will run because the PPI is already
   /// installed when code run to here, it is supposed that the InstallEfiMemory is
   /// done before.
   ///
-  Status = PeiServicesNotifyPpi(&mMemDiscoveredNotifyList);
+  Status = PeiServicesNotifyPpi (&mMemDiscoveredNotifyList);
 
   return EFI_SUCCESS;
 }
@@ -561,5 +560,3 @@ WhiskeylakeURvpBoardBootModeDetect (
 {
   return BOOT_WITH_FULL_CONFIGURATION;
 }
-
-
