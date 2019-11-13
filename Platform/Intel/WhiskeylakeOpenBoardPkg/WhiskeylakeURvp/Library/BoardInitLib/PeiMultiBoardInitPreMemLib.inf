@@ -31,6 +31,7 @@
   PeiPlatformHookLib
   PeiPolicyInitLib
   PlatformHookLib
+  SiliconInitLib
   StallPpiLib
 
 [Packages]
@@ -57,7 +58,6 @@
 
 [Guids]
   gPchGeneralPreMemConfigGuid      ## CONSUMES
-  gTcoWdtHobGuid                                ## CONSUMES
 
 [Pcd]
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort

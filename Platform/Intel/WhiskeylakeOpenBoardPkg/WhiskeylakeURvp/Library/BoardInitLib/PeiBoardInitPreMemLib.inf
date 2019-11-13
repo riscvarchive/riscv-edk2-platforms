@@ -23,6 +23,7 @@
   BaseMemoryLib
   MemoryAllocationLib
   PcdLib
+  SiliconInitLib
 
 [Packages]
   MinPlatformPkg/MinPlatformPkg.dec

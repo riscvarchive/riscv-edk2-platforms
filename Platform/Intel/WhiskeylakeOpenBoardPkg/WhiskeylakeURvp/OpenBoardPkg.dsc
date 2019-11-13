@@ -155,6 +155,11 @@
 
 [LibraryClasses.common.PEIM]
   #######################################
+  # Silicon Initialization Package
+  #######################################
+  SiliconInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconInitLib/PeiSiliconInitLib.inf
+
+  #######################################
   # Platform Package
   #######################################
   BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf

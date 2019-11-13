@@ -430,6 +430,10 @@ WhiskeylakeURvpBoardInitBeforeSiliconInit (
   //
   Status = UpdateChipsetInitPtr();
 
+  ///
+  /// Do Late PCH init
+  ///
+  LateSiliconInit ();
+
   return EFI_SUCCESS;
 }
-

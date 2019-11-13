@@ -15,6 +15,7 @@
 #include <Library/MemoryAllocationLib.h>
 #include <Library/DebugLib.h>
 #include <Library/GpioLib.h>
+#include <Library/SiliconInitLib.h>
 #include <Ppi/SiPolicy.h>
 #include <PchHsioPtssTables.h>
 

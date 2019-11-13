@@ -45,7 +45,6 @@
 #include <Library/PciSegmentLib.h>
 #include <PeiPlatformHookLib.h>
 #include <FirwmareConfigurations.h>
-#include <Guid/TcoWdtHob.h>
 #include <Library/OcWdtLib.h>
 
 ///
@@ -232,50 +231,8 @@ BoardMiscInitPreMem(
   return EFI_SUCCESS;
 }
 
-//@todo it should be moved to Si Pkg.
-/**
-Early Platform PCH initialization
-**/
-VOID
-EarlyPlatformPchInit(
-  VOID
-)
-{
-  UINT8        Data8;
-  UINT8        TcoRebootHappened;
-  TCO_WDT_HOB  *TcoWdtHobPtr;
-  EFI_STATUS   Status;
-
-  ///
-  /// Read the Second TO status bit
-  ///
-  Data8 = IoRead8(PcdGet16(PcdTcoBaseAddress) + R_TCO_IO_TCO2_STS);
-  if ((Data8 & B_TCO_IO_TCO2_STS_SECOND_TO) == B_TCO_IO_TCO2_STS_SECOND_TO) {
-    TcoRebootHappened = 1;
-    DEBUG((DEBUG_INFO, "PlatformInitPreMem - TCO Second TO status bit is set. This might be a TCO reboot\n"));
-  }
-  else {
-    TcoRebootHappened = 0;
-  }
-
-  ///
-  /// Create HOB
-  ///
-  Status = PeiServicesCreateHob(EFI_HOB_TYPE_GUID_EXTENSION, sizeof(TCO_WDT_HOB), (VOID **)&TcoWdtHobPtr);
-  if (!EFI_ERROR(Status)) {
-    TcoWdtHobPtr->Header.Name = gTcoWdtHobGuid;
-    TcoWdtHobPtr->TcoRebootHappened = TcoRebootHappened;
-  }
-
-  ///
-  /// Clear the Second TO status bit
-  ///
-  IoWrite8(PcdGet16(PcdTcoBaseAddress) + R_TCO_IO_TCO2_STS, B_TCO_IO_TCO2_STS_SECOND_TO);
-}
-
 /**
   Board configuration initialization in the pre-memory boot phase.
-
 **/
 VOID
 BoardConfigInitPreMem (
@@ -341,7 +298,6 @@ PlatformInitPreMemCallBack(
 )
 {
   EFI_STATUS                        Status;
-  UINT16                            ABase;
   UINT8                             FwConfig;
 
   //
@@ -378,16 +334,8 @@ PlatformInitPreMemCallBack(
   ///
   /// Configure GPIO and SIO
   ///
-  Status = BoardInitPreMem();
-  ASSERT_EFI_ERROR(Status);
-
-  ABase = PmcGetAcpiBase();
-
-  ///
-  /// Clear all pending SMI. On S3 clear power button enable so it will not generate an SMI.
-  ///
-  IoWrite16(ABase + R_ACPI_IO_PM1_EN, 0);
-  IoWrite32(ABase + R_ACPI_IO_GPE0_EN_127_96, 0);
+  Status = BoardInitPreMem ();
+  ASSERT_EFI_ERROR (Status);
 
   ///
   /// Install Pre Memory PPIs
@@ -550,12 +498,6 @@ WhiskeylakeURvpInitPreMem (
   Status = InstallStallPpi();
   ASSERT_EFI_ERROR(Status);
 
-  ///@todo it should be moved to Si Pkg.
-  ///
-  /// Do Early PCH init
-  ///
-  EarlyPlatformPchInit();
-
   //
   // Install PCH RESET PPI and EFI RESET2 PeiService
   //
@@ -588,6 +530,11 @@ WhiskeylakeURvpBoardInitBeforeMemoryInit (
   VOID
   )
 {
+  ///
+  /// Do basic PCH init
+  ///
+  SiliconInit ();
+
   WhiskeylakeURvpInitPreMem ();
 
   return EFI_SUCCESS;
@@ -600,27 +547,9 @@ WhiskeylakeURvpBoardDebugInit (
   )
 {
   ///
-  /// LPC I/O Configuration
+  /// Do Early PCH init
   ///
-  PchLpcIoDecodeRangesSet (
-    (V_LPC_CFG_IOD_LPT_378 << N_LPC_CFG_IOD_LPT) |
-    (V_LPC_CFG_IOD_COMB_3E8 << N_LPC_CFG_IOD_COMB) |
-    (V_LPC_CFG_IOD_COMA_3F8 << N_LPC_CFG_IOD_COMA)
-    );
-
-  PchLpcIoEnableDecodingSet (
-    B_LPC_CFG_IOE_ME2 |
-    B_LPC_CFG_IOE_SE |
-    B_LPC_CFG_IOE_ME1 |
-    B_LPC_CFG_IOE_KE |
-    B_LPC_CFG_IOE_HGE |
-    B_LPC_CFG_IOE_LGE |
-    B_LPC_CFG_IOE_FDE |
-    B_LPC_CFG_IOE_PPE |
-    B_LPC_CFG_IOE_CBE |
-    B_LPC_CFG_IOE_CAE
-    );
-
+  EarlySiliconInit ();
   return EFI_SUCCESS;
 }
 

@@ -30,6 +30,7 @@
   PeiPlatformHookLib
   PeiPolicyInitLib
   PchInfoLib
+  SiliconInitLib
 
 [Packages]
   MinPlatformPkg/MinPlatformPkg.dec
