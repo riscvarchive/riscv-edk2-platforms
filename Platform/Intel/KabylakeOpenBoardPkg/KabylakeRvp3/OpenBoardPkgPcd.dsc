@@ -40,6 +40,26 @@
   gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode|TRUE
 
   #
+  # FALSE: The PEI Main included in FvPreMemory is used to dispatch all PEIMs
+  #        (both inside FSP and outside FSP).
+  #        Pros:
+  #          * PEI Main is re-built from source and is always the latest version
+  #          * Platform code can link any desired LibraryClass to PEI Main
+  #            (Ex: Custom DebugLib instance, SerialPortLib, etc.)
+  #        Cons:
+  #          * The PEI Main being used to execute FSP PEIMs is not the PEI Main
+  #            that the FSP PEIMs were tested with, adding risk of breakage.
+  #          * Two copies of PEI Main will exist in the final binary,
+  #            #1 in FSP-M, #2 in FvPreMemory. The copy in FSP-M is never
+  #            executed, wasting space.
+  #
+  # <b>TRUE</b>:  The PEI Main included in FSP is used to dispatch all PEIMs
+  #        (both inside FSP and outside FSP). PEI Main will not be included in
+  #        FvPreMemory. This is the default and is the recommended choice.
+  #
+  gMinPlatformPkgTokenSpaceGuid.PcdFspDispatchModeUseFspPeiMain|TRUE
+
+  #
   # FSP Base address PCD will be updated in FDF basing on flash map.
   #
   gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress|0
