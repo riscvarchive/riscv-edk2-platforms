@@ -11,8 +11,9 @@
   BASE_NAME                      = SiliconInitLib
   FILE_GUID                      = 72CD3A7B-FEA5-4F5E-9165-4DD12187BB13
   VERSION_STRING                 = 1.0
-  MODULE_TYPE                    = BASE
-  LIBRARY_CLASS                  = SiliconInitLib
+  MODULE_TYPE                    = PEIM
+  LIBRARY_CLASS                  = SiliconInitLib|SEC PEIM
+
 #
 # The following information is for reference only and not required by the build tools.
 #
