@@ -133,7 +133,7 @@
   # Silicon Initialization Package
   #######################################
   ConfigBlockLib|IntelSiliconPkg/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
-  SiliconInitLib|$(PLATFORM_SI_PACKAGE)/Library/SiliconInitLib/SiliconInitLib.inf
+  SiliconInitLib|$(PLATFORM_SI_PACKAGE)/Library/PeiSiliconInitLib/PeiSiliconInitLib.inf
 
 !if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
   #
