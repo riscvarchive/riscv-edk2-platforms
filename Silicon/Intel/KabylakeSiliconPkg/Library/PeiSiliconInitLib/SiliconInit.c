@@ -1,7 +1,7 @@
 /** @file
   Source code file for Platform Init PEI module
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -199,6 +199,9 @@ ClearIchSmiAndWake (
   return EFI_SUCCESS;
 }
 
+/**
+  Late Silicon Initialization
+**/
 VOID
 LateSiliconInit (
   VOID

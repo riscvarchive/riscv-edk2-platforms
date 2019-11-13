@@ -31,9 +31,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/PeiServicesTablePointerLib.h>
 #include <Library/PchSerialIoLib.h>
 
-//@todo it should be moved to Si Pkg.
 /**
-  Early Platform PCH initialization
+  Early Silicon initialization
 **/
 VOID
 EarlySiliconInit (
@@ -233,4 +232,3 @@ SiliconInit (
   }
 
 }
-
