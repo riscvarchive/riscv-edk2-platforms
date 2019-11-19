@@ -1,5 +1,6 @@
 #/** @file
 #
+#  Copyright (c) 2019, ARM Limited. All rights reserved.
 #  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -54,6 +55,7 @@
   gRaspberryPiConfigAppliedProtocolGuid ## PRODUCES
 
 [Pcd]
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gRaspberryPiTokenSpaceGuid.PcdCpuClock
   gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan

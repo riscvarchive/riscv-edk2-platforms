@@ -1,5 +1,5 @@
 #/** @file
-#
+#  Copyright (c) 2019, ARM Limited. All rights reserved.
 #  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
 #
@@ -39,6 +39,9 @@
 
 [Protocols]
   gRaspberryPiFirmwareProtocolGuid    ## PRODUCES
+
+[FixedPcd]
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
 
 [Depex]
   TRUE

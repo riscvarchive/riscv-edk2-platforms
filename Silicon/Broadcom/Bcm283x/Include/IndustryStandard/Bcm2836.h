@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2019, ARM Limited. All rights reserved.
  *  Copyright (c) 2017, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro Limited. All rights reserved.
  *
@@ -13,7 +14,7 @@
 /*
  * Both "core" and SoC perpherals (1M each).
  */
-#define BCM2836_SOC_REGISTERS                               0x3f000000
+#define BCM2836_SOC_REGISTERS                               (FixedPcdGet64 (PcdBcm283xRegistersAddress))
 #define BCM2836_SOC_REGISTER_LENGTH                         0x02000000
 
 /*

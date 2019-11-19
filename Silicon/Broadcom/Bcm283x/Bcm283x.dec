@@ -1,5 +1,6 @@
 ## @file
 #
+#  Copyright (c) 2019, ARM Limited. All rights reserved.
 #  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -14,3 +15,9 @@
 
 [Includes]
   Include
+
+[Guids]
+  gBcm283xTokenSpaceGuid = {0x82f36a92, 0xfb7e, 0x43a1, {0xb9, 0x9e, 0x49, 0x13, 0x3f, 0xc7, 0xa4, 0x2e}}
+
+[PcdsFixedAtBuild.common]
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress|0x0|UINT32|0x00000001

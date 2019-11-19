@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) 2014-2016, Linaro Limited. All rights reserved.
-#  Copyright (c) 2011-2014, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2019, ARM Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -47,6 +47,7 @@
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
   gArmTokenSpaceGuid.PcdArmPrimaryCore
   gArmTokenSpaceGuid.PcdFdSize
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize

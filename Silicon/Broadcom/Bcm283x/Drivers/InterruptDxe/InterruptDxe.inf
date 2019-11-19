@@ -1,5 +1,5 @@
 #/** @file
-#
+#  Copyright (c) 2019, ARM Limited. All rights reserved.
 #  Copyright (c) 2017, Andrei Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) 2016 Linaro, Ltd. All rights reserved.
 #
@@ -27,6 +27,7 @@
   BaseLib
   DebugLib
   IoLib
+  PcdLib
   UefiBootServicesTableLib
   UefiLib
   UefiDriverEntryPoint
@@ -36,6 +37,7 @@
   gEfiCpuArchProtocolGuid         ## CONSUMES ## NOTIFY
 
 [FixedPcd]
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
 
 [Depex]
