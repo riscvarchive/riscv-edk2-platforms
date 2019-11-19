@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2016, Linaro Limited. All rights reserved.
  *  Copyright (c) 2011-2013, ARM Limited. All rights reserved.
  *
@@ -39,6 +40,7 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     adr     x0, .Lmeminfo_buffer
     mov     x1, #FixedPcdGet64 (PcdDmaDeviceOffset)
     orr     x0, x0, #RPI_MBOX_VC_CHANNEL
+    // x1 holds the value of PcdDmaDeviceOffset throughout this function
     add     x0, x0, x1
 
     MOV32   (x4, BCM2836_MBOX_BASE_ADDRESS)
@@ -52,24 +54,90 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     ldr     wzr, [x4, #BCM2836_MBOX_READ_OFFSET]
     dmb     ld
 
+    ldr     w0, .Lmembase
+    adr     x2, mSystemMemoryBase
+    str     x0, [x2]
+
     ldr     w0, .Lmemsize
     sub     x0, x0, #1
-    adr     x1, mSystemMemoryEnd
-    str     x0, [x1]
+    adr     x2, mSystemMemoryEnd
+    str     x0, [x2]
+
+    adr     x0, .Lvcinfo_buffer
+    orr     x0, x0, #RPI_MBOX_VC_CHANNEL
+    add     x0, x0, x1
+
+    poll    BCM2836_MBOX_STATUS_FULL
+    str     w0, [x4, #BCM2836_MBOX_WRITE_OFFSET]
+    dmb     sy
+    poll    BCM2836_MBOX_STATUS_EMPTY
+    dmb     sy
+    ldr     wzr, [x4, #BCM2836_MBOX_READ_OFFSET]
+    dmb     ld
+
+    ldr     w0, .Lvcbase
+    adr     x2, mVideoCoreBase
+    str     x0, [x2]
+
+    ldr     w0, .Lvcsize
+    adr     x2, mVideoCoreSize
+    str     x0, [x2]
+
+    adr     x0, .Lrevinfo_buffer
+    orr     x0, x0, #RPI_MBOX_VC_CHANNEL
+    add     x0, x0, x1
+
+    poll    BCM2836_MBOX_STATUS_FULL
+    str     w0, [x4, #BCM2836_MBOX_WRITE_OFFSET]
+    dmb     sy
+    poll    BCM2836_MBOX_STATUS_EMPTY
+    dmb     sy
+    ldr     wzr, [x4, #BCM2836_MBOX_READ_OFFSET]
+    dmb     ld
+
+    ldr     w0, .Lrevision
+    adr     x2, mBoardRevision
+    str     w0, [x2]
+
     ret
 
     .align  4
 .Lmeminfo_buffer:
-    .long   .Lbuffer_size
+    .long   .Lmeminfo_size
     .long   0x0
     .long   RPI_MBOX_GET_ARM_MEMSIZE
     .long   8                           // buf size
     .long   0                           // input len
+.Lmembase:
     .long   0                           // mem base
 .Lmemsize:
     .long   0                           // mem size
     .long   0                           // end tag
-    .set    .Lbuffer_size, . - .Lmeminfo_buffer
+    .set    .Lmeminfo_size, . - .Lmeminfo_buffer
+
+.Lvcinfo_buffer:
+    .long   .Lvcinfo_size
+    .long   0x0
+    .long   RPI_MBOX_GET_VC_MEMSIZE
+    .long   8                           // buf size
+    .long   0                           // input len
+.Lvcbase:
+    .long   0                           // videocore base
+.Lvcsize:
+    .long   0                           // videocore size
+    .long   0                           // end tag
+    .set    .Lvcinfo_size, . - .Lvcinfo_buffer
+
+.Lrevinfo_buffer:
+    .long   .Lrevinfo_size
+    .long   0x0
+    .long   RPI_MBOX_GET_BOARD_REVISION
+    .long   4                           // buf size
+    .long   0                           // input len
+.Lrevision:
+    .long   0                           // revision
+    .long   0                           // end tag
+    .set    .Lrevinfo_size, . - .Lrevinfo_buffer
 
 //UINTN
 //ArmPlatformGetPrimaryCoreMpId (

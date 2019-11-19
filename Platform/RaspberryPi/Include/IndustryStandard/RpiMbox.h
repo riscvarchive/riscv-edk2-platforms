@@ -34,6 +34,7 @@
 #define RPI_MBOX_GET_MAC_ADDRESS                              0x00010003
 #define RPI_MBOX_GET_BOARD_SERIAL                             0x00010004
 #define RPI_MBOX_GET_ARM_MEMSIZE                              0x00010005
+#define RPI_MBOX_GET_VC_MEMSIZE                               0x00010006
 
 #define RPI_MBOX_SET_POWER_STATE                              0x00028001
 

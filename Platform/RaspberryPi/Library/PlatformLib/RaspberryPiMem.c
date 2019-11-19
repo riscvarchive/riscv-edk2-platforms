@@ -12,9 +12,11 @@
 #include <IndustryStandard/Bcm2836.h>
 #include <Library/PcdLib.h>
 
+UINT64 mSystemMemoryBase;
 extern UINT64 mSystemMemoryEnd;
-extern UINT64 mGPUMemoryBase;
-extern UINT64 mGPUMemoryLength;
+UINT64 mVideoCoreBase;
+UINT64 mVideoCoreSize;
+UINT32 mBoardRevision;
 
 #define VariablesSize (FixedPcdGet32(PcdFlashNvStorageVariableSize) +   \
                        FixedPcdGet32(PcdFlashNvStorageFtwWorkingSize) + \
@@ -87,6 +89,14 @@ ArmPlatformGetVirtualMemoryMap (
   IN ARM_MEMORY_REGION_DESCRIPTOR** VirtualMemoryMap
   )
 {
+  // Early output of the info we got from VideoCore can prove valuable.
+  DEBUG ((DEBUG_INFO, "Board Rev: 0x%lX\n", mBoardRevision));
+  DEBUG ((DEBUG_INFO, "Base RAM : 0x%ll08X (Size 0x%ll08X)\n", mSystemMemoryBase, mSystemMemoryEnd + 1));
+  DEBUG ((DEBUG_INFO, "VideoCore: 0x%ll08X (Size 0x%ll08X)\n", mVideoCoreBase, mVideoCoreSize));
+
+  ASSERT (mSystemMemoryBase == 0);
+  ASSERT (VirtualMemoryMap != NULL);
+
   RaspberryPiMemoryRegionDescriptor[3].Length = mSystemMemoryEnd + 1 -
     FixedPcdGet64 (PcdSystemMemoryBase);
 
