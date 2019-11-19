@@ -606,6 +606,66 @@ RpiFirmwareGetModelName (
 }
 
 STATIC
+EFI_STATUS
+EFIAPI
+RPiFirmwareGetModelFamily (
+  OUT   UINT32 *ModelFamily
+  )
+{
+  EFI_STATUS                  Status;
+  UINT32                      Revision;
+  UINT32                      ModelId;
+
+  Status = RpiFirmwareGetModelRevision(&Revision);
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Could not get the board revision: Status == %r\n",
+      __FUNCTION__, Status));
+    return EFI_DEVICE_ERROR;
+  } else {
+    ModelId = (Revision >> 4) & 0xFF;
+  }
+
+  switch (ModelId) {
+  // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+  case 0x00:          // Raspberry Pi Model A
+  case 0x01:          // Raspberry Pi Model B
+  case 0x02:          // Raspberry Pi Model A+
+  case 0x03:          // Raspberry Pi Model B+
+  case 0x06:          // Raspberry Pi Compute Module 1
+  case 0x09:          // Raspberry Pi Zero
+  case 0x0C:          // Raspberry Pi Zero W
+      *ModelFamily = 1;
+      break;
+  case 0x04:          // Raspberry Pi 2 Model B
+      *ModelFamily = 2;
+      break;
+  case 0x08:          // Raspberry Pi 3 Model B
+  case 0x0A:          // Raspberry Pi Compute Module 3
+  case 0x0D:          // Raspberry Pi 3 Model B+
+  case 0x0E:          // Raspberry Pi 3 Model A+
+  case 0x10:          // Raspberry Pi Compute Module 3+
+      *ModelFamily = 3;
+      break;
+  case 0x11:          // Raspberry Pi 4 Model B
+      *ModelFamily = 4;
+      break;
+  default:
+      *ModelFamily = 0;
+      break;
+  }
+
+  if (*ModelFamily == 0) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: Unknown Raspberry Pi model family : ModelId == 0x%x\n",
+      __FUNCTION__, ModelId));
+    return EFI_UNSUPPORTED;
+    }
+
+  return EFI_SUCCESS;
+}
+
+STATIC
 CHAR8*
 EFIAPI
 RpiFirmwareGetManufacturerName (
@@ -1171,6 +1231,7 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareGetModel,
   RpiFirmwareGetModelRevision,
   RpiFirmwareGetModelName,
+  RPiFirmwareGetModelFamily,
   RpiFirmwareGetFirmwareRevision,
   RpiFirmwareGetManufacturerName,
   RpiFirmwareGetCpuName,

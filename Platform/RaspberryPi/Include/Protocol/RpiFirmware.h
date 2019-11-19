@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2019, ARM Limited. All rights reserved.
  *  Copyright (c) 2016, Linaro Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -104,6 +105,12 @@ CHAR8*
 
 typedef
 EFI_STATUS
+(EFIAPI *GET_MODEL_FAMILY) (
+  UINT32 *ModelFamily
+  );
+
+typedef
+EFI_STATUS
 (EFIAPI *GET_FIRMWARE_REVISION) (
   UINT32 *Revision
   );
@@ -143,6 +150,7 @@ typedef struct {
   GET_MODEL             GetModel;
   GET_MODEL_REVISION    GetModelRevision;
   GET_MODEL_NAME        GetModelName;
+  GET_MODEL_FAMILY      GetModelFamily;
   GET_FIRMWARE_REVISION GetFirmwareRevision;
   GET_MANUFACTURER_NAME GetManufacturerName;
   GET_CPU_NAME          GetCpuName;
