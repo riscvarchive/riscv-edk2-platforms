@@ -15,8 +15,7 @@
 #include <Library/HobLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
-
-extern UINT64 mSystemMemoryEnd;
+#include <Library/RPiMem.h>
 
 VOID
 BuildMemoryTypeInformationHob (
@@ -41,7 +40,7 @@ InitMmu (
 
 STATIC
 VOID
-AddRuntimeServicesRegion (
+AddBasicMemoryRegion (
   IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
 )
 {
@@ -56,6 +55,15 @@ AddRuntimeServicesRegion (
     Desc->PhysicalBase,
     Desc->Length
   );
+}
+
+STATIC
+VOID
+AddRuntimeServicesRegion (
+  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
+)
+{
+  AddBasicMemoryRegion (Desc);
 
   BuildMemoryAllocationHob (
     Desc->PhysicalBase,
@@ -70,17 +78,7 @@ AddReservedMemoryRegion (
   IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
   )
 {
-  BuildResourceDescriptorHob (
-    EFI_RESOURCE_SYSTEM_MEMORY,
-    EFI_RESOURCE_ATTRIBUTE_PRESENT |
-    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-    EFI_RESOURCE_ATTRIBUTE_TESTED,
-    Desc->PhysicalBase,
-    Desc->Length
-  );
+  AddBasicMemoryRegion (Desc);
 
   BuildMemoryAllocationHob (
     Desc->PhysicalBase,
@@ -88,6 +86,12 @@ AddReservedMemoryRegion (
     EfiReservedMemoryType
   );
 }
+
+void (*AddRegion[]) (IN ARM_MEMORY_REGION_DESCRIPTOR *Desc) = {
+  AddBasicMemoryRegion,
+  AddRuntimeServicesRegion,
+  AddReservedMemoryRegion,
+  };
 
 /*++
 
@@ -113,36 +117,28 @@ MemoryPeim (
   )
 {
   ARM_MEMORY_REGION_DESCRIPTOR *MemoryTable;
+  RPI_MEMORY_REGION_INFO       *MemoryInfo;
+  UINTN                        Index;
 
   // Get Virtual Memory Map from the Platform Library
   ArmPlatformGetVirtualMemoryMap (&MemoryTable);
 
-  // Ensure PcdSystemMemorySize has been set
-  ASSERT (PcdGet64 (PcdSystemMemorySize) != 0);
+  // Get additional info not provided by MemoryTable
+  RpiPlatformGetVirtualMemoryInfo (&MemoryInfo);
 
-  // FD without variable store
-  AddReservedMemoryRegion (&MemoryTable[0]);
-
-  // Variable store.
-  AddRuntimeServicesRegion (&MemoryTable[1]);
-
-  // Trusted Firmware region
-  AddReservedMemoryRegion (&MemoryTable[2]);
-
-  // Usable memory.
-  BuildResourceDescriptorHob (
-    EFI_RESOURCE_SYSTEM_MEMORY,
-    EFI_RESOURCE_ATTRIBUTE_PRESENT |
-    EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_COMBINEABLE |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_THROUGH_CACHEABLE |
-    EFI_RESOURCE_ATTRIBUTE_WRITE_BACK_CACHEABLE |
-    EFI_RESOURCE_ATTRIBUTE_TESTED,
-    MemoryTable[3].PhysicalBase,
-    MemoryTable[3].Length
-  );
-
-  AddReservedMemoryRegion (&MemoryTable[4]);
+  // Register each memory region
+  for (Index = 0; MemoryTable[Index].Length != 0; Index++) {
+    ASSERT (MemoryInfo[Index].Type < ARRAY_SIZE (AddRegion));
+    DEBUG ((DEBUG_INFO, "%s:\n"
+      "\tPhysicalBase: 0x%lX\n"
+      "\tVirtualBase: 0x%lX\n"
+      "\tLength: 0x%lX\n",
+      MemoryInfo[Index].Name,
+      MemoryTable[Index].PhysicalBase,
+      MemoryTable[Index].VirtualBase,
+      MemoryTable[Index].Length));
+    AddRegion[MemoryInfo[Index].Type] (&MemoryTable[Index]);
+  }
 
   // Build Memory Allocation Hob
   InitMmu (MemoryTable);

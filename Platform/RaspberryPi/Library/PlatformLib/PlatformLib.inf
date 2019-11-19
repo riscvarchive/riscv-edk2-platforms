@@ -22,6 +22,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
+  Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
   Platform/RaspberryPi/RaspberryPi.dec
 
@@ -47,10 +48,12 @@
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
   gArmTokenSpaceGuid.PcdArmPrimaryCore
   gArmTokenSpaceGuid.PcdFdSize
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize
+  gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase
   gRaspberryPiTokenSpaceGuid.PcdNvStorageEventLogSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
