@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2019, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
  *
@@ -595,6 +596,8 @@ RpiFirmwareGetModelName (
     return "Raspberry Pi 3 Model B+";
   case 0x0E:
     return "Raspberry Pi 3 Model A+";
+  case 0x10:
+    return "Raspberry Pi Compute Module 3+";
   case 0x11:
     return "Raspberry Pi 4 Model B";
   default:
