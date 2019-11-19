@@ -10,7 +10,9 @@
 #define __BCM2836_SDIO_H__
 
 //MMC/SD/SDIO1 register definitions.
-#define MMCHS1BASE        0x3F300000
+#define MMCHS1_OFFSET     0x00300000
+#define MMCHS1BASE        (FixedPcdGet64 (PcdBcm283xRegistersAddress) \
+                          + MMCHS1_OFFSET)
 
 #define MMCHS_BLK         (MMCHS1BASE + 0x4)
 #define BLEN_512BYTES     (0x200UL << 0)
