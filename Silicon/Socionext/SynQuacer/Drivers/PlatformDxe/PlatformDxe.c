@@ -130,7 +130,7 @@ RegisterDevice (
   }
 
   Device->Type = TypeGuid;
-  Device->DmaType = NonDiscoverableDeviceDmaTypeNonCoherent;
+  Device->DmaType = NonDiscoverableDeviceDmaTypeCoherent;
   Device->Resources = Desc;
 
   Status = gBS->InstallMultipleProtocolInterfaces (Handle,
