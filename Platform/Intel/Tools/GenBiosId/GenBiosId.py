@@ -102,22 +102,24 @@ def MyOptionParser():
     parser.add_argument('-i', '--int', metavar='FILENAME', dest='InputFile', help="Input Config file")
     parser.add_argument('-o', '--out', metavar='FILENAME', dest='OutputFile', help="Output file")
     parser.add_argument('-ot', '--text', metavar='FILENAME', dest='OutputTextFile', help="Output Text file")
+    parser.add_argument('-nt', '--notimestamp', dest='NoTimestamp', action='store_true', default=False, help="Set timestamp to zero")
     Options = parser.parse_args()
     return Options
 
 
 # Check the Tool for missing variables
 def CheckOptions(Options):
-    if len(sys.argv) != 5 and not (len(sys.argv) == 7 and Options.OutputTextFile):
+    if len(sys.argv) not in [5,6] and not (len(sys.argv) not in [7,8] and Options.OutputTextFile):
         EdkLogger("GenBiosId", OPTION_MISSING, ExtraData=_Usage)
     elif not Options.InputFile or not Options.OutputFile:
         EdkLogger("GenBiosId", OPTION_MISSING, ExtraData=_Usage)
     InputFile = Options.InputFile
     OutputFile = Options.OutputFile
     OutputTextFile = Options.OutputTextFile
+    NoTimestamp = Options.NoTimestamp
     if not os.path.exists(InputFile):
         EdkLogger("GenBiosId", FILE_NOT_FOUND, ExtraData="Input file not found")
-    return InputFile, OutputFile, OutputTextFile
+    return InputFile, OutputFile, OutputTextFile, NoTimestamp
 
 # Read input file and get config
 def ReadInputFile(InputFile):
@@ -134,7 +136,7 @@ def ReadInputFile(InputFile):
 
 
 # Parse the input file and extract the information
-def ParserInputFile(InputDict):
+def ParserInputFile(InputDict, NoTimestamp):
     for Item in InputDict:
         if Item not in _ConfigItem:
             EdkLogger("GenBiosId", FORMAT_INVALID, ExtraData=_ConfigItemInvalid % Item)
@@ -145,8 +147,10 @@ def ParserInputFile(InputDict):
         if not _ConfigItem[Item]['Value']:
             EdkLogger("GenBiosId", FORMAT_UNKNOWN_ERROR, ExtraData="Item %s is missing" % Item)
     utcnow = datetime.datetime.utcnow()
-    TimeStamp = time.strftime("%y%m%d%H%M", utcnow.timetuple())
-
+    if NoTimestamp:
+        TimeStamp = "\0\0\0\0\0\0\0\0\0\0"
+    else:
+        TimeStamp = time.strftime("%y%m%d%H%M", utcnow.timetuple())
     Id_Str = _ConfigItem['BOARD_ID']['Value'] + _ConfigItem['BOARD_REV']['Value'] + '.' + _ConfigItem['BOARD_EXT'][
         'Value'] + '.' + _ConfigItem['VERSION_MAJOR']['Value'] + \
              '.' + _ConfigItem["BUILD_TYPE"]['Value'] + _ConfigItem['VERSION_MINOR']['Value'] + '.' + TimeStamp
@@ -171,9 +175,9 @@ def PrintOutputFile(OutputFile, OutputTextFile, Id_Str):
 # Tool entrance method
 def Main():
     Options = MyOptionParser()
-    InputFile, OutputFile, OutputTextFile = CheckOptions(Options)
+    InputFile, OutputFile, OutputTextFile, NoTimestamp = CheckOptions(Options)
     InputDict = ReadInputFile(InputFile)
-    Id_Str = ParserInputFile(InputDict)
+    Id_Str = ParserInputFile(InputDict, NoTimestamp)
     PrintOutputFile(OutputFile, OutputTextFile, Id_Str)
     return 0
 
