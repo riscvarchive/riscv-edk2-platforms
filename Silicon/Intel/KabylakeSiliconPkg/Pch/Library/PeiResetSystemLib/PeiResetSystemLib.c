@@ -317,5 +317,10 @@ ResetSystem (
   default:
     return;
   }
+
+  //
+  // Given we should have reset getting here would be bad
+  //
+  ASSERT (FALSE);
 }
 

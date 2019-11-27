@@ -18,61 +18,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/ResetSystemLib.h>
 #include <PchResetPlatformSpecific.h>
 
-VOID
-EFIAPI
-ResetPlatformSpecific (
-  IN UINTN            DataSize,
-  IN VOID             *ResetData OPTIONAL
-  );
-
-
-/**
-  Resets the entire platform.
-
-  @param[in] ResetType            UEFI defined reset type.
-  @param[in] ResetStatus          The status code for the reset.
-  @param[in] DataSize             The size of ResetData in bytes.
-  @param[in] ResetData            Optional element used to introduce a platform specific reset.
-                                  The exact type of the reset is defined by the EFI_GUID that follows
-                                  the Null-terminated Unicode string.
-
-**/
-VOID
-EFIAPI
-ResetSystem (
-  IN EFI_RESET_TYPE     ResetType,
-  IN EFI_STATUS         ResetStatus,
-  IN UINTN              DataSize,
-  IN VOID               *ResetData OPTIONAL
-  )
-{
-  switch (ResetType) {
-  case EfiResetWarm:
-    ResetWarm ();
-    break;
-
-  case EfiResetCold:
-    ResetCold ();
-    break;
-
-  case EfiResetShutdown:
-    ResetShutdown ();
-    return;
-
-  case EfiResetPlatformSpecific:
-    ResetPlatformSpecific (DataSize, ResetData);
-    return;
-
-  default:
-    return;
-  }
-
-  //
-  // Given we should have reset getting here would be bad
-  //
-  ASSERT (FALSE);
-}
-
 /**
   Execute Pch Reset from the host controller.
 
