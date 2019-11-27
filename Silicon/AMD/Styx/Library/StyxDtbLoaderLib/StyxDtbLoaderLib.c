@@ -331,33 +331,6 @@ PrepareFdt (
   // Get Id from primary CPU
   MpId = (UINTN)ArmReadMpidr ();
 
-  // Create /pmu node
-  PmuNode = fdt_add_subnode(Fdt, 0, "pmu");
-  if (PmuNode >= 0) {
-    fdt_setprop_string (Fdt, PmuNode, "compatible", "arm,armv8-pmuv3");
-
-    // append PMU interrupts
-    for (Index = 0; Index < ArmCoreCount; Index++) {
-      MpId = (UINTN)GET_MPID (ArmCoreInfoTable[Index].ClusterId,
-                              ArmCoreInfoTable[Index].CoreId);
-
-      Status = AmdMpCoreInfoProtocol->GetPmuSpiFromMpId (MpId, &PmuInt.IntId);
-      if (EFI_ERROR (Status)) {
-        DEBUG ((DEBUG_ERROR,
-          "FDT: Error getting PMU interrupt for MpId '0x%x'\n", MpId));
-        return Status;
-      }
-
-      PmuInt.Flag = cpu_to_fdt32 (PMU_INT_FLAG_SPI);
-      PmuInt.IntId = cpu_to_fdt32 (PmuInt.IntId);
-      PmuInt.Type = cpu_to_fdt32 (PMU_INT_TYPE_HIGH_LEVEL);
-      fdt_appendprop (Fdt, PmuNode, "interrupts", &PmuInt, sizeof(PmuInt));
-    }
-  } else {
-    DEBUG ((DEBUG_ERROR, "FDT: Error creating 'pmu' node\n"));
-    return EFI_INVALID_PARAMETER;
-  }
-
   // Create /cpus noide
   Node = fdt_add_subnode (Fdt, 0, "cpus");
   if (Node >= 0) {
@@ -446,6 +419,34 @@ PrepareFdt (
     }
   } else {
     DEBUG ((DEBUG_ERROR,"FDT: Error creating 'cpu-map' node\n"));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  // Create /pmu node
+  PmuNode = fdt_add_subnode(Fdt, 0, "pmu");
+  if (PmuNode >= 0) {
+    fdt_setprop_string (Fdt, PmuNode, "compatible", "arm,armv8-pmuv3");
+
+    // append PMU interrupts
+    for (Index = 0; Index < ArmCoreCount; Index++) {
+      MpId = (UINTN)GET_MPID (ArmCoreInfoTable[Index].ClusterId,
+                              ArmCoreInfoTable[Index].CoreId);
+
+      Status = AmdMpCoreInfoProtocol->GetPmuSpiFromMpId (MpId, &PmuInt.IntId);
+      if (EFI_ERROR (Status)) {
+        DEBUG ((DEBUG_ERROR,
+          "FDT: Error getting PMU interrupt for MpId '0x%x'\n", MpId));
+        return Status;
+      }
+
+      PmuInt.Flag = cpu_to_fdt32 (PMU_INT_FLAG_SPI);
+      PmuInt.IntId = cpu_to_fdt32 (PmuInt.IntId);
+      PmuInt.Type = cpu_to_fdt32 (PMU_INT_TYPE_HIGH_LEVEL);
+      fdt_appendprop (Fdt, PmuNode, "interrupts", &PmuInt, sizeof(PmuInt));
+      fdt_appendprop_cell (Fdt, PmuNode, "interrupt-affinity", Phandle[Index]);
+    }
+  } else {
+    DEBUG ((DEBUG_ERROR, "FDT: Error creating 'pmu' node\n"));
     return EFI_INVALID_PARAMETER;
   }
 
