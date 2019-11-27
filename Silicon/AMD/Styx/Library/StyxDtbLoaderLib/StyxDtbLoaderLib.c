@@ -281,6 +281,8 @@ SetXgbeStatus (
   }
 }
 
+STATIC CONST CHAR8 mCpuCompatible[] = "arm,cortex-a57\0arm,armv8";
+STATIC CONST CHAR8 mPmuCompatible[] = "arm,cortex-a57-pmu\0arm,armv8-pmuv3";
 
 STATIC
 EFI_STATUS
@@ -405,7 +407,8 @@ PrepareFdt (
                             ArmCoreInfoTable[Index].CoreId);
     MpId = cpu_to_fdt64 (MpId);
     fdt_setprop (Fdt, CpuNode, "reg", &MpId, sizeof (MpId));
-    fdt_setprop_string (Fdt, CpuNode, "compatible", "arm,armv8");
+    fdt_setprop (Fdt, CpuNode, "compatible", mCpuCompatible,
+      sizeof (mCpuCompatible));
     fdt_setprop_string (Fdt, CpuNode, "device_type", "cpu");
 
     fdt_setprop_cell (Fdt, CpuNode, "i-cache-size", 3 * SIZE_16KB);
@@ -474,7 +477,8 @@ PrepareFdt (
   // Create /pmu node
   PmuNode = fdt_add_subnode(Fdt, 0, "pmu");
   if (PmuNode >= 0) {
-    fdt_setprop_string (Fdt, PmuNode, "compatible", "arm,armv8-pmuv3");
+    fdt_setprop (Fdt, PmuNode, "compatible", mPmuCompatible,
+      sizeof (mPmuCompatible));
 
     // append PMU interrupts
     for (Index = 0; Index < ArmCoreCount; Index++) {
