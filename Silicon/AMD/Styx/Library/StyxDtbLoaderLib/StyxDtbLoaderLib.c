@@ -399,7 +399,6 @@ PrepareFdt (
     }
     Phandle[Index] = fdt_alloc_phandle (Fdt);
     fdt_setprop_cell (Fdt, CpuNode, "phandle", Phandle[Index]);
-    fdt_setprop_cell (Fdt, CpuNode, "linux,phandle", Phandle[Index]);
 
     fdt_setprop_string (Fdt, CpuNode, "enable-method", "psci");
 
