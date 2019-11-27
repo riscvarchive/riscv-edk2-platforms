@@ -212,8 +212,6 @@ DisableSmmu (
 
   Node = fdt_path_offset (Fdt, SmmuNodeName);
   if (Node <= 0) {
-    DEBUG ((DEBUG_WARN, "%a: Failed to find path %s: %a\n",
-      __FUNCTION__, SmmuNodeName, fdt_strerror (Node)));
     return;
   }
 
@@ -251,9 +249,7 @@ SetSocIdStatus (
   if (!PcdGetBool (PcdEnableSmmus)) {
     DisableSmmu (Fdt, "iommu-map", "/smb/smmu@e0a00000", "/smb/pcie@f0000000");
     DisableSmmu (Fdt, "iommus", "/smb/smmu@e0200000", "/smb/sata@e0300000");
-  }
-
-  if (!PcdGetBool (PcdEnableSmmus) || !IsRevB1 || FixedPcdGet8 (PcdSata1PortCount) == 0) {
+    DisableSmmu (Fdt, "iommus", "/smb/smmu@e0c00000", "/smb/ccp@e0100000");
     DisableSmmu (Fdt, "iommus", "/smb/smmu@e0c00000", "/smb/sata@e0d00000");
   }
 
