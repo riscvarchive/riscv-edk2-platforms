@@ -130,6 +130,8 @@
   # needed for NFIT tables installed by RamDiskDxe
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
 
+  gEfiMdeModulePkgTokenSpaceGuid.PcdEnableVariableRuntimeCache|FALSE
+
 [PcdsFixedAtBuild.common]
 !ifdef $(FIRMWARE_VENDOR)
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"$(FIRMWARE_VENDOR)"
