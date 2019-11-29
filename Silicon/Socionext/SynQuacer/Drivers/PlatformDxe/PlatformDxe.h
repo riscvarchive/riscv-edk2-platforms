@@ -23,6 +23,7 @@
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/NonDiscoverableDeviceRegistrationLib.h>
+#include <Library/OpteeLib.h>
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
@@ -36,6 +37,7 @@
 #include <Protocol/SdMmcOverride.h>
 
 #define EMMC_TABLE_ID     SIGNATURE_64('S','y','n','Q','e','M','M','C')
+#define TOS0_TABLE_ID     SIGNATURE_64('S','y','n','Q','T','O','S','0')
 
 extern UINT8                             PlatformDxeHiiBin[];
 extern UINT8                             PlatformDxeStrings[];

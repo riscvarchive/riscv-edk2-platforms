@@ -19,6 +19,7 @@
 [Sources]
   Emmc.asl
   Emmc.c
+  Optee.asl
   Pci.c
   PlatformDxe.c
   PlatformDxeHii.uni
@@ -46,6 +47,7 @@
   IoLib
   MemoryAllocationLib
   NonDiscoverableDeviceRegistrationLib
+  OpteeLib
   PcdLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint

@@ -116,6 +116,9 @@ STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mI2c1Desc[] = {
 STATIC EFI_ACPI_DESCRIPTION_HEADER      *mEmmcSsdt;
 STATIC UINTN                            mEmmcSsdtSize;
 
+STATIC EFI_ACPI_DESCRIPTION_HEADER      *mTos0Ssdt;
+STATIC UINTN                            mTos0SsdtSize;
+
 STATIC VOID                             *mAcpiTableEventRegistration;
 
 STATIC
@@ -279,11 +282,22 @@ InstallAcpiTables (
     return;
   }
 
-  Status = AcpiTable->InstallAcpiTable (AcpiTable, mEmmcSsdt, mEmmcSsdtSize,
-                        &TableKey);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table for eMMC - %r\n",
-      __FUNCTION__, Status));
+  if (mEmmcSsdtSize > 0) {
+    Status = AcpiTable->InstallAcpiTable (AcpiTable, mEmmcSsdt, mEmmcSsdtSize,
+                          &TableKey);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table for eMMC - %r\n",
+        __FUNCTION__, Status));
+    }
+  }
+
+  if (mTos0SsdtSize > 0) {
+    Status = AcpiTable->InstallAcpiTable (AcpiTable, mTos0Ssdt, mTos0SsdtSize,
+                          &TableKey);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table for OP-TEE - %r\n",
+        __FUNCTION__, Status));
+    }
   }
 }
 
@@ -397,10 +411,18 @@ PlatformDxeEntryPoint (
         mEmmcSsdt = Ssdt;
         mEmmcSsdtSize = SsdtSize;
         break;
+
+      case TOS0_TABLE_ID:
+        if (!IsOpteePresent ()) {
+          break;
+        }
+        mTos0Ssdt = Ssdt;
+        mTos0SsdtSize = SsdtSize;
+        break;
       }
     }
 
-    if (mEmmcSsdtSize > 0) {
+    if (mEmmcSsdtSize > 0 || mTos0SsdtSize > 0) {
       //
       // Register for the ACPI table protocol if we found any SSDTs to install
       //
