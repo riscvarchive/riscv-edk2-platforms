@@ -113,6 +113,11 @@ STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mI2c1Desc[] = {
   }
 };
 
+STATIC EFI_ACPI_DESCRIPTION_HEADER      *mEmmcSsdt;
+STATIC UINTN                            mEmmcSsdtSize;
+
+STATIC VOID                             *mAcpiTableEventRegistration;
+
 STATIC
 EFI_STATUS
 RegisterDevice (
@@ -256,6 +261,32 @@ EnableSettingsForm (
   return InstallHiiPages ();
 }
 
+STATIC
+VOID
+EFIAPI
+InstallAcpiTables (
+  IN EFI_EVENT                      Event,
+  IN VOID*                          Context
+  )
+{
+  UINTN                             TableKey;
+  EFI_STATUS                        Status;
+  EFI_ACPI_TABLE_PROTOCOL           *AcpiTable;
+
+  Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL,
+                  (VOID **)&AcpiTable);
+  if (EFI_ERROR (Status)) {
+    return;
+  }
+
+  Status = AcpiTable->InstallAcpiTable (AcpiTable, mEmmcSsdt, mEmmcSsdtSize,
+                        &TableKey);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table for eMMC - %r\n",
+      __FUNCTION__, Status));
+  }
+}
+
 EFI_STATUS
 EFIAPI
 PlatformDxeEntryPoint (
@@ -267,6 +298,9 @@ PlatformDxeEntryPoint (
   VOID                            *Dtb;
   UINTN                           DtbSize;
   EFI_HANDLE                      Handle;
+  EFI_ACPI_DESCRIPTION_HEADER     *Ssdt;
+  UINTN                           SsdtSize;
+  UINTN                           Index;
 
   mHiiSettingsVal = PcdGet64 (PcdPlatformSettings);
   mHiiSettings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&mHiiSettingsVal;
@@ -342,6 +376,37 @@ PlatformDxeEntryPoint (
   if (mHiiSettings->EnableEmmc == EMMC_ENABLED) {
     Status = RegisterEmmc ();
     ASSERT_EFI_ERROR (Status);
+  }
+
+  if (mHiiSettings->AcpiPref == ACPIPREF_ACPI) {
+    //
+    // Load the SSDT tables from a raw section in this FFS file.
+    //
+    for (Index = 0;; Index++) {
+      Status = GetSectionFromFv (&gEfiCallerIdGuid, EFI_SECTION_RAW, Index,
+                 (VOID **)&Ssdt, &SsdtSize);
+      if (EFI_ERROR (Status)) {
+        break;
+      }
+
+      switch (Ssdt->OemTableId) {
+      case EMMC_TABLE_ID:
+        if (mHiiSettings->EnableEmmc != EMMC_ENABLED) {
+          break;
+        }
+        mEmmcSsdt = Ssdt;
+        mEmmcSsdtSize = SsdtSize;
+        break;
+      }
+    }
+
+    if (mEmmcSsdtSize > 0) {
+      //
+      // Register for the ACPI table protocol if we found any SSDTs to install
+      //
+      EfiCreateProtocolNotifyEvent (&gEfiAcpiTableProtocolGuid, TPL_CALLBACK,
+        InstallAcpiTables, NULL, &mAcpiTableEventRegistration);
+    }
   }
 
   return EFI_SUCCESS;

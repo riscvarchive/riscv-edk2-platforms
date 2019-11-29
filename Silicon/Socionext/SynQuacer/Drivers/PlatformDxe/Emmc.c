@@ -53,10 +53,6 @@
 
 STATIC EFI_HANDLE mSdMmcControllerHandle;
 
-STATIC EFI_ACPI_DESCRIPTION_HEADER      *mSsdt;
-STATIC UINTN                            mSsdtSize;
-STATIC VOID                             *mEventRegistration;
-
 /**
 
   Override function for SDHCI capability bits
@@ -185,31 +181,6 @@ STATIC EDKII_SD_MMC_OVERRIDE mSdMmcOverride = {
   SynQuacerSdMmcNotifyPhase,
 };
 
-STATIC
-VOID
-EFIAPI
-InstallAcpiTable (
-  IN EFI_EVENT                      Event,
-  IN VOID*                          Context
-  )
-{
-  UINTN                             TableKey;
-  EFI_STATUS                        Status;
-  EFI_ACPI_TABLE_PROTOCOL           *AcpiTable;
-
-  Status = gBS->LocateProtocol (&gEfiAcpiTableProtocolGuid, NULL,
-                  (VOID **)&AcpiTable);
-  if (EFI_ERROR (Status)) {
-    return;
-  }
-
-  Status = AcpiTable->InstallAcpiTable (AcpiTable, mSsdt, mSsdtSize, &TableKey);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_WARN, "%a: failed to install SSDT table for eMMC - %r\n",
-      __FUNCTION__, Status));
-  }
-}
-
 EFI_STATUS
 EFIAPI
 RegisterEmmc (
@@ -218,32 +189,6 @@ RegisterEmmc (
 {
   EFI_STATUS                      Status;
   EFI_HANDLE                      Handle;
-  UINTN                           Index;
-
-  if (mHiiSettings->AcpiPref == ACPIPREF_ACPI) {
-    //
-    // Load the SSDT table from a raw section in this FFS file.
-    //
-    for (Index = 0;; Index++) {
-      Status = GetSectionFromFv (&gEfiCallerIdGuid, EFI_SECTION_RAW, Index,
-                 (VOID **)&mSsdt, &mSsdtSize);
-      if (EFI_ERROR (Status)) {
-        break;
-      }
-
-      if (mSsdt->OemTableId != EMMC_TABLE_ID) {
-        continue;
-      }
-
-      //
-      // Register for the ACPI table protocol
-      //
-      EfiCreateProtocolNotifyEvent (&gEfiAcpiTableProtocolGuid, TPL_CALLBACK,
-        InstallAcpiTable, NULL, &mEventRegistration);
-
-      break;
-    }
-  }
 
   Status = RegisterNonDiscoverableMmioDevice (
              NonDiscoverableDeviceTypeSdhci,
