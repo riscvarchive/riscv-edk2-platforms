@@ -1,6 +1,6 @@
 /** @file
 
-  This driver produces an EFI_RNG_PROTOCOL instance for the Broadcom 2836 RNG
+  This driver produces an EFI_RNG_PROTOCOL instance for the Broadcom 2835 RNG
 
   Copyright (C) 2019, Linaro Ltd. All rights reserved.<BR>
 
@@ -59,7 +59,7 @@
 STATIC
 EFI_STATUS
 EFIAPI
-Bcm2836RngGetInfo (
+Bcm2835RngGetInfo (
   IN      EFI_RNG_PROTOCOL        *This,
   IN OUT  UINTN                   *RNGAlgorithmListSize,
   OUT     EFI_RNG_ALGORITHM       *RNGAlgorithmList
@@ -116,7 +116,7 @@ Bcm2836RngGetInfo (
 STATIC
 EFI_STATUS
 EFIAPI
-Bcm2836RngGetRNG (
+Bcm2835RngGetRNG (
   IN EFI_RNG_PROTOCOL            *This,
   IN EFI_RNG_ALGORITHM           *RNGAlgorithm, OPTIONAL
   IN UINTN                       RNGValueLength,
@@ -168,9 +168,9 @@ Bcm2836RngGetRNG (
   return EFI_SUCCESS;
 }
 
-STATIC EFI_RNG_PROTOCOL mBcm2836RngProtocol = {
-  Bcm2836RngGetInfo,
-  Bcm2836RngGetRNG
+STATIC EFI_RNG_PROTOCOL mBcm2835RngProtocol = {
+  Bcm2835RngGetInfo,
+  Bcm2835RngGetRNG
 };
 
 //
@@ -178,7 +178,7 @@ STATIC EFI_RNG_PROTOCOL mBcm2836RngProtocol = {
 //
 EFI_STATUS
 EFIAPI
-Bcm2836RngEntryPoint (
+Bcm2835RngEntryPoint (
   IN EFI_HANDLE       ImageHandle,
   IN EFI_SYSTEM_TABLE *SystemTable
   )
@@ -186,7 +186,7 @@ Bcm2836RngEntryPoint (
   EFI_STATUS      Status;
 
   Status = gBS->InstallMultipleProtocolInterfaces (&ImageHandle,
-                  &gEfiRngProtocolGuid, &mBcm2836RngProtocol,
+                  &gEfiRngProtocolGuid, &mBcm2835RngProtocol,
                   NULL);
   ASSERT_EFI_ERROR (Status);
 

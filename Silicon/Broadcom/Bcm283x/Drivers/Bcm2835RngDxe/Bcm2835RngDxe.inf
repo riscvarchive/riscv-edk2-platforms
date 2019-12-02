@@ -9,14 +9,14 @@
 
 [Defines]
   INF_VERSION                    = 0x0001001B
-  BASE_NAME                      = RngDxe
+  BASE_NAME                      = Bcm2835RngDxe
   FILE_GUID                      = 9743084e-c82a-4714-b2ba-f571f81cb021
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
-  ENTRY_POINT                    = Bcm2836RngEntryPoint
+  ENTRY_POINT                    = Bcm2835RngEntryPoint
 
 [Sources]
-  RngDxe.c
+  Bcm2835RngDxe.c
 
 [Packages]
   MdePkg/MdePkg.dec

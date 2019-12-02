@@ -273,7 +273,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # RNG
   #
-  INF Silicon/Broadcom/Bcm283x/Drivers/RngDxe/RngDxe.inf
+  INF Silicon/Broadcom/Bcm283x/Drivers/Bcm2835RngDxe/Bcm2835RngDxe.inf
 
   #
   # SCSI Bus and Disk Driver
