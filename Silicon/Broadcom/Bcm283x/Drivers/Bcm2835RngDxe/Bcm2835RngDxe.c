@@ -14,7 +14,7 @@
 #include <Library/IoLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#include <IndustryStandard/Bcm2836.h>
+#include <IndustryStandard/Bcm2835Rng.h>
 
 #include <Protocol/Rng.h>
 

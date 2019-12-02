@@ -50,13 +50,4 @@
 #define BCM2836_INTC_TIMER_CONTROL_OFFSET                   0x00000040
 #define BCM2836_INTC_TIMER_PENDING_OFFSET                   0x00000060
 
-/* random number generator */
-#define RNG_BASE_ADDRESS   (BCM2836_SOC_REGISTERS + 0x00104000)
-
-#define RNG_CTRL           (RNG_BASE_ADDRESS + 0x0)
-#define RNG_STATUS         (RNG_BASE_ADDRESS + 0x4)
-#define RNG_DATA           (RNG_BASE_ADDRESS + 0x8)
-
-#define RNG_CTRL_ENABLE    0x1
-
 #endif /*__BCM2836_H__ */
