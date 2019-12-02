@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2019, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -569,12 +570,60 @@ SdSetSpeed (
 
 STATIC
 EFI_STATUS
+SdExecuteScr (
+  IN  MMC_HOST_INSTANCE   *MmcHostInstance,
+  OUT SCR                 *Scr
+  )
+{
+  EFI_STATUS              Status;
+  UINT32                  Response[4];
+  EFI_MMC_HOST_PROTOCOL   *MmcHost;
+
+  MmcHost = MmcHostInstance->MmcHost;
+
+  Status = MmcHost->SendCommand (MmcHost, MMC_CMD55,
+                      MmcHostInstance->CardInfo.RCA << 16);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a (MMC_CMD55): Error and Status = %r\n",
+      __FUNCTION__, Status));
+    return Status;
+  }
+  Status = MmcHost->ReceiveResponse (MmcHost, MMC_RESPONSE_TYPE_R1, Response);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a (MMC_CMD55): Error and Status = %r\n",
+      __FUNCTION__, Status));
+    return Status;
+  }
+  if ((Response[0] & MMC_STATUS_APP_CMD) == 0) {
+    return EFI_SUCCESS;
+  }
+
+  /* SCR */
+  Status = MmcHost->SendCommand (MmcHost, MMC_ACMD51, 0);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a (MMC_ACMD51): Error and Status = %r\n",
+      __FUNCTION__, Status));
+    return Status;
+  }
+
+  Status = MmcHost->ReadBlockData (MmcHost, 0, 8, (VOID *)Scr);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR,
+      "%a (MMC_ACMD51): ReadBlockData Error and Status = %r\n",
+      __FUNCTION__, Status));
+    return Status;
+  }
+
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
 InitializeSdMmcDevice (
   IN  MMC_HOST_INSTANCE *MmcHostInstance
   )
 {
   UINT32        Response[4];
-  UINT32        Buffer[128];
   UINTN         BlockSize;
   UINTN         CardSize;
   UINTN         NumBlocks;
@@ -621,57 +670,34 @@ InitializeSdMmcDevice (
     return Status;
   }
 
-  Status = MmcHost->SendCommand (MmcHost, MMC_CMD55,
-                      MmcHostInstance->CardInfo.RCA << 16);
+  Status = SdExecuteScr (MmcHostInstance, &Scr);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a (MMC_CMD55): Error and Status = %r\n", __FUNCTION__, Status));
-    return Status;
-  }
-  Status = MmcHost->ReceiveResponse (MmcHost, MMC_RESPONSE_TYPE_R1, Response);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a (MMC_CMD55): Error and Status = %r\n", __FUNCTION__, Status));
-    return Status;
-  }
-  if ((Response[0] & MMC_STATUS_APP_CMD) == 0) {
-    return EFI_SUCCESS;
+     return Status;
   }
 
-  /* SCR */
-  Status = MmcHost->SendCommand (MmcHost, MMC_ACMD51, 0);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a(MMC_ACMD51): Error and Status = %r\n", __func__, Status));
-    return Status;
-  } else {
-    Status = MmcHost->ReadBlockData (MmcHost, 0, 8, Buffer);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR, "%a(MMC_ACMD51): ReadBlockData Error and Status = %r\n", __func__, Status));
-      return Status;
-    }
-    CopyMem (&Scr, Buffer, 8);
-    if (Scr.SD_SPEC == 2) {
-      if (Scr.SD_SPEC3 == 1) {
-        if (Scr.SD_SPEC4 == 1) {
-          DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 4.xx\n"));
-        } else {
-          DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 3.0x\n"));
-        }
+  if (Scr.SD_SPEC == 2) {
+    if (Scr.SD_SPEC3 == 1) {
+      if (Scr.SD_SPEC4 == 1) {
+        DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 4.xx\n"));
       } else {
-        if (Scr.SD_SPEC4 == 0) {
-          DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 2.0\n"));
-        } else {
-          DEBUG ((DEBUG_ERROR, "Found invalid SD Card\n"));
-        }
+        DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 3.0x\n"));
       }
     } else {
-      if ((Scr.SD_SPEC3 == 0) && (Scr.SD_SPEC4 == 0)) {
-        if (Scr.SD_SPEC == 1) {
-          DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 1.10\n"));
-        } else {
-          DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 1.0\n"));
-        }
+      if (Scr.SD_SPEC4 == 0) {
+        DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 2.0\n"));
       } else {
         DEBUG ((DEBUG_ERROR, "Found invalid SD Card\n"));
       }
+    }
+  } else {
+    if ((Scr.SD_SPEC3 == 0) && (Scr.SD_SPEC4 == 0)) {
+      if (Scr.SD_SPEC == 1) {
+        DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 1.10\n"));
+      } else {
+        DEBUG ((DEBUG_INFO, "Found SD Card for Spec Version 1.0\n"));
+      }
+    } else {
+      DEBUG ((DEBUG_ERROR, "Found invalid SD Card\n"));
     }
   }
 
