@@ -2,6 +2,7 @@
  *
  *  Main file of the MMC Dxe driver. The driver entrypoint is defined into this file.
  *
+ *  Copyright (c) 2019, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2011-2013, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -367,7 +368,11 @@ CheckCardsCallback (
       MmcHostInstance->Initialized = !MmcHostInstance->Initialized;
 
       if (MmcHostInstance->BlockIo.Media->MediaPresent) {
-        InitializeMmcDevice (MmcHostInstance);
+        Status = InitializeMmcDevice (MmcHostInstance);
+        if (EFI_ERROR (Status)) {
+          MmcHostInstance->Initialized = !MmcHostInstance->Initialized;
+          continue;
+        }
       }
 
       Status = gBS->ReinstallProtocolInterface (
