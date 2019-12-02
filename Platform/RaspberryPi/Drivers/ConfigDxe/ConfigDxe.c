@@ -1,6 +1,7 @@
 /** @file
  *
- *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2019, ARM Limited. All rights reserved.
+ *  Copyright (c) 2018 - 2019, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -9,10 +10,12 @@
 #include <Uefi.h>
 #include <Library/HiiLib.h>
 #include <Library/DebugLib.h>
+#include <Library/IoLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/DevicePathLib.h>
 #include <IndustryStandard/RpiMbox.h>
+#include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <Library/GpioLib.h>
 #include <Protocol/RpiFirmware.h>
@@ -212,6 +215,7 @@ ApplyVariables (
   UINT32 CpuClock = PcdGet32 (PcdCpuClock);
   UINT32 CustomCpuClock = PcdGet32 (PcdCustomCpuClock);
   UINT32 Rate = 0;
+  UINT32 ModelFamily = 0;
 
   if (CpuClock != 0) {
     if (CpuClock == 2) {
@@ -245,51 +249,102 @@ ApplyVariables (
     DEBUG ((DEBUG_INFO, "Current CPU speed is %uHz\n", Rate));
   }
 
-  /*
-   * Switching two groups around, so disable both first.
-   *
-   * No, I've not seen a problem, but having a group be
-   * routed to two sets of pins seems like asking for trouble.
-   */
-  GpioPinFuncSet (34, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (35, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (36, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (37, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (38, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (39, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (48, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (49, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (50, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (51, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (52, GPIO_FSEL_INPUT);
-  GpioPinFuncSet (53, GPIO_FSEL_INPUT);
-  if (PcdGet32 (PcdSdIsArasan)) {
-    DEBUG ((DEBUG_INFO, "Routing SD to Arasan\n"));
-    Gpio48Group = GPIO_FSEL_ALT3;
-    /*
-     * Route SDIO to SdHost.
-     */
-    Gpio34Group = GPIO_FSEL_ALT0;
+  Status = mFwProtocol->GetModelFamily (&ModelFamily);
+  if (Status != EFI_SUCCESS) {
+    DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi model family: %r\n", Status));
   } else {
-    DEBUG ((DEBUG_INFO, "Routing SD to SdHost\n"));
-    Gpio48Group = GPIO_FSEL_ALT0;
-    /*
-     * Route SDIO to Arasan.
-     */
-    Gpio34Group = GPIO_FSEL_ALT3;
+    DEBUG ((DEBUG_INFO, "Current Raspberry Pi model family is 0x%x\n", ModelFamily));
   }
-  GpioPinFuncSet (34, Gpio34Group);
-  GpioPinFuncSet (35, Gpio34Group);
-  GpioPinFuncSet (36, Gpio34Group);
-  GpioPinFuncSet (37, Gpio34Group);
-  GpioPinFuncSet (38, Gpio34Group);
-  GpioPinFuncSet (39, Gpio34Group);
-  GpioPinFuncSet (48, Gpio48Group);
-  GpioPinFuncSet (49, Gpio48Group);
-  GpioPinFuncSet (50, Gpio48Group);
-  GpioPinFuncSet (51, Gpio48Group);
-  GpioPinFuncSet (52, Gpio48Group);
-  GpioPinFuncSet (53, Gpio48Group);
+
+
+  if (ModelFamily == 3) {
+    /*
+     * Pi 3: either Arasan or SdHost goes to SD card.
+     *
+     * Switching two groups around, so disable both first.
+     *
+     * No, I've not seen a problem, but having a group be
+     * routed to two sets of pins seems like asking for trouble.
+     */
+    GpioPinFuncSet (34, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (35, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (36, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (37, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (38, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (39, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (48, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (49, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (50, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (51, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (52, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (53, GPIO_FSEL_INPUT);
+
+    if (PcdGet32 (PcdSdIsArasan)) {
+      DEBUG ((DEBUG_INFO, "Routing SD to Arasan\n"));
+      Gpio48Group = GPIO_FSEL_ALT3;
+      /*
+       * Route SDIO to SdHost.
+       */
+      Gpio34Group = GPIO_FSEL_ALT0;
+    } else {
+      DEBUG ((DEBUG_INFO, "Routing SD to SdHost\n"));
+      Gpio48Group = GPIO_FSEL_ALT0;
+      /*
+       * Route SDIO to Arasan.
+       */
+      Gpio34Group = GPIO_FSEL_ALT3;
+    }
+    GpioPinFuncSet (34, Gpio34Group);
+    GpioPinFuncSet (35, Gpio34Group);
+    GpioPinFuncSet (36, Gpio34Group);
+    GpioPinFuncSet (37, Gpio34Group);
+    GpioPinFuncSet (38, Gpio34Group);
+    GpioPinFuncSet (39, Gpio34Group);
+    GpioPinFuncSet (48, Gpio48Group);
+    GpioPinFuncSet (49, Gpio48Group);
+    GpioPinFuncSet (50, Gpio48Group);
+    GpioPinFuncSet (51, Gpio48Group);
+    GpioPinFuncSet (52, Gpio48Group);
+    GpioPinFuncSet (53, Gpio48Group);
+
+  } else if (ModelFamily == 4) {
+    /*
+     * Pi 4: either Arasan or eMMC2 goes to SD card.
+     */
+    if (PcdGet32 (PcdSdIsArasan)) {
+      /*
+       * WiFi disabled.
+       */
+      GpioPinFuncSet (34, GPIO_FSEL_INPUT);
+      GpioPinFuncSet (35, GPIO_FSEL_INPUT);
+      GpioPinFuncSet (36, GPIO_FSEL_INPUT);
+      GpioPinFuncSet (37, GPIO_FSEL_INPUT);
+      GpioPinFuncSet (38, GPIO_FSEL_INPUT);
+      GpioPinFuncSet (39, GPIO_FSEL_INPUT);
+      /*
+       * SD card pins go to Arasan.
+       */
+      MmioWrite32((GPIO_BASE_ADDRESS + 0xD0),
+                  MmioRead32(GPIO_BASE_ADDRESS + 0xD0) | 0x2);
+    } else {
+      /*
+       * SD card pins back to eMMC2.
+       */
+      MmioWrite32((GPIO_BASE_ADDRESS + 0xD0),
+                  MmioRead32(GPIO_BASE_ADDRESS + 0xD0) & ~0x2);
+      /*
+       * WiFi back to Arasan.
+       */
+      GpioPinFuncSet (34, GPIO_FSEL_ALT3);
+      GpioPinFuncSet (35, GPIO_FSEL_ALT3);
+      GpioPinFuncSet (36, GPIO_FSEL_ALT3);
+      GpioPinFuncSet (37, GPIO_FSEL_ALT3);
+      GpioPinFuncSet (38, GPIO_FSEL_ALT3);
+      GpioPinFuncSet (39, GPIO_FSEL_ALT3);
+    }
+  } else {
+    DEBUG ((DEBUG_ERROR, "Model Family %d not supported...\n", ModelFamily));
+  }
 
   /*
    * JTAG pin    JTAG sig    GPIO      Mode    Header pin
