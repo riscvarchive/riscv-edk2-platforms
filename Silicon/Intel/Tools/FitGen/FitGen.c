@@ -315,6 +315,7 @@ Returns:
           "\t[-F <FitTablePointerOffset>] [-F <FitTablePointerOffset>] [-V <FitHeaderVersion>]\n"
           "\t[-NA]\n"
           "\t[-CLEAR]\n"
+          "\t[-L <MicrocodeSlotSize> <MicrocodeFfsGuid>]\n"
           "\t[-I <BiosInfoGuid>]\n"
           "\t[-S <StartupAcmAddress StartupAcmSize>|<StartupAcmGuid>] [-V <StartupAcmVersion>]\n"
           "\t[-B <BiosModuleAddress BiosModuleSize>] [-B ...] [-V <BiosModuleVersion>]\n"
@@ -340,6 +341,8 @@ Returns:
   printf ("\tMicrocodeRegionOffset  - Offset of Microcode region in input FD image.\n");
   printf ("\tMicrocodeRegionSize    - Size of Microcode region in input FD image.\n");
   printf ("\tMicrocodeGuid          - Guid of Microcode Module.\n");
+  printf ("\tMicrocodeSlotSize      - Occupied region size of each Microcode binary.\n");
+  printf ("\tMicrocodeFfsGuid       - Guid of FFS which is used to save Microcode binary");
   printf ("\t-NA                    - No 0x800 aligned Microcode requirement. No -NA means Microcode is 0x800 aligned.\n");
   printf ("\tRecordType             - FIT entry record type. User should ensure it is ordered.\n");
   printf ("\tRecordDataAddress      - FIT entry record data address.\n");
@@ -764,6 +767,7 @@ Returns:
 */
 {
   EFI_GUID  Guid;
+  EFI_GUID  MicrocodeFfsGuid;
   INTN      Index;
   UINT8     *FileBuffer;
   UINT32    FileSize;
@@ -774,15 +778,21 @@ Returns:
   UINT32    MicrocodeBase;
   UINT32    MicrocodeSize;
   UINT8     *MicrocodeBuffer;
+  UINT32    MicrocodeBufferSize;
+  UINT8     *Walker;
   UINT32    MicrocodeRegionOffset;
   UINT32    MicrocodeRegionSize;
+  UINT32    SlotSize;
   STATUS    Status;
   EFI_FIRMWARE_VOLUME_HEADER  *FvHeader;
   UINTN                       FitEntryNumber;
   BOOLEAN                     BiosInfoExist;
+  BOOLEAN                     SlotMode;
   BIOS_INFO_HEADER            *BiosInfo;
   BIOS_INFO_STRUCT            *BiosInfoStruct;
   UINTN                       BiosInfoIndex;
+
+  SlotMode = FALSE;
 
   //
   // Init index
@@ -900,7 +910,34 @@ Returns:
   }
 
   //
-  // 0.5 BiosInfo
+  // 0.5 SlotSize
+  //
+  if ((Index + 1 >= argc) ||
+      ((strcmp (argv[Index], "-L") != 0) &&
+       (strcmp (argv[Index], "-l") != 0)) ) {
+    //
+    // Bypass
+    //
+    SlotSize = 0;
+  } else {
+    SlotSize = xtoi (argv[Index + 1]);
+
+    if (SlotSize == 0) {
+      printf ("Invalid slotsize = %d\n", SlotSize);
+      return 0;
+    }
+
+    SlotMode = IsGuidData(argv[Index + 2], &MicrocodeFfsGuid);
+    if (!SlotMode) {
+      printf ("Need a ffs GUID for search uCode ffs\n");
+      return 0;
+    }
+
+    Index += 3;
+  }
+
+  //
+  // 0.6 BiosInfo
   //
   if ((Index + 1 >= argc) ||
       ((strcmp (argv[Index], "-I") != 0) &&
@@ -1007,6 +1044,16 @@ Returns:
             } else {
               MicrocodeBuffer = MicrocodeFileBuffer;
             }
+
+            if (SlotMode) {
+              MicrocodeBuffer = FindFileFromFvByGuid(MicrocodeFileBuffer, MicrocodeFileSize, &MicrocodeFfsGuid, &MicrocodeBufferSize);
+              if (MicrocodeBuffer == NULL) {
+                printf ("-L Parameter incorrect, GUID not found\n");
+                // not found
+                return 0;
+              }
+            }
+
             while ((UINT32)(MicrocodeBuffer - MicrocodeFileBuffer) < MicrocodeFileSize) {
               if (*(UINT32 *)(MicrocodeBuffer) != 0x1) { // HeaderVersion
                 break;
@@ -1040,7 +1087,35 @@ Returns:
               gFitTableContext.MicrocodeNumber++;
               gFitTableContext.FitEntryNumber++;
 
-              MicrocodeBuffer += MicrocodeSize;
+              if (SlotSize != 0) {
+                MicrocodeBuffer += SlotSize;
+              } else {
+                MicrocodeBuffer += MicrocodeSize;
+              }
+            }
+
+            ///
+            /// Check the remaining buffer
+            ///
+            if (((UINT32)(MicrocodeBuffer - MicrocodeFileBuffer) < MicrocodeFileSize) && SlotMode != 0) {
+              for (Walker = MicrocodeBuffer; Walker < MicrocodeFileBuffer + MicrocodeFileSize; Walker++) {
+                if (*Walker != 0xFF) {
+                  printf ("Error: detect non-spare space after uCode array, please check uCode array!\n");
+                  return 0;
+                }
+              }
+
+              ///
+              /// Split the spare space as empty buffer for save uCode patch.
+              ///
+              while (MicrocodeBuffer + SlotSize <= MicrocodeFileBuffer + MicrocodeFileSize) {
+                gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Type = FIT_TABLE_TYPE_MICROCODE;
+                gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + ((UINT32) (UINTN) MicrocodeBuffer - (UINT32) (UINTN) MicrocodeFileBuffer);
+                gFitTableContext.MicrocodeNumber++;
+                gFitTableContext.FitEntryNumber++;
+
+                MicrocodeBuffer += SlotSize;
+              }
             }
           }
           break;
