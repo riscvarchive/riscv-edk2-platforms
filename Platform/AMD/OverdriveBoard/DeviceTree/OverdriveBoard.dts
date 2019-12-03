@@ -86,7 +86,7 @@
 				       */
 				      <0 332 4>,
 				      <0 332 4>;
-			#iommu-cells = <1>;
+			#iommu-cells = <2>;
 			dma-coherent;
 		};
 
@@ -109,12 +109,7 @@
 			interrupts = <0x0 0x163 0x4>;
 			clocks = <&sata_clk>;
 			dma-coherent;
-			iommus = <&sata0_smmu 0x0a>,
-				 <&sata0_smmu 0x0b>,
-				 <&sata0_smmu 0x0e>,
-				 <&sata0_smmu 0x0f>,
-				 <&sata0_smmu 0x1a>,
-				 <&sata0_smmu 0x1e>;
+			iommus = <&sata0_smmu 0x0 0x1f>;
 		};
 
 		sata@e0d00000 {
