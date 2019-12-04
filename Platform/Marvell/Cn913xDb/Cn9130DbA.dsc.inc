@@ -93,10 +93,6 @@
   gMarvellTokenSpaceGuid.PcdPciEAhci|{ 0x1 }
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x1, 0x1 }
 
-  # PCIE
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0xDFF00000
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xD0000000
-
   # RTC
   gMarvellTokenSpaceGuid.PcdRtcBaseAddress|0xF2284000
 

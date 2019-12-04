@@ -16,18 +16,21 @@
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
   LIBRARY_CLASS                  = PciSegmentLib
+  CONSTRUCTOR                    = Armada7k8kPciSegmentLibConstructor
 
 [Sources]
   PciSegmentLib.c
 
 [Packages]
+  EmbeddedPkg/EmbeddedPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
+  ArmadaBoardDescLib
+  ArmadaSoCDescLib
   BaseLib
-  DebugLib
-  IoLib
 
-[Pcd]
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+[Protocols]
+  gMarvellBoardDescProtocolGuid

@@ -9,12 +9,20 @@
 
 **/
 
+#include <Uefi.h>
 #include <Base.h>
 
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
+#include <Library/MemoryAllocationLib.h>
 #include <Library/PciSegmentLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+
+#include <Protocol/BoardDesc.h>
+
+UINT64 *mConfigSpaceAddresses;
+UINTN mPcieControllerCount;
 
 typedef enum {
   PciCfgWidthUint8      = 0,
@@ -35,6 +43,15 @@ typedef enum {
   ASSERT (((A) & (0xffff0000f0000000ULL | (M))) == 0)
 
 /**
+  Extract segment number from PCI Segment address
+
+  @param  A The address to process.
+
+**/
+#define SEGMENT_INDEX(A) \
+  (((A) & 0x0000ffff00000000) >> 32)
+
+/**
   Internal worker function to obtain config space base address.
 
   @param  Address The address that encodes the PCI Bus, Device, Function and
@@ -49,7 +66,9 @@ PciSegmentLibGetConfigBase (
   IN  UINT64      Address
   )
 {
-  return PcdGet64 (PcdPciExpressBaseAddress);
+  ASSERT (SEGMENT_INDEX (Address) < mPcieControllerCount);
+
+  return mConfigSpaceAddresses[SEGMENT_INDEX (Address)];
 }
 
 /**
@@ -1387,4 +1406,52 @@ PciSegmentWriteBuffer (
   }
 
   return ReturnValue;
+}
+
+/**
+  Obtain base addresses of PCIe configuration spaces.
+
+  @retval EFI_SUCEESS       Routine executed properly.
+  @retval Other             Return error status.
+
+**/
+EFI_STATUS
+EFIAPI
+Armada7k8kPciSegmentLibConstructor (
+  VOID
+  )
+{
+  CONST MV_BOARD_PCIE_DESCRIPTION *PcieDesc;
+  MARVELL_BOARD_DESC_PROTOCOL *Proto;
+  EFI_STATUS Status;
+  UINTN Index;
+
+  Status = gBS->LocateProtocol (
+                  &gMarvellBoardDescProtocolGuid,
+                  NULL,
+                  (VOID **)&Proto
+                  );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  Status = Proto->PcieDescriptionGet (Proto, &PcieDesc);
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  mConfigSpaceAddresses = AllocateZeroPool (
+                            PcieDesc->PcieControllerCount * sizeof (UINT64)
+                          );
+  if (mConfigSpaceAddresses == NULL) {
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  for (Index = 0; Index < PcieDesc->PcieControllerCount; Index++) {
+    mConfigSpaceAddresses[Index] = PcieDesc->PcieControllers[Index].ConfigSpaceAddress;
+  }
+
+  mPcieControllerCount = PcieDesc->PcieControllerCount;
+
+  return EFI_SUCCESS;
 }
