@@ -9,23 +9,33 @@
 
 #include "SmbiosPlatformDxe.h"
 
+/**
+  Get the system memory size below 4GB
 
+  @return The size of system memory below 4GB
+**/
 UINT32
 GetSystemMemorySizeBelow4gb(
   VOID
   )
 {
+  UINT32 Size;
   //
   // CMOS 0x34/0x35 specifies the system memory above 16 MB.
-  // * CMOS(0x35) is the high byte
-  // * CMOS(0x34) is the low byte
   // * The size is specified in 64kb chunks
   // * Since this is memory above 16MB, the 16MB must be added
   //   into the calculation to get the total memory size.
   //
-  return (UINT32) (((UINTN) CmosRead16 (0x34) << 16) + SIZE_16MB);
+  Size = (UINT32) ((CmosRead16 (CMOS_SYSTEM_MEM_ABOVE_16MB_LOW_BYTE) << 16)
+           + SIZE_16MB);
+  return Size;
 }
 
+/**
+  Get the system memory size  above 4GB
+
+  @return The size of system memory above 4GB
+**/
 STATIC
 UINT64
 GetSystemMemorySizeAbove4gb(
@@ -35,14 +45,12 @@ GetSystemMemorySizeAbove4gb(
   UINT32 Size;
   //
   // CMOS 0x5b-0x5d specifies the system memory above 4GB MB.
-  // * CMOS(0x5d) is the most significant size byte
-  // * CMOS(0x5c) is the middle size byte
-  // * CMOS(0x5b) is the least significant size byte
   // * The size is specified in 64kb chunks
   //
-  Size = (CmosRead16 (0x5c) << 8) + CmosRead8 (0x5b);
+  Size = (CmosRead16 (CMOS_SYSTEM_MEM_ABOVE_4GB_MIDDLE_BYTE) << 8)
+           + CmosRead8 (CMOS_SYSTEM_MEM_ABOVE_4GB_LOW_BYTE);
 
-  return LShiftU64(Size, 16);
+  return LShiftU64 (Size, 16);
 }
 
 /**
