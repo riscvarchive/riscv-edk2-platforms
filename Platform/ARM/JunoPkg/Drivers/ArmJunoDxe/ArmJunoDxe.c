@@ -32,39 +32,8 @@
 STATIC CONST EFI_GUID mJunoAcpiTableFile = { 0xa1dd808e, 0x1e95, 0x4399, { 0xab, 0xc0, 0x65, 0x3c, 0x82, 0xe8, 0x53, 0x0c } };
 #endif
 
-typedef struct {
-  ACPI_HID_DEVICE_PATH      AcpiDevicePath;
-  PCI_DEVICE_PATH           PciDevicePath;
-  EFI_DEVICE_PATH_PROTOCOL  EndDevicePath;
-} EFI_PCI_ROOT_BRIDGE_DEVICE_PATH;
-
-STATIC CONST EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mPciRootComplexDevicePath = {
-    {
-      { ACPI_DEVICE_PATH,
-        ACPI_DP,
-        { (UINT8) (sizeof (ACPI_HID_DEVICE_PATH)),
-          (UINT8) ((sizeof (ACPI_HID_DEVICE_PATH)) >> 8) }
-      },
-      EISA_PNP_ID (0x0A03),
-      0
-    },
-    {
-      { HARDWARE_DEVICE_PATH,
-        HW_PCI_DP,
-        { (UINT8) (sizeof (PCI_DEVICE_PATH)),
-          (UINT8) ((sizeof (PCI_DEVICE_PATH)) >> 8) }
-      },
-      0,
-      0
-    },
-    {
-      END_DEVICE_PATH_TYPE,
-      END_ENTIRE_DEVICE_PATH_SUBTYPE,
-      { END_DEVICE_PATH_LENGTH, 0 }
-    }
-};
-
 STATIC VOID *mAcpiRegistration = NULL;
+STATIC VOID *mPciIoNotificationRegistration = NULL;
 
 /**
   This function reads PCI ID of the controller.
@@ -97,59 +66,6 @@ ReadMarvellYoukonPciId (
   }
 
   return EFI_SUCCESS;
-}
-
-/**
-  This function searches for Marvell Yukon NIC on the Juno
-  platform and returns PCI IO protocol handle for the controller.
-
-  @param[out]  PciIo   PCI IO protocol handle
-**/
-STATIC
-EFI_STATUS
-GetMarvellYukonPciIoProtocol (
-  OUT EFI_PCI_IO_PROTOCOL  **PciIo
-  )
-{
-  UINTN       HandleCount;
-  EFI_HANDLE  *HandleBuffer;
-  UINTN       HIndex;
-  EFI_STATUS  Status;
-
-  Status = gBS->LocateHandleBuffer (
-                  ByProtocol,
-                  &gEfiPciIoProtocolGuid,
-                  NULL,
-                  &HandleCount,
-                  &HandleBuffer);
-  if (EFI_ERROR (Status)) {
-    return (Status);
-  }
-
-  for (HIndex = 0; HIndex < HandleCount; ++HIndex) {
-    // If PciIo opened with EFI_OPEN_PROTOCOL_GET_PROTOCOL, the CloseProtocol() is not required
-    Status = gBS->OpenProtocol (
-                    HandleBuffer[HIndex],
-                    &gEfiPciIoProtocolGuid,
-                    (VOID **) PciIo,
-                    NULL,
-                    NULL,
-                    EFI_OPEN_PROTOCOL_GET_PROTOCOL);
-    if (EFI_ERROR (Status)) {
-      continue;
-    }
-
-    Status = ReadMarvellYoukonPciId (*PciIo, JUNO_MARVELL_YUKON_ID);
-    if (EFI_ERROR (Status)) {
-      continue;
-    } else {
-      break;
-    }
-  }
-
-  gBS->FreePool (HandleBuffer);
-
-  return Status;
 }
 
 /**
@@ -326,17 +242,13 @@ WriteMacAddress (
 **/
 STATIC
 EFI_STATUS
-ArmJunoSetNicMacAddress ()
+ArmJunoSetNicMacAddress (
+  IN  EFI_PCI_IO_PROTOCOL   *PciIo
+  )
 {
   UINT64                              OldPciAttr;
-  EFI_PCI_IO_PROTOCOL*                PciIo;
   UINT32                              PciRegBase;
   EFI_STATUS                          Status;
-
-  Status = GetMarvellYukonPciIoProtocol (&PciIo);
-  if (EFI_ERROR (Status)) {
-    return Status;
-  }
 
   PciRegBase = 0;
   Status = InitPciDev (PciIo, &PciRegBase, &OldPciAttr);
@@ -352,14 +264,8 @@ ArmJunoSetNicMacAddress ()
 }
 
 /**
-  Notification function of the event defined as belonging to the
-  EFI_END_OF_DXE_EVENT_GROUP_GUID event group that was created in
-  the entry point of the driver.
-
-  This function is called when an event belonging to the
-  EFI_END_OF_DXE_EVENT_GROUP_GUID event group is signalled. Such an
-  event is signalled once at the end of the dispatching of all
-  drivers (end of the so called DXE phase).
+  This function is called when a gEfiPciIoProtocolGuid protocol instance is
+  registered in the protocol database.
 
   @param[in]  Event    Event declared in the entry point of the driver whose
                        notification function is being invoked.
@@ -367,33 +273,30 @@ ArmJunoSetNicMacAddress ()
 **/
 STATIC
 VOID
-OnEndOfDxe (
+PciIoNotificationEvent (
   IN EFI_EVENT  Event,
   IN VOID       *Context
   )
 {
-  EFI_DEVICE_PATH_PROTOCOL* PciRootComplexDevicePath;
-  EFI_HANDLE                Handle;
-  EFI_STATUS                Status;
+  EFI_STATUS            Status;
+  EFI_PCI_IO_PROTOCOL   *PciIo;
 
-  //
-  // PCI Root Complex initialization
-  // At the end of the DXE phase, we should get all the driver dispatched.
-  // Force the PCI Root Complex to be initialized. It allows the OS to skip
-  // this step.
-  //
-  PciRootComplexDevicePath = (EFI_DEVICE_PATH_PROTOCOL*) &mPciRootComplexDevicePath;
-  Status = gBS->LocateDevicePath (&gEfiPciRootBridgeIoProtocolGuid,
-                                  &PciRootComplexDevicePath,
-                                  &Handle);
+  Status = gBS->LocateProtocol (&gEfiPciIoProtocolGuid,
+                  mPciIoNotificationRegistration, (VOID **)&PciIo);
+  if (EFI_ERROR (Status)) {
+    return;
+  }
 
-  Status = gBS->ConnectController (Handle, NULL, PciRootComplexDevicePath, FALSE);
-  ASSERT_EFI_ERROR (Status);
+  Status = ReadMarvellYoukonPciId (PciIo, JUNO_MARVELL_YUKON_ID);
+  if (EFI_ERROR (Status)) {
+    return;
+  }
 
-  Status = ArmJunoSetNicMacAddress ();
+  Status = ArmJunoSetNicMacAddress (PciIo);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "ArmJunoDxe: Failed to set Marvell Yukon NIC MAC address\n"));
   }
+  gBS->CloseEvent (Event);
 }
 
 EFI_STATUS
@@ -408,7 +311,6 @@ ArmJunoEntryPoint (
   CHAR16                *TextDevicePath;
   UINTN                 TextDevicePathSize;
   UINT32                JunoRevision;
-  EFI_EVENT             EndOfDxeEvent;
 
   //
   // Register the OHCI and EHCI controllers as non-coherent
@@ -497,20 +399,17 @@ ArmJunoEntryPoint (
     PcdSetBoolS (PcdPciDisableBusEnumeration, FALSE);
 
     //
-    // Create an event belonging to the "gEfiEndOfDxeEventGroupGuid" group.
-    // The "OnEndOfDxe()" function is declared as the call back function.
-    // It will be called at the end of the DXE phase when an event of the
-    // same group is signalled to inform about the end of the DXE phase.
-    // Install the INSTALL_FDT_PROTOCOL protocol.
+    // Create a protocol notification event handler on the PciIo protocol
+    // so we can set the MAC address on the Marvell Yukon as soon as it
+    // appears.
     //
-    Status = gBS->CreateEventEx (
-                    EVT_NOTIFY_SIGNAL,
-                    TPL_CALLBACK,
-                    OnEndOfDxe,
-                    NULL,
-                    &gEfiEndOfDxeEventGroupGuid,
-                    &EndOfDxeEvent
-                    );
+    EfiCreateProtocolNotifyEvent (
+        &gEfiPciIoProtocolGuid,
+        TPL_NOTIFY,
+        PciIoNotificationEvent,
+        NULL,
+        &mPciIoNotificationRegistration
+        );
 
 #ifndef DYNAMIC_TABLES_FRAMEWORK
     // Declare the related ACPI Tables
