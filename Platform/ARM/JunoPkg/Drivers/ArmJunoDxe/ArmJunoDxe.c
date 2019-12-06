@@ -64,7 +64,7 @@ STATIC CONST EFI_PCI_ROOT_BRIDGE_DEVICE_PATH mPciRootComplexDevicePath = {
     }
 };
 
-EFI_EVENT mAcpiRegistration = NULL;
+STATIC VOID *mAcpiRegistration = NULL;
 
 /**
   This function reads PCI ID of the controller.
