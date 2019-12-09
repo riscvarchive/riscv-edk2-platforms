@@ -216,11 +216,18 @@ PlatInitPeiEntryPoint (
                PeiServices, &MacAddrInfo );
     ASSERT_EFI_ERROR (Status);
 
+    // Check for bogus MAC addresses that have the multicast bit set. This
+    // includes FF:FF:FF:FF:FF:FF, which is what you get from the SCP on
+    // some versions of the B0 Overdrive
     MacSize = sizeof(MacAddrInfo.MacAddress0);
-    Status = PcdSetPtrS (PcdEthMacA, &MacSize, MacAddrInfo.MacAddress0);
-    ASSERT_EFI_ERROR (Status);
-    Status = PcdSetPtrS (PcdEthMacB, &MacSize, MacAddrInfo.MacAddress1);
-    ASSERT_EFI_ERROR (Status);
+    if ((MacAddrInfo.MacAddress0[0] & 0x1) == 0x0) {
+      Status = PcdSetPtrS (PcdEthMacA, &MacSize, MacAddrInfo.MacAddress0);
+      ASSERT_EFI_ERROR (Status);
+    }
+    if ((MacAddrInfo.MacAddress1[0] & 0x1) == 0x0) {
+      Status = PcdSetPtrS (PcdEthMacB, &MacSize, MacAddrInfo.MacAddress1);
+      ASSERT_EFI_ERROR (Status);
+    }
 
     DEBUG ((EFI_D_ERROR, "EthMacA = %02x:%02x:%02x:%02x:%02x:%02x\n",
       ((UINT8 *)PcdGetPtr (PcdEthMacA))[0], ((UINT8 *)PcdGetPtr (PcdEthMacA))[1],
