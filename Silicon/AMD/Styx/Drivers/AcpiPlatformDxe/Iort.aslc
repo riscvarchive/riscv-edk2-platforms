@@ -228,12 +228,15 @@ STATIC STYX_IO_REMAPPING_STRUCTURE AcpiIort = {
                      STYX_SATA0_SMMU_INTERRUPT)
   }, {
     // Sata0NamedNode
-    __STYX_NAMED_COMPONENT_NODE("\\_SB_.AHC0", 6),
+    __STYX_NAMED_COMPONENT_NODE("\\_SB_.AHC0", 9),
     {
+      __STYX_ID_MAPPING_SINGLE(0x00, Sata0SmmuNode),
+      __STYX_ID_MAPPING_SINGLE(0x01, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x0A, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x0B, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x0E, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x0F, Sata0SmmuNode),
+      __STYX_ID_MAPPING_SINGLE(0x10, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x1A, Sata0SmmuNode),
       __STYX_ID_MAPPING_SINGLE(0x1E, Sata0SmmuNode),
     }
