@@ -60,7 +60,7 @@ ArmPlatformGetVirtualMemoryMap (
 {
   UINTN                         Index = 0;
   UINTN                         GpuIndex;
-  INT64                         ExtendedMemorySize;
+  INT64                         SystemMemorySize;
   ARM_MEMORY_REGION_DESCRIPTOR  *VirtualMemoryTable;
 
   // Early output of the info we got from VideoCore can prove valuable.
@@ -120,21 +120,21 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
   VirtualMemoryInfo[Index++].Name           = L"GPU Reserved";
 
-  // Compute the amount of extended RAM available on this platform
-  ExtendedMemorySize = SIZE_256MB;
-  ExtendedMemorySize <<= (mBoardRevision >> 20) & 0x07;
-  ExtendedMemorySize -= SIZE_1GB;
-  if (ExtendedMemorySize > 0) {
-    VirtualMemoryTable[Index].PhysicalBase  = FixedPcdGet64 (PcdExtendedMemoryBase);
-    VirtualMemoryTable[Index].VirtualBase   = VirtualMemoryTable[Index].PhysicalBase;
-    VirtualMemoryTable[Index].Length        = ExtendedMemorySize;
-    VirtualMemoryTable[Index].Attributes    = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
-    VirtualMemoryInfo[Index].Type           = RPI_MEM_BASIC_REGION;
-    VirtualMemoryInfo[Index++].Name         = L"Extended System RAM";
-  }
+  // Compute the total RAM size available on this platform
+  SystemMemorySize = SIZE_256MB;
+  SystemMemorySize <<= (mBoardRevision >> 20) & 0x07;
+
+  //
+  // Ensure that what we declare as System Memory doesn't overlap with the
+  // Bcm2836 SoC registers. This can be achieved through a MIN () with the
+  // base address since SystemMemoryBase is 0 (we assert if it isn't).
+  //
+  SystemMemorySize = MIN(SystemMemorySize, BCM2836_SOC_REGISTERS);
 
   // Extended SoC registers (PCIe, genet, ...)
   if (BCM2711_SOC_REGISTERS > 0) {
+    // Same overlap protection as above for the Bcm2711 SoC registers
+    SystemMemorySize                        = MIN(SystemMemorySize, BCM2711_SOC_REGISTERS);
     VirtualMemoryTable[Index].PhysicalBase  = BCM2711_SOC_REGISTERS;
     VirtualMemoryTable[Index].VirtualBase   = VirtualMemoryTable[Index].PhysicalBase;
     VirtualMemoryTable[Index].Length        = BCM2711_SOC_REGISTER_LENGTH;
@@ -154,6 +154,16 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
   VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
   VirtualMemoryInfo[Index++].Name           = L"SoC Reserved (283x)";
+
+  // If we have RAM above the 1 GB mark, declare it
+  if (SystemMemorySize - SIZE_1GB > 0) {
+    VirtualMemoryTable[Index].PhysicalBase  = FixedPcdGet64 (PcdExtendedMemoryBase);
+    VirtualMemoryTable[Index].VirtualBase   = VirtualMemoryTable[Index].PhysicalBase;
+    VirtualMemoryTable[Index].Length        = SystemMemorySize - SIZE_1GB;
+    VirtualMemoryTable[Index].Attributes    = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+    VirtualMemoryInfo[Index].Type           = RPI_MEM_BASIC_REGION;
+    VirtualMemoryInfo[Index++].Name         = L"Extended System RAM";
+  }
 
   // End of Table
   VirtualMemoryTable[Index].PhysicalBase    = 0;
