@@ -78,8 +78,8 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          MEMORY32FIXED(ReadWrite, 0x3F980000, 0x10000,)
-          Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x29 }
+          MEMORY32FIXED(ReadWrite, 0xFE980000, 0x10000,)
+          Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x69 }
         })
         Return(RBUF)
       }
@@ -101,29 +101,29 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         Name (RBUF, ResourceTemplate ()
         {
           // Memory and interrupt for the GPU
-          MEMORY32FIXED(ReadWrite, 0x3FC00000, 0x1000,)
+          MEMORY32FIXED(ReadWrite, 0xFEC00000, 0x1000,)
           Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x2A }
 
           // HVS - Hardware Video Scalar
-          MEMORY32FIXED (ReadWrite, 0x3F400000, 0x6000,)
+          MEMORY32FIXED (ReadWrite, 0xFE400000, 0x6000,)
           // The HVS interrupt is reserved by the VPU
           // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x41 }
 
           // PixelValve0 - DSI0 or DPI
-          // MEMORY32FIXED (ReadWrite, 0x3F206000, 0x100,)
+          // MEMORY32FIXED (ReadWrite, 0xFE206000, 0x100,)
           // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4D }
 
           // PixelValve1 - DS1 or SMI
-          // MEMORY32FIXED (ReadWrite, 0x73F207000, 0x100,)
+          // MEMORY32FIXED (ReadWrite, 0xFE207000, 0x100,)
           // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4E }
 
           // PixelValve2 - HDMI output - connected to HVS display FIFO 1
-          MEMORY32FIXED (ReadWrite, 0x3F807000, 0x100,)
+          MEMORY32FIXED (ReadWrite, 0xFE807000, 0x100,)
           Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4A }
 
           // HDMI registers
-          MEMORY32FIXED (ReadWrite, 0x3F902000, 0x600,)   // HDMI registers
-          MEMORY32FIXED (ReadWrite, 0x3F808000, 0x100,)   // HD registers
+          MEMORY32FIXED (ReadWrite, 0xFE902000, 0x600,)   // HDMI registers
+          MEMORY32FIXED (ReadWrite, 0xFE808000, 0x100,)   // HD registers
           // hdmi_int[0]
           // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x48 }
           // hdmi_int[1]
@@ -199,7 +199,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          Memory32Fixed (ReadWrite, 0x3F00B880, 0x00000024,)
+          Memory32Fixed (ReadWrite, 0xFE00B880, 0x00000024,)
           Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x61 }
         })
         Return (RBUF)
@@ -222,7 +222,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          Memory32Fixed (ReadWrite, 0x3F00B840, 0x00000010,)
+          Memory32Fixed (ReadWrite, 0xFE00B840, 0x00000010,)
           Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x62 }
         })
         Return (RBUF)
@@ -258,7 +258,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          MEMORY32FIXED (ReadWrite, 0x3F200000, 0xB4, )
+          MEMORY32FIXED (ReadWrite, 0xFE200000, 0xB4, )
           Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x51 }
           Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x53 }
         })
@@ -281,7 +281,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          Memory32Fixed(ReadWrite, 0x3F804000, 0x20)
+          Memory32Fixed(ReadWrite, 0xFE804000, 0x20)
           Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) {0x55}
 
           //
@@ -319,7 +319,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate()
         {
-          Memory32Fixed (ReadWrite, 0x3F805000, 0x20)
+          Memory32Fixed (ReadWrite, 0xFE805000, 0x20)
           Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) {0x55}
         })
         Return (RBUF)
@@ -341,7 +341,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          MEMORY32FIXED (ReadWrite, 0x3F204000, 0x20,)
+          MEMORY32FIXED (ReadWrite, 0xFE204000, 0x20,)
           Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) {0x56}
 
           //
@@ -406,7 +406,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         Name (RBUF, ResourceTemplate ()
         {
-          MEMORY32FIXED (ReadWrite, 0x3F215080, 0x40,)
+          MEMORY32FIXED (ReadWrite, 0xFE215080, 0x40,)
           Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) {0x3D}
 
           //
@@ -458,7 +458,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
     //   {
     //     Name (RBUF, ResourceTemplate ()
     //     {
-    //       MEMORY32FIXED (ReadWrite, 0x3F2150C0, 0x40,)
+    //       MEMORY32FIXED (ReadWrite, 0xFE2150C0, 0x40,)
     //       Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) {0x3D}
     //     })
     //     Return (RBUF)
@@ -481,15 +481,15 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         Name (RBUF, ResourceTemplate ()
         {
           // DMA channel 11 control
-          Memory32Fixed (ReadWrite, 0x3F007B00, 0x00000100,)
+          Memory32Fixed (ReadWrite, 0xFE007B00, 0x00000100,)
           // PWM control
-          Memory32Fixed (ReadWrite, 0x3F20C000, 0x00000028,)
+          Memory32Fixed (ReadWrite, 0xFE20C000, 0x00000028,)
           // PWM control bus
           Memory32Fixed (ReadWrite, 0x7E20C000, 0x00000028,)
           // PWM control uncached
           Memory32Fixed (ReadWrite, 0xFF20C000, 0x00000028,)
           // PWM clock control
-          Memory32Fixed (ReadWrite, 0x3F1010A0, 0x00000008,)
+          Memory32Fixed (ReadWrite, 0xFE1010A0, 0x00000008,)
           // Interrupt DMA channel 11
           Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x3B }
           // DMA channel 11, DREQ 5 for PWM

@@ -2,6 +2,7 @@
  *
  *  PEP device tables
  *
+ *  Copyright (c) 2019, ARM Ltd. All rights reserved.
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
@@ -11,7 +12,7 @@
 
 #include "Pep.h"
 
-PEP_PROCESSOR_TABLE_PLAT RPI3Processors = {
+PEP_PROCESSOR_TABLE_PLAT RPI4Processors = {
   1, // Version
   1, // NumberProcessors
   {  // ProcessorInfo
@@ -29,7 +30,7 @@ PEP_PROCESSOR_TABLE_PLAT RPI3Processors = {
   }
 };
 
-PEP_COORDINATED_STATE_TABLE_PLAT RPI3CoordinatedStates = {
+PEP_COORDINATED_STATE_TABLE_PLAT RPI4CoordinatedStates = {
   1, // Version
   1, // CoordinatedStateCount
   { // CordinatedStates[]
@@ -51,7 +52,7 @@ PEP_COORDINATED_STATE_TABLE_PLAT RPI3CoordinatedStates = {
   }
 };
 
-PEP_DEVICE_TABLE_PLAT RPI3Devices = {
+PEP_DEVICE_TABLE_PLAT RPI4Devices = {
   1, // Version
   1, // NumberDevices
   { // DeviceInfo

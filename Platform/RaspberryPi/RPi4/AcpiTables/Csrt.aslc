@@ -2,6 +2,7 @@
  *
  *  Core System Resource Table (CSRT)
  *
+ *  Copyright (c) 2019, ARM Ltd. All rights reserved.
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -15,7 +16,7 @@
 #pragma pack (push, 1)
 
 //------------------------------------------------------------------------
-// DMA Controller Vendor Data for RPi3
+// DMA Controller Vendor Data for RPi4
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -33,7 +34,7 @@ typedef struct
 } DMA_CONTROLLER_VENDOR_DATA;
 
 //------------------------------------------------------------------------
-// DMA Controller on RPi3
+// DMA Controller on RPi4
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -42,7 +43,7 @@ typedef struct
 } RD_DMA_CONTROLLER;
 
 //------------------------------------------------------------------------
-// DMA Channel Vendor Data for RPi3
+// DMA Channel Vendor Data for RPi4
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -53,7 +54,7 @@ typedef struct
 } DMA_CHANNEL_VENDOR_DATA;
 
 //------------------------------------------------------------------------
-// DMA Channel on RPi3
+// DMA Channel on RPi4
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -62,18 +63,18 @@ typedef struct
 } RD_DMA_CHANNEL;
 
 //------------------------------------------------------------------------
-// DMA Resource Group on RPi3
+// DMA Resource Group on RPi4
 //------------------------------------------------------------------------
 
 typedef struct
 {
   EFI_ACPI_5_0_CSRT_RESOURCE_GROUP_HEADER ResGroupHeader;
   RD_DMA_CONTROLLER DmaController;
-  RD_DMA_CHANNEL DmaChannels[RPI3_DMA_CHANNEL_COUNT];
+  RD_DMA_CHANNEL DmaChannels[RPI4_DMA_CHANNEL_COUNT];
 } RG_DMA;
 
 //----------------------------------------------------------------------------
-// CSRT table structure for RPi3 platform - current revision only includes DMA
+// CSRT table structure for RPi4 platform - current revision only includes DMA
 //----------------------------------------------------------------------------
 typedef struct
 {
@@ -96,7 +97,7 @@ EFI_ACPI_5_0_CSRT_TABLE Csrt =
     EFI_ACPI_5_0_CSRT_REVISION,     // Revision
     0x00,                           // Checksum calculated at runtime.
     EFI_ACPI_OEM_ID,                // OEMID is a 6 bytes long field "BC2836"
-    EFI_ACPI_OEM_TABLE_ID,          // OEM table identification(8 bytes long) "RPI3EDK2"
+    EFI_ACPI_OEM_TABLE_ID,          // OEM table identification(8 bytes long) "RPI4EDK2"
     EFI_ACPI_OEM_REVISION,          // OEM revision number.
     EFI_ACPI_CREATOR_ID,            // ASL compiler vendor ID.
     EFI_ACPI_CREATOR_REVISION       // ASL compiler revision number.
@@ -134,11 +135,11 @@ EFI_ACPI_5_0_CSRT_TABLE Csrt =
       {
         sizeof (DMA_CONTROLLER_VENDOR_DATA),  // Controller vendor data here
         1,
-        0x3F007000,                   // Base address for channels
-        RPI3_DMA_CHANNEL_COUNT * 0x100, // Base size = Number of channels x 0x100 size for each channel
-        0x3F007FE0,                   // Base address for controller
+        0xFE007000,                   // Base address for channels
+        RPI4_DMA_CHANNEL_COUNT * 0x100, // Base size = Number of channels x 0x100 size for each channel
+        0xFE007FE0,                   // Base address for controller
         8,                            // Base size = two registers
-        RPI3_DMA_USED_CHANNEL_COUNT,
+        RPI4_DMA_USED_CHANNEL_COUNT,
         0,                            // cannot use controller interrupt
         0,                            // Minimum Request Line
         DMA_MAX_REQ_LINES - 1,          // Maximum Request Line

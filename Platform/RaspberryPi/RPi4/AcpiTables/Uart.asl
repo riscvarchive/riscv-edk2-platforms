@@ -13,7 +13,7 @@
 Device (URT0)
 {
   Name (_HID, "BCM2837")
-  Name (_CID, "HID3123")
+  Name (_CID, "ARMH0011")
   Name (_UID, 0x4)
   Name (_CCA, 0x0)
   Method (_STA)
@@ -24,13 +24,13 @@ Device (URT0)
   {
     Name (RBUF, ResourceTemplate ()
     {
-      MEMORY32FIXED (ReadWrite, 0x3F201000, 0x1000,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x59 }
+      MEMORY32FIXED (ReadWrite, 0xFE201000, 0x1000,)
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x99 }
     })
     Return (RBUF)
   }
 
-  Name (CLCK, 3000000)
+  Name (CLCK, 48000000)
 
   Name (_DSD, Package ()
   {
@@ -63,8 +63,8 @@ Device (URTM)
   {
     Name (RBUF, ResourceTemplate ()
     {
-      MEMORY32FIXED (ReadWrite, 0x3F215000, 0x70,)
-      Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) {0x3D}
+      MEMORY32FIXED (ReadWrite, 0xFE215000, 0x70,)
+      Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { 0x7D }
 
       // NTRAID#MSFT-7141401-2016/04/7-jordanrh - disable UART muxing
       // until a proper solution can be created for the dmap conflict.
