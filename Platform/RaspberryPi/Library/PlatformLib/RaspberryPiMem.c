@@ -117,7 +117,7 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
   VirtualMemoryTable[Index].Length          = mVideoCoreSize;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
-  VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+  VirtualMemoryInfo[Index].Type             = RPI_MEM_UNMAPPED_REGION;
   VirtualMemoryInfo[Index++].Name           = L"GPU Reserved";
 
   // Compute the total RAM size available on this platform
@@ -139,7 +139,7 @@ ArmPlatformGetVirtualMemoryMap (
     VirtualMemoryTable[Index].VirtualBase   = VirtualMemoryTable[Index].PhysicalBase;
     VirtualMemoryTable[Index].Length        = BCM2711_SOC_REGISTER_LENGTH;
     VirtualMemoryTable[Index].Attributes    = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
-    VirtualMemoryInfo[Index].Type           = RPI_MEM_RESERVED_REGION;
+    VirtualMemoryInfo[Index].Type           = RPI_MEM_UNMAPPED_REGION;
     VirtualMemoryInfo[Index++].Name         = L"SoC Reserved (27xx)";
   }
 
@@ -152,7 +152,7 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
   VirtualMemoryTable[Index].Length          = BCM2836_SOC_REGISTER_LENGTH;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
-  VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+  VirtualMemoryInfo[Index].Type             = RPI_MEM_UNMAPPED_REGION;
   VirtualMemoryInfo[Index++].Name           = L"SoC Reserved (283x)";
 
   // If we have RAM above the 1 GB mark, declare it

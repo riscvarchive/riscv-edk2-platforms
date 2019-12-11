@@ -9,9 +9,10 @@
 #ifndef RPI_MEM_H__
 #define RPI_MEM_H__
 
-#define RPI_MEM_BASIC_REGION    0
-#define RPI_MEM_RUNTIME_REGION  1
-#define RPI_MEM_RESERVED_REGION 2
+#define RPI_MEM_UNMAPPED_REGION 0
+#define RPI_MEM_BASIC_REGION    1
+#define RPI_MEM_RUNTIME_REGION  2
+#define RPI_MEM_RESERVED_REGION 3
 
 typedef struct {
   CONST CHAR16*                 Name;

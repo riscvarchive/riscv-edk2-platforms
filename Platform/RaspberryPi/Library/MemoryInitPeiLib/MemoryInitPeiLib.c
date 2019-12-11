@@ -74,6 +74,15 @@ AddRuntimeServicesRegion (
 
 STATIC
 VOID
+AddUnmappedMemoryRegion (
+  IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
+  )
+{
+  // Do nothing
+}
+
+STATIC
+VOID
 AddReservedMemoryRegion (
   IN ARM_MEMORY_REGION_DESCRIPTOR *Desc
   )
@@ -88,6 +97,7 @@ AddReservedMemoryRegion (
 }
 
 void (*AddRegion[]) (IN ARM_MEMORY_REGION_DESCRIPTOR *Desc) = {
+  AddUnmappedMemoryRegion,
   AddBasicMemoryRegion,
   AddRuntimeServicesRegion,
   AddReservedMemoryRegion,
