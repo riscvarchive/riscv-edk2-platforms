@@ -7,28 +7,19 @@ This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 4 platfor
 
 This is intended to be useful 64-bit [TF-A](https://www.trustedfirmware.org/) +
 UEFI implementation for the Raspberry Pi 4 which should be good enough for most
-kind of UEFI development, as well as for running consummer Operating Systems
-such as Linux or Windows.
+kind of UEFI development, as well as for running consummer Operating Systems.
 
 Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspberrypi.org).
 
 # Status
 
-This firmware is still in early stage of development, meaning that it comes with
-the following __major__ limitations:
+This firmware is still in development stage, meaning that it comes with the
+following __major__ limitations:
 
-- USB is not supported yet (will be added soon)
-- Booting of vanilla Operating Systems (Windows, Linux) is not supported yet,
-  let alone expected to work at all.
-
-The only features that are expected to work with this first iteration of the
-firmware are HDMI and serial I/O.
-
-## Known issues
-
-- The serial output from TF-A is garbled when using a `start4.elf` that was
-  released after 2019.11.18. This is a TF-A issue that will be fixed in a
-  later version.
+- USB is likely to work only in pre-OS phase at this stage (nonstandard ECAM,
+  missing ACPI tables).
+- Serial I/O from the OS may not work at all due to CPU throttling affecting
+  the miniUART baudrate.
 
 # Building
 

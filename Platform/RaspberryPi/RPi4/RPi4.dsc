@@ -161,6 +161,14 @@
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
   GpioLib|Silicon/Broadcom/Bcm283x/Library/GpioLib/GpioLib.inf
 
+  #
+  # PCI dependencies
+  #
+  # PCI root port configuation and description
+  PciHostBridgeLib|Silicon/Broadcom/Bcm27xx/Library/Bcm2711PciHostBridgeLib/Bcm2711PciHostBridgeLib.inf
+  # The "segment lib" provides the CAM accessors/etc when they aren't ECAM standard
+  PciSegmentLib|Silicon/Broadcom/Bcm27xx/Library/Bcm2711PciSegmentLib/PciSegmentLib.inf
+
 [LibraryClasses.common.SEC]
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   BaseMemoryLib|MdePkg/Library/BaseMemoryLib/BaseMemoryLib.inf
@@ -316,6 +324,7 @@
   gEmbeddedTokenSpaceGuid.PcdMemoryTypeEfiLoaderData|0
 
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset|0xc0000000
+  gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit|0xffffffff
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2-DEV"
 
@@ -375,6 +384,12 @@
   gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase|0x40000000
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress|0xfc000000
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress|0xfe000000
+
+  # PCIe specific addresses
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase|0xfd500000
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioAdr|0xf8000000
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioLen|0x3ffffff
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr|0x600000000
 
   ## NS16550 compatible UART
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0xfe215040
@@ -523,7 +538,6 @@
 
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
 
-  UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   Platform/RaspberryPi/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   Platform/RaspberryPi/Drivers/FdtDxe/FdtDxe.inf
@@ -585,6 +599,7 @@
   #
   # USB Support
   #
+  MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
   Platform/RaspberryPi/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
   MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
@@ -607,6 +622,18 @@
   # RNG
   #
   Silicon/Broadcom/Bcm283x/Drivers/Bcm2838RngDxe/Bcm2838RngDxe.inf
+
+  #
+  # PCI Support
+  #
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  EmbeddedPkg/Drivers/NonCoherentIoMmuDxe/NonCoherentIoMmuDxe.inf {
+    <PcdsFixedAtBuild>
+      gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset|0x00000000
+      gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit|0xbfffffff
+  }
 
   #
   # UEFI application (Shell Embedded Boot Loader)

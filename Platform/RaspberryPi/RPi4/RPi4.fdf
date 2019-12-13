@@ -205,7 +205,6 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
   INF Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
 
-  INF UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   INF Platform/RaspberryPi/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
   INF Platform/RaspberryPi/Drivers/FdtDxe/FdtDxe.inf
@@ -270,6 +269,14 @@ READ_LOCK_STATUS   = TRUE
   INF Silicon/Broadcom/Bcm283x/Drivers/Bcm2838RngDxe/Bcm2838RngDxe.inf
 
   #
+  # PCI Support
+  #
+  INF ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  INF EmbeddedPkg/Drivers/NonCoherentIoMmuDxe/NonCoherentIoMmuDxe.inf
+
+  #
   # SCSI Bus and Disk Driver
   #
   INF MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
@@ -278,6 +285,7 @@ READ_LOCK_STATUS   = TRUE
   #
   # USB Support
   #
+  INF MdeModulePkg/Bus/Pci/XhciDxe/XhciDxe.inf
   INF Platform/RaspberryPi/Drivers/DwUsbHostDxe/DwUsbHostDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbBusDxe/UsbBusDxe.inf
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
