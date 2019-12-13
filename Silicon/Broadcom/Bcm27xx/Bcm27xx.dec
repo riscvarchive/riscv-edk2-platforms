@@ -20,3 +20,7 @@
 
 [PcdsFixedAtBuild.common]
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress|0x0|UINT32|0x00000001
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase|0x0|UINT32|0x00000002
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioAdr|0x0|UINT64|0x00000003
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioLen|0x0|UINT32|0x00000004
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr|0x0|UINT64|0x00000005
