@@ -54,15 +54,14 @@
   gSiPkgTokenSpaceGuid.PcdTsegSize|0x1000000
 
   #
-  # FSP API mode does not share stack with the boot loader,
-  # so FSP needs more temporary memory for FSP heap + stack size.
+  # When sharing stack with boot loader, FSP only needs a small temp ram for heap
   #
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize|0x26000
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize|0x10000
+
   #
-  # FSP API mode does not need to enlarge the boot loader stack size
-  # since the stacks are separate.
+  # Boot loader stack size has to be large enough for FSP execution
   #
-  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
+  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x30000
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
   gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
