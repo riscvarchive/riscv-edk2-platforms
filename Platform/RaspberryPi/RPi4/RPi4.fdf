@@ -208,10 +208,13 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
   INF Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
+  INF EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf
 
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   INF Platform/RaspberryPi/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
+!if $(ACPI_BASIC_MODE_ENABLE) == FALSE
   INF Platform/RaspberryPi/Drivers/FdtDxe/FdtDxe.inf
+!endif
   INF Platform/RaspberryPi/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf

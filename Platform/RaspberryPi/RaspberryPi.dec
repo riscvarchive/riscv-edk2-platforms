@@ -57,3 +57,6 @@
   gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock|0|UINT32|0x00000016
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes|0|UINT8|0x00000017
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot|0|UINT32|0x00000018
+
+[PcdsFeatureFlag.common]
+  gRaspberryPiTokenSpaceGuid.PcdAcpiBasicMode|FALSE|BOOLEAN|0x00000019

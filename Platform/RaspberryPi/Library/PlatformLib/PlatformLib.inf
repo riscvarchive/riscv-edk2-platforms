@@ -59,5 +59,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 
+[FeaturePcd]
+  gRaspberryPiTokenSpaceGuid.PcdAcpiBasicMode
+
 [Ppis]
   gArmMpCoreInfoPpiGuid

@@ -16,8 +16,9 @@ Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspber
 This firmware is still in development stage, meaning that it comes with the
 following __major__ limitations:
 
-- USB is likely to work only in pre-OS phase at this stage (nonstandard ECAM,
-  missing ACPI tables).
+- USB may only work in pre-OS phase at this stage due to nonstandard ECAM,
+  missing/incomplete ACPI tables as well as other factors. For Linux, using
+  the `ACPI_BASIC_MODE_ENABLE` build option may help.
 - Serial I/O from the OS may not work due to CPU throttling affecting the
   miniUART baudrate. This can be worked around by using the `PL011_ENABLE`
   compilation option.
@@ -27,6 +28,10 @@ following __major__ limitations:
 Build instructions from the top level edk2-platforms Readme.md apply.
 
 The following additional build options are also available:
+- `-D ACPI_BASIC_MODE_ENABLE=1`: Limits OS visible memory to 3 GB and forces
+  ACPI (by disabling the Device Tree driver altogether). This may be required
+  to boot Operating Systems such as Linux on account of the current PCIe/xHCI
+  limitations.
 - `-D PL011_ENABLE=1`: Selects PL011 for the serial console instead of the
   miniUART (default). This doesn't change the GPIO pinout for the UART but
   can be useful if you find that the miniUART baud rate changes when the
