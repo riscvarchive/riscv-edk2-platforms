@@ -24,8 +24,7 @@
 
 /* watchdog constants */
 #define BCM2836_WDOG_OFFSET                                 0x00100000
-#define BCM2836_WDOG_BASE_ADDRESS                           (FixedPcdGet64 (PcdBcm283xRegistersAddress) \
-                                                            + BCM2836_WDOG_OFFSET)
+#define BCM2836_WDOG_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_WDOG_OFFSET)
 #define BCM2836_WDOG_PASSWORD                               0x5a000000
 #define BCM2836_WDOG_RSTC_OFFSET                            0x0000001c
 #define BCM2836_WDOG_WDOG_OFFSET                            0x00000024
@@ -34,8 +33,7 @@
 
 /* mailbox interface constants */
 #define BCM2836_MBOX_OFFSET                                 0x0000b880
-#define BCM2836_MBOX_BASE_ADDRESS                           (FixedPcdGet64 (PcdBcm283xRegistersAddress) \
-                                                            + BCM2836_MBOX_OFFSET)
+#define BCM2836_MBOX_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_MBOX_OFFSET)
 #define BCM2836_MBOX_READ_OFFSET                            0x00000000
 #define BCM2836_MBOX_STATUS_OFFSET                          0x00000018
 #define BCM2836_MBOX_CONFIG_OFFSET                          0x0000001c
@@ -49,5 +47,16 @@
 /* interrupt controller constants */
 #define BCM2836_INTC_TIMER_CONTROL_OFFSET                   0x00000040
 #define BCM2836_INTC_TIMER_PENDING_OFFSET                   0x00000060
+
+/* uart constants */
+#define BCM2836_PL011_UART_OFFSET                           0x00201000
+#define BCM2836_PL011_UART_BASE_ADDRESS                     (BCM2836_SOC_REGISTERS + BCM2836_PL011_UART_OFFSET)
+#define BCM2836_PL011_UART_LENGTH                           0x00001000
+#define BCM2836_PL011_UART_INTERRUPT                        0x99
+
+#define BCM2836_MINI_UART_OFFSET                            0x00215000
+#define BCM2836_MINI_UART_BASE_ADDRESS                      (BCM2836_SOC_REGISTERS + BCM2836_MINI_UART_OFFSET)
+#define BCM2836_MINI_UART_LENGTH                            0x00000070
+#define BCM2836_MINI_UART_INTERRUPT                         0x7D
 
 #endif /*__BCM2836_H__ */
