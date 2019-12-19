@@ -18,12 +18,20 @@ following __major__ limitations:
 
 - USB is likely to work only in pre-OS phase at this stage (nonstandard ECAM,
   missing ACPI tables).
-- Serial I/O from the OS may not work at all due to CPU throttling affecting
-  the miniUART baudrate.
+- Serial I/O from the OS may not work due to CPU throttling affecting the
+  miniUART baudrate. This can be worked around by using the `PL011_ENABLE`
+  compilation option.
 
 # Building
 
 Build instructions from the top level edk2-platforms Readme.md apply.
+
+The following additional build options are also available:
+- `-D PL011_ENABLE=1`: Selects PL011 for the serial console instead of the
+  miniUART (default). This doesn't change the GPIO pinout for the UART but
+  can be useful if you find that the miniUART baud rate changes when the
+  OS throttles the CPU. Note that this requires one of `disable-bt.dtbo` or
+  `miniuart-bt.dtbo` overlays to have been applied (see below).
 
 # Booting the firmware
 
@@ -33,14 +41,31 @@ Build instructions from the top level edk2-platforms Readme.md apply.
   - `bcm2711-rpi-4-b.dtb`
   - `fixup4.dat`
   - `start4.elf`
+  - `overlays/miniuart-bt.dbto` or `overlays/disable-bt.dtbo` (Optional)
 4. Create a `config.txt` with the following content:
-  ```
-  arm_64bit=1
-  enable_uart=1
-  core_freq=250
-  enable_gic=1
-  armstub=RPI_EFI.fd
-  ```
+  - For a firmware **without** the `PL011_ENABLE` build option:
+    ```
+    arm_64bit=1
+    enable_uart=1
+    core_freq=250
+    enable_gic=1
+    armstub=RPI_EFI.fd
+    disable_commandline_tags=1
+    ```
+  - For a firmware **with** the `PL011_ENABLE` build option:
+    ```
+    arm_64bit=1
+    enable_gic=1
+    armstub=RPI_EFI.fd
+    disable_commandline_tags=1
+    device_tree_address=0x20000
+    device_tree_end=0x30000
+    device_tree=bcm2711-rpi-4-b.dtb
+    dtoverlay=miniuart-bt
+    ```
+    The above also requires `miniuart-bt.dbto` to have been copied into an `overlays/`
+    directory on the uSD card. Alternatively, you may use `disable-bt` instead of
+    `miniuart-bt` if you don't require BlueTooth.
 5. Insert the uSD card and power up the Pi.
 
 # Notes

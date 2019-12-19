@@ -51,7 +51,11 @@ NumBlocks     = 0x200
 # ATF primary boot image
 #
 0x00000000|0x00020000
+!if $(PL011_ENABLE) == TRUE
+FILE = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31_pl011.bin
+!else
 FILE = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31_miniuart.bin
+!endif
 
 #
 # DTB.

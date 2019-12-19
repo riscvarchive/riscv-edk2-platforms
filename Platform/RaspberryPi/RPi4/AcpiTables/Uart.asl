@@ -108,7 +108,7 @@ Device(BTH0)
   {
     Name (RBUF, ResourceTemplate ()
     {
-      // BT UART: UART0 (PL011)
+      // BT UART: URT0 (PL011) or URTM (miniUART)
       UARTSerialBus(
         115200,        // InitialBaudRate: in BPS
         ,              // BitsPerByte: default to 8 bits
@@ -133,7 +133,11 @@ Device(BTH0)
                        //   no flow control.
         16,            // ReceiveBufferSize
         16,            // TransmitBufferSize
+#ifdef PL011_ENABLE
+        "\\_SB.URTM",  // ResourceSource:
+#else
         "\\_SB.URT0",  // ResourceSource:
+#endif
                        //   UART bus controller name
         ,              // ResourceSourceIndex: assumed to be 0
         ,              // ResourceUsage: assumed to be
