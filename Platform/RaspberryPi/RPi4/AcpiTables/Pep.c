@@ -12,7 +12,7 @@
 
 #include "Pep.h"
 
-PEP_PROCESSOR_TABLE_PLAT RPI4Processors = {
+PEP_PROCESSOR_TABLE_PLAT RpiProcessors = {
   1, // Version
   1, // NumberProcessors
   {  // ProcessorInfo
@@ -30,7 +30,7 @@ PEP_PROCESSOR_TABLE_PLAT RPI4Processors = {
   }
 };
 
-PEP_COORDINATED_STATE_TABLE_PLAT RPI4CoordinatedStates = {
+PEP_COORDINATED_STATE_TABLE_PLAT RpiCoordinatedStates = {
   1, // Version
   1, // CoordinatedStateCount
   { // CordinatedStates[]
@@ -52,7 +52,7 @@ PEP_COORDINATED_STATE_TABLE_PLAT RPI4CoordinatedStates = {
   }
 };
 
-PEP_DEVICE_TABLE_PLAT RPI4Devices = {
+PEP_DEVICE_TABLE_PLAT RpiDevices = {
   1, // Version
   1, // NumberDevices
   { // DeviceInfo

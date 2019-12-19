@@ -9,14 +9,16 @@
  *
  **/
 
+#include <IndustryStandard/Acpi.h>
+
 #include "AcpiTables.h"
 
-#define DMA_MAX_REQ_LINES 32
+#define RPI_DMA_MAX_REQ_LINES 32
 
 #pragma pack (push, 1)
 
 //------------------------------------------------------------------------
-// DMA Controller Vendor Data for RPi4
+// DMA Controller Vendor Data
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -34,16 +36,16 @@ typedef struct
 } DMA_CONTROLLER_VENDOR_DATA;
 
 //------------------------------------------------------------------------
-// DMA Controller on RPi4
+// DMA Controller
 //------------------------------------------------------------------------
 typedef struct
 {
-  EFI_ACPI_5_0_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaControllerHeader;
+  EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaControllerHeader;
   DMA_CONTROLLER_VENDOR_DATA ControllerVendorData;
 } RD_DMA_CONTROLLER;
 
 //------------------------------------------------------------------------
-// DMA Channel Vendor Data for RPi4
+// DMA Channel Vendor Data
 //------------------------------------------------------------------------
 typedef struct
 {
@@ -54,27 +56,27 @@ typedef struct
 } DMA_CHANNEL_VENDOR_DATA;
 
 //------------------------------------------------------------------------
-// DMA Channel on RPi4
+// DMA Channel
 //------------------------------------------------------------------------
 typedef struct
 {
-  EFI_ACPI_5_0_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaChannelHeader;
+  EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaChannelHeader;
   DMA_CHANNEL_VENDOR_DATA ChannelVendorData;
 } RD_DMA_CHANNEL;
 
 //------------------------------------------------------------------------
-// DMA Resource Group on RPi4
+// DMA Resource Group
 //------------------------------------------------------------------------
 
 typedef struct
 {
-  EFI_ACPI_5_0_CSRT_RESOURCE_GROUP_HEADER ResGroupHeader;
+  EFI_ACPI_5_1_CSRT_RESOURCE_GROUP_HEADER ResGroupHeader;
   RD_DMA_CONTROLLER DmaController;
-  RD_DMA_CHANNEL DmaChannels[RPI4_DMA_CHANNEL_COUNT];
+  RD_DMA_CHANNEL DmaChannels[RPI_DMA_CHANNEL_COUNT];
 } RG_DMA;
 
 //----------------------------------------------------------------------------
-// CSRT table structure for RPi4 platform - current revision only includes DMA
+// CSRT table structure - current revision only includes DMA
 //----------------------------------------------------------------------------
 typedef struct
 {
@@ -84,20 +86,20 @@ typedef struct
 // DMA Resource Group
   RG_DMA DmaResourceGroup;
 
-} EFI_ACPI_5_0_CSRT_TABLE;
+} EFI_ACPI_5_1_CSRT_TABLE;
 
-EFI_ACPI_5_0_CSRT_TABLE Csrt =
+EFI_ACPI_5_1_CSRT_TABLE Csrt =
 {
   //------------------------------------------------------------------------
   // ACPI Table Header
   //------------------------------------------------------------------------
   {
-    EFI_ACPI_5_0_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,       // Signature "CSRT"
+    EFI_ACPI_5_1_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,       // Signature "CSRT"
     sizeof (EFI_ACPI_DESCRIPTION_HEADER) + sizeof (RG_DMA),  // Length
-    EFI_ACPI_5_0_CSRT_REVISION,     // Revision
+    EFI_ACPI_5_1_CSRT_REVISION,     // Revision
     0x00,                           // Checksum calculated at runtime.
-    EFI_ACPI_OEM_ID,                // OEMID is a 6 bytes long field "BC2836"
-    EFI_ACPI_OEM_TABLE_ID,          // OEM table identification(8 bytes long) "RPI4EDK2"
+    EFI_ACPI_OEM_ID,                // OEMID is a 6 bytes long field
+    EFI_ACPI_OEM_TABLE_ID,          // OEM table identification (8 bytes long)
     EFI_ACPI_OEM_REVISION,          // OEM revision number.
     EFI_ACPI_CREATOR_ID,            // ASL compiler vendor ID.
     EFI_ACPI_CREATOR_REVISION       // ASL compiler revision number.
@@ -136,13 +138,13 @@ EFI_ACPI_5_0_CSRT_TABLE Csrt =
         sizeof (DMA_CONTROLLER_VENDOR_DATA),  // Controller vendor data here
         1,
         0xFE007000,                   // Base address for channels
-        RPI4_DMA_CHANNEL_COUNT * 0x100, // Base size = Number of channels x 0x100 size for each channel
+        RPI_DMA_CHANNEL_COUNT * 0x100, // Base size = Number of channels x 0x100 size for each channel
         0xFE007FE0,                   // Base address for controller
         8,                            // Base size = two registers
-        RPI4_DMA_USED_CHANNEL_COUNT,
+        RPI_DMA_USED_CHANNEL_COUNT,
         0,                            // cannot use controller interrupt
         0,                            // Minimum Request Line
-        DMA_MAX_REQ_LINES - 1,          // Maximum Request Line
+        RPI_DMA_MAX_REQ_LINES - 1,    // Maximum Request Line
         FALSE,
       },
     },

@@ -13,7 +13,7 @@
 #ifndef __ACPITABLES_H__
 #define __ACPITABLES_H__
 
-#include <IndustryStandard/Acpi50.h>
+#include <IndustryStandard/Acpi.h>
 
 #define EFI_ACPI_OEM_ID                       {'M','C','R','S','F','T'} // OEMID 6 bytes long
 #define EFI_ACPI_OEM_TABLE_ID                 SIGNATURE_64 ('R','P','I','4','E','D','K','2') // OEM table id 8 bytes long
@@ -41,10 +41,10 @@
 #define EFI_ACPI_CSRT_DEVICE_ID_DMA           0x00000009 // Fixed id
 #define EFI_ACPI_CSRT_RESOURCE_ID_IN_DMA_GRP  0x0 // Count up from 0
 
-#define RPI4_DMA_CHANNEL_COUNT                10 // All 10 DMA channels are listed, including the reserved ones
-#define RPI4_DMA_USED_CHANNEL_COUNT           5  // Use 5 DMA channels
+#define RPI_DMA_CHANNEL_COUNT                 10 // All 10 DMA channels are listed, including the reserved ones
+#define RPI_DMA_USED_CHANNEL_COUNT            5  // Use 5 DMA channels
 
-#define EFI_ACPI_5_0_CSRT_REVISION            0x00000000
+#define EFI_ACPI_5_1_CSRT_REVISION            0x00000000
 
 typedef enum
 {
@@ -76,7 +76,7 @@ typedef struct
   UINT16 Revision;                // 2 bytes
   UINT16 Reserved;                // 2 bytes
   UINT32 SharedInfoLength;        // 4 bytes
-} EFI_ACPI_5_0_CSRT_RESOURCE_GROUP_HEADER;
+} EFI_ACPI_5_1_CSRT_RESOURCE_GROUP_HEADER;
 
 //------------------------------------------------------------------------
 // CSRT Resource Descriptor 12 bytes total
@@ -87,6 +87,6 @@ typedef struct
   UINT16 ResourceType;            // 2 bytes
   UINT16 ResourceSubType;         // 2 bytes
   UINT32 UID;                     // 4 bytes
-} EFI_ACPI_5_0_CSRT_RESOURCE_DESCRIPTOR_HEADER;
+} EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER;
 
 #endif // __ACPITABLES_H__

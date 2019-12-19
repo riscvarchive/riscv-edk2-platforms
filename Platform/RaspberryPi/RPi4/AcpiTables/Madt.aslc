@@ -8,11 +8,12 @@
 *
 **/
 
-#include "AcpiTables.h"
+#include <IndustryStandard/Acpi.h>
 #include <Library/AcpiLib.h>
 #include <Library/ArmLib.h>
 #include <Library/PcdLib.h>
-#include <IndustryStandard/Acpi51.h>
+
+#include "AcpiTables.h"
 
 //
 // Multiple APIC Description Table
@@ -45,13 +46,13 @@ PI_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
         0, 0, GET_MPID(0, 0), EFI_ACPI_5_1_GIC_ENABLED, 48, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
         0xFF846000, 0xFF844000, 0x19, 0),
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
-        1, 1, GET_MPID(0, 1),  EFI_ACPI_5_1_GIC_ENABLED, 49, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        1, 1, GET_MPID(0, 1), EFI_ACPI_5_1_GIC_ENABLED, 49, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
         0xFF846000, 0xFF844000, 0x19, 0),
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
-        2, 2, GET_MPID(0, 2),  EFI_ACPI_5_1_GIC_ENABLED, 50, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        2, 2, GET_MPID(0, 2), EFI_ACPI_5_1_GIC_ENABLED, 50, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
         0xFF846000, 0xFF844000, 0x19, 0),
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
-        3, 3, GET_MPID(0, 3),  EFI_ACPI_5_1_GIC_ENABLED, 51, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        3, 3, GET_MPID(0, 3), EFI_ACPI_5_1_GIC_ENABLED, 51, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
         0xFF846000, 0xFF844000, 0x19, 0),
   },
   EFI_ACPI_5_0_GIC_DISTRIBUTOR_INIT(0, FixedPcdGet64 (PcdGicDistributorBase), 0)
