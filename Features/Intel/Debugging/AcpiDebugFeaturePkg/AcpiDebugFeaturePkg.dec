@@ -34,6 +34,18 @@
   gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize|0x10000|UINT32|0xF0000001
 
 [PcdsDynamic, PcdsDynamicEx]
+  ## This PCD specifies whether the feature is active.
+  #
+  #  The PCD value can be modified at boot time to activate and deactivate the feature functionality.
+  #
+  #  Note that this differs from Pcd<FeatureName>FeatureEnable which determines whether the feature is included
+  #  as an advanced feature in the flash image. If enabled, the feature is then eligible to be activated/deactivated
+  #  via this PCD.
+  #
+  #  An enabled but deactivated feature will be dispatched but exit in its entry point without performing any
+  #  feature actions.
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureActive|TRUE|BOOLEAN|0xD0000001
+
   ## This PCD specifies ACPI debug message buffer address.
   #  The PCD value will be updated during boot time when the buffer is allocated.
-  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress|0|UINT32|0xD0000001
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress|0|UINT32|0xD0000002

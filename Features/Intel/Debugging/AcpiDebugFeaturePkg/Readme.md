@@ -78,6 +78,7 @@ instance assigned to `AcpiDebugSmm`.
 
 ## Configuration
 * PcdAcpiDebugEnable - Enables this feature.
+* PcdAcpiDebugFeatureActive - Activates this feature.
 * PcdAcpiDebugAddress - The address of the ACPI debug message buffer.
 * PcdAcpiDebugBufferSize - The size of the ACPI debug message buffer.
 

@@ -35,8 +35,9 @@
   Debugging/AcpiDebugFeaturePkg/AcpiDebugFeaturePkg.dec
 
 [Pcd]
-  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize  ## CONSUMES
-  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress     ## PRODUCES
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureActive  ## CONSUMES
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugBufferSize     ## CONSUMES
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugAddress        ## PRODUCES
 
 [Sources]
   AcpiDebug.c

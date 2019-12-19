@@ -289,6 +289,10 @@ InitializeAcpiDebugDxe (
   EFI_STATUS            Status;
   EFI_EVENT             EndOfDxeEvent;
 
+  if (!PcdGetBool (PcdAcpiDebugFeatureActive)) {
+    return EFI_SUCCESS;
+  }
+
   //
   // Register EndOfDxe notification
   // that point could ensure the Acpi Debug related PCDs initialized.
