@@ -39,6 +39,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
 
 [FixedPcd]
@@ -48,6 +49,8 @@
   gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase
   gArmTokenSpaceGuid.PcdGicDistributorBase
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress

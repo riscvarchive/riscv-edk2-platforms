@@ -22,6 +22,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
   {
     include ("Sdhc.asl")
     include ("Pep.asl")
+    include ("Xhci.asl")
 
     Device (CPU0)
     {
