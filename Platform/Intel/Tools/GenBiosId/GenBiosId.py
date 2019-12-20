@@ -109,7 +109,7 @@ def MyOptionParser():
 
 # Check the Tool for missing variables
 def CheckOptions(Options):
-    if len(sys.argv) not in [5,6] and not (len(sys.argv) not in [7,8] and Options.OutputTextFile):
+    if len(sys.argv) not in [5,6] and not (len(sys.argv) in [7,8] and Options.OutputTextFile):
         EdkLogger("GenBiosId", OPTION_MISSING, ExtraData=_Usage)
     elif not Options.InputFile or not Options.OutputFile:
         EdkLogger("GenBiosId", OPTION_MISSING, ExtraData=_Usage)
