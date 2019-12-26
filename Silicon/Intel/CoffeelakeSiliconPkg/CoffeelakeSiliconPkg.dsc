@@ -147,7 +147,7 @@ gUefiCpuPkgTokenSpaceGuid.PcdCpuApTargetCstate|0
 # Silicon Init Common Library
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgCommonLib.dsc
-ConfigBlockLib|ClientSiliconPkg/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
+ConfigBlockLib|IntelSiliconPkg/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
 PchTraceHubInitLib|ClientSiliconPkg/Library/BasePchTraceHubInitLib/BasePchTraceHubInitLib.inf
 
 [LibraryClasses.IA32]
