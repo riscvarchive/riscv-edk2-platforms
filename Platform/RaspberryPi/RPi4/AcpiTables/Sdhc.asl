@@ -33,7 +33,7 @@ Device (SDC1)
     Name (RBUF, ResourceTemplate ()
     {
       MEMORY32FIXED (ReadWrite, 0xFE300000, 0x100,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x5E }
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x9E }
     })
     Return (RBUF)
   }
@@ -76,7 +76,7 @@ Device (SDC2)
     Name (RBUF, ResourceTemplate ()
     {
       MEMORY32FIXED (ReadWrite, 0xFE202000, 0x100,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x58 }
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x98 }
     })
     Return (RBUF)
   }
