@@ -124,7 +124,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutUgaSupport|FALSE
   gEfiMdePkgTokenSpaceGuid.PcdUgaConsumeSupport|FALSE
 
-  gArmTokenSpaceGuid.PcdArmReenterPeiForCapsuleWarmReboot|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|TRUE
 
   # needed for NFIT tables installed by RamDiskDxe
