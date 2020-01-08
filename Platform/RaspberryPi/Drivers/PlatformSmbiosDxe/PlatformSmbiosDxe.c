@@ -38,6 +38,7 @@
 #include <Library/PcdLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/TimeBaseLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/PrintLib.h>
 
@@ -597,23 +598,26 @@ BIOSInfoUpdateSmbiosType0 (
   VOID
   )
 {
-  UINT32 FirmwareRevision = 0;
+  UINT32 EpochSeconds = 0;
   EFI_STATUS Status = EFI_SUCCESS;
+  EFI_TIME Time;
   INTN   i;
   INTN   State = 0;
   INTN   Value[2];
 
   // Populate the Firmware major and minor.
-  Status = mFwProtocol->GetFirmwareRevision (&FirmwareRevision);
+  Status = mFwProtocol->GetFirmwareRevision (&EpochSeconds);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to get firmware revision: %r\n", Status));
   } else {
-    // This expects Broadcom / The Raspberry Pi Foundation to switch to
-    // less nonsensical VideoCore firmware revisions in the future...
-    mBIOSInfoType0.EmbeddedControllerFirmwareMajorRelease =
-      (UINT8)((FirmwareRevision >> 16) & 0xFF);
-    mBIOSInfoType0.EmbeddedControllerFirmwareMinorRelease =
-      (UINT8)(FirmwareRevision & 0xFF);
+    // The firmware revision is really an epoch time which we convert to a
+    // YY.MM major.minor. This is good enough for our purpose, where this
+    // revision is merely provided as a loose indicator of when the
+    // VideoCore firmware was generated.
+    EpochToEfiTime (EpochSeconds, &Time);
+    ASSERT (Time.Year >= 2000 && Time.Year <= 2255);
+    mBIOSInfoType0.EmbeddedControllerFirmwareMajorRelease = (UINT8)(Time.Year - 2000);
+    mBIOSInfoType0.EmbeddedControllerFirmwareMinorRelease = Time.Month;
   }
 
   // mBiosVendor and mBiosVersion, which are referenced in mBIOSInfoType0Strings,

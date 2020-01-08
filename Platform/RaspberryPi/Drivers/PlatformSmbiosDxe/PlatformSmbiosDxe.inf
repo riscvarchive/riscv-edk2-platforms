@@ -27,6 +27,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
   Platform/RaspberryPi/RaspberryPi.dec
+  EmbeddedPkg/EmbeddedPkg.dec
 
 [LibraryClasses]
   UefiBootServicesTableLib
@@ -37,6 +38,7 @@
   UefiDriverEntryPoint
   DebugLib
   PrintLib
+  TimeBaseLib
 
 [Protocols]
   gEfiSmbiosProtocolGuid           # PROTOCOL SOMETIMES_CONSUMED
