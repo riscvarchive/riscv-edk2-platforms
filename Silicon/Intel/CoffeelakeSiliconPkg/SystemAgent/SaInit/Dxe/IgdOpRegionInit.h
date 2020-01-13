@@ -2,7 +2,7 @@
   This is part of the implementation of an Intel Graphics drivers OpRegion /
   Software SCI interface between system BIOS, ASL code, and Graphics drivers.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -30,7 +30,6 @@
 #include <SaInit.h>
 #include <Library/CpuPlatformLib.h>
 #include <Library/HobLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <SiConfigHob.h>
 
 ///

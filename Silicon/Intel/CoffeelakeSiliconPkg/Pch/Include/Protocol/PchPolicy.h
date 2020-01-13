@@ -1,7 +1,7 @@
 /** @file
   Interface definition details between Pch and platform drivers during DXE phase.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -10,7 +10,6 @@
 #define _PCH_POLICY_H_
 
 #include <ConfigBlock.h>
-#include <Library/ConfigBlockLib.h>
 #include <Private/PchConfigHob.h>
 #include <Library/HobLib.h>
 

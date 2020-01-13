@@ -2,11 +2,12 @@
  Intel PEI SA Policy update by board configuration
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiPolicyBoardConfig.h"
+#include <Library/ConfigBlockLib.h>
 
 /**
   This function performs PEI SA Policy update by board configuration.

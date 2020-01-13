@@ -2,7 +2,7 @@
 #  Provide FSP wrapper platform related function.
 #
 #
-#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -60,6 +60,7 @@
   CoffeeLakeFspBinPkg/CoffeeLakeFspBinPkg.dec
   WhiskeylakeOpenBoardPkg/OpenBoardPkg.dec
   MinPlatformPkg/MinPlatformPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [LibraryClasses.IA32]
   FspWrapperApiLib

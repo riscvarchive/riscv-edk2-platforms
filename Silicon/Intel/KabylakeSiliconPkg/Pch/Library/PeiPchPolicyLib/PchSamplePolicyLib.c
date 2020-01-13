@@ -1,11 +1,12 @@
 /** @file
   This file is to load sample board policy.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 #include "PeiPchPolicyLibrary.h"
+#include <Library/ConfigBlockLib.h>
 
 /*
   Apply sample board PCH specific default settings

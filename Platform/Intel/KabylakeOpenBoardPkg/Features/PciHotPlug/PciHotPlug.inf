@@ -2,7 +2,7 @@
 # This module will perform specific PCI-Express devices
 # resource configuration.
 #
-# Copyright (c) 2018 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2018 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -40,6 +40,7 @@
   MinPlatformPkg/MinPlatformPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
   PciHotPlug.c

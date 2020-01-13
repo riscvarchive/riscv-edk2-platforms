@@ -1,7 +1,7 @@
 ### @file
 # Component information file for silicon policy update library
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -36,6 +36,7 @@
   UefiCpuPkg/UefiCpuPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
   PeiSiliconPolicyUpdateLib.c

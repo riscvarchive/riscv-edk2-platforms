@@ -1,7 +1,7 @@
 /** @file
   Header file for the PeiSaPolicy library.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -21,7 +21,6 @@
 #include <Library/PciSegmentLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/CpuPlatformLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Ppi/SiPolicy.h>
 #include <Library/PeiSaPolicyLib.h>
 #include <Library/SiConfigBlockLib.h>

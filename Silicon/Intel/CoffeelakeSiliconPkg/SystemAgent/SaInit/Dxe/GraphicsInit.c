@@ -1,7 +1,7 @@
 /** @file
   DXE driver for Initializing SystemAgent Graphics ACPI table initialization.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -11,6 +11,7 @@
 #include <Protocol/LegacyBios.h>
 #include <Protocol/GopComponentName2.h>
 #include <SiConfigHob.h>
+#include <Library/ConfigBlockLib.h>
 
 typedef union {
   struct {

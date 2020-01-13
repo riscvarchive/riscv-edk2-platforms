@@ -1,7 +1,7 @@
 ### @file
 # Library functions for Fsp Policy Initialization Library.
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -59,6 +59,7 @@
   IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   KabylakeFspBinPkg/KabylakeFspBinPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [LibraryClasses]
   BaseMemoryLib

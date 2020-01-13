@@ -1,14 +1,13 @@
 /** @file
   This file is PeiCpuPolicyLibPreMem library.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiCpuPolicyLibrary.h"
 #include <Library/PciSegmentLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Library/PostCodeLib.h>
 #include <Library/SaPlatformLib.h>
 

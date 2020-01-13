@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the PchSmbusCommonLib
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -22,6 +22,7 @@
   MdePkg/MdePkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   KabylakeSiliconPkg/KabylakeSiliconPrivate.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [LibraryClasses]
   IoLib

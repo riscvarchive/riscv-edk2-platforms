@@ -1,7 +1,7 @@
 /** @file
   Prototype of the MePolicyLibPei library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -9,7 +9,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define _PEI_ME_POLICY_LIB_H_
 
 #include <Ppi/SiPolicy.h>
-#include <Library/ConfigBlockLib.h>
 
 /**
   This function prints the PEI phase PreMem policy.

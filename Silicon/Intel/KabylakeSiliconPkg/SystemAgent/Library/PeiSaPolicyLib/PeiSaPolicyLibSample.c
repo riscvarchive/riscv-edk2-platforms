@@ -1,7 +1,7 @@
 /** @file
   This file provides services for Sample PEI policy default initialization.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -22,6 +22,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/CpuPlatformLib.h>
 #include <Library/RngLib.h>
 #include <Library/CpuMailboxLib.h>
+#include <Library/ConfigBlockLib.h>
 
 //
 // DQ byte mapping to CMD/CTL/CLK, from the CPU side - for SKL RVP, SKL SDS.

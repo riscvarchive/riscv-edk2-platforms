@@ -1,7 +1,7 @@
 /** @file
   Header file for the PeiMePolicy library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -16,7 +16,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Ppi/SiPolicy.h>
 #include <Library/PeiMePolicyLib.h>
 #include <ConfigBlock.h>
-#include <Library/ConfigBlockLib.h>
 #include <Library/SiConfigBlockLib.h>
 
 #endif // _PEI_ME_POLICY_LIBRARY_H_

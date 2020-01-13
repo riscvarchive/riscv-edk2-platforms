@@ -2,7 +2,7 @@
 # Module Information file for PeiPolicyBoardConfigLib Library
 #
 #
-#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -34,6 +34,7 @@
   WhiskeylakeOpenBoardPkg/OpenBoardPkg.dec
   SecurityPkg/SecurityPkg.dec
   MinPlatformPkg/MinPlatformPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [LibraryClasses]
   PcdLib

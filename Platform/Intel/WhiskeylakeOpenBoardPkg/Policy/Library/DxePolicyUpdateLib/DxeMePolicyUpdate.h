@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -16,7 +16,6 @@
 #include <Library/BaseMemoryLib.h>
 #include <Protocol/MePolicy.h>
 #include <Library/HobLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <ConfigBlock/MePeiConfig.h>
 
 #define PLATFORM_BOOT_TABLE_PTR_TYPE   0x1001

@@ -2,7 +2,7 @@
 # Module Information file for PEI PolicyUpdateLib Library
 #
 #
-#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -52,6 +52,7 @@
   SecurityPkg/SecurityPkg.dec
   IntelSiliconPkg/IntelSiliconPkg.dec
   MinPlatformPkg/MinPlatformPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [FixedPcd]
   gSiPkgTokenSpaceGuid.PcdTsegSize                             ## CONSUMES

@@ -1,13 +1,13 @@
 /** @file
   Implementation of Fsp Me Policy Initialization.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
 #include <PeiFspPolicyInitLib.h>
-
+#include <Library/ConfigBlockLib.h>
 #include <Ppi/SiPolicy.h>
 
 /**

@@ -1,7 +1,7 @@
 /** @file
   Implementation of Fsp PCH Policy Initialization.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -11,6 +11,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Ppi/SiPolicy.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PeiServicesLib.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   Performs FSP PCH PEI Policy pre mem initialization.

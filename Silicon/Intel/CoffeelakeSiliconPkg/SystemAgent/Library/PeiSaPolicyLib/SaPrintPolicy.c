@@ -1,13 +1,14 @@
 /** @file
   This file provides service for PEI phase policy printing
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiSaPolicyLibrary.h"
 #include <Library/GpioNativeLib.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   This function prints the PEI phase PreMem policy.

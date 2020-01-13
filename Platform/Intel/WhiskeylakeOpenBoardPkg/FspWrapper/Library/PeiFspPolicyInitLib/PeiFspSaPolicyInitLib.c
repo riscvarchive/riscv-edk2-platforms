@@ -2,7 +2,7 @@
   Implementation of Fsp SA Policy Initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -22,6 +22,7 @@
 #include <Pi/PiFirmwareFile.h>
 #include <Pi/PiPeiCis.h>
 #include <Core/Pei/PeiMain.h>
+#include <Library/ConfigBlockLib.h>
 
 #define MAX_SPD_PAGE_COUNT           (2)
 #define MAX_SPD_PAGE_SIZE            (256)

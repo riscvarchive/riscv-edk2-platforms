@@ -1,7 +1,7 @@
 /** @file
   Prototype of the PeiSaPolicy library.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -10,7 +10,6 @@
 #define _PEI_SA_POLICY_LIB_H_
 
 #include <Ppi/SiPolicy.h>
-#include <Library/ConfigBlockLib.h>
 
 /**
   This function prints the PEI phase PreMem policy.

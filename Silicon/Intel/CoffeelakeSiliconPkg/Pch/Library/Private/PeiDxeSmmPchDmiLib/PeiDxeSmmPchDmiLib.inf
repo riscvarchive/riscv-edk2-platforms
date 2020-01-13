@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the PeiDxeSmmPchDmiLib
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -31,7 +31,7 @@ LIBRARY_CLASS                  = PchDmiLib
 [Packages]
   MdePkg/MdePkg.dec
   CoffeelakeSiliconPkg/SiPkg.dec
-
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
   PchDmiLib.c

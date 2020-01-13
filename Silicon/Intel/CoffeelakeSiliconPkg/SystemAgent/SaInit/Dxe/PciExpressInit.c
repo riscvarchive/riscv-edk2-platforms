@@ -1,12 +1,13 @@
 /** @file
   This driver does SA PCI Express ACPI table initialization.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PciExpressInit.h"
+#include <Library/ConfigBlockLib.h>
 
 extern SYSTEM_AGENT_NVS_AREA_PROTOCOL   mSaNvsAreaProtocol;
 extern SA_CONFIG_HOB                    *mSaConfigHob;

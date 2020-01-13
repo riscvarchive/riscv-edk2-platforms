@@ -2,7 +2,7 @@
   This library implements constructor function to register notify call back
   when policy PPI installed.
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -11,6 +11,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PeiServicesLib.h>
 #include <Library/SiPolicyLib.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   Callback function to update policy when policy PPI installed.

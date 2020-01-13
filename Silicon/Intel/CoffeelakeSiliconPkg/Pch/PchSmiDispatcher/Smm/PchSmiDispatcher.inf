@@ -1,7 +1,7 @@
 ## @file
 # Component description file for the Pch SMI Dispatch Handlers module
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -47,7 +47,7 @@ SmiHandlerProfileLib
 [Packages]
 MdePkg/MdePkg.dec
 CoffeelakeSiliconPkg/SiPkg.dec
-
+IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Pcd]
 # Progress Code for S3 Suspend end.

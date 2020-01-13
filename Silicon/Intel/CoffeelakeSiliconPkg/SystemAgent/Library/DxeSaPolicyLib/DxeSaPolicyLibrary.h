@@ -1,7 +1,7 @@
 /** @file
   Header file for the DxeSaPolicy library.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -15,7 +15,6 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Base.h>
 #include <ConfigBlock.h>
 #include <Library/HobLib.h>

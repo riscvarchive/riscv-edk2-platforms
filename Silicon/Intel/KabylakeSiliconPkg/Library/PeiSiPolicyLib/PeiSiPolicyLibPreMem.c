@@ -2,13 +2,13 @@
   This file is PeiSiPolicyLib library creates default settings of RC
   Policy and installs RC Policy PPI.
 
-Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
 #include "PeiSiPolicyLibrary.h"
-
+#include <Library/ConfigBlockLib.h>
 
 /**
   SiCreatePreMemConfigBlocks creates the config blocksg of Silicon PREMEM Policy.

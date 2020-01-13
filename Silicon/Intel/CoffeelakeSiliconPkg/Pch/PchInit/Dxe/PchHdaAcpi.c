@@ -1,7 +1,7 @@
 /** @file
   Initializes the PCH HD Audio ACPI Tables.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -13,6 +13,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Protocol/AcpiTable.h>
+#include <Library/ConfigBlockLib.h>
 
 #include "PchInit.h"
 #include <Protocol/PchPolicy.h>

@@ -1,7 +1,7 @@
 ## @file
 # Component description file for PchInitSmm driver
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -50,7 +50,7 @@ SataLib
 [Packages]
 MdePkg/MdePkg.dec
 CoffeelakeSiliconPkg/SiPkg.dec
-
+IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Pcd]
 gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress

@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -31,6 +31,7 @@
 #include <Library/PchInfoLib.h>
 #include <FirwmareConfigurations.h>
 #include "WhiskeylakeURvpInit.h"
+#include <Library/ConfigBlockLib.h>
 
 EFI_STATUS
 BoardFunctionInit (

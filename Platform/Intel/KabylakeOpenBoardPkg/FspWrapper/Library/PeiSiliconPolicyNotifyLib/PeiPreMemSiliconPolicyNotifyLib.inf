@@ -3,7 +3,7 @@
 # This library implements constructor function to register notify call back
 # when policy PPI installed.
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -25,6 +25,7 @@
   MdePkg/MdePkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
   KabylakeSiliconPkg/SiPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
   PeiPreMemSiliconPolicyNotifyLib.c

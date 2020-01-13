@@ -1,7 +1,7 @@
 /** @file
   Header file for PCH Initialization Driver.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -17,7 +17,6 @@ typedef UINT16                    STRING_REF;
 #include <Library/BaseMemoryLib.h>
 #include <Library/IoLib.h>
 #include <Library/TimerLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Protocol/DriverSupportedEfiVersion.h>
 #include <Library/PchCycleDecodingLib.h>
 #include <Library/PchPcieRpLib.h>

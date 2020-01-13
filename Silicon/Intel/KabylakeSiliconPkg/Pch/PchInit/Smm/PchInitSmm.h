@@ -1,7 +1,7 @@
 /** @file
   Header file for PCH Init SMM Handler
 
-Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -34,7 +34,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/GpioNativeLib.h>
 #include <Library/PchEspiLib.h>
 #include <Library/MmPciLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Library/PchPciExpressHelpersLib.h>
 #include <Protocol/PchPcieSmiDispatch.h>
 #include <Protocol/PchTcoSmiDispatch.h>

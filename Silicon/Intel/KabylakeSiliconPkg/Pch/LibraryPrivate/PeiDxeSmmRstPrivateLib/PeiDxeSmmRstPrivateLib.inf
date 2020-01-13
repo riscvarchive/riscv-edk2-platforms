@@ -4,7 +4,7 @@
 # All function in this library is available for PEI, DXE, and SMM,
 # But do not support UEFI RUNTIME environment call.
 #
-# Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -31,6 +31,7 @@ PchInitCommonLib
 MdePkg/MdePkg.dec
 KabylakeSiliconPkg/SiPkg.dec
 KabylakeSiliconPkg/KabylakeSiliconPrivate.dec
+IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
 PeiDxeSmmRstPrivateLib.c

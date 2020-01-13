@@ -1,7 +1,7 @@
 /** @file
   Internal header file for Fsp Policy Initialization Library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -13,7 +13,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <Library/DebugLib.h>
 #include <Library/PeiServicesLib.h>
-#include <Library/ConfigBlockLib.h>
 #include "PeiPolicyInitLib.h"
 
 #include <FspEas.h>

@@ -2,7 +2,7 @@
   This file is SampleCode of the library for Intel PCH PEI Policy initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -25,6 +25,7 @@
 #include <Library/CnviLib.h>
 #include <Register/PchRegsLpcCnl.h>
 #include <PcieDeviceOverrideTable.h>
+#include <Library/ConfigBlockLib.h>
 
 VOID
 UpdatePcieClockInfo (

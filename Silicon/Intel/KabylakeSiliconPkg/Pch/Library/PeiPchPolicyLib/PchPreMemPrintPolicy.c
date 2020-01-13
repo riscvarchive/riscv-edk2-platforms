@@ -1,11 +1,12 @@
 /** @file
   Print whole PCH_PREMEM_POLICY_PPI
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 #include "PeiPchPolicyLibrary.h"
+#include <Library/ConfigBlockLib.h>
 
 /**
   Print PCH_GENERAL_PREMEM_CONFIG and serial out.

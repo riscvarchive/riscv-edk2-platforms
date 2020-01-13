@@ -1,9 +1,9 @@
 /** @file
   Header file for Config Block Lib implementation
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
-SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #ifndef _CONFIG_BLOCK_LIB_H_

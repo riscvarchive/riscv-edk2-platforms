@@ -1,7 +1,7 @@
 ## @file
 # PEI PCH PMC Private Lib for Cannon Lake PCH.
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -35,6 +35,7 @@ PeiItssLib
 [Packages]
 MdePkg/MdePkg.dec
 CoffeelakeSiliconPkg/SiPkg.dec
+IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
 PeiPmcPrivateLib.c

@@ -3,12 +3,13 @@
   Software SCI interface between system BIOS, ASL code, and Graphics drivers.
   The code in this file will load the driver and initialize the interface
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "IgdOpRegionInit.h"
+#include <Library/ConfigBlockLib.h>
 
 GLOBAL_REMOVE_IF_UNREFERENCED IGD_OPREGION_PROTOCOL           mIgdOpRegion;
 

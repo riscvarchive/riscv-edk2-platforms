@@ -1,7 +1,7 @@
 /** @file
   Interface definition details between System Agent and platform drivers during DXE phase.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -11,7 +11,6 @@
 
 #include <SaAccess.h>
 #include <ConfigBlock.h>
-#include <Library/ConfigBlockLib.h>
 #include <ConfigBlock/GraphicsDxeConfig.h>
 #include <ConfigBlock/MemoryDxeConfig.h>
 #include <ConfigBlock/MiscDxeConfig.h>

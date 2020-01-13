@@ -2,7 +2,7 @@
   Platform Stage System Agent initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -22,6 +22,7 @@
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PeiSaPolicyLib.h>
 #include <Library/GpioLib.h>
+#include <Library/ConfigBlockLib.h>
 
 ///
 /// Memory Reserved should be between 125% to 150% of the Current required memory

@@ -1,7 +1,7 @@
 /** @file
   This file is PeiPchPolicy library.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -10,6 +10,7 @@
 #include <Library/PchPcieRpLib.h>
 #include <Library/CpuPlatformLib.h>
 #include <Register/PchRegsLpcCnl.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   mPxRcConfig[] table contains data for 8259 routing (how PIRQx is mapped to IRQy).

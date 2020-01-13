@@ -1,7 +1,7 @@
 ## @file
 # Component information file for Silicon Update Library
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -19,12 +19,14 @@
   BaseLib
   PcdLib
   DebugLib
+  ConfigBlockLib
 
 [Packages]
   MdePkg/MdePkg.dec
   KabylakeSiliconPkg/SiPkg.dec
   MinPlatformPkg/MinPlatformPkg.dec
   KabylakeOpenBoardPkg/OpenBoardPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
   DxeSiliconPolicyUpdateLib.c

@@ -1,7 +1,7 @@
 /** @file
   Header file for the DxeTBTPolicy library.
 
-Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2018 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -16,7 +16,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <ConfigBlock.h>
-#include <Library/ConfigBlockLib.h>
 #include <Guid/EventGroup.h>
 
 #endif // _DXE_TBT_POLICY_LIBRARY_H_

@@ -1,12 +1,13 @@
 /** @file
   This file is the library for SA DXE Policy initialization.
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
 #include "DxeSaPolicyInit.h"
+#include <Library/ConfigBlockLib.h>
 
 #define SA_VTD_RMRR_USB_LENGTH  0x20000
 

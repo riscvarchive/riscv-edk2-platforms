@@ -1,7 +1,7 @@
 ## @file
 # Component description file for SystemAgent Initialization driver
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -50,7 +50,7 @@ MdePkg/MdePkg.dec
 UefiCpuPkg/UefiCpuPkg.dec
 KabylakeSiliconPkg/SiPkg.dec
 KabylakeSiliconPkg/KabylakeSiliconPrivate.dec
-
+IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Pcd]
 gSiPkgTokenSpaceGuid.PcdAcpiDefaultOemId

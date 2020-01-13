@@ -1,13 +1,13 @@
 /** @file
   This file provide services for DXE phase policy default initialization
 
-Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
 #include "DxeSaPolicyLibrary.h"
-
+#include <Library/ConfigBlockLib.h>
 
 extern EFI_GUID gGraphicsDxeConfigGuid;
 extern EFI_GUID gMiscDxeConfigGuid;

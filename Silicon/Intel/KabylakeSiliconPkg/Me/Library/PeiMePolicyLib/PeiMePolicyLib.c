@@ -1,11 +1,12 @@
 /** @file
   This file is PeiMePolicy library.
 
-Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020 Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 #include "PeiMePolicyLibrary.h"
+#include <Library/ConfigBlockLib.h>
 
 /**
   Load default settings for ME config block in pre-mem phase.

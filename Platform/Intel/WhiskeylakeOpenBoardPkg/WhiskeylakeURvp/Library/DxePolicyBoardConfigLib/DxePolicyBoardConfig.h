@@ -2,7 +2,7 @@
  Header file for DxePolicyBoardConfig library instance.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -12,7 +12,6 @@
 #include <PiDxe.h>
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
-#include <Library/ConfigBlockLib.h>
 #include <Library/DxePolicyBoardConfigLib.h>
 
 

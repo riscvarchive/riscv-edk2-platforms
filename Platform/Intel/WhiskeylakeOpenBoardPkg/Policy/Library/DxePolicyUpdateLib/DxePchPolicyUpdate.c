@@ -2,7 +2,7 @@
   This file is the library for PCH DXE Policy initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -13,6 +13,7 @@
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Protocol/PchPolicy.h>
 #include <ConfigBlock/HdAudioConfig.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   Get data for PCH policy from setup options.

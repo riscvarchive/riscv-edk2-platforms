@@ -1,13 +1,13 @@
 /** @file
   This file provide services for DXE phase policy default initialization
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "DxeSaPolicyLibrary.h"
-
+#include <Library/ConfigBlockLib.h>
 
 GLOBAL_REMOVE_IF_UNREFERENCED PCIE_ASPM_OVERRIDE_LIST mPcieAspmDevsOverride[] = {
   {0x8086, 0x108b, 0xff, 2, 2},           ///< Tekoa w/o iAMT

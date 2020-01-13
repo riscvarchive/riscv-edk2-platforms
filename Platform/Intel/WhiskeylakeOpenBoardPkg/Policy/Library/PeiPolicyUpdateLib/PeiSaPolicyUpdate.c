@@ -2,7 +2,7 @@
 Do Platform Stage System Agent initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -21,6 +21,7 @@ Do Platform Stage System Agent initialization.
 #include <Library/PeiSaPolicyLib.h>
 #include <GpioPinsCnlLp.h>
 #include <GpioPinsCnlH.h>
+#include <Library/ConfigBlockLib.h>
 
 /**
   UpdatePeiSaPolicy performs SA PEI Policy initialization

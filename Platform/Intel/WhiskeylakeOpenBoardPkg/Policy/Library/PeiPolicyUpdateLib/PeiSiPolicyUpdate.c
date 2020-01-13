@@ -3,7 +3,7 @@
   Platform Policy initialization.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -13,6 +13,7 @@
 #include <Library/PeiServicesLib.h>
 #include <Library/SiPolicyLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/ConfigBlockLib.h>
 
 STATIC SVID_SID_INIT_ENTRY mCdfSsidTablePtr[] = {
   //

@@ -2,7 +2,7 @@
 #  PEI Intel HD Audio Verb Table library.
 #
 #
-#  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -50,6 +50,7 @@
   MdeModulePkg/MdeModulePkg.dec
   CoffeelakeSiliconPkg/SiPkg.dec
   WhiskeylakeOpenBoardPkg/OpenBoardPkg.dec
+  IntelSiliconPkg/IntelSiliconPkg.dec
 
 [LibraryClasses]
   BaseLib
