@@ -1,10 +1,13 @@
 /** @file
   Component Name functions declaration for Super I/O DXE driver.
 
-  Copyright (c) 2013 - 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2013 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
+
+#ifndef _LEGACY_SIO_DXE_COMPONENT_NAME_H_
+#define _LEGACY_SIO_DXE_COMPONENT_NAME_H_
 
 /**
   Retrieves a Unicode string that is the user-readable name of the EFI Driver.
@@ -85,3 +88,5 @@ SioComponentNameGetControllerName (
   IN  CHAR8                         *Language,
   OUT CHAR16                        **ControllerName
   );
+
+#endif

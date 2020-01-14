@@ -1,13 +1,13 @@
 /** @file
   Header file for the Ps2 keyboard controller library.
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
-#ifndef _PS2_KBC_LIB_H
-#define _PS2_KBC_LIB_H
+#ifndef _PS2_KBC_LIB_H_
+#define _PS2_KBC_LIB_H_
 
 #include <Uefi.h>
 #include <Library/UefiLib.h>

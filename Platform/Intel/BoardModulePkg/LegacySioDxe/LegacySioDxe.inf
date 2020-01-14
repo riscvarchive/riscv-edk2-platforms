@@ -2,7 +2,7 @@
 # Module information that produces the
 # EFI_SIO_PROTOCOL.
 #
-# Copyright (c) 2010 - 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2010 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -44,6 +44,8 @@
   SioDriver.c
   SioDriver.h
   ComponentName.c
+  ComponentName.h
+  Register.h
 
 [Pcd]
   gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable

@@ -1,7 +1,7 @@
 /** @file
   Main file for Ps2 keyboard controller library.
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -65,7 +65,7 @@ DetectPs2Keyboard (
     MicroSecondDelay (30);
   }
 
-  if (FoundPs2Kbc == FALSE) {
+  if (!FoundPs2Kbc) {
     return FALSE;
   }
 
@@ -126,7 +126,7 @@ IsPs2KeyboardConnected (
   BOOLEAN Result;
   Result = DetectPs2Keyboard ();
 
-  if (Result == FALSE) {
+  if (!Result) {
     //
     // If there is no ps2 keyboard detected for the 1st time, retry again.
     //
@@ -138,7 +138,7 @@ IsPs2KeyboardConnected (
 
 /**
   Updates the ConIn variable with Ps2 Keyboard device path,
-  if it doesn't already exists in ConIn and ConInDev
+  if it doesn't already exists in ConIn and ConInDev.
 **/
 VOID
 AddPs2Keyboard (

@@ -1,7 +1,7 @@
 /** @file
   EFI Driver following Driver Binding Protocol.
 
-  Copyright (c) 2010 - 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2010 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -118,13 +118,14 @@ BOOLEAN
 EFIAPI
 SioDeviceEnabled (
   IN SIO_PCI_ISA_BRIDGE_DEVICE_INFO *CurrentDevice
-){
-    SIO_PCI_ISA_BRIDGE_DEVICE_INFO *Device = \
-      (SIO_PCI_ISA_BRIDGE_DEVICE_INFO *) FixedPcdGetPtr (PcdSuperIoPciIsaBridgeDevice);
-    if(CompareMem (Device, CurrentDevice, sizeof (SIO_PCI_ISA_BRIDGE_DEVICE_INFO)) == 0) {
-      return TRUE;
-    }
-    return FALSE;
+  )
+{
+  SIO_PCI_ISA_BRIDGE_DEVICE_INFO *Device;
+  Device = (SIO_PCI_ISA_BRIDGE_DEVICE_INFO *) FixedPcdGetPtr (PcdSuperIoPciIsaBridgeDevice);
+  if(CompareMem (Device, CurrentDevice, sizeof (SIO_PCI_ISA_BRIDGE_DEVICE_INFO)) == 0) {
+    return TRUE;
+  }
+  return FALSE;
 }
 
 /**

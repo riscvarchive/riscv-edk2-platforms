@@ -1,7 +1,7 @@
 /** @file
   Super I/O specific implementation.
 
-  Copyright (c) 2010 - 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2010 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -145,7 +145,7 @@ DEVICE_INFO    mDeviceInfo[] = {
 
 
 /**
-  Gets the number of devices in Table of SIO Controllers mDeviceInfo
+  Gets the number of devices in Table of SIO Controllers mDeviceInfo.
 
   @retval     Number of enabled devices in Table of SIO Controllers.
 **/
@@ -153,7 +153,8 @@ UINTN
 EFIAPI
 GetDeviceCount (
   VOID
-){
+  )
+{
    UINTN        Count;
    // Get mDeviceInfo item count
    // -1 to account for for the end device info
