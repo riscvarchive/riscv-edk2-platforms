@@ -35,6 +35,9 @@
   UefiRuntimeLib
   DxeServicesTableLib
 
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
+
 [FixedPcd]
   gArmTokenSpaceGuid.PcdFdBaseAddress
 
