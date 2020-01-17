@@ -52,8 +52,7 @@ NetsecDriverBindingSupported (
     return Status;
   }
 
-  if (CompareGuid (Dev->Type, &gNetsecNonDiscoverableDeviceGuid) &&
-      Dev->DmaType == NonDiscoverableDeviceDmaTypeNonCoherent) {
+  if (CompareGuid (Dev->Type, &gNetsecNonDiscoverableDeviceGuid)) {
     Status = EFI_SUCCESS;
   } else {
     Status = EFI_UNSUPPORTED;
