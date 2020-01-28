@@ -52,6 +52,13 @@ Build instructions from the top level edk2-platforms Readme.md apply.
   armstub=RPI_EFI.fd
   disable_commandline_tags=1
   ```
+  Additionally, if you want to use PL011 instead of the miniUART, you can add the lines:
+  ```
+  device_tree_address=0x20000
+  device_tree_end=0x30000
+  device_tree=bcm2710-rpi-3-b[-plus].dtb
+  dtoverlay=miniuart-bt
+  ```
 5. Insert the uSD card and power up the Pi.
 
 Note that if you have a model 3+ or a model 3 where you enabled USB boot through OTP
