@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2013-2019, ARM Limited. All rights reserved.
+*  Copyright (c) 2013-2020, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -30,9 +30,9 @@
 #ifndef DYNAMIC_TABLES_FRAMEWORK
 // This GUID must match the FILE_GUID in ArmPlatformPkg/ArmJunoPkg/AcpiTables/AcpiTables.inf
 STATIC CONST EFI_GUID mJunoAcpiTableFile = { 0xa1dd808e, 0x1e95, 0x4399, { 0xab, 0xc0, 0x65, 0x3c, 0x82, 0xe8, 0x53, 0x0c } };
+STATIC VOID *mAcpiRegistration = NULL;
 #endif
 
-STATIC VOID *mAcpiRegistration = NULL;
 STATIC VOID *mPciIoNotificationRegistration = NULL;
 
 /**
