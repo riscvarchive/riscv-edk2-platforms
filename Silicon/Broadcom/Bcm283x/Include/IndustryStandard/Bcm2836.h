@@ -31,6 +31,28 @@
 #define BCM2836_WDOG_RSTC_WRCFG_MASK                        0x00000030
 #define BCM2836_WDOG_RSTC_WRCFG_FULL_RESET                  0x00000020
 
+/* clock manager constants */
+#define BCM2836_CM_OFFSET                                   0x00101000
+#define BCM2836_CM_BASE                                     (BCM2836_SOC_REGISTERS + BCM2836_CM_OFFSET)
+#define BCM2836_CM_GEN_CLOCK_CONTROL                        0x0000
+#define BCM2836_CM_GEN_CLOCK_DIVISOR                        0x0004
+#define BCM2836_CM_VPU_CLOCK_CONTROL                        0x0008
+#define BCM2836_CM_VPU_CLOCK_DIVISOR                        0x000c
+#define BCM2836_CM_SYSTEM_CLOCK_CONTROL                     0x0010
+#define BCM2836_CM_SYSTEM_CLOCK_DIVISOR                     0x0014
+#define BCM2836_CM_H264_CLOCK_CONTROL                       0x0028
+#define BCM2836_CM_H264_CLOCK_DIVISOR                       0x002c
+#define BCM2836_CM_PWM_CLOCK_CONTROL                        0x00a0
+#define BCM2836_CM_PWM_CLOCK_DIVISOR                        0x00a4
+#define BCM2836_CM_UART_CLOCK_CONTROL                       0x00f0
+#define BCM2836_CM_UART_CLOCK_DIVISOR                       0x00f4
+#define BCM2836_CM_SDC_CLOCK_CONTROL                        0x01a8
+#define BCM2836_CM_SDC_CLOCK_DIVISOR                        0x01ac
+#define BCM2836_CM_ARM_CLOCK_CONTROL                        0x01b0
+#define BCM2836_CM_ARM_CLOCK_DIVISOR                        0x01b4
+#define BCM2836_CM_EMMC_CLOCK_CONTROL                       0x01c0
+#define BCM2836_CM_EMMC_CLOCK_DIVISOR                       0x01c4
+
 /* mailbox interface constants */
 #define BCM2836_MBOX_OFFSET                                 0x0000b880
 #define BCM2836_MBOX_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_MBOX_OFFSET)
