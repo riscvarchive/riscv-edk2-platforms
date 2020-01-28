@@ -20,8 +20,8 @@ following __major__ limitations:
   missing/incomplete ACPI tables as well as other factors. For Linux, using
   the `ACPI_BASIC_MODE_ENABLE` build option may help.
 - Serial I/O from the OS may not work due to CPU throttling affecting the
-  miniUART baudrate. This can be worked around by using the `PL011_ENABLE`
-  compilation option.
+  miniUART baudrate. This can be worked around by using the PL011 UART
+  through the device tree overlays.
 
 # Building
 
@@ -32,11 +32,6 @@ The following additional build options are also available:
   ACPI (by disabling the Device Tree driver altogether). This may be required
   to boot Operating Systems such as Linux on account of the current PCIe/xHCI
   limitations.
-- `-D PL011_ENABLE=1`: Selects PL011 for the serial console instead of the
-  miniUART (default). This doesn't change the GPIO pinout for the UART but
-  can be useful if you find that the miniUART baud rate changes when the
-  OS throttles the CPU. Note that this requires one of `disable-bt.dtbo` or
-  `miniuart-bt.dtbo` overlays to have been applied (see below).
 
 # Booting the firmware
 
@@ -48,27 +43,21 @@ The following additional build options are also available:
   - `start4.elf`
   - `overlays/miniuart-bt.dbto` or `overlays/disable-bt.dtbo` (Optional)
 4. Create a `config.txt` with the following content:
-  - For a firmware **without** the `PL011_ENABLE` build option:
     ```
     arm_64bit=1
     enable_uart=1
-    core_freq=250
     enable_gic=1
     armstub=RPI_EFI.fd
     disable_commandline_tags=1
     ```
-  - For a firmware **with** the `PL011_ENABLE` build option:
+    Additionally, if you want to use PL011 instead of the miniUART, you can add the lines:
     ```
-    arm_64bit=1
-    enable_gic=1
-    armstub=RPI_EFI.fd
-    disable_commandline_tags=1
     device_tree_address=0x20000
     device_tree_end=0x30000
     device_tree=bcm2711-rpi-4-b.dtb
     dtoverlay=miniuart-bt
     ```
-    The above also requires `miniuart-bt.dbto` to have been copied into an `overlays/`
+    Note that doing so requires `miniuart-bt.dbto` to have been copied into an `overlays/`
     directory on the uSD card. Alternatively, you may use `disable-bt` instead of
     `miniuart-bt` if you don't require BlueTooth.
 5. Insert the uSD card and power up the Pi.
@@ -80,7 +69,7 @@ The following additional build options are also available:
 The TF-A binaries were compiled from a TF-A source over which 2 serial-output related
 patches were applied, the first one to fix the miniUART baud rate not being properly
 set to 115200 bauds with recent versions of `start4.elf` and the second one to allow
-swicthing between miniUART and PL011 at build time.
+the use of the PL011 UART.
 
 No other alterations to the official source have been applied.
 
