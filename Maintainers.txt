@@ -126,7 +126,6 @@ R: Ard Biesheuvel <ard.biesheuvel@linaro.org>
 
 Features/Intel
 F: Features/Intel/
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 R: Liming Gao <liming.gao@intel.com>
 
@@ -158,7 +157,6 @@ R: Liming Gao <liming.gao@intel.com>
 Platform/Intel/KabylakeOpenBoardPkg
 F: Platform/Intel/KabylakeOpenBoardPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Platform/Intel/KabylakeOpenBoardPkg/GalagoPro3
@@ -167,7 +165,6 @@ R: Jeremy Soller <jeremy@system76.com>
 
 Platform/Intel/MinPlatformPkg
 F: Platform/Intel/MinPlatformPkg/
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 R: Liming Gao <liming.gao@intel.com>
@@ -175,7 +172,6 @@ R: Liming Gao <liming.gao@intel.com>
 Platform/Intel/WhiskeylakeOpenBoardPkg
 F: Platform/Intel/WhiskeylakeOpenBoardPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Platform/Intel/SimicsOpenBoardPkg
@@ -205,13 +201,11 @@ M: Yi Qian <yi.qian@intel.com>
 Silicon/Intel/CoffeelakeSiliconPkg
 F: Silicon/Intel/CoffeelakeSiliconPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 
 Silicon/Intel/KabylakeSiliconPkg
 F: Silicon/Intel/KabylakeSiliconPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
-M: Michael Kubacki <michael.a.kubacki@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 
 Silicon/Intel/SimicsX58SktPkg
