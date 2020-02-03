@@ -402,6 +402,7 @@
   gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase|0x40000000
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress|0xfc000000
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress|0xfe000000
+  gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress|0xfd580000
 
   # PCIe specific addresses
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase|0xfd500000
@@ -648,6 +649,10 @@
   # Networking stack
   #
 !include NetworkPkg/Network.dsc.inc
+  Silicon/Broadcom/Drivers/Net/BcmGenetDxe/BcmGenetDxe.inf {
+    <LibraryClasses>
+      NULL|Platform/RaspberryPi/Library/PlatformPcdLib/PlatformPcdLib.inf
+  }
 
   #
   # RNG
