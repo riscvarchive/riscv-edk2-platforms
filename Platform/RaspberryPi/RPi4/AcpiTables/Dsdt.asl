@@ -267,6 +267,35 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       }
     }
 
+    Device (ETH0)
+    {
+      Name (_HID, "BCM6E4E")
+      Name (_CID, "BCM6E4E")
+      Name (_UID, 0x0)
+      Name (_CCA, 0x0)
+      Method (_STA)
+      {
+        Return (0xf)
+      }
+      Method (_CRS, 0x0, Serialized)
+      {
+        Name (RBUF, ResourceTemplate ()
+        {
+          Memory32Fixed (ReadWrite, 0xfd580000, 0x10000, )
+          Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0xBD }
+          Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0xBE }
+        })
+        Return (RBUF)
+      }
+      Name (_DSD, Package () {
+        ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package () { "brcm,max-dma-burst-size", 0x08 },
+          Package () { "phy-mode", "rgmii" },
+        }
+      })
+    }
+
     // Description: I2C
     Device (I2C1)
     {
