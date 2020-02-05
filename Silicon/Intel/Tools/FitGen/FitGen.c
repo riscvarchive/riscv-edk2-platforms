@@ -747,6 +747,37 @@ CheckOverlap (
   }
 }
 
+UINT8 *
+GetMicrocodeBufferFromFv (
+  EFI_FIRMWARE_VOLUME_HEADER *FvHeader
+  )
+{
+  UINT8 *MicrocodeBuffer;
+  EFI_FFS_FILE_HEADER *FfsHeader;
+
+  MicrocodeBuffer = NULL;
+  //
+  // Skip FV header + FV extension header + FFS header
+  //
+  FfsHeader = (EFI_FFS_FILE_HEADER *)((UINT8 *) FvHeader + FvHeader->HeaderLength);
+  while ((UINT8 *) FfsHeader < (UINT8 *) FvHeader + FvHeader->FvLength) {
+    if (FfsHeader->Type == EFI_FV_FILETYPE_RAW) {
+      //
+      // Find the first RAW ffs file as Microcode Buffer
+      //
+      MicrocodeBuffer = (UINT8 *)(FfsHeader + 1);
+      break;
+    }
+    if (GetFfsFileLength (FfsHeader) == 0xFFFFFF) {
+      // spare space is found, and exit
+      break;
+    }
+    FfsHeader = (EFI_FFS_FILE_HEADER *) ((UINT8 *) FfsHeader + ((GetFfsFileLength (FfsHeader)+7)&~7));
+  }
+
+  return MicrocodeBuffer;
+}
+
 UINT32
 GetFitEntryNumber (
   IN INTN   argc,
@@ -1047,8 +1078,7 @@ Returns:
 
             FvHeader = (EFI_FIRMWARE_VOLUME_HEADER *)MicrocodeFileBuffer;
             if (FvHeader->Signature == EFI_FVH_SIGNATURE) {
-              // Skip FV header + FFS header
-              MicrocodeBuffer = MicrocodeFileBuffer + sizeof(EFI_FIRMWARE_VOLUME_HEADER) + sizeof(EFI_FV_BLOCK_MAP_ENTRY) + sizeof(EFI_FFS_FILE_HEADER);
+              MicrocodeBuffer = GetMicrocodeBufferFromFv (FvHeader);
             } else {
               MicrocodeBuffer = MicrocodeFileBuffer;
             }
@@ -1388,8 +1418,7 @@ Returns:
 
         FvHeader = (EFI_FIRMWARE_VOLUME_HEADER *)MicrocodeFileBuffer;
         if (FvHeader->Signature == EFI_FVH_SIGNATURE) {
-          // Skip FV header + FFS header
-          MicrocodeBuffer = MicrocodeFileBuffer + sizeof(EFI_FIRMWARE_VOLUME_HEADER) + sizeof(EFI_FV_BLOCK_MAP_ENTRY) + sizeof(EFI_FFS_FILE_HEADER);
+          MicrocodeBuffer = GetMicrocodeBufferFromFv (FvHeader);
         } else {
           MicrocodeBuffer = MicrocodeFileBuffer;
         }
@@ -1401,8 +1430,7 @@ Returns:
 
         FvHeader = (EFI_FIRMWARE_VOLUME_HEADER *)MicrocodeFileBuffer;
         if (FvHeader->Signature == EFI_FVH_SIGNATURE) {
-          // Skip FV header + FFS header
-          MicrocodeBuffer = MicrocodeFileBuffer + sizeof(EFI_FIRMWARE_VOLUME_HEADER) + sizeof(EFI_FV_BLOCK_MAP_ENTRY) + sizeof(EFI_FFS_FILE_HEADER);
+          MicrocodeBuffer = GetMicrocodeBufferFromFv (FvHeader);
         } else {
           MicrocodeBuffer = MicrocodeFileBuffer;
         }
