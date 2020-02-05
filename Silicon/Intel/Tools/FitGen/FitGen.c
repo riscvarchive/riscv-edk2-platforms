@@ -2,7 +2,7 @@
 This utility is part of build process for IA32/X64 FD.
 It generates FIT table.
 
-Copyright (c) 2010-2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2010-2020, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -226,9 +226,17 @@ typedef struct {
 #define FIT_TABLE_TYPE_BIOS_DATA_AREA         13
 #define FIT_TABLE_TYPE_CSE_SECURE_BOOT        16
 
+//
+// With OptionalModule Address isn't known until free space has been
+// identified and the optional module has been copied into the FLASH
+// image buffer (or initialized to be populated later by another program).
+// This is very dangerous code as it can truncate 64b pointers to
+// allocated memory buffers.  The full pointer is in Buffer for that case.
+//
 typedef struct {
   UINT32  Type;
   UINT32  Address;
+  UINT8   *Buffer; // Used by OptionalModule only
   UINT32  Size;
   UINT32  Version; // Used by OptionalModule and PortModule only
 } FIT_TABLE_CONTEXT_ENTRY;
@@ -575,9 +583,9 @@ Returns:
   UINT64                      FvLength;
   EFI_GUID                    *TempGuid;
   UINT8                       *FixPoint;
-  UINT32                      Offset;
-  UINT32                      FileLength;
-  UINT32                      FileOccupiedSize;
+  UINTN                       Offset;
+  UINTN                       FileLength;
+  UINTN                       FileOccupiedSize;
 
   //
   // Find the FFS file
@@ -595,7 +603,7 @@ Returns:
     InitializeFvLib (FvHeader, (UINT32)FvLength);
 
     FileHeader       = (EFI_FFS_FILE_HEADER *)((UINTN)FvHeader + FvHeader->HeaderLength);
-    Offset           = (UINT32) (UINTN) FileHeader - (UINT32) (UINTN) FvHeader;
+    Offset           = (UINTN) FileHeader - (UINTN) FvHeader;
 
     while (Offset < FvLength) {
       TempGuid = (EFI_GUID *)&(FileHeader->Name);
@@ -625,7 +633,7 @@ Returns:
         return FixPoint;
       }
       FileHeader = (EFI_FFS_FILE_HEADER *)((UINTN)FileHeader + FileOccupiedSize);
-      Offset = (UINT32) (UINTN) FileHeader - (UINT32) (UINTN) FvHeader;
+      Offset = (UINTN) FileHeader - (UINTN) FvHeader;
     }
 
     //
@@ -1082,7 +1090,7 @@ Returns:
                 return 0;
               }
               gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Type = FIT_TABLE_TYPE_MICROCODE;
-              gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + ((UINT32) (UINTN) MicrocodeBuffer - (UINT32) (UINTN) MicrocodeFileBuffer);
+              gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + (UINT32)((UINTN) MicrocodeBuffer - (UINTN) MicrocodeFileBuffer);
               gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Size = MicrocodeSize;
               gFitTableContext.MicrocodeNumber++;
               gFitTableContext.FitEntryNumber++;
@@ -1110,7 +1118,7 @@ Returns:
               ///
               while (MicrocodeBuffer + SlotSize <= MicrocodeFileBuffer + MicrocodeFileSize) {
                 gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Type = FIT_TABLE_TYPE_MICROCODE;
-                gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + ((UINT32) (UINTN) MicrocodeBuffer - (UINT32) (UINTN) MicrocodeFileBuffer);
+                gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + (UINT32)((UINTN) MicrocodeBuffer - (UINTN) MicrocodeFileBuffer);
                 gFitTableContext.MicrocodeNumber++;
                 gFitTableContext.FitEntryNumber++;
 
@@ -1428,7 +1436,7 @@ Returns:
         return 0;
       }
       gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Type = FIT_TABLE_TYPE_MICROCODE;
-      gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + ((UINT32) (UINTN) MicrocodeBuffer - (UINT32) (UINTN) MicrocodeFileBuffer);
+      gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Address = MicrocodeBase + (UINT32)((UINTN) MicrocodeBuffer - (UINTN) MicrocodeFileBuffer);
       gFitTableContext.Microcode[gFitTableContext.MicrocodeNumber].Size = MicrocodeSize;
       gFitTableContext.MicrocodeNumber++;
       gFitTableContext.FitEntryNumber++;
@@ -1557,6 +1565,7 @@ Returns:
     }
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Type = Type;
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Address = (UINT32) (UINTN) FileBuffer;
+    gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Buffer = FileBuffer;
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Size = FileSize;
 
     //
@@ -1846,8 +1855,8 @@ Returns:
           }
         }
       }
-      memcpy (OptionalModuleAddress, (VOID *) (UINTN) gFitTableContext.OptionalModule[Index].Address, gFitTableContext.OptionalModule[Index].Size);
-      free ((VOID *) (UINTN) gFitTableContext.OptionalModule[Index].Address);
+      memcpy (OptionalModuleAddress, gFitTableContext.OptionalModule[Index].Buffer, gFitTableContext.OptionalModule[Index].Size);
+      free (gFitTableContext.OptionalModule[Index].Buffer);
       gFitTableContext.OptionalModule[Index].Address = MEMORY_TO_FLASH (OptionalModuleAddress, FvBuffer, FvSize);
     }
     //
