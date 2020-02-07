@@ -217,6 +217,7 @@ typedef struct {
 #define FIT_TABLE_TYPE_HEADER                 0
 #define FIT_TABLE_TYPE_MICROCODE              1
 #define FIT_TABLE_TYPE_STARTUP_ACM            2
+#define FIT_TABLE_TYPE_DIAGNST_ACM            3
 #define FIT_TABLE_TYPE_BIOS_MODULE            7
 #define FIT_TABLE_TYPE_TPM_POLICY             8
 #define FIT_TABLE_TYPE_BIOS_POLICY            9
@@ -254,6 +255,8 @@ typedef struct {
   UINT32                     FitHeaderVersion;
   FIT_TABLE_CONTEXT_ENTRY    StartupAcm;
   UINT32                     StartupAcmVersion;
+  FIT_TABLE_CONTEXT_ENTRY    DiagnstAcm;
+  UINT32                     DiagnstAcmVersion;
   FIT_TABLE_CONTEXT_ENTRY    BiosModule[MAX_BIOS_MODULE_ENTRY];
   UINT32                     BiosModuleVersion;
   FIT_TABLE_CONTEXT_ENTRY    Microcode[MAX_MICROCODE_ENTRY];
@@ -326,6 +329,7 @@ Returns:
           "\t[-L <MicrocodeSlotSize> <MicrocodeFfsGuid>]\n"
           "\t[-I <BiosInfoGuid>]\n"
           "\t[-S <StartupAcmAddress StartupAcmSize>|<StartupAcmGuid>] [-V <StartupAcmVersion>]\n"
+          "\t[-U <DiagnstAcmAddress>|<DiagnstAcmGuid>]\n"
           "\t[-B <BiosModuleAddress BiosModuleSize>] [-B ...] [-V <BiosModuleVersion>]\n"
           "\t[-M <MicrocodeAddress MicrocodeSize>] [-M ...]|[-U <MicrocodeFv MicrocodeBase>|<MicrocodeRegionOffset MicrocodeRegionSize>|<MicrocodeGuid>] [-V <MicrocodeVersion>]\n"
           "\t[-O RecordType <RecordDataAddress RecordDataSize>|<RESERVE RecordDataSize>|<RecordDataGuid>|<RecordBinFile> [-V <RecordVersion>]] [-O ... [-V ...]]\n"
@@ -340,6 +344,8 @@ Returns:
   printf ("\tStartupAcmAddress      - Address of StartupAcm.\n");
   printf ("\tStartupAcmSize         - Size of StartupAcm.\n");
   printf ("\tStartupAcmGuid         - Guid of StartupAcm Module, if StartupAcm is in a BiosModule, it will be excluded form that.\n");
+  printf ("\tDiagnstAcmAddress      - Address of DiagnstAcm.\n");
+  printf ("\tDiagnstAcmGuid         - Guid of DiagnstAcm Module, if DiagnstAcm is in a BiosModule, it will be excluded from that.\n");
   printf ("\tBiosModuleAddress      - Address of BiosModule. User should ensure there is no overlap.\n");
   printf ("\tBiosModuleSize         - Size of BiosModule.\n");
   printf ("\tMicrocodeAddress       - Address of Microcode.\n");
@@ -1029,6 +1035,17 @@ Returns:
           gFitTableContext.StartupAcmVersion  = BiosInfoStruct[BiosInfoIndex].Version;
           gFitTableContext.FitEntryNumber ++;
           break;
+        case FIT_TABLE_TYPE_DIAGNST_ACM:
+          if (gFitTableContext.DiagnstAcm.Type != 0) {
+            Error (NULL, 0, 0, "-U Parameter incorrect, Duplicated DiagnosticsAcm!", NULL);
+            return 0;
+          }
+          gFitTableContext.DiagnstAcm.Type    = FIT_TABLE_TYPE_DIAGNST_ACM;
+          gFitTableContext.DiagnstAcm.Address = (UINT32)BiosInfoStruct[BiosInfoIndex].Address;
+          gFitTableContext.DiagnstAcm.Size    = 0;
+          gFitTableContext.DiagnstAcmVersion  = DEFAULT_FIT_ENTRY_VERSION;
+          gFitTableContext.FitEntryNumber ++;
+          break;
         case FIT_TABLE_TYPE_BIOS_MODULE:
           if ((BiosInfoStruct[BiosInfoIndex].Attributes & BIOS_INFO_STRUCT_ATTRIBUTE_BIOS_POST_IBB) != 0) {
             continue;
@@ -1261,6 +1278,40 @@ Returns:
   } while (FALSE);
 
   //
+  // 1.5. DiagnosticsAcm
+  //
+  do {
+    if ((Index + 1 >= argc) ||
+        ((strcmp (argv[Index], "-U") != 0) &&
+         (strcmp (argv[Index], "-u") != 0)) ) {
+      if (BiosInfoExist && (gFitTableContext.DiagnstAcm.Type == FIT_TABLE_TYPE_DIAGNST_ACM)) {
+        break;
+      }
+      break;
+    }
+    if (IsGuidData (argv[Index + 1], &Guid)) {
+      FileBuffer = FindFileFromFvByGuid (FdBuffer, FdSize, &Guid, &FileSize);
+      if (FileBuffer == NULL) {
+        Error (NULL, 0, 0, "-U Parameter incorrect, GUID not found!", "%s", argv[Index + 1]);
+        return 0;
+      }
+      FileBuffer = (UINT8 *)MEMORY_TO_FLASH (FileBuffer, FdBuffer, FdSize);
+      Index += 2;
+    } else {
+      FileBuffer = (UINT8 *) (UINTN) xtoi (argv[Index + 1]);
+      Index += 2;
+    }
+    if (gFitTableContext.DiagnstAcm.Type != 0) {
+      Error (NULL, 0, 0, "-U Parameter incorrect, Duplicated DiagnosticsAcm!", NULL);
+      return 0;
+    }
+    gFitTableContext.DiagnstAcm.Type = FIT_TABLE_TYPE_DIAGNST_ACM;
+    gFitTableContext.DiagnstAcm.Address = (UINT32) (UINTN) FileBuffer;
+    gFitTableContext.DiagnstAcm.Size = 0;
+    gFitTableContext.FitEntryNumber ++;
+    gFitTableContext.DiagnstAcmVersion = DEFAULT_FIT_ENTRY_VERSION;
+  } while (FALSE);
+
   // 2. BiosModule
   //
   do {
@@ -1933,6 +1984,9 @@ Returns:
   if (gFitTableContext.StartupAcm.Address != 0) {
     printf ("StartupAcm - (0x%08x, 0x%08x, 0x%04x)\n", gFitTableContext.StartupAcm.Address, gFitTableContext.StartupAcm.Size, gFitTableContext.StartupAcmVersion);
   }
+  if (gFitTableContext.DiagnstAcm.Address != 0) {
+    printf ("DiagnosticAcm - (0x%08x, 0x%08x, 0x%04x)\n", gFitTableContext.DiagnstAcm.Address, gFitTableContext.DiagnstAcm.Size, gFitTableContext.DiagnstAcmVersion);
+  }
   for (Index = 0; Index < gFitTableContext.BiosModuleNumber; Index++) {
     printf ("BiosModule[%d] - (0x%08x, 0x%08x, 0x%04x)\n", Index, gFitTableContext.BiosModule[Index].Address, gFitTableContext.BiosModule[Index].Size, gFitTableContext.BiosModuleVersion);
   }
@@ -1957,6 +2011,7 @@ CHAR8 *mFitTypeStr[] = {
   "           ",
   "MICROCODE  ",
   "STARTUP_ACM",
+  "DIAGNST_ACM",
   "           ",
   "           ",
   "           ",
@@ -2525,6 +2580,18 @@ Returns:
     FitIndex++;
   }
 
+  //
+  // 4.5. DiagnosticAcm
+  //
+  if (gFitTableContext.DiagnstAcm.Address != 0) {
+    FitEntry[FitIndex].Address             = gFitTableContext.DiagnstAcm.Address;
+    *(UINT32 *)&FitEntry[FitIndex].Size[0] = 0;
+    FitEntry[FitIndex].Version             = (UINT16)gFitTableContext.DiagnstAcmVersion;
+    FitEntry[FitIndex].Type                = FIT_TABLE_TYPE_DIAGNST_ACM;
+    FitEntry[FitIndex].C_V                 = 0;
+    FitEntry[FitIndex].Checksum            = 0;
+    FitIndex++;
+  }
   //
   // 5. BiosModule
   //
