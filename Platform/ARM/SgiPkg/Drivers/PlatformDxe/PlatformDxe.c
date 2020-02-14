@@ -11,6 +11,35 @@
 #include <Library/HobLib.h>
 #include <SgiPlatform.h>
 
+typedef struct {
+  SGI_PLATFORM_DESCRIPTOR SgiPlafromDescriptor;
+  CONST  EFI_GUID*        AcpiTableGuid;
+} SGI_PLATFORM_ACPI_TABLE_GUID_LOOKUP;
+
+// Macro to construct the SGI_PLATFORM_ACPI_TABLE_GUID_LOOKUP structure
+#define ACPI_GUID_LOOKUP(PART_NUM, CONFIG_NUM, GUID)                           \
+{                                                                              \
+  {                                                                            \
+    PART_NUM, CONFIG_NUM                                                       \
+  },                                                                           \
+  GUID                                                                         \
+}                                                                              \
+
+STATIC SGI_PLATFORM_ACPI_TABLE_GUID_LOOKUP AcpiTableGuidLookup[] = {
+  ACPI_GUID_LOOKUP (
+      SGI575_PART_NUM,
+      SGI575_CONF_NUM,
+      &gSgi575AcpiTablesFileGuid),
+  ACPI_GUID_LOOKUP (
+      RD_N1E1_EDGE_PART_NUM,
+      RD_N1_EDGE_CONF_ID,
+      &gRdN1EdgeAcpiTablesFileGuid),
+  ACPI_GUID_LOOKUP (
+      RD_N1E1_EDGE_PART_NUM,
+      RD_E1_EDGE_CONF_ID,
+      &gRdE1EdgeAcpiTablesFileGuid),
+};
+
 VOID
 InitVirtioDevices (
   VOID
@@ -26,6 +55,7 @@ ArmSgiPkgEntryPoint (
   EFI_STATUS              Status;
   VOID                    *SystemIdHob;
   SGI_PLATFORM_DESCRIPTOR *HobData;
+  UINTN                   Idx;
   UINT32                  ConfigId;
   UINT32                  PartNum;
 
@@ -40,16 +70,15 @@ ArmSgiPkgEntryPoint (
   PartNum = HobData->PlatformId;
   ConfigId = HobData->ConfigId;
 
-  if ((PartNum == SGI575_PART_NUM) && (ConfigId == SGI575_CONF_NUM)) {
-    Status = LocateAndInstallAcpiFromFv (&gSgi575AcpiTablesFileGuid);
-  } else if ((PartNum == RD_N1E1_EDGE_PART_NUM) &&
-             (ConfigId == RD_N1_EDGE_CONF_ID)) {
-    Status = LocateAndInstallAcpiFromFv (&gRdN1EdgeAcpiTablesFileGuid);
-  } else if ((PartNum == RD_N1E1_EDGE_PART_NUM) &&
-             (ConfigId == RD_E1_EDGE_CONF_ID)) {
-    Status = LocateAndInstallAcpiFromFv (&gRdE1EdgeAcpiTablesFileGuid);
-  } else {
-    Status = EFI_UNSUPPORTED;
+  Status = EFI_UNSUPPORTED;
+
+  // Walk through the AcpiTableGuidLookup lookup array
+  for (Idx = 0; Idx < ARRAY_SIZE (AcpiTableGuidLookup); Idx++) {
+    if ((PartNum == AcpiTableGuidLookup[Idx].SgiPlafromDescriptor.PlatformId) &&
+        (ConfigId == AcpiTableGuidLookup[Idx].SgiPlafromDescriptor.ConfigId)) {
+      Status = LocateAndInstallAcpiFromFv (AcpiTableGuidLookup[Idx].AcpiTableGuid);
+      break;
+    }
   }
 
   if (EFI_ERROR (Status)) {
