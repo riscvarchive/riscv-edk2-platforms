@@ -82,6 +82,9 @@
 #define MULTI_CHIP_MODE_DISABLED                  0x0
 #define MULTI_CHIP_MODE_ENABLED                   0x1
 
+// Remote chip address offset (4TB per chip)
+#define SGI_REMOTE_CHIP_MEM_OFFSET(n)             ((1ULL << 42) * (n))
+
 // ARM platform description data.
 typedef struct {
   UINTN  PlatformId;
