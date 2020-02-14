@@ -294,7 +294,7 @@ Returns:
 --*/
 {
   printf (
-    "%s - Tiano IA32/X64 FIT table generation Utility."" Version %i.%i\n\n",
+    "%s - Tiano IA32/X64 FIT table generation Utility for FIT spec revision 1.1."" Version %i.%i\n\n",
     UTILITY_NAME,
     UTILITY_MAJOR_VERSION,
     UTILITY_MINOR_VERSION
