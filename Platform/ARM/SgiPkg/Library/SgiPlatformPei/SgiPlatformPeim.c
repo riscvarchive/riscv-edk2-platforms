@@ -75,6 +75,14 @@ GetSgiSystemId (
 
   HobData->ConfigId = fdt32_to_cpu (*Property);
 
+  Property = fdt_getprop (NtFwCfgDtBlob, Offset, "multi-chip-mode", NULL);
+  if (Property == NULL) {
+    DEBUG ((DEBUG_WARN, "multi-chip-mode property not found\n"));
+    HobData->MultiChipMode = 0;
+  } else {
+    HobData->MultiChipMode = fdt32_to_cpu (*Property);
+  }
+
   return EFI_SUCCESS;
 }
 

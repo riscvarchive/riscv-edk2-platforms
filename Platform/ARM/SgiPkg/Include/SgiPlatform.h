@@ -79,10 +79,14 @@
 #define SGI_CONFIG_SHIFT                          0x1C
 #define SGI_PART_NUM_MASK                         0xFFF
 
+#define MULTI_CHIP_MODE_DISABLED                  0x0
+#define MULTI_CHIP_MODE_ENABLED                   0x1
+
 // ARM platform description data.
 typedef struct {
   UINTN  PlatformId;
   UINTN  ConfigId;
+  UINTN  MultiChipMode;
 } SGI_PLATFORM_DESCRIPTOR;
 
 #endif // __SGI_PLATFORM_H__
