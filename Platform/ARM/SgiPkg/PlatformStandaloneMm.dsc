@@ -132,3 +132,6 @@
 ###################################################################################################
 [BuildOptions.AARCH64]
   GCC:*_*_*_DLINK_FLAGS = -z common-page-size=0x1000 -march=armv8-a+nofp
+
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES

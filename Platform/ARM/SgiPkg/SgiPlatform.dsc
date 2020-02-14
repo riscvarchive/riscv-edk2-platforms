@@ -23,6 +23,9 @@
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
 
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
+
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
   ArmMmuLib|ArmPkg/Library/ArmMmuLib/ArmMmuBaseLib.inf
