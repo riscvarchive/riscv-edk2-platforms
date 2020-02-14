@@ -32,6 +32,7 @@
   gArmSgiPlatformIdDescriptorGuid
   gSgi575AcpiTablesFileGuid
   gRdN1EdgeAcpiTablesFileGuid
+  gRdN1EdgeX2AcpiTablesFileGuid
   gRdE1EdgeAcpiTablesFileGuid
 
 [FeaturePcd]

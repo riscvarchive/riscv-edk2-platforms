@@ -38,6 +38,11 @@ STATIC SGI_PLATFORM_ACPI_TABLE_GUID_LOOKUP AcpiTableGuidLookup[] = {
       &gRdN1EdgeAcpiTablesFileGuid),
   ACPI_GUID_LOOKUP (
       RD_N1E1_EDGE_PART_NUM,
+      RD_N1_EDGE_CONF_ID,
+      MULTI_CHIP_MODE_ENABLED,
+      &gRdN1EdgeX2AcpiTablesFileGuid),
+  ACPI_GUID_LOOKUP (
+      RD_N1E1_EDGE_PART_NUM,
       RD_E1_EDGE_CONF_ID,
       MULTI_CHIP_MODE_DISABLED,
       &gRdE1EdgeAcpiTablesFileGuid),
