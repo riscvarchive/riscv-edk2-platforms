@@ -9,7 +9,7 @@
   - Definitions beginning with "S_" are register sizes
   - Definitions beginning with "N_" are the bit position
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -181,6 +181,7 @@
 #define CPUID_FULL_FAMILY_MODEL_COFFEELAKE_ULT_ULX 0x000806E0
 #define CPUID_FULL_FAMILY_MODEL_COFFEELAKE_DT_HALO 0x000906E0
 #define CPUID_FULL_FAMILY_MODEL_CANNONLAKE_DT_HALO 0x00060670
+#define CPUID_FULL_FAMILY_MODEL_COMETLAKE_ULT      0x000A0660
 
 #ifndef STALL_ONE_MICRO_SECOND
 #define STALL_ONE_MICRO_SECOND 1
@@ -206,6 +207,7 @@ typedef enum {
   EnumCpuCflUltUlx    = CPUID_FULL_FAMILY_MODEL_COFFEELAKE_ULT_ULX,
   EnumCpuCflDtHalo    = CPUID_FULL_FAMILY_MODEL_COFFEELAKE_DT_HALO,
   EnumCpuCnlDtHalo    = CPUID_FULL_FAMILY_MODEL_CANNONLAKE_DT_HALO,
+  EnumCpuCmlUlt       = CPUID_FULL_FAMILY_MODEL_COMETLAKE_ULT,
   EnumCpuMax          = CPUID_FULL_FAMILY_MODEL
 } CPU_FAMILY;
 
@@ -256,6 +258,7 @@ typedef enum {
 ///
 typedef enum {
   EnumCflCpu  = 0,
+  EnumCmlCpu,
   EnumCpuUnknownGeneration = 255
 } CPU_GENERATION;
 #endif

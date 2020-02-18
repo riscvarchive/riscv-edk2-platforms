@@ -4,7 +4,7 @@
   All function in this library is available for PEI, DXE, and SMM,
   But do not support UEFI RUNTIME environment call.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -35,6 +35,9 @@ PchSeriesFromLpcDid (
       return PCH_H;
 
     case V_LPC_CFG_DID_CNL_LP:
+      return PCH_LP;
+
+    case V_LPC_CFG_DID_CML_LP:
       return PCH_LP;
 
     default:

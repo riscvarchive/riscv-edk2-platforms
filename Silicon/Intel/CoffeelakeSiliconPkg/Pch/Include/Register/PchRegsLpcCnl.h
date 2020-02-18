@@ -21,7 +21,7 @@
   - Registers / bits of new devices introduced in a PCH generation will be just named
     as "_PCH_" without [generation_name] inserted.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -31,6 +31,7 @@
 
 #define V_LPC_CFG_DID_CNL_H                       0xA300
 #define V_LPC_CFG_DID_CNL_LP                      0x9D80
+#define V_LPC_CFG_DID_CML_LP                      0x0280
 
 //
 // PCH-LP Device IDs

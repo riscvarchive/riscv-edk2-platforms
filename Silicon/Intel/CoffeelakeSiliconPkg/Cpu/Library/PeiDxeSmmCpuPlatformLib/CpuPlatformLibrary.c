@@ -1,7 +1,7 @@
 /** @file
   CPU Platform Lib implementation.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -80,6 +80,15 @@ GetCpuSku (
   CpuDid = PciSegmentRead16 (PCI_SEGMENT_LIB_ADDRESS (SA_SEG_NUM, SA_MC_BUS, SA_MC_DEV, SA_MC_FUN, R_SA_MC_DEVICE_ID));
 
   switch (CpuFamilyModel) {
+    case CPUID_FULL_FAMILY_MODEL_COMETLAKE_ULT:
+      switch (CpuDid) {
+        case V_SA_DEVICE_ID_CML_ULT_1:   // CML ULT
+        case V_SA_DEVICE_ID_CML_ULT_2:   // CML ULT
+        case V_SA_DEVICE_ID_CML_ULT_3:   // CML ULT
+          CpuType = EnumCpuUlt;
+          break;
+      }
+      break;
     case CPUID_FULL_FAMILY_MODEL_COFFEELAKE_ULT_ULX:
       switch (CpuDid) {
         case V_SA_DEVICE_ID_KBL_MB_ULT_1:    // KBL ULT OPI
@@ -87,6 +96,9 @@ GetCpuSku (
         case V_SA_DEVICE_ID_CFL_ULT_2:       // CFL ULT
         case V_SA_DEVICE_ID_CFL_ULT_3:       // CFL ULT
         case V_SA_DEVICE_ID_CFL_ULT_4:       // CFL ULT
+        case V_SA_DEVICE_ID_CML_ULT_1:       // CML ULT
+        case V_SA_DEVICE_ID_CML_ULT_2:       // CML ULT
+        case V_SA_DEVICE_ID_CML_ULT_3:       // CML ULT
           CpuType = EnumCpuUlt;
           break;
 
@@ -376,6 +388,10 @@ GetCpuGeneration (
     case EnumCpuCflUltUlx:
     case EnumCpuCflDtHalo:
       CpuGeneration = EnumCflCpu;
+      break;
+
+    case EnumCpuCmlUlt:
+      CpuGeneration = EnumCmlCpu;
       break;
 
     default:

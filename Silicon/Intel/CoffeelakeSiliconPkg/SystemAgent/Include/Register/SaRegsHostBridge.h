@@ -15,7 +15,7 @@
   - Registers / bits of new devices introduced in a SA generation will be just named
     as "_SA_" without [generation_name] inserted.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -112,6 +112,9 @@
 #define V_SA_DEVICE_ID_CFL_ULT_4        0x3E35   ///< CoffeeLake Mobile (CFL-U 2+(1 or 2)) SA DID
 #define V_SA_DEVICE_ID_CFL_ULT_6        0x3ECC   ///< CoffeeLake Mobile (CFL-U 2+3e) SA DID
 
+#define V_SA_DEVICE_ID_CML_ULT_1        0x9B51  ///< CometLake (CML-U 6+2) SA DID
+#define V_SA_DEVICE_ID_CML_ULT_2        0x9B61  ///< CometLake (CML-U 4+2) SA DID
+#define V_SA_DEVICE_ID_CML_ULT_3        0x9B71  ///< CometLake (CML-U 2+2) SA DID
 //
 // CoffeeLake CPU Desktop SA Device IDs B0:D0:F0
 //

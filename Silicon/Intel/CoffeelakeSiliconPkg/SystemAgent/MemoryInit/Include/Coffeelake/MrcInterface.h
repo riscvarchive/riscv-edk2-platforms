@@ -1,7 +1,7 @@
 /** @file
   This file includes all the data structures that the MRC considers "global data".
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -477,7 +477,8 @@ typedef enum {
 ///
 typedef enum {
   cmCFL_ULX_ULT   = CPUID_FULL_FAMILY_MODEL_COFFEELAKE_ULT_ULX,  ///< Coffeelake ULT/ULX
-  cmCFL_DT_HALO   = CPUID_FULL_FAMILY_MODEL_COFFEELAKE_DT_HALO   ///< Coffeelake DT/Halo
+  cmCFL_DT_HALO   = CPUID_FULL_FAMILY_MODEL_COFFEELAKE_DT_HALO,  ///< Coffeelake DT/Halo
+  cmCML_ULX_ULT   = CPUID_FULL_FAMILY_MODEL_COMETLAKE_ULT        ///< Cometlake ULT/ULX
 } MrcCpuModel;
 
 ///
