@@ -403,6 +403,34 @@ SetMem (
   return Buffer;
 }
 
+BOOLEAN
+CheckPath (
+  IN CHAR8 * String
+)
+{
+  //
+  //Return FLASE if  input file path include % character or is NULL
+  //
+  CHAR8 *StrPtr;
+
+  StrPtr = String;
+  if (StrPtr == NULL) {
+    return FALSE;
+  }
+
+  if (*StrPtr == 0) {
+    return FALSE;
+  }
+
+  while (*StrPtr != '\0') {
+    if (*StrPtr == '%') {
+      return FALSE;
+    }
+    StrPtr++;
+  }
+  return TRUE;
+}
+
 STATUS
 ReadInputFile (
   IN CHAR8    *FileName,
@@ -433,6 +461,15 @@ Returns:
 {
   FILE                        *FpIn;
   UINT32                      TempResult;
+
+  //
+  //Check the File Path
+  //
+  if (!CheckPath(FileName)) {
+
+    Error (NULL, 0, 0, "File path is invalid!", NULL);
+    return STATUS_ERROR;
+  }
 
   //
   // Open the Input FvRecovery.fv file
@@ -2761,6 +2798,15 @@ Returns:
   FILE                        *FpOut;
 
   //
+  //Check the File Path
+  //
+  if (!CheckPath(FileName)) {
+
+    Error (NULL, 0, 0, "File path is invalid!", NULL);
+    return STATUS_ERROR;
+  }
+
+  //
   // Open the output FvRecovery.fv file
   //
   if ((FpOut = fopen (FileName, "w+b")) == NULL) {
@@ -2982,6 +3028,7 @@ Returns:
 
   UINT8                       *AcmBuffer;
 
+  FileBufferRaw = NULL;
   //
   // Step 0: Check FV or FD
   //
