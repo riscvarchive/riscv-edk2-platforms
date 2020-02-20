@@ -19,7 +19,7 @@ package.
 ## Board Naming Convention
 The board packages supported by Intel follow the naming convention \<xxx\>OpenBoardPkg where xxx refers to the
 encompassing platform name for a particular platform generation. For example, the [`KabylakeOpenBoardPkg`](https://github.com/tianocore/edk2-platforms/tree/master/Platform/Intel/KabylakeOpenBoardPkg) contains the
-board code for Intel Kaby Lake reference systems. Intel uses the moniker "OpenBoardPkg" to indicate that this package
+board code for Intel KabyLake reference systems. Intel uses the moniker "OpenBoardPkg" to indicate that this package
 is the open source board code. A closed source counterpart may exist which simply uses "BoardPkg". Both directly use
 the MinPlatformPkg from edk2-platforms.
 
@@ -53,9 +53,10 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 
 ## Board Support
-* The `KabylakeOpenBoardPkg` contains board implementations for Kaby Lake systems.
+* The `KabylakeOpenBoardPkg` contains board implementations for KabyLake systems.
 * The `SimicsOpenBoardPkg` contains board implementations for the Simics hardware simulator.
-* The `WhiskeylakeOpenBoardPkg` contains board implementations for Whiskey Lake systems.
+* The `WhiskeylakeOpenBoardPkg` contains board implementations for WhiskeyLake systems.
+* The `CometlakeOpenBoardPkg` contains board implementations for CometLake systems.
 
 ### **Supported Hardware**
 
@@ -65,8 +66,9 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 | Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
-| RVP 3                                 | Sky Lake, Kaby Lake, Kaby Lake Refresh     | KabylakeOpenBoardPkg         | KabylakeRvp3       |
-| WHL-U DDR4 RVP                        | Whiskey Lake                               | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
+| RVP 3                                 | SkyLake, KabyLake, KabyLake Refresh        | KabylakeOpenBoardPkg         | KabylakeRvp3       |
+| WHL-U DDR4 RVP                        | WhiskeyLake                                | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
+| CML-U LPDDR3 RVP                      | CometLake V1                               | CometlakeOpenBoardPkg        | CometlakeURvp      |
 
 *Note: RVP = Reference and Validation Platform*
 
@@ -82,8 +84,8 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 | Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
-| galp2                                 | Kaby Lake                                  | KabylakeOpenBoardPkg         | GalagoPro3         |
-| galp3 & galp3-b                       | Kaby Lake Refresh                          | KabylakeOpenBoardPkg         | GalagoPro3         |
+| galp2                                 | KabyLake                                   | KabylakeOpenBoardPkg         | GalagoPro3         |
+| galp3 & galp3-b                       | KabyLake Refresh                           | KabylakeOpenBoardPkg         | GalagoPro3         |
 
 ## Board Package Organization
 The board package follows the standard EDK II package structure with the following additional elements and guidelines:
@@ -237,6 +239,11 @@ return back to the minimum platform caller.
           |       |        |               |---build_config.cfg: WhiskeylakeURvp specific build
           |       |        |                                     settings environment variables.
           |       |        |
+          |       |        |------CometlakeOpenBoardPkg
+          |       |        |       |------CometlakeURvp
+          |       |        |               |---build_config.cfg: CometlakeURvp specific build
+          |       |        |                                     settings environment variables.
+          |       |        |
           |------FSP
   </pre>
 
@@ -256,6 +263,10 @@ return back to the minimum platform caller.
 **WhiskeylakeOpenBoardPkg**
 1. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
    Device.
+
+**CometlakeOpenBoardPkg**
+1. This firmware project has been tested booting to Microsoft Windows 10 x64 with AHCI mode and External Graphic Device.
+2. This firmware project has been also tested booting to Ubuntu 17.10 with AHCI mode and Integrated Graphic Device.
 
 ### **Package Builds**
 
