@@ -21,7 +21,6 @@
     #address-cells = <2>;
     #size-cells = <2>;
     interrupt-parent = <&gic>;
-    dma-ranges = <0x0 0x0 0x0 0x0 0x100 0x0>;
 
     aliases {
         serial0 = &soc_uart0;
