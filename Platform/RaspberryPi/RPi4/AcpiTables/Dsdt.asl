@@ -291,7 +291,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
         Package () {
           Package () { "brcm,max-dma-burst-size", 0x08 },
-          Package () { "phy-mode", "rgmii" },
+          Package () { "phy-mode", "rgmii-rxid" },
         }
       })
     }
