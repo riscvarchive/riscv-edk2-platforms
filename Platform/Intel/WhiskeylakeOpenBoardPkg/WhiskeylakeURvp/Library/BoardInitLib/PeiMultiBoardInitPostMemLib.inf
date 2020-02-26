@@ -44,12 +44,8 @@
 [Sources]
   PeiWhiskeylakeURvpInitPostMemLib.c
   PeiMultiBoardInitPostMemLib.c
-  BoardFunc.c
-  BoardFuncInit.c
   GpioTableDefault.c
   GpioTableWhiskeylakeUDdr4Rvp.c
-
-[FixedPcd]
 
 [Pcd]
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdBoardGpioTable

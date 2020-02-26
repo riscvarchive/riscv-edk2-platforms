@@ -33,11 +33,6 @@
 #include "WhiskeylakeURvpInit.h"
 #include <Library/ConfigBlockLib.h>
 
-EFI_STATUS
-BoardFunctionInit (
-  IN UINT16 BoardId
-  );
-
 /**
   GPIO init function for PEI post memory phase.
 
@@ -166,9 +161,6 @@ BoardConfigInit (
   ASSERT_EFI_ERROR (Status);
 
   Status = BoardMiscInit (BoardId);
-  ASSERT_EFI_ERROR (Status);
-
-  Status = BoardFunctionInit (BoardId);
   ASSERT_EFI_ERROR (Status);
 
   Status = BoardSecurityInit (BoardId);

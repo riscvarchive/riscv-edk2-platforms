@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -117,11 +117,6 @@ PchPmConfigInit (
 
 EFI_STATUS
 SaDisplayConfigInit (
-  IN UINT16 BoardId
-  );
-
-EFI_STATUS
-BoardFunctionInitPreMem (
   IN UINT16 BoardId
   );
 
@@ -272,9 +267,6 @@ BoardConfigInitPreMem (
   ASSERT_EFI_ERROR (Status);
 
   Status = SaDisplayConfigInit (BoardId);
-  ASSERT_EFI_ERROR (Status);
-
-  Status = BoardFunctionInitPreMem (BoardId);
   ASSERT_EFI_ERROR (Status);
 }
 

@@ -2,7 +2,7 @@
  Source code for the board PCH configuration Pcd init functions for Pre-Memory Init phase.
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -310,7 +310,6 @@ GpioGroupTierInit (
   //
   // GPIO Group Tier
   //
-
   switch (BoardId) {
     case BoardIdWhiskeyLakeRvp:
       PcdSet32S (PcdGpioGroupToGpeDw0, GPIO_CNL_LP_GROUP_GPP_G);
