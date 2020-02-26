@@ -1,8 +1,8 @@
 /** @file
-Defines Platform BoardIds
+  Defines Whiskey Lake Platform Board IDs
 
 
-  Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
@@ -21,9 +21,11 @@ Defines Platform BoardIds
 #define TypeTrad                            0x1
 #define TypeUltUlx                          0x2
 
+#define BoardIdUpXtreme                     0x10
 #define BoardIdWhiskeyLakeRvp               0x60
 
 #define BoardIdUnknown1                     0xffff
 
 #endif
+
 
