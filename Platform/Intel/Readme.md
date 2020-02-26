@@ -60,6 +60,12 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 ### **Supported Hardware**
 
+#### AAEON
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| UP Xtreme                             | Whiskey Lake                               | WhiskeylakeOpenBoardPkg      | UpXtreme           |
+
 #### Intel
 
 ***Intel Reference and Validation Platform***
@@ -235,6 +241,9 @@ return back to the minimum platform caller.
           |       |        |                                     build settings, environment variables.
           |       |        |
           |       |        |------WhiskeylakeOpenBoardPkg
+          |       |        |       |------UpXtreme
+          |       |        |               |---build_config.cfg: UpXtreme specific build
+          |       |        |                                     settings environment variables.
           |       |        |       |------WhiskeylakeURvp
           |       |        |               |---build_config.cfg: WhiskeylakeURvp specific build
           |       |        |                                     settings environment variables.
@@ -261,8 +270,14 @@ return back to the minimum platform caller.
 1. This firmware project has only been tested booting to Microsoft Windows 10 x64 and Ubuntu 17.10 with AHCI mode.
 
 **WhiskeylakeOpenBoardPkg**
-1. This firmware project has only been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
+1. This firmware project has mainly been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic
    Device.
+2. UP Xtreme boards might hang during Windows 10 boot.
+3. The UP Xtreme boards below boot to x64 windows 10 home edition and Ubuntu 18.04
+      * UP Xtreme Intel(R) Core(TM) i3-8145UE CPU @ 2.20GHz with 8GB RAM
+      * UP Xtreme Intel(R) Core(TM) i7-8565U CPU @ 1.80GHz with 16GB RAM
+      * UP Xtreme Intel(R) Core(TM) i7-8665UE CPU @ 1.70GHz with 16GB RAM
+      * UP Xtreme Intel(R) Celeron(R) CPU 4305UE @ 2.00GHz with 4GB RAM
 
 **CometlakeOpenBoardPkg**
 1. This firmware project has been tested booting to Microsoft Windows 10 x64 with AHCI mode and External Graphic Device.
@@ -304,5 +319,5 @@ If you would like to help but are not sure where to start some areas currently i
  * Adding board ports for more motherboards and systems
  * Adding Clang support
 
-Please feel free to contact Michael Kubacki (michael.a.kubacki at intel.com) and Isaac Oram (isaac.w.oram at intel.com)
+Please feel free to contact Isaac Oram (isaac.w.oram at intel.com)
 if you would like to discuss contribution ideas.
