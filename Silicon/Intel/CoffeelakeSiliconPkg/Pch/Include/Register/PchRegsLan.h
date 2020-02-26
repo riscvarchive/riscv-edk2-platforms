@@ -30,7 +30,7 @@
   - RegisterName:
     Full register name.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -49,6 +49,17 @@
 #define R_LAN_CFG_PMCS                0xCC
 #define B_LAN_CFG_PMCS_PS             (BIT1 | BIT0)
 #define V_LAN_CFG_PMCS_PS0            0x00
+#define R_LAN_MEM_CSR_CTRL                    0
+#define B_LAN_MEM_CSR_CTRL_LANPHYPC_OVERRIDE  BIT16
+#define B_LAN_MEM_CSR_CTRL_LANPHYPC_VAL       BIT17
+#define R_LAN_MEM_CSR_CTRL_EXT             0x0018
+#define B_LAN_MEM_CSR_CTRL_EXT_LPCD        BIT2
+#define B_LAN_MEM_CSR_CTRL_EXT_FORCE_SMB   BIT11
+#define R_LAN_MEM_CSR_MDIC                 0x0020
+#define B_LAN_MEM_CSR_MDIC_RB              BIT28
+#define B_LAN_MEM_CSR_MDIC_DATA            0xFFFF
+#define R_LAN_MEM_CSR_EXTCNF_CTRL          0x0F00
+#define B_LAN_MEM_CSR_EXTCNF_CTRL_SWFLAG   BIT5
 #define R_LAN_MEM_CSR_RAL                  0x5400
 #define R_LAN_MEM_CSR_RAH                  0x5404
 #define B_LAN_MEM_CSR_RAH_RAH              0x0000FFFF
@@ -56,3 +67,4 @@
 #define B_LAN_MEM_CSR_WUC_APME             BIT0
 
 #endif
+

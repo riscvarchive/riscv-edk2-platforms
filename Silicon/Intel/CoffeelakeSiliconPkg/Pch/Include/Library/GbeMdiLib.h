@@ -21,7 +21,7 @@
   - Registers / bits of new devices introduced in a PCH generation will be just named
     as "_PCH_" without [generation_name] inserted.
 
-  Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+  Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -29,7 +29,35 @@
 #ifndef _GBE_MDI_LIB_H_
 #define _GBE_MDI_LIB_H_
 
+
+#define GBE_MAX_LOOP_TIME       4000
+#define GBE_ACQUIRE_MDIO_DELAY  50
+#define GBE_MDI_SET_PAGE_DELAY  4000 // 4 mSec delay after setting page
+
+
 //
+// Custom Mode Control PHY Address 01, Page 769, Register 16
+//
+#define R_PHY_MDI_PAGE_769_REGISETER_16_CMC            0x0010
+//
+// Custom Mode Control
+// Page 769, Register 16, BIT 10
+// 0 - normal MDIO frequency access
+// 1 - reduced MDIO frequency access (slow mdio)
+//     required for read during cable disconnect
+//
+#define B_PHY_MDI_PAGE_769_REGISETER_16_CMC_MDIO_FREQ_ACCESS        BIT10
+
+//
+// LAN PHY MDI settings
+//
+#define B_PHY_MDI_READY                BIT28
+#define B_PHY_MDI_READ                 BIT27
+#define B_PHY_MDI_WRITE                BIT26
+//
+//      PHY SPECIFIC registers
+//
+#define B_PHY_MDI_PHY_ADDRESS_02       BIT22
 //
 //      PHY GENERAL registers
 //      Registers 0 to 15 are defined by the specification
@@ -37,8 +65,22 @@
 //
 #define B_PHY_MDI_PHY_ADDRESS_01       BIT21
 #define B_PHY_MDI_PHY_ADDRESS_MASK    (BIT25 | BIT24 | BIT23 | BIT22 | BIT21)
+//
+//  PHY Identifier Register 2
+//  Bits [15:10] - PHY ID Number   - The PHY identifier composed of bits 3 through 18
+//                                   of the Organizationally Unique Identifier (OUI)
+//  Bits [9:4]   - Device Model Number
+//  Bits [3:0]   - Device Revision Number
+//
+#define R_PHY_MDI_GENEREAL_REGISTER_03_PHY_IDENTIFIER_2  0x00030000
+
 #define MDI_REG_SHIFT(x)                              (x << 16)
+#define B_PHY_MDI_PHY_REGISTER_MASK                   (BIT20 | BIT19 | BIT18 | BIT17 | BIT16)
+#define R_PHY_MDI_PHY_REG_SET_ADDRESS                 0x00110000 // Used after new page setting
 #define R_PHY_MDI_PHY_REG_DATA_READ_WRITE             0x00120000
+#define R_PHY_MDI_PHY_REG_SET_PAGE                    0x001F0000
+
+//
 // LAN PHY MDI registers and bits
 //
 
@@ -131,6 +173,7 @@
 
 **/
 VOID
+EFIAPI
 GbeMdiForceMACtoSMB (
   IN      UINT32  GbeBar
   );
@@ -144,6 +187,7 @@ GbeMdiForceMACtoSMB (
   @retval EFI_TIMEOUT
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiWaitReady (
   IN      UINT32  GbeBar
   );
@@ -160,6 +204,7 @@ GbeMdiWaitReady (
   @retval EFI_TIMEOUT
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiAcquireMdio (
   IN      UINT32  GbeBar
   );
@@ -170,6 +215,7 @@ GbeMdiAcquireMdio (
   @param [in]  GbeBar   GbE MMIO space
 **/
 VOID
+EFIAPI
 GbeMdiReleaseMdio (
   IN      UINT32  GbeBar
   );
@@ -186,6 +232,7 @@ GbeMdiReleaseMdio (
   @retval EFI_DEVICE_ERROR  Returned if both attermps of setting page failed
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiSetPage (
   IN      UINT32  GbeBar,
   IN      UINT32  Page
@@ -200,6 +247,7 @@ GbeMdiSetPage (
   @return EFI_STATUS
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiSetRegister (
   IN      UINT32  GbeBar,
   IN      UINT32  Register
@@ -219,6 +267,7 @@ GbeMdiSetRegister (
   @retval EFI_INVALID_PARAMETER  If Phy Address or Register validaton failed
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiRead (
   IN      UINT32  GbeBar,
   IN      UINT32  PhyAddress,
@@ -239,6 +288,7 @@ GbeMdiRead (
   @retval EFI_INVALID_PARAMETER  If Phy Address or Register validaton failed
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiWrite (
   IN      UINT32  GbeBar,
   IN      UINT32  PhyAddress,
@@ -257,6 +307,7 @@ GbeMdiWrite (
   @return EFI_INVALID_PARAMETER When GbeBar is incorrect
 **/
 EFI_STATUS
+EFIAPI
 GbeMdiGetLanPhyRevision (
   IN      UINT32  GbeBar,
   OUT     UINT16  *LanPhyRevision

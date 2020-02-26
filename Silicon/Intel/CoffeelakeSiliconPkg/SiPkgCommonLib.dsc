@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the Coffee Lake silicon package both PEI and DXE libraries DSC file.
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -34,6 +34,8 @@ DEFINE  PCH = Cnl
  PchPcieRpLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmPchPcieRpLib/PeiDxeSmmPchPcieRpLib.inf
  PchPcrLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmPchPcrLib/PeiDxeSmmPchPcrLib.inf
  PmcLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmPmcLib/PeiDxeSmmPmcLib.inf
+ GbeMdiLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmGbeMdiLib/PeiDxeSmmGbeMdiLib.inf
+
 
  PchSbiAccessLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmPchSbiAccessLib/PeiDxeSmmPchSbiAccessLib.inf
  GpioLib|$(PLATFORM_SI_PACKAGE)/Pch/Library/PeiDxeSmmGpioLib/PeiDxeSmmGpioLib.inf

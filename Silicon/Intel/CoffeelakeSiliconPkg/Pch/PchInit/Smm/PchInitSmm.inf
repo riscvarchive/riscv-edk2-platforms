@@ -46,6 +46,7 @@ TimerLib
 ConfigBlockLib
 PmcPrivateLib
 SataLib
+GbeMdiLib
 
 [Packages]
 MdePkg/MdePkg.dec
