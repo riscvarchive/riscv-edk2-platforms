@@ -271,3 +271,4 @@
 [Guids]
   gTianoLogoGuid                                ## CONSUMES
   gSiConfigGuid                                 ## CONSUMES
+  gEfiMemoryTypeInformationGuid                 ## CONSUMES
