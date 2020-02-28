@@ -10,6 +10,7 @@
  **/
 
 #include <IndustryStandard/Acpi.h>
+#include <IndustryStandard/Bcm2836.h>
 
 #include "AcpiTables.h"
 
@@ -137,9 +138,9 @@ EFI_ACPI_5_1_CSRT_TABLE Csrt =
       {
         sizeof (DMA_CONTROLLER_VENDOR_DATA),  // Controller vendor data here
         1,
-        0xFE007000,                   // Base address for channels
-        RPI_DMA_CHANNEL_COUNT * 0x100, // Base size = Number of channels x 0x100 size for each channel
-        0xFE007FE0,                   // Base address for controller
+        BCM2836_DMA0_BASE_ADDRESS,    // Base address for channels
+        RPI_DMA_CHANNEL_COUNT * BCM2836_DMA_CHANNEL_LENGTH, // Base size = Number of channels x channel size
+        BCM2836_DMA_CTRL_BASE_ADDRESS,// Base address for controller
         8,                            // Base size = two registers
         RPI_DMA_USED_CHANNEL_COUNT,
         0,                            // cannot use controller interrupt

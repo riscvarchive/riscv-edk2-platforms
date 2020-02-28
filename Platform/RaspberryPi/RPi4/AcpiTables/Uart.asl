@@ -2,12 +2,17 @@
  *
  *  [DSDT] Serial devices (UART).
  *
+ *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
  **/
+
+#include <IndustryStandard/Bcm2836.h>
+
+#include "AcpiTables.h"
 
 // PL011 based UART.
 Device (URT0)
@@ -20,14 +25,15 @@ Device (URT0)
   {
     Return (0xf)
   }
+  Name (RBUF, ResourceTemplate ()
+  {
+    MEMORY32FIXED (ReadWrite, 0, BCM2836_PL011_UART_LENGTH, RMEM)
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x99 }
+  })
   Method (_CRS, 0x0, Serialized)
   {
-    Name (RBUF, ResourceTemplate ()
-    {
-      MEMORY32FIXED (ReadWrite, 0xFE201000, 0x1000,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x99 }
-    })
-    Return (RBUF)
+    MEMORY32SETBASE (RBUF, RMEM, RBAS, BCM2836_PL011_UART_OFFSET)
+    Return (^RBUF)
   }
 
   Name (CLCK, 48000000)
@@ -59,37 +65,38 @@ Device (URTM)
   {
     Return (0xf)
   }
+  Name (RBUF, ResourceTemplate ()
+  {
+    MEMORY32FIXED (ReadWrite, 0, BCM2836_MINI_UART_LENGTH, RMEM)
+    Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { 0x7D }
+
+    // NTRAID#MSFT-7141401-2016/04/7-jordanrh - disable UART muxing
+    // until a proper solution can be created for the dmap conflict.
+    // When muxing is enabled, must consider DBG2 table conflict.
+    // The alternate function resource needs to be reserved when
+    // the kernel debugger is enabled to prevent another client
+    // from muxing the pins away.
+
+    //
+    // MsftFunctionConfig is encoded as the VendorLong.
+    //
+    // MsftFunctionConfig(Exclusive, PullDown, BCM_ALT5, "\\_SB.GPI0", 0, ResourceConsumer, ) {14, 15}
+    // VendorLong  ()      // Length = 0x31
+    // {
+    //   /* 0000 */  0x00, 0x60, 0x44, 0xD5, 0xF3, 0x1F, 0x11, 0x60,  // .`D....`
+    //   /* 0008 */  0x4A, 0xB8, 0xB0, 0x9C, 0x2D, 0x23, 0x30, 0xDD,  // J...-#0.
+    //   /* 0010 */  0x2F, 0x8D, 0x1D, 0x00, 0x01, 0x10, 0x00, 0x02,  // /.......
+    //   /* 0018 */  0x02, 0x00, 0x12, 0x00, 0x00, 0x16, 0x00, 0x20,  // .......
+    //   /* 0020 */  0x00, 0x00, 0x00, 0x0E, 0x00, 0x0F, 0x00, 0x5C,  // .......\
+    //   /* 0028 */  0x5F, 0x53, 0x42, 0x2E, 0x47, 0x50, 0x49, 0x30,  // _SB.GPI0
+    //   /* 0030 */  0x00                                             // .
+    //}
+
+  })
   Method (_CRS, 0x0, Serialized)
   {
-    Name (RBUF, ResourceTemplate ()
-    {
-      MEMORY32FIXED (ReadWrite, 0xFE215000, 0x70,)
-      Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { 0x7D }
-
-      // NTRAID#MSFT-7141401-2016/04/7-jordanrh - disable UART muxing
-      // until a proper solution can be created for the dmap conflict.
-      // When muxing is enabled, must consider DBG2 table conflict.
-      // The alternate function resource needs to be reserved when
-      // the kernel debugger is enabled to prevent another client
-      // from muxing the pins away.
-
-      //
-      // MsftFunctionConfig is encoded as the VendorLong.
-      //
-      // MsftFunctionConfig(Exclusive, PullDown, BCM_ALT5, "\\_SB.GPI0", 0, ResourceConsumer, ) {14, 15}
-      // VendorLong  ()      // Length = 0x31
-      // {
-      //   /* 0000 */  0x00, 0x60, 0x44, 0xD5, 0xF3, 0x1F, 0x11, 0x60,  // .`D....`
-      //   /* 0008 */  0x4A, 0xB8, 0xB0, 0x9C, 0x2D, 0x23, 0x30, 0xDD,  // J...-#0.
-      //   /* 0010 */  0x2F, 0x8D, 0x1D, 0x00, 0x01, 0x10, 0x00, 0x02,  // /.......
-      //   /* 0018 */  0x02, 0x00, 0x12, 0x00, 0x00, 0x16, 0x00, 0x20,  // .......
-      //   /* 0020 */  0x00, 0x00, 0x00, 0x0E, 0x00, 0x0F, 0x00, 0x5C,  // .......\
-      //   /* 0028 */  0x5F, 0x53, 0x42, 0x2E, 0x47, 0x50, 0x49, 0x30,  // _SB.GPI0
-      //   /* 0030 */  0x00                                             // .
-      //}
-
-    })
-    Return (RBUF)
+    MEMORY32SETBASE (RBUF, RMEM, RBAS, BCM2836_MINI_UART_OFFSET)
+    Return (^RBUF)
   }
 }
 

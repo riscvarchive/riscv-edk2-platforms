@@ -41,6 +41,7 @@
   MdePkg/MdePkg.dec
   Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
+  Silicon/Broadcom/Drivers/Net/BcmNet.dec
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
@@ -52,6 +53,7 @@
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
+  gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
 

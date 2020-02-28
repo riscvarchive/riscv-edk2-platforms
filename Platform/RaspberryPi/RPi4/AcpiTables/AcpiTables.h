@@ -15,6 +15,14 @@
 
 #include <IndustryStandard/Acpi.h>
 
+// The ASL compiler can't perform arithmetic on MEMORY32SETBASE ()
+// parameters so you can't pass a constant like BASE + OFFSET (the
+// compiler just silently sets it to zero). So we need a macro that
+// can perform arithmetic base address update with an offset.
+#define MEMORY32SETBASE(BufName, MemName, VarName, Offset)       \
+    CreateDwordField (^BufName, ^MemName._BAS, VarName)          \
+    Add (BCM2836_SOC_REGISTERS, Offset, VarName)
+
 #define EFI_ACPI_OEM_ID                       {'M','C','R','S','F','T'} // OEMID 6 bytes long
 #define EFI_ACPI_OEM_TABLE_ID                 SIGNATURE_64 ('R','P','I','4','E','D','K','2') // OEM table id 8 bytes long
 #define EFI_ACPI_OEM_REVISION                 0x02000820
