@@ -28,7 +28,7 @@ Device (URT0)
   Name (RBUF, ResourceTemplate ()
   {
     MEMORY32FIXED (ReadWrite, 0, BCM2836_PL011_UART_LENGTH, RMEM)
-    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x99 }
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_PL011_UART_INTERRUPT }
   })
   Method (_CRS, 0x0, Serialized)
   {
@@ -68,7 +68,7 @@ Device (URTM)
   Name (RBUF, ResourceTemplate ()
   {
     MEMORY32FIXED (ReadWrite, 0, BCM2836_MINI_UART_LENGTH, RMEM)
-    Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { 0x7D }
+    Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_MINI_UART_INTERRUPT }
 
     // NTRAID#MSFT-7141401-2016/04/7-jordanrh - disable UART muxing
     // until a proper solution can be created for the dmap conflict.

@@ -97,4 +97,32 @@ typedef struct
   UINT32 UID;                     // 4 bytes
 } EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER;
 
+//------------------------------------------------------------------------
+// Interrupts. These are specific to each platform
+//------------------------------------------------------------------------
+#define BCM2836_V3D_BUS_INTERRUPT               0x2A
+#define BCM2836_DMA_INTERRUPT                   0x3B
+#define BCM2836_SPI1_INTERRUPT                  0x3D
+#define BCM2836_SPI2_INTERRUPT                  0x3D
+#define BCM2836_HVS_INTERRUPT                   0x41
+#define BCM2836_HDMI0_INTERRUPT                 0x48
+#define BCM2836_HDMI1_INTERRUPT                 0x49
+#define BCM2836_PV2_INTERRUPT                   0x4A
+#define BCM2836_PV0_INTERRUPT                   0x4D
+#define BCM2836_PV1_INTERRUPT                   0x4E
+#define BCM2836_MBOX_INTERRUPT                  0x61
+#define BCM2836_VCHIQ_INTERRUPT                 0x62
+#define BCM2386_GPIO_INTERRUPT0                 0x51
+#define BCM2386_GPIO_INTERRUPT1                 0x53
+#define BCM2836_I2C1_INTERRUPT                  0x55
+#define BCM2836_I2C2_INTERRUPT                  0x55
+#define BCM2836_SPI0_INTERRUPT                  0x56
+#define BCM2836_USB_INTERRUPT                   0x69
+#define BCM2836_SDHOST_INTERRUPT                0x98
+#define BCM2836_MMCHS1_INTERRUPT                0x9E
+#define BCM2836_MINI_UART_INTERRUPT             0x7D
+#define BCM2836_PL011_UART_INTERRUPT            0x99
+#define GENET_INTERRUPT0                        0xBD
+#define GENET_INTERRUPT1                        0xBE
+
 #endif // __ACPITABLES_H__

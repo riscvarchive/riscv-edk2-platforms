@@ -87,7 +87,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_USB_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x69 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_USB_INTERRUPT }
       })
       Method (_CRS, 0x0, Serialized)
       {
@@ -111,32 +111,32 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       {
         // Memory and interrupt for the GPU
         MEMORY32FIXED (ReadWrite, 0, BCM2836_V3D_BUS_LENGTH, RM01)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x2A }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_V3D_BUS_INTERRUPT }
 
         // HVS - Hardware Video Scalar
         MEMORY32FIXED (ReadWrite, 0, BCM2836_HVS_LENGTH, RM02)
         // The HVS interrupt is reserved by the VPU
-        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x41 }
+        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_HVS_INTERRUPT }
 
         // PixelValve0 - DSI0 or DPI
         // MEMORY32FIXED (ReadWrite, BCM2836_PV0_BASE_ADDRESS, BCM2836_PV0_LENGTH, RM03)
-        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4D }
+        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_PV0_INTERRUPT }
 
         // PixelValve1 - DS1 or SMI
         // MEMORY32FIXED (ReadWrite, BCM2836_PV1_BASE_ADDRESS, BCM2836_PV1_LENGTH, RM04)
-        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4E }
+        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_PV1_INTERRUPT }
 
         // PixelValve2 - HDMI output - connected to HVS display FIFO 1
         MEMORY32FIXED (ReadWrite, 0, BCM2836_PV2_LENGTH, RM05)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x4A }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_PV2_INTERRUPT }
 
         // HDMI registers
         MEMORY32FIXED (ReadWrite, 0, BCM2836_HDMI0_LENGTH, RM06)
         MEMORY32FIXED (ReadWrite, 0, BCM2836_HDMI1_LENGTH, RM07)
         // hdmi_int[0]
-        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x48 }
+        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_HDMI0_INTERRUPT }
         // hdmi_int[1]
-        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x49 }
+        // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_HDMI1_INTERRUPT }
 
         // HDMI DDC connection
         I2CSerialBus (0x50,, 100000,, "\\_SB.I2C2",,,,)  // EDID
@@ -214,7 +214,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_MBOX_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x61 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_MBOX_INTERRUPT }
       })
 
       Method (_CRS, 0x0, Serialized)
@@ -239,7 +239,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_VCHIQ_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x62 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_VCHIQ_INTERRUPT }
       })
 
       Method (_CRS, 0x0, Serialized)
@@ -277,7 +277,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, GPIO_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x51, 0x53 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2386_GPIO_INTERRUPT0, BCM2386_GPIO_INTERRUPT1 }
       })
       Method (_CRS, 0x0, Serialized)
       {
@@ -302,7 +302,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         {
           // No need for MEMORY32SETBASE on Genet as we have a straight base address constant
           MEMORY32FIXED (ReadWrite, GENET_BASE_ADDRESS, GENET_LENGTH, )
-          Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0xBD, 0xBE }
+          Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { GENET_INTERRUPT0, GENET_INTERRUPT1 }
         })
         Return (RBUF)
       }
@@ -329,7 +329,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_I2C1_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x55 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_I2C1_INTERRUPT }
 
         //
         // MsftFunctionConfig is encoded as the VendorLong.
@@ -368,7 +368,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_I2C2_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x55 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_I2C2_INTERRUPT }
       })
 
       Method (_CRS, 0x0, Serialized)
@@ -392,7 +392,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_SPI0_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { 0x56 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_SPI0_INTERRUPT }
 
         //
         // MsftFunctionConfig is encoded as the VendorLong.
@@ -459,7 +459,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, BCM2836_SPI1_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) { 0x3D }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) { BCM2836_SPI1_INTERRUPT }
 
         //
         // MsftFunctionConfig is encoded as the VendorLong.
@@ -515,7 +515,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
     //     Name (RBUF, ResourceTemplate ()
     //     {
     //       MEMORY32FIXED (ReadWrite, BCM2836_SPI2_BASE_ADDRESS, BCM2836_SPI2_LENGTH, RMEM)
-    //       Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) { 0x3D }
+    //       Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) { BCM2836_SPI2_INTERRUPT }
     //     })
     //     Return (RBUF)
     //   }
@@ -545,7 +545,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         // PWM clock control
         MEMORY32FIXED (ReadWrite, 0, BCM2836_PWM_CLK_LENGTH, RM03)
         // Interrupt DMA channel 11
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x3B }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_DMA_INTERRUPT }
         // DMA channel 11, DREQ 5 for PWM
         FixedDMA (5, 11, Width32Bit, )
       })

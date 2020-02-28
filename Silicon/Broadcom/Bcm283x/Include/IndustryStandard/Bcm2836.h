@@ -80,12 +80,10 @@
 #define BCM2836_PL011_UART_OFFSET                           0x00201000
 #define BCM2836_PL011_UART_BASE_ADDRESS                     (BCM2836_SOC_REGISTERS + BCM2836_PL011_UART_OFFSET)
 #define BCM2836_PL011_UART_LENGTH                           0x00001000
-#define BCM2836_PL011_UART_INTERRUPT                        0x99
 
 #define BCM2836_MINI_UART_OFFSET                            0x00215000
 #define BCM2836_MINI_UART_BASE_ADDRESS                      (BCM2836_SOC_REGISTERS + BCM2836_MINI_UART_OFFSET)
 #define BCM2836_MINI_UART_LENGTH                            0x00000070
-#define BCM2836_MINI_UART_INTERRUPT                         0x7D
 
 #define BCM2836_I2C0_OFFSET                                 0x00205000
 #define BCM2836_I2C0_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_I2C0_OFFSET)
