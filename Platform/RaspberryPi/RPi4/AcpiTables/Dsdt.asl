@@ -31,7 +31,9 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
   {
     include ("Sdhc.asl")
     include ("Pep.asl")
+#if (RPI_MODEL == 4)
     include ("Xhci.asl")
+#endif
 
     Device (CPU0)
     {
@@ -286,6 +288,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       }
     }
 
+#if (RPI_MODEL == 4)
     Device (ETH0)
     {
       Name (_HID, "BCM6E4E")
@@ -314,6 +317,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         }
       })
     }
+#endif
 
     // Description: I2C
     Device (I2C1)
