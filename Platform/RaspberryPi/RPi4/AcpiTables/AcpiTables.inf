@@ -56,10 +56,3 @@
   gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
-
-# The following is a stopgap solution to default to PL011
-# usage in ACPI (most common case), until we can switch
-# to using DynamicTablesPkg/ConfigurationManagerDxe.
-[BuildOptions]
-  GCC:*_*_*_ASLPP_FLAGS       = -DPL011_ENABLE
-  GCC:*_*_*_ASLCC_FLAGS       = -DPL011_ENABLE
