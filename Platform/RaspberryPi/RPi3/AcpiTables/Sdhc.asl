@@ -37,7 +37,7 @@ Device (SDC1)
   Name (RBUF, ResourceTemplate ()
   {
     MEMORY32FIXED (ReadWrite, 0, MMCHS1_LENGTH, RMEM)
-    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x5E }
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_MMCHS1_INTERRUPT }
   })
   Method (_CRS, 0x0, Serialized)
   {
@@ -81,7 +81,7 @@ Device (SDC2)
   Name (RBUF, ResourceTemplate ()
   {
     MEMORY32FIXED (ReadWrite, 0, SDHOST_LENGTH, RMEM)
-    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x58 }
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_SDHOST_INTERRUPT }
   })
   Method (_CRS, 0x0, Serialized)
   {
