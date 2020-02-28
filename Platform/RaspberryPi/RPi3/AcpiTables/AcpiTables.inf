@@ -30,7 +30,7 @@
   Gtdt.aslc
   Dsdt.asl
   Csrt.aslc
-  Spcr.asl
+  Spcr.aslc
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -39,4 +39,5 @@
 
 [FixedPcd]
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
+  gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
