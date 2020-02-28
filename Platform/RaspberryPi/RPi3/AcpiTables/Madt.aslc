@@ -23,7 +23,9 @@
 typedef struct {
   EFI_ACPI_5_1_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER   Header;
   EFI_ACPI_5_1_GIC_STRUCTURE                            GicInterfaces[4];
-  // Do *NOT* add a GIC Distributor on the Pi 3 or Windows 10 won't boot!
+#if (RPI_MODEL != 3)
+  EFI_ACPI_5_1_GIC_DISTRIBUTOR_STRUCTURE                GicDistributor;
+#endif
 } PI_MULTIPLE_APIC_DESCRIPTION_TABLE;
 
 #pragma pack ()
@@ -42,6 +44,7 @@ PI_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
     0, // Flags
   },
   {
+#if (RPI_MODEL == 3)
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
         0, 0, GET_MPID(0, 0), EFI_ACPI_5_1_GIC_ENABLED, 0x09, 0x40000000, 0, 0, 0, 0),
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
@@ -50,7 +53,24 @@ PI_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
         2, 2, GET_MPID(0, 2), EFI_ACPI_5_1_GIC_ENABLED, 0x09, 0x40000000, 0, 0, 0, 0),
     EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
         3, 3, GET_MPID(0, 3), EFI_ACPI_5_1_GIC_ENABLED, 0x09, 0x40000000, 0, 0, 0, 0),
+#elif (RPI_MODEL == 4)
+    EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
+        0, 0, GET_MPID(0, 0), EFI_ACPI_5_1_GIC_ENABLED, 48, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        0xFF846000, 0xFF844000, 0x19, 0),
+    EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
+        1, 1, GET_MPID(0, 1), EFI_ACPI_5_1_GIC_ENABLED, 49, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        0xFF846000, 0xFF844000, 0x19, 0),
+    EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
+        2, 2, GET_MPID(0, 2), EFI_ACPI_5_1_GIC_ENABLED, 50, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        0xFF846000, 0xFF844000, 0x19, 0),
+    EFI_ACPI_5_1_GICC_STRUCTURE_INIT(
+        3, 3, GET_MPID(0, 3), EFI_ACPI_5_1_GIC_ENABLED, 51, FixedPcdGet64 (PcdGicInterruptInterfaceBase),
+        0xFF846000, 0xFF844000, 0x19, 0),
+#endif
   },
+#if (RPI_MODEL != 3)
+  EFI_ACPI_5_0_GIC_DISTRIBUTOR_INIT(0, FixedPcdGet64 (PcdGicDistributorBase), 0)
+#endif
 };
 
 //

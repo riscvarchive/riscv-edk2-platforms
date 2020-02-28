@@ -14,6 +14,7 @@
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <IndustryStandard/Bcm2836Gpu.h>
 #include <IndustryStandard/Bcm2836Pwm.h>
+#include <Net/Genet.h>
 
 #include "AcpiTables.h"
 
@@ -30,6 +31,9 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
   {
     include ("Sdhc.asl")
     include ("Pep.asl")
+#if (RPI_MODEL == 4)
+    include ("Xhci.asl")
+#endif
 
     Device (CPU0)
     {
@@ -283,6 +287,37 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
         Return (^RBUF)
       }
     }
+
+#if (RPI_MODEL == 4)
+    Device (ETH0)
+    {
+      Name (_HID, "BCM6E4E")
+      Name (_CID, "BCM6E4E")
+      Name (_UID, 0x0)
+      Name (_CCA, 0x0)
+      Method (_STA)
+      {
+        Return (0xf)
+      }
+      Method (_CRS, 0x0, Serialized)
+      {
+        Name (RBUF, ResourceTemplate ()
+        {
+          // No need for MEMORY32SETBASE on Genet as we have a straight base address constant
+          MEMORY32FIXED (ReadWrite, GENET_BASE_ADDRESS, GENET_LENGTH, )
+          Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { GENET_INTERRUPT0, GENET_INTERRUPT1 }
+        })
+        Return (RBUF)
+      }
+      Name (_DSD, Package () {
+        ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+        Package () {
+          Package () { "brcm,max-dma-burst-size", 0x08 },
+          Package () { "phy-mode", "rgmii-rxid" },
+        }
+      })
+    }
+#endif
 
     // Description: I2C
     Device (I2C1)

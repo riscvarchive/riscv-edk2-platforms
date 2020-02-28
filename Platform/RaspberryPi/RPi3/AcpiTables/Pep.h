@@ -2,6 +2,7 @@
  *
  *  PEP device defines
  *
+ *  Copyright (c) 2019, ARM Ltd. All rights reserved.
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
@@ -13,10 +14,10 @@
  * Note: Not everything is here. At least SOC_STATE_TYPE is missing.
  */
 
-#ifndef _RPI3PEP_H_INCLUDED_
-#define _RPI3PEP_H_INCLUDED_
+#ifndef _RPI_PEP_H_INCLUDED_
+#define _RPI_PEP_H_INCLUDED_
 
-#include <IndustryStandard/Acpi50.h>
+#include <IndustryStandard/Acpi.h>
 
 #define PEP_MAX_DEPENDENCIES_PER_STATE 16
 #define MAX_PROCESSOR_PATH_LENGTH 16
@@ -117,4 +118,4 @@ typedef struct _PEP_DEVICE_TABLE_PLAT {
   PEP_DEVICE_INFO_PLAT DeviceInfo[P_NUMBER_DEVICES];
 } PEP_DEVICE_TABLE_PLAT, *PPEP_DEVICE_TABLE_PLAT;
 
-#endif // _RPI3PEP_H_INCLUDED_
+#endif // _RPI_PEP_H_INCLUDED_

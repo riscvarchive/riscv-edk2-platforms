@@ -140,7 +140,7 @@ Device(BTH0)
                        //   no flow control.
         16,            // ReceiveBufferSize
         16,            // TransmitBufferSize
-#ifdef PL011_ENABLE
+#if (RPI_MODEL == 4)
         "\\_SB.URTM",  // ResourceSource:
 #else
         "\\_SB.URT0",  // ResourceSource:

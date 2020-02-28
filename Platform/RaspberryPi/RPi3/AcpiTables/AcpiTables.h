@@ -1,7 +1,8 @@
 /** @file
  *
- *  RPi3 defines for constructing ACPI tables
+ *  RPi defines for constructing ACPI tables
  *
+ *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2019, ARM Ltd. All rights reserved.
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
@@ -23,11 +24,15 @@
     CreateDwordField (^BufName, ^MemName._BAS, VarName)          \
     Add (BCM2836_SOC_REGISTERS, Offset, VarName)
 
-#define EFI_ACPI_OEM_ID                       {'B','C','2','8','3','6'} // OEMID 6 bytes long
-#define EFI_ACPI_OEM_TABLE_ID                 SIGNATURE_64 ('R','P','I','3','E','D','K','2') // OEM table id 8 bytes long
-#define EFI_ACPI_OEM_REVISION                 0x02000820
-#define EFI_ACPI_CREATOR_ID                   SIGNATURE_32 ('R','P','I','3')
-#define EFI_ACPI_CREATOR_REVISION             0x00000097
+#if (RPI_MODEL == 3)
+#define EFI_ACPI_OEM_ID                       {'B','C','2','8','3','6'}
+#else
+#define EFI_ACPI_OEM_ID                       {'M','C','R','S','F','T'}
+#endif
+#define EFI_ACPI_OEM_TABLE_ID                 SIGNATURE_64 ('R','P','I','_','E','D','K','2')
+#define EFI_ACPI_OEM_REVISION                 0x00000100
+#define EFI_ACPI_CREATOR_ID                   SIGNATURE_32 ('E','D','K','2')
+#define EFI_ACPI_CREATOR_REVISION             0x00000100
 
 #define EFI_ACPI_VENDOR_ID                    SIGNATURE_32 ('M','S','F','T')
 
@@ -49,8 +54,14 @@
 #define EFI_ACPI_CSRT_DEVICE_ID_DMA           0x00000009 // Fixed id
 #define EFI_ACPI_CSRT_RESOURCE_ID_IN_DMA_GRP  0x0 // Count up from 0
 
-#define RPI3_DMA_CHANNEL_COUNT                10 // All 10 DMA channels are listed, including the reserved ones
-#define RPI3_DMA_USED_CHANNEL_COUNT           5  // Use 5 DMA channels
+#define RPI_DMA_CHANNEL_COUNT                 10 // All 10 DMA channels are listed, including the reserved ones
+#define RPI_DMA_USED_CHANNEL_COUNT            5  // Use 5 DMA channels
+
+#if (RPI_MODEL == 3)
+#define RPI_SYSTEM_TIMER_BASE_ADDRESS         0x4000001C
+#elif (RPI_MODEL == 4)
+#define RPI_SYSTEM_TIMER_BASE_ADDRESS         0xFF80001C
+#endif
 
 #define EFI_ACPI_5_1_CSRT_REVISION            0x00000000
 
@@ -100,7 +111,7 @@ typedef struct
 //------------------------------------------------------------------------
 // Interrupts. These are specific to each platform
 //------------------------------------------------------------------------
-#define BCM2836_USB_INTERRUPT                   0x29
+#if (RPI_MODEL == 3)
 #define BCM2836_V3D_BUS_INTERRUPT               0x2A
 #define BCM2836_DMA_INTERRUPT                   0x3B
 #define BCM2836_SPI1_INTERRUPT                  0x3D
@@ -118,9 +129,36 @@ typedef struct
 #define BCM2836_I2C1_INTERRUPT                  0x55
 #define BCM2836_I2C2_INTERRUPT                  0x55
 #define BCM2836_SPI0_INTERRUPT                  0x56
+#define BCM2836_USB_INTERRUPT                   0x29
 #define BCM2836_SDHOST_INTERRUPT                0x58
 #define BCM2836_MMCHS1_INTERRUPT                0x5E
 #define BCM2836_MINI_UART_INTERRUPT             0x3D
 #define BCM2836_PL011_UART_INTERRUPT            0x59
+#elif (RPI_MODEL == 4)
+#define BCM2836_V3D_BUS_INTERRUPT               0x2A
+#define BCM2836_DMA_INTERRUPT                   0x3B
+#define BCM2836_SPI1_INTERRUPT                  0x3D
+#define BCM2836_SPI2_INTERRUPT                  0x3D
+#define BCM2836_HVS_INTERRUPT                   0x41
+#define BCM2836_HDMI0_INTERRUPT                 0x48
+#define BCM2836_HDMI1_INTERRUPT                 0x49
+#define BCM2836_PV2_INTERRUPT                   0x4A
+#define BCM2836_PV0_INTERRUPT                   0x4D
+#define BCM2836_PV1_INTERRUPT                   0x4E
+#define BCM2836_MBOX_INTERRUPT                  0x61
+#define BCM2836_VCHIQ_INTERRUPT                 0x62
+#define BCM2386_GPIO_INTERRUPT0                 0x51
+#define BCM2386_GPIO_INTERRUPT1                 0x53
+#define BCM2836_I2C1_INTERRUPT                  0x55
+#define BCM2836_I2C2_INTERRUPT                  0x55
+#define BCM2836_SPI0_INTERRUPT                  0x56
+#define BCM2836_USB_INTERRUPT                   0x69
+#define BCM2836_SDHOST_INTERRUPT                0x98
+#define BCM2836_MMCHS1_INTERRUPT                0x9E
+#define BCM2836_MINI_UART_INTERRUPT             0x7D
+#define BCM2836_PL011_UART_INTERRUPT            0x99
+#define GENET_INTERRUPT0                        0xBD
+#define GENET_INTERRUPT1                        0xBE
+#endif
 
 #endif // __ACPITABLES_H__
