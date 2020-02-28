@@ -2,6 +2,7 @@
  *
  *  Fixed ACPI Description Table (FADT)
  *
+ *  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
@@ -9,34 +10,76 @@
  *
  **/
 
-UINT8 Fadt[268] = {
-  0x46, 0x41, 0x43, 0x50, 0x0C, 0x01, 0x00, 0x00, 0x05, 0x00, /*   0 */
-  0x42, 0x43, 0x32, 0x38, 0x33, 0x36, 0x45, 0x44, 0x4B, 0x32, /*  10 */
-  0x20, 0x20, 0x20, 0x20, 0x01, 0x00, 0x00, 0x00, 0x4D, 0x53, /*  20 */
-  0x46, 0x54, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /*  30 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, /*  40 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /*  50 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /*  60 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /*  70 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /*  80 */
-  0x00, 0x04, 0x00, 0x00, 0x00, 0xE3, 0x00, 0x00, 0x00, 0x00, /*  90 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x3C, /* 100 */
-  0x00, 0x00, 0x21, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, /* 110 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, /* 120 */
-  0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 130 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 140 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 150 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 160 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 170 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 180 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 190 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 200 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 210 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 220 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 230 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 240 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, /* 250 */
-  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00              /* 268 */
+#include <IndustryStandard/Acpi.h>
+#include <Library/AcpiLib.h>
+#include <Library/PcdLib.h>
+
+#include "AcpiTables.h"
+
+/*
+ * Note: Use ACPI 5.1 since we need to match MADT ACPI requirements
+ */
+EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
+  ACPI_HEADER (
+    EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE_SIGNATURE,
+    EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE,
+    EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE_REVISION
+  ),
+  0,                                                                        // UINT32     FirmwareCtrl
+  0,                                                                        // UINT32     Dsdt
+  EFI_ACPI_RESERVED_BYTE,                                                   // UINT8      Reserved0
+  EFI_ACPI_5_1_PM_PROFILE_APPLIANCE_PC,                                     // UINT8      PreferredPmProfile
+  0,                                                                        // UINT16     SciInt
+  0,                                                                        // UINT32     SmiCmd
+  0,                                                                        // UINT8      AcpiEnable
+  0,                                                                        // UINT8      AcpiDisable
+  0,                                                                        // UINT8      S4BiosReq
+  0,                                                                        // UINT8      PstateCnt
+  0,                                                                        // UINT32     Pm1aEvtBlk
+  0,                                                                        // UINT32     Pm1bEvtBlk
+  0,                                                                        // UINT32     Pm1aCntBlk
+  0,                                                                        // UINT32     Pm1bCntBlk
+  0,                                                                        // UINT32     Pm2CntBlk
+  0,                                                                        // UINT32     PmTmrBlk
+  0,                                                                        // UINT32     Gpe0Blk
+  0,                                                                        // UINT32     Gpe1Blk
+  0,                                                                        // UINT8      Pm1EvtLen
+  0,                                                                        // UINT8      Pm1CntLen
+  0,                                                                        // UINT8      Pm2CntLen
+  0,                                                                        // UINT8      PmTmrLen
+  0,                                                                        // UINT8      Gpe0BlkLen
+  0,                                                                        // UINT8      Gpe1BlkLen
+  0,                                                                        // UINT8      Gpe1Base
+  0,                                                                        // UINT8      CstCnt
+  0,                                                                        // UINT16     PLvl2Lat
+  0,                                                                        // UINT16     PLvl3Lat
+  0,                                                                        // UINT16     FlushSize
+  0,                                                                        // UINT16     FlushStride
+  0,                                                                        // UINT8      DutyOffset
+  0,                                                                        // UINT8      DutyWidth
+  0,                                                                        // UINT8      DayAlrm
+  0,                                                                        // UINT8      MonAlrm
+  0,                                                                        // UINT8      Century
+  EFI_ACPI_RESERVED_WORD,                                                   // UINT16     IaPcBootArch (Reserved on ARM)
+  EFI_ACPI_RESERVED_BYTE,                                                   // UINT8      Reserved1
+  EFI_ACPI_5_1_WBINVD | EFI_ACPI_5_1_SLP_BUTTON |                           // UINT32     Flags
+  EFI_ACPI_5_1_HW_REDUCED_ACPI,
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  ResetReg
+  0,                                                                        // UINT8      ResetValue
+  EFI_ACPI_5_1_ARM_PSCI_COMPLIANT,                                          // UINT16     ArmBootArchFlags
+  EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE_MINOR_REVISION,                 // UINT8      MinorRevision
+  0,                                                                        // UINT64     XFirmwareCtrl
+  0,                                                                        // UINT64     XDsdt
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPm1aEvtBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPm1bEvtBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPm1aCntBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPm1bCntBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPm2CntBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XPmTmrBlk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XGpe0Blk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  XGpe1Blk
+  NULL_GAS,                                                                 // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  SleepControlReg
+  NULL_GAS                                                                  // EFI_ACPI_5_1_GENERIC_ADDRESS_STRUCTURE  SleepStatusReg
 };
 
 //

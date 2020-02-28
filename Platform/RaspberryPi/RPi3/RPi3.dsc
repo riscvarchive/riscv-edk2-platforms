@@ -328,8 +328,8 @@
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress|0x40000000
   gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum|0x0
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum|0x1
-  gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum|0x2
-  gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum|0x3
+  gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum|0x3
+  gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum|0x2
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf

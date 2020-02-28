@@ -23,7 +23,7 @@
     CreateDwordField (^BufName, ^MemName._BAS, VarName)          \
     Add (BCM2836_SOC_REGISTERS, Offset, VarName)
 
-#define EFI_ACPI_OEM_ID                       {'M','C','R','S','F','T'} // OEMID 6 bytes long
+#define EFI_ACPI_OEM_ID                       {'B','C','2','8','3','6'} // OEMID 6 bytes long
 #define EFI_ACPI_OEM_TABLE_ID                 SIGNATURE_64 ('R','P','I','3','E','D','K','2') // OEM table id 8 bytes long
 #define EFI_ACPI_OEM_REVISION                 0x02000820
 #define EFI_ACPI_CREATOR_ID                   SIGNATURE_32 ('R','P','I','3')

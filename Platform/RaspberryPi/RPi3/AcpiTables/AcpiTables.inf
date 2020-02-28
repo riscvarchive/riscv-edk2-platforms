@@ -33,11 +33,17 @@
   Spcr.aslc
 
 [Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
 
 [FixedPcd]
+  gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum
+  gArmTokenSpaceGuid.PcdArmArchTimerVirtIntrNum
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
