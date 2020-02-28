@@ -2,12 +2,18 @@
  *
  *  [DSDT] SD controller/card definition (SDHC)
  *
+ *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
  **/
+
+#include <IndustryStandard/Bcm2836SdHost.h>
+#include <IndustryStandard/Bcm2836Sdio.h>
+
+#include "AcpiTables.h"
 
 //
 // Note: UEFI can use either SDHost or Arasan. We expose both to the OS.
@@ -28,14 +34,15 @@ Device (SDC1)
   {
     Return(0xf)
   }
+  Name (RBUF, ResourceTemplate ()
+  {
+    MEMORY32FIXED (ReadWrite, 0, MMCHS1_LENGTH, RMEM)
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x5E }
+  })
   Method (_CRS, 0x0, Serialized)
   {
-    Name (RBUF, ResourceTemplate ()
-    {
-      MEMORY32FIXED (ReadWrite, 0x3F300000, 0x100,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x5E }
-    })
-    Return (RBUF)
+    MEMORY32SETBASE (RBUF, RMEM, RBAS, MMCHS1_OFFSET)
+    Return (^RBUF)
   }
 
   //
@@ -71,14 +78,15 @@ Device (SDC2)
   {
     Return (0xf)
   }
+  Name (RBUF, ResourceTemplate ()
+  {
+    MEMORY32FIXED (ReadWrite, 0, SDHOST_LENGTH, RMEM)
+    Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x58 }
+  })
   Method (_CRS, 0x0, Serialized)
   {
-    Name (RBUF, ResourceTemplate ()
-    {
-      MEMORY32FIXED (ReadWrite, 0x3F202000, 0x100,)
-      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 0x58 }
-    })
-    Return (RBUF)
+    MEMORY32SETBASE (RBUF, RMEM, RBAS, SDHOST_OFFSET)
+    Return (^RBUF)
   }
 
   //

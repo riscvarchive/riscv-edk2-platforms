@@ -35,6 +35,8 @@
 [Packages]
   MdePkg/MdePkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/Broadcom/Bcm283x/Bcm283x.dec
 
 [FixedPcd]
+  gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
