@@ -11,7 +11,8 @@
 
 #include <Library/PcdLib.h>
 
-#define GENET_BASE_ADDRESS         (FixedPcdGet64 (PcdBcmGenetRegistersAddress))
+#define GENET_BASE_ADDRESS         FixedPcdGet64 (PcdBcmGenetRegistersAddress)
+#define GENET_LENGTH               0x00010000
 
 #define GENET_SYS_RBUF_FLUSH_CTRL  0x0008
 #define GENET_UMAC_MAC0            0x080c

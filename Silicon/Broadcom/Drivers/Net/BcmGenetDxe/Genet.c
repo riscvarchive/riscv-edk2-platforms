@@ -17,7 +17,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 
-#include <Genet.h>
+#include <Net/Genet.h>
 #include <PiDxe.h>
 
 STATIC
