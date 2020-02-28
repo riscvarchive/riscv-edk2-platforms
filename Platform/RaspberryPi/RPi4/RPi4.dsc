@@ -576,7 +576,7 @@
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
-  Platform/RaspberryPi/$(PLATFORM_NAME)/AcpiTables/AcpiTables.inf
+  Platform/RaspberryPi/AcpiTables/AcpiTables.inf
 
   #
   # SMBIOS Support
