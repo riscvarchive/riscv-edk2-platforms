@@ -7,10 +7,14 @@
  *
  **/
 
+#include <IndustryStandard/Bcm2836.h>
+
 #ifndef __BCM2836_SDHOST_H__
 #define __BCM2836_SDHOST_H__
 
-#define SDHOST_BASE_ADDRESS         (BCM2836_SOC_REGISTERS + 0x00202000)
+#define SDHOST_OFFSET               0x00202000
+#define SDHOST_BASE_ADDRESS         (BCM2836_SOC_REGISTERS + SDHOST_OFFSET)
+#define SDHOST_LENGTH               0x00000100
 #define SDHOST_REG(X)               (SDHOST_BASE_ADDRESS + (X))
 #define SDHOST_CMD                  SDHOST_REG(0x0)
 #define SDHOST_ARG                  SDHOST_REG(0x4)

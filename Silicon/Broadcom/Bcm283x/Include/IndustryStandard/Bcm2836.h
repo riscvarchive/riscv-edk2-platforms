@@ -56,6 +56,7 @@
 /* mailbox interface constants */
 #define BCM2836_MBOX_OFFSET                                 0x0000b880
 #define BCM2836_MBOX_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_MBOX_OFFSET)
+#define BCM2836_MBOX_LENGTH                                 0x00000024
 #define BCM2836_MBOX_READ_OFFSET                            0x00000000
 #define BCM2836_MBOX_STATUS_OFFSET                          0x00000018
 #define BCM2836_MBOX_CONFIG_OFFSET                          0x0000001c
@@ -75,7 +76,7 @@
 #define BCM2836_USB_BASE_ADDRESS                            (BCM2836_SOC_REGISTERS + BCM2836_USB_OFFSET)
 #define BCM2836_USB_LENGTH                                  0x00010000
 
-/* uart constants */
+/* serial based protocol constants */
 #define BCM2836_PL011_UART_OFFSET                           0x00201000
 #define BCM2836_PL011_UART_BASE_ADDRESS                     (BCM2836_SOC_REGISTERS + BCM2836_PL011_UART_OFFSET)
 #define BCM2836_PL011_UART_LENGTH                           0x00001000
@@ -85,5 +86,41 @@
 #define BCM2836_MINI_UART_BASE_ADDRESS                      (BCM2836_SOC_REGISTERS + BCM2836_MINI_UART_OFFSET)
 #define BCM2836_MINI_UART_LENGTH                            0x00000070
 #define BCM2836_MINI_UART_INTERRUPT                         0x7D
+
+#define BCM2836_I2C0_OFFSET                                 0x00205000
+#define BCM2836_I2C0_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_I2C0_OFFSET)
+#define BCM2836_I2C0_LENGTH                                 0x00000020
+
+#define BCM2836_I2C1_OFFSET                                 0x00804000
+#define BCM2836_I2C1_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_I2C1_OFFSET)
+#define BCM2836_I2C1_LENGTH                                 0x00000020
+
+#define BCM2836_I2C2_OFFSET                                 0x00805000
+#define BCM2836_I2C2_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_I2C2_OFFSET)
+#define BCM2836_I2C2_LENGTH                                 0x00000020
+
+#define BCM2836_SPI0_OFFSET                                 0x00204000
+#define BCM2836_SPI0_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_SPI0_OFFSET)
+#define BCM2836_SPI0_LENGTH                                 0x00000020
+
+#define BCM2836_SPI1_OFFSET                                 0x00215080
+#define BCM2836_SPI1_LENGTH                                 0x00000040
+#define BCM2836_SPI1_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_SPI1_OFFSET)
+
+#define BCM2836_SPI2_OFFSET                                 0x002150C0
+#define BCM2836_SPI2_LENGTH                                 0x00000040
+#define BCM2836_SPI2_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_SPI2_OFFSET)
+
+/* dma constants */
+#define BCM2836_DMA0_OFFSET                                 0x00007000
+#define BCM2836_DMA0_BASE_ADDRESS                           (BCM2836_SOC_REGISTERS + BCM2836_DMA0_OFFSET)
+
+#define BCM2836_DMA15_OFFSET                                0x00E05000
+#define BCM2836_DMA15_BASE_ADDRESS                          (BCM2836_SOC_REGISTERS + BCM2836_DMA15_OFFSET)
+
+#define BCM2836_DMA_CTRL_OFFSET                             0x00007FE0
+#define BCM2836_DMA_CTRL_BASE_ADDRESS                       (BCM2836_SOC_REGISTERS + BCM2836_DMA_CTRL_OFFSET)
+
+#define BCM2836_DMA_CHANNEL_LENGTH                          0x00000100
 
 #endif /*__BCM2836_H__ */

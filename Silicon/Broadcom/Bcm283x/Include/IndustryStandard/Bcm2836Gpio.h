@@ -7,10 +7,14 @@
  *
  **/
 
+#include <IndustryStandard/Bcm2836.h>
+
 #ifndef __BCM2836_GPIO_H__
 #define __BCM2836_GPIO_H__
 
-#define GPIO_BASE_ADDRESS  (BCM2836_SOC_REGISTERS + 0x00200000)
+#define GPIO_OFFSET        0x00200000
+#define GPIO_BASE_ADDRESS  (BCM2836_SOC_REGISTERS + GPIO_OFFSET)
+#define GPIO_LENGTH        0x000000B4
 
 #define GPIO_GPFSEL0       (GPIO_BASE_ADDRESS + 0x00)
 #define GPIO_GPFSEL1       (GPIO_BASE_ADDRESS + 0x04)
