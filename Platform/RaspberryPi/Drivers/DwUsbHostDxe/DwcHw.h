@@ -10,11 +10,7 @@
 #ifndef __DWCHW_H__
 #define __DWCHW_H__
 
-#define DW2_USB_OFFSET                  0x00980000
-#define DW2_USB_BASE_ADDRESS            (FixedPcdGet64 (PcdBcm283xRegistersAddress) \
-                                        + DW2_USB_OFFSET)
-
-#define HSOTG_REG(x)    (x)
+#define HSOTG_REG(x)                    (x)
 
 #define HCCHAR(_ch)                     HSOTG_REG(0x0500 + 0x20 * (_ch))
 #define HCSPLT(_ch)                     HSOTG_REG(0x0504 + 0x20 * (_ch))

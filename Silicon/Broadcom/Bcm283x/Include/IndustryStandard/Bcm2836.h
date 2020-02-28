@@ -70,6 +70,11 @@
 #define BCM2836_INTC_TIMER_CONTROL_OFFSET                   0x00000040
 #define BCM2836_INTC_TIMER_PENDING_OFFSET                   0x00000060
 
+/* usb constants */
+#define BCM2836_USB_OFFSET                                  0x00980000
+#define BCM2836_USB_BASE_ADDRESS                            (BCM2836_SOC_REGISTERS + BCM2836_USB_OFFSET)
+#define BCM2836_USB_LENGTH                                  0x00010000
+
 /* uart constants */
 #define BCM2836_PL011_UART_OFFSET                           0x00201000
 #define BCM2836_PL011_UART_BASE_ADDRESS                     (BCM2836_SOC_REGISTERS + BCM2836_PL011_UART_OFFSET)

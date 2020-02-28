@@ -7,6 +7,7 @@
  *
  **/
 
+#include <IndustryStandard/Bcm2836.h>
 #include "DwUsbHostDxe.h"
 #include "DwcHw.h"
 
@@ -1548,7 +1549,7 @@ CreateDwUsbHc (
   DwHc->DwUsbOtgHc.ClearRootHubPortFeature        = DwHcClearRootHubPortFeature;
   DwHc->DwUsbOtgHc.MajorRevision                  = 0x02;
   DwHc->DwUsbOtgHc.MinorRevision                  = 0x00;
-  DwHc->DwUsbBase                                 = DW2_USB_BASE_ADDRESS;
+  DwHc->DwUsbBase                                 = BCM2836_USB_BASE_ADDRESS;
 
   Pages = EFI_SIZE_TO_PAGES (DWC2_STATUS_BUF_SIZE);
   DwHc->StatusBuffer = AllocatePages (Pages);
