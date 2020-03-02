@@ -40,6 +40,20 @@
   DEFINE DEBUG_PRINT_ERROR_LEVEL = 0x8000004F
   DEFINE ACPI_BASIC_MODE_ENABLE  = FALSE
 
+!ifndef TFA_BUILD_ARTIFACTS
+  #
+  # Default TF-A binary checked into edk2-non-osi.
+  #
+  DEFINE TFA_BUILD_BL31 = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31_pl011.bin
+!else
+  #
+  # Usually we use the checked-in binaries, but for developers working
+  # on the firmware, being able to use a local TF-A build without extra copy
+  # operations ends up being very helpful.
+  #
+  DEFINE TFA_BUILD_BL31 = $(TFA_BUILD_ARTIFACTS)/bl31.bin
+!endif
+
 ################################################################################
 #
 # Library Class section - list of all Library Classes needed by this Platform.

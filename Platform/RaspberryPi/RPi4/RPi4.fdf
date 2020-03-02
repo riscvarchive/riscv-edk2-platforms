@@ -51,7 +51,7 @@ NumBlocks     = 0x200
 # ATF primary boot image
 #
 0x00000000|0x00020000
-FILE = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31_pl011.bin
+FILE = $(TFA_BUILD_BL31)
 
 #
 # DTB.
