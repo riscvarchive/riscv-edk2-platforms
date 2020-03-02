@@ -25,7 +25,6 @@
 #include <Protocol/LoadedImage.h>
 #include <Guid/EventGroup.h>
 #include <Guid/TtyTerm.h>
-#include <Protocol/BootLogo.h>
 
 #include "PlatformBm.h"
 
@@ -691,7 +690,6 @@ PlatformBootManagerWaitCallback (
   EFI_GRAPHICS_OUTPUT_BLT_PIXEL_UNION White;
   UINT16                              Timeout;
   EFI_STATUS                          Status;
-  EFI_BOOT_LOGO_PROTOCOL *BootLogo;
 
   Timeout = PcdGet16 (PcdPlatformBootTimeOut);
 
@@ -710,22 +708,6 @@ PlatformBootManagerWaitCallback (
     SerialConPrint (L".");
   } else {
     Print (L".");
-  }
-
-  if (TimeoutRemain == 0) {
-    BootLogo = NULL;
-
-    //
-    // Clear out the boot logo so that Windows displays its own logo
-    // instead of ours.
-    //
-    Status = gBS->LocateProtocol (&gEfiBootLogoProtocolGuid, NULL, (VOID**)&BootLogo);
-    if (!EFI_ERROR (Status) && (BootLogo != NULL)) {
-      Status = BootLogo->SetBootLogo (BootLogo, NULL, 0, 0, 0, 0);
-      ASSERT_EFI_ERROR (Status);
-    };
-
-    gST->ConOut->ClearScreen (gST->ConOut);
   }
 }
 

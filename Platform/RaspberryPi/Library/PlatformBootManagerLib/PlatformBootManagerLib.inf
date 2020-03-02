@@ -81,4 +81,3 @@
   gEfiSimpleFileSystemProtocolGuid
   gEsrtManagementProtocolGuid
   gEfiUsb2HcProtocolGuid
-  gEfiBootLogoProtocolGuid
