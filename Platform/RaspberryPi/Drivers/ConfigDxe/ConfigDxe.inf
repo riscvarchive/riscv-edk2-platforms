@@ -35,6 +35,7 @@
   MdeModulePkg/MdeModulePkg.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
   Platform/RaspberryPi/RaspberryPi.dec
+  EmbeddedPkg/EmbeddedPkg.dec
 
 [LibraryClasses]
   BaseLib
@@ -46,6 +47,7 @@
   UefiDriverEntryPoint
   HiiLib
   GpioLib
+  AcpiLib
 
 [Guids]
   gConfigDxeFormSetGuid

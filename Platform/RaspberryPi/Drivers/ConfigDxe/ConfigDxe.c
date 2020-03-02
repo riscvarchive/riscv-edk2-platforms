@@ -8,6 +8,7 @@
  **/
 
 #include <Uefi.h>
+#include <Library/AcpiLib.h>
 #include <Library/HiiLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
@@ -25,6 +26,14 @@ extern UINT8 ConfigDxeHiiBin[];
 extern UINT8 ConfigDxeStrings[];
 
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
+
+/*
+ * The GUID inside Platform/RaspberryPi/RPi3/AcpiTables/AcpiTables.inf and
+ * Platform/RaspberryPi/RPi4/AcpiTables/AcpiTables.inf _must_ match below.
+ */
+STATIC CONST EFI_GUID mAcpiTableFile = {
+  0x7E374E25, 0x8E01, 0x4FEE, { 0x87, 0xf2, 0x39, 0x0C, 0x23, 0xC6, 0x06, 0xCD }
+};
 
 typedef struct {
   VENDOR_DEVICE_PATH VendorDevicePath;
@@ -407,6 +416,9 @@ ConfigInitialize (
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "Couldn't install ConfigDxe configuration pages: %r\n", Status));
   }
+
+  Status = LocateAndInstallAcpiFromFv (&mAcpiTableFile);
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }
