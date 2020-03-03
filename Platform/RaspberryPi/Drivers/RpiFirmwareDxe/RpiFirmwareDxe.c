@@ -609,6 +609,32 @@ RpiFirmwareGetModelName (
 STATIC
 EFI_STATUS
 EFIAPI
+RPiFirmwareGetModelInstalledMB (
+  OUT   UINT32 *InstalledMB
+  )
+{
+  EFI_STATUS Status;
+  UINT32     Revision;
+
+  Status = RpiFirmwareGetModelRevision(&Revision);
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Could not get the board revision: Status == %r\n",
+      __FUNCTION__, Status));
+    return EFI_DEVICE_ERROR;
+  }
+
+  //
+  // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
+  // Bits [20-22] indicate the amount of memory starting with 256MB (000b)
+  // and doubling in size for each value (001b = 512 MB, 010b = 1GB, etc.)
+  //
+  *InstalledMB = 256 << ((Revision >> 20) & 0x07);
+  return EFI_SUCCESS;
+}
+
+STATIC
+EFI_STATUS
+EFIAPI
 RPiFirmwareGetModelFamily (
   OUT   UINT32 *ModelFamily
   )
@@ -1236,7 +1262,8 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareGetFirmwareRevision,
   RpiFirmwareGetManufacturerName,
   RpiFirmwareGetCpuName,
-  RpiFirmwareGetArmMemory
+  RpiFirmwareGetArmMemory,
+  RPiFirmwareGetModelInstalledMB,
 };
 
 /**
