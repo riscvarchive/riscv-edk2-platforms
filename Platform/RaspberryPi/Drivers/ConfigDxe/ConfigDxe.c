@@ -11,11 +11,13 @@
 #include <Library/AcpiLib.h>
 #include <Library/HiiLib.h>
 #include <Library/DebugLib.h>
+#include <Library/DxeServicesTableLib.h>
 #include <Library/IoLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/DevicePathLib.h>
 #include <IndustryStandard/RpiMbox.h>
+#include <IndustryStandard/Bcm2711.h>
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <Library/GpioLib.h>
@@ -26,6 +28,8 @@ extern UINT8 ConfigDxeHiiBin[];
 extern UINT8 ConfigDxeStrings[];
 
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
+STATIC UINT32 mModelFamily = 0;
+STATIC UINT32 mModelInstalledMB = 0;
 
 /*
  * The GUID inside Platform/RaspberryPi/RPi3/AcpiTables/AcpiTables.inf and
@@ -129,6 +133,24 @@ SetupVariables (
     PcdSet32 (PcdCustomCpuClock, PcdGet32 (PcdCustomCpuClock));
   }
 
+  if (mModelFamily >= 4 && mModelInstalledMB > 3 * 1024) {
+    /*
+     * This allows changing PcdRamLimitTo3GB in forms.
+     */
+    PcdSet32 (PcdRamMoreThan3GB, 1);
+
+    Size = sizeof (UINT32);
+    Status = gRT->GetVariable (L"RamLimitTo3GB",
+                               &gConfigDxeFormSetGuid,
+                               NULL, &Size, &Var32);
+    if (EFI_ERROR (Status)) {
+      PcdSet32 (PcdRamLimitTo3GB, PcdGet32 (PcdRamLimitTo3GB));
+    }
+  } else {
+    PcdSet32 (PcdRamMoreThan3GB, 0);
+    PcdSet32 (PcdRamLimitTo3GB, 0);
+  }
+
   Size = sizeof (UINT32);
   Status = gRT->GetVariable (L"SdIsArasan",
                   &gConfigDxeFormSetGuid,
@@ -224,7 +246,7 @@ ApplyVariables (
   UINT32 CpuClock = PcdGet32 (PcdCpuClock);
   UINT32 CustomCpuClock = PcdGet32 (PcdCustomCpuClock);
   UINT32 Rate = 0;
-  UINT32 ModelFamily = 0;
+  UINT64 SystemMemorySize;
 
   if (CpuClock != 0) {
     if (CpuClock == 2) {
@@ -258,15 +280,31 @@ ApplyVariables (
     DEBUG ((DEBUG_INFO, "Current CPU speed is %uHz\n", Rate));
   }
 
-  Status = mFwProtocol->GetModelFamily (&ModelFamily);
-  if (Status != EFI_SUCCESS) {
-    DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi model family: %r\n", Status));
-  } else {
-    DEBUG ((DEBUG_INFO, "Current Raspberry Pi model family is 0x%x\n", ModelFamily));
+  if (mModelFamily >= 4 && PcdGet32 (PcdRamLimitTo3GB) == 0) {
+    /*
+     * Similar to how we compute the > 3 GB RAM segment's size in PlatformLib/
+     * RaspberryPiMem.c, with some overlap protection for the Bcm2xxx register
+     * spaces. This computation should also work for models with more than 4 GB
+     * RAM, if there ever exist ones.
+     */
+    SystemMemorySize = (UINT64)mModelInstalledMB * SIZE_1MB;
+    ASSERT (SystemMemorySize > 3UL * SIZE_1GB);
+    SystemMemorySize = MIN(SystemMemorySize, BCM2836_SOC_REGISTERS);
+    if (BCM2711_SOC_REGISTERS > 0) {
+      SystemMemorySize = MIN(SystemMemorySize, BCM2711_SOC_REGISTERS);
+    }
+
+    Status = gDS->AddMemorySpace (EfiGcdMemoryTypeSystemMemory, 3UL * BASE_1GB,
+                    SystemMemorySize - (3UL * SIZE_1GB),
+                    EFI_MEMORY_UC | EFI_MEMORY_WC | EFI_MEMORY_WT | EFI_MEMORY_WB);
+    ASSERT_EFI_ERROR (Status);
+    Status = gDS->SetMemorySpaceAttributes (3UL * BASE_1GB,
+                    SystemMemorySize - (3UL * SIZE_1GB),
+                    EFI_MEMORY_WB);
+    ASSERT_EFI_ERROR (Status);
   }
 
-
-  if (ModelFamily == 3) {
+  if (mModelFamily == 3) {
     /*
      * Pi 3: either Arasan or SdHost goes to SD card.
      *
@@ -316,7 +354,7 @@ ApplyVariables (
     GpioPinFuncSet (52, Gpio48Group);
     GpioPinFuncSet (53, Gpio48Group);
 
-  } else if (ModelFamily == 4) {
+  } else if (mModelFamily == 4) {
     /*
      * Pi 4: either Arasan or eMMC2 goes to SD card.
      */
@@ -352,7 +390,7 @@ ApplyVariables (
       GpioPinFuncSet (39, GPIO_FSEL_ALT3);
     }
   } else {
-    DEBUG ((DEBUG_ERROR, "Model Family %d not supported...\n", ModelFamily));
+    DEBUG ((DEBUG_ERROR, "Model Family %d not supported...\n", mModelFamily));
   }
 
   /*
@@ -398,6 +436,20 @@ ConfigInitialize (
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
     return Status;
+  }
+
+  Status = mFwProtocol->GetModelFamily (&mModelFamily);
+  if (Status != EFI_SUCCESS) {
+    DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi model family: %r\n", Status));
+  } else {
+    DEBUG ((DEBUG_INFO, "Current Raspberry Pi model family is %d\n", mModelFamily));
+  }
+
+  Status = mFwProtocol->GetModelInstalledMB (&mModelInstalledMB);
+  if (Status != EFI_SUCCESS) {
+    DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi installed RAM size: %r\n", Status));
+  } else {
+    DEBUG ((DEBUG_INFO, "Current Raspberry Pi installed RAM size is %d MB\n", mModelInstalledMB));
   }
 
   Status = SetupVariables ();

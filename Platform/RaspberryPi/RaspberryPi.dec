@@ -57,6 +57,8 @@
   gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock|0|UINT32|0x00000016
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes|0|UINT8|0x00000017
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot|0|UINT32|0x00000018
+  gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB|0|UINT32|0x00000019
+  gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB|0|UINT32|0x0000001A
 
 [PcdsFeatureFlag.common]
-  gRaspberryPiTokenSpaceGuid.PcdAcpiBasicMode|FALSE|BOOLEAN|0x00000019
+  gRaspberryPiTokenSpaceGuid.PcdAcpiBasicMode|FALSE|BOOLEAN|0x0000001B

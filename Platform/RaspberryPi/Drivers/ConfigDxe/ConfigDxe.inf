@@ -33,6 +33,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
   Platform/RaspberryPi/RaspberryPi.dec
   EmbeddedPkg/EmbeddedPkg.dec
@@ -53,10 +54,11 @@
   gConfigDxeFormSetGuid
 
 [Protocols]
-  gRaspberryPiFirmwareProtocolGuid ## CONSUMES
+  gRaspberryPiFirmwareProtocolGuid      ## CONSUMES
   gRaspberryPiConfigAppliedProtocolGuid ## PRODUCES
 
 [Pcd]
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gRaspberryPiTokenSpaceGuid.PcdCpuClock
   gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock
@@ -70,8 +72,8 @@
   gRaspberryPiTokenSpaceGuid.PcdDebugShowUEFIExit
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot
-
-[FeaturePcd]
+  gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB
+  gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB
 
 [Depex]
   gPcdProtocolGuid AND gRaspberryPiFirmwareProtocolGuid

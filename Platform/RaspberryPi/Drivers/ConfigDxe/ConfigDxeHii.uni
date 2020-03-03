@@ -36,6 +36,17 @@
 #string STR_CHIPSET_SD_ARASAN        #language en-US "Arasan SDHCI"
 
 /*
+ * Advanced configuration.
+ */
+
+#string STR_ADVANCED_FORM_TITLE      #language en-US "Advanced Configuration"
+
+#string STR_ADVANCED_3GB_PROMPT      #language en-US "Limit RAM to 3 GB"
+#string STR_ADVANCED_3GB_HELP        #language en-US "OSes not supporting ACPI DMA constraints require a 3 GB limit or face broken xHCI USB"
+#string STR_ADVANCED_3GB_OFF         #language en-US "Disabled"
+#string STR_ADVANCED_3GB_ON          #language en-US "Enabled"
+
+/*
  * MMC/SD configuration.
  */
 
