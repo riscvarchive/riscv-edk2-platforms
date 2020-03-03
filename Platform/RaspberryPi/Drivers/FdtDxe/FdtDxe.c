@@ -443,6 +443,11 @@ FdtDxeInitialize (
   UINT32     BoardRevision;
   BOOLEAN    Internal;
 
+  if (PcdGet32 (PcdOptDeviceTree) == 0) {
+    DEBUG ((DEBUG_INFO, "Device Tree disabled per user configuration\n"));
+    return EFI_SUCCESS;
+  }
+
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid, NULL,
                   (VOID**)&mFwProtocol);
   ASSERT_EFI_ERROR (Status);

@@ -48,3 +48,6 @@
 
 [FixedPcd]
   gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress
+
+[Pcd]
+  gRaspberryPiTokenSpaceGuid.PcdOptDeviceTree

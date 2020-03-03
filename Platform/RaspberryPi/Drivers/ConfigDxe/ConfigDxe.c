@@ -152,6 +152,14 @@ SetupVariables (
   }
 
   Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"OptDeviceTree",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    PcdSet32 (PcdOptDeviceTree, PcdGet32 (PcdOptDeviceTree));
+  }
+
+  Size = sizeof (UINT32);
   Status = gRT->GetVariable (L"SdIsArasan",
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);

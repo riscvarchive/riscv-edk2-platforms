@@ -208,9 +208,7 @@ READ_LOCK_STATUS   = TRUE
 
   INF ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   INF Platform/RaspberryPi/Drivers/RpiFirmwareDxe/RpiFirmwareDxe.inf
-!if $(ACPI_BASIC_MODE_ENABLE) == FALSE
   INF Platform/RaspberryPi/Drivers/FdtDxe/FdtDxe.inf
-!endif
   INF Platform/RaspberryPi/Drivers/ConfigDxe/ConfigDxe.inf
   INF ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   INF MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf

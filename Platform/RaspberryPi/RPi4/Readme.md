@@ -16,9 +16,12 @@ Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspber
 This firmware is still in development stage, meaning that it comes with the
 following __major__ limitations:
 
-- USB may only work in pre-OS phase at this stage due to nonstandard ECAM,
-  missing/incomplete ACPI tables as well as other factors. For Linux, using
-  the `ACPI_BASIC_MODE_ENABLE` build option may help.
+- xHCI USB may only work in pre-OS phase due to nonstandard DMA constraints.
+  For 4 GB models running Linux, limiting the RAM to 3 GB should help.
+  The 3 GB limitation is currently enabled by default in the user settings.
+- Device Tree boot of OSes such as Linux may not work at all.
+  For this reason, the provision of a Device Tree is disabled by default in
+  the user settings, in order to enforce ACPI boot.
 - Serial I/O from the OS may not work due to CPU throttling affecting the
   miniUART baudrate. This can be worked around by using the PL011 UART
   through the device tree overlays.
@@ -26,12 +29,6 @@ following __major__ limitations:
 # Building
 
 Build instructions from the top level edk2-platforms Readme.md apply.
-
-The following additional build options are also available:
-- `-D ACPI_BASIC_MODE_ENABLE=1`: Limits OS visible memory to 3 GB and forces
-  ACPI (by disabling the Device Tree driver altogether). This may be required
-  to boot Operating Systems such as Linux on account of the current PCIe/xHCI
-  limitations.
 
 # Booting the firmware
 

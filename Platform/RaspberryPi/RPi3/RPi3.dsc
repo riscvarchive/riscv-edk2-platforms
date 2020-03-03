@@ -446,6 +446,11 @@
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB|L"RamLimitTo3GB"|gConfigDxeFormSetGuid|0x0|0
 
   #
+  # Device Tree
+  #
+  gRaspberryPiTokenSpaceGuid.PcdOptDeviceTree|L"OptDeviceTree"|gConfigDxeFormSetGuid|0x0|1
+
+  #
   # Common UEFI ones.
   #
 
