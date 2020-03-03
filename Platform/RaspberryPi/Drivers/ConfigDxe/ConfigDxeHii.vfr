@@ -67,14 +67,6 @@ typedef struct {
 
 typedef struct {
   /*
-   * 0 - uSD slot routed to Broadcom SDHOST.
-   * 1 - uSD slot routed to Arasan SDHCI.
-   */
-  UINT32 Routing;
-} CHIPSET_SD_VARSTORE_DATA;
-
-typedef struct {
-  /*
    * Always set by ConfigDxe prior to HII init to reflect
    * platform capability.
    */
@@ -92,6 +84,14 @@ typedef struct {
    */
   UINT32 Enabled;
 } ADVANCED_DEVICE_TREE_VARSTORE_DATA;
+
+typedef struct {
+  /*
+   * 0 - uSD slot routed to Broadcom SDHOST.
+   * 1 - uSD slot routed to Arasan SDHCI.
+   */
+  UINT32 Routing;
+} MMC_SD_VARSTORE_DATA;
 
 typedef struct {
   /*
@@ -155,11 +155,6 @@ formset
       name  = CustomCpuClock,
       guid  = CONFIGDXE_FORM_SET_GUID;
 
-    efivarstore CHIPSET_SD_VARSTORE_DATA,
-      attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
-      name  = SdIsArasan,
-      guid  = CONFIGDXE_FORM_SET_GUID;
-
     efivarstore ADVANCED_RAM_MORE_THAN_3GB_VARSTORE_DATA,
       attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
       name  = RamMoreThan3GB,
@@ -173,6 +168,11 @@ formset
     efivarstore ADVANCED_DEVICE_TREE_VARSTORE_DATA,
       attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
       name  = OptDeviceTree,
+      guid  = CONFIGDXE_FORM_SET_GUID;
+
+    efivarstore MMC_SD_VARSTORE_DATA,
+      attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+      name  = SdIsArasan,
       guid  = CONFIGDXE_FORM_SET_GUID;
 
     efivarstore MMC_DISMULTI_VARSTORE_DATA,
@@ -228,6 +228,10 @@ formset
            prompt = STRING_TOKEN(STR_CHIPSET_FORM_TITLE),
            help = STRING_TOKEN(STR_NULL_STRING);
 
+        goto 0x1004,
+            prompt = STRING_TOKEN(STR_DISPLAY_FORM_TITLE),
+            help = STRING_TOKEN(STR_NULL_STRING);
+
         goto 0x1006,
            prompt = STRING_TOKEN(STR_ADVANCED_FORM_TITLE),
            help = STRING_TOKEN(STR_NULL_STRING);
@@ -235,10 +239,6 @@ formset
         goto 0x1003,
            prompt = STRING_TOKEN(STR_MMC_FORM_TITLE),
            help = STRING_TOKEN(STR_NULL_STRING);
-
-        goto 0x1004,
-            prompt = STRING_TOKEN(STR_DISPLAY_FORM_TITLE),
-            help = STRING_TOKEN(STR_NULL_STRING);
 
         goto 0x1005,
             prompt = STRING_TOKEN(STR_DEBUG_FORM_TITLE),
@@ -269,14 +269,6 @@ formset
               default = 600,
           endnumeric;
         endif;
-
-        oneof varid = SdIsArasan.Routing,
-            prompt      = STRING_TOKEN(STR_CHIPSET_SD_PROMPT),
-            help        = STRING_TOKEN(STR_CHIPSET_SD_HELP),
-            flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
-            option text = STRING_TOKEN(STR_CHIPSET_SD_ARASAN), value = 1, flags = 0;
-            option text = STRING_TOKEN(STR_CHIPSET_SD_SDHOST), value = 0, flags = DEFAULT;
-        endoneof;
     endform;
 
     form formid = 0x1006,
@@ -305,6 +297,14 @@ formset
     form formid = 0x1003,
         title  = STRING_TOKEN(STR_MMC_FORM_TITLE);
         subtitle text = STRING_TOKEN(STR_MMC_FORM_SUBTITLE);
+
+        oneof varid = SdIsArasan.Routing,
+            prompt      = STRING_TOKEN(STR_MMC_SD_PROMPT),
+            help        = STRING_TOKEN(STR_MMC_SD_HELP),
+            flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
+            option text = STRING_TOKEN(STR_MMC_SD_ARASAN), value = 1, flags = 0;
+            option text = STRING_TOKEN(STR_MMC_SD_SDHOST), value = 0, flags = DEFAULT;
+        endoneof;
 
         oneof varid = MmcDisableMulti.DisableMulti,
             prompt      = STRING_TOKEN(STR_MMC_DISMULTI_PROMPT),

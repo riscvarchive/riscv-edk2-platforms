@@ -14,11 +14,11 @@
 #string STR_FORM_SET_TITLE_HELP  #language en-US "Press <Enter> to configure system settings."
 
 /*
- * Chipset config.
+ * Chipset configuration.
  */
 
-#string STR_CHIPSET_FORM_TITLE      #language en-US "Chipset Configuration"
-#string STR_CHIPSET_FORM_SUBTITLE   #language en-US "Note: OS may override settings when booted."
+#string STR_CHIPSET_FORM_TITLE      #language en-US "CPU Configuration"
+#string STR_CHIPSET_FORM_SUBTITLE   #language en-US "Note: OS may override settings."
 
 #string STR_CHIPSET_CLOCK_CPU_PROMPT #language en-US "CPU Clock"
 #string STR_CHIPSET_CLOCK_CPU_HELP   #language en-US "CPU Speed"
@@ -29,11 +29,6 @@
 
 #string STR_CHIPSET_CUSTOM_CPU_CLOCK_PROMPT #language en-US "CPU Clock Rate (MHz)"
 #string STR_CHIPSET_CUSTOM_CPU_CLOCK_HELP   #language en-US "Adjust the CPU speed.\nMin value: 100 MHz\nMax value: 1600 MHz\n\nWarning: Overclocking can make the system unbootable!"
-
-#string STR_CHIPSET_SD_PROMPT        #language en-US "uSD Routing"
-#string STR_CHIPSET_SD_HELP          #language en-US "Choose host controller to drive uSD slot"
-#string STR_CHIPSET_SD_SDHOST        #language en-US "Broadcom SDHOST"
-#string STR_CHIPSET_SD_ARASAN        #language en-US "Arasan SDHCI"
 
 /*
  * Advanced configuration.
@@ -55,8 +50,13 @@
  * MMC/SD configuration.
  */
 
-#string STR_MMC_FORM_TITLE       #language en-US "SD/MMC Tweaks"
-#string STR_MMC_FORM_SUBTITLE    #language en-US "Note: UEFI only, OS will override settings when booted."
+#string STR_MMC_FORM_TITLE       #language en-US "SD/MMC Configuration"
+#string STR_MMC_FORM_SUBTITLE    #language en-US "Note: UEFI only, OS may override settings."
+
+#string STR_MMC_SD_PROMPT        #language en-US "uSD Routing"
+#string STR_MMC_SD_HELP          #language en-US "Choose host controller to drive uSD slot"
+#string STR_MMC_SD_SDHOST        #language en-US "Broadcom SDHOST"
+#string STR_MMC_SD_ARASAN        #language en-US "Arasan SDHCI"
 
 #string STR_MMC_DISMULTI_PROMPT  #language en-US "Multi-Block Support"
 #string STR_MMC_DISMULTI_HELP    #language en-US "Use CMD18/CMD25 for transfers when possible"
@@ -84,7 +84,7 @@
  * Display settings.
  */
 
-#string STR_DISPLAY_FORM_TITLE      #language en-US "Display"
+#string STR_DISPLAY_FORM_TITLE      #language en-US "Display Configuration"
 #string STR_DISPLAY_FORM_SUBTITLE   #language en-US "UEFI video driver settings"
 
 #string STR_DISPLAY_VMODES_640_PROMPT  #language en-US "Virtual 640x480"
@@ -109,7 +109,7 @@
 /*
  * Debugging settings go here.
  */
-#string STR_DEBUG_FORM_TITLE        #language en-US "Debugging"
+#string STR_DEBUG_FORM_TITLE        #language en-US "Debugging Configuration"
 #string STR_DEBUG_FORM_SUBTITLE     #language en-US "For UEFI/OS Developers"
 
 #string STR_DEBUG_JTAG_PROMPT       #language en-US "JTAG Routing"
