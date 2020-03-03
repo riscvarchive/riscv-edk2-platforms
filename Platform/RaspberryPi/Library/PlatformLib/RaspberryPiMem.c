@@ -25,7 +25,7 @@ UINT32 mBoardRevision;
 
 
 // The total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 10
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 11
 
 STATIC BOOLEAN                  VirtualMemoryInfoInitialized = FALSE;
 STATIC RPI_MEMORY_REGION_INFO   VirtualMemoryInfo[MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS];
@@ -60,6 +60,7 @@ ArmPlatformGetVirtualMemoryMap (
 {
   UINTN                         Index = 0;
   UINTN                         GpuIndex;
+  INT64                         OrigMemorySize;
   INT64                         SystemMemorySize;
   ARM_MEMORY_REGION_DESCRIPTOR  *VirtualMemoryTable;
 
@@ -155,13 +156,13 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index].Type             = RPI_MEM_UNMAPPED_REGION;
   VirtualMemoryInfo[Index++].Name           = L"SoC Reserved (283x)";
 
-  if (FeaturePcdGet (PcdAcpiBasicMode)) {
-    //
-    // Limit the memory to 3 GB to work around the DMA bugs in the SoC without
-    // having to rely on IORT or _DMA descriptions.
-    //
-    SystemMemorySize = MIN(SystemMemorySize, 3U * SIZE_1GB);
-  }
+  //
+  // By default we limit the memory to 3 GB to work around the DMA bugs in the SoC,
+  // for OSes that don't support _DMA range descriptors. On 4GB boards, it's runtime
+  // setting to boot with 4 GB, and the additional 1 GB is added by ConfigDxe.
+  //
+  OrigMemorySize = SystemMemorySize;
+  SystemMemorySize = MIN(SystemMemorySize, 3UL * SIZE_1GB);
 
   // If we have RAM above the 1 GB mark, declare it
   if (SystemMemorySize - SIZE_1GB > 0) {
@@ -170,7 +171,20 @@ ArmPlatformGetVirtualMemoryMap (
     VirtualMemoryTable[Index].Length        = SystemMemorySize - SIZE_1GB;
     VirtualMemoryTable[Index].Attributes    = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
     VirtualMemoryInfo[Index].Type           = RPI_MEM_BASIC_REGION;
-    VirtualMemoryInfo[Index++].Name         = L"Extended System RAM";
+    VirtualMemoryInfo[Index++].Name         = L"Extended System RAM below 3 GB";
+  }
+
+  //
+  // If we have RAM above 3 GB mark, declare it so it's mapped, but
+  // don't add it to the memory map. This is done later by ConfigDxe if necessary.
+  //
+  if (OrigMemorySize > (3UL * SIZE_1GB)) {
+    VirtualMemoryTable[Index].PhysicalBase  = 3UL * SIZE_1GB;
+    VirtualMemoryTable[Index].VirtualBase   = VirtualMemoryTable[Index].PhysicalBase;
+    VirtualMemoryTable[Index].Length        = OrigMemorySize - VirtualMemoryTable[Index].PhysicalBase;
+    VirtualMemoryTable[Index].Attributes    = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+    VirtualMemoryInfo[Index].Type           = RPI_MEM_UNMAPPED_REGION;
+    VirtualMemoryInfo[Index++].Name         = L"Extended System RAM above 3 GB";
   }
 
   // End of Table
