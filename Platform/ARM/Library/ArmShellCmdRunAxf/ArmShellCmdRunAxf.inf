@@ -27,6 +27,12 @@
   elf64.h
   elf_common.h
 
+[Sources.AARCH64]
+  AArch64/Pivot.S
+
+[Sources.ARM]
+  Arm/Pivot.S
+
 [Packages]
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
@@ -37,11 +43,13 @@
 [LibraryClasses]
   ArmLib
   BaseLib
+  CacheMaintenanceLib
   DebugLib
   HiiLib
   ShellLib
 
 [Protocols]
+  gEfiLoadedImageProtocolGuid
   gEfiShellDynamicCommandProtocolGuid
 
 [Guids]

@@ -10,6 +10,7 @@
 
 #include <Guid/GlobalVariable.h>
 
+#include <Library/CacheMaintenanceLib.h>
 #include <Library/PrintLib.h>
 #include <Library/HandleParsingLib.h>
 #include <Library/DevicePathLib.h>
@@ -19,6 +20,8 @@
 #include <Library/DebugLib.h>
 
 #include <Library/ArmLib.h>
+
+#include <Protocol/LoadedImage.h>
 
 #include "ArmShellCmdRunAxf.h"
 #include "ElfLoader.h"
@@ -85,36 +88,20 @@ ShutdownUefiBootServices (
   return Status;
 }
 
-
-STATIC
-EFI_STATUS
-PreparePlatformHardware (
-  VOID
-  )
-{
-  //Note: Interrupts will be disabled by the GIC driver when ExitBootServices() will be called.
-
-  // Clean before Disable else the Stack gets corrupted with old data.
-  ArmCleanDataCache ();
-  ArmDisableDataCache ();
-  // Invalidate all the entries that might have snuck in.
-  ArmInvalidateDataCache ();
-
-  // Disable and invalidate the instruction cache
-  ArmDisableInstructionCache ();
-  ArmInvalidateInstructionCache ();
-
-  // Turn off MMU
-  ArmDisableMmu();
-
-  return EFI_SUCCESS;
-}
-
 // Process arguments to pass to AXF?
 STATIC CONST SHELL_PARAM_ITEM ParamList[] = {
   {NULL, TypeMax}
 };
 
+
+VOID
+RunAxfPivot (
+  IN  ELF_ENTRYPOINT  ElfEntry,
+  IN  UINTN           Arg0,
+  IN  UINTN           Arg1,
+  IN  UINTN           Arg2,
+  IN  UINTN           Arg3
+  );
 
 /**
   This is the shell command handler function pointer callback type. This
@@ -139,23 +126,23 @@ ShellDynCmdRunAxfHandler (
   IN EFI_SHELL_PROTOCOL                    *Shell
   )
 {
-  LIST_ENTRY        *ParamPackage;
-  EFI_STATUS         Status;
-  SHELL_STATUS       ShellStatus;
-  SHELL_FILE_HANDLE  FileHandle;
-  ELF_ENTRYPOINT     StartElf;
-  CONST CHAR16      *FileName;
-  EFI_FILE_INFO     *Info;
-  UINTN              FileSize;
-  VOID              *FileData;
-  VOID              *Entrypoint;
-  LIST_ENTRY         LoadList;
-  LIST_ENTRY        *Node;
-  LIST_ENTRY        *NextNode;
-  RUNAXF_LOAD_LIST  *LoadNode;
-  CHAR16            *TmpFileName;
-  CHAR16            *TmpChar16;
-
+  LIST_ENTRY                  *ParamPackage;
+  EFI_STATUS                  Status;
+  SHELL_STATUS                ShellStatus;
+  SHELL_FILE_HANDLE           FileHandle;
+  ELF_ENTRYPOINT              StartElf;
+  CONST CHAR16                *FileName;
+  EFI_FILE_INFO               *Info;
+  UINTN                       FileSize;
+  VOID                        *FileData;
+  VOID                        *Entrypoint;
+  LIST_ENTRY                  LoadList;
+  LIST_ENTRY                  *Node;
+  LIST_ENTRY                  *NextNode;
+  RUNAXF_LOAD_LIST            *LoadNode;
+  CHAR16                      *TmpFileName;
+  CHAR16                      *TmpChar16;
+  EFI_LOADED_IMAGE_PROTOCOL   *LoadedImage;
 
   ShellStatus = SHELL_SUCCESS;
   FileHandle = NULL;
@@ -291,6 +278,9 @@ ShellDynCmdRunAxfHandler (
     }
   }
 
+  WriteBackDataCacheRange (FileData, FileSize);
+  InvalidateInstructionCacheRange (FileData, FileSize);
+
   // Program load list created.
   // Shutdown UEFI, copy and jump to code.
   if (!IsListEmpty (&LoadList) && !EFI_ERROR (Status)) {
@@ -315,14 +305,17 @@ ShellDynCmdRunAxfHandler (
         Node = GetNextNode (&LoadList, Node);
       }
 
-      //
-      // Switch off interrupts, caches, mmu, etc
-      //
-      Status = PreparePlatformHardware ();
+      Status = gBS->HandleProtocol (gImageHandle, &gEfiLoadedImageProtocolGuid,
+                      (VOID **)&LoadedImage);
       ASSERT_EFI_ERROR (Status);
 
-      StartElf = (ELF_ENTRYPOINT)Entrypoint;
-      StartElf (0,0,0,0);
+      //
+      // Ensure that the currently running image is clean to the PoC so we can
+      // safely keep executing it with the MMU and caches off
+      //
+      WriteBackDataCacheRange (LoadedImage->ImageBase, LoadedImage->ImageSize);
+
+      RunAxfPivot (StartElf, 0, 0, 0, 0);
 
       // We should never get here.. But if we do, spin..
       ASSERT (FALSE);
