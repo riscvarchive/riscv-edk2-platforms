@@ -288,7 +288,8 @@ ApplyVariables (
     DEBUG ((DEBUG_INFO, "Current CPU speed is %uHz\n", Rate));
   }
 
-  if (mModelFamily >= 4 && PcdGet32 (PcdRamLimitTo3GB) == 0) {
+  if (mModelFamily >= 4 && PcdGet32 (PcdRamMoreThan3GB) != 0 &&
+      PcdGet32 (PcdRamLimitTo3GB) == 0) {
     /*
      * Similar to how we compute the > 3 GB RAM segment's size in PlatformLib/
      * RaspberryPiMem.c, with some overlap protection for the Bcm2xxx register
