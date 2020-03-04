@@ -882,7 +882,12 @@ MemArrMapInfoUpdateSmbiosType19 (
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_WARN, "Couldn't get the board memory size - defaulting to 256 MB: %r\n", Status));
   } else {
-    mMemArrMapInfoType19.EndingAddress = InstalledMB * 1024;
+    if (PcdGet32 (PcdRamMoreThan3GB) && PcdGet32 (PcdRamLimitTo3GB)) {
+      ASSERT (InstalledMB > 3 * 1024);
+      mMemArrMapInfoType19.EndingAddress = 3 * 1024 * 1024;
+    } else {
+      mMemArrMapInfoType19.EndingAddress = InstalledMB * 1024;
+    }
   }
   mMemArrMapInfoType19.EndingAddress -= 1;
 
