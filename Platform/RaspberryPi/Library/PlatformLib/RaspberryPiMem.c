@@ -39,8 +39,6 @@ STATIC RPI_MEMORY_REGION_INFO   VirtualMemoryInfo[MAX_VIRTUAL_MEMORY_MAP_DESCRIP
                        FixedPcdGet32(PcdFdSize) - \
                        VariablesSize)
 
-#define ATFBase (FixedPcdGet64(PcdFdBaseAddress) + FixedPcdGet32(PcdFdSize))
-
 /**
   Return the Virtual Memory Map of your platform
 
@@ -96,13 +94,19 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index].Type             = RPI_MEM_RUNTIME_REGION;
   VirtualMemoryInfo[Index++].Name           = L"FD Variables";
 
-  // TF-A reserved RAM
-  VirtualMemoryTable[Index].PhysicalBase    = ATFBase;
-  VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
-  VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdSystemMemoryBase) - ATFBase;
-  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
-  VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
-  VirtualMemoryInfo[Index++].Name           = L"TF-A RAM";
+  if (BCM2711_SOC_REGISTERS == 0) {
+     //
+     // TF-A reserved RAM only exists for the Pi 3 TF-A.
+     //
+     // This is 2MB that directly follows the FD.
+     //
+     VirtualMemoryTable[Index].PhysicalBase    = (FixedPcdGet64(PcdFdBaseAddress) + FixedPcdGet32(PcdFdSize));
+     VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
+     VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdSystemMemoryBase) - VirtualMemoryTable[Index].PhysicalBase;
+     VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+     VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+     VirtualMemoryInfo[Index++].Name           = L"TF-A RAM";
+  }
 
   // Base System RAM
   VirtualMemoryTable[Index].PhysicalBase    = FixedPcdGet64 (PcdSystemMemoryBase);

@@ -396,8 +396,8 @@
   # This matches PcdFvBaseAddress, since everything less is ATF, and
   # will be reserved away.
   #
-  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x00400000
-  gArmTokenSpaceGuid.PcdSystemMemorySize|0x3fc00000
+  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x00200000
+  gArmTokenSpaceGuid.PcdSystemMemorySize|0x3fe00000
 
   #
   # Device specific addresses
