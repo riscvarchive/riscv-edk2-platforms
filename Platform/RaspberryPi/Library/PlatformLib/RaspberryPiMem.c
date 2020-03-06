@@ -94,7 +94,18 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index].Type             = RPI_MEM_RUNTIME_REGION;
   VirtualMemoryInfo[Index++].Name           = L"FD Variables";
 
-  if (BCM2711_SOC_REGISTERS == 0) {
+  if (BCM2711_SOC_REGISTERS != 0) {
+     //
+     // Only the Pi 4 firmware today expects the DTB to directly follow the
+     // FD instead of overlapping the FD.
+     //
+     VirtualMemoryTable[Index].PhysicalBase    = FixedPcdGet32 (PcdFdtBaseAddress);
+     VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
+     VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdFdtSize);;
+     VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+     VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+     VirtualMemoryInfo[Index++].Name           = L"Flattened Device Tree";
+  } else {
      //
      // TF-A reserved RAM only exists for the Pi 3 TF-A.
      //

@@ -49,8 +49,8 @@ Build instructions from the top level edk2-platforms Readme.md apply.
     ```
     Additionally, if you want to use PL011 instead of the miniUART, you can add the lines:
     ```
-    device_tree_address=0x20000
-    device_tree_end=0x30000
+    device_tree_address=0x1f0000
+    device_tree_end=0x200000
     device_tree=bcm2711-rpi-4-b.dtb
     dtoverlay=miniuart-bt
     ```
@@ -80,12 +80,12 @@ You can pass a custom Device Tree and overlays using the following:
 ```
 (...)
 disable_commandline_tags=2
-device_tree_address=0x20000
-device_tree_end=0x30000
+device_tree_address=0x1f0000
+device_tree_end=0x200000
 device_tree=bcm2711-rpi-4-b.dtb
 ```
 
-Note: the address range **must** be `[0x20000:0x30000]`.
+Note: the address range **must** be `[0x1f0000:0x200000]`.
 `dtoverlay` and `dtparam` parameters are also supported **when** providing a Device Tree`.
 
 ## Custom `bootargs`

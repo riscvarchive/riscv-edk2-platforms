@@ -44,6 +44,8 @@
 [FixedPcd]
   gArmTokenSpaceGuid.PcdFdBaseAddress
   gArmTokenSpaceGuid.PcdFvBaseAddress
+  gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress
+  gRaspberryPiTokenSpaceGuid.PcdFdtSize
   gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
   gArmTokenSpaceGuid.PcdArmPrimaryCore

@@ -43,6 +43,7 @@
   gRaspberryPiTokenSpaceGuid.PcdNvStorageFtwSpareBase|0x0|UINT32|0x00000006
   gRaspberryPiTokenSpaceGuid.PcdNvStorageFtwWorkingBase|0x0|UINT32|0x00000007
   gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase|0x0|UINT32|0x00000008
+  gRaspberryPiTokenSpaceGuid.PcdFdtSize|0x10000|UINT32|0x00000009
 
 [PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
   gRaspberryPiTokenSpaceGuid.PcdCpuClock|0|UINT32|0x0000000d
