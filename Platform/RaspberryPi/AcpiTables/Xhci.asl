@@ -118,7 +118,6 @@ Device (SCB0) {
         Method (_INI, 0, Serialized) {
             OperationRegion (PCFG, SystemMemory, SANITIZED_PCIE_REG_BASE + PCIE_EXT_CFG_DATA, 0x1000)
             Field (PCFG, AnyAcc, NoLock, Preserve) {
-                Offset (0),
                 VNID, 16, // Vendor ID
                 DVID, 16, // Device ID
                 CMND, 16, // Command register

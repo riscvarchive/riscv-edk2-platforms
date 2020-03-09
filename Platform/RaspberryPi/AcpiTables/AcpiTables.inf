@@ -56,3 +56,6 @@
   gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
+
+[BuildOptions]
+  GCC:*_*_*_ASL_FLAGS       = -vw3133 -vw3150
