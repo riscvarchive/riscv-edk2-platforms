@@ -357,42 +357,36 @@ formset
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_640_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_640_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         checkbox varid = DisplayEnableScaledVModes.v800,
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_800_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_800_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         checkbox varid = DisplayEnableScaledVModes.v1024,
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_1024_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_1024_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         checkbox varid = DisplayEnableScaledVModes.v720p,
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_720_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_720_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         checkbox varid = DisplayEnableScaledVModes.v1080p,
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_1080_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_1080_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         checkbox varid = DisplayEnableScaledVModes.Physical,
             prompt      = STRING_TOKEN(STR_DISPLAY_VMODES_REAL_PROMPT),
             help        = STRING_TOKEN(STR_DISPLAY_VMODES_REAL_HELP),
             flags       = CHECKBOX_DEFAULT | CHECKBOX_DEFAULT_MFG | RESET_REQUIRED,
-            default     = TRUE,
         endcheckbox;
 
         oneof varid = DisplayEnableSShot.Enable,
