@@ -24,6 +24,8 @@
 #include <Protocol/RpiFirmware.h>
 #include "ConfigDxeFormSetGuid.h"
 
+#define FREQ_1_MHZ 1000000
+
 extern UINT8 ConfigDxeHiiBin[];
 extern UINT8 ConfigDxeStrings[];
 
@@ -256,28 +258,35 @@ ApplyVariables (
   UINT32 Rate = 0;
   UINT64 SystemMemorySize;
 
-  if (CpuClock != 0) {
-    if (CpuClock == 2) {
-      /*
-       * Maximum: 1.2GHz on RPi 3, 1.4GHz on RPi 3B+, unless
-       * overridden with arm_freq=xxx in config.txt.
-       */
-      Status = mFwProtocol->GetMaxClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
-      if (Status != EFI_SUCCESS) {
-        DEBUG ((DEBUG_ERROR, "Couldn't get the max CPU speed, leaving as is: %r\n", Status));
-      }
-    } else if (CpuClock == 3) {
-      Rate = CustomCpuClock * 1000000;
-    } else {
-      Rate = 600 * 1000000;
+  switch (CpuClock) {
+  case 0: // Low
+    Rate = FixedPcdGet32 (PcdCpuLowSpeedMHz) * FREQ_1_MHZ;
+    break;
+  case 1: // Default
+    /*
+     * What the Raspberry Pi Foundation calls "max clock rate" is really the default value
+     * from: https://www.raspberrypi.org/documentation/configuration/config-txt/overclocking.md
+     */
+    Status = mFwProtocol->GetMaxClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
+    if (Status != EFI_SUCCESS) {
+      DEBUG ((DEBUG_ERROR, "Couldn't read default CPU speed %r\n", Status));
     }
+    break;
+  case 2: // Max
+    Rate = FixedPcdGet32 (PcdCpuMaxSpeedMHz) * FREQ_1_MHZ;
+    break;
+  case 3: // Custom
+    Rate = CustomCpuClock * FREQ_1_MHZ;
+    break;
   }
 
   if (Rate != 0) {
-    DEBUG ((DEBUG_INFO, "Setting CPU speed to %uHz\n", Rate));
+    DEBUG ((DEBUG_INFO, "Setting CPU speed to %u MHz\n", Rate / FREQ_1_MHZ));
     Status = mFwProtocol->SetClockRate (RPI_MBOX_CLOCK_RATE_ARM, Rate, 1);
     if (Status != EFI_SUCCESS) {
       DEBUG ((DEBUG_ERROR, "Couldn't set the CPU speed: %r\n", Status));
+    } else {
+      PcdSet32 (PcdCustomCpuClock, Rate / FREQ_1_MHZ);
     }
   }
 
@@ -285,7 +294,7 @@ ApplyVariables (
   if (Status != EFI_SUCCESS) {
     DEBUG ((DEBUG_ERROR, "Couldn't get the CPU speed: %r\n", Status));
   } else {
-    DEBUG ((DEBUG_INFO, "Current CPU speed is %uHz\n", Rate));
+    DEBUG ((DEBUG_INFO, "Current CPU speed is %u MHz\n", Rate / FREQ_1_MHZ));
   }
 
   if (mModelFamily >= 4 && PcdGet32 (PcdRamMoreThan3GB) != 0 &&

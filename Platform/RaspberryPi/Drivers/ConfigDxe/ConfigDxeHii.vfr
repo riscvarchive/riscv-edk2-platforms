@@ -53,8 +53,8 @@ typedef struct {
 
 typedef struct {
   /*
-   * 0 - don't change the clock rate.
-   * 1 - 600MHz.
+   * 0 - low.
+   * 1 - default.
    * 2 - maximum.
    * 3 - custom.
    */
@@ -253,8 +253,8 @@ formset
             prompt      = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_PROMPT),
             help        = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_HELP),
             flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
-            option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_NA), value = 0, flags = DEFAULT;
-            option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_600MHZ), value = 1, flags = 0;
+            option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_LOW), value = 0, flags = 0;
+            option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_DEF), value = 1, flags = DEFAULT;
             option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_MAX), value = 2, flags = 0;
             option text = STRING_TOKEN(STR_CHIPSET_CLOCK_CPU_CUSTOM), value = 3, flags = 0;
         endoneof;
@@ -265,8 +265,8 @@ formset
               help    = STRING_TOKEN(STR_CHIPSET_CUSTOM_CPU_CLOCK_HELP),
               flags   = DISPLAY_UINT_DEC | NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
               minimum = 100,
-              maximum = 1600,
-              default = 600,
+              maximum = FixedPcdGet32 (PcdCpuMaxSpeedMHz),
+              default = FixedPcdGet32 (PcdCpuDefSpeedMHz),
           endnumeric;
         endif;
     endform;

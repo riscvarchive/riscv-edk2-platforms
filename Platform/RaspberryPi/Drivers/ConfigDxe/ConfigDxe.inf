@@ -57,6 +57,11 @@
   gRaspberryPiFirmwareProtocolGuid      ## CONSUMES
   gRaspberryPiConfigAppliedProtocolGuid ## PRODUCES
 
+[FixedPcd]
+  gRaspberryPiTokenSpaceGuid.PcdCpuLowSpeedMHz
+  gRaspberryPiTokenSpaceGuid.PcdCpuDefSpeedMHz
+  gRaspberryPiTokenSpaceGuid.PcdCpuMaxSpeedMHz
+
 [Pcd]
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress

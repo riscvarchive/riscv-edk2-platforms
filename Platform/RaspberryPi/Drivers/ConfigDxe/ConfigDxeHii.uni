@@ -22,13 +22,13 @@
 
 #string STR_CHIPSET_CLOCK_CPU_PROMPT #language en-US "CPU Clock"
 #string STR_CHIPSET_CLOCK_CPU_HELP   #language en-US "CPU Speed"
-#string STR_CHIPSET_CLOCK_CPU_NA     #language en-US "Don't Override"
-#string STR_CHIPSET_CLOCK_CPU_600MHZ #language en-US "Min (600MHz)"
+#string STR_CHIPSET_CLOCK_CPU_LOW    #language en-US "Low"
+#string STR_CHIPSET_CLOCK_CPU_DEF    #language en-US "Default"
 #string STR_CHIPSET_CLOCK_CPU_MAX    #language en-US "Max"
 #string STR_CHIPSET_CLOCK_CPU_CUSTOM #language en-US "Custom"
 
 #string STR_CHIPSET_CUSTOM_CPU_CLOCK_PROMPT #language en-US "CPU Clock Rate (MHz)"
-#string STR_CHIPSET_CUSTOM_CPU_CLOCK_HELP   #language en-US "Adjust the CPU speed.\nMin value: 100 MHz\nMax value: 1600 MHz\n\nWarning: Overclocking can make the system unbootable!"
+#string STR_CHIPSET_CUSTOM_CPU_CLOCK_HELP   #language en-US "Manually set the CPU Speed\n\nWarning: Overclocking can make the system unbootable!"
 
 /*
  * Advanced configuration.

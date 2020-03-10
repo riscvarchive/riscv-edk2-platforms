@@ -432,6 +432,13 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase|0xFF841000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xFF842000
 
+  #
+  # Fixed CPU settings.
+  #
+  gRaspberryPiTokenSpaceGuid.PcdCpuLowSpeedMHz|800
+  gRaspberryPiTokenSpaceGuid.PcdCpuDefSpeedMHz|1500
+  gRaspberryPiTokenSpaceGuid.PcdCpuMaxSpeedMHz|2200
+
   ## Default Terminal Type
   ## 0-PCANSI, 1-VT100, 2-VT00+, 3-UTF8, 4-TTYTERM
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|4
@@ -448,8 +455,8 @@
   # Clock overrides.
   #
 
-  gRaspberryPiTokenSpaceGuid.PcdCpuClock|L"CpuClock"|gConfigDxeFormSetGuid|0x0|0
-  gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock|L"CustomCpuClock"|gConfigDxeFormSetGuid|0x0|600
+  gRaspberryPiTokenSpaceGuid.PcdCpuClock|L"CpuClock"|gConfigDxeFormSetGuid|0x0|1
+  gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock|L"CustomCpuClock"|gConfigDxeFormSetGuid|0x0|gRaspberryPiTokenSpaceGuid.PcdCpuDefSpeedMHz
 
   #
   # SD-related.
