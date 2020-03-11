@@ -260,7 +260,8 @@ typedef struct {
   FIT_TABLE_CONTEXT_ENTRY    BiosModule[MAX_BIOS_MODULE_ENTRY];
   UINT32                     BiosModuleVersion;
   FIT_TABLE_CONTEXT_ENTRY    Microcode[MAX_MICROCODE_ENTRY];
-  BOOLEAN                    MicrocodeAlignment;
+  BOOLEAN                    MicrocodeIsAligned;
+  UINT32                     MicrocodeAlignValue;
   UINT32                     MicrocodeVersion;
   FIT_TABLE_CONTEXT_ENTRY    OptionalModule[MAX_OPTIONAL_ENTRY];
   FIT_TABLE_CONTEXT_ENTRY    PortModule[MAX_PORT_ENTRY];
@@ -325,6 +326,7 @@ Returns:
           "\t[-V <FitEntryDefaultVersion>]\n"
           "\t[-F <FitTablePointerOffset>] [-F <FitTablePointerOffset>] [-V <FitHeaderVersion>]\n"
           "\t[-NA]\n"
+          "\t[-A <MicrocodeAlignment>]\n"
           "\t[-CLEAR]\n"
           "\t[-L <MicrocodeSlotSize> <MicrocodeFfsGuid>]\n"
           "\t[-I <BiosInfoGuid>]\n"
@@ -357,7 +359,8 @@ Returns:
   printf ("\tMicrocodeGuid          - Guid of Microcode Module.\n");
   printf ("\tMicrocodeSlotSize      - Occupied region size of each Microcode binary.\n");
   printf ("\tMicrocodeFfsGuid       - Guid of FFS which is used to save Microcode binary");
-  printf ("\t-NA                    - No 0x800 aligned Microcode requirement. No -NA means Microcode is 0x800 aligned.\n");
+  printf ("\t-NA                    - No 0x800 aligned Microcode requirement. No -NA means Microcode is aligned with option MicrocodeAlignment value.\n");
+  printf ("\tMicrocodeAlignment     - HEX value of Microcode alignment. Ignored if \"-NA\" is specified. Default value is 0x800.\n");
   printf ("\tRecordType             - FIT entry record type. User should ensure it is ordered.\n");
   printf ("\tRecordDataAddress      - FIT entry record data address.\n");
   printf ("\tRecordDataSize         - FIT entry record data size.\n");
@@ -957,17 +960,25 @@ Returns:
   //
   if ((Index >= argc) ||
       ((strcmp (argv[Index], "-NA") != 0) &&
-       (strcmp (argv[Index], "-na") != 0)) ) {
+       (strcmp (argv[Index], "-na") != 0) &&
+       (strcmp (argv[Index], "-A") != 0) &&
+       (strcmp (argv[Index], "-a") != 0))) {
     //
     // by pass
     //
-    gFitTableContext.MicrocodeAlignment = TRUE;
-  } else {
-    //
-    // no alignment
-    //
-    gFitTableContext.MicrocodeAlignment = FALSE;
+    gFitTableContext.MicrocodeIsAligned = TRUE;
+    gFitTableContext.MicrocodeAlignValue = 0x800;
+  } else if ((strcmp (argv[Index], "-NA") == 0) || (strcmp (argv[Index], "-na") == 0)) {
+    gFitTableContext.MicrocodeIsAligned = FALSE;
+    gFitTableContext.MicrocodeAlignValue = 1;
     Index += 1;
+  } else if ((strcmp (argv[Index], "-A") == 0) || (strcmp (argv[Index], "-a") == 0)) {
+    gFitTableContext.MicrocodeIsAligned = TRUE;
+    //
+    // Get alignment from parameter
+    //
+    gFitTableContext.MicrocodeAlignValue = xtoi (argv[Index + 1]);;
+    Index += 2;
   }
 
   //
@@ -1159,8 +1170,8 @@ Returns:
                 //
                 // MCU might be put at 2KB alignment, if so, we need to adjust the size as 2KB alignment.
                 //
-                if (gFitTableContext.MicrocodeAlignment) {
-                  MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + MICROCODE_ALIGNMENT) & ~MICROCODE_ALIGNMENT;
+                if (gFitTableContext.MicrocodeIsAligned) {
+                  MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + (gFitTableContext.MicrocodeAlignValue - 1)) & ~(gFitTableContext.MicrocodeAlignValue - 1);
                 } else {
                   MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32));
                 }
@@ -1537,8 +1548,8 @@ Returns:
         //
         // MCU might be put at 2KB alignment, if so, we need to adjust the size as 2KB alignment.
         //
-        if (gFitTableContext.MicrocodeAlignment) {
-          MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + MICROCODE_ALIGNMENT) & ~MICROCODE_ALIGNMENT;
+        if (gFitTableContext.MicrocodeIsAligned) {
+          MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + (gFitTableContext.MicrocodeAlignValue - 1)) & ~(gFitTableContext.MicrocodeAlignValue - 1);
         } else {
           MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32));
         }
