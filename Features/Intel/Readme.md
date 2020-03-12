@@ -17,8 +17,10 @@ document as needed.
 ### Advanced Feature Attributes
 Advanced features should be:
 * _Cohesive_, the feature should not contain any functionality unrelated to the feature.
-* _Complete_, the feature must have a complete design that minimizes dependencies. A feature package cannot directly
-  depend on another feature package.
+* _Complete_, the feature must have a complete design that minimizes dependencies. A feature package can only depend
+  on following packages:
+  * edk2 repo: `MdePkg`, `MdeModulePkg`, `UefiCpuPkg`, `FmpDevicePkg`, `SecurityPkg`, `NetworkPkg`, `ShellPkg`.
+  * edk2-platforms repo: `MinPlatformPkg`, `IntelSiliconPkg`.
 * _Easy to Integrate_, the feature should expose well-defined software interfaces to use and configure the feature.
   * It should also present a set of simple and well-documented standard EDK II configuration options such as PCDs to
   configure the feature.
