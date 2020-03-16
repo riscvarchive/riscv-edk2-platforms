@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the Coffee Lake silicon package DSC file.
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -147,7 +147,7 @@ gUefiCpuPkgTokenSpaceGuid.PcdCpuApTargetCstate|0
 # Silicon Init Common Library
 #
 !include $(PLATFORM_SI_PACKAGE)/SiPkgCommonLib.dsc
-ConfigBlockLib|ClientSiliconPkg/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
+ConfigBlockLib|IntelSiliconPkg/Library/BaseConfigBlockLib/BaseConfigBlockLib.inf
 PchTraceHubInitLib|ClientSiliconPkg/Library/BasePchTraceHubInitLib/BasePchTraceHubInitLib.inf
 
 [LibraryClasses.IA32]
