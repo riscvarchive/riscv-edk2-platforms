@@ -118,23 +118,33 @@ UtmiPhyConfig (
 
   /* Impedance Calibration Threshold Setting */
   RegSet (UtmiBaseAddr + UTMI_CALIB_CTRL_REG,
-    0x6 << UTMI_CALIB_CTRL_IMPCAL_VTH_OFFSET,
+    0x7 << UTMI_CALIB_CTRL_IMPCAL_VTH_OFFSET,
     UTMI_CALIB_CTRL_IMPCAL_VTH_MASK);
+
+  /* Start Impedance and PLL Calibration */
+  Mask = UTMI_CALIB_CTRL_PLLCAL_START_MASK;
+  Data = (0x1 << UTMI_CALIB_CTRL_PLLCAL_START_OFFSET);
+  Mask |= UTMI_CALIB_CTRL_IMPCAL_START_MASK;
+  Data |= (0x1 << UTMI_CALIB_CTRL_IMPCAL_START_OFFSET);
+  RegSet (UtmiBaseAddr + UTMI_CALIB_CTRL_REG, Data, Mask);
 
   /* Set LS TX driver strength coarse control */
   Mask = UTMI_TX_CH_CTRL_DRV_EN_LS_MASK;
   Data = 0x3 << UTMI_TX_CH_CTRL_DRV_EN_LS_OFFSET;
-  /* Set LS TX driver fine adjustment */
+  Mask |= UTMI_TX_CH_CTRL_AMP_MASK;
+  Data |= 0x4 << UTMI_TX_CH_CTRL_AMP_OFFSET;
   Mask |= UTMI_TX_CH_CTRL_IMP_SEL_LS_MASK;
   Data |= 0x3 << UTMI_TX_CH_CTRL_IMP_SEL_LS_OFFSET;
   RegSet (UtmiBaseAddr + UTMI_TX_CH_CTRL_REG, Data, Mask);
 
   /* Enable SQ */
   Mask = UTMI_RX_CH_CTRL0_SQ_DET_MASK;
-  Data = 0x0 << UTMI_RX_CH_CTRL0_SQ_DET_OFFSET;
+  Data = 0x1 << UTMI_RX_CH_CTRL0_SQ_DET_OFFSET;
   /* Enable analog squelch detect */
   Mask |= UTMI_RX_CH_CTRL0_SQ_ANA_DTC_MASK;
-  Data |= 0x1 << UTMI_RX_CH_CTRL0_SQ_ANA_DTC_OFFSET;
+  Data |= 0x0 << UTMI_RX_CH_CTRL0_SQ_ANA_DTC_OFFSET;
+  Mask |= UTMI_RX_CH_CTRL0_DISCON_THRESH_MASK;
+  Data |= 0x0 << UTMI_RX_CH_CTRL0_DISCON_THRESH_OFFSET;
   RegSet (UtmiBaseAddr + UTMI_RX_CH_CTRL0_REG, Data, Mask);
 
   /* Set External squelch calibration number */
