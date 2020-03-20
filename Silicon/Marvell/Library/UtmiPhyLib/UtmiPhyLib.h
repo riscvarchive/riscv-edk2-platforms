@@ -21,6 +21,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <Protocol/BoardDesc.h>
 
+/* USB Configuration register */
 #define UTMI_USB_CFG_DEVICE_EN_OFFSET             0
 #define UTMI_USB_CFG_DEVICE_EN_MASK               (0x1 << UTMI_USB_CFG_DEVICE_EN_OFFSET)
 #define UTMI_USB_CFG_DEVICE_MUX_OFFSET            1
@@ -28,9 +29,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define UTMI_USB_CFG_PLL_OFFSET                   25
 #define UTMI_USB_CFG_PLL_MASK                     (0x1 << UTMI_USB_CFG_PLL_OFFSET)
 
+/* UTMI Configuration register */
 #define UTMI_PHY_CFG_PU_OFFSET                    5
 #define UTMI_PHY_CFG_PU_MASK                      (0x1 << UTMI_PHY_CFG_PU_OFFSET)
 
+/* UTMI PLL registers */
 #define UTMI_PLL_CTRL_REG                         0x0
 #define UTMI_PLL_CTRL_REFDIV_OFFSET               0
 #define UTMI_PLL_CTRL_REFDIV_MASK                 (0x7f << UTMI_PLL_CTRL_REFDIV_OFFSET)
@@ -53,7 +56,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define UTMI_CALIB_CTRL_PLLCAL_DONE_OFFSET        31
 #define UTMI_CALIB_CTRL_PLLCAL_DONE_MASK          (0x1 << UTMI_CALIB_CTRL_PLLCAL_DONE_OFFSET)
 
-#define UTMI_TX_CH_CTRL_REG                       0xC
+/* UTMI Base registers */
+#define UTMI_TX_CH_CTRL_REG                       0x0
 #define UTMI_TX_CH_CTRL_DRV_EN_LS_OFFSET          12
 #define UTMI_TX_CH_CTRL_DRV_EN_LS_MASK            (0xf << UTMI_TX_CH_CTRL_DRV_EN_LS_OFFSET)
 #define UTMI_TX_CH_CTRL_IMP_SEL_LS_OFFSET         16
@@ -61,7 +65,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define UTMI_TX_CH_CTRL_AMP_OFFSET                20
 #define UTMI_TX_CH_CTRL_AMP_MASK                  (0x7 << UTMI_TX_CH_CTRL_AMP_OFFSET)
 
-#define UTMI_RX_CH_CTRL0_REG                      0x14
+#define UTMI_RX_CH_CTRL0_REG                      0x8
 #define UTMI_RX_CH_CTRL0_DISCON_THRESH_OFFSET     8
 #define UTMI_RX_CH_CTRL0_DISCON_THRESH_MASK       (0x3 << UTMI_RX_CH_CTRL0_DISCON_THRESH_OFFSET)
 #define UTMI_RX_CH_CTRL0_SQ_DET_OFFSET            15
@@ -69,19 +73,19 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define UTMI_RX_CH_CTRL0_SQ_ANA_DTC_OFFSET        28
 #define UTMI_RX_CH_CTRL0_SQ_ANA_DTC_MASK          (0x1 << UTMI_RX_CH_CTRL0_SQ_ANA_DTC_OFFSET)
 
-#define UTMI_RX_CH_CTRL1_REG                      0x18
+#define UTMI_RX_CH_CTRL1_REG                      0xC
 #define UTMI_RX_CH_CTRL1_SQ_AMP_CAL_OFFSET        0
 #define UTMI_RX_CH_CTRL1_SQ_AMP_CAL_MASK          (0x7 << UTMI_RX_CH_CTRL1_SQ_AMP_CAL_OFFSET)
 #define UTMI_RX_CH_CTRL1_SQ_AMP_CAL_EN_OFFSET     3
 #define UTMI_RX_CH_CTRL1_SQ_AMP_CAL_EN_MASK       (0x1 << UTMI_RX_CH_CTRL1_SQ_AMP_CAL_EN_OFFSET)
 
-#define UTMI_CTRL_STATUS0_REG                     0x24
+#define UTMI_CTRL_STATUS0_REG                     0x18
 #define UTMI_CTRL_STATUS0_SUSPENDM_OFFSET         22
 #define UTMI_CTRL_STATUS0_SUSPENDM_MASK           (0x1 << UTMI_CTRL_STATUS0_SUSPENDM_OFFSET)
 #define UTMI_CTRL_STATUS0_TEST_SEL_OFFSET         25
 #define UTMI_CTRL_STATUS0_TEST_SEL_MASK           (0x1 << UTMI_CTRL_STATUS0_TEST_SEL_OFFSET)
 
-#define UTMI_CHGDTC_CTRL_REG                      0x38
+#define UTMI_CHGDTC_CTRL_REG                      0x2C
 #define UTMI_CHGDTC_CTRL_VDAT_OFFSET              8
 #define UTMI_CHGDTC_CTRL_VDAT_MASK                (0x3 << UTMI_CHGDTC_CTRL_VDAT_OFFSET)
 #define UTMI_CHGDTC_CTRL_VSRC_OFFSET              10

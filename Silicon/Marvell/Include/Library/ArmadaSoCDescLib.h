@@ -226,6 +226,7 @@ ArmadaSoCDescPp2Get (
 typedef struct {
   UINT8 UtmiPhyId;
   UINTN UtmiBaseAddress;
+  UINTN UtmiPllAddress;
   UINTN UtmiConfigAddress;
   UINTN UsbConfigAddress;
 } MV_SOC_UTMI_DESC;

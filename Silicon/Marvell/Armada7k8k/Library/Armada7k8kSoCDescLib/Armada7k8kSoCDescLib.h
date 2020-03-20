@@ -99,7 +99,8 @@
 //
 #define MV_SOC_UTMI_PER_CP_COUNT         2
 #define MV_SOC_UTMI_ID(Utmi)             (Utmi)
-#define MV_SOC_UTMI_BASE(Utmi)           (0x580000 + ((Utmi) * 0x1000))
+#define MV_SOC_UTMI_BASE(Utmi)           (0x58000C + ((Utmi) * 0x1000))
+#define MV_SOC_UTMI_PLL_BASE             0x580000
 #define MV_SOC_UTMI_CFG_BASE             0x440440
 #define MV_SOC_UTMI_USB_CFG_BASE         0x440420
 

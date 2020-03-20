@@ -409,6 +409,7 @@ ArmadaSoCDescUtmiGet (
     for (Index = 0; Index < MV_SOC_UTMI_PER_CP_COUNT; Index++) {
       Desc->UtmiPhyId = MV_SOC_UTMI_ID (UtmiIndex);
       Desc->UtmiBaseAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_UTMI_BASE (Index);
+      Desc->UtmiPllAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_UTMI_PLL_BASE;
       Desc->UtmiConfigAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_UTMI_CFG_BASE;
       Desc->UsbConfigAddress = MV_SOC_CP_BASE (CpIndex) + MV_SOC_UTMI_USB_CFG_BASE;
       Desc++;
