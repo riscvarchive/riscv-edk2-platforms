@@ -79,6 +79,7 @@ UtmiPhyPowerDown (
   } else {
     Data = 0x0 << UTMI_USB_CFG_DEVICE_EN_OFFSET;
   }
+  RegSet (UsbCfgAddr, Data, Mask);
 
   /* Set Test suspendm mode */
   Mask = UTMI_CTRL_STATUS0_SUSPENDM_MASK;
