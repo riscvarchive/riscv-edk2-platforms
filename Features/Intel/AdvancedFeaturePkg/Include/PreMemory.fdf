@@ -5,7 +5,7 @@
 #  can be conditionally included in the flash image by enabling the respective
 #  feature via its FeaturePCD.
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -54,4 +54,8 @@
 #
 !if gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable == TRUE
   !include UserInterface/UserAuthFeaturePkg/Include/PreMemory.fdf
+!endif
+
+!if gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable == TRUE
+  !include LogoFeaturePkg/Include/PreMemory.fdf
 !endif

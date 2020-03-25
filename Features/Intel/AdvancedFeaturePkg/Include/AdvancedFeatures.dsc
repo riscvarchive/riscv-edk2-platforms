@@ -4,7 +4,7 @@
 #  This file is intended to be included into another package so advanced features
 #  can be conditionally built by enabling the respective feature via its FeaturePCD.
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -53,4 +53,8 @@
 #
 !if gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable == TRUE
   !include UserInterface/UserAuthFeaturePkg/Include/UserAuthFeature.dsc
+!endif
+
+!if gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable == TRUE
+  !include LogoFeaturePkg/Include/LogoFeature.dsc
 !endif
