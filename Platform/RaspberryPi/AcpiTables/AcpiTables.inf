@@ -32,6 +32,7 @@
   Dsdt.asl
   Csrt.aslc
   Spcr.aslc
+  Pptt.aslc
 
 [Packages]
   ArmPkg/ArmPkg.dec
