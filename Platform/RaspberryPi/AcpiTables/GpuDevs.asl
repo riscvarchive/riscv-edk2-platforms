@@ -75,8 +75,8 @@ Device (GPU0)
     // Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { BCM2836_HDMI1_INTERRUPT }
 
     // HDMI DDC connection
-    I2CSerialBus (0x50,, 100000,, "\\_SB.I2C2",,,,)  // EDID
-    I2CSerialBus (0x30,, 100000,, "\\_SB.I2C2",,,,)  // E-DDC Segment Pointer
+    I2CSerialBus (0x50,, 100000,, "\\_SB.GDV0.I2C2",,,,)  // EDID
+    I2CSerialBus (0x30,, 100000,, "\\_SB.GDV0.I2C2",,,,)  // E-DDC Segment Pointer
   })
   Method (_CRS, 0x0, Serialized)
   {
@@ -167,7 +167,7 @@ Device (VCIQ)
   Name (_CID, "VCIQ")
   Name (_UID, 0)
   Name (_CCA, 0x0)
-  Name (_DEP, Package() { \_SB.RPIQ })
+  Name (_DEP, Package() { \_SB.GDV0.RPIQ })
   Method (_STA)
   {
     Return (0xf)
@@ -192,7 +192,7 @@ Device (VCSM)
   Name (_CID, "VCSM")
   Name (_UID, 0)
   Name (_CCA, 0x0)
-  Name (_DEP, Package() { \_SB.VCIQ })
+  Name (_DEP, Package() { \_SB.GDV0.VCIQ })
   Method (_STA)
   {
     Return (0xf)
@@ -241,7 +241,7 @@ Device (I2C1)
   {
     MEMORY32FIXED (ReadWrite, 0, BCM2836_I2C1_LENGTH, RMEM)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_I2C1_INTERRUPT }
-    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 2, 3 }
+    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 2, 3 }
   })
   Method (_CRS, 0x0, Serialized)
   {
@@ -289,9 +289,9 @@ Device (SPI0)
   {
     MEMORY32FIXED (ReadWrite, 0, BCM2836_SPI0_LENGTH, RMEM)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_SPI0_INTERRUPT }
-    PinFunction (Exclusive, PullDown, BCM_ALT0, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 9, 10, 11 } // MISO, MOSI, SCLK
-    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 8 } // CE0
-    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 7 } // CE1
+    PinFunction (Exclusive, PullDown, BCM_ALT0, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 9, 10, 11 } // MISO, MOSI, SCLK
+    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 8 } // CE0
+    PinFunction (Exclusive, PullUp, BCM_ALT0, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 7 } // CE1
   })
 
   Method (_CRS, 0x0, Serialized)
@@ -307,7 +307,7 @@ Device (SPI1)
   Name (_CID, "BCMAUXSPI")
   Name (_UID, 0x1)
   Name (_CCA, 0x0)
-  Name (_DEP, Package() { \_SB.RPIQ })
+  Name (_DEP, Package() { \_SB.GDV0.RPIQ })
   Method (_STA)
   {
     Return (0xf)
@@ -316,8 +316,8 @@ Device (SPI1)
   {
     MEMORY32FIXED (ReadWrite, 0, BCM2836_SPI1_LENGTH, RMEM)
     Interrupt (ResourceConsumer, Level, ActiveHigh, Shared,) { BCM2836_SPI1_INTERRUPT }
-    PinFunction (Exclusive, PullDown, BCM_ALT4, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 19, 20, 21 } // MISO, MOSI, SCLK
-    PinFunction (Exclusive, PullDown, BCM_ALT4, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 16 } // CE2
+    PinFunction (Exclusive, PullDown, BCM_ALT4, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 19, 20, 21 } // MISO, MOSI, SCLK
+    PinFunction (Exclusive, PullDown, BCM_ALT4, "\\_SB.GDV0.GPI0", 0, ResourceConsumer, , ) { 16 } // CE2
   })
 
   Method (_CRS, 0x0, Serialized)
@@ -334,7 +334,7 @@ Device (SPI1)
 //   Name (_CID, "BCMAUXSPI")
 //   Name (_UID, 0x2)
 //   Name (_CCA, 0x0)
-//   Name (_DEP, Package() { \_SB.RPIQ })
+//   Name (_DEP, Package() { \_SB.GDV0.RPIQ })
 //   Method (_STA)
 //   {
 //     Return (0xf)     // Disabled
