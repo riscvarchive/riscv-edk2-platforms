@@ -25,7 +25,7 @@
 #define BCM_ALT4 0x3
 #define BCM_ALT5 0x2
 
-DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
+DefinitionBlock ("Dsdt.aml", "DSDT", 5, "RPIFDN", "RPI", 2)
 {
   Scope (\_SB_)
   {

@@ -17,6 +17,16 @@
 #include "AcpiTables.h"
 
 /*
+ * Windows 10 on the Raspberry Pi 3 requires a specific OEM Id for FADT.
+ * We replace the one that was defined in "AcpiTables.h", so that it is
+ * picked by the ACPI_HEADER () macro.
+ */
+#if (RPI_MODEL == 3)
+#undef  EFI_ACPI_OEM_ID
+#define EFI_ACPI_OEM_ID         {'B','C','2','8','3','6'}
+#endif
+
+/*
  * Note: Use ACPI 5.1 since we need to match MADT ACPI requirements
  */
 EFI_ACPI_5_1_FIXED_ACPI_DESCRIPTION_TABLE Fadt = {
