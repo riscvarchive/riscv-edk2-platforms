@@ -279,7 +279,11 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "MSFT", "EDK2", 2)
       Name (RBUF, ResourceTemplate ()
       {
         MEMORY32FIXED (ReadWrite, 0, GPIO_LENGTH, RMEM)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared) { BCM2386_GPIO_INTERRUPT0, BCM2386_GPIO_INTERRUPT1 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Shared)
+        {
+          BCM2386_GPIO_INTERRUPT0, BCM2386_GPIO_INTERRUPT1,
+          BCM2386_GPIO_INTERRUPT2, BCM2386_GPIO_INTERRUPT3
+        }
       })
       Method (_CRS, 0x0, Serialized)
       {
