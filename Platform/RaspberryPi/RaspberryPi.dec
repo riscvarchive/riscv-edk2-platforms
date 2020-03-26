@@ -47,6 +47,13 @@
   gRaspberryPiTokenSpaceGuid.PcdCpuLowSpeedMHz|600|UINT32|0x0000000a
   gRaspberryPiTokenSpaceGuid.PcdCpuDefSpeedMHz|800|UINT32|0x0000000b
   gRaspberryPiTokenSpaceGuid.PcdCpuMaxSpeedMHz|1000|UINT32|0x0000000c
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceHBase|0x0|UINT64|0x00000030
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceVBase|0x0|UINT64|0x00000031
+  gRaspberryPiTokenSpaceGuid.PcdGicGsivId|0x0|UINT32|0x00000032
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0|0x0|UINT32|0x00000033
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1|0x0|UINT32|0x00000034
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2|0x0|UINT32|0x00000035
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3|0x0|UINT32|0x00000036
 
 [PcdsFixedAtBuild, PcdsPatchableInModule, PcdsDynamic, PcdsDynamicEx]
   gRaspberryPiTokenSpaceGuid.PcdCpuClock|0|UINT32|0x0000000d

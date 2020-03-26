@@ -431,6 +431,13 @@
   #
   gArmTokenSpaceGuid.PcdGicDistributorBase|0xFF841000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0xFF842000
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceHBase|0xFF844000
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceVBase|0xFF846000
+  gRaspberryPiTokenSpaceGuid.PcdGicGsivId|0x19
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0|0x30
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1|0x31
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2|0x32
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3|0x33
 
   #
   # Fixed CPU settings.

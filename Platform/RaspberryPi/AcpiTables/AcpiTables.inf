@@ -39,6 +39,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Platform/RaspberryPi/RaspberryPi.dec
   Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
   Silicon/Broadcom/Drivers/Net/BcmNet.dec
@@ -56,6 +57,13 @@
   gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceHBase
+  gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceVBase
+  gRaspberryPiTokenSpaceGuid.PcdGicGsivId
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3
 
 [BuildOptions]
   GCC:*_*_*_ASL_FLAGS       = -vw3133 -vw3150

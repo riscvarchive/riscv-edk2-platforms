@@ -403,6 +403,15 @@
   gRaspberryPiTokenSpaceGuid.PcdCpuDefSpeedMHz|1200
   gRaspberryPiTokenSpaceGuid.PcdCpuMaxSpeedMHz|1500
 
+  #
+  # ARM General Interrupt Controller
+  #
+  gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x40000000
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0|0x09
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1|0x09
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2|0x09
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3|0x09
+
   ## Default Terminal Type
   ## 0-PCANSI, 1-VT100, 2-VT00+, 3-UTF8, 4-TTYTERM
   gEfiMdePkgTokenSpaceGuid.PcdDefaultTerminalType|4
