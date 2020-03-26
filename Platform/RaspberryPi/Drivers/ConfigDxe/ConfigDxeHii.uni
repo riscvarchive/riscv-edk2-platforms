@@ -55,6 +55,7 @@
 
 #string STR_MMC_SD_PROMPT        #language en-US "uSD Routing"
 #string STR_MMC_SD_HELP          #language en-US "Choose host controller to drive uSD slot"
+#string STR_MMC_SD_EMMC2         #language en-US "eMMC2 SDHCI"
 #string STR_MMC_SD_SDHOST        #language en-US "Broadcom SDHOST"
 #string STR_MMC_SD_ARASAN        #language en-US "Arasan SDHCI"
 
