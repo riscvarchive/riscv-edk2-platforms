@@ -15,6 +15,28 @@
 #define NUM_CORES                           4
 #define NUM_CLUSTERS                        1
 
+#if (RPI_MODEL == 3)
+#define CORTEX_L1D_SIZE                     SIZE_16KB
+#define CORTEX_L1D_SETS                     64
+#define CORTEX_L1D_ASSC                     4
+#define CORTEX_L1I_SIZE                     SIZE_16KB
+#define CORTEX_L1I_SETS                     128
+#define CORTEX_L1I_ASSC                     2
+#define CORTEX_L2_SIZE                      SIZE_512KB
+#define CORTEX_L2_SETS                      512
+#define CORTEX_L2_ASSC                      16
+#elif (RPI_MODEL == 4)
+#define CORTEX_L1D_SIZE                     SIZE_32KB
+#define CORTEX_L1D_SETS                     256
+#define CORTEX_L1D_ASSC                     2
+#define CORTEX_L1I_SIZE                     (3*SIZE_16KB)
+#define CORTEX_L1I_SETS                     256
+#define CORTEX_L1I_ASSC                     3
+#define CORTEX_L2_SIZE                      SIZE_1MB
+#define CORTEX_L2_SETS                      1024
+#define CORTEX_L2_ASSC                      16
+#endif
+
 #define FIELD_OFFSET(type, name)            __builtin_offsetof(type, name)
 
 #pragma pack(1)

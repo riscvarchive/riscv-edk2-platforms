@@ -136,15 +136,6 @@ typedef struct
 #define BCM2836_MMCHS1_INTERRUPT                0x5E
 #define BCM2836_MINI_UART_INTERRUPT             0x3D
 #define BCM2836_PL011_UART_INTERRUPT            0x59
-#define CORTEX_L1D_SIZE                         SIZE_16KB
-#define CORTEX_L1D_SETS                         64
-#define CORTEX_L1D_ASSC                         4
-#define CORTEX_L1I_SIZE                         SIZE_16KB
-#define CORTEX_L1I_SETS                         128
-#define CORTEX_L1I_ASSC                         2
-#define CORTEX_L2_SIZE                          SIZE_512KB
-#define CORTEX_L2_SETS                          512
-#define CORTEX_L2_ASSC                          16
 #elif (RPI_MODEL == 4)
 #define BCM2836_V3D_BUS_INTERRUPT               0x2A
 #define BCM2836_DMA_INTERRUPT                   0x3B
@@ -172,15 +163,6 @@ typedef struct
 #define BCM2836_PL011_UART_INTERRUPT            0x99
 #define GENET_INTERRUPT0                        0xBD
 #define GENET_INTERRUPT1                        0xBE
-#define CORTEX_L1D_SIZE                         SIZE_32KB
-#define CORTEX_L1D_SETS                         256
-#define CORTEX_L1D_ASSC                         2
-#define CORTEX_L1I_SIZE                         (3*SIZE_16KB)
-#define CORTEX_L1I_SETS                         256
-#define CORTEX_L1I_ASSC                         3
-#define CORTEX_L2_SIZE                          SIZE_1MB
-#define CORTEX_L2_SETS                          1024
-#define CORTEX_L2_ASSC                          16
 #endif
 
 #endif // __ACPITABLES_H__
