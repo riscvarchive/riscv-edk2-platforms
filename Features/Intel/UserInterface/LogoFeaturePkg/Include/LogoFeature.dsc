@@ -27,15 +27,6 @@
 
 ################################################################################
 #
-# Packages Section - Make sure PCD can be directly used in a conditional statement
-# in a DSC which includes this DSC file.
-#
-################################################################################
-[Packages]
-  LogoFeaturePkg/LogoFeaturePkg.dec
-
-################################################################################
-#
 # Library Class section - list of all Library Classes needed by this feature.
 #
 ################################################################################
