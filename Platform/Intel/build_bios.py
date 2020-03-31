@@ -3,7 +3,7 @@
 # Builds BIOS using configuration files and dynamically
 # imported functions from board directory
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 
@@ -16,6 +16,7 @@ imported functions from board directory
 import os
 import re
 import sys
+import glob
 import signal
 import shutil
 import argparse
@@ -120,6 +121,13 @@ def pre_build(build_config, build_type="DEBUG", silent=False, toolchain=None):
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_SILICON"]
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_SILICON_BIN"]
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_FEATURES"]
+    # add all feature domains in WORKSPACE_FEATURES to package path
+    for filename in os.listdir(config["WORKSPACE_FEATURES"]):
+        filepath = os.path.join(config["WORKSPACE_FEATURES"], filename)
+        # feature domains folder does not contain dec file
+        if os.path.isdir(filepath) and \
+          not glob.glob(os.path.join(filepath, "*.dec")):
+            config["PACKAGES_PATH"] += os.pathsep + filepath
     config["PACKAGES_PATH"] += os.pathsep + config["WORKSPACE_DRIVERS"]
     config["PACKAGES_PATH"] += os.pathsep + \
         os.path.join(config["WORKSPACE"], "FSP")
