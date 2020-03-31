@@ -13,7 +13,7 @@
 # When the BaseTools update is complete, this file can entirely be removed
 # from this package.
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -49,6 +49,8 @@
   gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosFeatureEnable                  |FALSE
   gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugFeatureEnable            |FALSE
   gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable    |FALSE
+  gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable                      |FALSE
+  gLogoFeaturePkgTokenSpaceGuid.PcdJpgEnable                              |FALSE
 !endif
 
 #
