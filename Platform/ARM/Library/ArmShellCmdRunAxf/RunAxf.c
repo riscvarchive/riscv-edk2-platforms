@@ -2,7 +2,7 @@
 *
 *  Shell command for launching AXF files.
 *
-*  Copyright (c) 2014, ARM Limited. All rights reserved.
+*  Copyright (c) 2014 - 2020, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -315,6 +315,7 @@ ShellDynCmdRunAxfHandler (
       //
       WriteBackDataCacheRange (LoadedImage->ImageBase, LoadedImage->ImageSize);
 
+      StartElf = (ELF_ENTRYPOINT)Entrypoint;
       RunAxfPivot (StartElf, 0, 0, 0, 0);
 
       // We should never get here.. But if we do, spin..
