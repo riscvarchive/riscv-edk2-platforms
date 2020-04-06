@@ -553,6 +553,7 @@
         socionext,set-aces;
         #address-cells = <1>;
         #size-cells = <0>;
+        status = "disabled";
     };
 
     clk_i2c: i2c_pclk {
@@ -571,6 +572,12 @@
         clock-frequency = <400000>;
         #address-cells = <1>;
         #size-cells = <0>;
+    };
+
+    tpm: tpm_tis@10000000 {
+        compatible = "socionext,synquacer-tpm-mmio";
+        reg = <0x0 0x10000000 0x0 0x5000>;
+        status = "disabled";
     };
 
     firmware {

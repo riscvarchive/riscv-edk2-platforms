@@ -82,4 +82,8 @@
 #define SYNQUACER_SPI1_BASE             0x54810000
 #define SYNQUACER_SPI1_SIZE             SIZE_4KB
 
+// SPI controller #1 MMIO Region
+#define SYNQUACER_SPI1_MMIO_BASE        0x10000000
+#define SYNQUACER_SPI1_MMIO_SIZE        SIZE_1MB
+
 #endif

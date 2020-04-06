@@ -27,6 +27,10 @@
     };
 };
 
+&tpm {
+    status = "okay";
+};
+
 &gpio {
     gpio-line-names = "DSW3-PIN1",  "DSW3-PIN2",  "DSW3-PIN3",    "DSW3-PIN4",
                       "DSW3-PIN5",  "DSW3-PIN6",  "DSW3-PIN7",    "DSW3-PIN8",
