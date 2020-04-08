@@ -22,6 +22,7 @@
 #include <Library/HiiLib.h>
 #include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/NetLib.h>
 #include <Library/NonDiscoverableDeviceRegistrationLib.h>
 #include <Library/OpteeLib.h>
 #include <Library/PcdLib.h>

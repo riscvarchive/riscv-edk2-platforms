@@ -11,6 +11,18 @@
 UINT64                            mHiiSettingsVal;
 SYNQUACER_PLATFORM_VARSTORE_DATA  *mHiiSettings;
 
+#pragma pack (1)
+typedef struct {
+  MAC_ADDR_DEVICE_PATH                MacAddrDevicePath;
+  EFI_DEVICE_PATH_PROTOCOL            End;
+} NETSEC_DEVICE_PATH;
+
+typedef struct {
+  NETSEC_DEVICE_PATH                  DevicePath;
+  NON_DISCOVERABLE_DEVICE             NonDiscoverableDevice;
+} NETSEC_DEVICE;
+#pragma pack ()
+
 typedef struct {
   VENDOR_DEVICE_PATH              VendorDevicePath;
   EFI_DEVICE_PATH_PROTOCOL        End;
@@ -110,6 +122,31 @@ STATIC EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR mI2c1Desc[] = {
     SYNQUACER_I2C1_SIZE,                              // AddrLen
   }, {
     ACPI_END_TAG_DESCRIPTOR                           // Desc
+  }
+};
+
+STATIC NETSEC_DEVICE  mNetsecDevice = {
+  {
+    {
+      {
+        MESSAGING_DEVICE_PATH,
+        MSG_MAC_ADDR_DP,
+        { sizeof (MAC_ADDR_DEVICE_PATH), 0 },
+      },
+      {},
+      NET_IFTYPE_ETHERNET,
+    },
+    {
+      END_DEVICE_PATH_TYPE,
+      END_ENTIRE_DEVICE_PATH_SUBTYPE,
+      { sizeof (EFI_DEVICE_PATH_PROTOCOL), 0 }
+    }
+  },
+  {
+    &gNetsecNonDiscoverableDeviceGuid,
+    NonDiscoverableDeviceDmaTypeCoherent,
+    NULL,
+    mNetsecDesc
   }
 };
 
@@ -303,6 +340,20 @@ InstallAcpiTables (
 
 STATIC
 VOID
+NetsecReadMacAddress (
+  OUT   EFI_MAC_ADDRESS     *MacAddress
+  )
+{
+  MacAddress->Addr[0] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 3);
+  MacAddress->Addr[1] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 2);
+  MacAddress->Addr[2] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 1);
+  MacAddress->Addr[3] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 0);
+  MacAddress->Addr[4] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 7);
+  MacAddress->Addr[5] = MmioRead8 (FixedPcdGet32 (PcdNetsecEepromBase) + 6);
+}
+
+STATIC
+VOID
 EFIAPI
 RegisterDevices (
   EFI_EVENT           Event,
@@ -312,9 +363,13 @@ RegisterDevices (
   EFI_HANDLE                      Handle;
   EFI_STATUS                      Status;
 
+  NetsecReadMacAddress (&mNetsecDevice.DevicePath.MacAddrDevicePath.MacAddress);
+
   Handle = NULL;
-  Status = RegisterDevice (&gNetsecNonDiscoverableDeviceGuid, mNetsecDesc,
-             &Handle);
+  Status = gBS->InstallMultipleProtocolInterfaces (&Handle,
+                  &gEfiDevicePathProtocolGuid,              &mNetsecDevice.DevicePath,
+                  &gEdkiiNonDiscoverableDeviceProtocolGuid, &mNetsecDevice.NonDiscoverableDevice,
+                  NULL);
   ASSERT_EFI_ERROR (Status);
 
   if (mHiiSettings->EnableEmmc == EMMC_ENABLED) {

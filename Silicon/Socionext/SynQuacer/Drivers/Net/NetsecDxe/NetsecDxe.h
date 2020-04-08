@@ -38,13 +38,6 @@ extern EFI_COMPONENT_NAME2_PROTOCOL gNetsecDriverComponentName2;
   NETSEC Information Structure
 ------------------------------------------------------------------------------*/
 
-#pragma pack(1)
-typedef struct {
-  MAC_ADDR_DEVICE_PATH              Netsec;
-  EFI_DEVICE_PATH_PROTOCOL          End;
-} NETSEC_DEVICE_PATH;
-#pragma pack()
-
 typedef struct {
   // Driver signature
   UINT32                            Signature;
@@ -68,8 +61,6 @@ typedef struct {
   EFI_EVENT                         PhyStatusEvent;
 
   NON_DISCOVERABLE_DEVICE           *Dev;
-
-  NETSEC_DEVICE_PATH                DevicePath;
 } NETSEC_DRIVER;
 
 #define NETSEC_SIGNATURE            SIGNATURE_32('n', 't', 's', 'c')

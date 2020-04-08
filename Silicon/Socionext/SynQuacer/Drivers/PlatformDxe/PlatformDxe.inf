@@ -30,6 +30,7 @@
   EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  NetworkPkg/NetworkPkg.dec
   Platform/96Boards/96Boards.dec
   Silicon/NXP/Library/Pcf8563RealTimeClockLib/Pcf8563RealTimeClockLib.dec
   Silicon/Socionext/SynQuacer/Drivers/Net/NetsecDxe/NetsecDxe.dec
@@ -46,6 +47,7 @@
   HiiLib
   IoLib
   MemoryAllocationLib
+  NetLib
   NonDiscoverableDeviceRegistrationLib
   OpteeLib
   PcdLib

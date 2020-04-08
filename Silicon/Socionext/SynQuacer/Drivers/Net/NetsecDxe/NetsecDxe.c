@@ -1051,21 +1051,10 @@ NetsecInit (
 
   InitializeListHead (&LanDriver->TxBufferList);
 
-  LanDriver->DevicePath.Netsec.Header.Type = MESSAGING_DEVICE_PATH;
-  LanDriver->DevicePath.Netsec.Header.SubType = MSG_MAC_ADDR_DP;
-
-  SetDevicePathNodeLength (&LanDriver->DevicePath.Netsec.Header,
-    sizeof (LanDriver->DevicePath.Netsec));
-  CopyMem (&LanDriver->DevicePath.Netsec.MacAddress,
-    &SnpMode->PermanentAddress, PXE_HWADDR_LEN_ETHER);
-  LanDriver->DevicePath.Netsec.IfType = SnpMode->IfType;
-  SetDevicePathEndNode (&LanDriver->DevicePath.End);
-
   // Initialise the protocol
   Status = gBS->InstallMultipleProtocolInterfaces (
                   &ControllerHandle,
                   &gEfiSimpleNetworkProtocolGuid, Snp,
-                  &gEfiDevicePathProtocolGuid, &LanDriver->DevicePath,
                   NULL);
 
   LanDriver->ControllerHandle = ControllerHandle;
@@ -1111,7 +1100,6 @@ NetsecRelease (
 
   Status = gBS->UninstallMultipleProtocolInterfaces (ControllerHandle,
                   &gEfiSimpleNetworkProtocolGuid, Snp,
-                  &gEfiDevicePathProtocolGuid, &LanDriver->DevicePath,
                   NULL);
   if (EFI_ERROR (Status)) {
     return Status;
