@@ -511,7 +511,12 @@
   #
   # DT support
   #
-  Silicon/Socionext/SynQuacer/DeviceTree/DeveloperBox.inf
+  Silicon/Socionext/SynQuacer/DeviceTree/DeveloperBox.inf {
+    <BuildOptions>
+!if $(TPM2_ENABLE) == TRUE
+      *_*_*_DTCPP_FLAGS = -D TPM2_ENABLE
+!endif
+  }
 
   #
   # Firmware update

@@ -27,9 +27,11 @@
     };
 };
 
+#ifdef TPM2_ENABLE
 &tpm {
     status = "okay";
 };
+#endif
 
 &gpio {
     gpio-line-names = "DSW3-PIN1",  "DSW3-PIN2",  "DSW3-PIN3",    "DSW3-PIN4",
