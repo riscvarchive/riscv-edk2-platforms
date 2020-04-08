@@ -301,6 +301,28 @@ InstallAcpiTables (
   }
 }
 
+STATIC
+VOID
+EFIAPI
+RegisterDevices (
+  EFI_EVENT           Event,
+  VOID                *Context
+  )
+{
+  EFI_HANDLE                      Handle;
+  EFI_STATUS                      Status;
+
+  Handle = NULL;
+  Status = RegisterDevice (&gNetsecNonDiscoverableDeviceGuid, mNetsecDesc,
+             &Handle);
+  ASSERT_EFI_ERROR (Status);
+
+  if (mHiiSettings->EnableEmmc == EMMC_ENABLED) {
+    Status = RegisterEmmc ();
+    ASSERT_EFI_ERROR (Status);
+  }
+}
+
 EFI_STATUS
 EFIAPI
 PlatformDxeEntryPoint (
@@ -315,6 +337,7 @@ PlatformDxeEntryPoint (
   EFI_ACPI_DESCRIPTION_HEADER     *Ssdt;
   UINTN                           SsdtSize;
   UINTN                           Index;
+  EFI_EVENT                       EndOfDxeEvent;
 
   mHiiSettingsVal = PcdGet64 (PcdPlatformSettings);
   mHiiSettings = (SYNQUACER_PLATFORM_VARSTORE_DATA *)&mHiiSettingsVal;
@@ -343,11 +366,6 @@ PlatformDxeEntryPoint (
         __FUNCTION__));
     }
   }
-
-  Handle = NULL;
-  Status = RegisterDevice (&gNetsecNonDiscoverableDeviceGuid, mNetsecDesc,
-             &Handle);
-  ASSERT_EFI_ERROR (Status);
 
   Handle = NULL;
   Status = RegisterDevice (&gSynQuacerNonDiscoverableRuntimeI2cMasterGuid,
@@ -387,11 +405,6 @@ PlatformDxeEntryPoint (
   Status = EnableSettingsForm ();
   ASSERT_EFI_ERROR (Status);
 
-  if (mHiiSettings->EnableEmmc == EMMC_ENABLED) {
-    Status = RegisterEmmc ();
-    ASSERT_EFI_ERROR (Status);
-  }
-
   if (mHiiSettings->AcpiPref == ACPIPREF_ACPI) {
     //
     // Load the SSDT tables from a raw section in this FFS file.
@@ -430,6 +443,10 @@ PlatformDxeEntryPoint (
         InstallAcpiTables, NULL, &mAcpiTableEventRegistration);
     }
   }
+
+  Status = gBS->CreateEventEx (EVT_NOTIFY_SIGNAL, TPL_NOTIFY, RegisterDevices,
+                  NULL, &gEfiEndOfDxeEventGroupGuid, &EndOfDxeEvent);
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }
