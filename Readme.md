@@ -213,21 +213,25 @@ they will be documented with the platform.
 * [Overdrive 1000](Platform/SoftIron/Overdrive1000Board)
 
 ## [ARM](Platform/ARM/Readme.md)
+* [Juno](Platform/ARM/JunoPkg)
+* [SGI family](Platform/ARM/SgiPkg)
 
 ## BeagleBoard
 * [BeagleBoard](Platform/BeagleBoard/BeagleBoardPkg)
 
 ## Hisilicon
-* [D02](Platform/Hisilicon/D02)
 * [D03](Platform/Hisilicon/D03)
 * [D05](Platform/Hisilicon/D05)
+* [D06](Platform/Hisilicon/D06)
 * [HiKey](Platform/Hisilicon/HiKey)
+* [HiKey960](Platform/Hisilicon/HiKey960)
 
 ## Intel
 ### [Minimum Platforms](Platform/Intel/Readme.md)
 * [Kaby Lake](Platform/Intel/KabylakeOpenBoardPkg)
 * [Simics](Platform/Intel/SimicsOpenBoardPkg)
 * [Whiskey Lake](Platform/Intel/WhiskeylakeOpenBoardPkg)
+* [Comet Lake](Platform/Intel/CometlakeOpenBoardPkg)
 
 For more information, see the
 [EDK II Minimum Platform Specification](https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification).
@@ -238,10 +242,14 @@ For more information, see the
 * [Minnowboard Max](Platform/Intel/Vlv2TbltDevicePkg)
 
 ## Marvell
-* [Armada 70x0](Platform/Marvell/Armada)
+* [Armada 70x0](Platform/Marvell/Armada70x0Db)
+* [Armada 80x0](Platform/Marvell/Armada80x0Db)
+* [CN913x](Platform/Marvell/Cn913xDb)
+* [SolidRun Armada MacchiatoBin](Platform/SolidRun/Armada80x0McBin)
 
 ## Raspberry Pi
 * [Pi 3](Platform/RaspberryPi/RPi3)
+* [Pi 4](Platform/RaspberryPi/RPi4)
 
 ## Socionext
 * [SynQuacer](Platform/Socionext/DeveloperBox)
