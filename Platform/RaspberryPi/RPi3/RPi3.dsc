@@ -662,5 +662,8 @@
       gEfiShellPkgTokenSpaceGuid.PcdShellFileOperationSize|0x200000
   }
 !if $(INCLUDE_TFTP_COMMAND) == TRUE
-  ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf
+  ShellPkg/DynamicCommand/TftpDynamicCommand/TftpDynamicCommand.inf  {
+    <PcdsFixedAtBuild>
+      gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
+  }
 !endif
