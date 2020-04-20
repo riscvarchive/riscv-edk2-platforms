@@ -1,7 +1,7 @@
 /** @file
   This is the driver that initializes the Intel PCH.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -442,9 +442,6 @@ PatchPchNvsAreaAddress (
   EFI_STATUS                            Status;
   UINT32                                Address;
   UINT16                                Length;
-
-  Status = InitializeAslUpdateLib ();
-  ASSERT_EFI_ERROR (Status);
 
   Address = (UINT32) (UINTN) mPchNvsAreaProtocol.Area;
   Length  = (UINT16) sizeof (PCH_NVS_AREA);
