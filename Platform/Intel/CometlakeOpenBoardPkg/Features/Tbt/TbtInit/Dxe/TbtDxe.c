@@ -125,9 +125,6 @@ TbtAcpiEndOfDxeCallback (
   UINT16                                Length;
   UINT32                                Signature;
 
-  Status = InitializeAslUpdateLib ();
-  ASSERT_EFI_ERROR (Status);
-
   Address = (UINT32) (UINTN) mTbtNvsAreaProtocol.Area;
   Length  = (UINT16) sizeof (TBT_NVS_AREA);
   DEBUG ((DEBUG_INFO, "Patch TBT NvsAreaAddress: TBT NVS Address %x Length %x\n", Address, Length));
