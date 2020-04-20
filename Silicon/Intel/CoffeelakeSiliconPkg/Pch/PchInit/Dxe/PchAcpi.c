@@ -438,9 +438,6 @@ PatchPchNvsAreaAddress (
   UINT32                                Address;
   UINT16                                Length;
 
-  Status = InitializeAslUpdateLib ();
-  ASSERT_EFI_ERROR (Status);
-
   Address = (UINT32) (UINTN) mPchNvsAreaProtocol.Area;
   Length  = (UINT16) sizeof (PCH_NVS_AREA);
   DEBUG ((DEBUG_INFO, "PatchPchNvsAreaAddress: PCH NVS Address %x Length %x\n", Address, Length));
