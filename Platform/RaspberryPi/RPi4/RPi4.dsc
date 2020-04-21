@@ -37,7 +37,7 @@
   #
   # Default TF-A binary checked into edk2-non-osi.
   #
-  DEFINE TFA_BUILD_BL31 = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31_pl011.bin
+  DEFINE TFA_BUILD_BL31 = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl31.bin
 !else
   #
   # Usually we use the checked-in binaries, but for developers working
