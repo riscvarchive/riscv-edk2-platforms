@@ -202,6 +202,12 @@
 !endif
 
   #######################################
+  # Board Package
+  #######################################
+  BoardBdsHookLib|BoardModulePkg/Library/BoardBdsHookLib/BoardBdsHookLib.inf
+  BoardBootManagerLib|BoardModulePkg/Library/BoardBootManagerLib/BoardBootManagerLib.inf
+
+  #######################################
   # Board-specific
   #######################################
   SiliconPolicyUpdateLib|$(PROJECT)/Policy/Library/DxeSiliconPolicyUpdateLib/DxeSiliconPolicyUpdateLib.inf
@@ -425,3 +431,4 @@
   }
 !endif
   BoardModulePkg/LegacySioDxe/LegacySioDxe.inf
+  BoardModulePkg/BoardBdsHookDxe/BoardBdsHookDxe.inf

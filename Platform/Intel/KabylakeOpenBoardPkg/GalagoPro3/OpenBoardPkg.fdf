@@ -341,6 +341,7 @@ INF  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
 INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
 INF  BoardModulePkg/LegacySioDxe/LegacySioDxe.inf
 INF  MdeModulePkg/Bus/Isa/Ps2KeyboardDxe/Ps2KeyboardDxe.inf
+INF  BoardModulePkg/BoardBdsHookDxe/BoardBdsHookDxe.inf
 
 INF  ShellPkg/Application/Shell/Shell.inf
 

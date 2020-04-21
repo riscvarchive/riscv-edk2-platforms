@@ -241,6 +241,11 @@
 !if $(TARGET) == DEBUG
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/DxeTestPointCheckLib.inf
 !endif
+  #######################################
+  # Board Package
+  #######################################
+  BoardBdsHookLib|BoardModulePkg/Library/BoardBdsHookLib/BoardBdsHookLib.inf
+  BoardBootManagerLib|BoardModulePkg/Library/BoardBootManagerLib/BoardBootManagerLib.inf
 
   #######################################
   # Board-specific
@@ -505,3 +510,4 @@
   }
 !endif
   BoardModulePkg/LegacySioDxe/LegacySioDxe.inf
+  BoardModulePkg/BoardBdsHookDxe/BoardBdsHookDxe.inf
