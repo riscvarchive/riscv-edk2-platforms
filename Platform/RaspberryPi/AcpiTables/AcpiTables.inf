@@ -29,6 +29,7 @@
   Fadt.aslc
   Dbg2.aslc
   Gtdt.aslc
+  Iort.aslc
   Dsdt.asl
   Csrt.aslc
   Spcr.aslc
