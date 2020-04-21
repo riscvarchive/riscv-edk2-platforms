@@ -146,10 +146,17 @@
   SetCacheMtrrLib|$(PLATFORM_PACKAGE)/Library/SetCacheMtrrLib/SetCacheMtrrLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
+
+  #####################################
+  # Platform Package
+  #####################################
+  PlatformBootManagerLib|$(PLATFORM_PACKAGE)/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
+
   #######################################
   # Board Package
   #######################################
-  PlatformBootManagerLib|$(BOARD_PKG)/Library/PlatformBootManagerLib/PlatformBootManagerLib.inf
+  BoardBdsHookLib|$(BOARD_PKG)/Library/BoardBdsHookLib/BoardBdsHookLib.inf
+  BoardBootManagerLib|$(BOARD_PKG)/Library/BoardBootManagerLib/BoardBootManagerLib.inf
 
 [LibraryClasses.common.DXE_SMM_DRIVER]
   #######################################
@@ -294,3 +301,4 @@
   $(BOARD_PKG)/SimicsVideoDxe/SimicsVideoDxe.inf
   $(BOARD_PKG)/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
   BoardModulePkg/LegacySioDxe/LegacySioDxe.inf
+  BoardModulePkg/BoardBdsHookDxe/BoardBdsHookDxe.inf
