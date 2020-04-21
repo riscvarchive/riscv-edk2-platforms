@@ -224,6 +224,8 @@
   #######################################
   DxePolicyUpdateLib|$(PLATFORM_BOARD_PACKAGE)/Policy/Library/DxePolicyUpdateLib/DxePolicyUpdateLib.inf
   DxeTbtPolicyLib|$(PLATFORM_BOARD_PACKAGE)/Features/Tbt/Library/DxeTbtPolicyLib/DxeTbtPolicyLib.inf
+  BoardBdsHookLib|BoardModulePkg/Library/BoardBdsHookLib/BoardBdsHookLib.inf
+  BoardBootManagerLib|BoardModulePkg/Library/BoardBootManagerLib/BoardBootManagerLib.inf
 
   #######################################
   # Board-specific
@@ -446,3 +448,5 @@
   $(PLATFORM_BOARD_PACKAGE)/Acpi/BoardAcpiDxe/BoardAcpiDxe.inf
 !endif
   BoardModulePkg/LegacySioDxe/LegacySioDxe.inf
+  BoardModulePkg/BoardBdsHookDxe/BoardBdsHookDxe.inf
+
