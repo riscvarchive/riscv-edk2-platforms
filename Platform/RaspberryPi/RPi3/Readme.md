@@ -54,8 +54,8 @@ Build instructions from the top level edk2-platforms Readme.md apply.
   ```
   Additionally, if you want to use PL011 instead of the miniUART, you can add the lines:
   ```
-  device_tree_address=0x20000
-  device_tree_end=0x30000
+  device_tree_address=0x10000
+  device_tree_end=0x20000
   device_tree=bcm2710-rpi-3-b[-plus].dtb
   dtoverlay=miniuart-bt
   ```
@@ -67,13 +67,14 @@ you may also be able to boot from a FAT32 USB driver rather than uSD.
 
 # Notes
 
-## ARM Trusted Firmware (ATF)
+## ARM Trusted Firmware (TF-A)
 
-The ATF binaries being used were compiled from the latest ATF source.
-No aleration to the official source have been applied.
+The TF-A binary files were compiled from the latest TF-A release.
+No aleration to the official source has been applied.
 
-For more details on the ATF compilation, see the [Readme](./TrustedFirmware/Readme.md)
-in the `TrustedFirmware/` directory.
+For more details on the TF-A compilation, see the relevant
+[Readme](https://github.com/tianocore/edk2-non-osi/blob/master/Platform/RaspberryPi/RPi3/TrustedFirmware/Readme.md)
+in the `TrustedFirmware/` directory from `edk2-non-osi`.
 
 ## Custom Device Tree
 

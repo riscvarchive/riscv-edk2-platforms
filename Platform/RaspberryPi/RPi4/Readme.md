@@ -63,15 +63,12 @@ Build instructions from the top level edk2-platforms Readme.md apply.
 
 ## ARM Trusted Firmware (TF-A)
 
-The TF-A binaries were compiled from a TF-A source over which 2 serial-output related
-patches were applied, the first one to fix the miniUART baud rate not being properly
-set to 115200 bauds with recent versions of `start4.elf` and the second one to allow
-the use of the PL011 UART.
+The TF-A binary was compiled from the latest TF-A release.
+No aleration to the official source has been applied.
 
-No other alterations to the official source have been applied.
-
-For more details on the TF-A compilation, see the [Readme](./TrustedFirmware/Readme.md)
-in the `TrustedFirmware/` directory.
+For more details on the TF-A compilation, see the relevant
+[Readme](https://github.com/tianocore/edk2-non-osi/blob/master/Platform/RaspberryPi/RPi4/TrustedFirmware/Readme.md)
+in the `TrustedFirmware/` directory from `edk2-non-osi`.
 
 ## Device Tree
 
