@@ -301,39 +301,17 @@ SwapMmioAnd64 (
   return MmioAnd64 (Address, SwapBytes64 (AndData));
 }
 
-STATIC MMIO_OPERATIONS_16 SwappingFunctions16 = {
+STATIC MMIO_OPERATIONS SwappingFunctions = {
   SwapMmioRead16,
   SwapMmioWrite16,
   SwapMmioOr16,
   SwapMmioAnd16,
   SwapMmioAndThenOr16,
-};
-
-STATIC MMIO_OPERATIONS_16 NonSwappingFunctions16 = {
-  MmioRead16,
-  MmioWrite16,
-  MmioOr16,
-  MmioAnd16,
-  MmioAndThenOr16,
-};
-
-STATIC MMIO_OPERATIONS_32 SwappingFunctions32 = {
   SwapMmioRead32,
   SwapMmioWrite32,
   SwapMmioOr32,
   SwapMmioAnd32,
   SwapMmioAndThenOr32,
-};
-
-STATIC MMIO_OPERATIONS_32 NonSwappingFunctions32 = {
-  MmioRead32,
-  MmioWrite32,
-  MmioOr32,
-  MmioAnd32,
-  MmioAndThenOr32,
-};
-
-STATIC MMIO_OPERATIONS_64 SwappingFunctions64 = {
   SwapMmioRead64,
   SwapMmioWrite64,
   SwapMmioOr64,
@@ -341,7 +319,17 @@ STATIC MMIO_OPERATIONS_64 SwappingFunctions64 = {
   SwapMmioAndThenOr64,
 };
 
-STATIC MMIO_OPERATIONS_64 NonSwappingFunctions64 = {
+STATIC MMIO_OPERATIONS NonSwappingFunctions = {
+  MmioRead16,
+  MmioWrite16,
+  MmioOr16,
+  MmioAnd16,
+  MmioAndThenOr16,
+  MmioRead32,
+  MmioWrite32,
+  MmioOr32,
+  MmioAnd32,
+  MmioAndThenOr32,
   MmioRead64,
   MmioWrite64,
   MmioOr64,
@@ -350,7 +338,7 @@ STATIC MMIO_OPERATIONS_64 NonSwappingFunctions64 = {
 };
 
 /**
-  Function to return pointer to 16 bit Mmio operations.
+  Function to return pointer to Mmio operations.
 
   @param  Swap  Flag to tell if Swap is needed or not
                 on Mmio Operations.
@@ -358,47 +346,11 @@ STATIC MMIO_OPERATIONS_64 NonSwappingFunctions64 = {
   @return       Pointer to Mmio Operations.
 
 **/
-MMIO_OPERATIONS_16 *
-GetMmioOperations16 (BOOLEAN Swap) {
+MMIO_OPERATIONS *
+GetMmioOperations (BOOLEAN Swap) {
   if (Swap) {
-    return &SwappingFunctions16;
+    return &SwappingFunctions;
   } else {
-    return &NonSwappingFunctions16;
-  }
-}
-
-/**
-  Function to return pointer to 32 bit Mmio operations.
-
-  @param  Swap  Flag to tell if Swap is needed or not
-                on Mmio Operations.
-
-  @return       Pointer to Mmio Operations.
-
-**/
-MMIO_OPERATIONS_32 *
-GetMmioOperations32 (BOOLEAN Swap) {
-  if (Swap) {
-    return &SwappingFunctions32;
-  } else {
-    return &NonSwappingFunctions32;
-  }
-}
-
-/**
-  Function to return pointer to 64 bit Mmio operations.
-
-  @param  Swap  Flag to tell if Swap is needed or not
-                on Mmio Operations.
-
-  @return       Pointer to Mmio Operations.
-
-**/
-MMIO_OPERATIONS_64 *
-GetMmioOperations64 (BOOLEAN Swap) {
-  if (Swap) {
-    return &SwappingFunctions64;
-  } else {
-    return &NonSwappingFunctions64;
+    return &NonSwappingFunctions;
   }
 }

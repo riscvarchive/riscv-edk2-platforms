@@ -15,40 +15,26 @@
 ///  Structure to have pointer to R/W
 ///  Mmio operations for 16 bits.
 ///
-typedef struct _MMIO_OPERATIONS_16 {
+typedef struct _MMIO_OPERATIONS {
   UINT16 (*Read16) (UINTN Address);
   UINT16 (*Write16) (UINTN Address, UINT16 Value);
   UINT16 (*Or16) (UINTN Address, UINT16 OrData);
   UINT16 (*And16) (UINTN Address, UINT16 AndData);
   UINT16 (*AndThenOr16) (UINTN Address, UINT16 AndData, UINT16 OrData);
-} MMIO_OPERATIONS_16;
-
-///
-///  Structure to have pointer to R/W
-///  Mmio operations for 32 bits.
-///
-typedef struct _MMIO_OPERATIONS_32 {
   UINT32 (*Read32) (UINTN Address);
   UINT32 (*Write32) (UINTN Address, UINT32 Value);
   UINT32 (*Or32) (UINTN Address, UINT32 OrData);
   UINT32 (*And32) (UINTN Address, UINT32 AndData);
   UINT32 (*AndThenOr32) (UINTN Address, UINT32 AndData, UINT32 OrData);
-} MMIO_OPERATIONS_32;
-
-///
-///  Structure to have pointer to R/W
-///  Mmio operations for 64 bits.
-///
-typedef struct _MMIO_OPERATIONS_64 {
   UINT64 (*Read64) (UINTN Address);
   UINT64 (*Write64) (UINTN Address, UINT64 Value);
   UINT64 (*Or64) (UINTN Address, UINT64 OrData);
   UINT64 (*And64) (UINTN Address, UINT64 AndData);
   UINT64 (*AndThenOr64) (UINTN Address, UINT64 AndData, UINT64 OrData);
-} MMIO_OPERATIONS_64;
+} MMIO_OPERATIONS;
 
 /**
-  Function to return pointer to 16 bit Mmio operations.
+  Function to return pointer to Mmio operations.
 
   @param  Swap  Flag to tell if Swap is needed or not
                 on Mmio Operations.
@@ -56,36 +42,8 @@ typedef struct _MMIO_OPERATIONS_64 {
   @return       Pointer to Mmio Operations.
 
 **/
-MMIO_OPERATIONS_16 *
-GetMmioOperations16  (
-  IN  BOOLEAN  Swap
-  );
-
-/**
-  Function to return pointer to 32 bit Mmio operations.
-
-  @param  Swap  Flag to tell if Swap is needed or not
-                on Mmio Operations.
-
-  @return       Pointer to Mmio Operations.
-
-**/
-MMIO_OPERATIONS_32 *
-GetMmioOperations32  (
-  IN  BOOLEAN  Swap
-  );
-
-/**
-  Function to return pointer to 64 bit Mmio operations.
-
-  @param  Swap  Flag to tell if Swap is needed or not
-                on Mmio Operations.
-
-  @return       Pointer to Mmio Operations.
-
-**/
-MMIO_OPERATIONS_64 *
-GetMmioOperations64  (
+MMIO_OPERATIONS *
+GetMmioOperations  (
   IN  BOOLEAN  Swap
   );
 
