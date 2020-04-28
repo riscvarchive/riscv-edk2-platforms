@@ -31,7 +31,11 @@
 // The ASL compiler does not support argument arithmetic in functions
 // like QWordMemory (). So we need to instantiate dummy qword regions
 // that we can then update the Min, Max and Length attributes of.
-// The two macros below help accomplish this.
+// The three macros below help accomplish this.
+//
+// QWORDMEMORYSET specifies a CPU memory range (whose base address is
+// BCM2836_SOC_REGISTERS + Offset), and QWORDBUSMEMORYSET specifies
+// a VPU memory range (whose base address is provided directly).
 //
 #define QWORDMEMORYBUF(Index)                                   \
   QWordMemory (ResourceProducer,,                               \
@@ -44,6 +48,14 @@
   CreateQwordField (RBUF, RB ## Index._LEN, LE ## Index)        \
   Store (Length, LE ## Index)                                   \
   Add (BCM2836_SOC_REGISTERS, Offset, MI ## Index)              \
+  Add (MI ## Index, LE ## Index - 1, MA ## Index)
+
+#define QWORDBUSMEMORYSET(Index, Base, Length)                  \
+  CreateQwordField (RBUF, RB ## Index._MIN, MI ## Index)        \
+  CreateQwordField (RBUF, RB ## Index._MAX, MA ## Index)        \
+  CreateQwordField (RBUF, RB ## Index._LEN, LE ## Index)        \
+  Store (Base, MI ## Index)                                     \
+  Store (Length, LE ## Index)                                   \
   Add (MI ## Index, LE ## Index - 1, MA ## Index)
 
 DefinitionBlock ("Dsdt.aml", "DSDT", 5, "RPIFDN", "RPI", 2)
@@ -173,8 +185,8 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "RPIFDN", "RPI", 2)
         // PWM
         QWORDMEMORYSET(17, BCM2836_PWM_DMA_OFFSET, BCM2836_PWM_DMA_LENGTH)
         QWORDMEMORYSET(18, BCM2836_PWM_CTRL_OFFSET, BCM2836_PWM_CTRL_LENGTH)
-        QWORDMEMORYSET(19, BCM2836_PWM_BUS_BASE_ADDRESS, BCM2836_PWM_BUS_LENGTH)
-        QWORDMEMORYSET(20, BCM2836_PWM_CTRL_UNCACHED_BASE_ADDRESS, BCM2836_PWM_CTRL_UNCACHED_LENGTH)
+        QWORDBUSMEMORYSET(19, BCM2836_PWM_BUS_BASE_ADDRESS, BCM2836_PWM_BUS_LENGTH)
+        QWORDBUSMEMORYSET(20, BCM2836_PWM_CTRL_UNCACHED_BASE_ADDRESS, BCM2836_PWM_CTRL_UNCACHED_LENGTH)
         QWORDMEMORYSET(21, BCM2836_PWM_CLK_OFFSET, BCM2836_PWM_CLK_LENGTH)
 
         // UART
