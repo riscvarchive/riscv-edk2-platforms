@@ -11,7 +11,7 @@
 #ifndef __BCM2836_PWM_H__
 #define __BCM2836_PWM_H__
 
-/* Power Management constants */
+/* PWM controller constants */
 
 #define BCM2836_PWM_DMA_OFFSET                              0x00007B00
 #define BCM2836_PWM_DMA_BASE_ADDRESS                        (BCM2836_SOC_REGISTERS + BCM2836_PWM_DMA_OFFSET)
