@@ -127,9 +127,9 @@ Device(BTH0)
         16,            // ReceiveBufferSize
         16,            // TransmitBufferSize
 #if (RPI_MODEL == 4)
-        "\\_SB.URTM",  // ResourceSource:
+        "\\_SB.GDV0.URTM",  // ResourceSource:
 #else
-        "\\_SB.URT0",  // ResourceSource:
+        "\\_SB.GDV0.URT0",  // ResourceSource:
 #endif
                        //   UART bus controller name
         ,              // ResourceSourceIndex: assumed to be 0
@@ -142,7 +142,7 @@ Device(BTH0)
       //
       // RPIQ connection for BT_ON/OFF
       //
-      GpioIO (Shared, PullUp, 0, 0, IoRestrictionNone, "\\_SB.RPIQ", 0, ResourceConsumer, , ) { 128 }
+      GpioIO (Shared, PullUp, 0, 0, IoRestrictionNone, "\\_SB.GDV0.RPIQ", 0, ResourceConsumer, , ) { 128 }
     })
     Return (RBUF)
   }
