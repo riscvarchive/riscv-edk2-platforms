@@ -28,6 +28,9 @@
 [PcdsFeatureFlag.common]
   gArmJunoTokenSpaceGuid.PcdPciMaxPayloadFixup|FALSE|BOOLEAN|0x00000013
 
+  gArmJunoTokenSpaceGuid.PcdSataSiI3132FeaturePMPSupport|FALSE|BOOLEAN|0x00000018
+  gArmJunoTokenSpaceGuid.PcdSataSiI3132FeatureDirectCommandIssuing|FALSE|BOOLEAN|0x00000019
+
 [PcdsFixedAtBuild.common]
   gArmJunoTokenSpaceGuid.PcdPcieControlBaseAddress|0x7FF20000|UINT64|0x0000000B
   gArmJunoTokenSpaceGuid.PcdPcieRootPortBaseAddress|0x7FF30000|UINT64|0x0000000C
@@ -54,4 +57,3 @@
   #
   # For a list of mode numbers look in HdLcdArmJuno.c
   gArmJunoTokenSpaceGuid.PcdArmHdLcdMaxMode|0|UINT32|0x00000017
-

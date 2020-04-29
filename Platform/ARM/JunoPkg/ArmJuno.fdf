@@ -184,7 +184,7 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   # SATA Controller
   #
   INF MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
-  INF EmbeddedPkg/Drivers/SataSiI3132Dxe/SataSiI3132Dxe.inf
+  INF Platform/ARM/JunoPkg/Drivers/SataSiI3132Dxe/SataSiI3132Dxe.inf
 
   #
   # NVMe boot devices

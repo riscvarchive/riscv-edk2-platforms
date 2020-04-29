@@ -314,7 +314,7 @@
   # SATA Controller
   #
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
-  EmbeddedPkg/Drivers/SataSiI3132Dxe/SataSiI3132Dxe.inf
+  Platform/ARM/JunoPkg/Drivers/SataSiI3132Dxe/SataSiI3132Dxe.inf
 
   #
   # NVMe boot devices
