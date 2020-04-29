@@ -662,7 +662,7 @@ MMCInitialize (
 
   Status = gBS->InstallMultipleProtocolInterfaces (
                   &Handle,
-                  &gEfiMmcHostProtocolGuid,         &gMMCHost,
+                  &gEmbeddedMmcHostProtocolGuid,    &gMMCHost,
                   NULL
                   );
   ASSERT_EFI_ERROR (Status);
