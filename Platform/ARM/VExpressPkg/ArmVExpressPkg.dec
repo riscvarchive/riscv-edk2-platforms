@@ -52,3 +52,7 @@
   #
   gArmVExpressTokenSpaceGuid.PcdAndroidFastbootNvmDevicePath|""|VOID*|0x00000006
   gArmVExpressTokenSpaceGuid.PcdAndroidFastbootProductName|""|VOID*|0x00000007
+
+  ## PL180 MCI
+  gArmVExpressTokenSpaceGuid.PcdPL180SysMciRegAddress|0x00000000|UINT32|0x00000009
+  gArmVExpressTokenSpaceGuid.PcdPL180MciBaseAddress|0x00000000|UINT32|0x0000000A

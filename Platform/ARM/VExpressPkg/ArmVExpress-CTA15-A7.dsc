@@ -146,8 +146,8 @@
   #
   # PL180 MMC/SD card controller
   #
-  gArmPlatformTokenSpaceGuid.PcdPL180SysMciRegAddress|0x1C010048
-  gArmPlatformTokenSpaceGuid.PcdPL180MciBaseAddress|0x1C050000
+  gArmVExpressTokenSpaceGuid.PcdPL180SysMciRegAddress|0x1C010048
+  gArmVExpressTokenSpaceGuid.PcdPL180MciBaseAddress|0x1C050000
 
 
   #
@@ -249,7 +249,7 @@
   # Multimedia Card Interface
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  ArmPlatformPkg/Drivers/PL180MciDxe/PL180MciDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/PL180MciDxe/PL180MciDxe.inf
 
   # SMSC LAN 9118
   EmbeddedPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
