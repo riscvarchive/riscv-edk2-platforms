@@ -303,17 +303,6 @@ READ_LOCK_STATUS   = TRUE
   #
   INF Platform/RaspberryPi/Drivers/LogoDxe/LogoDxe.inf
 
-  #
-  # Device Tree support (used by FdtDxe)
-  # GUIDs should match gRaspberryPi#####FdtGuid's from the .dec
-  #
-  FILE FREEFORM = DF5DA223-1D27-47C3-8D1B-9A41B55A18BC {
-    SECTION RAW = Platform/RaspberryPi/$(PLATFORM_NAME)/DeviceTree/bcm2710-rpi-3-b.dtb
-  }
-  FILE FREEFORM = 3D523012-73FE-40E5-892E-1A4DF60F3C0C {
-    SECTION RAW = Platform/RaspberryPi/$(PLATFORM_NAME)/DeviceTree/bcm2710-rpi-3-b-plus.dtb
-  }
-
 [FV.FVMAIN_COMPACT]
 FvAlignment        = 16
 ERASE_POLARITY     = 1

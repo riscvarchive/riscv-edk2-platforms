@@ -335,90 +335,6 @@ CleanSimpleFramebuffer (
   return EFI_SUCCESS;
 }
 
-#define MAX_CMDLINE_SIZE    512
-
-STATIC
-EFI_STATUS
-UpdateBootArgs (
-  VOID
-  )
-{
-  INTN          Node;
-  INTN          Retval;
-  EFI_STATUS    Status;
-  CHAR8         *CommandLine;
-
-  //
-  // Locate the /chosen node
-  //
-  Node = fdt_path_offset (mFdtImage, "/chosen");
-  if (Node < 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to locate /chosen node\n", __FUNCTION__));
-    return EFI_NOT_FOUND;
-  }
-
-  //
-  // If /chosen/bootargs already exists, we want to add a space character
-  // before adding the firmware supplied arguments. However, the RpiFirmware
-  // protocol expects a 32-bit aligned buffer. So let's allocate 4 bytes of
-  // slack, and skip the first 3 when passing this buffer into libfdt.
-  //
-  CommandLine = AllocatePool (MAX_CMDLINE_SIZE) + 4;
-  if (!CommandLine) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to allocate memory\n", __FUNCTION__));
-    return EFI_OUT_OF_RESOURCES;
-  }
-
-  //
-  // Get the command line from the firmware
-  //
-  Status = mFwProtocol->GetCommandLine (MAX_CMDLINE_SIZE, CommandLine + 4);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to retrieve command line\n", __FUNCTION__));
-    return Status;
-  }
-
-  if (AsciiStrLen (CommandLine + 4) == 0) {
-    DEBUG ((DEBUG_INFO, "%a: empty command line received\n", __FUNCTION__));
-    return EFI_SUCCESS;
-  }
-
-  CommandLine[3] = ' ';
-
-  Retval = fdt_appendprop_string (mFdtImage, Node, "bootargs", &CommandLine[3]);
-  if (Retval != 0) {
-    DEBUG ((DEBUG_ERROR, "%a: failed to set /chosen/bootargs property (%d)\n",
-      __FUNCTION__, Retval));
-  }
-
-  DEBUG_CODE_BEGIN ();
-    CONST CHAR8    *Prop;
-    INT32         Length;
-    INT32         Index;
-
-    Node = fdt_path_offset (mFdtImage, "/chosen");
-    ASSERT (Node >= 0);
-
-    Prop = fdt_getprop (mFdtImage, Node, "bootargs", &Length);
-    ASSERT (Prop != NULL);
-
-    DEBUG ((DEBUG_INFO, "Command line set from firmware (length %d):\n'", Length));
-
-    for (Index = 0; Index < Length; Index++, Prop++) {
-      if (*Prop == '\0') {
-        continue;
-      }
-      DEBUG ((DEBUG_INFO, "%c", *Prop));
-    }
-
-    DEBUG ((DEBUG_INFO, "'\n"));
-  DEBUG_CODE_END ();
-
-  FreePool (CommandLine - 4);
-  return EFI_SUCCESS;
-}
-
-
 /**
   @param  ImageHandle   of the loaded driver
   @param  SystemTable   Pointer to the System Table
@@ -435,13 +351,10 @@ FdtDxeInitialize (
   IN EFI_SYSTEM_TABLE   *SystemTable
   )
 {
-  EFI_STATUS Status;
-  EFI_GUID   *FdtGuid;
-  VOID       *FdtImage;
-  UINTN      FdtSize;
   INT32      Retval;
-  UINT32     BoardRevision;
-  BOOLEAN    Internal;
+  EFI_STATUS Status;
+  UINTN      FdtSize;
+  VOID       *FdtImage = NULL;
 
   if (PcdGet32 (PcdOptDeviceTree) == 0) {
     DEBUG ((DEBUG_INFO, "Device Tree disabled per user configuration\n"));
@@ -452,75 +365,20 @@ FdtDxeInitialize (
                   (VOID**)&mFwProtocol);
   ASSERT_EFI_ERROR (Status);
 
-  Internal = FALSE;
   FdtImage = (VOID*)(UINTN)PcdGet32 (PcdFdtBaseAddress);
   Retval = fdt_check_header (FdtImage);
-  if (Retval == 0) {
+  if (Retval != 0) {
     /*
-     * Have FDT passed via config.txt.
+     * Any one of:
+     * - Invalid config.txt device_tree_address (not PcdFdtBaseAddress)
+     * - Missing FDT for your Pi variant (if not overriding via device_tree=)
      */
-    FdtSize = fdt_totalsize (FdtImage);
-    DEBUG ((DEBUG_INFO, "Device Tree passed via config.txt (0x%lx bytes)\n", FdtSize));
-    Status = EFI_SUCCESS;
-  } else {
-    /*
-     * Use one of the embedded FDT's.
-     */
-    Internal = TRUE;
-    DEBUG ((DEBUG_INFO, "No/Bad Device Tree found at address 0x%p (%a), "
-      "looking up internal one...\n", FdtImage, fdt_strerror (Retval)));
-    /*
-     * Query the board revision to differentiate between models.
-     */
-    Status = mFwProtocol->GetModelRevision (&BoardRevision);
-    if (EFI_ERROR (Status)) {
-      DEBUG ((DEBUG_ERROR, "Failed to get board type: %r\n", Status));
-      DEBUG ((DEBUG_INFO, "Using default internal Device Tree\n"));
-      FdtGuid = &gRaspberryPiDefaultFdtGuid;
-    } else {
-      // www.raspberrypi.org/documentation/hardware/raspberrypi/revision-codes/README.md
-      switch ((BoardRevision >> 4) & 0xFF) {
-      case 0x08:
-        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 3 Model B internal Device Tree\n"));
-        FdtGuid = &gRaspberryPi3ModelBFdtGuid;
-        break;
-      case 0x0D:
-        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 3 Model B+ internal Device Tree\n"));
-        FdtGuid = &gRaspberryPi3ModelBPlusFdtGuid;
-        break;
-      case 0x11:
-        DEBUG ((DEBUG_INFO, "Using Raspberry Pi 4 Model B internal Device Tree\n"));
-        FdtGuid = &gRaspberryPi4ModelBFdtGuid;
-        break;
-      default:
-        DEBUG ((DEBUG_INFO, "Using default internal Device Tree\n"));
-        FdtGuid = &gRaspberryPiDefaultFdtGuid;
-        break;
-      }
-    }
-    do {
-      Status = GetSectionFromAnyFv (FdtGuid, EFI_SECTION_RAW, 0, &FdtImage, &FdtSize);
-      if (Status == EFI_SUCCESS) {
-        if (fdt_check_header (FdtImage) != 0) {
-          Status = EFI_INCOMPATIBLE_VERSION;
-        }
-      }
-      // No retry needed if we are successful or are dealing with the default Fdt.
-      if ( (Status == EFI_SUCCESS) ||
-           (CompareGuid (FdtGuid, &gRaspberryPiDefaultFdtGuid)) )
-        break;
-      // Otherwise, try one more time with the default Fdt. An example of this
-      // is if we detected a non-default Fdt, that isn't included in the FDF.
-      DEBUG ((DEBUG_INFO, "Internal Device Tree was not found for this platform, "
-        "falling back to default...\n"));
-      FdtGuid = &gRaspberryPiDefaultFdtGuid;
-    } while (1);
+    DEBUG ((DEBUG_ERROR, "No devicetree passed via config.txt\n"));
+    return EFI_NOT_FOUND;
   }
 
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Failed to locate Device Tree: %r\n", Status));
-    return Status;
-  }
+  FdtSize = fdt_totalsize (FdtImage);
+  DEBUG ((DEBUG_INFO, "Devicetree passed via config.txt (0x%lx bytes)\n", FdtSize));
 
   /*
    * Probably overkill.
@@ -529,12 +387,19 @@ FdtDxeInitialize (
   Status = gBS->AllocatePages (AllocateAnyPages, EfiBootServicesData,
                   EFI_SIZE_TO_PAGES (FdtSize), (EFI_PHYSICAL_ADDRESS*)&mFdtImage);
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "Failed to allocate Device Tree: %r\n", Status));
-    return Status;
+    DEBUG ((DEBUG_ERROR, "Failed to allocate devicetree: %r\n", Status));
+    goto out;
   }
 
   Retval = fdt_open_into (FdtImage, mFdtImage, FdtSize);
-  ASSERT (Retval == 0);
+  if (Retval != 0) {
+     DEBUG ((DEBUG_ERROR, "fdt_open_into failed: %d\n", Retval));
+     goto out;
+  }
+
+  /*
+   * These are all best-effort.
+   */
 
   Status = SanitizePSCI ();
   if (EFI_ERROR (Status)) {
@@ -566,19 +431,18 @@ FdtDxeInitialize (
     Print (L"Failed to update USB compatible properties: %r\n", Status);
   }
 
-  if (Internal) {
-    /*
-     * A GPU-provided DTB already has the full command line.
-     */
-    Status = UpdateBootArgs ();
-    if (EFI_ERROR (Status)) {
-      Print (L"Failed to update boot arguments: %r\n", Status);
-    }
+  DEBUG ((DEBUG_INFO, "Installed devicetree at address %p\n", mFdtImage));
+  Status = gBS->InstallConfigurationTable (&gFdtTableGuid, mFdtImage);
+  if (EFI_ERROR (Status)) {
+     DEBUG ((DEBUG_ERROR, "Couldn't register devicetree: %r\n", Status));
+     goto out;
   }
 
-  DEBUG ((DEBUG_INFO, "Installed Device Tree at address 0x%p\n", mFdtImage));
-  Status = gBS->InstallConfigurationTable (&gFdtTableGuid, mFdtImage);
-  ASSERT_EFI_ERROR (Status);
-
+out:
+  if (EFI_ERROR(Status)) {
+    if (mFdtImage != NULL) {
+      gBS->FreePages ((EFI_PHYSICAL_ADDRESS) mFdtImage, EFI_SIZE_TO_PAGES (FdtSize));
+    }
+  }
   return Status;
 }
