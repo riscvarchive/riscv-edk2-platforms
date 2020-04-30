@@ -33,6 +33,22 @@
   DEFINE INCLUDE_TFTP_COMMAND    = FALSE
   DEFINE DEBUG_PRINT_ERROR_LEVEL = 0x8000004F
 
+!ifndef TFA_BUILD_ARTIFACTS
+  #
+  # Default TF-A binaries checked into edk2-non-osi.
+  #
+  DEFINE TFA_BUILD_BL1 = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/bl1.bin
+  DEFINE TFA_BUILD_FIP = Platform/RaspberryPi/$(PLATFORM_NAME)/TrustedFirmware/fip.bin
+!else
+  #
+  # Usually we use the checked-in binaries, but for developers working
+  # on the firmware, being able to use a local TF-A build without extra copy
+  # operations ends up being very helpful.
+  #
+  DEFINE TFA_BUILD_BL1 = $(TFA_BUILD_ARTIFACTS)/bl1.bin
+  DEFINE TFA_BUILD_FIP = $(TFA_BUILD_ARTIFACTS)/fip.bin
+!endif
+
 ################################################################################
 #
 # Library Class section - list of all Library Classes needed by this Platform.
