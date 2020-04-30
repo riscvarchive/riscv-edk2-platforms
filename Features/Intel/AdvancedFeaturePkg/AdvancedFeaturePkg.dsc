@@ -30,7 +30,7 @@
   PEI_ARCH                            = IA32
   DXE_ARCH                            = X64
 
-!include AdvancedFeaturePkg/TemporaryBuildWorkaround/TemporaryBuildWorkaround.dsc
+!include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
 
 ################################################################################
 #

@@ -37,7 +37,7 @@
   #
   # Include PCD configuration for this board.
   #
-  !include AdvancedFeaturePkg/TemporaryBuildWorkaround/TemporaryBuildWorkaround.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
   !include OpenBoardPkgPcd.dsc
   !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
