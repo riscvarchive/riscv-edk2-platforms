@@ -56,23 +56,30 @@ Build instructions from the top level edk2-platforms Readme.md apply.
 1. Format a uSD card as FAT32
 2. Copy the generated `RPI_EFI.fd` firmware onto the partition
 3. Download and copy the following files from https://github.com/raspberrypi/firmware/tree/master/boot
+  - `bcm2710-rpi-3-b.dtb` (for Pi 3B)
+  - `bcm2710-rpi-3-b-plus.dtb` (for Pi 3B+)
+  - `bcm2710-rpi-2-b.dtb` (for Pi 2B v1.2)
+  - `bcm2710-rpi-cm3.dtb` (for Pi CM3)
   - `bootcode.bin`
   - `fixup.dat`
   - `start.elf`
+  - `overlays/miniuart-bt.dtbo` or `overlays/disable-bt.dtbo` (Optional)
 4. Create a `config.txt` with the following content:
   ```
   arm_control=0x200
   enable_uart=1
   armstub=RPI_EFI.fd
-  disable_commandline_tags=1
+  disable_commandline_tags=2
+  device_tree_address=0x1f0000
+  device_tree_end=0x200000
   ```
-  Additionally, if you want to use PL011 instead of the miniUART, you can add the lines:
+  If you want to use PL011 instead of the miniUART on your Pi 3B/3B+, you can add the lines:
   ```
-  device_tree_address=0x10000
-  device_tree_end=0x20000
-  device_tree=bcm2710-rpi-3-b[-plus].dtb
   dtoverlay=miniuart-bt
   ```
+  Note: doing so requires `miniuart-bt.dbto` to have been copied into an `overlays/`
+  directory on the uSD card. Alternatively, you may use `disable-bt` instead of
+ `miniuart-bt` if you don't require Bluetooth.
 5. Insert the uSD card and power up the Pi.
 
 Note that if you have a model 3+ or a model 3 where you enabled USB boot through OTP
@@ -92,21 +99,26 @@ in the `TrustedFirmware/` directory from `edk2-non-osi`.
 
 ## Custom Device Tree
 
-The default Device Tree included in the firmware is the one for a Raspberry Pi 3 Model B (not B+).
-If you want to use a different Device Tree, to boot a Pi 3 Model B+ for instance (for which a
-DTB is also provided under `DeviceTree/`), you should copy the relevant `.dtb` into the root of
+By default, UEFI will use the device tree loaded by the VideoCore firmware. This
+depends on the model/variant, and relies on the presence on specific files on your boot media.
+E.g.:
+ - `bcm2710-rpi-3-b.dtb` (for Pi 3B)
+ - `bcm2710-rpi-3-b-plus.dtb` (for Pi 3B+)
+ - `bcm2710-rpi-2-b.dtb` (for Pi 2B v1.2)
+ - `bcm2710-rpi-cm3.dtb` (for Pi CM3)
+
+You can override the DTB and provide a custom one. Copy the relevant `.dtb` into the root of
 the SD or USB, and then edit your `config.txt` so that it looks like:
 
 ```
 (...)
 disable_commandline_tags=2
-device_tree_address=0x10000
-device_tree_end=0x20000
-device_tree=bcm2710-rpi-3-b-plus.dtb
+device_tree_address=0x1f0000
+device_tree_end=0x200000
+device_tree=your_fdt_file.dtb
 ```
 
-Note: the address range **must** be `[0x10000:0x20000]`.
-`dtoverlay` and `dtparam` parameters are also supported **when** providing a Device Tree`.
+Note: the address range **must** be `[0x1f0000:0x200000]`. `dtoverlay` and `dtparam` parameters are also supported.
 
 ## Custom `bootargs`
 
