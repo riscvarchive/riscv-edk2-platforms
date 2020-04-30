@@ -188,7 +188,7 @@
 
   # Ethernet / Virtio Network
 !ifdef EDK2_ENABLE_SMSC_91X
-  gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
+  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
 !endif
   gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress|0x1c150000
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x10000
@@ -313,7 +313,7 @@
 
   # SMSC LAN 91C111 / Virtio Network
 !ifdef EDK2_ENABLE_SMSC_91X
-  EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
 !endif
   OvmfPkg/VirtioNetDxe/VirtioNet.inf
 

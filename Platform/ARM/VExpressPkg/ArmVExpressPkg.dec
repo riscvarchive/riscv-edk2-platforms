@@ -56,3 +56,6 @@
   ## PL180 MCI
   gArmVExpressTokenSpaceGuid.PcdPL180SysMciRegAddress|0x00000000|UINT32|0x00000009
   gArmVExpressTokenSpaceGuid.PcdPL180MciBaseAddress|0x00000000|UINT32|0x0000000A
+
+  # LAN91x Ethernet Driver PCDs
+  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x0|UINT32|0x0000000B

@@ -154,7 +154,7 @@ FvNameGuid         = 87940482-fc81-41c3-87e6-399cf85ac8a0
 
 !ifdef EDK2_ENABLE_SMSC_91X
 !include Platform/ARM/VExpressPkg/ArmVExpress-networking.fdf.inc
-  INF EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
 !endif
 
   #

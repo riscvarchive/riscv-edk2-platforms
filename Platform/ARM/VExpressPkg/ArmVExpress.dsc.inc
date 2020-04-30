@@ -368,7 +368,7 @@
 
 !ifdef EDK2_ENABLE_SMSC_91X
   # Ethernet (SMSC 91C111)
-  gEmbeddedTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x1A000000
+  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x1A000000
 !endif
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
@@ -417,7 +417,7 @@
 !include NetworkPkg/Network.dsc.inc
 !ifdef EDK2_ENABLE_SMSC_91X
   # SMSC LAN 91C111
-  EmbeddedPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
 !endif
 
   #
