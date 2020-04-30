@@ -143,7 +143,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
 !include Platform/ARM/VExpressPkg/ArmVExpress-networking.fdf.inc
 
-  INF EmbeddedPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
 
   #
   # UEFI application

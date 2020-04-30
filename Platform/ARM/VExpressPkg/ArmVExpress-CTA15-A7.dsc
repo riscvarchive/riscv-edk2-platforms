@@ -160,8 +160,8 @@
   gEmbeddedTokenSpaceGuid.PcdIsp1761BaseAddress|0x1B000000
 
   # Ethernet (SMSC LAN9118)
-  gEmbeddedTokenSpaceGuid.PcdLan9118DxeBaseAddress|0x1A000000
-  gEmbeddedTokenSpaceGuid.PcdLan9118DefaultNegotiationTimeout|400000
+  gArmVExpressTokenSpaceGuid.PcdLan9118DxeBaseAddress|0x1A000000
+  gArmVExpressTokenSpaceGuid.PcdLan9118DefaultNegotiationTimeout|400000
 
   #
   # Define the device path to the FDT for the platform
@@ -252,7 +252,7 @@
   Platform/ARM/VExpressPkg/Drivers/PL180MciDxe/PL180MciDxe.inf
 
   # SMSC LAN 9118
-  EmbeddedPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
+  Platform/ARM/VExpressPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
 
   #
   # FAT filesystem + GPT/MBR partitioning

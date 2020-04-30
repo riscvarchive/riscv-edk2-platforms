@@ -196,7 +196,7 @@ FvNameGuid         = B73FE497-B92E-416e-8326-45AD0D270092
   #
 !include Platform/ARM/VExpressPkg/ArmVExpress-networking.fdf.inc
 
-  INF EmbeddedPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/Lan9118Dxe/Lan9118Dxe.inf
 !if 0
   INF OptionRomPkg/MarvellYukonDxe/MarvellYukonDxe.inf
 !endif
