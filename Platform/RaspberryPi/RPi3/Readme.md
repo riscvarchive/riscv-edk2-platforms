@@ -1,18 +1,32 @@
-Raspberry Pi Platform
-=====================
+Raspberry Pi 3 Platform
+=======================
 
 # Summary
 
-This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 3/3B+ platforms,
-based on [Ard Bisheuvel's 64-bit](http://www.workofard.com/2017/02/uefi-on-the-pi/)
+This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 3B (and related)
+platforms, based on [Ard Biesheuvel's 64-bit](http://www.workofard.com/2017/02/uefi-on-the-pi/)
 and [Microsoft's 32-bit](https://github.com/ms-iot/RPi-UEFI/tree/ms-iot/Pi3BoardPkg)
 implementations, as maintained by [Andrei Warkentin](https://github.com/andreiw/RaspberryPiPkg).
 
-This is meant as a generally useful 64-bit ATF + UEFI implementation for the Raspberry
-Pi 3/3B+ which should be good enough for most kind of UEFI development, as well as for
-running consummer Operating Systems in such as Linux or Windows.
+This is meant as a generally useful 64-bit ATF + UEFI implementation for Raspberry Pi
+variants based on the BCM2837 SoC, which should be good enough for most kind of UEFI development,
+as well as for running consummer Operating Systems in such as Linux, Windows or the BSDs.
 
 Raspberry Pi is a trademark of the [Raspberry Pi Foundation](http://www.raspberrypi.org).
+
+# Hardware Supported
+
+The RPi3 target supports Pi revisions based on the BCM2837 SoC:
+- Raspberry Pi 2B v1.2 (older versions are *not* compatible)
+- Raspberry Pi 3A+
+- Raspberry Pi 3B
+- Raspberry Pi 3B+
+- Raspberry Pi CM3
+
+Note: a CM3L, lacking eMMC and thus similar to the 3B, will probably work as well, but just
+has not been tested.
+
+Please see the RPi4 target for BCM2711-based variants, such as the Raspberry Pi 4B.
 
 # Status
 
@@ -138,27 +152,28 @@ This should allow you to set whatever date/time you want using the Shell date an
 time commands. While in UEFI or HLOS, the time will tick forward.
 `RtcEpochSeconds` is not updated on reboots.
 
-## uSD
+## uSD (and eMMC for CM3)
 
-UEFI supports both the Arasan SDHCI and the Broadcom SDHost controllers to access the uSD slot.
-You can use either. The other controller gets routed to the SDIO card. The choice made will
+UEFI supports both the Arasan SDHCI and the Broadcom SDHost controllers to access the flash
+media (eMMC on CM3, and uSD slot on everything else). You can use either. The other controller
+gets routed to the SDIO WiFi card (N/A to models without WiFi). The choice made will
 impact ACPI OSes booted (e.g. Windows 10). Arasan, being an SDIO controller, is usually used
-with the WiFi adapter where available. SDHost cannot be used with SDIO. In UEFI setup screen:
+with the WiFi adapter (where available). SDHost cannot be used with SDIO. In UEFI setup screen:
 - go to `Device Manager`
 - go to `Raspberry Pi Configuration`
-- go to `Chipset`
-- configure `Boot uSD Routing`
+- go to `SD/MMC Configuration`
+- configure `uSD/eMMC Routing`
 
 Known issues:
 - Arasan HS/4bit support is missing.
-- No 8 bit mode support for (e)MMC (irrelevant for the Pi 3).
+- No 8 bit mode support for (e)MMC (slow UEFI file I/O on CM3).
 - Hacky (e)MMC support (no HS).
 - No card removal/replacement detection, tons of timeouts and slow down during boot without an uSD card present.
 
 ## USB
 
 - USB1 BBB mass storage devices untested (USB2 and USB3 devices are fine).
-- USB1 CBI mass storage devices don't work (e.g. HP FD-05PUB floppy).
+- Some USB1 CBI (e.g. UFI floppy) mass storage devices may not work.
 
 ## ACPI
 
@@ -172,4 +187,6 @@ install a kernel that relies on Device Tree rather than ACPI.
 ## Missing Functionality
 
 - Network booting via onboard NIC.
-- Ability to switch UART use to PL011.
+- SPCR hardcodes UART type to miniUART, and thus will not expose correct
+  (PL011) UART on CM3 and Pi2B or if DT overlays to switch UART are used
+  on Pi 3B/3B+/3A+.

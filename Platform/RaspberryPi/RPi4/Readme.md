@@ -3,13 +3,22 @@ Raspberry Pi 4 Platform
 
 # Summary
 
-This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 4 platforms.
+This is a port of 64-bit Tiano Core UEFI firmware for the Raspberry Pi 4B platform.
 
 This is intended to be useful 64-bit [TF-A](https://www.trustedfirmware.org/) +
-UEFI implementation for the Raspberry Pi 4 which should be good enough for most
-kind of UEFI development, as well as for running consummer Operating Systems.
+UEFI implementation for the Raspberry Pi variants based on the BCM2711 SoC,
+which should be good enough for most kind of UEFI development, as well running consumer
+Operating Systems.
 
 Raspberry Pi is a trademark of the [Raspberry Pi Foundation](https://www.raspberrypi.org).
+
+# Hardware Supported
+
+The RPi4 target supports Pi revisions based on the BCM2711 SoC:
+- Raspberry Pi 4B
+
+Please see the RPi3 target for the BCM2837-based variants, such as the Raspberry
+Pi 3B.
 
 # Status
 
@@ -112,3 +121,23 @@ An `RtcEpochSeconds` NVRAM variable is used to store the boot time.
 This should allow you to set whatever date/time you want using the Shell date and
 time commands. While in UEFI or HLOS, the time will tick forward.
 `RtcEpochSeconds` is not updated on reboots.
+
+## USB
+
+This UEFI supports both the USB3 xHCI ports (front ports), and the Pi 3-style
+DesignWare USB2 controller via the Type-C port (host only).
+
+The following only apply to the Type-C port:
+- USB1 BBB mass storage devices untested (USB2 and USB3 devices are fine).
+- Some USB1 CBI (e.g. UFI floppy) mass storage devices may not work.
+
+## ACPI
+
+OS support for ACPI description of Pi-specific devices is still in development. Not
+all functionality may be available.
+
+## Missing Functionality
+
+- Network booting via onboard NIC.
+- SPCR hardcodes type to PL011, and thus will not expose correct
+  (miniUART) UART if DT overlays to switch UART are used on Pi 4B.
