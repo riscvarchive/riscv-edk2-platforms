@@ -67,3 +67,6 @@
   # The default feature mask below disables full duplex negotiation, since full
   # duplex operation is suspected to be broken in the driver.
   gArmVExpressTokenSpaceGuid.PcdLan9118NegotiationFeatureMask|0xFFFFFEBF|UINT32|0x00000028
+
+  # ISP1761 USB OTG Controller
+  gArmVExpressTokenSpaceGuid.PcdIsp1761BaseAddress|0|UINT32|0x00000029

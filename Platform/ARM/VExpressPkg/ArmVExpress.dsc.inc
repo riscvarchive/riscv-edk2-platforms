@@ -455,4 +455,4 @@
 [Components.ARM]
 
   # ISP1761 USB OTG Controller
-  EmbeddedPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf
+  Platform/ARM/VExpressPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf

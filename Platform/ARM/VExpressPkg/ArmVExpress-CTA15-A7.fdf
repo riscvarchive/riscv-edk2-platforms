@@ -126,7 +126,7 @@ FvNameGuid         = 73dcb643-3862-4904-9076-a94af1890243
   #
   # USB support
   #
-  INF EmbeddedPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf
+  INF Platform/ARM/VExpressPkg/Drivers/Isp1761UsbDxe/Isp1761UsbDxe.inf
 
   #
   # Android Fastboot
