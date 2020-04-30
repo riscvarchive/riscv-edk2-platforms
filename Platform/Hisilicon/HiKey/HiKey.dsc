@@ -131,8 +131,9 @@
   #
   # DW MMC/SD card controller
   #
-  gEmbeddedTokenSpaceGuid.PcdDwEmmcDxeBaseAddress|0xF723D000
-  gEmbeddedTokenSpaceGuid.PcdDwEmmcDxeClockFrequencyInHz|100000000
+  gDesignWareTokenSpaceGuid.PcdDwEmmcDxeBaseAddress|0xF723D000
+  gDesignWareTokenSpaceGuid.PcdDwEmmcDxeClockFrequencyInHz|100000000
+  gDesignWareTokenSpaceGuid.PcdDwPermitObsoleteDrivers|TRUE
 
   #
   #
@@ -216,7 +217,7 @@
   # MMC/SD
   #
   EmbeddedPkg/Universal/MmcDxe/MmcDxe.inf
-  EmbeddedPkg/Drivers/DwEmmcDxe/DwEmmcDxe.inf
+  Silicon/Synopsys/DesignWare/Drivers/DwEmmcDxe/DwEmmcDxe.inf
 
   #
   # USB Host Support
