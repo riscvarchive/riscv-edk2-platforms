@@ -53,8 +53,8 @@
 #string STR_MMC_FORM_TITLE       #language en-US "SD/MMC Configuration"
 #string STR_MMC_FORM_SUBTITLE    #language en-US "Note: UEFI only, OS may override settings."
 
-#string STR_MMC_SD_PROMPT        #language en-US "uSD Routing"
-#string STR_MMC_SD_HELP          #language en-US "Choose host controller to drive uSD slot"
+#string STR_MMC_SD_PROMPT        #language en-US "uSD/eMMC Routing"
+#string STR_MMC_SD_HELP          #language en-US "Choose host controller to drive local flash storage"
 #string STR_MMC_SD_EMMC2         #language en-US "eMMC2 SDHCI"
 #string STR_MMC_SD_SDHOST        #language en-US "Broadcom SDHOST"
 #string STR_MMC_SD_ARASAN        #language en-US "Arasan SDHCI"
@@ -65,12 +65,12 @@
 #string STR_MMC_DISMULTI_Y       #language en-US "Single-block transfers"
 
 #string STR_MMC_FORCE1BIT_PROMPT #language en-US "uSD Max Bus Width"
-#string STR_MMC_FORCE1BIT_HELP   #language en-US "Tweak for bad media"
+#string STR_MMC_FORCE1BIT_HELP   #language en-US "Tweak for bad media (N/A for eMMC)"
 #string STR_MMC_FORCE1BIT_Y      #language en-US "1 Bit Mode"
 #string STR_MMC_FORCE1BIT_N      #language en-US "4 Bit Mode"
 
 #string STR_MMC_FORCEDS_PROMPT   #language en-US "uSD Force Default Speed"
-#string STR_MMC_FORCEDS_HELP     #language en-US "Tweak for bad media"
+#string STR_MMC_FORCEDS_HELP     #language en-US "Tweak for bad media (N/A for eMMC)"
 #string STR_MMC_FORCEDS_Y        #language en-US "Force Default Speed"
 #string STR_MMC_FORCEDS_N        #language en-US "Allow High Speed"
 
