@@ -94,29 +94,27 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index].Type             = RPI_MEM_RUNTIME_REGION;
   VirtualMemoryInfo[Index++].Name           = L"FD Variables";
 
-  if (BCM2711_SOC_REGISTERS != 0) {
-     //
-     // Only the Pi 4 firmware today expects the DTB to directly follow the
-     // FD instead of overlapping the FD.
-     //
-     VirtualMemoryTable[Index].PhysicalBase    = FixedPcdGet32 (PcdFdtBaseAddress);
-     VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
-     VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdFdtSize);;
-     VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
-     VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
-     VirtualMemoryInfo[Index++].Name           = L"Flattened Device Tree";
-  } else {
-     //
-     // TF-A reserved RAM only exists for the Pi 3 TF-A.
-     //
-     // This is 2MB that directly follows the FD.
-     //
-     VirtualMemoryTable[Index].PhysicalBase    = (FixedPcdGet64(PcdFdBaseAddress) + FixedPcdGet32(PcdFdSize));
-     VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
-     VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdSystemMemoryBase) - VirtualMemoryTable[Index].PhysicalBase;
-     VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
-     VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
-     VirtualMemoryInfo[Index++].Name           = L"TF-A RAM";
+  //
+  // Both the the Pi 4 and Pi 3 implementations expect the DTB to directly follow the FD.
+  //
+  VirtualMemoryTable[Index].PhysicalBase    = FixedPcdGet32 (PcdFdtBaseAddress);
+  VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdFdtSize);;
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+  VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+  VirtualMemoryInfo[Index++].Name           = L"Flattened Device Tree";
+  if (BCM2711_SOC_REGISTERS == 0) {
+    //
+    // TF-A reserved RAM only exists for the Pi 3 TF-A.
+    //
+    // This is 2MB that directly follows the FD.
+    //
+    VirtualMemoryTable[Index].PhysicalBase    = (FixedPcdGet64(PcdFdBaseAddress) + FixedPcdGet32(PcdFdSize));
+    VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
+    VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdSystemMemoryBase) - VirtualMemoryTable[Index].PhysicalBase;
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
+    VirtualMemoryInfo[Index].Type             = RPI_MEM_RESERVED_REGION;
+    VirtualMemoryInfo[Index++].Name           = L"TF-A RAM";
   }
 
   // Base System RAM

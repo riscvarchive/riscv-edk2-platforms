@@ -135,6 +135,14 @@ DATA = {
 0x001e0000|0x00010000
 gRaspberryPiTokenSpaceGuid.PcdNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 
+#
+# This is just for documentation purposes! The DTB reserved space is not part of the FD,
+# but this is exactly where it is expected to be.
+#
+# 0x001f0000|0x10000
+# gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress|gRaspberryPiTokenSpaceGuid.PcdFdtSize
+#
+
 ################################################################################
 #
 # FV Section

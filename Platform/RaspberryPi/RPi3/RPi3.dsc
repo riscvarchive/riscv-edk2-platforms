@@ -387,8 +387,13 @@
   # Size of the region used by UEFI in permanent memory (Reserved 64MB)
   gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x04000000
   #
-  # This matches PcdFvBaseAddress, since everything less is ATF, and
-  # will be reserved away.
+  # 0x00000000 - 0x001F0000  FD (PcdFdBaseAddress, PcdFdSize)
+  # 0x001F0000 - 0x00200000 DTB (PcdFdtBaseAddress, PcdFdtSize)
+  # 0x00200000 - 0x00400000 TFA (BL2 / BL31 / BL32 "secure SRAM")
+  # 0x00400000 - ...        RAM (PcdSystemMemoryBase, PcdSystemMemorySize)
+  #
+  # This matches PcdFvBaseAddress, since everything less is FD + TF-A RAM,
+  # thus will be reserved away.
   #
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x00400000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x3FC00000
