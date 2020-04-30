@@ -37,6 +37,7 @@
   BaseMemoryLib
 
 [Protocols]
+  gEfiCpuArchProtocolGuid
   gEfiDevicePathProtocolGuid
   gEfiGraphicsOutputProtocolGuid
   gEfiDevicePathToTextProtocolGuid
