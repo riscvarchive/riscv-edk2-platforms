@@ -125,8 +125,7 @@ Note: the address range **must** be `[0x1f0000:0x200000]`. `dtoverlay` and `dtpa
 This firmware will honor the command line passed by the GPU via `cmdline.txt`.
 
 Note, that the ultimate contents of `/chosen/bootargs` are a combination of several pieces:
-- Original `/chosen/bootargs` if using the internal DTB. Seems to be completely discarded by GPU when booting with a custom device tree.
-- GPU-passed hardware configuration. This one is always present.
+- GPU-passed hardware configuration.
 - Additional boot options passed via `cmdline.txt`.
 
 # Limitations
