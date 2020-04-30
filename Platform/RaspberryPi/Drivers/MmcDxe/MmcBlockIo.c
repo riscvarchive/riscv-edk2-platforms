@@ -47,6 +47,7 @@ ValidateWrittenBlockCount (
     /*
      * Not on MMC.
      */
+    *TransferredBlocks = Count;
     return EFI_SUCCESS;
   }
 
