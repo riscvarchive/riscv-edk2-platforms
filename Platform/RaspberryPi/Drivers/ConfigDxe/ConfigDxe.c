@@ -322,9 +322,9 @@ ApplyVariables (
     ASSERT_EFI_ERROR (Status);
   }
 
-  if (mModelFamily == 3) {
+  if (mModelFamily == 3 || mModelFamily == 2) {
     /*
-     * Pi 3: either Arasan or SdHost goes to SD card.
+     * Pi 2B v1.2 / Pi 3: either Arasan or SdHost goes to SD card.
      *
      * Switching two groups around, so disable both first.
      *
