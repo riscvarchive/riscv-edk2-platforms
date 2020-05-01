@@ -6,7 +6,7 @@
   Copyright (c) 2008 - 2010, Apple Inc. All rights reserved.<BR>
   Copyright (c) 2012 - 2013, ARM Ltd. All rights reserved.<BR>
   Copyright (c) 2016, Freescale Semiconductor, Inc. All rights reserved.
-  Copyright 2017 NXP
+  Copyright 2017, 2020 NXP
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -16,6 +16,7 @@
 #include <Library/IoLib.h>
 #include <Library/PcdLib.h>
 #include <Library/SerialPortLib.h>
+#include <Ppi/NxpPlatformGetClock.h>
 
 #include "DUart.h"
 
@@ -169,10 +170,8 @@ CalculateBaudDivisor (
   )
 {
   UINTN DUartClk;
-  UINTN FreqSystemBus;
 
-  FreqSystemBus = GetBusFrequency ();
-  DUartClk = FreqSystemBus/PcdGet32(PcdPlatformFreqDiv);
+  DUartClk = gPlatformGetClockPpi.PlatformGetClock (NXP_UART_CLOCK, 0);
 
   return ((DUartClk)/(BaudRate * 16));
 }

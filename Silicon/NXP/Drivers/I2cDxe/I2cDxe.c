@@ -17,6 +17,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <Library/UefiRuntimeLib.h>
+#include <Ppi/NxpPlatformGetClock.h>
 
 #include "I2cDxe.h"
 
@@ -51,7 +52,7 @@ SetBusFrequency (
 
   I2cBase = (UINTN)(I2c->Dev->Resources[0].AddrRangeMin);
 
-  I2cClock = GetBusFrequency ();
+  I2cClock = gPlatformGetClockPpi.PlatformGetClock (NXP_I2C_CLOCK, 0);
 
   I2cInitialize (I2cBase, I2cClock, *BusClockHertz);
 

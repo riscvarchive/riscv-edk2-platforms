@@ -39,8 +39,6 @@
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x7BE00000
   gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x02000000
 
-  gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv|0x1
-
   #
   # RTC Pcds
   #

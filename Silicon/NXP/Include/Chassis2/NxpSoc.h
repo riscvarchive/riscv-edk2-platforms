@@ -27,10 +27,6 @@
 #define SACR_PAGESIZE_MASK         0x00010000
 #define IDR1_PAGESIZE_MASK         0x80000000
 
-typedef struct {
-  UINTN FreqSystemBus;
-} SYS_INFO;
-
 /* Device Configuration and Pin Control */
 typedef struct {
   UINT8    Res0[0x100-0x00];
@@ -38,11 +34,6 @@ typedef struct {
 #define CHASSIS2_RCWSR0_SYS_PLL_RAT_SHIFT  25
 #define CHASSIS2_RCWSR0_SYS_PLL_RAT_MASK  0x1f
 } CCSR_GUR;
-
-VOID
-GetSysInfo (
-  OUT SYS_INFO *
-  );
 
 UINT32
 EFIAPI

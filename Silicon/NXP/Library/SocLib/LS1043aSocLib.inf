@@ -36,4 +36,3 @@
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
   gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian
-  gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv

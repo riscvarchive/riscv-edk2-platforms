@@ -37,12 +37,6 @@ typedef struct {
   NON_DISCOVERABLE_DEVICE         *Dev;
 } NXP_I2C_MASTER;
 
-extern
-UINT64
-GetBusFrequency (
-  VOID
-  );
-
 EFI_STATUS
 NxpI2cInit (
   IN EFI_HANDLE  DriverBindingHandle,

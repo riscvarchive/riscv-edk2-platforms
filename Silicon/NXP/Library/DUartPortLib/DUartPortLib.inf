@@ -3,7 +3,7 @@
 #  Component description file for DUartPortLib module
 #
 #  Copyright (c) 2013, Freescale Ltd. All rights reserved.
-#  Copyright 2017 NXP
+#  Copyright 2017, 2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -20,8 +20,8 @@
   DUartPortLib.c
 
 [LibraryClasses]
+  ArmPlatformLib
   PcdLib
-  SocLib
 
 [Packages]
   MdeModulePkg/MdeModulePkg.dec
@@ -31,4 +31,3 @@
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
-  gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv

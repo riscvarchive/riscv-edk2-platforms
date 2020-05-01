@@ -38,21 +38,6 @@ GurRead (
 }
 
 /*
- * Return system bus frequency
- */
-UINT64
-GetBusFrequency (
-   VOID
-  )
-{
-  SYS_INFO SocSysInfo;
-
-  GetSysInfo (&SocSysInfo);
-
-  return SocSysInfo.FreqSystemBus;
-}
-
-/*
  * Setup SMMU in bypass mode
  * and also set its pagesize
  */

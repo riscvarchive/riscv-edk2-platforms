@@ -25,13 +25,13 @@
 
 [LibraryClasses]
   ArmLib
+  ArmPlatformLib
   BaseMemoryLib
   DevicePathLib
   I2cLib
   IoLib
   MemoryAllocationLib
   PcdLib
-  SocLib
   TimerLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint

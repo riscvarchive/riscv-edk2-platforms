@@ -22,37 +22,6 @@
 #include <Soc.h>
 
 /**
-  Calculate the frequency of various controllers and
-  populate the passed structure with frequuencies.
-
-  @param  PtrSysInfo            Input structure to populate with
-                                frequencies.
-**/
-VOID
-GetSysInfo (
-  OUT SYS_INFO *PtrSysInfo
-  )
-{
-  CCSR_GUR     *GurBase;
-  UINTN        SysClk;
-
-  GurBase = (CCSR_GUR *)CHASSIS2_DCFG_ADDRESS;
-  SysClk = CLK_FREQ;
-
-  SetMem (PtrSysInfo, sizeof (SYS_INFO), 0);
-
-  PtrSysInfo->FreqSystemBus = SysClk;
-
-  //
-  // selects the platform clock:SYSCLK ratio and calculate
-  // system frequency
-  //
-  PtrSysInfo->FreqSystemBus *= (GurRead ((UINTN)&GurBase->RcwSr[0]) >>
-                CHASSIS2_RCWSR0_SYS_PLL_RAT_SHIFT) &
-                CHASSIS2_RCWSR0_SYS_PLL_RAT_MASK;
-}
-
-/**
   Return the input clock frequency to an IP Module.
   This function reads the RCW bits and calculates the  PLL multiplier/divider
   values to be applied to various IP modules.

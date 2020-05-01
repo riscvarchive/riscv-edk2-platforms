@@ -23,11 +23,6 @@
 
 [PcdsFixedAtBuild.common]
   #
-  # Platform PCDs
-  #
-  gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv|0x0|UINT32|0x00000250
-
-  #
   # Pcds to support Big Endian IPs
   #
   gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian|FALSE|BOOLEAN|0x0000311
