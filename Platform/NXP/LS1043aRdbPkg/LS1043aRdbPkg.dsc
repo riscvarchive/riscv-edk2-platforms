@@ -22,7 +22,7 @@
   OUTPUT_DIRECTORY               = Build/LS1043aRdbPkg
   FLASH_DEFINITION               = Platform/NXP/LS1043aRdbPkg/LS1043aRdbPkg.fdf
 
-!include Platform/NXP/NxpQoriqLs.dsc.inc
+!include Silicon/NXP/NxpQoriqLs.dsc.inc
 !include Silicon/NXP/LS1043A/LS1043A.dsc.inc
 
 [LibraryClasses.common]
