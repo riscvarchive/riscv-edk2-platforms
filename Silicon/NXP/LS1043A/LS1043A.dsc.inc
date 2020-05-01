@@ -1,11 +1,15 @@
 #  LS1043A.dsc
 #  LS1043A Soc package.
 #
-#  Copyright 2017-2019 NXP
+#  Copyright 2017-2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 #
+
+[LibraryClasses.common]
+  SocLib|Silicon/NXP/Library/SocLib/LS1043aSocLib.inf
+  SerialPortLib|Silicon/NXP/Library/DUartPortLib/DUartPortLib.inf
 
 ################################################################################
 #
@@ -20,6 +24,7 @@
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x01402000
 
 [PcdsFixedAtBuild.common]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x021c0500
 
   #
   # CCSR Address Space and other attached Memories
