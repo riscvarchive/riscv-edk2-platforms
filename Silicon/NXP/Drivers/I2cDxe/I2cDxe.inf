@@ -3,7 +3,7 @@
 #  Component description file for I2c driver
 #
 #  Copyright (c) 2015, Freescale Semiconductor, Inc. All rights reserved.
-#  Copyright 2017-2019 NXP
+#  Copyright 2017-2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -27,6 +27,7 @@
   ArmLib
   BaseMemoryLib
   DevicePathLib
+  I2cLib
   IoLib
   MemoryAllocationLib
   PcdLib
@@ -47,12 +48,6 @@
 [Protocols]
   gEdkiiNonDiscoverableDeviceProtocolGuid    ## TO_START
   gEfiI2cMasterProtocolGuid                  ## BY_START
-
-[Pcd]
-  gNxpQoriqLsTokenSpaceGuid.PcdI2cSpeed
-  gNxpQoriqLsTokenSpaceGuid.PcdI2c0BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdI2cSize
-  gNxpQoriqLsTokenSpaceGuid.PcdNumI2cController
 
 [Depex]
   TRUE
