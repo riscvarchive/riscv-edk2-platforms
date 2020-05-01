@@ -32,10 +32,7 @@
   # Pcds for base address and size
   #
   gNxpQoriqLsTokenSpaceGuid.PcdGutsBaseAddr|0x0|UINT64|0x00000100
-  gNxpQoriqLsTokenSpaceGuid.PcdPiFdSize|0x0|UINT32|0x00000101
-  gNxpQoriqLsTokenSpaceGuid.PcdPiFdBaseAddress|0x0|UINT64|0x00000102
   gNxpQoriqLsTokenSpaceGuid.PcdClkBaseAddr|0x0|UINT64|0x00000103
-  gNxpQoriqLsTokenSpaceGuid.PcdWatchdog1BaseAddr|0x0|UINT64|0x00000104
   gNxpQoriqLsTokenSpaceGuid.PcdDdrBaseAddr|0x0|UINT64|0x00000105
   gNxpQoriqLsTokenSpaceGuid.PcdSdxcBaseAddr|0x0|UINT64|0x00000106
   gNxpQoriqLsTokenSpaceGuid.PcdScfgBaseAddr|0x0|UINT64|0x00000107
@@ -61,10 +58,6 @@
   gNxpQoriqLsTokenSpaceGuid.PcdQspiRegionSize|0x0|UINT64|0x0000011B
   gNxpQoriqLsTokenSpaceGuid.PcdQspiRegion2BaseAddr|0x0|UINT64|0x0000011C
   gNxpQoriqLsTokenSpaceGuid.PcdQspiRegion2Size|0x0|UINT64|0x0000011D
-  gNxpQoriqLsTokenSpaceGuid.PcdSystemMemoryExBase|0x0|UINT64|0x0000011E
-  gNxpQoriqLsTokenSpaceGuid.PcdSystemMemoryExSize|0x0|UINT64|0x0000011F
-  gNxpQoriqLsTokenSpaceGuid.PcdUsbBaseAddr|0x0|UINT32|0x00000120
-  gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x0|UINT32|0x00000121
   gNxpQoriqLsTokenSpaceGuid.PcdCcsrBaseAddr|0x0|UINT64|0x00000122
   gNxpQoriqLsTokenSpaceGuid.PcdCcsrSize|0x0|UINT64|0x00000123
 
@@ -75,36 +68,16 @@
   gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion1Size|0x0|UINT64|0x00000191
   gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2BaseAddr|0x0|UINT64|0x00000192
   gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2Size|0x0|UINT64|0x00000193
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcNandReservedSize|0x0|UINT32|0x00000194
-  gNxpQoriqLsTokenSpaceGuid.PcdFlashDeviceBase64|0x0|UINT64|0x00000195
-  gNxpQoriqLsTokenSpaceGuid.PcdFlashReservedRegionBase64|0x0|UINT64|0x00000196
-
-  #
-  # NV Pcd
-  #
-  gNxpQoriqLsTokenSpaceGuid.PcdNvFdBase|0x0|UINT64|0x00000210
-  gNxpQoriqLsTokenSpaceGuid.PcdNvFdSize|0x0|UINT64|0x00000211
 
   #
   # Platform PCDs
   #
   gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv|0x0|UINT32|0x00000250
-  gNxpQoriqLsTokenSpaceGuid.PcdSerdes2Enabled|FALSE|BOOLEAN|0x00000251
-
-  #
-  # Clock PCDs
-  #
-  gNxpQoriqLsTokenSpaceGuid.PcdSysClk|0x0|UINT64|0x000002A0
-  gNxpQoriqLsTokenSpaceGuid.PcdDdrClk|0x0|UINT64|0x000002A1
 
   #
   # Pcds to support Big Endian IPs
   #
-  gNxpQoriqLsTokenSpaceGuid.PcdMmcBigEndian|FALSE|BOOLEAN|0x0000310
   gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian|FALSE|BOOLEAN|0x0000311
-  gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|FALSE|BOOLEAN|0x00000312
-  gNxpQoriqLsTokenSpaceGuid.PcdWatchdogBigEndian|FALSE|BOOLEAN|0x00000313
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcBigEndian|FALSE|BOOLEAN|0x00000314
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|FALSE|BOOLEAN|0x00000315

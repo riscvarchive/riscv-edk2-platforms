@@ -1,6 +1,6 @@
 #  @file
 #
-#  Copyright 2017-2019 NXP
+#  Copyright 2017-2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -18,7 +18,6 @@
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Silicon/NXP/NxpQoriqLs.dec
-  Silicon/NXP/LS1043A/LS1043A.dec
 
 [LibraryClasses]
   ArmSmcLib
@@ -30,16 +29,12 @@
 [Sources.common]
   Chassis.c
   Chassis2/Soc.c
-  SerDes.c
 
 [BuildOptions]
   GCC:*_*_*_CC_FLAGS = -DCHASSIS2
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
-  gNxpQoriqLsTokenSpaceGuid.PcdClkBaseAddr
   gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian
   gNxpQoriqLsTokenSpaceGuid.PcdGutsBaseAddr
   gNxpQoriqLsTokenSpaceGuid.PcdPlatformFreqDiv
-  gNxpQoriqLsTokenSpaceGuid.PcdScfgBaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdSerdes2Enabled
