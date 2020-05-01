@@ -2,7 +2,7 @@
 
   Provide MMIO APIs for BE modules.
 
-  Copyright 2017-2019 NXP
+  Copyright 2017-2020 NXP
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -21,6 +21,7 @@
   @return The value read.
 
 **/
+STATIC
 UINT16
 EFIAPI
 SwapMmioRead16 (
@@ -38,6 +39,7 @@ SwapMmioRead16 (
   @return The value read.
 
 **/
+STATIC
 UINT32
 EFIAPI
 SwapMmioRead32 (
@@ -55,6 +57,7 @@ SwapMmioRead32 (
   @return The value read.
 
 **/
+STATIC
 UINT64
 EFIAPI
 SwapMmioRead64 (
@@ -71,6 +74,7 @@ SwapMmioRead64 (
   @param  Value   The value to write to the MMIO register.
 
 **/
+STATIC
 UINT16
 EFIAPI
 SwapMmioWrite16 (
@@ -88,6 +92,7 @@ SwapMmioWrite16 (
   @param  Value   The value to write to the MMIO register.
 
 **/
+STATIC
 UINT32
 EFIAPI
 SwapMmioWrite32 (
@@ -105,6 +110,7 @@ SwapMmioWrite32 (
   @param  Value   The value to write to the MMIO register.
 
 **/
+STATIC
 UINT64
 EFIAPI
 SwapMmioWrite64 (
@@ -125,6 +131,7 @@ SwapMmioWrite64 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT16
 EFIAPI
 SwapMmioAndThenOr16 (
@@ -149,6 +156,7 @@ SwapMmioAndThenOr16 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT32
 EFIAPI
 SwapMmioAndThenOr32 (
@@ -173,6 +181,7 @@ SwapMmioAndThenOr32 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT64
 EFIAPI
 SwapMmioAndThenOr64 (
@@ -196,6 +205,7 @@ SwapMmioAndThenOr64 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT16
 EFIAPI
 SwapMmioOr16 (
@@ -215,6 +225,7 @@ SwapMmioOr16 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT32
 EFIAPI
 SwapMmioOr32 (
@@ -234,6 +245,7 @@ SwapMmioOr32 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT64
 EFIAPI
 SwapMmioOr64 (
@@ -253,6 +265,7 @@ SwapMmioOr64 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT16
 EFIAPI
 SwapMmioAnd16 (
@@ -272,6 +285,7 @@ SwapMmioAnd16 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT32
 EFIAPI
 SwapMmioAnd32 (
@@ -291,6 +305,7 @@ SwapMmioAnd32 (
   @return The value written back to the MMIO register.
 
 **/
+STATIC
 UINT64
 EFIAPI
 SwapMmioAnd64 (

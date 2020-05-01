@@ -30,11 +30,11 @@ GurRead (
   IN  UINTN     Address
   )
 {
-  if (FixedPcdGetBool (PcdGurBigEndian)) {
-    return SwapMmioRead32 (Address);
-  } else {
-    return MmioRead32 (Address);
-  }
+  MMIO_OPERATIONS  *GurOps;
+
+  GurOps = GetMmioOperations (FixedPcdGetBool (PcdGurBigEndian));
+
+  return GurOps->Read32 (Address);
 }
 
 /*
