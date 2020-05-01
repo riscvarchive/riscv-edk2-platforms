@@ -1,7 +1,7 @@
 /** @file
 *  Header defining the Base addresses, sizes, flags etc for chassis 1
 *
-*  Copyright 2017-2019 NXP
+*  Copyright 2017-2020 NXP
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -55,14 +55,6 @@ typedef struct {
 } SOC_CLOCK_INFO;
 
 /*
- * Print Soc information
- */
-VOID
-PrintSoc (
-  VOID
-  );
-
-/*
  * Initialize Clock structure
  */
 VOID
@@ -76,22 +68,6 @@ ClockInit (
  */
 VOID
 SmmuInit (
-  VOID
-  );
-
-/*
- * Print CPU information
- */
-VOID
-PrintCpuInfo (
-  VOID
-  );
-
-/*
- * Dump RCW (Reset Control Word) on console
- */
-VOID
-PrintRCW (
   VOID
   );
 

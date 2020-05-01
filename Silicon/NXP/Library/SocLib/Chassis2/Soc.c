@@ -1,7 +1,7 @@
 /** @Soc.c
   SoC specific Library containg functions to initialize various SoC components
 
-  Copyright 2017-2019 NXP
+  Copyright 2017-2020 NXP
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -131,10 +131,6 @@ GetSysInfo (
 
 /**
   Function to initialize SoC specific constructs
-  CPU Info
-  SoC Personality
-  Board Personality
-  RCW prints
  **/
 VOID
 SocInit (
@@ -147,16 +143,6 @@ SocInit (
   // Early init serial Port to get board information.
   //
   SerialPortInitialize ();
-  DEBUG ((DEBUG_INIT, "\nUEFI firmware (version %s built at %a on %a)\n",
-          (CHAR16*)PcdGetPtr (PcdFirmwareVersionString), __TIME__, __DATE__));
-
-  PrintCpuInfo ();
-
-  //
-  // Print Reset control Word
-  //
-  PrintRCW ();
-  PrintSoc ();
 
   return;
 }
