@@ -10,7 +10,7 @@
 !include Silicon/NXP/Chassis2/Chassis2.dsc.inc
 
 [LibraryClasses.common]
-  SocLib|Silicon/NXP/Library/SocLib/LS1043aSocLib.inf
+  SocLib|Silicon/NXP/LS1043A/Library/SocLib/SocLib.inf
   SerialPortLib|Silicon/NXP/Library/DUartPortLib/DUartPortLib.inf
 
 ################################################################################

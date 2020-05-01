@@ -24,4 +24,4 @@
   DebugLib
 
 [Sources.common]
-  Chassis2/Soc.c
+  SocLib.c
