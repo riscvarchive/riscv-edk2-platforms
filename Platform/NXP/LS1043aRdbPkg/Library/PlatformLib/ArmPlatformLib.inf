@@ -1,7 +1,7 @@
 #  @file
 #
 #  Copyright (c) 2016, Freescale Semiconductor, Inc. All rights reserved.
-#  Copyright 2017, 2019 NXP
+#  Copyright 2017, 2019-2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -19,6 +19,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/LS1043A/LS1043A.dec
   Silicon/NXP/NxpQoriqLs.dec
 
 [LibraryClasses]
@@ -35,21 +36,3 @@
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdArmPrimaryCore
-  gNxpQoriqLsTokenSpaceGuid.PcdCcsrBaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdCcsrSize
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion1BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion1Size
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2Size
-  gNxpQoriqLsTokenSpaceGuid.PcdQmanSwpBaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdQmanSwpSize
-  gNxpQoriqLsTokenSpaceGuid.PcdBmanSwpBaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdBmanSwpSize
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseSize
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp2BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp2BaseSize
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp3BaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp3BaseSize
-  gNxpQoriqLsTokenSpaceGuid.PcdQspiRegionBaseAddr
-  gNxpQoriqLsTokenSpaceGuid.PcdQspiRegionSize

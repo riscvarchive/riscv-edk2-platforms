@@ -12,6 +12,8 @@
 
 #define CLK_FREQ                   100000000
 
+#define CHASSIS2_DCFG_ADDRESS      0x1EE0000
+
 /* SMMU Defintions */
 #define SMMU_BASE_ADDR             0x09000000
 #define SMMU_REG_SCR0              (SMMU_BASE_ADDR + 0x0)

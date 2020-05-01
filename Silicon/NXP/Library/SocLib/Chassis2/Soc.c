@@ -34,7 +34,7 @@ GetSysInfo (
   CCSR_GUR     *GurBase;
   UINTN        SysClk;
 
-  GurBase = (VOID *)PcdGet64 (PcdGutsBaseAddr);
+  GurBase = (CCSR_GUR *)CHASSIS2_DCFG_ADDRESS;
   SysClk = CLK_FREQ;
 
   SetMem (PtrSysInfo, sizeof (SYS_INFO), 0);

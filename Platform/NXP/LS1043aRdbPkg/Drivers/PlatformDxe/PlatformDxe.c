@@ -1,7 +1,7 @@
 /** @file
   LS1043 DXE platform driver.
 
-  Copyright 2018-2019 NXP
+  Copyright 2018-2020 NXP
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -14,6 +14,7 @@
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
+#include <Soc.h>
 
 #include <Protocol/NonDiscoverableDevice.h>
 
@@ -22,7 +23,7 @@ typedef struct {
   UINT8 EndDesc;
 } ADDRESS_SPACE_DESCRIPTOR;
 
-STATIC ADDRESS_SPACE_DESCRIPTOR mI2cDesc[FixedPcdGet64 (PcdNumI2cController)];
+STATIC ADDRESS_SPACE_DESCRIPTOR mI2cDesc[LS1043A_I2C_NUM_CONTROLLERS];
 
 STATIC
 EFI_STATUS
@@ -65,19 +66,19 @@ PopulateI2cInformation (
 {
   UINT32 Index;
 
-  for (Index = 0; Index < FixedPcdGet32 (PcdNumI2cController); Index++) {
+  for (Index = 0; Index < ARRAY_SIZE (mI2cDesc); Index++) {
     mI2cDesc[Index].StartDesc.Desc = ACPI_ADDRESS_SPACE_DESCRIPTOR;
     mI2cDesc[Index].StartDesc.Len = sizeof (EFI_ACPI_ADDRESS_SPACE_DESCRIPTOR) - 3;
     mI2cDesc[Index].StartDesc.ResType = ACPI_ADDRESS_SPACE_TYPE_MEM;
     mI2cDesc[Index].StartDesc.GenFlag = 0;
     mI2cDesc[Index].StartDesc.SpecificFlag = 0;
     mI2cDesc[Index].StartDesc.AddrSpaceGranularity = 32;
-    mI2cDesc[Index].StartDesc.AddrRangeMin = FixedPcdGet64 (PcdI2c0BaseAddr) +
-                                             (Index * FixedPcdGet32 (PcdI2cSize));
+    mI2cDesc[Index].StartDesc.AddrRangeMin = LS1043A_I2C0_PHYS_ADDRESS +
+                                             (Index * LS1043A_I2C_SIZE);
     mI2cDesc[Index].StartDesc.AddrRangeMax = mI2cDesc[Index].StartDesc.AddrRangeMin +
-                                             FixedPcdGet32 (PcdI2cSize) - 1;
+                                             LS1043A_I2C_SIZE - 1;
     mI2cDesc[Index].StartDesc.AddrTranslationOffset = 0;
-    mI2cDesc[Index].StartDesc.AddrLen = FixedPcdGet32 (PcdI2cSize);
+    mI2cDesc[Index].StartDesc.AddrLen = LS1043A_I2C_SIZE;
 
     mI2cDesc[Index].EndDesc = ACPI_END_TAG_DESCRIPTOR;
   }

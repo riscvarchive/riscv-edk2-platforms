@@ -6,7 +6,7 @@
 *
 *  Copyright (c) 2011, ARM Limited. All rights reserved.
 *  Copyright (c) 2016, Freescale Semiconductor, Inc. All rights reserved.
-*  Copyright 2017, 2019 NXP
+*  Copyright 2017, 2019-2020 NXP
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -16,7 +16,7 @@
 #include <Library/DebugLib.h>
 #include <Library/PcdLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <DramInfo.h>
+#include <Soc.h>
 
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS          25
 
@@ -38,7 +38,6 @@ ArmPlatformGetVirtualMemoryMap (
 {
   UINTN                            Index;
   ARM_MEMORY_REGION_DESCRIPTOR     *VirtualMemoryTable;
-  DRAM_INFO                        DramInfo;
 
   Index = 0;
 
@@ -51,24 +50,20 @@ ArmPlatformGetVirtualMemoryMap (
     return;
   }
 
-  if (GetDramBankInfo (&DramInfo)) {
-    DEBUG ((DEBUG_ERROR, "Failed to get DRAM information, exiting...\n"));
-    return;
-  }
+  VirtualMemoryTable[Index].PhysicalBase = LS1043A_DRAM0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_DRAM0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_DRAM0_SIZE;
+  VirtualMemoryTable[Index++].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
 
-
-  for (Index = 0; Index < DramInfo.NumOfDrams; Index++) {
-    // DRAM1 (Must be 1st entry)
-    VirtualMemoryTable[Index].PhysicalBase = DramInfo.DramRegion[Index].BaseAddress;
-    VirtualMemoryTable[Index].VirtualBase  = DramInfo.DramRegion[Index].BaseAddress;
-    VirtualMemoryTable[Index].Length       = DramInfo.DramRegion[Index].Size;
-    VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
-  }
+  VirtualMemoryTable[Index].PhysicalBase = LS1043A_DRAM1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_DRAM1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_DRAM1_SIZE;
+  VirtualMemoryTable[Index++].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK;
 
   // CCSR Space
-  VirtualMemoryTable[Index].PhysicalBase = FixedPcdGet64 (PcdCcsrBaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdCcsrBaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdCcsrSize);
+  VirtualMemoryTable[Index].PhysicalBase = LS1043A_CCSR_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_CCSR_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_CCSR_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // IFC region 1
@@ -85,51 +80,51 @@ ArmPlatformGetVirtualMemoryMap (
   //             For write transactions from non-core masters (like system DMA), the address
   //                should be 16 byte aligned and the data size should be multiple of 16 bytes.
   //
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdIfcRegion1BaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdIfcRegion1BaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdIfcRegion1Size);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_IFC0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_IFC0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_IFC0_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // QMAN SWP
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdQmanSwpBaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdQmanSwpBaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdQmanSwpSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_QMAN_SW_PORTAL_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_QMAN_SW_PORTAL_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_QMAN_SW_PORTAL_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
 
   // BMAN SWP
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdBmanSwpBaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdBmanSwpBaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdBmanSwpSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_BMAN_SW_PORTAL_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_BMAN_SW_PORTAL_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_QMAN_SW_PORTAL_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
 
   // IFC region 2
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdIfcRegion2BaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdIfcRegion2BaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdIfcRegion2Size);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_IFC1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_IFC1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_IFC1_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // PCIe1
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdPciExp1BaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdPciExp1BaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdPciExp1BaseSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_PCI0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_PCI0_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_PCI_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // PCIe2
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdPciExp2BaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdPciExp2BaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdPciExp2BaseSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_PCI1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_PCI1_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_PCI_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // PCIe3
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdPciExp3BaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdPciExp3BaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdPciExp3BaseSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_PCI2_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_PCI2_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_PCI_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // QSPI region
-  VirtualMemoryTable[++Index].PhysicalBase = FixedPcdGet64 (PcdQspiRegionBaseAddr);
-  VirtualMemoryTable[Index].VirtualBase  = FixedPcdGet64 (PcdQspiRegionBaseAddr);
-  VirtualMemoryTable[Index].Length       = FixedPcdGet64 (PcdQspiRegionSize);
+  VirtualMemoryTable[++Index].PhysicalBase = LS1043A_QSPI_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].VirtualBase  = LS1043A_QSPI_PHYS_ADDRESS;
+  VirtualMemoryTable[Index].Length       = LS1043A_QSPI_SIZE;
   VirtualMemoryTable[Index].Attributes   = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
 
   // End of Table

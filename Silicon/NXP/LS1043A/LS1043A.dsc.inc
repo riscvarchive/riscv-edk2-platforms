@@ -27,32 +27,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x021c0500
 
   #
-  # CCSR Address Space and other attached Memories
-  #
-  gNxpQoriqLsTokenSpaceGuid.PcdCcsrBaseAddr|0x01000000
-  gNxpQoriqLsTokenSpaceGuid.PcdCcsrSize|0x0F000000
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion1BaseAddr|0x60000000
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion1Size|0x20000000
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2BaseAddr|0x0620000000
-  gNxpQoriqLsTokenSpaceGuid.PcdIfcRegion2Size|0x00E0000000
-  gNxpQoriqLsTokenSpaceGuid.PcdQmanSwpBaseAddr|0x0500000000
-  gNxpQoriqLsTokenSpaceGuid.PcdQmanSwpSize|0x0080000000
-  gNxpQoriqLsTokenSpaceGuid.PcdBmanSwpBaseAddr|0x0508000000
-  gNxpQoriqLsTokenSpaceGuid.PcdBmanSwpSize|0x0080000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr|0x4000000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseSize|0x800000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp2BaseAddr|0x4800000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp2BaseSize|0x800000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp3BaseAddr|0x5000000000
-  gNxpQoriqLsTokenSpaceGuid.PcdPciExp3BaseSize|0x800000000
-  gNxpQoriqLsTokenSpaceGuid.PcdGutsBaseAddr|0x01EE0000
-  gNxpQoriqLsTokenSpaceGuid.PcdI2c0BaseAddr|0x02180000
-  gNxpQoriqLsTokenSpaceGuid.PcdI2cSize|0x10000
-  gNxpQoriqLsTokenSpaceGuid.PcdNumI2cController|4
-  gNxpQoriqLsTokenSpaceGuid.PcdQspiRegionBaseAddr|0x40000000
-  gNxpQoriqLsTokenSpaceGuid.PcdQspiRegionSize|0x20000000
-
-  #
   # Big Endian IPs
   #
   gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian|TRUE
