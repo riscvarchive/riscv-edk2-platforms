@@ -28,6 +28,11 @@ STATIC EFI_I2C_MASTER_PROTOCOL    *mI2cMaster;
 
 /**
   Read RTC register.
+  Data Read-Slave Transmitter Mode
+
+  <Slave Address> <Word Address (n)> <Slave Address> <Data(n)> <Data(n+1)> <Data(n+2)> <Data(n+X)>
+
+  The first byte is received and handled as in the slave receiver mode.
 
   @param  RtcRegAddr       Register offset of RTC to be read.
 
@@ -69,6 +74,9 @@ RtcRead (
 
 /**
   Write RTC register.
+  Data Write-Slave Receiver Mode
+
+  <Slave Address> <Word Address (n)> <Data(n)> <Data(n+1)> <Data(n+X)>
 
   @param  RtcRegAddr       Register offset of RTC to write.
   @param  Val              Value to be written
