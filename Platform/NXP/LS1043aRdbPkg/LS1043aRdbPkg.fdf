@@ -24,10 +24,10 @@
 
 [FD.LS1043ARDB_EFI]
 BaseAddress   = 0x82000000|gArmTokenSpaceGuid.PcdFdBaseAddress  #The base address of the FLASH Device.
-Size          = 0x000ED000|gArmTokenSpaceGuid.PcdFdSize         #The size in bytes of the FLASH Device
+Size          = 0x00140000|gArmTokenSpaceGuid.PcdFdSize         #The size in bytes of the FLASH Device
 ErasePolarity = 1
-BlockSize     = 0x1
-NumBlocks     = 0xED000
+BlockSize     = 0x40000
+NumBlocks     = 0x5
 
 ################################################################################
 #
@@ -44,7 +44,7 @@ NumBlocks     = 0xED000
 # RegionType <FV, DATA, or FILE>
 #
 ################################################################################
-0x00000000|0x000ED000
+0x00000000|0x00140000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
 FV = FVMAIN_COMPACT
 
@@ -159,7 +159,15 @@ READ_STATUS        = TRUE
 READ_LOCK_CAP      = TRUE
 READ_LOCK_STATUS   = TRUE
 
-  INF ArmPlatformPkg/PrePi/PeiUniCore.inf
+  INF ArmPlatformPkg/PrePeiCore/PrePeiCoreUniCore.inf
+  INF MdeModulePkg/Core/Pei/PeiMain.inf
+  INF MdeModulePkg/Universal/PCD/Pei/Pcd.inf
+  INF MdeModulePkg/Universal/FaultTolerantWritePei/FaultTolerantWritePei.inf
+  INF MdeModulePkg/Universal/Variable/Pei/VariablePei.inf
+  INF ArmPlatformPkg/MemoryInitPei/MemoryInitPeim.inf
+  INF ArmPkg/Drivers/CpuPei/CpuPei.inf
+  INF ArmPlatformPkg/PlatformPei/PlatformPeim.inf
+  INF MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 
   FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
     SECTION GUIDED EE4E5898-3914-4259-9D6E-DC7BD79403CF PROCESSING_REQUIRED = TRUE {

@@ -13,7 +13,8 @@
   FILE_GUID                      = 55ddb6e0-70b5-11e0-b33e-0002a5d5c51b
   MODULE_TYPE                    = BASE
   VERSION_STRING                 = 1.0
-  LIBRARY_CLASS                  = MemoryInitPeiLib|SEC PEIM DXE_DRIVER
+  LIBRARY_CLASS                  = MemoryInitPeiLib|PEIM
+  CONSTRUCTOR                    = MemoryInitPeiLibConstructor
 
 [Sources]
   MemoryInitPeiLib.c

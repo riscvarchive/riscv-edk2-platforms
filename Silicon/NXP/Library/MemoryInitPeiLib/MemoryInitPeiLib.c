@@ -120,22 +120,17 @@ GetDramRegionsInfo (
 
 /**
   Get the installed RAM information.
-  Initialize MMU and Memory HOBs (Resource Descriptor HOBs)
+  Initialize Memory HOBs (Resource Descriptor HOBs)
+  Set the PcdSystemMemoryBase and PcdSystemMemorySize.
 
-  @param[in] UefiMemoryBase  Base address of region used by UEFI in
-                             permanent memory
-  @param[in] UefiMemorySize  Size of the region used by UEFI in permanent memory
-
-  @return  EFI_SUCCESS  Successfuly Initialize MMU and Memory HOBs.
+  @return  EFI_SUCCESS  Successfuly retrieved the system memory information
 **/
 EFI_STATUS
 EFIAPI
-MemoryPeim (
-  IN EFI_PHYSICAL_ADDRESS               UefiMemoryBase,
-  IN UINT64                             UefiMemorySize
+MemoryInitPeiLibConstructor (
+  VOID
   )
 {
-  ARM_MEMORY_REGION_DESCRIPTOR  *MemoryTable;
   INT32                         Index;
   UINTN                         BaseAddress;
   UINTN                         Size;
@@ -146,18 +141,6 @@ MemoryPeim (
   UINTN                         FdTop;
   BOOLEAN                       FoundSystemMem;
 
-  // Get Virtual Memory Map from the Platform Library
-  ArmPlatformGetVirtualMemoryMap (&MemoryTable);
-
-  //
-  // Ensure MemoryTable[0].Length which is size of DRAM has been set
-  // by ArmPlatformGetVirtualMemoryMap ()
-  //
-  ASSERT (MemoryTable[0].Length != 0);
-
-  //
-  // Now, the permanent memory has been installed, we can call AllocatePages()
-  //
   ResourceAttributes = (
     EFI_RESOURCE_ATTRIBUTE_PRESENT |
     EFI_RESOURCE_ATTRIBUTE_INITIALIZED |
@@ -172,8 +155,8 @@ MemoryPeim (
 
   (VOID)GetDramRegionsInfo (DramRegions, ARRAY_SIZE (DramRegions));
 
-  FdBase = (UINTN)FixedPcdGet64 (PcdFdBaseAddress);
-  FdTop = FdBase + (UINTN)FixedPcdGet32 (PcdFdSize);
+  FdBase = (UINTN)PcdGet64 (PcdFdBaseAddress);
+  FdTop = FdBase + (UINTN)PcdGet32 (PcdFdSize);
 
   // Declare memory regions to system
   // The DRAM region info is sorted based on the RAM address is SOC memory map.
@@ -226,8 +209,8 @@ MemoryPeim (
         );
       };
       // Mark the memory covering the Firmware Device as boot services data
-      BuildMemoryAllocationHob (FixedPcdGet64 (PcdFdBaseAddress),
-                                FixedPcdGet32 (PcdFdSize),
+      BuildMemoryAllocationHob (PcdGet64 (PcdFdBaseAddress),
+                                PcdGet32 (PcdFdSize),
                                 EfiBootServicesData);
     } else {
       BuildResourceDescriptorHob (
@@ -245,17 +228,43 @@ MemoryPeim (
     Size = DramRegions[Index].Size;
 
     if (FdBase >= BaseAddress && FdTop <= Top) {
-      Size -= (UINTN)FixedPcdGet32 (PcdFdSize);
+      Size -= (UINTN)PcdGet32 (PcdFdSize);
     }
 
-    if ((UefiMemoryBase >= BaseAddress) && (Size >= UefiMemorySize)) {
+    if (Size >= FixedPcdGet32 (PcdSystemMemoryUefiRegionSize)) {
       FoundSystemMem = TRUE;
+      PcdSet64S (PcdSystemMemoryBase, BaseAddress);
+      PcdSet64S (PcdSystemMemorySize, Size);
     }
   }
 
   ASSERT (FoundSystemMem == TRUE);
 
-  // Build Memory Allocation Hob
+  return EFI_SUCCESS;
+}
+
+/**
+  Initialize MMU
+
+  @param[in] UefiMemoryBase  Base address of region used by UEFI in
+                             permanent memory
+  @param[in] UefiMemorySize  Size of the region used by UEFI in permanent memory
+
+  @return  EFI_SUCCESS  Successfuly Initialize MMU
+**/
+EFI_STATUS
+EFIAPI
+MemoryPeim (
+  IN EFI_PHYSICAL_ADDRESS               UefiMemoryBase,
+  IN UINT64                             UefiMemorySize
+  )
+{
+  ARM_MEMORY_REGION_DESCRIPTOR *MemoryTable;
+
+  // Get Virtual Memory Map from the Platform Library
+  ArmPlatformGetVirtualMemoryMap (&MemoryTable);
+
+  // Initialize Mmu
   InitMmu (MemoryTable);
 
   if (FeaturePcdGet (PcdPrePiProduceMemoryTypeInformationHob)) {

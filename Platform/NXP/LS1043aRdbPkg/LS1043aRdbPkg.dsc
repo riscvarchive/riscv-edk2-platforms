@@ -30,15 +30,6 @@
   RealTimeClockLib|Silicon/Maxim/Library/Ds1307RtcLib/Ds1307RtcLib.inf
 
 [PcdsFixedAtBuild.common]
-
-  #
-  # LS1043a board Specific PCDs
-  # XX (DRAM - Region 1 2GB)
-  # (NOR - IFC Region 1 512MB)
-  gArmTokenSpaceGuid.PcdSystemMemoryBase|0x80000000
-  gArmTokenSpaceGuid.PcdSystemMemorySize|0x7BE00000
-  gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize|0x02000000
-
   #
   # RTC Pcds
   #
