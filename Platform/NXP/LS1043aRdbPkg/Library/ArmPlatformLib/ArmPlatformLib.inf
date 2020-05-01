@@ -19,6 +19,7 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   EmbeddedPkg/EmbeddedPkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/Chassis2/Chassis2.dec
   Silicon/NXP/LS1043A/LS1043A.dec
   Silicon/NXP/NxpQoriqLs.dec
 

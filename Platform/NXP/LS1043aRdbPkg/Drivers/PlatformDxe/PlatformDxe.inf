@@ -24,6 +24,7 @@
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Silicon/Maxim/Library/Ds1307RtcLib/Ds1307RtcLib.dec
+  Silicon/NXP/Chassis2/Chassis2.dec
   Silicon/NXP/LS1043A/LS1043A.dec
   Silicon/NXP/NxpQoriqLs.dec
 

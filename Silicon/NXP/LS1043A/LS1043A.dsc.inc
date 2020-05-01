@@ -7,6 +7,8 @@
 #
 #
 
+!include Silicon/NXP/Chassis2/Chassis2.dsc.inc
+
 [LibraryClasses.common]
   SocLib|Silicon/NXP/Library/SocLib/LS1043aSocLib.inf
   SerialPortLib|Silicon/NXP/Library/DUartPortLib/DUartPortLib.inf
@@ -26,9 +28,6 @@
 [PcdsFixedAtBuild.common]
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x021c0500
 
-  #
-  # Big Endian IPs
-  #
-  gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian|TRUE
-
+[PcdsFeatureFlag]
+  gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|TRUE
 ##

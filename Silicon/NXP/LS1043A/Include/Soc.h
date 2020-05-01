@@ -8,7 +8,7 @@
 #ifndef SOC_H__
 #define SOC_H__
 
-#include <Chassis2/NxpSoc.h>
+#include <Chassis.h>
 
 /**
   Soc Memory Map
@@ -43,13 +43,13 @@
 #define LS1043A_I2C_SIZE             0x10000
 #define LS1043A_I2C_NUM_CONTROLLERS  4
 
-#define LS1043A_DCFG_ADDRESS         CHASSIS2_DCFG_ADDRESS
+#define LS1043A_DCFG_ADDRESS         NXP_LAYERSCAPE_CHASSIS2_DCFG_ADDRESS
 
 /**
   Reset Control Word (RCW) Bits
 **/
 #define SYS_PLL_RAT(x)  (((x) & 0x7c) >> 2) // Bits 2-6
 
-typedef CCSR_GUR LS1043A_DEVICE_CONFIG;
+typedef NXP_LAYERSCAPE_CHASSIS2_DEVICE_CONFIG LS1043A_DEVICE_CONFIG;
 
 #endif // SOC_H__

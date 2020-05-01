@@ -14,25 +14,14 @@
   LIBRARY_CLASS                  = SocLib
 
 [Packages]
-  ArmPkg/ArmPkg.dec
-  MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/Chassis2/Chassis2.dec
   Silicon/NXP/LS1043A/LS1043A.dec
   Silicon/NXP/NxpQoriqLs.dec
 
 [LibraryClasses]
-  BaseLib
+  ChassisLib
   DebugLib
-  IoAccessLib
-  SerialPortLib
 
 [Sources.common]
-  Chassis.c
   Chassis2/Soc.c
-
-[BuildOptions]
-  GCC:*_*_*_CC_FLAGS = -DCHASSIS2
-
-[FixedPcd]
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString
-  gNxpQoriqLsTokenSpaceGuid.PcdGurBigEndian

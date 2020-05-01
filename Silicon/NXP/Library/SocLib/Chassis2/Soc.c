@@ -8,16 +8,8 @@
 **/
 
 #include <Base.h>
-#include <NxpChassis.h>
-#include <Chassis2/NxpSoc.h>
-#include <Library/BaseLib.h>
-#include <Library/BaseMemoryLib.h>
+#include <Library/ChassisLib.h>
 #include <Library/DebugLib.h>
-#include <Library/IoAccessLib.h>
-#include <Library/IoLib.h>
-#include <Library/PcdLib.h>
-#include <Library/PrintLib.h>
-#include <Library/SerialPortLib.h>
 #include <Library/SocLib.h>
 #include <Soc.h>
 
@@ -61,7 +53,7 @@ SocGetClock (
   switch (ClockType) {
   case NXP_UART_CLOCK:
   case NXP_I2C_CLOCK:
-    RcwSr = GurRead ((UINTN)&Dcfg->RcwSr[0]);
+    RcwSr = DcfgRead32 ((UINTN)&Dcfg->RcwSr[0]);
     ReturnValue = BaseClock * SYS_PLL_RAT (RcwSr);
     break;
   default:
@@ -79,12 +71,7 @@ SocInit (
   VOID
   )
 {
-  SmmuInit ();
-
-  //
-  // Early init serial Port to get board information.
-  //
-  SerialPortInitialize ();
+  ChassisInit ();
 
   return;
 }
