@@ -5,7 +5,7 @@
   EmbeddedPkg/Library/TemplateRealTimeClockLib/RealTimeClockLib.c
 
   Copyright (c) 2008 - 2009, Apple Inc. All rights reserved.<BR>
-  Copyright 2017 NXP
+  Copyright 2017, 2020 NXP
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -84,16 +84,15 @@ RtcWrite (
 {
   RTC_I2C_REQUEST          Req;
   EFI_STATUS               Status;
+  UINT8                    Buffer[2];
 
-  Req.OperationCount = 2;
+  Req.OperationCount = 1;
+  Buffer[0] = RtcRegAddr;
+  Buffer[1] = Val;
 
   Req.SetAddressOp.Flags = 0;
-  Req.SetAddressOp.LengthInBytes = sizeof (RtcRegAddr);
-  Req.SetAddressOp.Buffer = &RtcRegAddr;
-
-  Req.GetSetDateTimeOp.Flags = 0;
-  Req.GetSetDateTimeOp.LengthInBytes = sizeof (Val);
-  Req.GetSetDateTimeOp.Buffer = &Val;
+  Req.SetAddressOp.LengthInBytes = sizeof (Buffer);
+  Req.SetAddressOp.Buffer = Buffer;
 
   Status = mI2cMaster->StartRequest (mI2cMaster, FixedPcdGet8 (PcdI2cSlaveAddress),
                                      (VOID *)&Req,
