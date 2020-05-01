@@ -16,8 +16,6 @@
 #include <Ppi/ArmMpCoreInfo.h>
 #include <Ppi/NxpPlatformGetClock.h>
 
-extern VOID SocInit (VOID);
-
 /**
   Get the clocks supplied by Platform(Board) to NXP Layerscape SOC IPs
 

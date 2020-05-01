@@ -41,4 +41,12 @@ SocGetClock (
   IN  VA_LIST       Args
   );
 
+/**
+  Function to initialize SoC specific constructs
+ **/
+VOID
+SocInit (
+  VOID
+  );
+
 #endif // SOC_LIB_H__
