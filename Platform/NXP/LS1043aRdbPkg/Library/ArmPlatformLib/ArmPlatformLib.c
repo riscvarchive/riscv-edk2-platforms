@@ -12,9 +12,59 @@
 **/
 
 #include <Library/ArmPlatformLib.h>
+#include <Library/SocLib.h>
 #include <Ppi/ArmMpCoreInfo.h>
+#include <Ppi/NxpPlatformGetClock.h>
 
 extern VOID SocInit (VOID);
+
+/**
+  Get the clocks supplied by Platform(Board) to NXP Layerscape SOC IPs
+
+  @param[in]  ClockType  Variable of Type NXP_IP_CLOCK. Indicates which IP clock
+                         is to be retrieved.
+  @param[in]  ...        Variable argument list which is parsed based on
+                         ClockType. e.g. if the ClockType is NXP_I2C_CLOCK, then
+                         the second argument will be interpreted as controller
+                         number.
+                         if ClockType is NXP_CORE_CLOCK, then second argument
+                         is interpreted as cluster number and third argument is
+                         interpreted as core number (within the cluster)
+
+  @return                Actual Clock Frequency. Return value 0 should be
+                         interpreted as clock not being provided to IP.
+**/
+UINT64
+EFIAPI
+NxpPlatformGetClock(
+  IN  UINT32  ClockType,
+  ...
+  )
+{
+  UINT64      Clock;
+  VA_LIST     Args;
+
+  Clock = 0;
+
+  VA_START (Args, ClockType);
+
+  switch (ClockType) {
+  case NXP_SYSTEM_CLOCK:
+    Clock = 100 * 1000 * 1000; // 100 MHz
+    break;
+  case NXP_I2C_CLOCK:
+  case NXP_UART_CLOCK:
+    Clock = NxpPlatformGetClock (NXP_SYSTEM_CLOCK);
+    Clock = SocGetClock (Clock, ClockType, Args);
+    break;
+  default:
+    break;
+  }
+
+  VA_END (Args);
+
+  return Clock;
+}
 
 /**
   Return the current Boot Mode
@@ -69,6 +119,7 @@ PrePeiCoreGetMpCoreInfo (
 }
 
 ARM_MP_CORE_INFO_PPI mMpCoreInfoPpi = { PrePeiCoreGetMpCoreInfo };
+NXP_PLATFORM_GET_CLOCK_PPI gPlatformGetClockPpi = { NxpPlatformGetClock };
 
 EFI_PEI_PPI_DESCRIPTOR      gPlatformPpiTable[] = {
   {

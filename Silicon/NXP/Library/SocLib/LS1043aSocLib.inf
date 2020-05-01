@@ -17,6 +17,7 @@
   ArmPkg/ArmPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/LS1043A/LS1043A.dec
   Silicon/NXP/NxpQoriqLs.dec
 
 [LibraryClasses]
