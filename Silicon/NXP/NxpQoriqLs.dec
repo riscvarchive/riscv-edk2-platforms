@@ -1,6 +1,6 @@
 #  @file.
 #
-#  Copyright 2017-2019 NXP
+#  Copyright 2017-2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -12,6 +12,10 @@
 
 [Includes]
   Include
+
+[LibraryClasses]
+  ##  @libraryclass  Provides services to read/write to I2c devices
+  I2cLib|Include/Library/I2cLib.h
 
 [Guids.common]
   gNxpQoriqLsTokenSpaceGuid      = {0x98657342, 0x4aee, 0x4fc6, {0xbc, 0xb5, 0xff, 0x45, 0xb7, 0xa8, 0x71, 0xf2}}
@@ -101,3 +105,6 @@
   gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|FALSE|BOOLEAN|0x00000312
   gNxpQoriqLsTokenSpaceGuid.PcdWatchdogBigEndian|FALSE|BOOLEAN|0x00000313
   gNxpQoriqLsTokenSpaceGuid.PcdIfcBigEndian|FALSE|BOOLEAN|0x00000314
+
+[PcdsFeatureFlag]
+  gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|FALSE|BOOLEAN|0x00000315
