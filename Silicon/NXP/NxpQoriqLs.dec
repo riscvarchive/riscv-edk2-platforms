@@ -14,6 +14,9 @@
   Include
 
 [LibraryClasses]
+  ##  @libraryclass  Provides Chassis specific functions to other modules
+  ChassisLib|Include/Library/ChassisLib.h
+
   ##  @libraryclass  Provides services to read/write to I2c devices
   I2cLib|Include/Library/I2cLib.h
 
@@ -29,3 +32,4 @@
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|FALSE|BOOLEAN|0x00000315
+  gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|FALSE|BOOLEAN|0x00000316
