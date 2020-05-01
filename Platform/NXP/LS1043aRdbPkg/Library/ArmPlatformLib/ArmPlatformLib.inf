@@ -27,8 +27,8 @@
   SocLib
 
 [Sources.common]
-  NxpQoriqLsHelper.S    | GCC
-  NxpQoriqLsMem.c
+  AArch64/ArmPlatformHelper.S    | GCC
+  ArmPlatformLibMem.c
   ArmPlatformLib.c
 
 [Ppis]

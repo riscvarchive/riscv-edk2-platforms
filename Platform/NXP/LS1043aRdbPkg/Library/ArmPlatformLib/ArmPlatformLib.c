@@ -6,7 +6,7 @@
 *
 *  Copyright (c) 2011-2012, ARM Limited. All rights reserved.
 *  Copyright (c) 2016, Freescale Semiconductor, Inc. All rights reserved.
-*  Copyright 2017 NXP
+*  Copyright 2017, 2020 NXP
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
 **/

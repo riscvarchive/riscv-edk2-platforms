@@ -26,7 +26,7 @@
 !include Silicon/NXP/LS1043A/LS1043A.dsc.inc
 
 [LibraryClasses.common]
-  ArmPlatformLib|Platform/NXP/LS1043aRdbPkg/Library/PlatformLib/ArmPlatformLib.inf
+  ArmPlatformLib|Platform/NXP/LS1043aRdbPkg/Library/ArmPlatformLib/ArmPlatformLib.inf
   RealTimeClockLib|Silicon/Maxim/Library/Ds1307RtcLib/Ds1307RtcLib.inf
 
 [PcdsFixedAtBuild.common]

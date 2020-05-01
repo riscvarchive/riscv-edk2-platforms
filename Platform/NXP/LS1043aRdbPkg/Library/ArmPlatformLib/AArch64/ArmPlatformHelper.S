@@ -1,7 +1,7 @@
 #  @file
 #
 #  Copyright (c) 2012-2013, ARM Limited. All rights reserved.
-#  Copyright 2017 NXP
+#  Copyright 2017, 2020 NXP
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
