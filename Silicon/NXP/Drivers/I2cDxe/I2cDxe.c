@@ -16,6 +16,7 @@
 #include <Library/TimerLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
+#include <Library/UefiRuntimeLib.h>
 
 #include "I2cDxe.h"
 
@@ -88,12 +89,23 @@ StartRequest (
   NXP_I2C_MASTER           *I2c;
   UINTN                    I2cBase;
   EFI_STATUS               Status;
+  EFI_TPL                  Tpl;
+  BOOLEAN                  AtRuntime;
+
+  AtRuntime = EfiAtRuntime ();
+  if (!AtRuntime) {
+    Tpl = gBS->RaiseTPL (TPL_HIGH_LEVEL);
+  }
 
   I2c = NXP_I2C_FROM_THIS (This);
 
   I2cBase = (UINTN)(I2c->Dev->Resources[0].AddrRangeMin);
 
   Status = I2cBusXfer (I2cBase, SlaveAddress, RequestPacket);
+
+  if (!AtRuntime) {
+    gBS->RestoreTPL (Tpl);
+  }
 
   return Status;
 }
