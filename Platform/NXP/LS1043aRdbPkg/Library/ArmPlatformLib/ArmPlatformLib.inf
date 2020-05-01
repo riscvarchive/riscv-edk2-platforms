@@ -37,3 +37,4 @@
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdArmPrimaryCore
+  gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
