@@ -1,6 +1,6 @@
 /** @file
  *
- * Copyright (c) 2019, Pete Batard <pete@akeo.ie>
+ * Copyright (c) 2019-2020, Pete Batard <pete@akeo.ie>
  * Copyright (c) 2016, Linaro Limited. All rights reserved.
  *
  * SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -9,6 +9,15 @@
 
 #ifndef __RASPBERRY_PI_MAILBOX_H__
 #define __RASPBERRY_PI_MAILBOX_H__
+
+/*
+ * Number of iterations to perform when waiting for the mailbox.
+ *
+ * This number was arrived at empirically, following discussion
+ * at https://github.com/raspberrypi/firmware/issues/1376, to
+ * avoid mailbox time-outs on some commands.
+ */
+#define RPI_MBOX_MAX_TRIES                                    0x8000000
 
 /* Mailbox channels */
 #define RPI_MBOX_PM_CHANNEL                                   0

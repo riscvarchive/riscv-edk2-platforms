@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2019, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
@@ -30,12 +31,6 @@
 //
 #define NUM_PAGES   1
 
-//
-// The number of iterations to perform when waiting for the mailbox
-// status to change
-//
-#define MAX_TRIES   0x100000
-
 STATIC VOID  *mDmaBuffer;
 STATIC VOID  *mDmaBufferMapping;
 STATIC UINTN mDmaBufferBusAddress;
@@ -62,7 +57,7 @@ DrainMailbox (
     }
     ArmDataSynchronizationBarrier ();
     MmioRead32 (BCM2836_MBOX_BASE_ADDRESS + BCM2836_MBOX_READ_OFFSET);
-  } while (++Tries < MAX_TRIES);
+  } while (++Tries < RPI_MBOX_MAX_TRIES);
 
   return FALSE;
 }
@@ -86,7 +81,7 @@ MailboxWaitForStatusCleared (
       return TRUE;
     }
     ArmDataSynchronizationBarrier ();
-  } while (++Tries < MAX_TRIES);
+  } while (++Tries < RPI_MBOX_MAX_TRIES);
 
   return FALSE;
 }
