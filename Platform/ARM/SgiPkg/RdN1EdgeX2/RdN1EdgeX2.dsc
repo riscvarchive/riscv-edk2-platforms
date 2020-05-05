@@ -19,6 +19,7 @@
   BUILD_TARGETS                  = NOOPT|DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Platform/ARM/SgiPkg/SgiPlatform.fdf
+  BOARD_DXE_FV_COMPONENTS        = Platform/ARM/SgiPkg/RdN1EdgeX2/RdN1EdgeX2.fdf.inc
   BUILD_NUMBER                   = 1
 
 # include common definitions from SgiPlatform.dsc
