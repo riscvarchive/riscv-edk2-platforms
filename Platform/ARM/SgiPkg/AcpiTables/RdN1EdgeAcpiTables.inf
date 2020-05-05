@@ -10,7 +10,7 @@
 [Defines]
   INF_VERSION                    = 0x0001001A
   BASE_NAME                      = RdN1EdgeAcpiTables
-  FILE_GUID                      = 4b0b91d0-4a05-45c4-88a7-88e170e76694
+  FILE_GUID                      = c712719a-0aaf-438c-9cdd-35ab4d60207d  # gArmSgiAcpiTablesGuid
   MODULE_TYPE                    = USER_DEFINED
   VERSION_STRING                 = 1.0
 

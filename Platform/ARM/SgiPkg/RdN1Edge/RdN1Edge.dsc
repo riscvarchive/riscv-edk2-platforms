@@ -40,3 +40,12 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x30000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x300C0000
   gArmSgiTokenSpaceGuid.PcdGicSize|0x100000
+
+################################################################################
+#
+# Components Section - list of all EDK II Modules needed by this Platform
+#
+################################################################################
+
+[Components.common]
+  Platform/ARM/SgiPkg/AcpiTables/RdN1EdgeAcpiTables.inf
