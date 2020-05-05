@@ -73,6 +73,7 @@
 // RD-Daniel Platform Identification values
 #define RD_DANIEL_PART_NUM                        0x78A
 #define RD_DANIEL_CFGM_CONF_ID                    0x1
+#define RD_DANIEL_CFGXLR_CONF_ID                  0x2
 
 #define SGI_CONFIG_MASK                           0x0F
 #define SGI_CONFIG_SHIFT                          0x1C
