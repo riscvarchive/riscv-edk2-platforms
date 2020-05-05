@@ -16,6 +16,7 @@
 
 [Sources]
   Dbg2.aslc
+  SsdtRos.asl
   Fadt.aslc
   Gtdt.aslc
   Iort.aslc
