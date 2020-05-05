@@ -100,4 +100,23 @@
     EFI_ACPI_RESERVED_DWORD               /* DiscoveryRangeLength */           \
   }
 
+// EFI_ACPI_6_3_MEMORY_AFFINITY_STRUCTURE
+#define EFI_ACPI_6_3_MEMORY_AFFINITY_STRUCTURE_INIT(                           \
+          ProximityDomain, Base, Length, Flags)                                \
+  {                                                                            \
+    1, sizeof (EFI_ACPI_6_3_MEMORY_AFFINITY_STRUCTURE), ProximityDomain,       \
+    EFI_ACPI_RESERVED_WORD, (Base) & 0xffffffff,                               \
+    (Base) >> 32, (Length) & 0xffffffff,                                       \
+    (Length) >> 32, EFI_ACPI_RESERVED_DWORD, Flags,                            \
+    EFI_ACPI_RESERVED_QWORD                                                    \
+  }
+
+// EFI_ACPI_6_3_GICC_AFFINITY_STRUCTURE
+#define EFI_ACPI_6_3_GICC_AFFINITY_STRUCTURE_INIT(                             \
+          ProximityDomain, ACPIProcessorUID, Flags, ClockDomain)               \
+  {                                                                            \
+    3, sizeof (EFI_ACPI_6_3_GICC_AFFINITY_STRUCTURE), ProximityDomain,         \
+    ACPIProcessorUID,  Flags,  ClockDomain                                     \
+  }
+
 #endif /* __SGI_ACPI_HEADER__ */
