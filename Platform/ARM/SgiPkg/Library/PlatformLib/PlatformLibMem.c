@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2018, ARM Limited. All rights reserved.
+*  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -93,9 +93,9 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Sub System Peripherals - GIC-600
-  VirtualMemoryTable[++Index].PhysicalBase  = SGI_SUBSYS_GENERIC_GIC_BASE;
-  VirtualMemoryTable[Index].VirtualBase     = SGI_SUBSYS_GENERIC_GIC_BASE;
-  VirtualMemoryTable[Index].Length          = SGI_SUBSYS_GENERIC_GIC_SZ;
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64(PcdGicDistributorBase);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64(PcdGicDistributorBase);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet64(PcdGicSize);
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Expansion AXI - Platform Peripherals - HDLCD1

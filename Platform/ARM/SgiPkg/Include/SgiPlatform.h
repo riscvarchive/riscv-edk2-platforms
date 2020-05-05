@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2018, ARM Limited. All rights reserved.
+*  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -44,11 +44,6 @@
 // Sub System Peripherals - Generic Watchdog
 #define SGI_SUBSYS_GENERIC_WDOG_BASE              0x2A440000
 #define SGI_SUBSYS_GENERIC_WDOG_SZ                SIZE_128KB
-
-// Sub System Peripherals - GIC
-#define SGI_SUBSYS_GENERIC_GIC_BASE               0x30000000
-#define SGI_SUBSYS_GENERIC_GICR_BASE              0x300C0000
-#define SGI_SUBSYS_GENERIC_GIC_SZ                 SIZE_1MB
 
 // Expansion AXI - Platform Peripherals - HDLCD1
 #define SGI_EXP_PLAT_PERIPH_HDLCD1_BASE           0x7FF60000

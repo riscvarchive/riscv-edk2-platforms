@@ -109,10 +109,6 @@
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x80000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x7F000000
 
-  # GIC Base Addresses
-  gArmTokenSpaceGuid.PcdGicDistributorBase|0x30000000
-  gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x300C0000
-
   #
   # PCIe
   #

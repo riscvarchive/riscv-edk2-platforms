@@ -34,3 +34,8 @@
   # ARM Cores and Clusters
   gArmPlatformTokenSpaceGuid.PcdCoreCount|16
   gArmPlatformTokenSpaceGuid.PcdClusterCount|2
+
+  # GIC Base Addresses
+  gArmTokenSpaceGuid.PcdGicDistributorBase|0x30000000
+  gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x300C0000
+  gArmSgiTokenSpaceGuid.PcdGicSize|0x100000
