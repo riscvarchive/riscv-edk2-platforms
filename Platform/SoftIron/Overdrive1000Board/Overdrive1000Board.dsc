@@ -405,8 +405,6 @@ DEFINE NUM_CORES    = 4
   # map the stack as non-executable when entering the DXE phase
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 
-  gAmdStyxTokenSpaceGuid.PcdEnableKcs|TRUE
-
 [PcdsPatchableInModule]
 # PCIe Configuration: x4x2x2 (=2 See Include/FDKGionb.h)
   gAmdModulePkgTokenSpaceGuid.PcdPcieCoreConfiguration|2
