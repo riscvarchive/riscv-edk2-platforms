@@ -14,6 +14,9 @@
 #include <Library/PcdLib.h>
 #include <IndustryStandard/Acpi.h>
 
+#define CORE_CNT   (FixedPcdGet32 (PcdClusterCount) * \
+                    FixedPcdGet32 (PcdCoreCount))
+
 // EFI_ACPI_6_2_GIC_STRUCTURE
 #define EFI_ACPI_6_2_GICC_STRUCTURE_INIT(GicId, AcpiCpuUid, Mpidr, Flags,      \
   PmuIrq, GicBase, GicVBase, GicHBase, GsivId, GicRBase, Efficiency)           \
@@ -85,7 +88,7 @@
 
 typedef struct {
   EFI_ACPI_6_2_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER   Header;
-  EFI_ACPI_6_2_GIC_STRUCTURE                            GicInterfaces[32];
+  EFI_ACPI_6_2_GIC_STRUCTURE                            GicInterfaces[CORE_CNT];
   EFI_ACPI_6_2_GIC_DISTRIBUTOR_STRUCTURE                GicDistributor;
   EFI_ACPI_6_2_GICR_STRUCTURE                           GicRedistributor;
   EFI_ACPI_6_2_GIC_ITS_STRUCTURE                        GicIts;
