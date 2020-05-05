@@ -46,6 +46,9 @@
 
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize
+
+  gArmSgiTokenSpaceGuid.PcdChipCount
+
   gArmTokenSpaceGuid.PcdGicDistributorBase
   gArmTokenSpaceGuid.PcdGicRedistributorsBase
   gArmTokenSpaceGuid.PcdFvBaseAddress

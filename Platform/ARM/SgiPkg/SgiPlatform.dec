@@ -46,6 +46,9 @@
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x00000000|UINT32|0x00000008
   gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|0x00000000|UINT32|0x00000009
 
+  # Chip count on the platform
+  gArmSgiTokenSpaceGuid.PcdChipCount|1|UINT32|0x0000000B
+
   # GIC
   gArmSgiTokenSpaceGuid.PcdGicSize|0|UINT64|0x0000000A
 

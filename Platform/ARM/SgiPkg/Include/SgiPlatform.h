@@ -80,6 +80,14 @@
 // Remote chip address offset (4TB per chip)
 #define SGI_REMOTE_CHIP_MEM_OFFSET(n)             ((1ULL << 42) * (n))
 
+// Base address of the DRAM1 block in a remote chip
+#define SYSTEM_MEMORY_BASE_REMOTE(ChipId) \
+          (SGI_REMOTE_CHIP_MEM_OFFSET (ChipId) + FixedPcdGet64 (PcdSystemMemoryBase))
+
+// Base address of the DRAM2 block in a remote chip
+#define DRAM_BLOCK2_BASE_REMOTE(ChipId) \
+          (SGI_REMOTE_CHIP_MEM_OFFSET (ChipId) + FixedPcdGet64 (PcdDramBlock2Base))
+
 // ARM platform description data.
 typedef struct {
   UINTN  PlatformId;
