@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2018, ARM Limited. All rights reserved.
+*  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -8,6 +8,8 @@
 
 #ifndef __SGI_ACPI_HEADER__
 #define __SGI_ACPI_HEADER__
+
+#include <IndustryStandard/Acpi.h>
 
 //
 // ACPI table information used to initialize tables.
@@ -30,6 +32,72 @@
     EFI_ACPI_ARM_OEM_REVISION,      /* UINT32  OemRevision */     \
     EFI_ACPI_ARM_CREATOR_ID,        /* UINT32  CreatorId */       \
     EFI_ACPI_ARM_CREATOR_REVISION   /* UINT32  CreatorRevision */ \
+  }
+
+// EFI_ACPI_6_2_GIC_STRUCTURE
+#define EFI_ACPI_6_2_GICC_STRUCTURE_INIT(GicId, AcpiCpuUid, Mpidr, Flags,      \
+  PmuIrq, GicBase, GicVBase, GicHBase, GsivId, GicRBase, Efficiency)           \
+  {                                                                            \
+    EFI_ACPI_6_2_GIC,                     /* Type */                           \
+    sizeof (EFI_ACPI_6_2_GIC_STRUCTURE),  /* Length */                         \
+    EFI_ACPI_RESERVED_WORD,               /* Reserved */                       \
+    GicId,                                /* CPUInterfaceNumber */             \
+    AcpiCpuUid,                           /* AcpiProcessorUid */               \
+    Flags,                                /* Flags */                          \
+    0,                                    /* ParkingProtocolVersion */         \
+    PmuIrq,                               /* PerformanceInterruptGsiv */       \
+    0,                                    /* ParkedAddress */                  \
+    GicBase,                              /* PhysicalBaseAddress */            \
+    GicVBase,                             /* GICV */                           \
+    GicHBase,                             /* GICH */                           \
+    GsivId,                               /* VGICMaintenanceInterrupt */       \
+    GicRBase,                             /* GICRBaseAddress */                \
+    Mpidr,                                /* MPIDR */                          \
+    Efficiency,                           /* ProcessorPowerEfficiencyClass */  \
+    {                                                                          \
+      EFI_ACPI_RESERVED_BYTE,             /* Reserved2[0] */                   \
+      EFI_ACPI_RESERVED_BYTE,             /* Reserved2[1] */                   \
+      EFI_ACPI_RESERVED_BYTE              /* Reserved2[2] */                   \
+    }                                                                          \
+  }
+
+// EFI_ACPI_6_2_GIC_DISTRIBUTOR_STRUCTURE
+#define EFI_ACPI_6_2_GIC_DISTRIBUTOR_INIT(GicDistHwId, GicDistBase,            \
+  GicDistVector, GicVersion)                                                   \
+  {                                                                            \
+    EFI_ACPI_6_2_GICD,                    /* Type */                           \
+    sizeof (EFI_ACPI_6_2_GIC_DISTRIBUTOR_STRUCTURE),                           \
+    EFI_ACPI_RESERVED_WORD,               /* Reserved1 */                      \
+    GicDistHwId,                          /* GicId */                          \
+    GicDistBase,                          /* PhysicalBaseAddress */            \
+    GicDistVector,                        /* SystemVectorBase */               \
+    GicVersion,                           /* GicVersion */                     \
+    {                                                                          \
+      EFI_ACPI_RESERVED_BYTE,             /* Reserved2[0] */                   \
+      EFI_ACPI_RESERVED_BYTE,             /* Reserved2[1] */                   \
+      EFI_ACPI_RESERVED_BYTE              /* Reserved2[2] */                   \
+    }                                                                          \
+  }
+
+// EFI_ACPI_6_2_GICR_STRUCTURE
+#define EFI_ACPI_6_2_GIC_REDISTRIBUTOR_INIT(RedisRegionAddr, RedisDiscLength)  \
+  {                                                                            \
+    EFI_ACPI_6_2_GICR,                    /* Type */                           \
+    sizeof (EFI_ACPI_6_2_GICR_STRUCTURE), /* Length */                         \
+    EFI_ACPI_RESERVED_WORD,               /* Reserved */                       \
+    RedisRegionAddr,                      /* DiscoveryRangeBaseAddress */      \
+    RedisDiscLength                       /* DiscoveryRangeLength */           \
+  }
+
+// EFI_ACPI_6_2_GIC_ITS_STRUCTURE
+#define EFI_ACPI_6_2_GIC_ITS_INIT(GicItsId, GicItsBase)                        \
+  {                                                                            \
+    EFI_ACPI_6_2_GIC_ITS,                 /* Type */                           \
+    sizeof (EFI_ACPI_6_2_GIC_ITS_STRUCTURE),                                   \
+    EFI_ACPI_RESERVED_WORD,               /* Reserved */                       \
+    GicItsId,                             /* GicItsId */                       \
+    GicItsBase,                           /* PhysicalBaseAddress */            \
+    EFI_ACPI_RESERVED_DWORD               /* DiscoveryRangeLength */           \
   }
 
 #endif /* __SGI_ACPI_HEADER__ */
