@@ -70,6 +70,10 @@
 #define RD_N1_EDGE_CONF_ID                        0x1
 #define RD_E1_EDGE_CONF_ID                        0x2
 
+// RD-Daniel Platform Identification values
+#define RD_DANIEL_PART_NUM                        0x78A
+#define RD_DANIEL_CFGM_CONF_ID                    0x1
+
 #define SGI_CONFIG_MASK                           0x0F
 #define SGI_CONFIG_SHIFT                          0x1C
 #define SGI_PART_NUM_MASK                         0xFFF
