@@ -3,7 +3,7 @@
  *  Copyright (c) 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2019-2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2016, Linaro Limited. All rights reserved.
- *  Copyright (c) 2011-2013, ARM Limited. All rights reserved.
+ *  Copyright (c) 2011-2020, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -85,6 +85,14 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     adr     x2, mBoardRevision
     str     w0, [x2]
 
+#if (RPI_MODEL == 3)
+    run     .Lclkinfo_buffer
+
+    ldr     w0, .Lfrequency
+    adr     x2, _gPcd_BinaryPatch_PcdSerialClockRate
+    str     w0, [x2]
+#endif
+
     ret
 
     .align  4
@@ -126,6 +134,21 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     .long   0                           // revision
     .long   0                           // end tag
     .set    .Lrevinfo_size, . - .Lrevinfo_buffer
+
+#if (RPI_MODEL == 3)
+    .align  4
+.Lclkinfo_buffer:
+    .long   .Lclkinfo_size
+    .long   0x0
+    .long   RPI_MBOX_GET_CLOCK_RATE
+    .long   8                           // buf size
+    .long   4                           // input len
+    .long   4                           // clock id: 0x04 = Core/VPU
+.Lfrequency:
+    .long   0                           // frequency
+    .long   0                           // end tag
+    .set    .Lclkinfo_size, . - .Lclkinfo_buffer
+#endif
 
 //UINTN
 //ArmPlatformGetPrimaryCoreMpId (

@@ -230,6 +230,7 @@
 
 [BuildOptions]
   GCC:*_*_*_CC_FLAGS          = -DRPI_MODEL=3
+  GCC:*_*_*_PP_FLAGS          = -DRPI_MODEL=3
   GCC:*_*_*_ASLPP_FLAGS       = -DRPI_MODEL=3
   GCC:*_*_*_ASLCC_FLAGS       = -DRPI_MODEL=3
   GCC:*_*_*_VFRPP_FLAGS       = -DRPI_MODEL=3

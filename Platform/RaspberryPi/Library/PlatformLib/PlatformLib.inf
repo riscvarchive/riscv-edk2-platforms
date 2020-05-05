@@ -61,5 +61,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate     # RPi3 only
+
 [Ppis]
   gArmMpCoreInfoPpiGuid
