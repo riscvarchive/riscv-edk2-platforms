@@ -41,6 +41,9 @@
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x300C0000
   gArmSgiTokenSpaceGuid.PcdGicSize|0x100000
 
+  # Number of chips in the multi-chip package
+  gArmSgiTokenSpaceGuid.PcdChipCount|2
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform

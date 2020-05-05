@@ -17,7 +17,7 @@
 #define CORE_CNT   (FixedPcdGet32 (PcdClusterCount) * \
                     FixedPcdGet32 (PcdCoreCount))
 
-#define CHIP_CNT   2
+#define CHIP_CNT   (FixedPcdGet32 (PcdChipCount))
 
 // Multiple APIC Description Table
 #pragma pack (1)
