@@ -577,7 +577,7 @@
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf {
     <LibraryClasses>
-      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortLib.inf
+      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortDxeLib.inf
   }
   Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
 
