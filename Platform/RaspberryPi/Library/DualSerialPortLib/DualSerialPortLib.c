@@ -41,18 +41,20 @@ SerialPortGetDivisor (
   // On the Raspberry Pi, the clock to use for the 16650-compatible UART
   // is the base clock divided by the 12.12 fixed point VPU clock divisor.
   //
-  BaseClockRate = (UINT64)PcdGet32 (PcdSerialClockRate) * 4;
+  BaseClockRate = (UINT64)PcdGet32 (PcdSerialClockRate);
+#if (RPI_MODEL == 4)
   Divisor = MmioRead32(BCM2836_CM_BASE + BCM2836_CM_VPU_CLOCK_DIVISOR) & 0xFFFFFF;
   if (Divisor != 0)
     BaseClockRate = (BaseClockRate << 12) / Divisor;
+#endif
 
   //
-  // Now calculate divisor for baud generator
-  //    Ref_Clk_Rate / Baud_Rate / 16
+  // As per the BCM2xxx datasheets:
+  // baudrate = system_clock_freq / (8 * (divisor + 1)).
   //
-  Divisor = (UINT32)BaseClockRate / (SerialBaudRate * 16);
-  if (((UINT32)BaseClockRate % (SerialBaudRate * 16)) >= SerialBaudRate * 8) {
-    Divisor++;
+  Divisor = (UINT32)BaseClockRate / (SerialBaudRate * 8);
+  if (Divisor != 0) {
+    Divisor--;
   }
   return Divisor;
 }
