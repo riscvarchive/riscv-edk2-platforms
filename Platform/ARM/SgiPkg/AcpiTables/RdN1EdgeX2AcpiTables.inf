@@ -23,6 +23,7 @@
   Mcfg.aslc
   RdN1Edge/Dsdt.asl
   RdN1EdgeX2/Madt.aslc
+  RdN1EdgeX2/Srat.aslc
   Spcr.aslc
   Ssdt.asl
 
@@ -38,6 +39,11 @@
   gArmPlatformTokenSpaceGuid.PcdClusterCount
   gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase
   gArmPlatformTokenSpaceGuid.PL011UartInterrupt
+
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gArmSgiTokenSpaceGuid.PcdDramBlock2Base
+  gArmSgiTokenSpaceGuid.PcdDramBlock2Size
 
   gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
