@@ -23,3 +23,14 @@
 
 # include common definitions from SgiPlatform.dsc
 !include Platform/ARM/SgiPkg/SgiPlatform.dsc.inc
+
+################################################################################
+#
+# Pcd Section - list of all EDK II PCD Entries defined by this Platform
+#
+################################################################################
+
+[PcdsFixedAtBuild.common]
+  # ARM Cores and Clusters
+  gArmPlatformTokenSpaceGuid.PcdCoreCount|16
+  gArmPlatformTokenSpaceGuid.PcdClusterCount|2

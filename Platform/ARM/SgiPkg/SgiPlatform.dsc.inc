@@ -160,10 +160,6 @@
   gEmbeddedTokenSpaceGuid.PcdMetronomeTickPeriod|1000
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod|1000
 
-  # ARM Cores and Clusters
-  gArmPlatformTokenSpaceGuid.PcdCoreCount|4
-  gArmPlatformTokenSpaceGuid.PcdClusterCount|2
-
   # Virtio Disk
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x1c130000
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x10000
