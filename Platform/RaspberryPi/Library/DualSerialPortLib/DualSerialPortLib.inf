@@ -19,9 +19,8 @@
 
 [Packages]
   ArmPlatformPkg/ArmPlatformPkg.dec
-  EmbeddedPkg/EmbeddedPkg.dec
-  MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
 
 [LibraryClasses]
@@ -32,6 +31,8 @@
 
 [Sources]
   DualSerialPortLib.c
+  DualSerialPortLib.h
+  DualSerialPortLibCommon.c
 
 [Pcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterAccessWidth     ## SOMETIMES_CONSUMES
