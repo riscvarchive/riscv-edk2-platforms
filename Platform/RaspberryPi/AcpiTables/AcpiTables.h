@@ -32,7 +32,7 @@
 #endif
 #define EFI_ACPI_OEM_REVISION                 0x00000200
 #define EFI_ACPI_CREATOR_ID                   SIGNATURE_32 ('E','D','K','2')
-#define EFI_ACPI_CREATOR_REVISION             0x00000200
+#define EFI_ACPI_CREATOR_REVISION             0x00000300
 
 #define EFI_ACPI_VENDOR_ID                    SIGNATURE_32 ('R','P','I','F')
 
@@ -63,7 +63,7 @@
 #define RPI_SYSTEM_TIMER_BASE_ADDRESS         0xFF80001C
 #endif
 
-#define EFI_ACPI_5_1_CSRT_REVISION            0x00000000
+#define EFI_ACPI_6_3_CSRT_REVISION            0x00000000
 
 typedef enum
 {
@@ -95,7 +95,7 @@ typedef struct
   UINT16 Revision;                // 2 bytes
   UINT16 Reserved;                // 2 bytes
   UINT32 SharedInfoLength;        // 4 bytes
-} EFI_ACPI_5_1_CSRT_RESOURCE_GROUP_HEADER;
+} EFI_ACPI_6_3_CSRT_RESOURCE_GROUP_HEADER;
 
 //------------------------------------------------------------------------
 // CSRT Resource Descriptor 12 bytes total
@@ -106,7 +106,7 @@ typedef struct
   UINT16 ResourceType;            // 2 bytes
   UINT16 ResourceSubType;         // 2 bytes
   UINT32 UID;                     // 4 bytes
-} EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER;
+} EFI_ACPI_6_3_CSRT_RESOURCE_DESCRIPTOR_HEADER;
 
 //------------------------------------------------------------------------
 // Interrupts. These are specific to each platform

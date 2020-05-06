@@ -41,7 +41,7 @@ typedef struct
 //------------------------------------------------------------------------
 typedef struct
 {
-  EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaControllerHeader;
+  EFI_ACPI_6_3_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaControllerHeader;
   DMA_CONTROLLER_VENDOR_DATA ControllerVendorData;
 } RD_DMA_CONTROLLER;
 
@@ -61,7 +61,7 @@ typedef struct
 //------------------------------------------------------------------------
 typedef struct
 {
-  EFI_ACPI_5_1_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaChannelHeader;
+  EFI_ACPI_6_3_CSRT_RESOURCE_DESCRIPTOR_HEADER DmaChannelHeader;
   DMA_CHANNEL_VENDOR_DATA ChannelVendorData;
 } RD_DMA_CHANNEL;
 
@@ -71,7 +71,7 @@ typedef struct
 
 typedef struct
 {
-  EFI_ACPI_5_1_CSRT_RESOURCE_GROUP_HEADER ResGroupHeader;
+  EFI_ACPI_6_3_CSRT_RESOURCE_GROUP_HEADER ResGroupHeader;
   RD_DMA_CONTROLLER DmaController;
   RD_DMA_CHANNEL DmaChannels[RPI_DMA_CHANNEL_COUNT];
 } RG_DMA;
@@ -87,17 +87,17 @@ typedef struct
 // DMA Resource Group
   RG_DMA DmaResourceGroup;
 
-} EFI_ACPI_5_1_CSRT_TABLE;
+} EFI_ACPI_6_3_CSRT_TABLE;
 
-EFI_ACPI_5_1_CSRT_TABLE Csrt =
+EFI_ACPI_6_3_CSRT_TABLE Csrt =
 {
   //------------------------------------------------------------------------
   // ACPI Table Header
   //------------------------------------------------------------------------
   {
-    EFI_ACPI_5_1_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,       // Signature "CSRT"
+    EFI_ACPI_6_3_CORE_SYSTEM_RESOURCE_TABLE_SIGNATURE,       // Signature "CSRT"
     sizeof (EFI_ACPI_DESCRIPTION_HEADER) + sizeof (RG_DMA),  // Length
-    EFI_ACPI_5_1_CSRT_REVISION,     // Revision
+    EFI_ACPI_6_3_CSRT_REVISION,     // Revision
     0x00,                           // Checksum calculated at runtime.
     EFI_ACPI_OEM_ID,                // OEMID is a 6 bytes long field
     EFI_ACPI_OEM_TABLE_ID,          // OEM table identification (8 bytes long)
