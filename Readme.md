@@ -10,6 +10,10 @@ The majority of the content in the EDK II open source project uses a
 [BSD-2-Clause Plus Patent License](License.txt).  Additional details on EDK II
 open source project code contributions can be found in the edk2 repository
 [Readme.md](https://github.com/tianocore/edk2/blob/master/Readme.md).
+The EDK II Platforms open source project contains the following components that
+are covered by additional licenses:
+
+- [`Silicon/RISC-V/ProcessorPkg/Library/RiscVOpensbiLib/opensbi`](https://github.com/riscv/opensbi/blob/master/COPYING.BSD)
 
 # INDEX
 * [Overview](#overview)
@@ -263,3 +267,35 @@ For more information, see the
 # Maintainers
 
 See [Maintainers.txt](Maintainers.txt).
+
+# Submodules
+
+Submodule in EDK II Platforms is allowed but submodule chain should be avoided
+as possible as we can. Currently EDK II Platforms contains the following
+submodules
+
+- Silicon/RISC-V/ProcessorPkg/Library/RiscVOpensbiLib/opensbi
+
+To get a full, buildable EDK II repository, use following steps of git command
+
+```bash
+  git clone https://github.com/tianocore/edk2-platforms.git
+  cd edk2-platforms
+  git submodule update --init
+  cd ..
+```
+
+If there's update for submodules, use following git commands to get the latest
+submodules code.
+
+```bash
+  cd edk2-platforms
+  git pull
+  git submodule update
+```
+
+Note: When cloning submodule repos, '--recursive' option is not recommended.
+EDK II Platforms itself will not use any code/feature from submodules in above
+submodules. So using '--recursive' adds a dependency on being able to reach
+servers we do not actually want any code from, as well as needlessly
+downloading code we will not use.
