@@ -57,6 +57,10 @@
 [Protocols]
   gEfiFirmwareVolumeBlockProtocolGuid           # PROTOCOL SOMETIMES_PRODUCED
   gEfiDevicePathProtocolGuid                    # PROTOCOL SOMETIMES_PRODUCED
+  gPcdProtocolGuid                              # SOMETIMES_CONSUMES
+  gEfiPcdProtocolGuid                           # CONSUMES
+  gGetPcdInfoProtocolGuid                       # SOMETIMES_CONSUMES
+  gEfiGetPcdInfoProtocolGuid                    # SOMETIMES_CONSUMES
 
 [FixedPcd]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
@@ -77,4 +81,4 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64
 
 [Depex]
-  TRUE
+  gEfiPcdProtocolGuid
