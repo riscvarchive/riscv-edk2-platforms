@@ -77,7 +77,7 @@
   gRaspberryPiTokenSpaceGuid.PcdDebugShowUEFIExit
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot
-  gRaspberryPiTokenSpaceGuid.PcdOptDeviceTree
+  gRaspberryPiTokenSpaceGuid.PcdSystemTableMode
   gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB
 

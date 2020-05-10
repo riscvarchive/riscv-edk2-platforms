@@ -76,12 +76,11 @@ typedef struct {
 } ADVANCED_RAM_LIMIT_TO_3GB_VARSTORE_DATA;
 
 typedef struct {
-  /*
-   * 0 - Do not provide a Device Tree to the OS
-   * 1 - Provide a Device Tree to the OS
-   */
-  UINT32 Enabled;
-} ADVANCED_DEVICE_TREE_VARSTORE_DATA;
+#define SYSTEM_TABLE_MODE_ACPI 0
+#define SYSTEM_TABLE_MODE_BOTH 1
+#define SYSTEM_TABLE_MODE_DT   2
+  UINT32 Mode;
+} SYSTEM_TABLE_MODE_VARSTORE_DATA;
 
 typedef struct {
   /*

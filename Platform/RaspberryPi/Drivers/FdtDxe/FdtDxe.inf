@@ -46,4 +46,4 @@
   gRaspberryPiTokenSpaceGuid.PcdFdtBaseAddress
 
 [Pcd]
-  gRaspberryPiTokenSpaceGuid.PcdOptDeviceTree
+  gRaspberryPiTokenSpaceGuid.PcdSystemTableMode

@@ -155,11 +155,11 @@ SetupVariables (
   }
 
   Size = sizeof (UINT32);
-  Status = gRT->GetVariable (L"OptDeviceTree",
+  Status = gRT->GetVariable (L"SystemTableMode",
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdOptDeviceTree, PcdGet32 (PcdOptDeviceTree));
+    PcdSet32 (PcdSystemTableMode, PcdGet32 (PcdSystemTableMode));
   }
 
   Size = sizeof (UINT32);
@@ -488,8 +488,11 @@ ConfigInitialize (
     DEBUG ((DEBUG_ERROR, "Couldn't install ConfigDxe configuration pages: %r\n", Status));
   }
 
-  Status = LocateAndInstallAcpiFromFv (&mAcpiTableFile);
-  ASSERT_EFI_ERROR (Status);
+  if (PcdGet32 (PcdSystemTableMode) == SYSTEM_TABLE_MODE_ACPI ||
+      PcdGet32 (PcdSystemTableMode) == SYSTEM_TABLE_MODE_BOTH) {
+     Status = LocateAndInstallAcpiFromFv (&mAcpiTableFile);
+     ASSERT_EFI_ERROR (Status);
+  }
 
   return EFI_SUCCESS;
 }

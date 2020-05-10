@@ -44,9 +44,9 @@ formset
       name  = RamLimitTo3GB,
       guid  = CONFIGDXE_FORM_SET_GUID;
 
-    efivarstore ADVANCED_DEVICE_TREE_VARSTORE_DATA,
+    efivarstore SYSTEM_TABLE_MODE_VARSTORE_DATA,
       attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
-      name  = OptDeviceTree,
+      name  = SystemTableMode,
       guid  = CONFIGDXE_FORM_SET_GUID;
 
     efivarstore MMC_SD_VARSTORE_DATA,
@@ -164,12 +164,13 @@ formset
           endoneof;
         endif;
 
-        oneof varid = OptDeviceTree.Enabled,
-            prompt      = STRING_TOKEN(STR_ADVANCED_DT_PROMPT),
-            help        = STRING_TOKEN(STR_ADVANCED_DT_HELP),
+        oneof varid = SystemTableMode.Mode,
+            prompt      = STRING_TOKEN(STR_ADVANCED_SYSTAB_PROMPT),
+            help        = STRING_TOKEN(STR_ADVANCED_SYSTAB_HELP),
             flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
-            option text = STRING_TOKEN(STR_ADVANCED_DT_OFF), value = 0, flags = 0;
-            option text = STRING_TOKEN(STR_ADVANCED_DT_ON), value = 1, flags = DEFAULT;
+            option text = STRING_TOKEN(STR_ADVANCED_SYSTAB_ACPI), value = SYSTEM_TABLE_MODE_ACPI, flags = 0;
+            option text = STRING_TOKEN(STR_ADVANCED_SYSTAB_BOTH), value = SYSTEM_TABLE_MODE_BOTH, flags = DEFAULT;
+            option text = STRING_TOKEN(STR_ADVANCED_SYSTAB_DT), value = SYSTEM_TABLE_MODE_DT, flags = DEFAULT;
         endoneof;
     endform;
 

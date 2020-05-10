@@ -484,9 +484,13 @@
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB|L"RamLimitTo3GB"|gConfigDxeFormSetGuid|0x0|0
 
   #
-  # Device Tree
+  # Device Tree and ACPI selection.
   #
-  gRaspberryPiTokenSpaceGuid.PcdOptDeviceTree|L"OptDeviceTree"|gConfigDxeFormSetGuid|0x0|1
+  # 0 - SYSTEM_TABLE_MODE_ACPI
+  # 1 - SYSTEM_TABLE_MODE_BOTH (default)
+  # 2 - SYSTEM_TABLE_MODE_DT
+  #
+  gRaspberryPiTokenSpaceGuid.PcdSystemTableMode|L"SystemTableMode"|gConfigDxeFormSetGuid|0x0|1
 
   #
   # Common UEFI ones.

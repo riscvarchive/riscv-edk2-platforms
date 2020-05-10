@@ -355,7 +355,8 @@ FdtDxeInitialize (
   UINTN      FdtSize;
   VOID       *FdtImage = NULL;
 
-  if (PcdGet32 (PcdOptDeviceTree) == 0) {
+  if (PcdGet32 (PcdSystemTableMode) != SYSTEM_TABLE_MODE_BOTH &&
+      PcdGet32 (PcdSystemTableMode) != SYSTEM_TABLE_MODE_DT) {
     DEBUG ((DEBUG_INFO, "Device Tree disabled per user configuration\n"));
     return EFI_SUCCESS;
   }

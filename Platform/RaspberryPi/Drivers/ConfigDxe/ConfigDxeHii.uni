@@ -41,10 +41,11 @@
 #string STR_ADVANCED_3GB_OFF         #language en-US "Disabled"
 #string STR_ADVANCED_3GB_ON          #language en-US "Enabled"
 
-#string STR_ADVANCED_DT_PROMPT       #language en-US "Device Tree"
-#string STR_ADVANCED_DT_HELP         #language en-US "Disable this option to force OSes such as GNU/Linux to use ACPI"
-#string STR_ADVANCED_DT_OFF          #language en-US "Disabled (Force ACPI)"
-#string STR_ADVANCED_DT_ON           #language en-US "Enabled"
+#string STR_ADVANCED_SYSTAB_PROMPT   #language en-US "System Table Selection"
+#string STR_ADVANCED_SYSTAB_HELP     #language en-US "ACPI/DT choice for specific OSes"
+#string STR_ADVANCED_SYSTAB_ACPI     #language en-US "ACPI"
+#string STR_ADVANCED_SYSTAB_BOTH     #language en-US "ACPI + Devicetree"
+#string STR_ADVANCED_SYSTAB_DT       #language en-US "Devicetree"
 
 /*
  * MMC/SD configuration.
