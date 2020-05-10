@@ -22,6 +22,7 @@
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <Library/GpioLib.h>
 #include <Protocol/RpiFirmware.h>
+#include <ConfigVars.h>
 #include "ConfigDxeFormSetGuid.h"
 
 #define FREQ_1_MHZ 1000000
@@ -259,10 +260,10 @@ ApplyVariables (
   UINT64 SystemMemorySize;
 
   switch (CpuClock) {
-  case 0: // Low
+  case CHIPSET_CPU_CLOCK_LOW:
     Rate = FixedPcdGet32 (PcdCpuLowSpeedMHz) * FREQ_1_MHZ;
     break;
-  case 1: // Default
+  case CHIPSET_CPU_CLOCK_DEFAULT:
     /*
      * What the Raspberry Pi Foundation calls "max clock rate" is really the default value
      * from: https://www.raspberrypi.org/documentation/configuration/config-txt/overclocking.md
@@ -272,10 +273,10 @@ ApplyVariables (
       DEBUG ((DEBUG_ERROR, "Couldn't read default CPU speed %r\n", Status));
     }
     break;
-  case 2: // Max
+  case CHIPSET_CPU_CLOCK_MAX:
     Rate = FixedPcdGet32 (PcdCpuMaxSpeedMHz) * FREQ_1_MHZ;
     break;
-  case 3: // Custom
+  case CHIPSET_CPU_CLOCK_CUSTOM:
     Rate = CustomCpuClock * FREQ_1_MHZ;
     break;
   }

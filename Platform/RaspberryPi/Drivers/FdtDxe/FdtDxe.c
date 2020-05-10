@@ -15,10 +15,9 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 #include <libfdt.h>
-
 #include <Protocol/RpiFirmware.h>
-
 #include <Guid/Fdt.h>
+#include <ConfigVars.h>
 
 STATIC VOID                             *mFdtImage;
 
