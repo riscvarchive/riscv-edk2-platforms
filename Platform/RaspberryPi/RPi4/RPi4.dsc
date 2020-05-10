@@ -486,7 +486,11 @@
   #
   # Display-related.
   #
-  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes|L"DisplayEnableScaledVModes"|gConfigDxeFormSetGuid|0x0|0x3f
+
+  #
+  # Just enable native resolution by default.
+  #
+  gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes|L"DisplayEnableScaledVModes"|gConfigDxeFormSetGuid|0x0|0x20
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot|L"DisplayEnableSShot"|gConfigDxeFormSetGuid|0x0|1
 
   #
