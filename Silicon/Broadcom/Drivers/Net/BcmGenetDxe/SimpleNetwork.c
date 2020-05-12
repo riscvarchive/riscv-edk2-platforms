@@ -641,9 +641,8 @@ GenetSimpleNetworkTransmit (
     return Status;
   }
 
+  Genet->TxProdIndex = (Genet->TxProdIndex + 1) & 0xFFFF;
   GenetDmaTriggerTx (Genet, Desc, DmaDeviceAddress, DmaNumberOfBytes);
-
-  Genet->TxProdIndex = (Genet->TxProdIndex + 1) % 0xFFFF;
   Genet->TxQueued++;
 
   EfiReleaseLock (&Genet->Lock);

@@ -737,7 +737,7 @@ GenetDmaTriggerTx (
   GenetMmioWrite (Genet, GENET_TX_DESC_STATUS (DescIndex), DescStatus);
 
   GenetMmioWrite (Genet, GENET_TX_DMA_PROD_INDEX (GENET_DMA_DEFAULT_QUEUE),
-    (DescIndex + 1) & 0xFFFF);
+    Genet->TxProdIndex);
 }
 
 /**
@@ -764,7 +764,7 @@ GenetTxIntr (
     *TxBuf = Genet->TxBuffer[Genet->TxNext];
     Genet->TxQueued--;
     Genet->TxNext = (Genet->TxNext + 1) % GENET_DMA_DESC_COUNT;
-    Genet->TxConsIndex++;
+    Genet->TxConsIndex = (Genet->TxConsIndex + 1) & 0xFFFF;
   } else {
     *TxBuf = NULL;
   }
