@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c) 2019, ARM Limited. All rights reserved.
+ *  Copyright (c) 2019 - 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2018 - 2019, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -8,19 +8,20 @@
  **/
 
 #include <Uefi.h>
-#include <Library/AcpiLib.h>
-#include <Library/HiiLib.h>
-#include <Library/DebugLib.h>
-#include <Library/DxeServicesTableLib.h>
-#include <Library/IoLib.h>
-#include <Library/UefiBootServicesTableLib.h>
-#include <Library/UefiRuntimeServicesTableLib.h>
-#include <Library/DevicePathLib.h>
-#include <IndustryStandard/RpiMbox.h>
 #include <IndustryStandard/Bcm2711.h>
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
+#include <IndustryStandard/RpiMbox.h>
+#include <Library/AcpiLib.h>
+#include <Library/DebugLib.h>
+#include <Library/DevicePathLib.h>
+#include <Library/DxeServicesTableLib.h>
 #include <Library/GpioLib.h>
+#include <Library/HiiLib.h>
+#include <Library/IoLib.h>
+#include <Library/NetLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiRuntimeServicesTableLib.h>
 #include <Protocol/RpiFirmware.h>
 #include <ConfigVars.h>
 #include "ConfigDxeFormSetGuid.h"

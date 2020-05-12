@@ -1,6 +1,8 @@
 #/** @file
 #
-#  Copyright (c) 2019, ARM Limited. All rights reserved.
+#  Component description file for the RasbperryPi DXE platform config driver.
+#
+#  Copyright (c) 2019 - 2020, ARM Limited. All rights reserved.
 #  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -31,24 +33,27 @@
 [Packages]
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
-  MdePkg/MdePkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
   MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  NetworkPkg/NetworkPkg.dec
+  Platform/RaspberryPi/RaspberryPi.dec
   Silicon/Broadcom/Bcm27xx/Bcm27xx.dec
   Silicon/Broadcom/Bcm283x/Bcm283x.dec
-  Platform/RaspberryPi/RaspberryPi.dec
-  EmbeddedPkg/EmbeddedPkg.dec
+  Silicon/Broadcom/Drivers/Net/BcmNet.dec
 
 [LibraryClasses]
+  AcpiLib
   BaseLib
   DebugLib
   DxeServicesTableLib
+  GpioLib
+  HiiLib
+  NetLib
   PcdLib
   UefiBootServicesTableLib
-  UefiRuntimeServicesTableLib
   UefiDriverEntryPoint
-  HiiLib
-  GpioLib
-  AcpiLib
+  UefiRuntimeServicesTableLib
 
 [Guids]
   gConfigDxeFormSetGuid
