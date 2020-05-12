@@ -54,8 +54,8 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase
+  gBcm27xxTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
-  gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
   gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceHBase

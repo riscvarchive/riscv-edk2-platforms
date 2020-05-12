@@ -10,13 +10,13 @@
  *
  **/
 
+#include <IndustryStandard/Bcm2711.h>
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <IndustryStandard/Bcm2836Gpu.h>
 #include <IndustryStandard/Bcm2836Pwm.h>
 #include <IndustryStandard/Bcm2836Sdio.h>
 #include <IndustryStandard/Bcm2836SdHost.h>
-#include <Net/Genet.h>
 
 #include "AcpiTables.h"
 

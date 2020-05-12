@@ -21,9 +21,3 @@
 
 [Protocols]
   gBcmGenetPlatformDeviceProtocolGuid = {0x5e485a22, 0x1bb0, 0x4e22, {0x85, 0x49, 0x41, 0xfc, 0xec, 0x85, 0xdf, 0xd3}}
-
-[PcdsFixedAtBuild]
-  gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress|0x0|UINT64|0x00000001
-
-[PcdsDynamic]
-  gBcmNetTokenSpaceGuid.PcdBcmGenetMacAddress|0x0|UINT64|0x00000002

@@ -24,3 +24,5 @@
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioAdr|0x0|UINT64|0x00000003
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioLen|0x0|UINT32|0x00000004
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr|0x0|UINT64|0x00000005
+
+  gBcm27xxTokenSpaceGuid.PcdBcmGenetRegistersAddress|0x0|UINT64|0x00000006
