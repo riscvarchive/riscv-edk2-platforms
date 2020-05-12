@@ -1,6 +1,7 @@
 ## @file
 #
 #  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
+#  Copyright (c) 2020, ARM Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -17,6 +18,9 @@
 
 [Guids]
   gBcmNetTokenSpaceGuid = {0x12b97d70, 0x9149, 0x4c2f, {0x82, 0xd5, 0xad, 0xa9, 0x1e, 0x92, 0x75, 0xa1}}
+
+[Protocols]
+  gBcmGenetPlatformDeviceProtocolGuid = {0x5e485a22, 0x1bb0, 0x4e22, {0x85, 0x49, 0x41, 0xfc, 0xec, 0x85, 0xdf, 0xd3}}
 
 [PcdsFixedAtBuild]
   gBcmNetTokenSpaceGuid.PcdBcmGenetRegistersAddress|0x0|UINT64|0x00000001
