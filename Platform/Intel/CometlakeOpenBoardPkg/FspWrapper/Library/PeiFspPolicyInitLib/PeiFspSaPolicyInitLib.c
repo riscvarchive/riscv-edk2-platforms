@@ -344,7 +344,7 @@ PeiFspSaPolicyInitPreMem (
     FspmUpd->FspmConfig.GdxcIotSize           = MemConfig->GdxcIotSize;
     FspmUpd->FspmConfig.GdxcMotSize           = MemConfig->GdxcMotSize;
     FspmUpd->FspmConfig.DualDimmPerChannelBoardType =(UINT8) MemConfig->DualDimmPerChannelBoardType;
-    FspmUpd->FspmConfig.Ddr4MixedUDimm2DpcLimit     =(UINT8) MemConfig->Ddr4MixedUDimm2DpcLimit;
+    FspmUpd->FspmConfig.Ddr4Mixed2DpcLimit    =(UINT8) MemConfig->Ddr4MixedUDimm2DpcLimit;
     //
     // Update UPD:CaVrefConfig
     //
