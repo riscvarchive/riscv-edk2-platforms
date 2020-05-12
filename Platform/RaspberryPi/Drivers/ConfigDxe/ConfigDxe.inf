@@ -23,7 +23,6 @@
 #
 #  VALID_ARCHITECTURES           = AARCH64
 #
-
 [Sources]
   ConfigDxe.c
   ConfigDxeFormSetGuid.h
@@ -57,10 +56,12 @@
 
 [Guids]
   gConfigDxeFormSetGuid
+  gEfiEndOfDxeEventGroupGuid
 
 [Protocols]
-  gRaspberryPiFirmwareProtocolGuid      ## CONSUMES
-  gRaspberryPiConfigAppliedProtocolGuid ## PRODUCES
+  gBcmGenetPlatformDeviceProtocolGuid             ## PRODUCES
+  gRaspberryPiFirmwareProtocolGuid                ## CONSUMES
+  gRaspberryPiConfigAppliedProtocolGuid           ## PRODUCES
 
 [FixedPcd]
   gRaspberryPiTokenSpaceGuid.PcdCpuLowSpeedMHz
@@ -69,6 +70,7 @@
 
 [Pcd]
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress
+  gBcm27xxTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
   gRaspberryPiTokenSpaceGuid.PcdCpuClock
   gRaspberryPiTokenSpaceGuid.PcdCustomCpuClock
