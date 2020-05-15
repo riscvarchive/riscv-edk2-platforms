@@ -196,18 +196,40 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       })
     }
 
-    Device (EXIU) {
-      Name (_HID, "SCX0008")
+    Device (GED0) {
+      Name (_HID, "ACPI0013")
       Name (_UID, Zero)
       Name (_CRS, ResourceTemplate () {
-        Memory32Fixed (ReadWrite, SYNQUACER_EXIU_BASE, SYNQUACER_EXIU_SIZE)
+       Interrupt (ResourceConsumer, Edge, ActiveHigh, ExclusiveAndWake) { 152 }
       })
-      Name (_DSD, Package () {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-        Package () {
-          Package () { "socionext,spi-base", 112 },
-        }
-      })
+      OperationRegion (EXIU, SystemMemory, SYNQUACER_EXIU_BASE, 0x20)
+      Field (EXIU, DWordAcc, NoLock, Preserve)
+      {
+        MASK,   32,
+        SRCS,   32,
+        REQS,   32,
+        RAWR,   32,
+        REQC,   32,
+        LEVL,   32,
+        EDGC,   32,
+        SWIR,   32,
+      }
+
+      Method (_INI) {
+        REQC = 0xffffffff
+        MASK = 0xffffffff
+
+        /* enable the power button on line 8 as edge active low */
+        LEVL &= ~0x100
+        EDGC |= 0x100
+        REQC = 0x100
+        MASK = 0xfffffeff
+      }
+
+      Method (_EVT) {
+        REQC = 0x100
+        Notify (\_SB.PWRB, 0x80)
+      }
     }
 
     Device (GPIO) {
@@ -215,9 +237,6 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       Name (_UID, Zero)
       Name (_CRS, ResourceTemplate () {
         Memory32Fixed (ReadWrite, SYNQUACER_GPIO_BASE, SYNQUACER_GPIO_SIZE)
-        Interrupt (ResourceConsumer, Edge, ActiveLow, ExclusiveAndWake, 0, "\\_SB.EXIU") {
-          8,
-        }
       })
       Name (_DSD, Package () {
         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -237,15 +256,6 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
           }
         }
       })
-      Name (_AEI, ResourceTemplate () {
-        GpioInt (Edge, ActiveLow, ExclusiveAndWake, PullDefault, 0, "\\_SB.GPIO")
-        {
-          8
-        }
-      })
-      Method (_E08) {
-        Notify (\_SB.PWRB, 0x80)
-      }
     }
 
     Device (PWRB) {
