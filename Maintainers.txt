@@ -169,6 +169,7 @@ F: Platform/Intel/MinPlatformPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 R: Liming Gao <liming.gao@intel.com>
+R: Eric Dong <eric.dong@intel.com>
 
 Platform/Intel/WhiskeylakeOpenBoardPkg
 F: Platform/Intel/WhiskeylakeOpenBoardPkg/
