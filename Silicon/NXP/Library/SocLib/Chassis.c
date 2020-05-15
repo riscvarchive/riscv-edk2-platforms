@@ -22,7 +22,6 @@
 #include <Library/PrintLib.h>
 #include <Library/SerialPortLib.h>
 
-#include <DramInfo.h>
 #include "NxpChassis.h"
 
 UINT32
@@ -75,69 +74,3 @@ SmmuInit (
   MmioWrite32 ((UINTN)SMMU_REG_NSCR0, Value);
 }
 
-UINTN
-GetDramSize (
-  IN VOID
-  )
-{
-  ARM_SMC_ARGS  ArmSmcArgs;
-
-  ArmSmcArgs.Arg0 = SMC_DRAM_BANK_INFO;
-  ArmSmcArgs.Arg1 = -1;
-
-  ArmCallSmc (&ArmSmcArgs);
-
-  if (ArmSmcArgs.Arg0) {
-    return 0;
-  } else {
-    return ArmSmcArgs.Arg1;
-  }
-}
-
-EFI_STATUS
-GetDramBankInfo (
-  IN OUT DRAM_INFO *DramInfo
-  )
-{
-  ARM_SMC_ARGS  ArmSmcArgs;
-  UINT32        I;
-  UINTN         DramSize;
-
-  DramSize = GetDramSize ();
-  DEBUG ((DEBUG_INFO, "DRAM Total Size 0x%lx \n", DramSize));
-
-  // Ensure DramSize has been set
-  ASSERT (DramSize != 0);
-
-  I = 0;
-
-  do {
-    ArmSmcArgs.Arg0 = SMC_DRAM_BANK_INFO;
-    ArmSmcArgs.Arg1 = I;
-
-    ArmCallSmc (&ArmSmcArgs);
-    if (ArmSmcArgs.Arg0) {
-      if (I > 0) {
-        break;
-      } else {
-        ASSERT (ArmSmcArgs.Arg0 == 0);
-      }
-    }
-
-    DramInfo->DramRegion[I].BaseAddress = ArmSmcArgs.Arg1;
-    DramInfo->DramRegion[I].Size = ArmSmcArgs.Arg2;
-
-    DramSize -= DramInfo->DramRegion[I].Size;
-
-    DEBUG ((DEBUG_INFO, "bank[%d]: start 0x%lx, size 0x%lx\n",
-      I, DramInfo->DramRegion[I].BaseAddress, DramInfo->DramRegion[I].Size));
-
-    I++;
-  } while (DramSize);
-
-  DramInfo->NumOfDrams = I;
-
-  DEBUG ((DEBUG_INFO, "Number Of DRAM in system %d \n", DramInfo->NumOfDrams));
-
-  return EFI_SUCCESS;
-}

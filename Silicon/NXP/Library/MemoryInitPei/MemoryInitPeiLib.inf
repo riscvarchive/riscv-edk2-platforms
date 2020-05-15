@@ -18,7 +18,6 @@
 [Sources]
   MemoryInitPeiLib.c
 
-
 [Packages]
   ArmPkg/ArmPkg.dec
   ArmPlatformPkg/ArmPlatformPkg.dec
@@ -30,6 +29,7 @@
 [LibraryClasses]
   ArmMmuLib
   ArmPlatformLib
+  ArmSmcLib
   DebugLib
   HobLib
   PcdLib
@@ -39,6 +39,11 @@
 
 [FeaturePcd]
   gEmbeddedTokenSpaceGuid.PcdPrePiProduceMemoryTypeInformationHob
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdFdBaseAddress
+  gArmTokenSpaceGuid.PcdFdSize
+  gArmPlatformTokenSpaceGuid.PcdSystemMemoryUefiRegionSize
 
 [Pcd]
   gArmTokenSpaceGuid.PcdSystemMemoryBase

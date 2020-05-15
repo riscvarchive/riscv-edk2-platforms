@@ -12,13 +12,15 @@
 
 #include <Library/ArmMmuLib.h>
 #include <Library/ArmPlatformLib.h>
+#include <Library/ArmSmcLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
 #include <Library/HobLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 
-#include <DramInfo.h>
+#include "MemoryInitPeiLib.h"
+
 
 VOID
 BuildMemoryTypeInformationHob (
@@ -44,22 +46,88 @@ InitMmu (
   }
 }
 
-/*++
+STATIC
+UINTN
+GetDramSize (
+  IN VOID
+  )
+{
+  ARM_SMC_ARGS  ArmSmcArgs;
 
-Routine Description:
+  ArmSmcArgs.Arg0 = SMC_DRAM_BANK_INFO;
+  ArmSmcArgs.Arg1 = SMC_DRAM_TOTAL_DRAM_ARG1;
 
+  ArmCallSmc (&ArmSmcArgs);
 
+  if (ArmSmcArgs.Arg0 == SMC_OK) {
+    return ArmSmcArgs.Arg1;
+  }
 
-Arguments:
+  // return 0 means no DDR found.
+  return 0;
+}
 
-  FileHandle  - Handle of the file being invoked.
-  PeiServices - Describes the list of possible PEI Services.
+STATIC
+EFI_STATUS
+GetDramRegionsInfo (
+  OUT DRAM_REGION_INFO *DramRegions,
+  IN  UINT32           NumRegions
+  )
+{
+  ARM_SMC_ARGS  ArmSmcArgs;
+  UINT32        Index;
+  UINTN         RemainingDramSize;
+  UINTN         BaseAddress;
+  UINTN         Size;
 
-Returns:
+  RemainingDramSize = GetDramSize ();
+  DEBUG ((DEBUG_INFO, "DRAM Total Size 0x%lx \n", RemainingDramSize));
 
-  Status -  EFI_SUCCESS if the boot mode could be set
+  // Ensure Total Dram Size is valid
+  ASSERT (RemainingDramSize != 0);
 
---*/
+  for (Index = 0; Index < NumRegions; Index++) {
+    ArmSmcArgs.Arg0 = SMC_DRAM_BANK_INFO;
+    ArmSmcArgs.Arg1 = Index;
+
+    ArmCallSmc (&ArmSmcArgs);
+
+    if (ArmSmcArgs.Arg0 == SMC_OK) {
+      BaseAddress = ArmSmcArgs.Arg1;
+      Size = ArmSmcArgs.Arg2;
+      ASSERT (BaseAddress && Size);
+
+      DramRegions[Index].BaseAddress = BaseAddress;
+      DramRegions[Index].Size = Size;
+      RemainingDramSize -= Size;
+
+      DEBUG ((DEBUG_INFO, "DRAM Region[%d]: start 0x%lx, size 0x%lx\n",
+              Index, BaseAddress, Size));
+
+      if (RemainingDramSize == 0) {
+        return EFI_SUCCESS;
+      }
+    } else {
+      break;
+    }
+  }
+
+  DEBUG ((DEBUG_ERROR, "RemainingDramSize = %u !! Ensure that all DDR regions "
+          "have been accounted for\n", RemainingDramSize));
+
+  return EFI_BUFFER_TOO_SMALL;
+}
+
+/**
+  Get the installed RAM information.
+  Initialize MMU and Memory HOBs (Resource Descriptor HOBs)
+
+  @param[in] UefiMemoryBase  Base address of region used by UEFI in
+                             permanent memory
+  @param[in] UefiMemorySize  Size of the region used by UEFI in permanent memory
+
+  @return  EFI_SUCCESS  Successfuly Initialize MMU and Memory HOBs.
+**/
 EFI_STATUS
 EFIAPI
 MemoryPeim (
@@ -67,11 +135,16 @@ MemoryPeim (
   IN UINT64                             UefiMemorySize
   )
 {
-  ARM_MEMORY_REGION_DESCRIPTOR *MemoryTable;
-  EFI_RESOURCE_ATTRIBUTE_TYPE  ResourceAttributes;
-  EFI_PEI_HOB_POINTERS         NextHob;
-  BOOLEAN                      Found;
-  DRAM_INFO                    DramInfo;
+  ARM_MEMORY_REGION_DESCRIPTOR  *MemoryTable;
+  INT32                         Index;
+  UINTN                         BaseAddress;
+  UINTN                         Size;
+  UINTN                         Top;
+  DRAM_REGION_INFO              DramRegions[MAX_DRAM_REGIONS];
+  EFI_RESOURCE_ATTRIBUTE_TYPE   ResourceAttributes;
+  UINTN                         FdBase;
+  UINTN                         FdTop;
+  BOOLEAN                       FoundSystemMem;
 
   // Get Virtual Memory Map from the Platform Library
   ArmPlatformGetVirtualMemoryMap (&MemoryTable);
@@ -94,39 +167,93 @@ MemoryPeim (
     EFI_RESOURCE_ATTRIBUTE_TESTED
   );
 
-  if (GetDramBankInfo (&DramInfo)) {
-    DEBUG ((DEBUG_ERROR, "Failed to get DRAM information, exiting...\n"));
-    return EFI_UNSUPPORTED;
-  }
+  FoundSystemMem = FALSE;
+  ZeroMem (DramRegions, sizeof (DramRegions));
 
-  while (DramInfo.NumOfDrams--) {
-    //
-    // Check if the resource for the main system memory has been declared
-    //
-    Found = FALSE;
-    NextHob.Raw = GetHobList ();
-    while ((NextHob.Raw = GetNextHob (EFI_HOB_TYPE_RESOURCE_DESCRIPTOR, NextHob.Raw)) != NULL) {
-      if ((NextHob.ResourceDescriptor->ResourceType == EFI_RESOURCE_SYSTEM_MEMORY) &&
-          (DramInfo.DramRegion[DramInfo.NumOfDrams].BaseAddress >= NextHob.ResourceDescriptor->PhysicalStart) &&
-          (NextHob.ResourceDescriptor->PhysicalStart + NextHob.ResourceDescriptor->ResourceLength <=
-           DramInfo.DramRegion[DramInfo.NumOfDrams].BaseAddress + DramInfo.DramRegion[DramInfo.NumOfDrams].Size))
-      {
-        Found = TRUE;
-        break;
-      }
-      NextHob.Raw = GET_NEXT_HOB (NextHob);
+  (VOID)GetDramRegionsInfo (DramRegions, ARRAY_SIZE (DramRegions));
+
+  FdBase = (UINTN)FixedPcdGet64 (PcdFdBaseAddress);
+  FdTop = FdBase + (UINTN)FixedPcdGet32 (PcdFdSize);
+
+  // Declare memory regions to system
+  // The DRAM region info is sorted based on the RAM address is SOC memory map.
+  // i.e. DramRegions[0] is at lower address, as compared to DramRegions[1].
+  // The goal to start from last region is to find the topmost RAM region that
+  // can contain UEFI DXE region i.e. PcdSystemMemoryUefiRegionSize.
+  // If UEFI were to allocate any reserved or runtime region, it would be
+  // allocated from topmost RAM region.
+  // This ensures that maximum amount of lower RAM (32 bit addresses) are left
+  // for OS to allocate to devices that can only work with 32bit physical
+  // addresses. E.g. legacy devices that need to DMA to 32bit addresses.
+  for (Index = MAX_DRAM_REGIONS - 1; Index >= 0; Index--) {
+    if (DramRegions[Index].Size == 0) {
+      continue;
     }
 
-    if (!Found) {
-      // Reserved the memory space occupied by the firmware volume
+    BaseAddress = DramRegions[Index].BaseAddress;
+    Top = DramRegions[Index].BaseAddress + DramRegions[Index].Size;
+
+    // EDK2 does not have the concept of boot firmware copied into DRAM.
+    // To avoid the DXE core to overwrite this area we must create a memory
+    // allocation HOB for the region, but this only works if we split off the
+    // underlying resource descriptor as well.
+    if (FdBase >= BaseAddress && FdTop <= Top) {
+      // Update Size
+      Size = FdBase - BaseAddress;
+      if (Size) {
+        BuildResourceDescriptorHob (
+          EFI_RESOURCE_SYSTEM_MEMORY,
+          ResourceAttributes,
+          BaseAddress,
+          Size
+        );
+      }
+      // create the System Memory HOB for the firmware
       BuildResourceDescriptorHob (
         EFI_RESOURCE_SYSTEM_MEMORY,
         ResourceAttributes,
-        DramInfo.DramRegion[DramInfo.NumOfDrams].BaseAddress,
-        DramInfo.DramRegion[DramInfo.NumOfDrams].Size
+        FdBase,
+        PcdGet32 (PcdFdSize)
+      );
+      // Create the System Memory HOB for the remaining region (top of the FD)s
+      Size = Top - FdTop;
+      if (Size) {
+        BuildResourceDescriptorHob (
+          EFI_RESOURCE_SYSTEM_MEMORY,
+          ResourceAttributes,
+          FdTop,
+          Size
+        );
+      };
+      // Mark the memory covering the Firmware Device as boot services data
+      BuildMemoryAllocationHob (FixedPcdGet64 (PcdFdBaseAddress),
+                                FixedPcdGet32 (PcdFdSize),
+                                EfiBootServicesData);
+    } else {
+      BuildResourceDescriptorHob (
+          EFI_RESOURCE_SYSTEM_MEMORY,
+          ResourceAttributes,
+          DramRegions[Index].BaseAddress,
+          DramRegions[Index].Size
       );
     }
+
+    if (FoundSystemMem == TRUE) {
+      continue;
+    }
+
+    Size = DramRegions[Index].Size;
+
+    if (FdBase >= BaseAddress && FdTop <= Top) {
+      Size -= (UINTN)FixedPcdGet32 (PcdFdSize);
+    }
+
+    if ((UefiMemoryBase >= BaseAddress) && (Size >= UefiMemorySize)) {
+      FoundSystemMem = TRUE;
+    }
   }
+
+  ASSERT (FoundSystemMem == TRUE);
 
   // Build Memory Allocation Hob
   InitMmu (MemoryTable);
