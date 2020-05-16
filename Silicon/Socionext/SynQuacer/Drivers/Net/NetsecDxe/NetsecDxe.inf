@@ -47,11 +47,13 @@
   UefiLib
 
 [Guids]
+  gEfiAdapterInfoMediaStateGuid
   gNetsecNonDiscoverableDeviceGuid
 
 [Protocols]
   gEfiCpuArchProtocolGuid                     ## CONSUMES
   gEdkiiNonDiscoverableDeviceProtocolGuid     ## TO_START
+  gEfiAdapterInformationProtocolGuid          ## BY_START
   gEfiSimpleNetworkProtocolGuid               ## BY_START
 
 [FixedPcd]
@@ -61,5 +63,4 @@
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStartThreshold
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStopThreshold
   gNetsecDxeTokenSpaceGuid.PcdJumboPacket
-  gNetsecDxeTokenSpaceGuid.PcdMediaDetectTimeoutOnBoot
   gNetsecDxeTokenSpaceGuid.PcdPauseTime

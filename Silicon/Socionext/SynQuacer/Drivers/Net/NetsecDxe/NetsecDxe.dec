@@ -37,5 +37,4 @@
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrl|0x0|UINT8|0x00000005
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStartThreshold|0x0|UINT16|0x00000006
   gNetsecDxeTokenSpaceGuid.PcdFlowCtrlStopThreshold|0x0|UINT16|0x00000007
-  gNetsecDxeTokenSpaceGuid.PcdMediaDetectTimeoutOnBoot|0x0|UINT8|0x00000009
   gNetsecDxeTokenSpaceGuid.PcdPauseTime|0x0|UINT16|0x00000008

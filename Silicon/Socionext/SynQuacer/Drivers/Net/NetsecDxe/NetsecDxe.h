@@ -20,6 +20,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiLib.h>
 
+#include <Protocol/AdapterInformation.h>
 #include <Protocol/NonDiscoverableDevice.h>
 
 #include "netsec_for_uefi/netsec_sdk/include/ogma_api.h"
@@ -50,6 +51,9 @@ typedef struct {
   // EFI Snp statistics instance
   EFI_NETWORK_STATISTICS            Stats;
 
+  // Adapter Information protocol
+  EFI_ADAPTER_INFORMATION_PROTOCOL  Aip;
+
   // ogma handle
   ogma_handle_t                     Handle;
 
@@ -65,6 +69,7 @@ typedef struct {
 
 #define NETSEC_SIGNATURE            SIGNATURE_32('n', 't', 's', 'c')
 #define INSTANCE_FROM_SNP_THIS(a)   CR((a), NETSEC_DRIVER, Snp, NETSEC_SIGNATURE)
+#define INSTANCE_FROM_AIP_THIS(a)   CR((a), NETSEC_DRIVER, Aip, NETSEC_SIGNATURE)
 
 /*------------------------------------------------------------------------------
 
