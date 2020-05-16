@@ -52,7 +52,6 @@
 [Protocols]
   gEfiCpuArchProtocolGuid                     ## CONSUMES
   gEdkiiNonDiscoverableDeviceProtocolGuid     ## TO_START
-  gEfiDevicePathProtocolGuid                  ## BY_START
   gEfiSimpleNetworkProtocolGuid               ## BY_START
 
 [FixedPcd]
