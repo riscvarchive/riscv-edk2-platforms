@@ -179,6 +179,19 @@ RegisterI2cBus (
   ASSERT_EFI_ERROR (Status);
 }
 
+STATIC
+VOID
+EFIAPI
+OnEndOfDxe (
+  IN EFI_EVENT  Event,
+  IN VOID       *Context
+  )
+{
+  gBS->CloseEvent (Event);
+  gBS->ConnectController (mI2cBus0.I2cMasterHandle, NULL, NULL, TRUE);
+  gBS->ConnectController (mI2cBus1.I2cMasterHandle, NULL, NULL, TRUE);
+}
+
 EFI_STATUS
 EFIAPI
 EntryPoint (
@@ -187,6 +200,7 @@ EntryPoint (
   )
 {
   EFI_STATUS    Status;
+  EFI_EVENT     EndOfDxeEvent;
 
   Status = gBS->LocateProtocol (&g96BoardsMezzanineProtocolGuid, NULL,
                   (VOID **)&mMezzanine);
@@ -196,6 +210,10 @@ EntryPoint (
     mMezzanine->I2c0NumDevices, mMezzanine->I2c0DeviceArray);
   RegisterI2cBus (&g96BoardsI2c1MasterGuid, &mI2cBus1,
     mMezzanine->I2c1NumDevices, mMezzanine->I2c1DeviceArray);
+
+  Status = gBS->CreateEventEx (EVT_NOTIFY_SIGNAL, TPL_CALLBACK, OnEndOfDxe,
+                  NULL, &gEfiEndOfDxeEventGroupGuid, &EndOfDxeEvent);
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }

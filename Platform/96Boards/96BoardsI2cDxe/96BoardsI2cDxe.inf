@@ -36,6 +36,7 @@
 [Guids]
   g96BoardsI2c0MasterGuid
   g96BoardsI2c1MasterGuid
+  gEfiEndOfDxeEventGroupGuid
 
 [FixedPcd]
   g96BoardsTokenSpaceGuid.PcdI2c0BusFrequencyHz
