@@ -55,7 +55,7 @@ SwitchRtcI2cChannelAndLock (
     Temp = Temp | CPU_GET_I2C_CONTROL;
     // CPU occupied RTC I2C State
     WriteCpldReg (CPLD_I2C_SWITCH_FLAG, Temp);
-    (VOID) MicroSecondDelay (RTC_DELAY_2_MACROSECOND);
+    (VOID) MicroSecondDelay (RTC_DELAY_2_MICROSECOND);
     Temp = ReadCpldReg (CPLD_I2C_SWITCH_FLAG);
     // Is preempt success
     if(CPU_GET_I2C_CONTROL == (Temp & CPU_GET_I2C_CONTROL)) {
@@ -109,7 +109,7 @@ RtcRead (
   EFI_STATUS  Status;
 
   Status = I2CRead (&gRtcDevice, Address, Size, Data);
-  MicroSecondDelay (RTC_DELAY_1000_MACROSECOND);
+  MicroSecondDelay (RTC_DELAY_1000_MICROSECOND);
   return Status;
 }
 
@@ -132,7 +132,7 @@ RtcWrite (
   EFI_STATUS  Status;
 
   Status = I2CWrite (&gRtcDevice, Address, Size, Data);
-  MicroSecondDelay (RTC_DELAY_1000_MACROSECOND);
+  MicroSecondDelay (RTC_DELAY_1000_MICROSECOND);
   return Status;
 }
 
@@ -164,7 +164,7 @@ InitializeM41T83 (
   }
 
   Status = I2CInit (gRtcDevice.Socket, gRtcDevice.Port, Normal);
-  MicroSecondDelay (RTC_DELAY_1000_MACROSECOND);
+  MicroSecondDelay (RTC_DELAY_1000_MICROSECOND);
   if (EFI_ERROR (Status)) {
     if (!EfiAtRuntime ()) {
       EfiReleaseLock (&mRtcLock);
@@ -181,7 +181,7 @@ InitializeM41T83 (
     return Status;
   }
 
-  MicroSecondDelay(RTC_DELAY_1000_MACROSECOND);
+  MicroSecondDelay(RTC_DELAY_1000_MICROSECOND);
 
   // Set ST at Power up to clear Oscillator fail detection(OF)
   Status = RtcRead (M41T83_REGADDR_SECONDS, 1, &Second.Uint8);
@@ -272,7 +272,7 @@ LibSetTime (
   if (EFI_ERROR (Status)) {
     return Status;
   }
-  (VOID)MicroSecondDelay (RTC_DELAY_1000_MACROSECOND);
+  (VOID)MicroSecondDelay (RTC_DELAY_1000_MICROSECOND);
 
   SetMem (&BcdTime, sizeof (RTC_M41T83_TIME), 0);
 
@@ -376,7 +376,7 @@ LibGetTime (
     return Status;
   }
 
-  MicroSecondDelay(RTC_DELAY_1000_MACROSECOND);
+  MicroSecondDelay(RTC_DELAY_1000_MICROSECOND);
 
   SetMem (&BcdTime, sizeof (RTC_M41T83_TIME), 0);
   SetMem (Time , sizeof (EFI_TIME), 0);
