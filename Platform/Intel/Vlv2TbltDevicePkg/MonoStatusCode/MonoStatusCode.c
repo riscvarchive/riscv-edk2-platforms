@@ -1,13 +1,10 @@
 /** @file
 
-  Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+  Copyright (c) 2004  - 2020, Intel Corporation. All rights reserved.<BR>
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
-
 Module Name:
-
 
   MonoStatusCode.c
 
@@ -35,7 +32,7 @@ EFI_PEI_PPI_DESCRIPTOR  mPpiListStatusCode = {
 };
 
 //
-// Function implemenations
+// Function implementations
 //
 
 /**
