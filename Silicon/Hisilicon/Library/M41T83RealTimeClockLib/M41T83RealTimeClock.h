@@ -10,13 +10,6 @@
 #ifndef __M41T83_REAL_TIME_CLOCK_H__
 #define __M41T83_REAL_TIME_CLOCK_H__
 
-// The delay is need for cpld and I2C. This is a empirical value. MemoryFence is no need.
-#define RTC_DELAY_30_MS            30000
-// The delay is need for cpld and I2C. This is a empirical value. MemoryFence is no need.
-#define RTC_DELAY_1000_MICROSECOND 1000
-// The delay is need for cpld and I2C. This is a empirical value. MemoryFence is no need.
-#define RTC_DELAY_2_MICROSECOND    2
-
 #define M41T83_REGADDR_DOTSECONDS       0x00
 #define M41T83_REGADDR_SECONDS          0x01
 #define M41T83_REGADDR_MINUTES          0x02

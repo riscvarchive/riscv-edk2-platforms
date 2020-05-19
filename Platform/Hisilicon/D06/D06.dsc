@@ -54,6 +54,7 @@
   CpldIoLib|Silicon/Hisilicon/Library/CpldIoLib/CpldIoLib.inf
 
   TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
+  RtcHelperLib|Silicon/Hisilicon/Library/RtcHelperLib/RtcHelperLib.inf
   RealTimeClockLib|Silicon/Hisilicon/Library/M41T83RealTimeClockLib/M41T83RealTimeClockLib.inf
   OemMiscLib|Platform/Hisilicon/D06/Library/OemMiscLibD06/OemMiscLibD06.inf
   OemAddressMapLib|Platform/Hisilicon/D06/Library/OemAddressMapD06/OemAddressMapD06.inf
