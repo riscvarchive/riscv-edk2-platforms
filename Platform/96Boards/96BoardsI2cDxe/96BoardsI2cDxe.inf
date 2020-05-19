@@ -43,4 +43,6 @@
   g96BoardsTokenSpaceGuid.PcdI2c1BusFrequencyHz
 
 [Depex]
-  g96BoardsMezzanineProtocolGuid AND g96BoardsI2c0MasterGuid OR g96BoardsI2c1MasterGuid
+  g96BoardsMezzanineProtocolGuid AND (
+    g96BoardsI2c0MasterGuid OR g96BoardsI2c1MasterGuid
+  )
