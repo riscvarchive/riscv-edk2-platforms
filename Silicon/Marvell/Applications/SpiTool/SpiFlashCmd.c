@@ -1,5 +1,6 @@
 /*******************************************************************************
 Copyright (C) 2016 Marvell International Ltd.
+Copyright (c) 2020, Intel Corporation. All rights reserved.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -83,7 +84,7 @@ SfUsage (
          "Length   - Number of bytes to send\n"
          "Address  - Address in RAM to store/load data\n"
          "FilePath - Path to file to read/write data from/to\n"
-         "Offset   - Offset from beggining of SPI flash to store/load data\n"
+         "Offset   - Offset from beginning of SPI flash to store/load data\n"
          "Examples:\n"
          "Check if there is response from SPI flash\n"
          "  sf probe\n"
