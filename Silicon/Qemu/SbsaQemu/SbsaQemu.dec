@@ -1,0 +1,37 @@
+#/** @file
+#
+#  Copyright (c) 2019, Linaro Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+#**/
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001B
+  PACKAGE_NAME                   = SbsaQemuPkg
+  PACKAGE_GUID                   = 8db32c5a-2821-43e2-b4ac-bc148e2b0b05
+  PACKAGE_VERSION                = 0.1
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+# Supported Module Types:
+#  BASE SEC PEI_CORE PEIM DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER UEFI_APPLICATION
+#
+################################################################################
+#[Includes.common]
+#  Include                        # Root include for the package
+
+[Guids.common]
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid   = { 0xaab3bea9, 0xa8e8, 0x4e76, { 0xb5, 0x3a, 0x35, 0x22, 0x11, 0xce, 0xf7, 0xf7 } }
+
+[PcdsFixedAtBuild.common]
+
+  # Non discoverable devices Pcds
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformAhciBase|0|UINT64|0x00000001
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformAhciSize|0x10000|UINT32|0x00000002
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformEhciBase|0|UINT64|0x00000003
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformEhciSize|0x10000|UINT32|0x00000004
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdDeviceTreeBaseAddress|0x10000000000|UINT64|0x00000005

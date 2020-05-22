@@ -257,6 +257,9 @@ For more information, see the
 ## NXP
 * [LS1043aRdb](Platform/NXP/LS1043aRdbPkg)
 
+## Qemu
+* [SBSA](Platform/Qemu/SbsaQemu)
+
 # Maintainers
 
 See [Maintainers.txt](Maintainers.txt).
