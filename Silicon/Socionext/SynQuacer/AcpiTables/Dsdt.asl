@@ -226,7 +226,7 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
         MASK = 0xfffffeff
       }
 
-      Method (_EVT) {
+      Method (_EVT, 0x1) {
         REQC = 0x100
         Notify (\_SB.PWRB, 0x80)
       }
