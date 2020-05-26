@@ -39,6 +39,16 @@ STATIC BOOLEAN PciLsGen4Ctrl;
 
 STATIC
 VOID
+PciLsGen4SetBusMaster (
+  IN EFI_PHYSICAL_ADDRESS   Dbi
+  )
+{
+  PciLsGen4SetPg (Dbi, 0);
+  MmioOr32 (Dbi + PCI_COMMAND_OFFSET, EFI_PCI_COMMAND_BUS_MASTER);
+}
+
+STATIC
+VOID
 PcieCfgSetTarget (
   IN EFI_PHYSICAL_ADDRESS   Dbi,
   IN UINT32                 Target
@@ -77,6 +87,8 @@ PciLsGen4GetConfigBase (
   UINT32 Target;
 
   if (Bus > 0) {
+    PciLsGen4SetBusMaster (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment);
+
     Target = (((Address >> 20) & 0xFF) << 24) |
              (((Address >> 15) & 0x1F) << 19) |
              (((Address >> 12) & 0x7) << 16);
