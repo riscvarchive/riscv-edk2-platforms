@@ -35,6 +35,8 @@
 [LibraryClasses.common]
   ArmPlatformLib|Platform/NXP/LS1043aRdbPkg/Library/ArmPlatformLib/ArmPlatformLib.inf
   RealTimeClockLib|Silicon/Maxim/Library/Ds1307RtcLib/Ds1307RtcLib.inf
+  PciSegmentLib|Silicon/NXP/Library/PciSegmentLib/PciSegmentLib.inf
+  PciHostBridgeLib|Silicon/NXP/Library/PciHostBridgeLib/PciHostBridgeLib.inf
 
 [PcdsFixedAtBuild.common]
   #
@@ -60,6 +62,13 @@
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
   Silicon/NXP/Drivers/I2cDxe/I2cDxe.inf
   Platform/NXP/LS1043aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
+
+  #
+  # PCI
+  #
+  Silicon/NXP/Drivers/PciCpuIo2Dxe/PciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
   #
   # Networking stack
