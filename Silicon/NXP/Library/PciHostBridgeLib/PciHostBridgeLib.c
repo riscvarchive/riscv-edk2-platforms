@@ -351,6 +351,48 @@ PcieOutboundSet (
 }
 
 /**
+  Dump PCIe Layerscape ATU
+
+  @param Pcie     Address of PCIe host controller.
+  @param Count    Number of Windows
+**/
+VOID
+LsDumpAtu (
+  IN EFI_PHYSICAL_ADDRESS   Pcie,
+  IN UINT32                 Count
+  )
+{
+  UINT32 Cnt;
+
+  for (Cnt = 0; Cnt < Count; Cnt++) {
+    MmioWrite32 ((UINTN)Pcie + IATU_VIEWPORT_OFF,
+                  (UINT32)(IATU_VIEWPORT_OUTBOUND | Cnt));
+
+    DEBUG ((DEBUG_INFO, "iATU%d:\n",Cnt));
+    DEBUG ((DEBUG_INFO, "\tLOWER PHYS 0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_LWR_BASE_ADDR_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tUPPER PHYS 0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_UPPER_BASE_ADDR_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tLOWER BUS 0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_LWR_TARGET_ADDR_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tUPPER BUS 0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_UPPER_TARGET_ADDR_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tLIMIT     0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_LIMIT_ADDR_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tCR1       0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_REGION_CTRL_1_OFF_OUTBOUND_0)));
+
+    DEBUG ((DEBUG_INFO, "\tCR2       0x%08x\n",
+            MmioRead32 ((UINTN)Pcie + IATU_REGION_CTRL_2_OFF_OUTBOUND_0)));
+  }
+}
+
+/**
   Function to set-up iATU windows for Layerscape PCIe controller
 
   @param Pcie      Address of PCIe host controller
@@ -450,6 +492,10 @@ PcieLsSetupAtu (
     SEG_IO_BUS,
     SEG_IO_SIZE
     );
+
+  DEBUG_CODE_BEGIN ();
+  LsDumpAtu (Pcie, Index);
+  DEBUG_CODE_END ();
 }
 
 /**
