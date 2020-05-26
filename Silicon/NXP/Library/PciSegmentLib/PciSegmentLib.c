@@ -35,6 +35,66 @@ typedef enum {
   ASSERT (((A) & (0xffff0000f0000000ULL | (M))) == 0)
 
 STATIC BOOLEAN CfgShiftEnable;
+STATIC BOOLEAN PciLsGen4Ctrl;
+
+STATIC
+VOID
+PcieCfgSetTarget (
+  IN EFI_PHYSICAL_ADDRESS   Dbi,
+  IN UINT32                 Target
+  )
+{
+  STATIC_ASSERT (
+    PAB_AXI_AMAP_PEX_WIN_L(0) <= INDIRECT_ADDR_BNDRY,
+    "PcieCfgSetTarget() boundary check error");
+
+  PciLsGen4SetPg (Dbi, 0);
+  MmioWrite32 (Dbi + PAB_AXI_AMAP_PEX_WIN_L(0), Target);
+  MmioWrite32 (Dbi + PAB_AXI_AMAP_PEX_WIN_H(0), 0);
+}
+
+/**
+  Function to return PCIe Physical Address(PCIe view) or Controller
+  Address(CPU view) for NXP Layerscape Gen4 SoC
+
+  @param  Address Address passed from bus layer.
+  @param  Segment Segment number for Root Complex.
+  @param  Offset  Config space register offset.
+  @param  Bus     PCIe Bus number.
+
+  @return Return PCIe CPU or Controller address.
+
+**/
+STATIC
+UINT64
+PciLsGen4GetConfigBase (
+  IN  UINT64      Address,
+  IN  UINT16      Segment,
+  IN  UINT16      Offset,
+  IN  UINT8       Bus
+  )
+{
+  UINT32 Target;
+
+  if (Bus > 0) {
+    Target = (((Address >> 20) & 0xFF) << 24) |
+             (((Address >> 15) & 0x1F) << 19) |
+             (((Address >> 12) & 0x7) << 16);
+
+    PcieCfgSetTarget ((PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment),
+      Target);
+    return PCI_SEG0_MMIO_MEMBASE + Offset + PCI_BASE_DIFF * Segment;
+  } else {
+      if (Offset < INDIRECT_ADDR_BNDRY) {
+        PciLsGen4SetPg (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment, 0);
+        return (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment + Offset);
+      }
+      PciLsGen4SetPg (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment,
+        OFFSET_TO_PAGE_IDX (Offset));
+      Offset = OFFSET_TO_PAGE_ADDR (Offset);
+      return (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment + Offset);
+  }
+}
 
 STATIC
 UINT64
@@ -130,7 +190,12 @@ PciSegmentLibGetConfigBase (
   UINT8  Bus;
 
   Bus = ((UINT32)Address >> 20) & 0xff;
-  return PciLsGetConfigBase (Address, Segment, Offset, Bus);
+
+  if (PciLsGen4Ctrl) {
+    return PciLsGen4GetConfigBase (Address, Segment, Offset, Bus);
+  } else {
+    return PciLsGetConfigBase (Address, Segment, Offset, Bus);
+  }
 }
 
 /**
@@ -621,5 +686,6 @@ PciSegLibInit (
   )
 {
   CfgShiftEnable = CFG_SHIFT_ENABLE;
+  PciLsGen4Ctrl = PCI_LS_GEN4_CTRL;
   return EFI_SUCCESS;
 }
