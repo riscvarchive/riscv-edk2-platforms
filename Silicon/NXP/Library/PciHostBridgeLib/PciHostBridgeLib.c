@@ -184,6 +184,60 @@ CHAR16 *mPciHostBridgeLibAcpiAddressSpaceTypeStr[] = {
 
 PCI_ROOT_BRIDGE mPciRootBridges[NUM_PCIE_CONTROLLER];
 
+
+/**
+  Function to read LsGen4 PCIe controller config space
+  LsGen4 PCIe controller requires page number to be set
+  in Bridge Control Register(PAB) for offset > 3KB.
+
+  @param  Dbi     GPEX host controller address.
+  @param  Offset  Offset to read from
+
+**/
+STATIC
+INTN
+PciLsGen4Read32 (
+  IN EFI_PHYSICAL_ADDRESS   Dbi,
+  IN UINT32                 Offset
+  )
+{
+  if (Offset < INDIRECT_ADDR_BNDRY) {
+    PciLsGen4SetPg (Dbi, 0);
+    return MmioRead32 (Dbi + Offset);
+  } else {
+    // If Offset > 3KB, paging mechanism is used
+    // Select page index and offset within the page
+    PciLsGen4SetPg (Dbi, OFFSET_TO_PAGE_IDX (Offset));
+    return MmioRead32 (Dbi + OFFSET_TO_PAGE_ADDR (Offset));
+  }
+}
+
+/**
+  Function to write to LsGen4 PCIe controller config space
+  LsGen4 PCIe controller requires page number to be set
+  in Bridge Control Register(PAB) for offset > 3KB.
+
+  @param  Dbi     GPEX host controller address
+  @param  Offset  Offset to read from
+
+**/
+STATIC
+VOID
+PciLsGen4Write32 (
+  IN EFI_PHYSICAL_ADDRESS   Dbi,
+  IN UINT32                 Offset,
+  IN UINT32                 Value
+  )
+{
+  if (Offset < INDIRECT_ADDR_BNDRY) {
+    PciLsGen4SetPg (Dbi, 0);
+    MmioWrite32 (Dbi + Offset, Value);
+  } else {
+    PciLsGen4SetPg (Dbi, OFFSET_TO_PAGE_IDX (Offset));
+    MmioWrite32 (Dbi + OFFSET_TO_PAGE_ADDR (Offset), Value);
+  }
+}
+
 /**
    Helper function to check PCIe link state
 
@@ -201,7 +255,11 @@ PcieLinkUp (
   UINT32 State;
   UINT32 LtssmMask;
 
-  LtssmMask = 0x3f;
+  if (PCI_LS_GEN4_CTRL) {
+    LtssmMask = 0x7f;
+  } else {
+    LtssmMask = 0x3f;
+  }
 
   PcieOps = GetMmioOperations (FeaturePcdGet (PcdPciLutBigEndian));
   State = PcieOps->Read32 ((UINTN)Pcie + PCI_LUT_BASE + PCI_LUT_DBG) & LtssmMask;
@@ -237,38 +295,58 @@ PcieOutboundSet (
   IN UINT64 Size
   )
 {
-  // PCIe Layerscape : Outbound Window
-  MmioWrite32 (Dbi + IATU_VIEWPORT_OFF,
-                (UINT32)(IATU_VIEWPORT_OUTBOUND | Idx));
+  UINT32 Val;
 
-  MmioWrite32 (Dbi + IATU_LWR_BASE_ADDR_OFF_OUTBOUND_0,
-                (UINT32)Phys);
-
-  MmioWrite32 (Dbi + IATU_UPPER_BASE_ADDR_OFF_OUTBOUND_0,
-                (UINT32)(Phys >> 32));
-
-  MmioWrite32 (Dbi + IATU_LIMIT_ADDR_OFF_OUTBOUND_0,
-                (UINT32)(Phys + Size - BIT0));
-
-  MmioWrite32 (Dbi + IATU_LWR_TARGET_ADDR_OFF_OUTBOUND_0,
-                (UINT32)BusAddr);
-
-  MmioWrite32 (Dbi + IATU_UPPER_TARGET_ADDR_OFF_OUTBOUND_0,
-                (UINT32)(BusAddr >> 32));
-
-  MmioWrite32 (Dbi + IATU_REGION_CTRL_1_OFF_OUTBOUND_0,
-                (UINT32)Type);
-
-  if (CFG_SHIFT_ENABLE &&
-     ((Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG0) ||
-     (Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG1))) {
-       MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
-         (IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN |
-         IATU_ENABLE_CFG_SHIFT_FEATURE)
-         );
+  if (PCI_LS_GEN4_CTRL) {
+    // PCIe Layerscape Gen4: Outbound Window
+    Size = ~(Size -1 );
+    Val = PciLsGen4Read32 ((UINTN)Dbi, PAB_AXI_AMAP_CTRL (Idx));
+    Val &= ~((AXI_AMAP_CTRL_TYPE_MASK << AXI_AMAP_CTRL_TYPE_SHIFT) |
+              (AXI_AMAP_CTRL_SIZE_MASK << AXI_AMAP_CTRL_SIZE_SHIFT) |
+              AXI_AMAP_CTRL_EN);
+    Val |= ((Type & AXI_AMAP_CTRL_TYPE_MASK) << AXI_AMAP_CTRL_TYPE_SHIFT) |
+             (((UINT32)Size >> AXI_AMAP_CTRL_SIZE_SHIFT) <<
+             AXI_AMAP_CTRL_SIZE_SHIFT) | AXI_AMAP_CTRL_EN;
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_AXI_AMAP_CTRL (Idx), Val);
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_AXI_AMAP_AXI_WIN (Idx), (UINT32)Phys);
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_EXT_AXI_AMAP_AXI_WIN (Idx), Phys >> 32);
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_AXI_AMAP_PEX_WIN_L (Idx), (UINT32)BusAddr);
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_AXI_AMAP_PEX_WIN_H (Idx), BusAddr >> 32);
+    PciLsGen4Write32 ((UINTN)Dbi, PAB_EXT_AXI_AMAP_SIZE (Idx), Size >> 32);
   } else {
-    MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
-                  IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN);
+    // PCIe Layerscape : Outbound Window
+    MmioWrite32 (Dbi + IATU_VIEWPORT_OFF,
+                  (UINT32)(IATU_VIEWPORT_OUTBOUND | Idx));
+
+    MmioWrite32 (Dbi + IATU_LWR_BASE_ADDR_OFF_OUTBOUND_0,
+                  (UINT32)Phys);
+
+    MmioWrite32 (Dbi + IATU_UPPER_BASE_ADDR_OFF_OUTBOUND_0,
+                  (UINT32)(Phys >> 32));
+
+    MmioWrite32 (Dbi + IATU_LIMIT_ADDR_OFF_OUTBOUND_0,
+                  (UINT32)(Phys + Size - BIT0));
+
+    MmioWrite32 (Dbi + IATU_LWR_TARGET_ADDR_OFF_OUTBOUND_0,
+                  (UINT32)BusAddr);
+
+    MmioWrite32 (Dbi + IATU_UPPER_TARGET_ADDR_OFF_OUTBOUND_0,
+                  (UINT32)(BusAddr >> 32));
+
+    MmioWrite32 (Dbi + IATU_REGION_CTRL_1_OFF_OUTBOUND_0,
+                  (UINT32)Type);
+
+    if (CFG_SHIFT_ENABLE &&
+       ((Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG0) ||
+       (Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG1))) {
+         MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
+           (IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN |
+           IATU_ENABLE_CFG_SHIFT_FEATURE)
+           );
+    } else {
+      MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
+                    IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN);
+    }
   }
 }
 
@@ -373,6 +451,116 @@ PcieLsSetupAtu (
     SEG_IO_SIZE
     );
 }
+
+/**
+  Function to set-up ATU windows for PCIe LayerscapeGen4 controller
+
+  @param Pcie      Address of PCIe host controller
+  @param Cfg0Base  PCIe controller phy address Type0 Configuration Space.
+  @param Cfg1Base  PCIe controller phy address Type1 Configuration Space.
+  @param MemBase   PCIe controller phy address Memory Space.
+  @param Mem64Base PCIe controller phy address MMIO64 Space.
+  @param IoBase    PCIe controller phy address IO Space.
+**/
+STATIC
+VOID
+PcieLsGen4SetupAtu (
+  IN EFI_PHYSICAL_ADDRESS Pcie,
+  IN EFI_PHYSICAL_ADDRESS Cfg0Base,
+  IN EFI_PHYSICAL_ADDRESS Cfg1Base,
+  IN EFI_PHYSICAL_ADDRESS MemBase,
+  IN EFI_PHYSICAL_ADDRESS Mem64Base,
+  IN EFI_PHYSICAL_ADDRESS IoBase
+  )
+{
+  UINT64 Mem64End;
+  UINT32 Index;
+
+  Index=0;
+
+  // ATU : OUTBOUND WINDOW 1 : CFG0
+  PcieOutboundSet (Pcie, Index++,
+                         PAB_AXI_TYPE_CFG,
+                         Cfg0Base,
+                         SEG_CFG_BUS,
+                         SEG_CFG_SIZE);
+
+  // ATU : OUTBOUND WINDOW 2 : IO
+  PcieOutboundSet (Pcie, Index++,
+                         PAB_AXI_TYPE_IO,
+                         IoBase,
+                         SEG_IO_BUS,
+                         SEG_IO_SIZE);
+
+  // ATU : OUTBOUND WINDOW 3 : MEM
+  PcieOutboundSet (Pcie, Index++,
+                         PAB_AXI_TYPE_MEM,
+                         MemBase,
+                         SEG_MEM_BUS,
+                         SEG_MEM_SIZE);
+
+  //
+  // To allow maximum MMIO64 space, MMIO64 window
+  // size must be multiple of max iATU size (4GB)
+  //
+  ASSERT ((PCI_MMIO64_WIN_SIZE & (SIZE_4GB - 1)) == 0);
+
+  Mem64End = Mem64Base + PCI_MMIO64_WIN_SIZE - 1;
+  while (Mem64Base < Mem64End) {
+    // ATU : OUTBOUND WINDOW : MMIO64
+    PcieOutboundSet (Pcie, Index++,
+                           PAB_AXI_TYPE_MEM,
+                           Mem64Base,
+                           Mem64Base,
+                           SIZE_4GB);
+
+    Mem64Base += SIZE_4GB;
+  }
+}
+
+/**
+  Function to set-up PCIe inbound window
+
+  @param Pcie    Address of PCIe host controller.
+  @param Idx     Index of inbound window.
+  @param Type    Type(Cfg/Mem/IO) of iATU outbound window.
+  @param Phys    PCIe controller phy address for inbound window.
+  @param BusAdr  PCIe controller bus address for inbound window.
+  @param Size    Window size
+
+**/
+
+STATIC
+VOID
+PciSetupInBoundWin (
+  IN EFI_PHYSICAL_ADDRESS Pcie,
+  IN UINT32 Idx,
+  IN UINT32  Type,
+  IN UINT64 Phys,
+  IN UINT64 BusAddr,
+  IN UINT64 Size)
+{
+  UINT32 Val;
+  UINT64 WinSize;
+
+  if (PCI_LS_GEN4_CTRL) {
+    Val = PciLsGen4Read32 ((UINTN)Pcie, PAB_PEX_AMAP_CTRL(Idx));
+    Val &= ~(PEX_AMAP_CTRL_TYPE_MASK << PEX_AMAP_CTRL_TYPE_SHIFT);
+    Val &= ~(PEX_AMAP_CTRL_EN_MASK << PEX_AMAP_CTRL_EN_SHIFT);
+    Val = (Val | (Type << PEX_AMAP_CTRL_TYPE_SHIFT));
+    Val = (Val | (1 << PEX_AMAP_CTRL_EN_SHIFT));
+
+    WinSize = ~(Size - 1);
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_PEX_AMAP_CTRL(Idx),
+                       (Val | (UINT32)WinSize));
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_EXT_PEX_AMAP_SIZE(Idx), (WinSize>>32));
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_PEX_AMAP_AXI_WIN(Idx), (UINT32)Phys);
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_EXT_PEX_AMAP_AXI_WIN(Idx), (Phys>>32));
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_PEX_AMAP_PEX_WIN_L(Idx), (UINT32)BusAddr);
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_PEX_AMAP_PEX_WIN_H(Idx), (BusAddr >>32));
+  }
+}
+
 /**
   Helper function to set-up PCIe controller
 
@@ -397,16 +585,47 @@ PcieSetupCntrl (
 {
   UINT32 Val;
 
-  // PCIe Layerscape Controller Setup
-  PcieLsSetupAtu (Pcie, Cfg0Base, Cfg1Base, MemBase, Mem64Base, IoBase);
+  if (PCI_LS_GEN4_CTRL) {
+    // PCIe LsGen4 Controller Setup
 
-  // Program Class code for Layerscape PCIe controller
-  MmioWrite32 ((UINTN)Pcie + PCI_DBI_RO_WR_EN, 1);
-  Val = MmioRead32 ((UINTN)Pcie + PCI_CLASS_DEVICE);
-  Val &= ~(CLASS_CODE_MASK << CLASS_CODE_SHIFT);
-  Val |= (PCI_CLASS_BRIDGE_PCI << CLASS_CODE_SHIFT);
-  MmioWrite32 ((UINTN)Pcie + PCI_CLASS_DEVICE, Val);
-  MmioWrite32 ((UINTN)Pcie + PCI_DBI_RO_WR_EN, 0);
+    //Fix Class Code
+    Val = PciLsGen4Read32 ((UINTN)Pcie, GPEX_CLASSCODE);
+    Val &= ~(GPEX_CLASSCODE_MASK << GPEX_CLASSCODE_SHIFT);
+    Val |= PCI_CLASS_BRIDGE_PCI << GPEX_CLASSCODE_SHIFT;
+    PciLsGen4Write32 ((UINTN)Pcie, GPEX_CLASSCODE, Val);
+
+    // Enable APIO and Memory/IO/CFG Windows
+    Val = PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_PIO_CTRL (0));
+    Val |= APIO_EN | MEM_WIN_EN | IO_WIN_EN | CFG_WIN_EN;
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_AXI_PIO_CTRL (0), Val);
+
+    // LsGen4 Inbound Window Setup
+    PciSetupInBoundWin (Pcie, 0, PAB_AXI_TYPE_MEM, 0 , 0, SIZE_1TB);
+
+    // LsGen4 Outbound Window Setup
+    PcieLsGen4SetupAtu (Pcie, Cfg0Base, Cfg1Base, MemBase, Mem64Base, IoBase);
+
+    // Enable AMBA & PEX PIO
+    Val = PciLsGen4Read32 ((UINTN)Pcie, PAB_CTRL);
+    Val |= PAB_CTRL_APIO_EN | PAB_CTRL_PPIO_EN;
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_CTRL, Val);
+
+    Val = PciLsGen4Read32 ((UINTN)Pcie, PAB_PEX_PIO_CTRL(0));
+    Val |= PPIO_EN;
+    PciLsGen4Write32 ((UINTN)Pcie, PAB_PEX_PIO_CTRL(0), Val);
+
+  } else {
+    // PCIe Layerscape Controller Setup
+    PcieLsSetupAtu (Pcie, Cfg0Base, Cfg1Base, MemBase, Mem64Base, IoBase);
+
+    // Program Class code for Layerscape PCIe controller
+    MmioWrite32 ((UINTN)Pcie + PCI_DBI_RO_WR_EN, 1);
+    Val = MmioRead32 ((UINTN)Pcie + PCI_CLASS_DEVICE);
+    Val &= ~(CLASS_CODE_MASK << CLASS_CODE_SHIFT);
+    Val |= (PCI_CLASS_BRIDGE_PCI << CLASS_CODE_SHIFT);
+    MmioWrite32 ((UINTN)Pcie + PCI_CLASS_DEVICE, Val);
+    MmioWrite32 ((UINTN)Pcie + PCI_DBI_RO_WR_EN, 0);
+  }
 }
 
 /**

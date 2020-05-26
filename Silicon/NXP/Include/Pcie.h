@@ -9,6 +9,10 @@
 #ifndef PCI_H
 #define PCI_H
 
+#define PciLsGen4SetPg(Dbi, PgIdx)      MmioAndThenOr32 ((Dbi) + PAB_CTRL,  \
+              ~(PAB_CTRL_PAGE_SEL_MASK << PAB_CTRL_PAGE_SEL_SHIFT),         \
+              ((PgIdx) & PAB_CTRL_PAGE_SEL_MASK) << PAB_CTRL_PAGE_SEL_SHIFT)
+
 #define PCI_SEG0_NUM              0
 #define PCI_SEG1_NUM              1
 #define PCI_SEG2_NUM              2
@@ -81,5 +85,58 @@
 #define SEG_IO_BUS                0x0
 
 #define CFG_SHIFT_ENABLE          (PcdGetBool (PcdPciCfgShiftEnable))
+#define PCI_LS_GEN4_CTRL          (PcdGetBool (PcdPciLsGen4Ctrl))
 
+// PCIe Layerscape Gen4 Controller
+#define GPEX_CLASSCODE                          0x474
+#define GPEX_CLASSCODE_SHIFT                    16
+#define GPEX_CLASSCODE_MASK                     0xffff
+#define PAB_AXI_PIO_CTRL(Idx)                   (0x840 + 0x10 * (Idx))
+#define APIO_EN                                 0x1
+#define MEM_WIN_EN                              0x1 << 1
+#define IO_WIN_EN                               0x1 << 2
+#define CFG_WIN_EN                              0x1 << 3
+#define PAB_PEX_PIO_CTRL(Idx)                   (0x8c0 + 0x10 * (Idx))
+#define PPIO_EN                                 (0x1 << 0)
+#define PAB_PEX_PIO_STAT(Idx)                   (0x8c4 + 0x10 * (Idx))
+#define PAB_PEX_PIO_MT_STAT(Idx)                (0x8c8 + 0x10 * (Idx))
+#define PEX_AMAP_CTRL_TYPE_SHIFT                0x1
+#define PEX_AMAP_CTRL_EN_SHIFT                  0x0
+#define PEX_AMAP_CTRL_TYPE_MASK                 0x3
+#define PEX_AMAP_CTRL_EN_MASK                   0x1
+#define PAB_PEX_AMAP_CTRL(Idx)                  (0x4ba0 + 0x10 * (Idx))
+#define PAB_EXT_PEX_AMAP_SIZE(Idx)              (0xbef0 + 0x04 * (Idx))
+#define PAB_PEX_AMAP_AXI_WIN(Idx)               (0x4ba4 + 0x10 * (Idx))
+#define PAB_EXT_PEX_AMAP_AXI_WIN(Idx)           (0xb4a0 + 0x04 * (Idx))
+#define PAB_PEX_AMAP_PEX_WIN_L(Idx)             (0x4ba8 + 0x10 * (Idx))
+#define PAB_PEX_AMAP_PEX_WIN_H(Idx)             (0x4bac + 0x10 * (Idx))
+#define PAB_CTRL                                0x808
+#define PAB_CTRL_APIO_EN                        0x1
+#define PAB_CTRL_PPIO_EN                        (0x1 << 1)
+#define PAB_CTRL_PAGE_SEL_SHIFT                 13
+#define PAB_CTRL_PAGE_SEL_MASK                  0x3f
+#define INDIRECT_ADDR_BNDRY                     0xc00
+#define PAGE_IDX_SHIFT                          10
+#define PAGE_ADDR_MASK                          0x3ff
+#define PAB_AXI_AMAP_CTRL(Idx)                  (0xba0 + 0x10 * (Idx))
+#define PAB_EXT_AXI_AMAP_SIZE(Idx)              (0xbaf0 + 0x4 * (Idx))
+#define PAB_AXI_AMAP_AXI_WIN(Idx)               (0xba4 + 0x10 * (Idx))
+#define PAB_EXT_AXI_AMAP_AXI_WIN(Idx)           (0x80a0 + 0x4 * (Idx))
+#define PAB_AXI_AMAP_PEX_WIN_L(Idx)             (0xba8 + 0x10 * (Idx))
+#define PAB_AXI_AMAP_PEX_WIN_H(Idx)             (0xbac + 0x10 * (Idx))
+#define PAB_AXI_TYPE_CFG                        0x00
+#define PAB_AXI_TYPE_IO                         0x01
+#define PAB_AXI_TYPE_MEM                        0x02
+#define AXI_AMAP_CTRL_EN                        0x1
+#define AXI_AMAP_CTRL_TYPE_SHIFT                1
+#define AXI_AMAP_CTRL_TYPE_MASK                 0x3
+#define AXI_AMAP_CTRL_SIZE_SHIFT                10
+#define AXI_AMAP_CTRL_SIZE_MASK                 0x3fffff
+
+
+#define OFFSET_TO_PAGE_IDX(Off)                 ((Off >> PAGE_IDX_SHIFT) \
+                                                & PAB_CTRL_PAGE_SEL_MASK)
+
+#define OFFSET_TO_PAGE_ADDR(Off)                ((Off & PAGE_ADDR_MASK) \
+                                                | INDIRECT_ADDR_BNDRY)
 #endif
