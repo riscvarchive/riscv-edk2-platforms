@@ -30,4 +30,11 @@
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|TRUE
+  gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|TRUE
+
+[PcdsFixedAtBuild.common]
+  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr|0x4000000000
+  gNxpQoriqLsTokenSpaceGuid.PcdNumPciController|3
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x10000
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x7FC
 ##
