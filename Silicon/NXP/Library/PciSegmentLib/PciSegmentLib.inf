@@ -30,3 +30,6 @@
 
 [FixedPcd]
   gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr
+
+[Pcd]
+  gNxpQoriqLsTokenSpaceGuid.PcdPciCfgShiftEnable

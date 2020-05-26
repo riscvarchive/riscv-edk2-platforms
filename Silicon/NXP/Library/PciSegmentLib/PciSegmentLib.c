@@ -34,6 +34,8 @@ typedef enum {
 #define ASSERT_INVALID_PCI_SEGMENT_ADDRESS(A,M) \
   ASSERT (((A) & (0xffff0000f0000000ULL | (M))) == 0)
 
+STATIC BOOLEAN CfgShiftEnable;
+
 STATIC
 UINT64
 PciLsCfgTarget (
@@ -88,11 +90,21 @@ PciLsGetConfigBase (
 {
   UINT32 CfgAddr;
 
-  CfgAddr = (UINT16)Offset;
-  if (Bus > 0) {
-    return PciLsCfgTarget (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment, Address, Segment, Bus, Offset);
+  if (CfgShiftEnable) {
+    CfgAddr = (UINT32)Address;
+    if (Bus > 0) {
+      return PCI_SEG0_MMIO_MEMBASE + PCI_BASE_DIFF * Segment + CfgAddr;
+    } else {
+      return PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment + CfgAddr;
+    }
   } else {
-    return PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment + CfgAddr;
+    CfgAddr = (UINT16)Offset;
+    if (Bus > 0) {
+      return PciLsCfgTarget (PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment,
+               Address, Segment, Bus, Offset);
+    } else {
+      return PCI_SEG0_DBI_BASE + PCI_DBI_SIZE_DIFF * Segment + CfgAddr;
+    }
   }
 }
 
@@ -608,5 +620,6 @@ PciSegLibInit (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
+  CfgShiftEnable = CFG_SHIFT_ENABLE;
   return EFI_SUCCESS;
 }
