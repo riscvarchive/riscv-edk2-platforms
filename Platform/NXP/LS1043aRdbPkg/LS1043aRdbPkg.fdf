@@ -24,10 +24,12 @@
 
 [FD.LS1043ARDB_EFI]
 BaseAddress   = 0x82000000|gArmTokenSpaceGuid.PcdFdBaseAddress  #The base address of the FLASH Device.
-Size          = 0x00140000|gArmTokenSpaceGuid.PcdFdSize         #The size in bytes of the FLASH Device
+Size          = 0x00180000|gArmTokenSpaceGuid.PcdFdSize         #The size in bytes of the FLASH Device
 ErasePolarity = 1
+
+# This one is tricky, it must be: BlockSize * NumBlocks = Size
 BlockSize     = 0x40000
-NumBlocks     = 0x5
+NumBlocks     = 0x6
 
 ################################################################################
 #
@@ -44,7 +46,7 @@ NumBlocks     = 0x5
 # RegionType <FV, DATA, or FILE>
 #
 ################################################################################
-0x00000000|0x00140000
+0x00000000|0x00180000
 gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
 FV = FVMAIN_COMPACT
 
