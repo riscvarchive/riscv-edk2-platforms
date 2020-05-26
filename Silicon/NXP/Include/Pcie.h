@@ -139,4 +139,9 @@
 
 #define OFFSET_TO_PAGE_ADDR(Off)                ((Off & PAGE_ADDR_MASK) \
                                                 | INDIRECT_ADDR_BNDRY)
+
+#define GPEX_ACK_REPLAY_TO                      0x438
+#define ACK_LAT_TO_VAL_SHIFT                    0
+#define ACK_LAT_TO_VAL_MASK                     0x1fff
+
 #endif

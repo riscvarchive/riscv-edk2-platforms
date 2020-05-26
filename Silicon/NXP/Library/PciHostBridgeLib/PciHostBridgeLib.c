@@ -588,6 +588,12 @@ PcieSetupCntrl (
   if (PCI_LS_GEN4_CTRL) {
     // PCIe LsGen4 Controller Setup
 
+    // Workaround for A-011451
+    Val = PciLsGen4Read32 ((UINTN)Pcie, GPEX_ACK_REPLAY_TO);
+    Val &= ~(ACK_LAT_TO_VAL_MASK << ACK_LAT_TO_VAL_SHIFT);
+    Val |= (4 << ACK_LAT_TO_VAL_SHIFT);
+    PciLsGen4Write32 ((UINTN)Pcie, GPEX_ACK_REPLAY_TO, Val);
+
     //Fix Class Code
     Val = PciLsGen4Read32 ((UINTN)Pcie, GPEX_CLASSCODE);
     Val &= ~(GPEX_CLASSCODE_MASK << GPEX_CLASSCODE_SHIFT);
