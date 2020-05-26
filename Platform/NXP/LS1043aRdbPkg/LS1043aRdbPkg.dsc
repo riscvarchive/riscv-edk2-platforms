@@ -22,6 +22,13 @@
   OUTPUT_DIRECTORY               = Build/LS1043aRdbPkg
   FLASH_DEFINITION               = Platform/NXP/LS1043aRdbPkg/LS1043aRdbPkg.fdf
 
+  #
+  # Network definition
+  #
+  DEFINE NETWORK_TLS_ENABLE             = FALSE
+  DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
+  DEFINE NETWORK_ISCSI_ENABLE           = FALSE
+
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
 !include Silicon/NXP/LS1043A/LS1043A.dsc.inc
 
@@ -54,4 +61,8 @@
   Silicon/NXP/Drivers/I2cDxe/I2cDxe.inf
   Platform/NXP/LS1043aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
 
+  #
+  # Networking stack
+  #
+!include NetworkPkg/Network.dsc.inc
  ##

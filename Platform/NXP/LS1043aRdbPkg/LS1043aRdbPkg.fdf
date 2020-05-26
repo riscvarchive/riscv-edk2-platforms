@@ -119,6 +119,11 @@ READ_LOCK_STATUS   = TRUE
   INF EmbeddedPkg/SimpleTextInOutSerial/SimpleTextInOutSerial.inf
 
   #
+  # Networking stack
+  #
+!include NetworkPkg/Network.fdf.inc
+
+  #
   # FAT filesystem + GPT/MBR partitioning
   #
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
