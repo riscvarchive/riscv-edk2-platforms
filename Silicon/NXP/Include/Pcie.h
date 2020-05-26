@@ -27,6 +27,8 @@
 #define PCI_SEG_PORTIO_MIN        0x0
 #define PCI_SEG_PORTIO_MAX        0xffff
 #define SEG_CFG_SIZE              0x00001000
+#define ECAM_BUS_SIZE             SIZE_1MB
+#define ECAM_CFG_REGION_SIZE      SIZE_256MB
 #define SEG_MEM_BASE              0x40000000
 #define SEG_MEM_SIZE              0xC0000000
 #define SEG_MEM_LIMIT             (SEG_MEM_BASE + (SEG_MEM_SIZE -1))
@@ -64,6 +66,7 @@
 #define IATU_UPPER_TARGET_ADDR_OFF_OUTBOUND_0        0x91C
 #define IATU_VIEWPORT_OUTBOUND                       0x0
 #define IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN  BIT31
+#define IATU_ENABLE_CFG_SHIFT_FEATURE                BIT28
 
 // ATU Programming
 #define IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_MEM   0x0
@@ -76,5 +79,7 @@
 #define SEG_MEM_BUS               0x40000000
 #define SEG_IO_SIZE               0x10000
 #define SEG_IO_BUS                0x0
+
+#define CFG_SHIFT_ENABLE          (PcdGetBool (PcdPciCfgShiftEnable))
 
 #endif

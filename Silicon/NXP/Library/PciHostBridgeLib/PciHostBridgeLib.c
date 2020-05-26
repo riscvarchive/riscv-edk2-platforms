@@ -259,8 +259,17 @@ PcieOutboundSet (
   MmioWrite32 (Dbi + IATU_REGION_CTRL_1_OFF_OUTBOUND_0,
                 (UINT32)Type);
 
-  MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
-                IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN);
+  if (CFG_SHIFT_ENABLE &&
+     ((Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG0) ||
+     (Type == IATU_REGION_CTRL_1_OFF_OUTBOUND_0_TYPE_CFG1))) {
+       MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
+         (IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN |
+         IATU_ENABLE_CFG_SHIFT_FEATURE)
+         );
+  } else {
+    MmioWrite32 (Dbi + IATU_REGION_CTRL_2_OFF_OUTBOUND_0,
+                  IATU_REGION_CTRL_2_OFF_OUTBOUND_0_REGION_EN);
+  }
 }
 
 /**
@@ -293,12 +302,24 @@ PcieLsSetupAtu (
   UINT64 Mem64End;
   UINT32 Index;
 
-  Cfg0BaseAddr = Cfg0Base;
-  Cfg1BaseAddr = Cfg1Base;
-  Cfg0BusAddress = SEG_CFG_BUS;
-  Cfg1BusAddress = SEG_CFG_BUS;
-  Cfg0Size = SEG_CFG_SIZE;
-  Cfg1Size = SEG_CFG_SIZE;
+  if (CFG_SHIFT_ENABLE) {
+    DEBUG ((DEBUG_INFO, "PCIe: CFG Shift Method Enabled \n"));
+    Cfg0BaseAddr = Cfg0Base + SIZE_1MB;
+    Cfg1BaseAddr = Cfg0Base + SIZE_2MB;
+    Cfg0BusAddress = SIZE_1MB;
+    Cfg1BusAddress = SIZE_2MB;
+    // Region for type0 CFG transactions (only for bus1)
+    Cfg0Size = ECAM_BUS_SIZE;
+    // Region for type1 CFG transactions (for bus > 1)
+    Cfg1Size = (ECAM_CFG_REGION_SIZE - ECAM_BUS_SIZE); // 255MB
+  } else {
+    Cfg0BaseAddr = Cfg0Base;
+    Cfg1BaseAddr = Cfg1Base;
+    Cfg0BusAddress = SEG_CFG_BUS;
+    Cfg1BusAddress = SEG_CFG_BUS;
+    Cfg0Size = SEG_CFG_SIZE;
+    Cfg1Size = SEG_CFG_SIZE;
+  }
 
   Index = 0;
   // iATU : OUTBOUND WINDOW 1 : CFG0

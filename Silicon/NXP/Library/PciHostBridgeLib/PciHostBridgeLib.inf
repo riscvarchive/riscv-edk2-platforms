@@ -37,3 +37,6 @@
   gNxpQoriqLsTokenSpaceGuid.PcdNumPciController
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg
+
+[Pcd]
+  gNxpQoriqLsTokenSpaceGuid.PcdPciCfgShiftEnable

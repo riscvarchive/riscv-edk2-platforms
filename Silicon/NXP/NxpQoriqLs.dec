@@ -35,3 +35,6 @@
   gNxpQoriqLsTokenSpaceGuid.PcdNumPciController|0|UINT32|0x00000501
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x0|UINT32|0x00000502
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x0|UINT32|0x00000503
+
+[PcdsDynamic.common]
+  gNxpQoriqLsTokenSpaceGuid.PcdPciCfgShiftEnable|FALSE|BOOLEAN|0x00000600
