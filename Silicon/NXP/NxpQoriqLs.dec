@@ -27,3 +27,11 @@
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|FALSE|BOOLEAN|0x00000315
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|FALSE|BOOLEAN|0x00000316
+  gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|FALSE|BOOLEAN|0x00000317
+
+[PcdsFixedAtBuild.common]
+  # Pcds for PCI Express
+  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr|0x0|UINT64|0x00000500
+  gNxpQoriqLsTokenSpaceGuid.PcdNumPciController|0|UINT32|0x00000501
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x0|UINT32|0x00000502
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x0|UINT32|0x00000503
