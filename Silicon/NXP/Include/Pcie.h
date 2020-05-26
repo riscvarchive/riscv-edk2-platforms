@@ -46,6 +46,25 @@
 #define PCI_SEG0_PHY_MEM64_BASE   (PCI_SEG0_MMIO_MEMBASE + SEG_MEM64_BASE)
 #define PCI_MMIO64_WIN_SIZE       SIZE_16GB
 #define PCI_SEG0_PHY_IO_BASE      (PCI_SEG0_MMIO_MEMBASE + SEG_IO_BASE)
+#define PCI_SEG0_PORTIO_MIN       0x0
+#define PCI_SEG0_PORTIO_MAX       0xffff
+#define PCI_SEG0_PORTIO_OFFSET    0x0
+#define PCI_SEG1_PORTIO_MIN       0x0
+#define PCI_SEG1_PORTIO_MAX       0xffff
+#define PCI_SEG1_PORTIO_OFFSET    0x10000
+#define PCI_SEG2_PORTIO_MIN       0x0
+#define PCI_SEG2_PORTIO_MAX       0xffff
+#define PCI_SEG2_PORTIO_OFFSET    0x20000
+#define PCI_SEG3_PORTIO_MIN       0x0
+#define PCI_SEG3_PORTIO_MAX       0xffff
+#define PCI_SEG3_PORTIO_OFFSET    0x30000
+#define PCI_SEG4_PORTIO_MIN       0x0
+#define PCI_SEG4_PORTIO_MAX       0xffff
+#define PCI_SEG4_PORTIO_OFFSET    0x40000
+#define PCI_SEG5_PORTIO_MIN       0x0
+#define PCI_SEG5_PORTIO_MAX       0xffff
+#define PCI_SEG5_PORTIO_OFFSET    0x50000
+#define PCI_SEG_PORTIO_LIMIT      (PCI_SEG5_PORTIO_MAX + PCI_SEG5_PORTIO_OFFSET)
 
 // PCIe Controller configuration
 #define NUM_PCIE_CONTROLLER       FixedPcdGet32 (PcdNumPciController)
