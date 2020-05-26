@@ -453,6 +453,40 @@ PcieLsSetupAtu (
 }
 
 /**
+  Dump PCIe LsGen4 ATU
+
+  @param Pcie     Address of PCIe host controller.
+  @param Count    Number of Windows
+**/
+VOID
+LsGen4DumpAtu (
+  IN EFI_PHYSICAL_ADDRESS   Pcie,
+  IN UINT32                 Count
+  )
+{
+  UINT32 Cnt;
+
+  for (Cnt = 0; Cnt < Count; Cnt++) {
+    DEBUG ((DEBUG_INFO,"APIO WINDOW%d:\n", Cnt));
+    DEBUG ((DEBUG_INFO,"\tLOWER PHYS 0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_AMAP_AXI_WIN (Cnt))));
+    DEBUG ((DEBUG_INFO,"\tUPPER PHYS 0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_EXT_AXI_AMAP_AXI_WIN (Cnt))));
+    DEBUG ((DEBUG_INFO,"\tLOWER BUS  0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_AMAP_PEX_WIN_L (Cnt))));
+    DEBUG ((DEBUG_INFO,"\tUPPER BUS  0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_AMAP_PEX_WIN_H (Cnt))));
+    DEBUG ((DEBUG_INFO,"\tSIZE      0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_AMAP_CTRL (Cnt)) &
+            (AXI_AMAP_CTRL_SIZE_MASK << AXI_AMAP_CTRL_SIZE_SHIFT)));
+    DEBUG ((DEBUG_INFO,"\tEXT_SIZE        0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_EXT_AXI_AMAP_SIZE (Cnt))));
+    DEBUG ((DEBUG_INFO,"\tCTRL:        0x%08x\n",
+            PciLsGen4Read32 ((UINTN)Pcie, PAB_AXI_AMAP_CTRL (Cnt))));
+  }
+}
+
+/**
   Function to set-up ATU windows for PCIe LayerscapeGen4 controller
 
   @param Pcie      Address of PCIe host controller
@@ -516,6 +550,10 @@ PcieLsGen4SetupAtu (
 
     Mem64Base += SIZE_4GB;
   }
+
+  DEBUG_CODE_BEGIN ();
+  LsGen4DumpAtu (Pcie, Index);
+  DEBUG_CODE_END ();
 }
 
 /**
