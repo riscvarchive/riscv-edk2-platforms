@@ -38,6 +38,7 @@
   UefiRuntimeLib
 
 [Guids]
+  gEfiEventVirtualAddressChangeGuid
   gEfiSystemNvDataFvGuid
   gEfiVariableGuid
 
