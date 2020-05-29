@@ -179,16 +179,16 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
 
   #
-  # SNP support
-  #
-  INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort0.inf
-  INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort1.inf
-
-  #
   # Networking stack
   #
 !include NetworkPkg/Network.fdf.inc
   INF MdeModulePkg/Universal/Disk/RamDiskDxe/RamDiskDxe.inf
+
+  #
+  # SNP support
+  #
+  INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort0.inf
+  INF Silicon/AMD/Styx/AmdModulePkg/SnpDxe/SnpDxePort1.inf
 
   #
   # Core Info
