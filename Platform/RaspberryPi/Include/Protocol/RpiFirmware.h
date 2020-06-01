@@ -1,6 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2019, ARM Limited. All rights reserved.
+ *  Copyright (c) 2017 - 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -140,6 +141,14 @@ EFI_STATUS
   UINT32 *Size
   );
 
+typedef
+EFI_STATUS
+(EFIAPI *NOTIFY_XHCI_RESET) (
+  UINTN BusNumber,
+  UINTN DeviceNumber,
+  UINTN FunctionNumber
+  );
+
 typedef struct {
   SET_POWER_STATE        SetPowerState;
   GET_MAC_ADDRESS        GetMacAddress;
@@ -162,6 +171,7 @@ typedef struct {
   GET_CPU_NAME           GetCpuName;
   GET_ARM_MEM            GetArmMem;
   GET_MODEL_INSTALLED_MB GetModelInstalledMB;
+  NOTIFY_XHCI_RESET      NotifyXhciReset;
 } RASPBERRY_PI_FIRMWARE_PROTOCOL;
 
 extern EFI_GUID gRaspberryPiFirmwareProtocolGuid;

@@ -2,7 +2,7 @@
  *
  *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2019, ARM Limited. All rights reserved.
- *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2017-2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro, Ltd. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -1237,6 +1237,62 @@ RpiFirmwareSetLed (
   }
 }
 
+#pragma pack()
+typedef struct {
+  UINT32                       DeviceAddress;
+} RPI_FW_NOTIFY_XHCI_RESET_TAG;
+
+typedef struct {
+  RPI_FW_BUFFER_HEAD           BufferHead;
+  RPI_FW_TAG_HEAD              TagHead;
+  RPI_FW_NOTIFY_XHCI_RESET_TAG TagBody;
+  UINT32                       EndTag;
+} RPI_FW_NOTIFY_XHCI_RESET_CMD;
+#pragma pack()
+
+STATIC
+EFI_STATUS
+EFIAPI
+RpiFirmwareNotifyXhciReset (
+  IN UINTN BusNumber,
+  IN UINTN DeviceNumber,
+  IN UINTN FunctionNumber
+  )
+{
+  RPI_FW_NOTIFY_XHCI_RESET_CMD *Cmd;
+  EFI_STATUS                   Status;
+  UINT32                       Result;
+
+  if (!AcquireSpinLockOrFail (&mMailboxLock)) {
+    DEBUG ((DEBUG_ERROR, "%a: failed to acquire spinlock\n", __FUNCTION__));
+    return EFI_DEVICE_ERROR;
+  }
+
+  Cmd = mDmaBuffer;
+  ZeroMem (Cmd, sizeof (*Cmd));
+
+  Cmd->BufferHead.BufferSize  = sizeof (*Cmd);
+  Cmd->BufferHead.Response    = 0;
+  Cmd->TagHead.TagId          = RPI_MBOX_NOTIFY_XHCI_RESET;
+  Cmd->TagHead.TagSize        = sizeof (Cmd->TagBody);
+  Cmd->TagHead.TagValueSize   = 0;
+  Cmd->TagBody.DeviceAddress  = BusNumber << 20 | DeviceNumber << 15 | FunctionNumber << 12;
+  Cmd->EndTag                 = 0;
+
+  Status = MailboxTransaction (Cmd->BufferHead.BufferSize, RPI_MBOX_VC_CHANNEL, &Result);
+
+  ReleaseSpinLock (&mMailboxLock);
+
+  if (EFI_ERROR (Status) ||
+      Cmd->BufferHead.Response != RPI_MBOX_RESP_SUCCESS) {
+    DEBUG ((DEBUG_ERROR,
+      "%a: mailbox  transaction error: Status == %r, Response == 0x%x\n",
+      __FUNCTION__, Status, Cmd->BufferHead.Response));
+  }
+
+  return Status;
+}
+
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareSetPowerState,
   RpiFirmwareGetMacAddress,
@@ -1259,6 +1315,7 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL mRpiFirmwareProtocol = {
   RpiFirmwareGetCpuName,
   RpiFirmwareGetArmMemory,
   RPiFirmwareGetModelInstalledMB,
+  RpiFirmwareNotifyXhciReset
 };
 
 /**

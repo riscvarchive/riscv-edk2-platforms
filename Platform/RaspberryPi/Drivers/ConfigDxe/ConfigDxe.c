@@ -1,7 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2019 - 2020, ARM Limited. All rights reserved.
- *  Copyright (c) 2018 - 2019, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2018 - 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -26,6 +26,7 @@
 #include <Protocol/RpiFirmware.h>
 #include <ConfigVars.h>
 #include "ConfigDxeFormSetGuid.h"
+#include "ConfigDxe.h"
 
 #define FREQ_1_MHZ 1000000
 
@@ -583,6 +584,11 @@ ConfigInitialize (
   Status = gBS->CreateEventEx (EVT_NOTIFY_SIGNAL, TPL_NOTIFY, RegisterDevices,
                   NULL, &gEfiEndOfDxeEventGroupGuid, &EndOfDxeEvent);
   ASSERT_EFI_ERROR (Status);
+
+
+  if (mModelFamily == 4) {
+    RegisterXhciQuirkHandler (mFwProtocol);
+  }
 
   return EFI_SUCCESS;
 }

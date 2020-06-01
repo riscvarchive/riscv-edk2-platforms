@@ -1,6 +1,7 @@
 /** @file
  *
  * Copyright (c) 2019-2020, Pete Batard <pete@akeo.ie>
+ * Copyright (c) 2017-2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  * Copyright (c) 2016, Linaro Limited. All rights reserved.
  *
  * SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -60,6 +61,8 @@
 #define RPI_MBOX_GET_CLOCK_RATE                               0x00030002
 #define RPI_MBOX_GET_MAX_CLOCK_RATE                           0x00030004
 #define RPI_MBOX_GET_MIN_CLOCK_RATE                           0x00030007
+
+#define RPI_MBOX_NOTIFY_XHCI_RESET                            0x00030058
 
 #define RPI_MBOX_SET_CLOCK_RATE                               0x00038002
 #define RPI_MBOX_SET_GPIO                                     0x00038041
