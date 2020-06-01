@@ -1101,7 +1101,6 @@ typedef struct {
 
 STATIC
 EFI_STATUS
-EFIAPI
 RpiFirmwareGetClockRate (
   IN  UINT32 ClockId,
   IN  UINT32 ClockKind,
@@ -1193,6 +1192,7 @@ typedef struct {
 
 STATIC
 VOID
+EFIAPI
 RpiFirmwareSetLed (
   IN  BOOLEAN On
   )
