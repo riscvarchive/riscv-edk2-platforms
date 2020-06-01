@@ -218,8 +218,6 @@
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|10
 
 [PcdsFixedAtBuild.common]
-  gEmbeddedTokenSpaceGuid.PcdMetronomeTickPeriod|1000
-  gEmbeddedTokenSpaceGuid.PcdTimerPeriod|10000 # expressed in 100ns units, 100,000 x 100 ns = 10,000,000 ns = 10 ms
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxAuthVariableSize|0x2800
   gEfiMdeModulePkgTokenSpaceGuid.PcdResetOnMemoryTypeInformationChange|FALSE
@@ -348,7 +346,7 @@
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
-  EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
+  MdeModulePkg/Universal/Metronome/Metronome.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   EmbeddedPkg/SimpleTextInOutSerial/SimpleTextInOutSerial.inf

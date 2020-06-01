@@ -117,7 +117,7 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
 
-  INF EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
+  INF MdeModulePkg/Universal/Metronome/Metronome.inf
   INF EmbeddedPkg/SimpleTextInOutSerial/SimpleTextInOutSerial.inf
 
   #
