@@ -8,6 +8,7 @@
 
 #include <Library/ArmLib.h>
 #include <Library/ArmPlatformLib.h>
+#include <Library/SocLib.h>
 
 #include <Ppi/ArmMpCoreInfo.h>
 #include <Ppi/NxpPlatformGetClock.h>
@@ -76,6 +77,7 @@ NxpPlatformGetClock(
   case NXP_I2C_CLOCK:
   case NXP_UART_CLOCK:
     Clock = NxpPlatformGetClock (NXP_SYSTEM_CLOCK);
+    Clock = SocGetClock (Clock, ClockType, Args);
     break;
   default:
     break;
@@ -98,7 +100,7 @@ ArmPlatformInitialize (
   IN  UINTN                     MpId
   )
 {
-  //TODO: Implement me
+  SocInit ();
 
   return EFI_SUCCESS;
 }

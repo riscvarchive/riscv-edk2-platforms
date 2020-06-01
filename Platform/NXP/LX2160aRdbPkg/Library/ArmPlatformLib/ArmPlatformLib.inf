@@ -18,11 +18,14 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
+  Silicon/NXP/Chassis3V2/Chassis3V2.dec
+  Silicon/NXP/LX2160A/LX2160A.dec
   Silicon/NXP/NxpQoriqLs.dec
 
 [LibraryClasses]
   ArmLib
   DebugLib
+  SocLib
 
 [Sources.common]
   ArmPlatformLib.c
