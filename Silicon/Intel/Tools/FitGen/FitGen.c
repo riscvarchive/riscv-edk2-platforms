@@ -226,6 +226,8 @@ typedef struct {
 #define FIT_TABLE_TYPE_BOOT_POLICY_MANIFEST   12
 #define FIT_TABLE_TYPE_BIOS_DATA_AREA         13
 #define FIT_TABLE_TYPE_CSE_SECURE_BOOT        16
+#define FIT_TABLE_SUBTYPE_FIT_PATCH_MANIFEST  12
+#define FIT_TABLE_SUBTYPE_ACM_MANIFEST        13
 
 //
 // With OptionalModule Address isn't known until free space has been
@@ -236,6 +238,7 @@ typedef struct {
 //
 typedef struct {
   UINT32  Type;
+  UINT32  SubType; // Used by OptionalModule only
   UINT32  Address;
   UINT8   *Buffer; // Used by OptionalModule only
   UINT32  Size;
@@ -295,7 +298,7 @@ Returns:
 --*/
 {
   printf (
-    "%s - Tiano IA32/X64 FIT table generation Utility for FIT spec revision 1.1."" Version %i.%i\n\n",
+    "%s - Tiano IA32/X64 FIT table generation Utility for FIT spec revision 1.2."" Version %i.%i\n\n",
     UTILITY_NAME,
     UTILITY_MAJOR_VERSION,
     UTILITY_MINOR_VERSION
@@ -334,7 +337,7 @@ Returns:
           "\t[-U <DiagnstAcmAddress>|<DiagnstAcmGuid>]\n"
           "\t[-B <BiosModuleAddress BiosModuleSize>] [-B ...] [-V <BiosModuleVersion>]\n"
           "\t[-M <MicrocodeAddress MicrocodeSize>] [-M ...]|[-U <MicrocodeFv MicrocodeBase>|<MicrocodeRegionOffset MicrocodeRegionSize>|<MicrocodeGuid>] [-V <MicrocodeVersion>]\n"
-          "\t[-O RecordType <RecordDataAddress RecordDataSize>|<RESERVE RecordDataSize>|<RecordDataGuid>|<RecordBinFile> [-V <RecordVersion>]] [-O ... [-V ...]]\n"
+          "\t[-O RecordType <RecordDataAddress RecordDataSize>|<RESERVE RecordDataSize>|<RecordDataGuid>|<RecordBinFile>|<CseRecordSubType RecordBinFile> [-V <RecordVersion>]] [-O ... [-V ...]]\n"
           "\t[-P RecordType <IndexPort DataPort Width Bit Index> [-V <RecordVersion>]] [-P ... [-V ...]]\n"
           , UTILITY_NAME);
   printf ("  Where:\n");
@@ -366,6 +369,7 @@ Returns:
   printf ("\tRecordDataSize         - FIT entry record data size.\n");
   printf ("\tRecordDataGuid         - FIT entry record data GUID.\n");
   printf ("\tRecordBinFile          - FIT entry record data binary file.\n");
+  printf ("\tCseRecordSubType       - FIT entry record subtype. Use to further distinguish CSE entries (see FIT spec revision 1.2 chapter 4.12).\n");
   printf ("\tFitEntryDefaultVersion - The default version for all FIT table entries. 0x%04x is used if this is not specified.\n", DEFAULT_FIT_ENTRY_VERSION);
   printf ("\tFitHeaderVersion       - The version for FIT header. (Override default version)\n");
   printf ("\tStartupAcmVersion      - The version for StartupAcm. (Override default version)\n");
@@ -857,6 +861,7 @@ Returns:
   UINT8     *FileBuffer;
   UINT32    FileSize;
   UINT32    Type;
+  UINT32    SubType;
   UINT8     *MicrocodeFileBuffer;
   UINT8     *MicrocodeFileBufferRaw;
   UINT32    MicrocodeFileSize;
@@ -1608,26 +1613,22 @@ Returns:
     }
     Type = xtoi (argv[Index + 1]);
     //
-    // 1st, try GUID
+    // 1st, try CSE entry sub-type
     //
-    if (IsGuidData (argv[Index + 2], &Guid)) {
-      FileBuffer = FindFileFromFvByGuid (FdBuffer, FdSize, &Guid, &FileSize);
-      if (FileBuffer == NULL) {
-        Error (NULL, 0, 0, "-O Parameter incorrect, GUID not found!", "%s", argv[Index + 2]);
-        // not found
+    SubType = 0;
+    if (Type == FIT_TABLE_TYPE_CSE_SECURE_BOOT) {
+      if (Index + 3 >= argc) {
+        break;
+      }
+      SubType = xtoi (argv[Index + 2]);
+      //
+      // try file
+      //
+      if (SubType != FIT_TABLE_SUBTYPE_FIT_PATCH_MANIFEST && SubType != FIT_TABLE_SUBTYPE_ACM_MANIFEST) {
+        Error (NULL, 0, 0, "-O Parameter incorrect, SubType unsupported!", NULL);
         return 0;
       }
-      if (FileSize >= 0x80000000) {
-        Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
-        return 0;
-      }
-      FileBuffer = (UINT8 *)MEMORY_TO_FLASH (FileBuffer, FdBuffer, FdSize);
-      Index += 3;
-    } else {
-      //
-      // 2nd, try file
-      //
-      Status = ReadInputFile (argv[Index + 2], &FileBuffer, &FileSize, NULL);
+      Status = ReadInputFile (argv[Index + 3], &FileBuffer, &FileSize, NULL);
       if (Status == STATUS_SUCCESS) {
         if (FileSize >= 0x80000000) {
           Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
@@ -1640,48 +1641,90 @@ Returns:
         // Assume the file size should < 2G.
         //
         FileSize |= 0x80000000;
+        Index += 4;
+      } else {
+        if (Status == STATUS_WARNING) {
+          Error (NULL, 0, 0, "-O Parameter incorrect, Unable to open file", argv[Index + 3]);
+        }
+        return 0;
+      }
+    } else {
+      //
+      // 2nd, try GUID
+      //
+      if (IsGuidData (argv[Index + 2], &Guid)) {
+        FileBuffer = FindFileFromFvByGuid (FdBuffer, FdSize, &Guid, &FileSize);
+        if (FileBuffer == NULL) {
+          Error (NULL, 0, 0, "-O Parameter incorrect, GUID not found!", "%s", argv[Index + 2]);
+          // not found
+          return 0;
+        }
+        if (FileSize >= 0x80000000) {
+          Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
+          return 0;
+        }
+      FileBuffer = (UINT8 *)MEMORY_TO_FLASH (FileBuffer, FdBuffer, FdSize);
         Index += 3;
       } else {
         //
-        // 3rd, try <RESERVE, Length>
+        // 3rd, try file
         //
-        if (Index + 3 >= argc) {
-          break;
-        }
-        if ((strcmp (argv[Index + 2], "RESERVE") == 0) ||
-            (strcmp (argv[Index + 2], "reserve") == 0)) {
-          FileSize = xtoi (argv[Index + 3]);
+        Status = ReadInputFile (argv[Index + 2], &FileBuffer, &FileSize, NULL);
+        if (Status == STATUS_SUCCESS) {
           if (FileSize >= 0x80000000) {
             Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
+            free (FileBuffer);
             return 0;
           }
-          FileBuffer = malloc (FileSize);
-          if (FileBuffer == NULL) {
-            Error (NULL, 0, 0, "No sufficient memory to allocate!", NULL);
-            return 0;
-          }
-          SetMem (FileBuffer, FileSize, 0xFF);
           //
           // Set the most significant bit
           // It means the data in memory, not in flash yet.
           // Assume the file size should < 2G.
           //
           FileSize |= 0x80000000;
-          Index += 4;
+          Index += 3;
         } else {
           //
-          // 4th, try <Address, Length>
+          // 4th, try <RESERVE, Length>
           //
           if (Index + 3 >= argc) {
             break;
           }
-          FileBuffer = (UINT8 *) (UINTN) xtoi (argv[Index + 2]);
-          FileSize = xtoi (argv[Index + 3]);
-          if (FileSize >= 0x80000000) {
-            Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
-            return 0;
+          if ((strcmp (argv[Index + 2], "RESERVE") == 0) ||
+              (strcmp (argv[Index + 2], "reserve") == 0)) {
+            FileSize = xtoi (argv[Index + 3]);
+            if (FileSize >= 0x80000000) {
+              Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
+              return 0;
+            }
+            FileBuffer = malloc (FileSize);
+            if (FileBuffer == NULL) {
+              Error (NULL, 0, 0, "No sufficient memory to allocate!", NULL);
+              return 0;
+            }
+            SetMem (FileBuffer, FileSize, 0xFF);
+            //
+            // Set the most significant bit
+            // It means the data in memory, not in flash yet.
+            // Assume the file size should < 2G.
+            //
+            FileSize |= 0x80000000;
+            Index += 4;
+          } else {
+            //
+            // 5th, try <Address, Length>
+            //
+            if (Index + 3 >= argc) {
+              break;
+            }
+            FileBuffer = (UINT8 *) (UINTN) xtoi (argv[Index + 2]);
+            FileSize = xtoi (argv[Index + 3]);
+            if (FileSize >= 0x80000000) {
+              Error (NULL, 0, 0, "-O Parameter incorrect, FileSize too large!", NULL);
+              return 0;
+            }
+            Index += 4;
           }
-          Index += 4;
         }
       }
     }
@@ -1691,6 +1734,9 @@ Returns:
       return 0;
     }
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Type = Type;
+    if (gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Type == FIT_TABLE_TYPE_CSE_SECURE_BOOT) {
+      gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].SubType = SubType;
+    }
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Address = (UINT32) (UINTN) FileBuffer;
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Buffer = FileBuffer;
     gFitTableContext.OptionalModule[gFitTableContext.OptionalModuleNumber].Size = FileSize;
@@ -2055,6 +2101,23 @@ Returns:
   return ;
 }
 
+CHAR8 *mFitCseSubTypeStr[] = {
+  "CSE_RSVD   ",
+  "CSE_K_HASH1",
+  "CSE_M_HASH ",
+  "CSE_BPOLICY",
+  "CSE_OTHR_BP",
+  "CSE_OEMSMIP",
+  "CSE_MRCDATA",
+  "CSE_IBBL_H ",
+  "CSE_IBB_H  ",
+  "CSE_OEM_ID ",
+  "CSEOEMSKUID",
+  "CSE_BD_IND ",
+  "CSE_FPM    ",
+  "CSE_ACMM   "
+};
+
 CHAR8 *mFitTypeStr[] = {
   "           ",
   "MICROCODE  ",
@@ -2103,6 +2166,14 @@ Returns:
     return mFitSignatureInHeader;
   }
   if (FitEntry->Type < sizeof (mFitTypeStr)/sizeof(mFitTypeStr[0])) {
+    if (FitEntry->Type == FIT_TABLE_TYPE_CSE_SECURE_BOOT) {
+      //
+      // "Reserved" field is used to distinguish CSE Secure Boot entries (see FIT spec revision 1.2)
+      //
+      if (FitEntry->Rsvd < sizeof (mFitCseSubTypeStr)/sizeof(mFitCseSubTypeStr[0])) {
+        return mFitCseSubTypeStr[FitEntry->Rsvd];
+      }
+    }
     return mFitTypeStr[FitEntry->Type];
   } else {
     return "           ";
@@ -2675,6 +2746,9 @@ Returns:
     *(UINT32 *)&FitEntry[FitIndex].Size[0] = gFitTableContext.OptionalModule[Index].Size;
     FitEntry[FitIndex].Version             = (UINT16)gFitTableContext.OptionalModule[Index].Version;
     FitEntry[FitIndex].Type                = (UINT8)gFitTableContext.OptionalModule[Index].Type;
+    if (FitEntry[FitIndex].Type == FIT_TABLE_TYPE_CSE_SECURE_BOOT) {
+      FitEntry[FitIndex].Rsvd              = (UINT8)gFitTableContext.OptionalModule[Index].SubType;
+    }
     FitEntry[FitIndex].C_V                 = 0;
     FitEntry[FitIndex].Checksum            = 0;
     FitIndex++;
