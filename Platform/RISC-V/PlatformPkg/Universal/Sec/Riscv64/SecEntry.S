@@ -502,19 +502,10 @@ _reset_regs:
 
   .align 3
   .section .entry, "ax", %progbits
-  .global fw_prev_arg1
-fw_prev_arg1:
-
-  /* We return previous arg1 in 'a0' */
-  add   a0, zero, zero
-  ret
-
-  .align 3
-  .section .entry, "ax", %progbits
   .global fw_next_arg1
 fw_next_arg1:
-  /* We return next arg1 in 'a0' */
-  li    a0, FixedPcdGet32(PcdRiscVPeiFvBase)
+  /* Pass device tree as next_arg1 to sbi_init */
+  la    a0, fdt_bin
   ret
 
   .align 3
@@ -530,3 +521,10 @@ fw_next_addr:
   .section .entry, "ax", %progbits
 _jump_addr:
 RISCV_PTR SecCoreStartUpWithStack
+
+  .section .text, "ax", %progbits
+  .align 4
+  .globl fdt_bin
+fdt_bin:
+  /* TODO: Rename to a generic name and think about where we want to put this */
+  .incbin "U540.dtb"
