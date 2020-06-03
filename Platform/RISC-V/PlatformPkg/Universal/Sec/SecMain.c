@@ -557,6 +557,12 @@ VOID EFIAPI PeiCore (
              &FirmwareContext
              ));
   ThisSbiPlatform->firmware_context = (unsigned long)&FirmwareContext;
+
+  //
+  // Save Flattened Device tree in firmware context
+  //
+  FirmwareContext.FlattenedDeviceTree = FuncArg1;
+
   //
   // Set firmware context Hart-specific pointer
   //
@@ -685,6 +691,21 @@ VOID EFIAPI SecCoreStartUpWithStack(
   UINT64 BootHartDoneSbiInit;
   UINT64 NonBootHartMessageLockValue;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *HartFirmwareContext;
+
+  if (FixedPcdGet32 (PcdDeviceTreeAddress)) {
+      Scratch->next_arg1 = *((unsigned long *)FixedPcdGet32 (PcdDeviceTreeAddress));
+  } else if (FixedPcdGet32 (PcdRiscVDtbFvBase)) {
+      // TODO: This probably isn't the most elegant way to do this.
+      Scratch->next_arg1 = (unsigned long )FixedPcdGet32 (PcdRiscVDtbFvBase)
+          + 0x48  // FV header size
+          + 0x18  // File header size
+          + 0x04; // Section header size
+  } else {
+      DEBUG ((DEBUG_ERROR, "Must use DTB either from memory or compiled in FW. PCDs configured incorrectly.\n"));
+      ASSERT (FALSE);
+  }
+  DEBUG ((DEBUG_INFO, "DTB address: 0x%08x\n", Scratch->next_arg1));
+  DEBUG ((DEBUG_INFO, "DTB: 0x%08x\n", *((unsigned long *) Scratch->next_arg1)));
 
   //
   // Setup EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC for each hart.
