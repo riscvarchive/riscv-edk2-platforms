@@ -12,6 +12,7 @@
 #include <Uefi.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
+#include <Library/IoLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/NetLib.h>
 #include <Library/UefiBootServicesTableLib.h>
@@ -19,6 +20,9 @@
 #include <Protocol/BcmGenetPlatformDevice.h>
 
 #include "BcmGenetDxe.h"
+
+STATIC EFI_EVENT      mProtocolNotifyEvent;
+STATIC VOID           *mProtocolNotifyEventRegistration;
 
 /**
   Tests to see if this driver supports a given controller.
@@ -305,6 +309,57 @@ STATIC EFI_DRIVER_BINDING_PROTOCOL mGenetDriverBinding = {
   NULL
 };
 
+STATIC
+VOID
+EFIAPI
+OnProtocolNotify (
+  IN  EFI_EVENT       Event,
+  IN  VOID            *Context
+  )
+{
+  BCM_GENET_PLATFORM_DEVICE_PROTOCOL  *GenetDevice;
+  EFI_STATUS                          Status;
+  EFI_HANDLE                          *HandleBuffer;
+  UINTN                               HandleCount;
+  UINTN                               Index;
+  UINT32                              Mac0, Mac1;
+
+  while (TRUE) {
+    Status = gBS->LocateHandleBuffer (ByRegisterNotify, NULL,
+                    mProtocolNotifyEventRegistration, &HandleCount,
+                    &HandleBuffer);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    for (Index = 0; Index < HandleCount; Index++) {
+      Status = gBS->HandleProtocol (HandleBuffer[Index],
+                      &gBcmGenetPlatformDeviceProtocolGuid,
+                      (VOID **)&GenetDevice);
+      ASSERT_EFI_ERROR (Status);
+
+      Mac0 = (GenetDevice->MacAddress.Addr[3])       |
+             (GenetDevice->MacAddress.Addr[2] << 8)  |
+             (GenetDevice->MacAddress.Addr[1] << 16) |
+             (GenetDevice->MacAddress.Addr[0] << 24);
+      Mac1 = (GenetDevice->MacAddress.Addr[5])       |
+             (GenetDevice->MacAddress.Addr[4] << 8);
+
+      MmioOr32 (GenetDevice->BaseAddress + GENET_SYS_RBUF_FLUSH_CTRL,
+        GENET_SYS_RBUF_FLUSH_RESET);
+      gBS->Stall (10);
+      MmioAnd32 (GenetDevice->BaseAddress + GENET_SYS_RBUF_FLUSH_CTRL,
+        ~GENET_SYS_RBUF_FLUSH_RESET);
+
+      MemoryFence ();
+
+      MmioWrite32 (GenetDevice->BaseAddress + GENET_UMAC_MAC0, Mac0);
+      MmioWrite32 (GenetDevice->BaseAddress + GENET_UMAC_MAC1, Mac1);
+    }
+    FreePool (HandleBuffer);
+  }
+}
+
 /**
   The entry point of GENET UEFI Driver.
 
@@ -335,6 +390,17 @@ GenetEntryPoint (
              );
 
   ASSERT_EFI_ERROR (Status);
+
+  //
+  // We need to program the MAC address into each existing controller,
+  // regardless of whether UEFI ever makes use of the interface, so that
+  // the OS driver will not have to care about this.
+  //
+  mProtocolNotifyEvent = EfiCreateProtocolNotifyEvent (
+                           &gBcmGenetPlatformDeviceProtocolGuid,
+                           TPL_CALLBACK, OnProtocolNotify, NULL,
+                           &mProtocolNotifyEventRegistration);
+  ASSERT (mProtocolNotifyEvent != NULL);
 
   DEBUG ((DEBUG_INIT | DEBUG_INFO, "Installed GENET UEFI driver!\n"));
 
