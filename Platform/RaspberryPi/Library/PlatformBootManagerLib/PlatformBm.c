@@ -655,11 +655,6 @@ PlatformBootManagerAfterConsole (
     Print (BOOT_PROMPT);
   }
 
-  //
-  // Connect the rest of the devices.
-  //
-  EfiBootManagerConnectAll ();
-
   Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL, (VOID**)&EsrtManagement);
   if (!EFI_ERROR (Status)) {
     EsrtManagement->SyncEsrtFmp ();
