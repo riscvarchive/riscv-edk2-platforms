@@ -460,7 +460,7 @@ PlatformRegisterOptionsAndKeys (
   RemoveStaleBootOptions ();
 
   ShellOption = PlatformRegisterFvBootOption (&gUefiShellFileGuid,
-                  L"UEFI Shell", LOAD_OPTION_CATEGORY_APP);
+                  L"UEFI Shell", 0);
   if (ShellOption != -1) {
     //
     // F1 boots Shell.
