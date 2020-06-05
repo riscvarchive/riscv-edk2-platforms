@@ -45,5 +45,8 @@
   gMarvellTokenSpaceGuid.PcdI2cBaudRate
   gMarvellTokenSpaceGuid.PcdI2cBusCount
 
+[Guids]
+  gEfiEndOfDxeEventGroupGuid
+
 [Depex]
   TRUE

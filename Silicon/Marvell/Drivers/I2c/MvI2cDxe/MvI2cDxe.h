@@ -80,6 +80,7 @@ typedef struct {
 
 typedef struct {
   VENDOR_DEVICE_PATH            Guid;
+  UINTN                         Instance;
   EFI_DEVICE_PATH_PROTOCOL      End;
 } MV_I2C_DEVICE_PATH;
 

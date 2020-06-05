@@ -30,12 +30,13 @@ STATIC MV_I2C_DEVICE_PATH MvI2cDevicePathProtocol = {
       HARDWARE_DEVICE_PATH,
       HW_VENDOR_DP,
       {
-  (UINT8) (sizeof(VENDOR_DEVICE_PATH)),
-  (UINT8) (sizeof(VENDOR_DEVICE_PATH) >> 8),
+        (UINT8)(OFFSET_OF (MV_I2C_DEVICE_PATH, End)),
+        (UINT8)(OFFSET_OF (MV_I2C_DEVICE_PATH, End) >> 8),
       },
     },
     EFI_CALLER_ID_GUID
   },
+  0,  // Instance
   {
     END_DEVICE_PATH_TYPE,
     END_ENTIRE_DEVICE_PATH_SUBTYPE,
@@ -86,7 +87,7 @@ MvI2cInitialiseController (
     DEBUG((DEBUG_ERROR, "MvI2cDxe: I2C device path allocation failed\n"));
     return EFI_OUT_OF_RESOURCES;
   }
-  DevicePath->Guid.Guid.Data4[0] = Bus;
+  DevicePath->Instance = Bus;
 
   /* if attachment succeeds, this gets freed at ExitBootServices */
   I2cMasterContext = AllocateZeroPool (sizeof (I2C_MASTER_CONTEXT));
@@ -139,6 +140,50 @@ fail:
   return Status;
 }
 
+STATIC
+VOID
+EFIAPI
+OnEndOfDxe (
+  IN EFI_EVENT  Event,
+  IN VOID       *Context
+  )
+{
+  MV_I2C_DEVICE_PATH        *DevicePath;
+  EFI_DEVICE_PATH_PROTOCOL  *DevicePathPointer;
+  EFI_HANDLE                DeviceHandle;
+  EFI_STATUS                Status;
+
+  gBS->CloseEvent (Event);
+
+  DevicePath = AllocateCopyPool (sizeof (MvI2cDevicePathProtocol),
+                 &MvI2cDevicePathProtocol);
+  if (DevicePath == NULL) {
+    DEBUG ((DEBUG_ERROR, "MvI2cDxe: I2C device path allocation failed\n"));
+    return;
+  }
+
+  do {
+    DevicePathPointer = (EFI_DEVICE_PATH_PROTOCOL *)DevicePath;
+    Status = gBS->LocateDevicePath (&gEfiI2cMasterProtocolGuid,
+                    &DevicePathPointer,
+                    &DeviceHandle);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    Status = gBS->ConnectController (DeviceHandle, NULL, NULL, TRUE);
+    DEBUG ((DEBUG_INFO,
+      "%a: ConnectController () returned %r\n",
+      __FUNCTION__,
+      Status));
+
+    DevicePath->Instance++;
+  } while (TRUE);
+
+  gBS->FreePool (DevicePath);
+}
+
+
 EFI_STATUS
 EFIAPI
 MvI2cInitialise (
@@ -147,6 +192,7 @@ MvI2cInitialise (
   )
 {
   MARVELL_BOARD_DESC_PROTOCOL *BoardDescProtocol;
+  EFI_EVENT EndOfDxeEvent;
   MV_BOARD_I2C_DESC *Desc;
   EFI_STATUS Status;
   UINTN Index;
@@ -176,6 +222,14 @@ MvI2cInitialise (
   }
 
   BoardDescProtocol->BoardDescFree (Desc);
+
+  Status = gBS->CreateEventEx (EVT_NOTIFY_SIGNAL,
+                  TPL_CALLBACK,
+                  OnEndOfDxe,
+                  NULL,
+                  &gEfiEndOfDxeEventGroupGuid,
+                  &EndOfDxeEvent);
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }
