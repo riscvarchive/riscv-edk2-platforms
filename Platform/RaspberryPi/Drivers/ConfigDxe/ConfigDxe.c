@@ -343,7 +343,6 @@ ApplyVariables (
   UINT32 CpuClock = PcdGet32 (PcdCpuClock);
   UINT32 CustomCpuClock = PcdGet32 (PcdCustomCpuClock);
   UINT32 Rate = 0;
-  UINT64 SystemMemorySize;
 
   switch (CpuClock) {
   case CHIPSET_CPU_CLOCK_LOW:
@@ -386,27 +385,43 @@ ApplyVariables (
 
   if (mModelFamily >= 4 && PcdGet32 (PcdRamMoreThan3GB) != 0 &&
       PcdGet32 (PcdRamLimitTo3GB) == 0) {
+    UINT64 SystemMemorySize;
+    UINT64 SystemMemorySizeBelow4GB;
+
+    ASSERT (BCM2711_SOC_REGISTERS != 0);
+    SystemMemorySize = (UINT64)mModelInstalledMB * SIZE_1MB;
     /*
      * Similar to how we compute the > 3 GB RAM segment's size in PlatformLib/
      * RaspberryPiMem.c, with some overlap protection for the Bcm2xxx register
-     * spaces. This computation should also work for models with more than 4 GB
-     * RAM, if there ever exist ones.
+     * spaces. SystemMemorySizeBelow4GB tracks the maximum memory below 4GB
+     * line, factoring in the limit imposed by the SoC register range.
      */
-    SystemMemorySize = (UINT64)mModelInstalledMB * SIZE_1MB;
-    ASSERT (SystemMemorySize > 3UL * SIZE_1GB);
-    SystemMemorySize = MIN(SystemMemorySize, BCM2836_SOC_REGISTERS);
-    if (BCM2711_SOC_REGISTERS > 0) {
-      SystemMemorySize = MIN(SystemMemorySize, BCM2711_SOC_REGISTERS);
-    }
+    SystemMemorySizeBelow4GB = MIN(SystemMemorySize, 4UL * SIZE_1GB);
+    SystemMemorySizeBelow4GB = MIN(SystemMemorySizeBelow4GB, BCM2836_SOC_REGISTERS);
+    SystemMemorySizeBelow4GB = MIN(SystemMemorySizeBelow4GB, BCM2711_SOC_REGISTERS);
+
+    ASSERT (SystemMemorySizeBelow4GB > 3UL * SIZE_1GB);
 
     Status = gDS->AddMemorySpace (EfiGcdMemoryTypeSystemMemory, 3UL * BASE_1GB,
-                    SystemMemorySize - (3UL * SIZE_1GB),
+                    SystemMemorySizeBelow4GB - (3UL * SIZE_1GB),
                     EFI_MEMORY_UC | EFI_MEMORY_WC | EFI_MEMORY_WT | EFI_MEMORY_WB);
     ASSERT_EFI_ERROR (Status);
     Status = gDS->SetMemorySpaceAttributes (3UL * BASE_1GB,
-                    SystemMemorySize - (3UL * SIZE_1GB),
-                    EFI_MEMORY_WB);
+                    SystemMemorySizeBelow4GB - (3UL * SIZE_1GB), EFI_MEMORY_WB);
     ASSERT_EFI_ERROR (Status);
+
+    if (SystemMemorySize > 4UL * SIZE_1GB) {
+      //
+      // Register any memory above 4GB.
+      //
+      Status = gDS->AddMemorySpace (EfiGcdMemoryTypeSystemMemory, 4UL * BASE_1GB,
+                      SystemMemorySize - (4UL * SIZE_1GB),
+                      EFI_MEMORY_UC | EFI_MEMORY_WC | EFI_MEMORY_WT | EFI_MEMORY_WB);
+      ASSERT_EFI_ERROR (Status);
+      Status = gDS->SetMemorySpaceAttributes (4UL * BASE_1GB,
+                      SystemMemorySize - (4UL * SIZE_1GB), EFI_MEMORY_WB);
+      ASSERT_EFI_ERROR (Status);
+    }
   }
 
   if (mModelFamily == 3 || mModelFamily == 2) {

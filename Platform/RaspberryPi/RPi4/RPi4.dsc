@@ -403,7 +403,6 @@
   #
   # Device specific addresses
   #
-  gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase|0x40000000
   gBcm27xxTokenSpaceGuid.PcdBcm27xxRegistersAddress|0xfc000000
   gBcm27xxTokenSpaceGuid.PcdBcmGenetRegistersAddress|0xfd580000
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress|0xfe000000

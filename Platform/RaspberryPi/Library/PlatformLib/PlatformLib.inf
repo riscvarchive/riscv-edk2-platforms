@@ -55,7 +55,6 @@
   gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset
   gArmTokenSpaceGuid.PcdSystemMemoryBase
   gArmTokenSpaceGuid.PcdSystemMemorySize
-  gRaspberryPiTokenSpaceGuid.PcdExtendedMemoryBase
   gRaspberryPiTokenSpaceGuid.PcdNvStorageEventLogSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
