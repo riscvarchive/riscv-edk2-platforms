@@ -65,3 +65,4 @@
 ################################################################################
 [Components]
 Drivers/ASIX/Bus/Usb/UsbNetworking/Ax88179/Ax88179.inf
+Drivers/ASIX/Bus/Usb/UsbNetworking/Ax88772c/Ax88772c.inf
