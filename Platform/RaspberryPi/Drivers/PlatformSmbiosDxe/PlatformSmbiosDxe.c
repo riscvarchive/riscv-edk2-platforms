@@ -20,6 +20,7 @@
  *  Copyright (c) 2013, Linaro.org
  *  Copyright (c) 2012, Apple Inc. All rights reserved.<BR>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -40,7 +41,9 @@
 #include <Library/MemoryAllocationLib.h>
 #include <Library/TimeBaseLib.h>
 #include <Library/UefiBootServicesTableLib.h>
+#include <Library/UefiRuntimeServicesTableLib.h>
 #include <Library/PrintLib.h>
+#include <ConfigVars.h>
 
 #define SMB_IS_DIGIT(c)  (((c) >= '0') && ((c) <= '9'))
 
@@ -164,7 +167,7 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
   2,    // ProductName String
   3,    // Version String
   4,    // SerialNumber String
-  0,    // AssetTag String
+  5,    // AssetTag String
   {     // FeatureFlag
     1,    //  Motherboard           :1;
     0,    //  RequiresDaughterCard  :1;
@@ -179,11 +182,15 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
   0,                        // NumberOfContainedObjectHandles;
   { 0 }                     // ContainedObjectHandles[1];
 };
+
+CHAR8 mChassisAssetTag[128];
+
 CHAR8 *mBoardInfoType2Strings[] = {
   mSysInfoManufName,
   mSysInfoProductName,
   mSysInfoVersionName,
   mSysInfoSerial,
+  mChassisAssetTag,
   NULL
 };
 
@@ -196,7 +203,7 @@ SMBIOS_TABLE_TYPE3 mEnclosureInfoType3 = {
   MiscChassisEmbeddedPc,    // Type;
   2,                        // Version String
   3,                        // SerialNumber String
-  0,                        // AssetTag String
+  4,                        // AssetTag String
   ChassisStateSafe,         // BootupState;
   ChassisStateSafe,         // PowerSupplyState;
   ChassisStateSafe,         // ThermalState;
@@ -212,6 +219,7 @@ CHAR8 *mEnclosureInfoType3Strings[] = {
   mSysInfoManufName,
   mSysInfoProductName,
   mSysInfoSerial,
+  mChassisAssetTag,
   NULL
 };
 
@@ -760,6 +768,20 @@ BoardInfoUpdateSmbiosType2 (
   VOID
   )
 {
+  UINTN      Size;
+  CHAR16     AssetTagVar[ASSET_TAG_STR_STORAGE_SIZE] = L"";
+  EFI_STATUS Status;
+
+  Size = sizeof(AssetTagVar);
+  Status = gRT->GetVariable(L"AssetTag",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, AssetTagVar);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to get Asset Tag: %r\n", Status));
+  }
+  UnicodeStrToAsciiStrS(AssetTagVar, mChassisAssetTag, sizeof(mChassisAssetTag));
+  DEBUG ((DEBUG_INFO, "System Asset Tag : %a\n", mChassisAssetTag));
+
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBoardInfoType2, mBoardInfoType2Strings, NULL);
 }
 

@@ -186,9 +186,10 @@ SetupVariables (
   VOID
   )
 {
-  UINTN Size;
-  UINT8 Var8;
-  UINT32 Var32;
+  UINTN      Size;
+  UINT8      Var8;
+  UINT32     Var32;
+  CHAR16     AssetTagVar[ASSET_TAG_STR_STORAGE_SIZE] = L"";
   EFI_STATUS Status;
 
   /*
@@ -236,6 +237,22 @@ SetupVariables (
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
     PcdSet32 (PcdSystemTableMode, PcdGet32 (PcdSystemTableMode));
+  }
+
+  Size = sizeof(AssetTagVar);
+
+  Status = gRT->GetVariable(L"AssetTag",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, AssetTagVar);
+
+  if (EFI_ERROR (Status)) {
+    Status = gRT->SetVariable (
+                    L"AssetTag",
+                    &gConfigDxeFormSetGuid,
+                    EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS,
+                    sizeof(AssetTagVar),
+                    AssetTagVar
+                    );
   }
 
   Size = sizeof (UINT32);

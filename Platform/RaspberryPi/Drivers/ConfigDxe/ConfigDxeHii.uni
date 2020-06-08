@@ -1,6 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -46,6 +47,9 @@
 #string STR_ADVANCED_SYSTAB_ACPI     #language en-US "ACPI"
 #string STR_ADVANCED_SYSTAB_BOTH     #language en-US "ACPI + Devicetree"
 #string STR_ADVANCED_SYSTAB_DT       #language en-US "Devicetree"
+
+#string STR_ADVANCED_ASSET_TAG_PROMPT #language en-US "Asset Tag"
+#string STR_ADVANCED_ASSET_TAG_HELP   #language en-US "Set the system Asset Tag"
 
 /*
  * MMC/SD configuration.

@@ -43,7 +43,9 @@
 [Protocols]
   gEfiSmbiosProtocolGuid           # PROTOCOL SOMETIMES_CONSUMED
   gRaspberryPiFirmwareProtocolGuid ## CONSUMES
+
 [Guids]
+  gConfigDxeFormSetGuid
 
 [Depex]
   gEfiSmbiosProtocolGuid AND gRaspberryPiFirmwareProtocolGuid

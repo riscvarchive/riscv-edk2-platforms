@@ -1,6 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -73,6 +74,12 @@ typedef struct {
 #define SYSTEM_TABLE_MODE_DT   2
   UINT32 Mode;
 } SYSTEM_TABLE_MODE_VARSTORE_DATA;
+
+#define ASSET_TAG_STR_MAX_LEN       32
+#define ASSET_TAG_STR_STORAGE_SIZE  33
+typedef struct {
+  CHAR16 AssetTag[ASSET_TAG_STR_STORAGE_SIZE];
+} ADVANCED_ASSET_TAG_VARSTORE_DATA;
 
 typedef struct {
   /*
