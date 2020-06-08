@@ -8,6 +8,7 @@
 #
 # Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
 # Copyright (c) 2016, Linaro Ltd. All rights reserved.<BR>
+# Copyright (c) 2020, ARM Limited. All rights reserved.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -106,8 +107,6 @@
   OptionRomPkg/CirrusLogic5430Dxe/CirrusLogic5430Dxe.inf
   OptionRomPkg/UndiRuntimeDxe/UndiRuntimeDxe.inf
   OptionRomPkg/Bus/Usb/FtdiUsbSerialDxe/FtdiUsbSerialDxe.inf
-  OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772/Ax88772.inf
-  OptionRomPkg/Bus/Usb/UsbNetworking/Ax88772b/Ax88772b.inf
 
 [Components.IA32, Components.X64]
   OptionRomPkg/Application/BltLibSample/BltLibSample.inf
