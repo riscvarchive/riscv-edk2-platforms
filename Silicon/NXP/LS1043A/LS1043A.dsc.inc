@@ -12,6 +12,7 @@
 [LibraryClasses.common]
   SocLib|Silicon/NXP/LS1043A/Library/SocLib/SocLib.inf
   SerialPortLib|Silicon/NXP/Library/DUartPortLib/DUartPortLib.inf
+  SerDesHelperLib|Silicon/NXP/Library/SerDesHelperLib/SerDesHelperLib.inf
 
 ################################################################################
 #
@@ -37,4 +38,5 @@
   gNxpQoriqLsTokenSpaceGuid.PcdNumPciController|3
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x10000
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x7FC
+  gNxpQoriqLsTokenSpaceGuid.PcdSerDesLanes|0x4
 ##
