@@ -15,6 +15,7 @@
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PciHostBridgeLib.h>
+#include <Library/SerDes.h>
 #include <Pcie.h>
 #include <Protocol/PciHostBridgeResourceAllocation.h>
 #include <Protocol/PciRootBridgeIo.h>
@@ -721,6 +722,32 @@ PcieSetupCntrl (
 }
 
 /**
+   This function checks whether PCIe is enabled or not
+   depending upon SoC serdes protocol map
+
+   @param  PcieNum PCIe number.
+
+   @return The     PCIe number enabled in map.
+   @return FALSE   PCIe number is disabled in map.
+
+**/
+STATIC
+BOOLEAN
+IsPcieNumEnabled(
+  IN UINTN PcieNum
+  )
+{
+  UINT64 SerDesProtocolMap;
+
+  SerDesProtocolMap = 0;
+
+  // Reading serdes protocol map
+  GetSerDesProtocolMap (&SerDesProtocolMap);
+
+  return (SerDesProtocolMap & (BIT0 << (PcieNum))) != 0;
+}
+
+/**
   Return all the root bridge instances in an array.
 
   @param Count  Return the count of root bridge instances.
@@ -752,13 +779,19 @@ PciHostBridgeGetRootBridges (
     PciPhyIoAddr [Idx] =  PCI_SEG0_PHY_IO_BASE + (PCI_BASE_DIFF * Idx);
     Regs[Idx] =  PCI_SEG0_DBI_BASE + (PCI_DBI_SIZE_DIFF * Idx);
 
+    // Check is the PCIe controller is enabled
+    if (IsPcieNumEnabled (Idx + 1) == 0) {
+      DEBUG ((DEBUG_INFO, "PCIE%d reg @ 0x%lx is disabled \n", Idx + 1, Regs[Idx]));
+      continue;
+    }
+
     // Check PCIe Link
     LinkUp = PcieLinkUp(Regs[Idx], Idx);
 
     if (!LinkUp) {
       continue;
     }
-    DEBUG ((DEBUG_INFO, "PCIE%d Passed Linkup Phase\n", Idx + 1));
+    DEBUG ((DEBUG_INFO, "PCIE%d reg @ 0x%lx :Passed Linkup Phase\n", Idx + 1, Regs[Idx]));
     // Set up PCIe Controller and ATU windows
     PcieSetupCntrl (Regs[Idx],
                     PciPhyCfg0Addr[Idx],

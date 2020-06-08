@@ -28,6 +28,7 @@
   IoAccessLib
   MemoryAllocationLib
   PcdLib
+  SocLib
 
 [FeaturePcd]
   gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian
