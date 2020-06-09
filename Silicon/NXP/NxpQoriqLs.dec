@@ -28,6 +28,7 @@
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|FALSE|BOOLEAN|0x00000315
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|FALSE|BOOLEAN|0x00000316
   gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|FALSE|BOOLEAN|0x00000317
+  gNxpQoriqLsTokenSpaceGuid.PcdSataErratumA009185|FALSE|BOOLEAN|0x00000318
 
 [PcdsFixedAtBuild.common]
   # Pcds for PCI Express
@@ -41,6 +42,11 @@
   gNxpQoriqLsTokenSpaceGuid.PcdUsbBaseAddr|0x0|UINT64|0x00000510
   gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x0|UINT32|0x00000511
   gNxpQoriqLsTokenSpaceGuid.PcdNumUsbController|0|UINT32|0x00000512
+
+  # Pcds for SATA
+  gNxpQoriqLsTokenSpaceGuid.PcdSataBaseAddr|0x0|UINT64|0x00000350
+  gNxpQoriqLsTokenSpaceGuid.PcdSataSize|0x0|UINT32|0x00000351
+  gNxpQoriqLsTokenSpaceGuid.PcdNumSataController|0x0|UINT32|0x00000352
 
 [PcdsDynamic.common]
   gNxpQoriqLsTokenSpaceGuid.PcdPciCfgShiftEnable|FALSE|BOOLEAN|0x00000600
