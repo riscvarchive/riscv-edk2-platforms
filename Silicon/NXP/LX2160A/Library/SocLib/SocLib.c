@@ -67,6 +67,20 @@ SocGetClock (
 }
 
 /**
+  Function to get SoC's System Version Register(SVR)
+ **/
+UINT32
+SocGetSvr (
+  VOID
+  )
+{
+  LX2160A_DEVICE_CONFIG  *DeviceConfig;
+
+  DeviceConfig = (LX2160A_DEVICE_CONFIG  *)LX2160A_DCFG_ADDRESS;
+  return DcfgRead32 ((UINTN)&DeviceConfig->Svr);
+}
+
+/**
   Function to initialize SoC specific constructs
  **/
 VOID
