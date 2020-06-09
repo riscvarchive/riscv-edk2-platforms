@@ -28,6 +28,9 @@
 
 #define LX2160A_DCFG_ADDRESS         NXP_LAYERSCAPE_CHASSIS3V2_DCFG_ADDRESS
 
+// SVR
+#define SVR_LX2160A                  0x873600
+
 /**
   Reset Control Word (RCW) Bits
 **/
