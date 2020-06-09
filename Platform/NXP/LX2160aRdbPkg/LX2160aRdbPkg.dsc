@@ -53,6 +53,7 @@
   }
 
   Silicon/NXP/Drivers/UsbHcdInitDxe/UsbHcd.inf
+  Silicon/NXP/Drivers/SataInitDxe/SataInitDxe.inf
   Platform/NXP/LX2160aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
 
   #

@@ -47,8 +47,13 @@
   gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x10000
   gNxpQoriqLsTokenSpaceGuid.PcdNumUsbController|2
 
+  gNxpQoriqLsTokenSpaceGuid.PcdSataBaseAddr|0x3200000
+  gNxpQoriqLsTokenSpaceGuid.PcdSataSize|0x10000
+  gNxpQoriqLsTokenSpaceGuid.PcdNumSataController|0x4
+
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|TRUE
+  gNxpQoriqLsTokenSpaceGuid.PcdSataErratumA009185|TRUE
 
 ################################################################################
 #
