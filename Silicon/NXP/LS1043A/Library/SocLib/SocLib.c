@@ -64,6 +64,20 @@ SocGetClock (
 }
 
 /**
+  Function to get SoC's System Version Register(SVR)
+ **/
+UINT32
+SocGetSvr (
+  VOID
+  )
+{
+  LS1043A_DEVICE_CONFIG  *DeviceConfig;
+
+  DeviceConfig = (LS1043A_DEVICE_CONFIG  *)LS1043A_DCFG_ADDRESS;
+  return DcfgRead32 ((UINTN)&DeviceConfig->Svr);
+}
+
+/**
   Function to initialize SoC specific constructs
  **/
 VOID

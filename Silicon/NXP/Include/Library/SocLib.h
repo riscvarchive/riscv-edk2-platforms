@@ -49,4 +49,11 @@ SocInit (
   VOID
   );
 
+/**
+  Function to get System Version Register(SVR) of SoC
+**/
+UINT32
+SocGetSvr (
+  VOID
+  );
 #endif // SOC_LIB_H__
