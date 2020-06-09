@@ -12,6 +12,10 @@
 
 #define  NXP_LAYERSCAPE_CHASSIS3V2_DCFG_ADDRESS  0x1E00000
 
+#define SVR_SOC_VER(svr)            (((svr) >> 8) & 0xFFFFFE)
+#define SVR_MAJOR(svr)              (((svr) >> 4) & 0xf)
+#define SVR_MINOR(svr)              (((svr) >> 0) & 0xf)
+
 /**
   The Device Configuration Unit provides general purpose configuration and
   status for the device. These registers only support 32-bit accesses.
