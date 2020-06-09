@@ -314,6 +314,30 @@ AddOutput (
     ReportText));
 }
 
+/**
+  This CALLBACK_FUNCTION attempts to connect a handle non-recursively, asking
+  the matching driver to produce all first-level child handles.
+**/
+STATIC
+VOID
+EFIAPI
+Connect (
+  IN EFI_HANDLE   Handle,
+  IN CONST CHAR16 *ReportText
+  )
+{
+  EFI_STATUS Status;
+
+  Status = gBS->ConnectController (
+                  Handle, // ControllerHandle
+                  NULL,   // DriverImageHandle
+                  NULL,   // RemainingDevicePath -- produce all children
+                  FALSE   // Recursive
+                  );
+  DEBUG ((EFI_ERROR (Status) ? EFI_D_ERROR : EFI_D_VERBOSE, "%a: %s: %r\n",
+    __FUNCTION__, ReportText, Status));
+}
+
 STATIC
 INTN
 PlatformRegisterBootOption (
@@ -617,6 +641,13 @@ PlatformBootManagerBeforeConsole (
   // Dispatch deferred images after EndOfDxe event and ReadyToLock installation.
   //
   EfiBootManagerDispatchDeferredImages ();
+
+  //
+  // Ensure that USB is initialized by connecting the PCI root bridge so
+  // that the xHCI PCI controller gets enumerated (Pi 4) or by connecting
+  // to the DesignWare USB OTG controller directly.
+  FilterAndProcess (&gEfiPciRootBridgeIoProtocolGuid, NULL, Connect);
+  FilterAndProcess (&gEfiUsb2HcProtocolGuid, NULL, Connect);
 }
 
 /**
