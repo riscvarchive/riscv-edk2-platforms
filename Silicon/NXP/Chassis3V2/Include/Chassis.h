@@ -18,7 +18,17 @@
 **/
 #pragma pack(1)
 typedef struct {
-  UINT8   Reserved0[0x100 - 0x0];
+  UINT8   Reserved0[0x70 - 0x0];
+  UINT32  DeviceDisableRegister1;  // Device Disable Register 1
+  UINT32  DeviceDisableRegister2;  // Device Disable Register 2
+  UINT32  DeviceDisableRegister3;  // Device Disable Register 3
+  UINT32  DeviceDisableRegister4;  // Device Disable Register 4
+  UINT32  DeviceDisableRegister5;  // Device Disable Register 5
+  UINT32  DeviceDisableRegister6;  // Device Disable Register 6
+  UINT32  DeviceDisableRegister7;  // Device Disable Register 7
+  UINT8   Reserved1[0xa4 - 0x8c];
+  UINT32  Svr;                     // System Version Register
+  UINT8   Reserved2[0x100 - 0xa8];
   UINT32  RcwSr[32]; // Reset Control Word Status Register
 } NXP_LAYERSCAPE_CHASSIS3V2_DEVICE_CONFIG;
 #pragma pack()
