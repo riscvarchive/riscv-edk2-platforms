@@ -46,7 +46,7 @@ UpdateAcpiDsdt (
     return;
   }
 
-  Status = EthMacInit ();
+  Status = UpdateAcpiDsdtTable ();
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, " UpdateAcpiDsdtTable Failed, Status = %r\n", Status));
   }

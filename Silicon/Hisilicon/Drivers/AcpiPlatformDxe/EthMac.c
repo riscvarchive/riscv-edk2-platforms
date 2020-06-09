@@ -1,7 +1,7 @@
 /** @file
 
   Copyright (c) 2014, Applied Micro Curcuit Corporation. All rights reserved.<BR>
-  Copyright (c) 2015, Hisilicon Limited. All rights reserved.<BR>
+  Copyright (c) 2015 - 2020, Hisilicon Limited. All rights reserved.<BR>
   Copyright (c) 2015, Linaro Limited. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -23,6 +23,7 @@
 #include <Library/UefiBootServicesTableLib.h>
 #include <Protocol/AcpiSystemDescriptionTable.h>
 #include <Library/DebugLib.h>
+#include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PrintLib.h>
 #include <Library/DebugLib.h>
@@ -32,6 +33,7 @@
 #include <IndustryStandard/AcpiAml.h>
 
 #include <Protocol/HisiBoardNicProtocol.h>
+#include <Protocol/HisiSasConfig.h>
 
 // Turn on debug message by enabling below define
 //#define ACPI_DEBUG
@@ -45,17 +47,27 @@
 #define EFI_ACPI_MAX_NUM_TABLES         20
 #define DSDT_SIGNATURE                  0x54445344
 
-#define D03_ACPI_ETH_ID                     "HISI00C2"
-
 #define ACPI_ETH_MAC_KEY                "local-mac-address"
+#define ACPI_ETH_SAS_KEY                "sas-addr"
 
 #define PREFIX_VARIABLE_NAME            L"MAC"
 #define PREFIX_VARIABLE_NAME_COMPAT     L"RGMII_MAC"
-#define MAC_MAX_LEN                     30
+#define ADDRESS_MAX_LEN                 30
 
-EFI_STATUS GetEnvMac(
-  IN          UINTN    MacNextID,
-  IN OUT      UINT8    *MacBuffer)
+CHAR8 *mHisiAcpiDevId[] = {"HISI00C1","HISI00C2","HISI0162"};
+
+typedef enum {
+  DsdtDeviceUnknown,
+  DsdtDeviceLan,
+  DsdtDeviceSas
+} DSDT_DEVICE_TYPE;
+
+STATIC
+EFI_STATUS
+GetEnvMac(
+  IN     UINTN    MacNextID,
+  IN OUT UINT8    *MacBuffer
+  )
 {
   EFI_MAC_ADDRESS Mac;
   EFI_STATUS Status;
@@ -89,12 +101,121 @@ EFI_STATUS GetEnvMac(
   return EFI_SUCCESS;
 }
 
-EFI_STATUS _SearchReplacePackageMACAddress(
+STATIC
+EFI_STATUS
+GetSasAddress (
+  IN UINT8        Index,
+  IN OUT UINT8    *SasAddrBuffer
+  )
+{
+  EFI_STATUS Status;
+  HISI_SAS_CONFIG_PROTOCOL *HisiSasConf;
+
+  if (SasAddrBuffer == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
+
+  Status = gBS->LocateProtocol (&gHisiSasConfigProtocolGuid, NULL, (VOID **)&HisiSasConf);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Locate Sas Config Protocol failed %r\n", Status));
+    SasAddrBuffer[0] = 0x00;
+    SasAddrBuffer[1] = 0x00;
+    SasAddrBuffer[2] = 0x00;
+    SasAddrBuffer[3] = 0x00;
+    SasAddrBuffer[4] = 0x00;
+    SasAddrBuffer[5] = 0x00;
+    SasAddrBuffer[6] = 0x00;
+    SasAddrBuffer[7] = Index;
+    return Status;
+  }
+
+  return HisiSasConf->GetAddr (Index, SasAddrBuffer);
+}
+
+STATIC
+EFI_STATUS
+UpdateAddressInOption (
+  IN EFI_ACPI_SDT_PROTOCOL  *AcpiTableProtocol,
+  IN EFI_ACPI_HANDLE        ChildHandle,
+  IN UINTN                  DevNextID,
+  IN DSDT_DEVICE_TYPE       FoundDev
+  )
+{
+  EFI_STATUS          Status;
+  EFI_ACPI_DATA_TYPE  DataType;
+  CONST VOID          *Buffer;
+  UINTN               DataSize;
+  UINTN               Count;
+  EFI_ACPI_HANDLE     CurrentHandle;
+  UINT8               *AddressBuffer;
+  UINT8               AddressByte;
+
+  AddressByte = 0;
+  AddressBuffer = AllocateZeroPool (ADDRESS_MAX_LEN);
+  if (AddressBuffer == NULL) {
+    DEBUG ((DEBUG_ERROR, "%a:%d AllocateZeroPool failed\n", __FILE__, __LINE__));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  switch (FoundDev) {
+    case DsdtDeviceLan:
+      //Update the MAC
+      Status = GetEnvMac (DevNextID, AddressBuffer);
+      AddressByte = 6;
+      break;
+    case DsdtDeviceSas:
+      //Update SAS Address.
+      Status = GetSasAddress (DevNextID, AddressBuffer);
+      AddressByte = 8;
+      break;
+    default:
+      Status = EFI_INVALID_PARAMETER;
+  }
+  if (EFI_ERROR (Status)) {
+    FreePool (AddressBuffer);
+    return Status;
+  }
+
+  for (Count = 0; Count < AddressByte; Count++) {
+    Status = AcpiTableProtocol->GetOption (CurrentHandle, 1, &DataType, &Buffer, &DataSize);
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    if (DataType != EFI_ACPI_DATA_TYPE_UINT)
+      break;
+
+    // only need one byte.
+    // FIXME: Assume the CPU is little endian
+    Status = AcpiTableProtocol->SetOption (
+                                  CurrentHandle,
+                                  1,
+                                  AddressBuffer + Count,
+                                  sizeof(UINT8));
+    if (EFI_ERROR (Status)) {
+      break;
+    }
+
+    Status = AcpiTableProtocol->GetChild (ChildHandle, &CurrentHandle);
+    if (EFI_ERROR (Status) || CurrentHandle == NULL) {
+      break;
+    }
+  }
+
+  FreePool (AddressBuffer);
+  return Status;
+}
+
+STATIC
+EFI_STATUS
+UpdateAddressInPackage (
   IN EFI_ACPI_SDT_PROTOCOL  *AcpiTableProtocol,
   IN EFI_ACPI_HANDLE        ChildHandle,
   IN UINTN                  Level,
   IN OUT BOOLEAN            *Found,
-  IN UINTN                  MacNextID)
+  IN UINTN                  DevNextID,
+  IN DSDT_DEVICE_TYPE       FoundDev
+  )
 {
   // ASL template for ethernet driver:
 /*
@@ -114,15 +235,18 @@ EFI_STATUS _SearchReplacePackageMACAddress(
   CONST UINT8         *Data;
   CONST VOID          *Buffer;
   UINTN               DataSize;
-  UINTN               Count;
   EFI_ACPI_HANDLE     CurrentHandle;
   EFI_ACPI_HANDLE     NextHandle;
-  UINT8               MACBuffer[MAC_MAX_LEN];
+  EFI_ACPI_HANDLE     Level1Handle;
 
   DBG("In Level:%d\n", Level);
+  Level1Handle = NULL;
   Status = EFI_SUCCESS;
   for (CurrentHandle = NULL; ;) {
     Status = AcpiTableProtocol->GetChild(ChildHandle, &CurrentHandle);
+    if (Level == 1) {
+      Level1Handle = CurrentHandle;
+    }
     if (Level != 3 && (EFI_ERROR(Status) || CurrentHandle == NULL))
        break;
 
@@ -143,11 +267,14 @@ EFI_STATUS _SearchReplacePackageMACAddress(
               DataSize, Data[0], DataSize > 1 ? Data[1] : 0);
 
       Data = Buffer;
-      if (DataType != EFI_ACPI_DATA_TYPE_STRING
-              || AsciiStrCmp((CHAR8 *) Data, ACPI_ETH_MAC_KEY) != 0)
+      if ((DataType != EFI_ACPI_DATA_TYPE_STRING) ||
+          ((AsciiStrCmp ((CHAR8 *) Data, ACPI_ETH_MAC_KEY) != 0) &&
+           (AsciiStrCmp ((CHAR8 *) Data, ACPI_ETH_SAS_KEY) != 0))) {
+        ChildHandle = Level1Handle;
         continue;
+      }
 
-      DBG("_DSD Key Type %d. Found MAC address key\n", DataType);
+      DBG("_DSD Key Type %d. Found address key\n", DataType);
 
       //
       // We found the node.
@@ -157,33 +284,7 @@ EFI_STATUS _SearchReplacePackageMACAddress(
     }
 
     if (Level == 3 && *Found) {
-
-      //Update the MAC
-      Status = GetEnvMac(MacNextID, MACBuffer);
-      if (EFI_ERROR(Status))
-        break;
-
-      for (Count = 0; Count < 6; Count++) {
-        Status = AcpiTableProtocol->GetOption(CurrentHandle, 1, &DataType, &Buffer, &DataSize);
-        if (EFI_ERROR(Status))
-          break;
-
-        Data = Buffer;
-        DBG("    _DSD Child Subnode Store Op Code 0x%02X 0x%02X %02X DataType 0x%X\n",
-            DataSize, Data[0], DataSize > 1 ? Data[1] : 0, DataType);
-
-        if (DataType != EFI_ACPI_DATA_TYPE_UINT)
-          break;
-
-        // only need one byte.
-        // FIXME: Assume the CPU is little endian
-        Status = AcpiTableProtocol->SetOption(CurrentHandle, 1, (VOID *)&MACBuffer[Count], sizeof(UINT8));
-        if (EFI_ERROR(Status))
-          break;
-        Status = AcpiTableProtocol->GetChild(ChildHandle, &CurrentHandle);
-        if (EFI_ERROR(Status) || CurrentHandle == NULL)
-          break;
-      }
+      Status = UpdateAddressInOption (AcpiTableProtocol, ChildHandle, DevNextID, FoundDev);
       break;
     }
 
@@ -192,7 +293,13 @@ EFI_STATUS _SearchReplacePackageMACAddress(
 
     //Search next package
     AcpiTableProtocol->Open((VOID *) Buffer, &NextHandle);
-    Status = _SearchReplacePackageMACAddress(AcpiTableProtocol, NextHandle, Level + 1, Found, MacNextID);
+    Status = UpdateAddressInPackage (
+               AcpiTableProtocol,
+               NextHandle,
+               Level + 1,
+               Found,
+               DevNextID,
+               FoundDev);
     AcpiTableProtocol->Close(NextHandle);
     if (!EFI_ERROR(Status))
       break;
@@ -201,22 +308,28 @@ EFI_STATUS _SearchReplacePackageMACAddress(
   return Status;
 }
 
-EFI_STATUS SearchReplacePackageMACAddress(
+STATIC
+EFI_STATUS
+SearchReplacePackageAddress (
   IN EFI_ACPI_SDT_PROTOCOL  *AcpiTableProtocol,
   IN EFI_ACPI_HANDLE        ChildHandle,
-  IN UINTN                  MacNextID)
+  IN UINTN                  DevNextID,
+  IN DSDT_DEVICE_TYPE       FoundDev
+  )
 {
   BOOLEAN Found = FALSE;
   UINTN Level = 0;
 
-  return _SearchReplacePackageMACAddress(AcpiTableProtocol, ChildHandle, Level, &Found, MacNextID);
+  return UpdateAddressInPackage (AcpiTableProtocol, ChildHandle, Level,
+                                 &Found, DevNextID, FoundDev);
 }
 
 EFI_STATUS
-GetEthID (
+GetDeviceInfo (
   EFI_ACPI_SDT_PROTOCOL   *AcpiTableProtocol,
   EFI_ACPI_HANDLE         ChildHandle,
-  UINTN                   *EthID
+  UINTN                   *DevID,
+  DSDT_DEVICE_TYPE        *FoundDev
   )
 {
   EFI_STATUS Status;
@@ -225,7 +338,7 @@ GetEthID (
   CONST VOID          *Buffer;
   UINTN               DataSize;
 
-  // Get NameString ETHx
+  // Get NameString
   Status = AcpiTableProtocol->GetOption (ChildHandle, 1, &DataType, &Buffer, &DataSize);
   if (EFI_ERROR (Status)) {
     DEBUG ((EFI_D_ERROR, "[%a:%d] Get NameString failed: %r\n", __FUNCTION__, __LINE__, Status));
@@ -236,14 +349,23 @@ GetEthID (
   DBG("Size %p Data %02x %02x %02x %02x\n", DataSize, Data[0], Data[1], Data[2], Data[3]);
 
   Data[4] = '\0';
-  if (DataSize != 4 ||
-      AsciiStrnCmp ("ETH", Data, 3) != 0 ||
-      Data[3] > '9' || Data[3] < '0') {
-    DEBUG ((EFI_D_ERROR, "[%a:%d] The NameString %a is not ETHn\n", __FUNCTION__, __LINE__, Data));
+  if ((DataSize != 4) ||
+    (Data[3] > '9' || Data[3] < '0')) {
+    DEBUG ((DEBUG_ERROR, "The NameString %a is not ETHn or SASn\n", Data));
     return EFI_INVALID_PARAMETER;
   }
 
-  *EthID = Data[3] - '0';
+  if (AsciiStrnCmp ("ETH", Data, 3) == 0) {
+    *FoundDev = DsdtDeviceLan;
+  } else if (AsciiStrnCmp ("SAS", Data, 3) == 0) {
+    *FoundDev = DsdtDeviceSas;
+  } else {
+    DEBUG ((DEBUG_ERROR, "[%a:%d] The NameString %a is not ETHn or SASn\n",
+            __FUNCTION__, __LINE__, Data));
+    return EFI_INVALID_PARAMETER;
+  }
+
+  *DevID = Data[3] - '0';
   return EFI_SUCCESS;
 }
 
@@ -257,8 +379,10 @@ EFI_STATUS ProcessDSDTDevice (
   CONST VOID          *Buffer;
   UINTN               DataSize;
   EFI_ACPI_HANDLE     DevHandle;
-  INTN                Found = 0;
-  UINTN               MacNextID;
+  DSDT_DEVICE_TYPE    FoundDev = DsdtDeviceUnknown;
+  UINTN               DevNextID;
+  BOOLEAN             HisiAcpiDevNotFound;
+  UINTN               Index;
 
   Status = AcpiTableProtocol->GetOption(ChildHandle, 0, &DataType, &Buffer, &DataSize);
   if (EFI_ERROR(Status))
@@ -280,7 +404,7 @@ EFI_STATUS ProcessDSDTDevice (
       break;
 
     //
-    // Search for _HID with Ethernet ID
+    // Search for _HID with Device ID
     //
     Status = AcpiTableProtocol->GetOption(DevHandle, 0, &DataType, &Buffer, &DataSize);
     if (EFI_ERROR(Status))
@@ -312,23 +436,34 @@ EFI_STATUS ProcessDSDTDevice (
           DBG("[%a:%d] - _HID = %a\n", __FUNCTION__, __LINE__, Data);
 
           if (EFI_ERROR(Status) ||
-              DataType != EFI_ACPI_DATA_TYPE_STRING ||
-              (AsciiStrCmp((CHAR8 *) Data, D03_ACPI_ETH_ID) != 0)) {
-            AcpiTableProtocol->Close(ValueHandle);
-            Found = 0;
+              DataType != EFI_ACPI_DATA_TYPE_STRING) {
+            AcpiTableProtocol->Close (ValueHandle);
+            FoundDev = DsdtDeviceUnknown;
             continue;
           }
 
-          DBG("Found Ethernet device\n");
+          HisiAcpiDevNotFound = TRUE;
+          for (Index = 0; Index < ARRAY_SIZE (mHisiAcpiDevId); Index++) {
+            if (AsciiStrCmp ((CHAR8 *)Data, mHisiAcpiDevId[Index]) == 0) {
+              HisiAcpiDevNotFound = FALSE;
+              break;
+            }
+          }
+          if (HisiAcpiDevNotFound) {
+            AcpiTableProtocol->Close (ValueHandle);
+            FoundDev = DsdtDeviceUnknown;
+            continue;
+          }
+
+          DBG("Found device\n");
           AcpiTableProtocol->Close(ValueHandle);
-          Status = GetEthID (AcpiTableProtocol, ChildHandle, &MacNextID);
+          Status = GetDeviceInfo (AcpiTableProtocol, ChildHandle, &DevNextID, &FoundDev);
           if (EFI_ERROR (Status)) {
             continue;
           }
-          Found = 1;
-        } else if (Found == 1 && AsciiStrnCmp((CHAR8 *) Data, "_DSD", 4) == 0) {
+        } else if ((FoundDev != DsdtDeviceUnknown) && AsciiStrnCmp((CHAR8 *) Data, "_DSD", 4) == 0) {
           //
-          // Patch MAC address for open source kernel
+          // Patch DSD data
           //
           EFI_ACPI_HANDLE    PkgHandle;
           Status = AcpiTableProtocol->GetOption(DevHandle, 2, &DataType, &Buffer, &DataSize);
@@ -351,12 +486,30 @@ EFI_STATUS ProcessDSDTDevice (
           //
           // Walk the _DSD node
           //
-          if (DataSize == 1 && Data[0] == AML_PACKAGE_OP)
-            Status = SearchReplacePackageMACAddress(AcpiTableProtocol, PkgHandle, MacNextID);
+          if (DataSize == 1 && Data[0] == AML_PACKAGE_OP) {
+            Status = SearchReplacePackageAddress (AcpiTableProtocol, PkgHandle, DevNextID, FoundDev);
+          }
 
           AcpiTableProtocol->Close(PkgHandle);
+        } else if (AsciiStrnCmp ((CHAR8 *) Data, "_ADR", 4) == 0) {
+          Status = AcpiTableProtocol->GetOption (DevHandle, 2, &DataType, &Buffer, &DataSize);
+          if (EFI_ERROR (Status)) {
+            break;
+          }
+
+          if (DataType != EFI_ACPI_DATA_TYPE_CHILD) {
+            continue;
+          }
+
+          Status = GetDeviceInfo (AcpiTableProtocol, ChildHandle, &DevNextID, &FoundDev);
+
+          if (EFI_ERROR (Status)) {
+            continue;
+          }
         }
       }
+    } else if ((DataSize == 2) && (Data[0] == AML_EXT_OP) && (Data[1] == AML_EXT_DEVICE_OP)) {
+      ProcessDSDTDevice (AcpiTableProtocol, DevHandle);
     }
   }
 
@@ -457,7 +610,10 @@ AcpiCheckSum (
   Buffer[ChecksumOffset] = CalculateCheckSum8 (Buffer, Table->Length);
 }
 
-EFI_STATUS EthMacInit(void)
+EFI_STATUS
+UpdateAcpiDsdtTable (
+  VOID
+  )
 {
   EFI_STATUS              Status;
   EFI_ACPI_SDT_PROTOCOL   *AcpiTableProtocol;

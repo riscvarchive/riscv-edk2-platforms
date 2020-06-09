@@ -10,7 +10,7 @@
 #ifndef _ETH_MAC_H_
 #define _ETH_MAC_H_
 
-EFI_STATUS EthMacInit(VOID);
+EFI_STATUS UpdateAcpiDsdtTable (VOID);
 
 #endif
 
