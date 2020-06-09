@@ -18,7 +18,7 @@
 
 [Sources]
   AcpiPlatform.c
-  EthMac.c
+  UpdateDsdt.c
 
 [Packages]
   MdePkg/MdePkg.dec

@@ -21,7 +21,7 @@
 #include <Library/UefiRuntimeServicesTableLib.h>
 #include <IndustryStandard/Acpi.h>
 #include <IndustryStandard/AcpiAml.h>
-#include "EthMac.h"
+#include "UpdateDsdt.h"
 
 EFI_EVENT       mUpdateAcpiDsdtTableEvent;
 
