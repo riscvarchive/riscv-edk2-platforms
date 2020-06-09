@@ -45,6 +45,9 @@
 
 #define LS1043A_DCFG_ADDRESS         NXP_LAYERSCAPE_CHASSIS2_DCFG_ADDRESS
 
+//SVR
+#define SVR_LS1043A                 0x879200
+
 /**
   Reset Control Word (RCW) Bits
 **/
