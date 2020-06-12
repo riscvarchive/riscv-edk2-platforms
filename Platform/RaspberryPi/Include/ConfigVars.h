@@ -44,14 +44,6 @@ typedef struct {
 } DEBUG_ENABLE_JTAG_VARSTORE_DATA;
 
 typedef struct {
-  /*
-   * 0 - Don't show UEFI exit message.
-   * 1 - Show UEFI exit message.
-   */
-   UINT32 Show;
-} DEBUG_SHOW_UEFI_EXIT_VARSTORE_DATA;
-
-typedef struct {
 #define CHIPSET_CPU_CLOCK_LOW     0
 #define CHIPSET_CPU_CLOCK_DEFAULT 1
 #define CHIPSET_CPU_CLOCK_MAX     2

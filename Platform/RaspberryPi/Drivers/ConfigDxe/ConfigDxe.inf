@@ -84,7 +84,6 @@
   gRaspberryPiTokenSpaceGuid.PcdMmcSdHighSpeedMHz
   gRaspberryPiTokenSpaceGuid.PcdMmcDisableMulti
   gRaspberryPiTokenSpaceGuid.PcdDebugEnableJTAG
-  gRaspberryPiTokenSpaceGuid.PcdDebugShowUEFIExit
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot
   gRaspberryPiTokenSpaceGuid.PcdSystemTableMode

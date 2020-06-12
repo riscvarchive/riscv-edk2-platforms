@@ -294,14 +294,6 @@ SetupVariables (
     PcdSet32 (PcdDebugEnableJTAG, PcdGet32 (PcdDebugEnableJTAG));
   }
 
-  Size = sizeof (UINT32);
-  Status = gRT->GetVariable (L"DebugShowUEFIExit",
-                  &gConfigDxeFormSetGuid,
-                  NULL, &Size, &Var32);
-  if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdDebugShowUEFIExit, PcdGet32 (PcdDebugShowUEFIExit));
-  }
-
   Size = sizeof (UINT8);
   Status = gRT->GetVariable (L"DisplayEnableScaledVModes",
                   &gConfigDxeFormSetGuid,

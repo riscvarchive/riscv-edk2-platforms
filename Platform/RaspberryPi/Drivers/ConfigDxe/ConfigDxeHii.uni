@@ -118,8 +118,3 @@
 #string STR_DEBUG_JTAG_HELP         #language en-US "Signals (nTRST, TDI, TMS, TCK, RTCK, TDO) -> Header pins (15, 7, 13, 22, 16, 18)"
 #string STR_DEBUG_JTAG_ENABLE       #language en-US "Enable JTAG via GPIO"
 #string STR_DEBUG_JTAG_DISABLE      #language en-US "Disable JTAG"
-
-#string STR_DEBUG_EXIT_SHOW_PROMPT  #language en-US "Verbose ExitBootServices"
-#string STR_DEBUG_EXIT_SHOW_HELP    #language en-US "Show message when UEFI hands off to OS"
-#string STR_DEBUG_EXIT_SHOW_NO      #language en-US "Do nothing"
-#string STR_DEBUG_EXIT_SHOW_YES     #language en-US "Show farewell message"

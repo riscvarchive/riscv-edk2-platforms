@@ -480,7 +480,6 @@
   #
 
   gRaspberryPiTokenSpaceGuid.PcdDebugEnableJTAG|L"DebugEnableJTAG"|gConfigDxeFormSetGuid|0x0|0
-  gRaspberryPiTokenSpaceGuid.PcdDebugShowUEFIExit|L"DebugShowUEFIExit"|gConfigDxeFormSetGuid|0x0|0
 
   #
   # Display-related.
