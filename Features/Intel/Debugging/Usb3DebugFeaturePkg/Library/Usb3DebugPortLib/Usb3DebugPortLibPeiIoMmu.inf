@@ -1,7 +1,7 @@
 ## @file
 #  USB3 Debug port library.
 #
-# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2020, Intel Corporation. All rights reserved.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -30,7 +30,7 @@
 [Packages]
   MdePkg/MdePkg.dec
   MdeModulePkg/MdeModulePkg.dec
-  Debugging/Usb3DebugFeaturePkg/Usb3DebugFeaturePkg.dec
+  Usb3DebugFeaturePkg/Usb3DebugFeaturePkg.dec
 
 [LibraryClasses]
   BaseLib

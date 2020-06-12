@@ -1,7 +1,7 @@
 ## @file
 #  USB3 Debug Port Parameter library instance based on PCD.
 #
-# Copyright (c) 2013 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2013 - 2020, Intel Corporation. All rights reserved.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -23,7 +23,7 @@
 
 [Packages]
   MdePkg/MdePkg.dec
-  Debugging/Usb3DebugFeaturePkg/Usb3DebugFeaturePkg.dec
+  Usb3DebugFeaturePkg/Usb3DebugFeaturePkg.dec
 
 [Pcd]
   gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsbSerialXhciBus     ## CONSUMES

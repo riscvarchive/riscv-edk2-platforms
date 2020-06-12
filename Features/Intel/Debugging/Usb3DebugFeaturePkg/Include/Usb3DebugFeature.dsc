@@ -106,10 +106,10 @@
 
   # Add library instances here that are not included in package components and should be tested
   # in the package build.
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortParamLibPcd/Usb3DebugPortParamLibPcd.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPei.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPeiIoMmu.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortParamLibPcd/Usb3DebugPortParamLibPcd.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPei.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibPeiIoMmu.inf
 
   # Add components here that should be included in the package build.
 
@@ -126,10 +126,10 @@
 
   # Add library instances here that are not included in package components and should be tested
   # in the package build.
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortParamLibPcd/Usb3DebugPortParamLibPcd.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxe.inf
-  Debugging/Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxeIoMmu.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibNull.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortParamLibPcd/Usb3DebugPortParamLibPcd.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxe.inf
+  Usb3DebugFeaturePkg/Library/Usb3DebugPortLib/Usb3DebugPortLibDxeIoMmu.inf
 
   # Add components here that should be included in the package build.
 
