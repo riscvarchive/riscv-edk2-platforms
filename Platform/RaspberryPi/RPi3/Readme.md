@@ -201,3 +201,64 @@ install a kernel that relies on Device Tree rather than ACPI.
 - SPCR hardcodes UART type to miniUART, and thus will not expose correct
   (PL011) UART on CM3 and Pi2B or if DT overlays to switch UART are used
   on Pi 3B/3B+/3A+.
+
+# Configuration Settings
+The Raspberry Pi UEFI configuration settings can be viewed and changed using both the UI configuration menu (under `Device Manager` -> `Raspberry Pi Configuration`), as well as the UEFI Shell. To configure using the UEFI Shell, use `setvar` command to read/write the UEFI variables with GUID = `CD7CC258-31DB-22E6-9F22-63B0B8EED6B5`.
+
+The syntax to read a setting is:
+```
+setvar <NAME> -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5
+```
+
+The syntax to write a setting is:
+```
+setvar <NAME> -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5 -bs -rt -nv =<VALUE>
+```
+
+For string-type settings (e.g. Asset Tag), the syntax to write is:
+```
+setvar <NAME> -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5 -bs -rt -nv =L"<VALUE>" =0x0000
+```
+
+UEFI Setting                 |    NAME               |  VALUE
+-----------------------------|-----------------------|-----------------------------
+**CPU Configuration**        |
+CPU Clock                    | `CpuClock` | Low = `0x00000000`<br> Default = `0x00000001` (default)<br> Max = `0x00000002`<br> Custom = `0x00000003`
+CPU Clock Rate (MHz)         | `CustomCpuClock` | Hex numeric value, 4-bytes<br> (e.g. `0x000005DC` for 1500 MHz)
+**Display Configuration**    |
+Virtual 640x480              | `DisplayEnableScaledVModes` | Checked = Bit 0 set (i.e.  `<DisplayEnableScaledVModes> \| 0x01`)
+Virtual 800x600              | `DisplayEnableScaledVModes` | Checked = Bit 1 set (i.e.  `<DisplayEnableScaledVModes> \| 0x02`)
+Virtual 1024x768             | `DisplayEnableScaledVModes` | Checked = Bit 2 set (i.e.  `<DisplayEnableScaledVModes> \| 0x04`)
+Virtual 720p                 | `DisplayEnableScaledVModes` | Checked = Bit 3 set (i.e.  `<DisplayEnableScaledVModes> \| 0x08`)
+Virtual 1080p                | `DisplayEnableScaledVModes` | Checked = Bit 4 set (i.e.  `<DisplayEnableScaledVModes> \| 0x10`)
+Native resolution            | `DisplayEnableScaledVModes` | Checked = Bit 5 set (i.e.  `<DisplayEnableScaledVModes> \| 0x20`) (default)
+Screenshot support           | `DisplayEnableSShot` | Control-Alt-F12 = `0x00000001` (default)<br> Not Enabled = `0x00000000`
+**Advanced Configuration**   |
+System Table Selection       | `SystemTableMode`| ACPI = `0x00000000` <br> ACPI + Devicetree = `0x00000001` (default)<br> Devicetree = `0x00000002`
+Asset Tag                    | `AssetTag` | String, 32 characters or less (e.g. `L"ABCD123"`)<br> (default `L""`)
+**SD/MMC Configuration**     |
+uSD/eMMC Routing             | `SdIsArasan` | Arasan SDHC = `0x00000001` <br> Broadcom SDHOST = `0x00000000` (default)
+Multi-Block Support          | `MmcDisableMulti` | Multi-block transfers = `0x00000000` (default)<br> Single block transfers = `0x00000001`
+uSD Max Bus Width            | `MmcForce1Bit` | 4-bit Mode = `0x00000000`  (default)<br> 1-bit Mode = `0x00000001`
+uSD Force Default Speed      | `MmcForceDefaultSpeed` | Allow High Speed = `0x00000000` (default)<br> Force Default Speed = `0x00000001`
+SD Default Speed (MHz)       | `MmcSdDefaultSpeedMHz` | Hex numeric value, 4-bytes (e.g. `0x00000019` for 25 MHz)<br>(default 25)
+SD High Speed (MHz)          | `MmcSdHighSpeedMHz` | Hex numeric value, 4-bytes (e.g. `0x00000032` for 50 MHz)<br>(default 50)
+**Debugging Configuration**  |
+JTAG Routing                 | `DebugEnableJTAG` | Enable JTAG via GPIO = `0x00000001`<br> Disable JTAG= `0x00000000` (default)
+
+**Examples:**
+
+- To read the 'System Table Selection' setting :
+```
+setvar SystemTableMode -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5
+```
+
+- To change the 'System Table Selection' setting to 'Devicetree' :
+```
+setvar SystemTableMode -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5 -bs -rt -nv =0x00000002
+```
+
+- To change the Asset Tag to the string "ASSET-TAG-123" :
+```
+setvar AssetTag -guid CD7CC258-31DB-22E6-9F22-63B0B8EED6B5 -bs -rt -nv =L"ASSET-TAG-123" =0x0000
+```
