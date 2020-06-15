@@ -1,7 +1,7 @@
 ## @file
 #  PCD configuration build description file for the X58Ich10 board.
 #
-# Copyright (c) 2019 Intel Corporation. All rights reserved. <BR>
+# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved. <BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -37,12 +37,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdDxeIplSwitchToLongMode|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciBusHotplugDeviceSupport|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|TRUE
-!if $(TARGET) == RELEASE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
-!else
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
-!endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdSupportUpdateCapsuleReset|FALSE
   gUefiCpuPkgTokenSpaceGuid.PcdCpuHotPlugSupport|FALSE
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
@@ -128,6 +122,12 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeMemorySize|1
   gEfiMdeModulePkgTokenSpaceGuid.PcdVariableStoreSize|0xc000
   gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|0x0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|TRUE
+!if $(TARGET) == RELEASE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
+!else
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
+!endif
   # DEBUG_INIT      0x00000001  // Initialization
   # DEBUG_WARN      0x00000002  // Warnings
   # DEBUG_LOAD      0x00000004  // Load events
