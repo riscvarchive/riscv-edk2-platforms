@@ -1,7 +1,7 @@
 ## @file
 #  PCD configuration build description file for the KabylakeRvp3 board.
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -107,12 +107,6 @@
   # Edk2 Configuration
   ######################################
   gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreImageLoaderSearchTeSectionFirst|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|FALSE
-!if $(TARGET) == RELEASE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
-!else
-  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
-!endif
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmProfileEnable|FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
@@ -243,6 +237,12 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
 !if $(TARGET) == DEBUG
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
+!endif
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|FALSE
+!if $(TARGET) == RELEASE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
+!else
+  gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
 !endif
 
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80
