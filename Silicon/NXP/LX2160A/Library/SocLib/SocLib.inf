@@ -22,6 +22,12 @@
 [LibraryClasses]
   ChassisLib
   DebugLib
+  PcdLib
+  SerDesHelperLib
 
 [Sources.common]
+  SerDes.c
   SocLib.c
+
+[FixedPcd]
+  gNxpQoriqLsTokenSpaceGuid.PcdSerDesLanes

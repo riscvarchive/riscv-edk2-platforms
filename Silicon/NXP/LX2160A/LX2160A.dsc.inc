@@ -15,6 +15,7 @@
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
   PL011UartClockLib|Silicon/NXP/Library/PL011UartClockLib/PL011UartClockLib.inf
+  SerDesHelperLib|Silicon/NXP/Library/SerDesHelperLib/SerDesHelperLib.inf
 
 ################################################################################
 #
@@ -32,6 +33,7 @@
   gArmTokenSpaceGuid.PcdGenericWatchdogControlBase|0x23A0000
   gArmTokenSpaceGuid.PcdGenericWatchdogRefreshBase|0x2390000
   gArmTokenSpaceGuid.PcdGenericWatchdogEl2IntrNum|91
+  gNxpQoriqLsTokenSpaceGuid.PcdSerDesLanes|0x8
 
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultReceiveFifoDepth|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x21C0000
