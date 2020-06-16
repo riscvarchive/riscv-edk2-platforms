@@ -163,6 +163,7 @@ GenetDriverBindingStart (
 
   EfiInitializeLock (&Genet->Lock, TPL_CALLBACK);
   CopyMem (&Genet->Snp, &gGenetSimpleNetworkTemplate, sizeof Genet->Snp);
+  CopyMem (&Genet->Aip, &gGenetAdapterInfoTemplate, sizeof Genet->Aip);
 
   Genet->Snp.Mode                       = &Genet->SnpMode;
   Genet->SnpMode.State                  = EfiSimpleNetworkStopped;
@@ -203,7 +204,8 @@ GenetDriverBindingStart (
   }
 
   Status = gBS->InstallMultipleProtocolInterfaces (&ControllerHandle,
-                  &gEfiSimpleNetworkProtocolGuid,   &Genet->Snp,
+                  &gEfiSimpleNetworkProtocolGuid,       &Genet->Snp,
+                  &gEfiAdapterInformationProtocolGuid,  &Genet->Aip,
                   NULL);
 
   if (EFI_ERROR (Status)) {
@@ -273,10 +275,10 @@ GenetDriverBindingStop (
 
   ASSERT (Genet->ControllerHandle == ControllerHandle);
 
-  Status = gBS->UninstallProtocolInterface (ControllerHandle,
-                                            &gEfiSimpleNetworkProtocolGuid,
-                                            &Genet->Snp
-                                            );
+  Status = gBS->UninstallMultipleProtocolInterfaces (ControllerHandle,
+                  &gEfiSimpleNetworkProtocolGuid,       &Genet->Snp,
+                  &gEfiAdapterInformationProtocolGuid,  &Genet->Aip,
+                  NULL);
   if (EFI_ERROR (Status)) {
     return Status;
   }

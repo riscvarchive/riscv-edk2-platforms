@@ -14,6 +14,7 @@
 #include <Uefi.h>
 #include <Library/UefiLib.h>
 #include <Protocol/BcmGenetPlatformDevice.h>
+#include <Protocol/AdapterInformation.h>
 #include <Protocol/ComponentName.h>
 #include <Protocol/ComponentName2.h>
 #include <Protocol/SimpleNetwork.h>
@@ -209,6 +210,8 @@ typedef struct {
   EFI_SIMPLE_NETWORK_PROTOCOL         Snp;
   EFI_SIMPLE_NETWORK_MODE             SnpMode;
 
+  EFI_ADAPTER_INFORMATION_PROTOCOL    Aip;
+
   BCM_GENET_PLATFORM_DEVICE_PROTOCOL  *Dev;
 
   GENERIC_PHY_PRIVATE_DATA            Phy;
@@ -234,9 +237,11 @@ extern EFI_COMPONENT_NAME_PROTOCOL            gGenetComponentName;
 extern EFI_COMPONENT_NAME2_PROTOCOL           gGenetComponentName2;
 
 extern CONST EFI_SIMPLE_NETWORK_PROTOCOL      gGenetSimpleNetworkTemplate;
+extern CONST EFI_ADAPTER_INFORMATION_PROTOCOL gGenetAdapterInfoTemplate;
 
 #define GENET_DRIVER_SIGNATURE                SIGNATURE_32('G', 'N', 'E', 'T')
 #define GENET_PRIVATE_DATA_FROM_SNP_THIS(a)   CR(a, GENET_PRIVATE_DATA, Snp, GENET_DRIVER_SIGNATURE)
+#define GENET_PRIVATE_DATA_FROM_AIP_THIS(a)   CR(a, GENET_PRIVATE_DATA, Aip, GENET_DRIVER_SIGNATURE)
 
 #define GENET_RX_BUFFER(g, idx)               ((UINT8 *)(UINTN)(g)->RxBuffer + GENET_MAX_PACKET_SIZE * (idx))
 

@@ -19,6 +19,7 @@
   UNLOAD_IMAGE                   = GenetUnload
 
 [Sources]
+  AdapterInfo.c
   BcmGenetDxe.h
   ComponentName.c
   DriverBinding.c
@@ -49,10 +50,12 @@
 
 [Protocols]
   gBcmGenetPlatformDeviceProtocolGuid         ## TO_START
+  gEfiAdapterInformationProtocolGuid          ## BY_START
   gEfiDevicePathProtocolGuid                  ## BY_START
   gEfiSimpleNetworkProtocolGuid               ## BY_START
 
 [Guids]
+  gEfiAdapterInfoMediaStateGuid
   gEfiEventExitBootServicesGuid
 
 [FixedPcd]
