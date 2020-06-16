@@ -23,7 +23,7 @@ NorFlashPlatformInitialization (
 NOR_FLASH_DESCRIPTION mNorFlashDevice =
 {
  FixedPcdGet64(PcdFdBaseAddress),
- FixedPcdGet64(PcdFdBaseAddress),
+ FixedPcdGet64(PcdFlashNvStorageVariableBase),
  FixedPcdGet32(PcdFdSize),
  QEMU_NOR_BLOCK_SIZE
 };

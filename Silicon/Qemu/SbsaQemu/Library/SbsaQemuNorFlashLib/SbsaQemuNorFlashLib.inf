@@ -23,7 +23,9 @@
   ArmPlatformPkg/ArmPlatformPkg.dec
   ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
 
 [FixedPcd]
   gArmTokenSpaceGuid.PcdFdBaseAddress
   gArmTokenSpaceGuid.PcdFdSize
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase
