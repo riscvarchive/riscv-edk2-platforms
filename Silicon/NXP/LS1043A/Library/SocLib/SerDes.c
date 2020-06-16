@@ -19,7 +19,7 @@
 // SerDes1 Protocol Shift in Reset Configuration Word (RCW) Status Register
 #define SERDES1_PROTOCOL_SHIFT     16
 
-SERDES_CONFIG gSerDes1ConfigTable[] = {
+STATIC SERDES_CONFIG mSerDes1ConfigTable[] = {
   {0x1555, {XFI_FM1_MAC9, PCIE1, PCIE2, PCIE3 } },
   {0x2555, {SGMII_2500_FM1_DTSEC9, PCIE1, PCIE2, PCIE3 } },
   {0x4555, {QSGMII_FM1_A, PCIE1, PCIE2, PCIE3 } },
@@ -49,7 +49,7 @@ SERDES_CONFIG gSerDes1ConfigTable[] = {
 };
 
 SERDES_CONFIG *gSerDesConfig[] = {
-  gSerDes1ConfigTable
+  mSerDes1ConfigTable
 };
 
 /**
