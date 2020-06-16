@@ -65,7 +65,7 @@ IsSerDesProtocolValid (
 
   while (Config->Protocol) {
     if (Config->Protocol == SerDesProtocol) {
-      DEBUG ((DEBUG_INFO, "Protocol: %x Matched with the one in Table\n", SerDesProtocol));
+      DEBUG ((DEBUG_INFO, "Protocol: 0x%x Matched with the one in Table\n", SerDesProtocol));
       break;
     }
     Config++;
