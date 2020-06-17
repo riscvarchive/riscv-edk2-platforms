@@ -4,7 +4,7 @@
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro Ltd. All rights reserved.
  *  Copyright (c) 2015-2016, Red Hat, Inc.
- *  Copyright (c) 2014, ARM Ltd. All rights reserved.
+ *  Copyright (c) 2014-2020, ARM Ltd. All rights reserved.
  *  Copyright (c) 2004-2016, Intel Corporation. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -700,6 +700,40 @@ PlatformBootManagerUnableToBoot (
   EFI_INPUT_KEY                Key;
   EFI_BOOT_MANAGER_LOAD_OPTION BootManagerMenu;
   UINTN                        Index;
+  EFI_BOOT_MANAGER_LOAD_OPTION *BootOptions;
+  UINTN                        OldBootOptionCount;
+  UINTN                        NewBootOptionCount;
+
+  //
+  // Record the total number of boot configured boot options
+  //
+  BootOptions = EfiBootManagerGetLoadOptions (&OldBootOptionCount,
+                  LoadOptionTypeBoot);
+  EfiBootManagerFreeLoadOptions (BootOptions, OldBootOptionCount);
+
+  //
+  // Connect all devices, and regenerate all boot options
+  //
+  EfiBootManagerConnectAll ();
+  EfiBootManagerRefreshAllBootOption ();
+
+  //
+  // Record the updated number of boot configured boot options
+  //
+  BootOptions = EfiBootManagerGetLoadOptions (&NewBootOptionCount,
+                  LoadOptionTypeBoot);
+  EfiBootManagerFreeLoadOptions (BootOptions, NewBootOptionCount);
+
+  //
+  // If the number of configured boot options has changed, reboot
+  // the system so the new boot options will be taken into account
+  // while executing the ordinary BDS bootflow sequence.
+  //
+  if (NewBootOptionCount != OldBootOptionCount) {
+    DEBUG ((DEBUG_WARN, "%a: rebooting after refreshing all boot options\n",
+      __FUNCTION__));
+    gRT->ResetSystem (EfiResetCold, EFI_SUCCESS, 0, NULL);
+  }
 
   //
   // BootManagerMenu doesn't contain the correct information when return status
