@@ -380,9 +380,9 @@ SMBIOS_TABLE_TYPE9  mSysSlotInfoType9 = {
     0,  // SmbusSignalSupported    :1;
     0,  // Reserved                :5;  ///< Set to 0.
   },
-  0,    // SegmentGroupNum;
-  0,    // BusNum;
-  0,    // DevFuncNum;
+  0xFFFF, // SegmentGroupNum;
+  0xFF,   // BusNum;
+  0xFF,   // DevFuncNum;
 };
 CHAR8 *mSysSlotInfoType9Strings[] = {
   "SD Card",
