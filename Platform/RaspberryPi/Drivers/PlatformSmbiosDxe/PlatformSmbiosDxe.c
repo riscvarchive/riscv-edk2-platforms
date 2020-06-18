@@ -389,6 +389,20 @@ CHAR8 *mSysSlotInfoType9Strings[] = {
   NULL
 };
 
+
+/***********************************************************************
+        SMBIOS data definition  TYPE 11  OEM Strings
+************************************************************************/
+
+SMBIOS_TABLE_TYPE11 mOemStringsType11 = {
+  { EFI_SMBIOS_TYPE_OEM_STRINGS, sizeof (SMBIOS_TABLE_TYPE11), SMBIOS_HANDLE_PI_RESERVED },
+  1 // StringCount
+};
+CHAR8 *mOemStringsType11Strings[] = {
+  "https://github/tianocore/edk2-platforms/Platform/RaspberryPi/",
+  NULL
+};
+
 /***********************************************************************
         SMBIOS data definition  TYPE16  Physical Memory ArrayInformation
 ************************************************************************/
@@ -855,6 +869,17 @@ SysSlotInfoUpdateSmbiosType9 (
 }
 
 /***********************************************************************
+        SMBIOS data update  TYPE11  OEM Strings
+************************************************************************/
+VOID
+OemStringsUpdateSmbiosType11 (
+  VOID
+  )
+{
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mOemStringsType11, mOemStringsType11Strings, NULL);
+}
+
+/***********************************************************************
         SMBIOS data update  TYPE16  Physical Memory Array Information
 ************************************************************************/
 VOID
@@ -960,6 +985,8 @@ PlatformSmbiosDriverEntryPoint (
   CacheInfoUpdateSmbiosType7 ();
 
   SysSlotInfoUpdateSmbiosType9 ();
+
+  OemStringsUpdateSmbiosType11 ();
 
   PhyMemArrayInfoUpdateSmbiosType16 ();
 
