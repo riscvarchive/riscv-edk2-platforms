@@ -18,9 +18,9 @@
 #include <Library/PostCodeMapLib.h>
 #include <Library/PostCodeLib.h>
 
-EFI_RSC_HANDLER_PROTOCOL  *mRscHandlerProtocol       = NULL;
-EFI_EVENT                 mExitBootServicesEvent     = NULL;
-BOOLEAN                   mRegisted                  = FALSE;
+EFI_RSC_HANDLER_PROTOCOL  *mPostCodeRscHandlerProtocol       = NULL;
+EFI_EVENT                 mPostCodeExitBootServicesEvent     = NULL;
+BOOLEAN                   mPostCodeRegisted                  = FALSE;
 
 /**
   Convert status code value and write data to post code.
@@ -81,8 +81,8 @@ UnregisterPostCodeBootTimeHandlers (
   IN VOID             *Context
   )
 {
-  if (mRegisted) {
-    mRscHandlerProtocol->Unregister (PostCodeStatusCodeReportWorker);
+  if (mPostCodeRegisted) {
+    mPostCodeRscHandlerProtocol->Unregister (PostCodeStatusCodeReportWorker);
   }
 }
 
@@ -109,13 +109,13 @@ RegisterPostCodeBootTimeHandlers (
   Status = gBS->LocateProtocol (
                   &gEfiRscHandlerProtocolGuid,
                   NULL,
-                  (VOID **) &mRscHandlerProtocol
+                  (VOID **) &mPostCodeRscHandlerProtocol
                   );
   ASSERT_EFI_ERROR (Status);
 
-  mRscHandlerProtocol->Register (PostCodeStatusCodeReportWorker, TPL_HIGH_LEVEL);
+  mPostCodeRscHandlerProtocol->Register (PostCodeStatusCodeReportWorker, TPL_HIGH_LEVEL);
   ASSERT_EFI_ERROR (Status);
-  mRegisted = TRUE;
+  mPostCodeRegisted = TRUE;
 
   Status = gBS->CreateEventEx (
                   EVT_NOTIFY_SIGNAL,
@@ -123,7 +123,7 @@ RegisterPostCodeBootTimeHandlers (
                   UnregisterPostCodeBootTimeHandlers,
                   NULL,
                   &gEfiEventExitBootServicesGuid,
-                  &mExitBootServicesEvent
+                  &mPostCodeExitBootServicesEvent
                   );
   ASSERT_EFI_ERROR (Status);
 }
@@ -158,7 +158,7 @@ RuntimeDxePostCodeStatusCodeHandlerLibConstructor (
   Status = gBS->LocateProtocol (
                   &gEfiRscHandlerProtocolGuid,
                   NULL,
-                  (VOID **) &mRscHandlerProtocol
+                  (VOID **) &mPostCodeRscHandlerProtocol
                   );
 
   if (!EFI_ERROR (Status)) {

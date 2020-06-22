@@ -17,9 +17,9 @@
 #include <Library/BeepMapLib.h>
 #include <Library/BeepLib.h>
 
-EFI_RSC_HANDLER_PROTOCOL  *mRscHandlerProtocol       = NULL;
-EFI_EVENT                 mExitBootServicesEvent     = NULL;
-BOOLEAN                   mRegistered                = FALSE;
+EFI_RSC_HANDLER_PROTOCOL  *mBeepRscHandlerProtocol       = NULL;
+EFI_EVENT                 mBeepExitBootServicesEvent     = NULL;
+BOOLEAN                   mBeepRegistered                = FALSE;
 
 /**
   Convert status code value to the times of beep.
@@ -79,8 +79,8 @@ UnregisterBeepBootTimeHandlers (
   IN VOID             *Context
   )
 {
-  if (mRegistered) {
-    mRscHandlerProtocol->Unregister (BeepStatusCodeReportWorker);
+  if (mBeepRegistered) {
+    mBeepRscHandlerProtocol->Unregister (BeepStatusCodeReportWorker);
   }
 }
 
@@ -105,13 +105,13 @@ RegisterBeepBootTimeHandlers (
   Status = gBS->LocateProtocol (
                   &gEfiRscHandlerProtocolGuid,
                   NULL,
-                  (VOID **) &mRscHandlerProtocol
+                  (VOID **) &mBeepRscHandlerProtocol
                   );
   ASSERT_EFI_ERROR (Status);
 
-  mRscHandlerProtocol->Register (BeepStatusCodeReportWorker, TPL_HIGH_LEVEL);
+  mBeepRscHandlerProtocol->Register (BeepStatusCodeReportWorker, TPL_HIGH_LEVEL);
   ASSERT_EFI_ERROR (Status);
-  mRegistered = TRUE;
+  mBeepRegistered = TRUE;
 
   Status = gBS->CreateEventEx (
                   EVT_NOTIFY_SIGNAL,
@@ -119,7 +119,7 @@ RegisterBeepBootTimeHandlers (
                   UnregisterBeepBootTimeHandlers,
                   NULL,
                   &gEfiEventExitBootServicesGuid,
-                  &mExitBootServicesEvent
+                  &mBeepExitBootServicesEvent
                   );
   ASSERT_EFI_ERROR (Status);
 }
@@ -154,7 +154,7 @@ RuntimeDxeBeepStatusCodeHandlerLibConstructor (
   Status = gBS->LocateProtocol (
                   &gEfiRscHandlerProtocolGuid,
                   NULL,
-                  (VOID **) &mRscHandlerProtocol
+                  (VOID **) &mBeepRscHandlerProtocol
                   );
 
   if (!EFI_ERROR (Status)) {
