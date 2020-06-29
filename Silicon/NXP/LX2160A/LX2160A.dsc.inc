@@ -38,6 +38,11 @@
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultReceiveFifoDepth|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x21C0000
 
+  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr|0x8000000000
+  gNxpQoriqLsTokenSpaceGuid.PcdNumPciController|6
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x80000
+  gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x407FC
+
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|TRUE
 
