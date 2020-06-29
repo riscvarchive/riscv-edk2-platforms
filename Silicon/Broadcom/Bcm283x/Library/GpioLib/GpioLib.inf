@@ -30,6 +30,7 @@
   BaseLib
   DebugLib
   IoLib
+  TimerLib
 
 [FixedPcd]
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress

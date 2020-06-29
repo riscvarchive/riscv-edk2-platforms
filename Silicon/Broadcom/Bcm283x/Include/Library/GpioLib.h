@@ -24,4 +24,21 @@ GpioPinFuncGet (
   IN  UINTN Pin
   );
 
+VOID
+GpioPinSet (
+  IN  UINTN Pin,
+  IN  UINTN Val
+  );
+
+UINTN
+GpioPinGet (
+  IN  UINTN Pin
+  );
+
+VOID
+GpioSetPull (
+  IN  UINTN   Pin,
+  IN  UINTN   Pud
+);
+
 #endif /* __GPIO_LIB__ */
