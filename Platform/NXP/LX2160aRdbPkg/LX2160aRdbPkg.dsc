@@ -35,6 +35,8 @@
 [LibraryClasses.common]
   ArmPlatformLib|Platform/NXP/LX2160aRdbPkg/Library/ArmPlatformLib/ArmPlatformLib.inf
   RealTimeClockLib|EmbeddedPkg/Library/VirtualRealTimeClockLib/VirtualRealTimeClockLib.inf
+  PciSegmentLib|Silicon/NXP/Library/PciSegmentLib/PciSegmentLib.inf
+  PciHostBridgeLib|Silicon/NXP/Library/PciHostBridgeLib/PciHostBridgeLib.inf
 
 ################################################################################
 #
@@ -51,6 +53,13 @@
   }
 
   Platform/NXP/LX2160aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
+
+  #
+  # PCI
+  #
+  Silicon/NXP/Drivers/PciCpuIo2Dxe/PciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 
   #
   # Networking stack
