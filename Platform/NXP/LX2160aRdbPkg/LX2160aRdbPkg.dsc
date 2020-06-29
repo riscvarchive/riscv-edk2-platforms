@@ -22,6 +22,13 @@
   OUTPUT_DIRECTORY               = Build/LX2160aRdbPkg
   FLASH_DEFINITION               = Platform/NXP/LX2160aRdbPkg/LX2160aRdbPkg.fdf
 
+  #
+  # Network definition
+  #
+  DEFINE NETWORK_TLS_ENABLE             = FALSE
+  DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
+  DEFINE NETWORK_ISCSI_ENABLE           = FALSE
+
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
 !include Silicon/NXP/LX2160A/LX2160A.dsc.inc
 
@@ -45,4 +52,8 @@
 
   Platform/NXP/LX2160aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
 
+  #
+  # Networking stack
+  #
+!include NetworkPkg/Network.dsc.inc
  ##

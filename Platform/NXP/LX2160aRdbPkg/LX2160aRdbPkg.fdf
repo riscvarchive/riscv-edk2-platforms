@@ -116,6 +116,11 @@ READ_LOCK_STATUS   = TRUE
   INF ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
   #
+  # Networking stack
+  #
+!include NetworkPkg/Network.fdf.inc
+
+  #
   # FAT filesystem + GPT/MBR partitioning
   #
   INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
