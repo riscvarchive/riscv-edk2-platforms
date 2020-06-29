@@ -53,6 +53,13 @@ SetPciControllerPcdOptions (
       // PCIe controller and program the iATU windows accordingly.
       //
       PcdSetBoolS (PcdPciCfgShiftEnable, TRUE);
+
+      //
+      // PCIe controller in LX2160-Rev2 is not ECAM-compliant for bus0.
+      // Set PcdPciHideRootPort for LX2160-Rev2, which will be used by
+      // PciHostBridgeLib and PciSegmentLib to program iATU windows accordingly.
+      //
+      PcdSetBoolS (PcdPciHideRootPort, TRUE);
       break;
     default:
       DEBUG ((DEBUG_ERROR, "%a: Invalid SoC Version 0x%x \n", __FUNCTION__,

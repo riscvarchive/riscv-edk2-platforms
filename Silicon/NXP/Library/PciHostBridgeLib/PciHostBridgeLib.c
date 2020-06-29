@@ -432,7 +432,11 @@ PcieLsSetupAtu (
     Cfg0BusAddress = SIZE_1MB;
     Cfg1BusAddress = SIZE_2MB;
     // Region for type0 CFG transactions (only for bus1)
-    Cfg0Size = ECAM_BUS_SIZE;
+    if (PcdGetBool (PcdPciHideRootPort)) {
+      Cfg0Size = ECAM_DEVICE_SIZE;
+    } else {
+      Cfg0Size = ECAM_BUS_SIZE;
+    }
     // Region for type1 CFG transactions (for bus > 1)
     Cfg1Size = (ECAM_CFG_REGION_SIZE - ECAM_BUS_SIZE); // 255MB
   } else {

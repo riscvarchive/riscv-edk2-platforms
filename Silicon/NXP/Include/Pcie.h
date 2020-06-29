@@ -31,6 +31,7 @@
 #define PCI_SEG_PORTIO_MIN        0x0
 #define PCI_SEG_PORTIO_MAX        0xffff
 #define SEG_CFG_SIZE              0x00001000
+#define ECAM_DEVICE_SIZE          SIZE_32KB
 #define ECAM_BUS_SIZE             SIZE_1MB
 #define ECAM_CFG_REGION_SIZE      SIZE_256MB
 #define SEG_MEM_BASE              0x40000000
