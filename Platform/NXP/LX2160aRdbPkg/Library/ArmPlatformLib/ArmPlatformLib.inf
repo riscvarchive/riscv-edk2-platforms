@@ -37,6 +37,8 @@
 [FixedPcd]
   gArmTokenSpaceGuid.PcdArmPrimaryCore
   gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
+  gNxpQoriqLsTokenSpaceGuid.PcdNumPciController
+  gNxpQoriqLsTokenSpaceGuid.PcdPciExp1BaseAddr
 
 [Ppis]
   gArmMpCoreInfoPpiGuid
