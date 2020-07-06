@@ -20,7 +20,7 @@
 //
 // EDK2 OpenSBI Firmware extension.
 //
-#define SBI_EDK2_FW_EXT (SBI_EXT_FIRMWARE_CODE_BASE_START | SBI_OPENSBI_IMPID)
+#define SBI_EDK2_FW_EXT (SBI_EXT_FIRMWARE_START | SBI_OPENSBI_IMPID)
 //
 // EDK2 OpenSBI Firmware extension functions.
 //
