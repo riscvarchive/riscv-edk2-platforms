@@ -44,6 +44,9 @@ typedef UINT64   virtual_size_t;
 typedef UINT64   physical_addr_t;
 typedef UINT64   physical_size_t;
 
+#define true			TRUE
+#define false			FALSE
+
 #define __packed        __attribute__((packed))
 #define __noreturn      __attribute__((noreturn))
 
@@ -65,6 +68,8 @@ typedef UINT64   physical_size_t;
 #define container_of(ptr, type, member) ({            \
   const typeof(((type *)0)->member) * __mptr = (ptr); \
   (type *)((char *)__mptr - offsetof(type, member)); })
+
+#define array_size(x) 	(sizeof(x) / sizeof((x)[0]))
 
 #define CLAMP(a, lo, hi) MIN(MAX(a, lo), hi)
 #define ROUNDUP(a, b) ((((a)-1) / (b) + 1) * (b))

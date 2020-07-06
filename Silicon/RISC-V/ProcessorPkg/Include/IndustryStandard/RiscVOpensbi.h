@@ -12,35 +12,12 @@
 
 #include <RiscVImpl.h>
 #include <sbi/riscv_asm.h>
+#include <sbi/riscv_atomic.h>
 #include <sbi/sbi_ecall_interface.h>
 #include <sbi/sbi_error.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_types.h>
-
-// Translation from OpenSBI constants to SBI names
-#define SBI_SUCCESS               SBI_OK
-#define SBI_ERR_FAILED            SBI_EFAIL
-#define SBI_ERR_NOT_SUPPORTED     SBI_ENOTSUPP
-#define SBI_ERR_INVALID_PARAM     SBI_EINVAL
-#define SBI_ERR_DENIED            SBI_DENIED
-#define SBI_ERR_INVALID_ADDRESS   SBI_INVALID_ADDR
-// Currently improperly defined in upstream OpenSBI
-#define SBI_ERR_ALREADY_AVAILABLE -6
-
-// Included in OpenSBI 0.7
-// Can be removed, once we upgrade
-#define SBI_EXT_HSM               0x48534D
-#define SBI_EXT_HSM_HART_START    0x0
-#define SBI_EXT_HSM_HART_STOP     0x1
-#define SBI_EXT_HSM_HART_GET_STATUS 0x2
-
-//
-// Below two definitions should be defined in OpenSBI.
-// Submitted to upstream, waiting for merge and release.
-//
-#define SBI_EXT_FIRMWARE_CODE_BASE_START 0x0A000000
-#define SBI_EXT_FIRMWARE_CODE_BASE_END   0x0AFFFFFF
 
 #define RISC_V_MAX_HART_SUPPORTED 16
 
