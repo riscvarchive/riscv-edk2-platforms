@@ -69,4 +69,7 @@
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamBase
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize
 
+[BuildOptions]
+  GCC:*_*_*_PP_FLAGS = -D__ASSEMBLY__
+
 
