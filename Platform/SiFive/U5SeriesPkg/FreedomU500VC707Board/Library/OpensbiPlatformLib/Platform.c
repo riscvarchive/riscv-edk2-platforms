@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+ * Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
  *
  * SPDX-License-Identifier: BSD-2-Clause
  *
@@ -11,13 +11,13 @@
  */
 
 #include <libfdt.h>
-#include <fdt.h>
-#include <sbi/riscv_encoding.h>
-#include <sbi/sbi_const.h>
-#include <sbi/sbi_hart.h>
-#include <sbi/sbi_console.h>
-#include <sbi/sbi_platform.h>
+#include <sbi/riscv_asm.h>
 #include <sbi/riscv_io.h>
+#include <sbi/riscv_encoding.h>
+#include <sbi/sbi_console.h>
+#include <sbi/sbi_const.h>
+#include <sbi/sbi_platform.h>
+#include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/irqchip/plic.h>
 #include <sbi_utils/serial/sifive-uart.h>
 #include <sbi_utils/sys/clint.h>
@@ -37,23 +37,28 @@
 
 #define U500_UART_BAUDRATE          115200
 
-/**
- * The U500 SoC has 8 HARTs but HART ID 0 doesn't have S mode.
- * HARTs 1 is selected as boot HART
- */
-#ifndef U500_ENABLED_HART_MASK
-#define U500_ENABLED_HART_MASK  (1 << U500_BOOT_HART_ID)
-#endif
-
-#define U500_HARTID_DISABLED    ~(U500_ENABLED_HART_MASK)
-
 /* PRCI clock related macros */
 //TODO: Do we need a separate driver for this ?
 #define U500_PRCI_BASE_ADDR                 0x10000000
 #define U500_PRCI_CLKMUXSTATUSREG           0x002C
 #define U500_PRCI_CLKMUX_STATUS_TLCLKSEL    (0x1 << 1)
 
+/* Full tlb flush always */
+#define U500_TLB_RANGE_FLUSH_LIMIT		0
+
 unsigned long log2roundup(unsigned long x);
+
+static struct plic_data plic = {
+    .addr = U500_PLIC_ADDR,
+    .num_src = U500_PLIC_NUM_SOURCES,
+};
+
+static struct clint_data clint = {
+    .addr = CLINT_REG_BASE_ADDR,
+    .first_hartid = 0,
+    .hart_count = U500_HART_COUNT,
+    .has_64bit_mmio = TRUE,
+};
 
 static void U500_modify_dt(void *fdt)
 {
@@ -83,7 +88,7 @@ static void U500_modify_dt(void *fdt)
     fdt_setprop_string(fdt, chosen_offset, "stdout-path",
                "/soc/serial@10010000:115200");
 
-    plic_fdt_fixup(fdt, "riscv,plic0");
+    fdt_plic_fixup(fdt, "riscv,plic0");
 }
 
 static int U500_final_init(bool cold_boot)
@@ -140,17 +145,15 @@ static int U500_console_init(void)
 static int U500_irqchip_init(bool cold_boot)
 {
     int rc;
-    u32 hartid = sbi_current_hartid();
+    u32 hartid = current_hartid();
 
     if (cold_boot) {
-        rc = plic_cold_irqchip_init(U500_PLIC_ADDR,
-                        U500_PLIC_NUM_SOURCES,
-                        U500_HART_COUNT);
+        rc = plic_cold_irqchip_init(&plic);
         if (rc)
             return rc;
     }
 
-    return plic_warm_irqchip_init(hartid,
+    return plic_warm_irqchip_init(&plic,
             (hartid) ? (2 * hartid - 1) : 0,
             (hartid) ? (2 * hartid) : -1);
 }
@@ -160,8 +163,7 @@ static int U500_ipi_init(bool cold_boot)
     int rc;
 
     if (cold_boot) {
-        rc = clint_cold_ipi_init(CLINT_REG_BASE_ADDR,
-                     U500_HART_COUNT);
+        rc = clint_cold_ipi_init(&clint);
         if (rc)
             return rc;
 
@@ -170,21 +172,29 @@ static int U500_ipi_init(bool cold_boot)
     return clint_warm_ipi_init();
 }
 
+static u64 U500_get_tlbr_flush_limit(void)
+{
+    return U500_TLB_RANGE_FLUSH_LIMIT;
+}
+
 static int U500_timer_init(bool cold_boot)
 {
     int rc;
 
     if (cold_boot) {
-        rc = clint_cold_timer_init(CLINT_REG_BASE_ADDR,
-                       U500_HART_COUNT, TRUE);
+        rc = clint_cold_timer_init(&clint, NULL);
         if (rc)
             return rc;
     }
 
     return clint_warm_timer_init();
 }
+/**
+ * The U500 SoC has 4 HARTs
+ */
+static u32 fu500_hart_index2id[U500_HART_COUNT] = {0, 1, 2, 3};
 
-static int U500_system_down(u32 type)
+static int U500_system_reset(u32 type)
 {
     /* For now nothing to do. */
     return 0;
@@ -201,21 +211,21 @@ const struct sbi_platform_operations platform_ops = {
     .ipi_send = clint_ipi_send,
     .ipi_clear = clint_ipi_clear,
     .ipi_init = U500_ipi_init,
+    .get_tlbr_flush_limit = U500_get_tlbr_flush_limit,
     .timer_value = clint_timer_value,
     .timer_event_stop = clint_timer_event_stop,
     .timer_event_start = clint_timer_event_start,
     .timer_init = U500_timer_init,
-    .system_reboot = U500_system_down,
-    .system_shutdown = U500_system_down
+    .system_reset = U500_system_reset
 };
 
 const struct sbi_platform platform = {
     .opensbi_version    = OPENSBI_VERSION,                      // The OpenSBI version this platform table is built bassed on.
     .platform_version   = SBI_PLATFORM_VERSION(0x0001, 0x0000), // SBI Platform version 1.0
-    .name                   = "SiFive Freedom U500",
-    .features       = SBI_PLATFORM_DEFAULT_FEATURES,
-    .hart_count     = U500_HART_COUNT,
+    .name               = "SiFive Freedom U500",
+    .features           = SBI_PLATFORM_DEFAULT_FEATURES,
+    .hart_count         = U500_HART_COUNT,
+    .hart_index2id      = fu500_hart_index2id,
     .hart_stack_size    = U500_HART_STACK_SIZE,
-    .disabled_hart_mask = U500_HARTID_DISABLED,
     .platform_ops_addr  = (unsigned long)&platform_ops
 };
