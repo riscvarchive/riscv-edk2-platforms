@@ -75,6 +75,10 @@ typedef UINT64   physical_size_t;
 #define ROUNDUP(a, b) ((((a)-1) / (b) + 1) * (b))
 #define ROUNDDOWN(a, b) ((a) / (b) * (b))
 
+#include <sbi/sbi_string.h> // Temp solution,
+                            // 1. Wait for sbi_strcmp is replaced by strcmp in fdt_helper.c
+                            // 2. edk2 libfdt_env.h adds strcmp macro
+
 /* clang-format on */
 
 #endif
