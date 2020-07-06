@@ -12,6 +12,8 @@
 #include <Library/DebugPrintErrorLevelLib.h>
 #include <Library/PrintLib.h>
 #include <Library/RiscVEdk2SbiLib.h>
+#include <sbi/riscv_asm.h>
+#include <sbi/riscv_atomic.h>
 #include <sbi/sbi_console.h>  // Reference to header file in opensbi
 #include <sbi/sbi_hart.h>     // Reference to header file in opensbi
 #include <sbi/sbi_scratch.h>  // Reference to header file in opensbi
@@ -19,11 +21,12 @@
 #include <sbi/sbi_init.h>     // Reference to header file in opensbi
 #include <sbi/sbi_ecall.h>    // Reference to header file in opensbi
 
-#define DEBUG_MSG_HART_INFO 0
+//
+// Indicates the boot hart (PcdBootHartId) OpenSBI initialization is done.
+//
+atomic_t BootHartDone = ATOMIC_INITIALIZER(0);
 
-#if DEBUG_MSG_HART_INFO
-UINTN HartsIn = 0;
-#endif
+typedef struct sbi_scratch *(*hartid2scratch)(ulong hartid, ulong hartindex);
 
 STATIC EFI_PEI_TEMPORARY_RAM_SUPPORT_PPI mTemporaryRamSupportPpi = {
   TemporaryRamMigration
@@ -412,7 +415,6 @@ EFI_STATUS EFIAPI TemporaryRamDone (
 
 /** Handles SBI calls of EDK2's SBI FW extension
 
-  @param[in]  ScratchSpace MSCRATCH of the calling hart.
   @param[in]  ExtId        The extension ID of the FW extension.
   @param[in]  FuncId       The called function ID.
   @param[in]  Args         The args to the function.
@@ -425,7 +427,6 @@ EFI_STATUS EFIAPI TemporaryRamDone (
   @retval SBI_ETRAP        If the called SBI functions wants to trap further.
 **/
 STATIC int SbiEcallFirmwareHandler (
-  IN  struct sbi_scratch   *ScratchSpace,
   IN  unsigned long         ExtId,
   IN  unsigned long         FuncId,
   IN  unsigned long        *Args,
@@ -440,7 +441,7 @@ STATIC int SbiEcallFirmwareHandler (
       *OutVal = (unsigned long) sbi_scratch_thishart_ptr();
       break;
     case SBI_EXT_FW_MSCRATCH_HARTID_FUNC:
-      *OutVal = (unsigned long) sbi_hart_id_to_scratch(sbi_scratch_thishart_ptr(), Args[0]);
+      *OutVal = (unsigned long) sbi_hartid_to_scratch (Args[0]);
       break;
     default:
       Ret = SBI_ENOTSUPP;
@@ -585,8 +586,9 @@ LaunchPeiCoreSMode (
   IN  UINTN  FuncArg1
   )
 {
+  DEBUG ((DEBUG_INFO, "%a: Set boot hart done.\n", __FUNCTION__));
+  atomic_write (&BootHartDone, (UINT64)TRUE);
   RegisterFirmwareSbiExtension ();
-
   sbi_hart_switch_mode(ThisHartId, FuncArg1, (UINTN) PeiCore, PRV_S, FALSE);
 }
 
@@ -651,6 +653,7 @@ VOID EFIAPI SecCoreStartUpWithStack(
   IN  struct sbi_scratch *Scratch
   )
 {
+  UINT64 BootHartDoneSbiInit;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *HartFirmwareContext;
 
   //
@@ -666,27 +669,28 @@ VOID EFIAPI SecCoreStartUpWithStack(
   HartFirmwareContext->MachineImplId.Value64_H = 0;
   HartFirmwareContext->HartSwitchMode = RiscVOpenSbiHartSwitchMode;
 
-#if DEBUG_MSG_HART_INFO
-  while (HartsIn != HartId);
-  DEBUG ((DEBUG_INFO, "Initial Firmware Context Hart-specific for HART ID:%d\n", HartId));
-  DEBUG ((DEBUG_INFO, "       Scratch at address: 0x%x\n", Scratch));
-  DEBUG ((DEBUG_INFO, "       Firmware Context Hart-specific at address: 0x%x\n", HartFirmwareContext));
-  DEBUG ((DEBUG_INFO, "       stack pointer at address: 0x%x\n", stack_point));
-  DEBUG ((DEBUG_INFO, "                MISA: 0x%x\n", HartFirmwareContext->IsaExtensionSupported));
-  DEBUG ((DEBUG_INFO, "                MVENDORID: 0x%x\n", HartFirmwareContext->MachineVendorId.Value64_L));
-  DEBUG ((DEBUG_INFO, "                MARCHID: 0x%x\n", HartFirmwareContext->MachineArchId.Value64_L));
-  DEBUG ((DEBUG_INFO, "                MIMPID: 0x%x\n\n", HartFirmwareContext->MachineImplId.Value64_L));
-  HartsIn ++;
-  for (;;);
-#endif
   if (HartId == FixedPcdGet32(PcdBootHartId)) {
     Scratch->next_addr = (UINTN)LaunchPeiCoreSMode;
     Scratch->next_mode = PRV_M;
     DEBUG ((DEBUG_INFO, "%a: Initializing OpenSBI library for booting hart\n", __FUNCTION__));
     sbi_init(Scratch);
   }
+
   //
-  // Those non boot harts will be halted in sbi_init function.
+  // Initialize the non boot harts
+  //
+  do {
+    BootHartDoneSbiInit = atomic_read (&BootHartDone);
+    ASM_NOP;
+    ASM_NOP;
+    ASM_NOP;
+  } while (BootHartDoneSbiInit != (UINT64)TRUE);
+
+  DEBUG ((DEBUG_INFO, "%a: Non boot hart %d initialization.\n", __FUNCTION__, HartId));
+  //
+  // Non boot hart wiil be halted waiting for SBI_HART_STARTING.
+  // Use HSM ecall to start non boot hart (SBI_EXT_HSM_HART_START) later on,
   //
   sbi_init(Scratch);
+
 }
