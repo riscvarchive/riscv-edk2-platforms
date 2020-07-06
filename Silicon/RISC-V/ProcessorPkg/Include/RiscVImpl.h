@@ -22,6 +22,10 @@
 
 #define ASM_FUNC(Name) _ASM_FUNC(ASM_PFX(Name), .text. ## Name)
 
+#define ASM_NOP ({ \
+        __asm__ __volatile__("nop"); \
+        })
+
 //
 // Structure for 128-bit value
 //
