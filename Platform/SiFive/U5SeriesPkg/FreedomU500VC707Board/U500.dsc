@@ -203,7 +203,6 @@
 #
 # RISC-V core libraries
 #
-  SiliconSiFiveE51CoreInfoLib|Silicon/SiFive/E51/Library/PeiCoreInfoHobLib/PeiCoreInfoHobLib.inf
   SiliconSiFiveU54CoreInfoLib|Silicon/SiFive/U54/Library/PeiCoreInfoHobLib/PeiCoreInfoHobLib.inf
   SiliconSiFiveU5MCCoreplexInfoLib|Platform/SiFive/U5SeriesPkg/Library/PeiCoreInfoHobLib/PeiCoreInfoHobLib.inf
 

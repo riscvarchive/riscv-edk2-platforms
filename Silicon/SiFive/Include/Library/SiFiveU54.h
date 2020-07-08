@@ -11,11 +11,10 @@
 
 #include <PiPei.h>
 
-#include <SmbiosProcessorSpecificData.h>
 #include <ProcessorSpecificHobData.h>
 
 /**
-  Function to build core specific information HOB.
+  Function to build core specific information HOB for U54 or E51 core.
 
   @param  ParentProcessorGuid    Parent processor od this core. ParentProcessorGuid
                                  could be the same as CoreGuid if one processor has
@@ -23,38 +22,55 @@
   @param  ParentProcessorUid     Unique ID of pysical processor which owns this core.
   @param  HartId                 Hart ID of this core.
   @param  IsBootHart             TRUE means this is the boot HART.
-  @param  GuidHobdata            Pointer to RISC_V_PROCESSOR_SPECIFIC_HOB_DATA.
+  @param  IsManagementCore       TRUE means this is for the E51 management core, not U54
+  @param  GuidHobData            Pointer to RISC_V_PROCESSOR_SPECIFIC_HOB_DATA.
 
   @return EFI_SUCCESS     The PEIM initialized successfully.
 
 **/
 EFI_STATUS
 EFIAPI
-CreateU54CoreProcessorSpecificDataHob (
+CreateU54E51CoreProcessorSpecificDataHob (
   IN EFI_GUID  *ParentProcessorGuid,
   IN UINTN     ParentProcessorUid,
   IN UINTN     HartId,
   IN BOOLEAN   IsBootHart,
-  OUT RISC_V_PROCESSOR_SPECIFIC_HOB_DATA **GuidHobdata
-  );
+  IN BOOLEAN   IsManagementCore,
+  OUT RISC_V_PROCESSOR_SPECIFIC_HOB_DATA **GuidHobData
+);
 
 /**
-  Function to build processor related SMBIOS information. RISC-V SMBIOS DXE driver collect
-  this information and build SMBIOS Type4 and Type7 record.
+  Function to build cache related SMBIOS information. RISC-V SMBIOS DXE driver collects
+  this information and builds SMBIOS Type 7 record.
 
-  @param  ProcessorUid    Unique ID of pysical processor which owns this core.
-  @param  SmbiosHobPtr    Pointer to receive RISC_V_PROCESSOR_SMBIOS_HOB_DATA. The pointers
-                          maintained in this structure is only valid before memory is discovered.
-                          Access to those pointers after memory is installed will cause unexpected issues.
+  The caller can adjust the allocated hob data to their needs.
 
-  @return EFI_SUCCESS     The PEIM initialized successfully.
+  @param  ProcessorUid      Unique ID of physical processor which owns this core.
+  @param  L1CacheDataHobPtr Pointer to allocated HOB data.
 
 **/
-EFI_STATUS
+VOID
 EFIAPI
-CreateU54ProcessorSmbiosDataHob (
+CreateU54SmbiosType7L1DataHob (
   IN UINTN     ProcessorUid,
-  IN RISC_V_PROCESSOR_SMBIOS_HOB_DATA **SmbiosHobPtr
-  );
+  OUT RISC_V_PROCESSOR_TYPE7_HOB_DATA **L1CacheDataHobPtr
+);
+
+/**
+  Function to build processor related SMBIOS information. RISC-V SMBIOS DXE driver collects
+  this information and builds SMBIOS Type 4 record.
+
+  The caller can adjust the allocated hob data to their needs.
+
+  @param  ProcessorUid      Unique ID of physical processor which owns this core.
+  @param  ProcessorDataHobPtr Pointer to allocated HOB data.
+
+**/
+VOID
+EFIAPI
+CreateU54SmbiosType4DataHob (
+  IN UINTN     ProcessorUid,
+  OUT RISC_V_PROCESSOR_TYPE4_HOB_DATA **ProcessorDataHobPtr
+);
 
 #endif

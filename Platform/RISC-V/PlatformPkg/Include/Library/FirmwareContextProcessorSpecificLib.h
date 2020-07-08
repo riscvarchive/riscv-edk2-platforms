@@ -39,4 +39,15 @@ CommonFirmwareContextHartSpecificInfo (
   RISC_V_PROCESSOR_SPECIFIC_HOB_DATA *ProcessorSpecDataHob
   );
 
+/**
+  Print debug information of the processor specific data for a hart
+
+  @param  ProcessorSpecificDataHob     Pointer to RISC_V_PROCESSOR_SPECIFIC_DATA_HOB
+**/
+VOID
+EFIAPI
+DebugPrintHartSpecificInfo (
+  RISC_V_PROCESSOR_SPECIFIC_HOB_DATA *ProcessorSpecificDataHob
+  );
+
 #endif

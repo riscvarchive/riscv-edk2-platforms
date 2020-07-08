@@ -91,3 +91,29 @@ CommonFirmwareContextHartSpecificInfo (
     FirmwareContextHartSpecific->MachineImplId.Value64_H;
   return EFI_SUCCESS;
 }
+
+/**
+  Print debug information of the processor specific data for a hart
+
+  @param  ProcessorSpecificDataHob     Pointer to RISC_V_PROCESSOR_SPECIFIC_DATA_HOB
+**/
+VOID
+EFIAPI
+DebugPrintHartSpecificInfo (
+  RISC_V_PROCESSOR_SPECIFIC_HOB_DATA *ProcessorSpecificDataHob
+  )
+{
+  DEBUG ((DEBUG_INFO, "        *HartId = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.HartId.Value64_L));
+  DEBUG ((DEBUG_INFO, "        *Is Boot Hart? = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.BootHartId));
+  DEBUG ((DEBUG_INFO, "        *PrivilegeModeSupported = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.PrivilegeModeSupported));
+  DEBUG ((DEBUG_INFO, "        *MModeExcepDelegation = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MModeExcepDelegation.Value64_L));
+  DEBUG ((DEBUG_INFO, "        *MModeInterruptDelegation = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MModeInterruptDelegation.Value64_L));
+  DEBUG ((DEBUG_INFO, "        *HartXlen = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.HartXlen ));
+  DEBUG ((DEBUG_INFO, "        *MachineModeXlen = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MachineModeXlen));
+  DEBUG ((DEBUG_INFO, "        *SupervisorModeXlen = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.SupervisorModeXlen));
+  DEBUG ((DEBUG_INFO, "        *UserModeXlen = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.UserModeXlen));
+  DEBUG ((DEBUG_INFO, "        *InstSetSupported = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.InstSetSupported));
+  DEBUG ((DEBUG_INFO, "        *MachineVendorId = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MachineVendorId.Value64_L));
+  DEBUG ((DEBUG_INFO, "        *MachineArchId = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MachineArchId.Value64_L));
+  DEBUG ((DEBUG_INFO, "        *MachineImplId = 0x%x\n", ProcessorSpecificDataHob->ProcessorSpecificData.MachineImplId.Value64_L));
+}

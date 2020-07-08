@@ -29,6 +29,7 @@
   MdeModulePkg/MdeModulePkg.dec
   Silicon/RISC-V/ProcessorPkg/RiscVProcessorPkg.dec
   Platform/RISC-V/PlatformPkg/RiscVPlatformPkg.dec
+  Platform/SiFive/U5SeriesPkg/U5SeriesPkg.dec
   Silicon/SiFive/SiFive.dec
 
 [LibraryClasses]
@@ -45,3 +46,6 @@
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType4GuidHobGuid
   gUefiRiscVPkgTokenSpaceGuid.PcdProcessorSmbiosType7GuidHobGuid
   gEfiSiFiveSiliconTokenSpaceGuid.PcdSiFiveU54CoreGuid
+  gEfiSiFiveSiliconTokenSpaceGuid.PcdSiFiveU5MCCoreplexGuid
+  gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores
+  gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdE5MCSupported

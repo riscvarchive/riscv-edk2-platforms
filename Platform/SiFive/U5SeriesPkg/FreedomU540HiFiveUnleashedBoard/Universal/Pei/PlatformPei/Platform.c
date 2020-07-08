@@ -258,7 +258,7 @@ BuildCoreInformationHob (
   if (EFI_ERROR (Status)) {
     ASSERT(FALSE);
   }
-  Status = CreateU5MCProcessorSmbiosDataHob(0, &SmbiosHobPtr);
+  Status = CreateU5MCProcessorSmbiosDataHob (0, &SmbiosHobPtr);
   if (EFI_ERROR (Status)) {
     ASSERT(FALSE);
   }

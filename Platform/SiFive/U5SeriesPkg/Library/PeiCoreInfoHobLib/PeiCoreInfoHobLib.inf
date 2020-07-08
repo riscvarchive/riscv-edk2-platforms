@@ -37,7 +37,6 @@
   PcdLib
   MemoryAllocationLib
   PrintLib
-  SiliconSiFiveE51CoreInfoLib
   SiliconSiFiveU54CoreInfoLib
 
 [Guids]
