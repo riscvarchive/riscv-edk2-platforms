@@ -36,8 +36,34 @@
 
 /**
   Reset Control Word (RCW) Bits
+
+  RCWSR contains the Reset Configuration Word (RCW) information written with
+  values read from flash memory by the device at power-on reset and read-only
+  upon exiting reset.
+
+  RCW bits in RCWSR registers are same as bit position in Little Endian (LE)
+
+RCW Bits |
+in RCWSR |
+(LSBit 0)| 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+------------------------------------------------------------------------------------------------
+LE       | 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+(LSBit 0)|
+
+  Moreover the RCW bits are to be interpreted in below fasion
+
+Bit(s) | Field Name  | Description                  | Notes/comments
+----------------------------------------------------------------------
+ 6-2   | SYS_PLL_RAT | System PLL Multiplier/Ratio  | This field selects the platform
+       |             |                              | clock:SYSCLK ratio.
+       |             |                              | 0_0100 4:1
+       |             |                              | 0_0110 6:1
+       |             |                              | 0_1000 8:1
+       |             |                              | 0_1101 13:1
+       |             |                              | 0_1111 15:1
+
 **/
-#define SYS_PLL_RAT(x)  (((x) & 0x7c) >> 2) // Bits 2-6
+#define SYS_PLL_RAT(x)  (((x) & 0x7c) >> 2) // Bits 6-2
 
 typedef NXP_LAYERSCAPE_CHASSIS3V2_DEVICE_CONFIG LX2160A_DEVICE_CONFIG;
 
