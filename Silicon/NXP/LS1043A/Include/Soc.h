@@ -78,7 +78,7 @@ Bit(s) | Field Name  | Description                  | Notes/comments
 
   which is why the RCW bits in RCWSR registers are parsed this way
 **/
-#define SYS_PLL_RAT(x)  (((x) & 0x7c) >> 2) // Bits 2-6
+#define SYS_PLL_RAT(x)  (((x) >> 25) & 0x1f) // Bits 2-6
 
 typedef NXP_LAYERSCAPE_CHASSIS2_DEVICE_CONFIG LS1043A_DEVICE_CONFIG;
 
