@@ -48,6 +48,7 @@ gArmTokenSpaceGuid.PcdFvBaseAddress|gArmTokenSpaceGuid.PcdFvSize
 FV = FVMAIN_COMPACT
 
 !include Platform/NXP/FVRules.fdf.inc
+!include VarStore.fdf.inc
 ################################################################################
 #
 # FV Section
