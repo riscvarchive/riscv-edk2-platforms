@@ -37,6 +37,11 @@
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x0|UINT32|0x00000503
   gNxpQoriqLsTokenSpaceGuid.PcdSerDesLanes|0x0|UINT8|0x00000504
 
+  # Pcds for USB
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbBaseAddr|0x0|UINT64|0x00000510
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x0|UINT32|0x00000511
+  gNxpQoriqLsTokenSpaceGuid.PcdNumUsbController|0|UINT32|0x00000512
+
 [PcdsDynamic.common]
   gNxpQoriqLsTokenSpaceGuid.PcdPciCfgShiftEnable|FALSE|BOOLEAN|0x00000600
   gNxpQoriqLsTokenSpaceGuid.PcdPciLsGen4Ctrl|FALSE|BOOLEAN|0x00000601
