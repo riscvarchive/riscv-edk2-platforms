@@ -52,6 +52,7 @@
     gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
   }
 
+  Silicon/NXP/Drivers/UsbHcdInitDxe/UsbHcd.inf
   Platform/NXP/LX2160aRdbPkg/Drivers/PlatformDxe/PlatformDxe.inf
 
   #

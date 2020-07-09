@@ -43,6 +43,10 @@
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutBase|0x80000
   gNxpQoriqLsTokenSpaceGuid.PcdPcieLutDbg|0x407FC
 
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbBaseAddr|0x3100000
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x10000
+  gNxpQoriqLsTokenSpaceGuid.PcdNumUsbController|2
+
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdI2cErratumA009203|TRUE
 
