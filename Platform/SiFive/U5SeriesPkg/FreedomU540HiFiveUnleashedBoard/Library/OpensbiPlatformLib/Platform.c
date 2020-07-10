@@ -190,7 +190,8 @@ static int U540_timer_init(bool cold_boot)
     return clint_warm_timer_init();
 }
 /**
- * The U540 SoC has 5 HARTs, HART 1 s the boot hart.
+ * The U540 SoC has 5 HARTs, Boot HART ID is determined by
+ * PcdBootHartId.
  */
 static u32 U540_hart_index2id[U540_HART_COUNT] = {0, 1, 2, 3, 4};
 
