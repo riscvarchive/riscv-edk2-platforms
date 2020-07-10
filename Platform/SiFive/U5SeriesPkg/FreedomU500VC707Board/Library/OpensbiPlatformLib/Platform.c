@@ -190,7 +190,8 @@ static int U500_timer_init(bool cold_boot)
     return clint_warm_timer_init();
 }
 /**
- * The U500 SoC has 4 HARTs
+ * The U500 SoC has 4 HARTs, Boot HART ID is determined by
+ * PcdBootHartId.
  */
 static u32 fu500_hart_index2id[U500_HART_COUNT] = {0, 1, 2, 3};
 
