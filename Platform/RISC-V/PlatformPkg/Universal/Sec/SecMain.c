@@ -681,6 +681,10 @@ VOID EFIAPI SecCoreStartUpWithStack(
   //
   do {
     BootHartDoneSbiInit = atomic_read (&BootHartDone);
+    //
+    // Below leave some memory cycles to boot hart
+    // for updating BootHartDone.
+    //
     ASM_NOP;
     ASM_NOP;
     ASM_NOP;
