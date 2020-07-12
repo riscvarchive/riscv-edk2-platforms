@@ -358,11 +358,26 @@ GenetTxIntr (
   OUT VOID              **TxBuf
   );
 
+UINT32
+GenetRxPending (
+  IN  GENET_PRIVATE_DATA *Genet
+  );
+
+UINT32
+GenetTxPending (
+  IN  GENET_PRIVATE_DATA *Genet
+  );
+
 EFI_STATUS
 GenetRxIntr (
   IN GENET_PRIVATE_DATA *Genet,
   OUT UINT8             *DescIndex,
   OUT UINTN             *FrameLength
+  );
+
+VOID
+GenetRxComplete (
+  IN GENET_PRIVATE_DATA *Genet
   );
 
 #endif /* GENET_UTIL_H__ */

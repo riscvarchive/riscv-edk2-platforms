@@ -661,6 +661,7 @@ GenetDmaMapRxDescriptor (
     Genet->RxBufferMap[DescIndex].PhysAddress & 0xFFFFFFFF);
   GenetMmioWrite (Genet, GENET_RX_DESC_ADDRESS_HI (DescIndex),
     (Genet->RxBufferMap[DescIndex].PhysAddress >> 32) & 0xFFFFFFFF);
+  GenetMmioWrite (Genet, GENET_RX_DESC_STATUS (DescIndex), 0);
 
   return EFI_SUCCESS;
 }
@@ -753,12 +754,9 @@ GenetTxIntr (
   OUT VOID               **TxBuf
   )
 {
-  UINT32  ConsIndex, Total;
+  UINT32 Total;
 
-  ConsIndex = GenetMmioRead (Genet,
-                GENET_TX_DMA_CONS_INDEX (GENET_DMA_DEFAULT_QUEUE)) & 0xFFFF;
-
-  Total = (ConsIndex - Genet->TxConsIndex) & 0xFFFF;
+  Total = GenetTxPending (Genet);
   if (Genet->TxQueued > 0 && Total > 0) {
     DmaUnmap (Genet->TxBufferMap[Genet->TxNext]);
     *TxBuf = Genet->TxBuffer[Genet->TxNext];
@@ -768,6 +766,46 @@ GenetTxIntr (
   } else {
     *TxBuf = NULL;
   }
+}
+
+UINT32
+GenetRxPending (
+  IN  GENET_PRIVATE_DATA *Genet
+  )
+{
+  UINT32 ProdIndex;
+  UINT32 ConsIndex;
+
+  ConsIndex = GenetMmioRead (Genet,
+                GENET_RX_DMA_CONS_INDEX (GENET_DMA_DEFAULT_QUEUE)) & 0xFFFF;
+  ASSERT (ConsIndex == Genet->RxConsIndex);
+
+  ProdIndex = GenetMmioRead (Genet,
+                GENET_RX_DMA_PROD_INDEX (GENET_DMA_DEFAULT_QUEUE)) & 0xFFFF;
+  return (ProdIndex - Genet->RxConsIndex) & 0xFFFF;
+}
+
+UINT32
+GenetTxPending (
+  IN  GENET_PRIVATE_DATA *Genet
+  )
+{
+  UINT32 ConsIndex;
+
+  ConsIndex = GenetMmioRead (Genet,
+                GENET_TX_DMA_CONS_INDEX (GENET_DMA_DEFAULT_QUEUE)) & 0xFFFF;
+
+  return (ConsIndex - Genet->TxConsIndex) & 0xFFFF;
+}
+
+VOID
+GenetRxComplete (
+  IN GENET_PRIVATE_DATA *Genet
+  )
+{
+  Genet->RxConsIndex = (Genet->RxConsIndex + 1) & 0xFFFF;
+  GenetMmioWrite (Genet, GENET_RX_DMA_CONS_INDEX (GENET_DMA_DEFAULT_QUEUE),
+                  Genet->RxConsIndex);
 }
 
 /**
@@ -790,21 +828,14 @@ GenetRxIntr (
   )
 {
   EFI_STATUS    Status;
-  UINT32        ProdIndex, Total;
+  UINT32        Total;
   UINT32        DescStatus;
 
-  ProdIndex = GenetMmioRead (Genet,
-                GENET_RX_DMA_PROD_INDEX (GENET_DMA_DEFAULT_QUEUE)) & 0xFFFF;
-
-  Total = (ProdIndex - Genet->RxConsIndex) & 0xFFFF;
+  Total = GenetRxPending (Genet);
   if (Total > 0) {
     *DescIndex = Genet->RxConsIndex % GENET_DMA_DESC_COUNT;
     DescStatus = GenetMmioRead (Genet, GENET_RX_DESC_STATUS (*DescIndex));
     *FrameLength = SHIFTOUT (DescStatus, GENET_RX_DESC_STATUS_BUFLEN);
-
-    Genet->RxConsIndex = (Genet->RxConsIndex + 1) & 0xFFFF;
-    GenetMmioWrite (Genet, GENET_RX_DMA_CONS_INDEX (GENET_DMA_DEFAULT_QUEUE),
-      Genet->RxConsIndex);
     Status = EFI_SUCCESS;
   } else {
     Status = EFI_NOT_READY;

@@ -502,9 +502,19 @@ GenetSimpleNetworkGetStatus (
     Genet->SnpMode.MediaPresent = FALSE;
   } else {
     Genet->SnpMode.MediaPresent = TRUE;
+  }
 
-    if (TxBuf != NULL) {
-      GenetTxIntr (Genet, TxBuf);
+  if (TxBuf != NULL) {
+    GenetTxIntr (Genet, TxBuf);
+  }
+
+  if (InterruptStatus != NULL) {
+    *InterruptStatus = 0;
+    if (GenetRxPending (Genet) > 0) {
+      *InterruptStatus |= EFI_SIMPLE_NETWORK_RECEIVE_INTERRUPT;
+    }
+    if (GenetTxPending (Genet) > 0) {
+      *InterruptStatus |= EFI_SIMPLE_NETWORK_TRANSMIT_INTERRUPT;
     }
   }
 
@@ -741,13 +751,8 @@ GenetSimpleNetworkReceive (
       DEBUG ((DEBUG_ERROR,
         "%a: Buffer size (0x%X) is too small for frame (0x%X)\n",
         __FUNCTION__, *BufferSize, FrameLength));
-      Status = GenetDmaMapRxDescriptor (Genet, DescIndex);
-      if (EFI_ERROR (Status)) {
-        DEBUG ((DEBUG_ERROR, "%a: Failed to remap RX descriptor!\n",
-          __FUNCTION__));
-      }
-      EfiReleaseLock (&Genet->Lock);
-      return EFI_BUFFER_TOO_SMALL;
+      Status = EFI_BUFFER_TOO_SMALL;
+      goto out;
     }
 
     if (DestAddr != NULL) {
@@ -773,10 +778,13 @@ GenetSimpleNetworkReceive (
     Status = EFI_NOT_READY;
   }
 
+out:
   Status = GenetDmaMapRxDescriptor (Genet, DescIndex);
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "%a: Failed to remap RX descriptor!\n", __FUNCTION__));
   }
+
+  GenetRxComplete (Genet);
 
   EfiReleaseLock (&Genet->Lock);
   return Status;
