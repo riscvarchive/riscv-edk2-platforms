@@ -82,6 +82,12 @@ typedef enum _MMC_STATE {
     MmcDisconnectState,
 } MMC_STATE;
 
+typedef enum _CARD_DETECT_STATE {
+    CardDetectRequired = 0,
+    CardDetectInProgress,
+    CardDetectCompleted
+} CARD_DETECT_STATE;
+
 #define EMMCBACKWARD         (0)
 #define EMMCHS26             (1 << 0)      // High-Speed @26MHz at rated device voltages
 #define EMMCHS52             (1 << 1)      // High-Speed @52MHz at rated device voltages

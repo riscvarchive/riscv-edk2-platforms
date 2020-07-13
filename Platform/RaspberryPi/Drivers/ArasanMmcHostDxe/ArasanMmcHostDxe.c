@@ -11,7 +11,8 @@
 
 #define DEBUG_MMCHOST_SD DEBUG_VERBOSE
 
-BOOLEAN PreviousIsCardPresent = FALSE;
+STATIC BOOLEAN mCardIsPresent = FALSE;
+STATIC CARD_DETECT_STATE mCardDetectState = CardDetectRequired;
 UINT32 LastExecutedCommand = (UINT32) -1;
 
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
@@ -240,14 +241,6 @@ CalculateClockFrequencyDivisor (
 }
 
 BOOLEAN
-MMCIsCardPresent (
-  IN EFI_MMC_HOST_PROTOCOL *This
-)
-{
-  return TRUE;
-}
-
-BOOLEAN
 MMCIsReadOnly (
   IN EFI_MMC_HOST_PROTOCOL *This
   )
@@ -418,6 +411,11 @@ MMCNotifyState (
 
   DEBUG ((DEBUG_MMCHOST_SD, "ArasanMMCHost: MMCNotifyState(State: %d)\n", State));
 
+  // Stall all operations except init until card detection has occurred.
+  if (State != MmcHwInitializationState && mCardDetectState != CardDetectCompleted) {
+    return EFI_NOT_READY;
+  }
+
   switch (State) {
   case MmcHwInitializationState:
     {
@@ -487,6 +485,78 @@ MMCNotifyState (
   }
 
   return EFI_SUCCESS;
+}
+
+BOOLEAN
+MMCIsCardPresent (
+  IN EFI_MMC_HOST_PROTOCOL *This
+)
+{
+  EFI_STATUS Status;
+
+  //
+  // If we are already in progress (we may get concurrent calls)
+  // or completed the detection, just return the current value.
+  //
+  if (mCardDetectState != CardDetectRequired) {
+    return mCardIsPresent;
+  }
+
+  mCardDetectState = CardDetectInProgress;
+  mCardIsPresent = FALSE;
+
+  //
+  // The two following commands should succeed even if no card is present.
+  //
+  Status = MMCNotifyState (This, MmcHwInitializationState);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "MMCIsCardPresent: Error MmcHwInitializationState, Status=%r.\n", Status));
+    // If we failed init, go back to requiring card detection
+    mCardDetectState = CardDetectRequired;
+    return FALSE;
+  }
+
+  Status = MMCSendCommand (This, MMC_CMD0, 0);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "MMCIsCardPresent: CMD0 Error, Status=%r.\n", Status));
+    goto out;
+  }
+
+  //
+  // CMD8 should tell us if an SD card is present.
+  //
+  Status = MMCSendCommand (This, MMC_CMD8, CMD8_SD_ARG);
+  if (!EFI_ERROR (Status)) {
+     DEBUG ((DEBUG_INFO, "MMCIsCardPresent: Maybe SD card detected.\n"));
+     mCardIsPresent = TRUE;
+     goto out;
+  }
+
+  //
+  // MMC/eMMC won't accept CMD8, but we can try CMD1.
+  //
+  Status = MMCSendCommand (This, MMC_CMD1, EMMC_CMD1_CAPACITY_GREATER_THAN_2GB);
+  if (!EFI_ERROR (Status)) {
+     DEBUG ((DEBUG_INFO, "MMCIsCardPresent: Maybe MMC card detected.\n"));
+     mCardIsPresent = TRUE;
+     goto out;
+  }
+
+  //
+  // SDIO?
+  //
+  Status = MMCSendCommand (This, MMC_CMD5, 0);
+  if (!EFI_ERROR (Status)) {
+     DEBUG ((DEBUG_INFO, "MMCIsCardPresent: Maybe SDIO card detected.\n"));
+     mCardIsPresent = TRUE;
+     goto out;
+  }
+
+  DEBUG ((DEBUG_INFO, "MMCIsCardPresent: Not detected, Status=%r.\n", Status));
+
+out:
+  mCardDetectState = CardDetectCompleted;
+  return mCardIsPresent;
 }
 
 EFI_STATUS
