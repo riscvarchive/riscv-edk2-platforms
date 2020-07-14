@@ -57,7 +57,6 @@ ArmPlatformGetVirtualMemoryMap (
   )
 {
   UINTN                         Index = 0;
-  UINTN                         GpuIndex;
   INT64                         TotalMemorySize;
   INT64                         MemorySizeBelow3GB;
   INT64                         MemorySizeBelow4GB;
@@ -162,7 +161,6 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryInfo[Index++].Name           = L"System RAM < 1GB";
 
   // GPU Reserved
-  GpuIndex = Index;
   VirtualMemoryTable[Index].PhysicalBase    = mVideoCoreBase;
   VirtualMemoryTable[Index].VirtualBase     = VirtualMemoryTable[Index].PhysicalBase;
   VirtualMemoryTable[Index].Length          = mVideoCoreSize;
