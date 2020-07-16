@@ -18,6 +18,7 @@
 STATIC volatile VOID * const p_mtime = (VOID *)CLINT_REG_MTIME;
 #define MTIME          (*p_mtime)
 #define MTIMECMP(i)    (p_mtimecmp[i])
+BOOLEAN TimerHandlerReentry = FALSE;
 
 //
 // The handle onto which the Timer Architectural Protocol will be installed
@@ -67,23 +68,34 @@ TimerInterruptHandler (
   EFI_TPL OriginalTPL;
   UINT64 RiscvTimer;
 
-  csr_clear(CSR_SIE, MIP_STIP); // Disable timer int
-  csr_clear(CSR_SIP, MIP_STIP);
+  if (TimerHandlerReentry) {
+    //
+    // MMode timer occurred when processing
+    // SMode timer handler.
+    //
+    RiscvTimer = readq_relaxed(p_mtime);
+    SbiSetTimer (RiscvTimer += mTimerPeriod);
+    csr_clear(CSR_SIP, MIP_STIP);
+    return;
+  }
+  TimerHandlerReentry = TRUE;
+
   OriginalTPL = gBS->RaiseTPL (TPL_HIGH_LEVEL);
+  csr_clear(CSR_SIE, MIP_STIP); // Disable SMode timer int
+  csr_clear(CSR_SIP, MIP_STIP);
   if (mTimerPeriod == 0) {
     gBS->RestoreTPL (OriginalTPL);
-    mCpu->DisableInterrupt(mCpu);
+    csr_clear(CSR_SIE, MIP_STIP); // Disable SMode timer int
     return;
   }
   if (mTimerNotifyFunction != NULL) {
-    mTimerNotifyFunction (mTimerPeriod);
+      mTimerNotifyFunction (mTimerPeriod);
   }
-  gBS->RestoreTPL (OriginalTPL);
-
   RiscvTimer = readq_relaxed(p_mtime);
   SbiSetTimer (RiscvTimer += mTimerPeriod);
-  csr_set(CSR_SIE, MIP_STIP); // enable timer int
-
+  gBS->RestoreTPL (OriginalTPL);
+  csr_set(CSR_SIE, MIP_STIP); // enable SMode timer int
+  TimerHandlerReentry = FALSE;
 }
 
 /**
@@ -169,7 +181,6 @@ TimerDriverSetTimerPeriod (
 
   if (TimerPeriod == 0) {
     mTimerPeriod = 0;
-    mCpu->DisableInterrupt(mCpu);
     csr_clear(CSR_SIE, MIP_STIP); // disable timer int
     return EFI_SUCCESS;
   }
