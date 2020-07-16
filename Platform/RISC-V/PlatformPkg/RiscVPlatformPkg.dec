@@ -60,6 +60,7 @@
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdOpenSbiStackSize|0|UINT32|0x00001027
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamBase|0|UINT32|0x00001028
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize|0|UINT32|0x00001029
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode|0|UINT32|0x00001030
 
 [PcdsPatchableInModule]
 
