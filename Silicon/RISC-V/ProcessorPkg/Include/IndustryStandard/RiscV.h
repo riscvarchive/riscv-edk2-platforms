@@ -92,6 +92,10 @@
 //
 // Supervisor mode CSR.
 //
+#define RISCV_CSR_SUPERVISOR_SSTATUS    0x100
+  #define SSTATUS_SIE_BIT_POSITION      1
+  #define SSTATUS_SPP_BIT_POSITION      8
+#define RISCV_CSR_SUPERVISOR_SIE        0x104
 #define RISCV_CSR_SUPERVISOR_SSCRATCH   0x140
 #define RISCV_CSR_SUPERVISOR_SEPC       0x141
 #define RISCV_CSR_SUPERVISOR_SCAUSE     0x142
@@ -103,6 +107,21 @@
   #define SCAUSE_SUPERVISOR_EXTERNAL_INT  9
 #define RISCV_CSR_SUPERVISOR_STVAL      0x143
 #define RISCV_CSR_SUPERVISOR_SIP        0x144
+#define RISCV_CSR_SUPERVISOR_SATP       0x180
+
+#if defined (MDE_CPU_RISCV64)
+  #define RISCV_SATP_MODE_MASK          0xF000000000000000
+  #define RISCV_SATP_MODE_BIT_POSITION  60
+#endif
+    #define RISCV_SATP_MODE_OFF         0
+    #define RISCV_SATP_MODE_SV32        1
+    #define RISCV_SATP_MODE_SV39        8
+    #define RISCV_SATP_MODE_SV48        9
+    #define RISCV_SATP_MODE_SV57        10
+    #define RISCV_SATP_MODE_SV64        11
+
+  #define SATP64_ASID_MASK              0x0FFFF00000000000
+  #define SATP64_PPN_MASK               0x00000FFFFFFFFFFF
 
 #define RISCV_CAUSE_MISALIGNED_FETCH        0x0
 #define RISCV_CAUSE_FETCH_ACCESS            0x1

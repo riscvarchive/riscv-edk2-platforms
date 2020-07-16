@@ -22,9 +22,10 @@
 
 #define ASM_FUNC(Name) _ASM_FUNC(ASM_PFX(Name), .text. ## Name)
 
-#define ASM_NOP ({ \
-        __asm__ __volatile__("nop"); \
-        })
+#if defined (MDE_CPU_RISCV64)
+typedef UINT64 RISC_V_REGS_PROTOTYPE;
+#else
+#endif
 
 //
 // Structure for 128-bit value
