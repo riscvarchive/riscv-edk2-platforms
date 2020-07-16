@@ -562,6 +562,11 @@ VOID EFIAPI PeiCore (
              FirmwareContext.HartSpecific [HartId]
              ));
   }
+  //
+  // Set supervisor translation mode to Bare mode
+  //
+  DEBUG ((DEBUG_INFO, "%a: Set Supervisor address mode to Bare-mode.\n", __FUNCTION__));
+  RiscVSetSupervisorAddressTranslationRegister ((UINT64)RISCV_SATP_MODE_OFF << RISCV_SATP_MODE_BIT_POSITION);
 
   //
   // Transfer the control to the PEI core
@@ -570,7 +575,8 @@ VOID EFIAPI PeiCore (
 }
 
 /**
-  Register firmware SBI extension and launch PeiCore in S-Mode
+  Register firmware SBI extension and launch PeiCore to the mode specified in
+   PcdPeiCorePrivilegeMode;
 
   To register the SBI extension we stay in M-Mode and then transition here,
   rather than before in sbi_init.
@@ -581,15 +587,28 @@ VOID EFIAPI PeiCore (
 **/
 VOID
 EFIAPI
-LaunchPeiCoreSMode (
+LaunchPeiCore (
   IN  UINTN  ThisHartId,
   IN  UINTN  FuncArg1
   )
 {
+  UINT32 PeiCoreMode;
+
   DEBUG ((DEBUG_INFO, "%a: Set boot hart done.\n", __FUNCTION__));
   atomic_write (&BootHartDone, (UINT64)TRUE);
   RegisterFirmwareSbiExtension ();
-  sbi_hart_switch_mode(ThisHartId, FuncArg1, (UINTN) PeiCore, PRV_S, FALSE);
+
+  PeiCoreMode = FixedPcdGet32 (PcdPeiCorePrivilegeMode);
+  if (PeiCoreMode == PRV_S) {
+    DEBUG ((DEBUG_INFO, "%a: Switch to S-Mode for PeiCore.\n", __FUNCTION__));
+    sbi_hart_switch_mode (ThisHartId, FuncArg1, (UINTN)PeiCore, PRV_S, FALSE);
+  } else if (PeiCoreMode == PRV_M) {
+    DEBUG ((DEBUG_INFO, "%a: Switch to M-Mode for PeiCore.\n", __FUNCTION__));
+    PeiCore (ThisHartId, FuncArg1);
+  } else {
+    DEBUG ((DEBUG_INFO, "%a: The privilege mode specified in PcdPeiCorePrivilegeMode is not supported.\n", __FUNCTION__));
+    while (TRUE);
+  }
 }
 
 /**
@@ -670,7 +689,7 @@ VOID EFIAPI SecCoreStartUpWithStack(
   HartFirmwareContext->HartSwitchMode = RiscVOpenSbiHartSwitchMode;
 
   if (HartId == FixedPcdGet32(PcdBootHartId)) {
-    Scratch->next_addr = (UINTN)LaunchPeiCoreSMode;
+    Scratch->next_addr = (UINTN)LaunchPeiCore;
     Scratch->next_mode = PRV_M;
     DEBUG ((DEBUG_INFO, "%a: Initializing OpenSBI library for booting hart\n", __FUNCTION__));
     sbi_init(Scratch);
@@ -685,9 +704,9 @@ VOID EFIAPI SecCoreStartUpWithStack(
     // Below leave some memory cycles to boot hart
     // for updating BootHartDone.
     //
-    ASM_NOP;
-    ASM_NOP;
-    ASM_NOP;
+    CpuPause ();
+    CpuPause ();
+    CpuPause ();
   } while (BootHartDoneSbiInit != (UINT64)TRUE);
 
   DEBUG ((DEBUG_INFO, "%a: Non boot hart %d initialization.\n", __FUNCTION__, HartId));
