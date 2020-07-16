@@ -52,5 +52,6 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdHartCount                   = 4      
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores       = 4         # Total U5 cores enabled on U500 platform
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdE5MCSupported         = False     # Enable optional E51 MC core?
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId                  = 0         # Boot hart ID
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode        = 1          # Set PeiCore to S-Mode
 
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdU5UartBase = 0x54000000
