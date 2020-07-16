@@ -2,7 +2,7 @@
 //
 // RISC-V CPU functions.
 //
-// Copyright (c) 2016 - 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+// Copyright (c) 2016 - 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 //
 // SPDX-License-Identifier: BSD-2-Clause-Patent
 //
@@ -99,5 +99,13 @@ ASM_FUNC (RiscVReadMachineArchitectureId)
 //
 ASM_FUNC (RiscVReadMachineImplementId)
     csrr a0, RISCV_CSR_MACHINE_MIMPID
+    ret
+
+//
+// Set Supervisor Address Translation and
+// Protection Register.
+//
+ASM_FUNC (RiscVSetSupervisorAddressTranslationRegister)
+    csrw  RISCV_CSR_SUPERVISOR_SATP, a0
     ret
 

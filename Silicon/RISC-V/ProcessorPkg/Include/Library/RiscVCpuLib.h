@@ -65,4 +65,7 @@ RiscVReadMachineArchitectureId (VOID);
 UINT64
 RiscVReadMachineImplementId (VOID);
 
+VOID
+RiscVSetSupervisorAddressTranslationRegister(UINT64);
+
 #endif
