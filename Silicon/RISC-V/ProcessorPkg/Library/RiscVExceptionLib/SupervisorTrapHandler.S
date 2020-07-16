@@ -15,74 +15,98 @@
 #include <sbi/sbi_scratch.h>
 #include <sbi/sbi_trap.h>
 
+#include "CpuExceptionHandlerLib.h"
+
   .align 3
   .section .entry, "ax", %progbits
   .globl SupervisorModeTrap
 SupervisorModeTrap:
-  addi sp, sp, -34 * 8
- /* Save all general regisers except SP and T0 */
-  sd    ra, 1 * 8(sp)
-  sd    gp, 2 * 8(sp)
-  sd    tp, 3 * 8(sp)
-  sd    t1, 4 * 8(sp)
-  sd    t2, 5 * 8(sp)
-  sd    s0, 6 * 8(sp)
-  sd    s1, 7 * 8(sp)
-  sd    a0, 8 * 8(sp)
-  sd    a1, 9 * 8(sp)
-  sd    a2, 10 * 8(sp)
-  sd    a3, 11 * 8(sp)
-  sd    a4, 12 * 8(sp)
-  sd    a5, 13 * 8(sp)
-  sd    a6, 14 * 8(sp)
-  sd    a7, 15 * 8(sp)
-  sd    s2, 16 * 8(sp)
-  sd    s3, 17 * 8(sp)
-  sd    s4, 18 * 8(sp)
-  sd    s5, 19 * 8(sp)
-  sd    s6, 20 * 8(sp)
-  sd    s7, 21 * 8(sp)
-  sd    s8, 22 * 8(sp)
-  sd    s9, 23 * 8(sp)
-  sd    s10, 24 * 8(sp)
-  sd    s11, 25 * 8(sp)
-  sd    t3, 26 * 8(sp)
-  sd    t4, 27 * 8(sp)
-  sd    t5, 28 * 8(sp)
-  sd    t6, 29 * 8(sp)
+  addi sp, sp, -SMODE_TRAP_REGS_SIZE
+
+  /* Save all general regisers except SP */
+  sd    t0, SMODE_TRAP_REGS_OFFSET(t0)(sp)
+
+  csrr  t0, RISCV_CSR_SUPERVISOR_SSTATUS
+  and   t0, t0, (1 << SSTATUS_SIE_BIT_POSITION) | (1 << SSTATUS_SPP_BIT_POSITION)
+  sd    t0, SMODE_TRAP_REGS_OFFSET(sstatus)(sp)
+  csrr  t0, RISCV_CSR_SUPERVISOR_SEPC
+  sd    t0, SMODE_TRAP_REGS_OFFSET(sepc)(sp)
+  csrr  t0, RISCV_CSR_SUPERVISOR_SIE
+  sd    t0, SMODE_TRAP_REGS_OFFSET(sie)(sp)
+  ld    t0, SMODE_TRAP_REGS_OFFSET(t0)(sp)
+
+  sd    ra, SMODE_TRAP_REGS_OFFSET(ra)(sp)
+  sd    gp, SMODE_TRAP_REGS_OFFSET(gp)(sp)
+  sd    tp, SMODE_TRAP_REGS_OFFSET(tp)(sp)
+  sd    t1, SMODE_TRAP_REGS_OFFSET(t1)(sp)
+  sd    t2, SMODE_TRAP_REGS_OFFSET(t2)(sp)
+  sd    s0, SMODE_TRAP_REGS_OFFSET(s0)(sp)
+  sd    s1, SMODE_TRAP_REGS_OFFSET(s1)(sp)
+  sd    a0, SMODE_TRAP_REGS_OFFSET(a0)(sp)
+  sd    a1, SMODE_TRAP_REGS_OFFSET(a1)(sp)
+  sd    a2, SMODE_TRAP_REGS_OFFSET(a2)(sp)
+  sd    a3, SMODE_TRAP_REGS_OFFSET(a3)(sp)
+  sd    a4, SMODE_TRAP_REGS_OFFSET(a4)(sp)
+  sd    a5, SMODE_TRAP_REGS_OFFSET(a5)(sp)
+  sd    a6, SMODE_TRAP_REGS_OFFSET(a6)(sp)
+  sd    a7, SMODE_TRAP_REGS_OFFSET(a7)(sp)
+  sd    s2, SMODE_TRAP_REGS_OFFSET(s2)(sp)
+  sd    s3, SMODE_TRAP_REGS_OFFSET(s3)(sp)
+  sd    s4, SMODE_TRAP_REGS_OFFSET(s4)(sp)
+  sd    s5, SMODE_TRAP_REGS_OFFSET(s5)(sp)
+  sd    s6, SMODE_TRAP_REGS_OFFSET(s6)(sp)
+  sd    s7, SMODE_TRAP_REGS_OFFSET(s7)(sp)
+  sd    s8, SMODE_TRAP_REGS_OFFSET(s8)(sp)
+  sd    s9, SMODE_TRAP_REGS_OFFSET(s9)(sp)
+  sd    s10, SMODE_TRAP_REGS_OFFSET(s10)(sp)
+  sd    s11, SMODE_TRAP_REGS_OFFSET(s11)(sp)
+  sd    t3, SMODE_TRAP_REGS_OFFSET(t3)(sp)
+  sd    t4, SMODE_TRAP_REGS_OFFSET(t4)(sp)
+  sd    t5, SMODE_TRAP_REGS_OFFSET(t5)(sp)
+  sd    t6, SMODE_TRAP_REGS_OFFSET(t6)(sp)
 
   /* Call to Supervisor mode trap handler in CpuExceptionHandlerLib.c */
   call  RiscVSupervisorModeTrapHandler
 
-  /* Restore all general regisers except SP and T0 */
-  ld    ra, 1 * 8(sp)
-  ld    gp, 2 * 8(sp)
-  ld    tp, 3 * 8(sp)
-  ld    t1, 4 * 8(sp)
-  ld    t2, 5 * 8(sp)
-  ld    s0, 6 * 8(sp)
-  ld    s1, 7 * 8(sp)
-  ld    a0, 8 * 8(sp)
-  ld    a1, 9 * 8(sp)
-  ld    a2, 10 * 8(sp)
-  ld    a3, 11 * 8(sp)
-  ld    a4, 12 * 8(sp)
-  ld    a5, 13 * 8(sp)
-  ld    a6, 14 * 8(sp)
-  ld    a7, 15 * 8(sp)
-  ld    s2, 16 * 8(sp)
-  ld    s3, 17 * 8(sp)
-  ld    s4, 18 * 8(sp)
-  ld    s5, 19 * 8(sp)
-  ld    s6, 20 * 8(sp)
-  ld    s7, 21 * 8(sp)
-  ld    s8, 22 * 8(sp)
-  ld    s9, 23 * 8(sp)
-  ld    s10, 24 * 8(sp)
-  ld    s11, 25 * 8(sp)
-  ld    t3, 26 * 8(sp)
-  ld    t4, 27 * 8(sp)
-  ld    t5, 28 * 8(sp)
-  ld    t6, 29 * 8(sp)
-  addi  sp, sp, 34 * 8
+  /* Restore all general regisers except SP */
+  ld    ra, SMODE_TRAP_REGS_OFFSET(ra)(sp)
+  ld    gp, SMODE_TRAP_REGS_OFFSET(gp)(sp)
+  ld    tp, SMODE_TRAP_REGS_OFFSET(tp)(sp)
+  ld    t2, SMODE_TRAP_REGS_OFFSET(t2)(sp)
+  ld    s0, SMODE_TRAP_REGS_OFFSET(s0)(sp)
+  ld    s1, SMODE_TRAP_REGS_OFFSET(s1)(sp)
+  ld    a0, SMODE_TRAP_REGS_OFFSET(a0)(sp)
+  ld    a1, SMODE_TRAP_REGS_OFFSET(a1)(sp)
+  ld    a2, SMODE_TRAP_REGS_OFFSET(a2)(sp)
+  ld    a3, SMODE_TRAP_REGS_OFFSET(a3)(sp)
+  ld    a4, SMODE_TRAP_REGS_OFFSET(a4)(sp)
+  ld    a5, SMODE_TRAP_REGS_OFFSET(a5)(sp)
+  ld    a6, SMODE_TRAP_REGS_OFFSET(a6)(sp)
+  ld    a7, SMODE_TRAP_REGS_OFFSET(a7)(sp)
+  ld    s2, SMODE_TRAP_REGS_OFFSET(s2)(sp)
+  ld    s3, SMODE_TRAP_REGS_OFFSET(s3)(sp)
+  ld    s4, SMODE_TRAP_REGS_OFFSET(s4)(sp)
+  ld    s5, SMODE_TRAP_REGS_OFFSET(s5)(sp)
+  ld    s6, SMODE_TRAP_REGS_OFFSET(s6)(sp)
+  ld    s7, SMODE_TRAP_REGS_OFFSET(s7)(sp)
+  ld    s8, SMODE_TRAP_REGS_OFFSET(s8)(sp)
+  ld    s9, SMODE_TRAP_REGS_OFFSET(s9)(sp)
+  ld    s10, SMODE_TRAP_REGS_OFFSET(s10)(sp)
+  ld    s11, SMODE_TRAP_REGS_OFFSET(s11)(sp)
+  ld    t3, SMODE_TRAP_REGS_OFFSET(t3)(sp)
+  ld    t4, SMODE_TRAP_REGS_OFFSET(t4)(sp)
+  ld    t5, SMODE_TRAP_REGS_OFFSET(t5)(sp)
+  ld    t6, SMODE_TRAP_REGS_OFFSET(t6)(sp)
+
+  ld    t0, SMODE_TRAP_REGS_OFFSET(sepc)(sp)
+  csrw  RISCV_CSR_SUPERVISOR_SEPC, t0
+  ld    t0, SMODE_TRAP_REGS_OFFSET(sie)(sp)
+  csrw  RISCV_CSR_SUPERVISOR_SIE, t0
+  csrr  t0, RISCV_CSR_SUPERVISOR_SSTATUS
+  ld    t1, SMODE_TRAP_REGS_OFFSET(sstatus)(sp)
+  or    t0, t0, t1
+  csrw  RISCV_CSR_SUPERVISOR_SSTATUS, t0
+  ld    t1, SMODE_TRAP_REGS_OFFSET(t1)(sp)
+  ld    t0, SMODE_TRAP_REGS_OFFSET(t0)(sp)
+  addi  sp, sp, SMODE_TRAP_REGS_SIZE
   sret

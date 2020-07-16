@@ -107,15 +107,18 @@ RegisterCpuInterruptHandler (
 /**
   Machine mode trap handler.
 
+  @param[in]  SmodeTrapReg     Registers before trap occurred.
+
 **/
 VOID
 RiscVSupervisorModeTrapHandler (
-  VOID
+  SMODE_TRAP_REGISTERS *SmodeTrapReg
   )
 {
-  EFI_SYSTEM_CONTEXT RiscVSystemContext;
   UINTN SCause;
+  EFI_SYSTEM_CONTEXT RiscVSystemContext;
 
+  RiscVSystemContext.SystemContextRiscV64 = (EFI_SYSTEM_CONTEXT_RISCV64 *)SmodeTrapReg;
   //
   // Check scasue register.
   //
@@ -126,7 +129,7 @@ RiscVSupervisorModeTrapHandler (
     //
     SCause &= ~(1UL << (sizeof (UINTN) * 8- 1));
     if((SCause == SCAUSE_SUPERVISOR_TIMER_INT) && (mInterruptHandlers[EXCEPT_RISCV_TIMER_INT] != NULL)) {
-      mInterruptHandlers[EXCEPT_RISCV_TIMER_INT](EXCEPT_RISCV_TIMER_INT, (CONST EFI_SYSTEM_CONTEXT)RiscVSystemContext);
+      mInterruptHandlers[EXCEPT_RISCV_TIMER_INT](EXCEPT_RISCV_TIMER_INT, RiscVSystemContext);
     }
   }
 }
