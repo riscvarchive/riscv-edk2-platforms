@@ -39,4 +39,9 @@
       gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
   }
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
-  Silicon/Socionext/SynQuacer/AcpiTables/AcpiTables.inf
+  Silicon/Socionext/SynQuacer/AcpiTables/AcpiTables.inf {
+    <BuildOptions>
+!if $(TPM2_ENABLE) == TRUE
+      *_*_*_ASLPP_FLAGS = -DTPM2_ENABLE
+!endif
+  }

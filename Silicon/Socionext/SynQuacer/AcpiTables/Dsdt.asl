@@ -262,6 +262,19 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       Name (_HID, "PNP0C0C")
     }
 
+#ifdef TPM2_ENABLE
+    //
+    // TPM MMIO device.
+    // This is backed by the SPI command sequencer in the SPI bus controller.
+    //
+    Device (TPM0) {
+      Name (_HID, "SCX0009")
+      Name (_UID, Zero)
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, SYNQUACER_SPI1_MMIO_BASE, SYNQUACER_SPI1_MMIO_SIZE)
+      })
+    }
+#else
     Device (SPI0) {
       Name (_HID, "SCX0004")
       Name (_UID, Zero)
@@ -280,5 +293,6 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
         }
       })
     }
+#endif
   } // Scope (_SB)
 }
