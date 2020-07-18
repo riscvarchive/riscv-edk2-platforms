@@ -1,6 +1,6 @@
 # @file
 #
-#  Copyright (c) 2011 - 2019, ARM Limited. All rights reserved.
+#  Copyright (c) 2011 - 2020, ARM Limited. All rights reserved.
 #  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
@@ -351,6 +351,9 @@
 !endif
 
   gEfiNetworkPkgTokenSpaceGuid.PcdAllowHttpConnections|TRUE
+
+  # Default platform supported RFC 4646 languages: (American) English
+  gEfiMdePkgTokenSpaceGuid.PcdUefiVariableDefaultPlatformLangCodes|"en-US"
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
