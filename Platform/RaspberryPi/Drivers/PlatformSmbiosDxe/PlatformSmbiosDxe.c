@@ -177,7 +177,7 @@ SMBIOS_TABLE_TYPE2 mBoardInfoType2 = {
     0,    //  HotSwappable          :1;
     0,    //  Reserved              :3;
   },
-  0,                        // LocationInChassis String
+  6,                        // LocationInChassis String
   0,                        // ChassisHandle;
   BaseBoardTypeMotherBoard, // BoardType;
   0,                        // NumberOfContainedObjectHandles;
@@ -192,6 +192,7 @@ CHAR8 *mBoardInfoType2Strings[] = {
   mSysInfoVersionName,
   mSysInfoSerial,
   mChassisAssetTag,
+  "Internal",
   NULL
 };
 
@@ -211,7 +212,7 @@ SMBIOS_TABLE_TYPE3 mEnclosureInfoType3 = {
   ChassisSecurityStatusNone,// SecurityStatus;
   { 0, 0, 0, 0 },           // OemDefined[4];
   0,    // Height;
-  0,    // NumberofPowerCords;
+  1,    // NumberofPowerCords;
   0,    // ContainedElementCount;
   0,    // ContainedElementRecordLength;
   { { 0 } },    // ContainedElements[1];
@@ -790,9 +791,22 @@ BoardInfoUpdateSmbiosType2 (
   VOID
   )
 {
-  UINTN      Size;
-  CHAR16     AssetTagVar[ASSET_TAG_STR_STORAGE_SIZE] = L"";
-  EFI_STATUS Status;
+
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBoardInfoType2, mBoardInfoType2Strings, NULL);
+}
+
+/***********************************************************************
+        SMBIOS data update  TYPE3  Enclosure Information
+************************************************************************/
+VOID
+EnclosureInfoUpdateSmbiosType3 (
+  VOID
+  )
+{
+  UINTN             Size;
+  EFI_STATUS        Status;
+  EFI_SMBIOS_HANDLE SmbiosHandle;
+  CHAR16            AssetTagVar[ASSET_TAG_STR_STORAGE_SIZE] = L"";
 
   Size = sizeof(AssetTagVar);
   Status = gRT->GetVariable(L"AssetTag",
@@ -810,18 +824,10 @@ BoardInfoUpdateSmbiosType2 (
   }
   DEBUG ((DEBUG_INFO, "System Asset Tag : %a\n", mChassisAssetTag));
 
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBoardInfoType2, mBoardInfoType2Strings, NULL);
-}
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mEnclosureInfoType3, mEnclosureInfoType3Strings, &SmbiosHandle);
 
-/***********************************************************************
-        SMBIOS data update  TYPE3  Enclosure Information
-************************************************************************/
-VOID
-EnclosureInfoUpdateSmbiosType3 (
-  VOID
-  )
-{
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mEnclosureInfoType3, mEnclosureInfoType3Strings, NULL);
+  // Set Type2 ChassisHandle to point to the newly added Type3 handle
+  mBoardInfoType2.ChassisHandle = (UINT16) SmbiosHandle;
 }
 
 /***********************************************************************
@@ -990,9 +996,10 @@ PlatformSmbiosDriverEntryPoint (
 
   SysInfoUpdateSmbiosType1 ();
 
+  EnclosureInfoUpdateSmbiosType3 (); // Add Type 3 first to get chassis handle for use in Type 2
+
   BoardInfoUpdateSmbiosType2 ();
 
-  EnclosureInfoUpdateSmbiosType3 ();
 
   ProcessorInfoUpdateSmbiosType4 (4);   //One example for creating and updating
 
