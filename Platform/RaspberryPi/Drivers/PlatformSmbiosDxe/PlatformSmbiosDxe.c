@@ -801,7 +801,13 @@ BoardInfoUpdateSmbiosType2 (
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Failed to get Asset Tag: %r\n", Status));
   }
-  UnicodeStrToAsciiStrS(AssetTagVar, mChassisAssetTag, sizeof(mChassisAssetTag));
+
+  if (AssetTagVar[0] == L'\0') {
+    // SMBIOS referenced strings cannot be NULL. If no AssetTag is set, default to a blank space.
+    UnicodeStrToAsciiStrS(L" ", mChassisAssetTag, sizeof(mChassisAssetTag));
+  } else {
+    UnicodeStrToAsciiStrS(AssetTagVar, mChassisAssetTag, sizeof(mChassisAssetTag));
+  }
   DEBUG ((DEBUG_INFO, "System Asset Tag : %a\n", mChassisAssetTag));
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mBoardInfoType2, mBoardInfoType2Strings, NULL);
