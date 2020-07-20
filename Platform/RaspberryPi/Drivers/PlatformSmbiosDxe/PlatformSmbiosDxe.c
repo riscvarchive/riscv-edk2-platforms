@@ -497,10 +497,10 @@ SMBIOS_TABLE_TYPE16 mPhyMemArrayInfoType16 = {
   MemoryArrayLocationSystemBoard, // Location;                       ///< The enumeration value from MEMORY_ARRAY_LOCATION.
   MemoryArrayUseSystemMemory,     // Use;                            ///< The enumeration value from MEMORY_ARRAY_USE.
   MemoryErrorCorrectionUnknown,   // MemoryErrorCorrection;          ///< The enumeration value from MEMORY_ERROR_CORRECTION.
-  0x40000000,                     // MaximumCapacity;
+  0x00000000,                     // MaximumCapacity;
   0xFFFE,                         // MemoryErrorInformationHandle;
   1,                              // NumberOfMemoryDevices;
-  0x40000000ULL,                  // ExtendedMaximumCapacity;
+  0x00000000ULL,                  // ExtendedMaximumCapacity;
 };
 CHAR8 *mPhyMemArrayInfoType16Strings[] = {
   NULL
@@ -511,18 +511,23 @@ CHAR8 *mPhyMemArrayInfoType16Strings[] = {
 ************************************************************************/
 SMBIOS_TABLE_TYPE17 mMemDevInfoType17 = {
   { EFI_SMBIOS_TYPE_MEMORY_DEVICE, sizeof (SMBIOS_TABLE_TYPE17), 0 },
-  0,          // MemoryArrayHandle; // Should match SMBIOS_TABLE_TYPE16.Handle, initialized at runtime, refer to PhyMemArrayInfoUpdateSmbiosType16()
-  0xFFFE,     // MemoryErrorInformationHandle;
-  0xFFFF,     // TotalWidth;
-  0xFFFF,     // DataWidth;
-  0x0400,     // Size; // When bit 15 is 0: Size in MB
-              // When bit 15 is 1: Size in KB, and continues in ExtendedSize
-  MemoryFormFactorUnknown, // FormFactor;                     ///< The enumeration value from MEMORY_FORM_FACTOR.
-  0xff,       // DeviceSet;
-  1,          // DeviceLocator String
-  2,          // BankLocator String
-  MemoryTypeDram,         // MemoryType;                     ///< The enumeration value from MEMORY_DEVICE_TYPE.
-  {           // TypeDetail;
+  0,                    // MemoryArrayHandle; // Should match SMBIOS_TABLE_TYPE16.Handle, initialized at runtime, refer to PhyMemArrayInfoUpdateSmbiosType16()
+  0xFFFE,               // MemoryErrorInformationHandle; (not provided)
+  0xFFFF,               // TotalWidth; (unknown)
+  0xFFFF,               // DataWidth; (unknown)
+  0xFFFF,               // Size; // When bit 15 is 0: Size in MB
+                        // When bit 15 is 1: Size in KB, and continues in ExtendedSize
+                        // initialized at runtime, refer to PhyMemArrayInfoUpdateSmbiosType16()
+  MemoryFormFactorChip, // FormFactor;                     ///< The enumeration value from MEMORY_FORM_FACTOR.
+  0,                    // DeviceSet;
+  1,                    // DeviceLocator String
+  0,                    // BankLocator String
+#if (RPI_MODEL == 4)
+  MemoryTypeLpddr4,     // MemoryType;                     ///< The enumeration value from MEMORY_DEVICE_TYPE.
+#else
+  MemoryTypeLpddr2,     // MemoryType;                     ///< The enumeration value from MEMORY_DEVICE_TYPE.
+#endif
+  {                     // TypeDetail;
     0,  // Reserved        :1;
     0,  // Other           :1;
     1,  // Unknown         :1;
@@ -540,19 +545,42 @@ SMBIOS_TABLE_TYPE17 mMemDevInfoType17 = {
     0,  // Unbuffered      :1;
     0,  // Reserved1       :1;
   },
-  0,          // Speed;
-  3,          // Manufacturer String
-  0,          // SerialNumber String
-  0,          // AssetTag String
-  0,          // PartNumber String
-  0,          // Attributes;
-  0,          // ExtendedSize;
-  0,          // ConfiguredMemoryClockSpeed;
+  0,                    // Speed; (unknown)
+  2,                    // Manufacturer String
+  0,                    // SerialNumber String
+  0,                    // AssetTag String
+  0,                    // PartNumber String
+  0,                    // Attributes; (unknown rank)
+  0,                    // ExtendedSize; (since Size < 32GB-1)
+  0,                    // ConfiguredMemoryClockSpeed; (unknown)
+  0,                    // MinimumVoltage; (unknown)
+  0,                    // MaximumVoltage; (unknown)
+  0,                    // ConfiguredVoltage; (unknown)
+  MemoryTechnologyDram, // MemoryTechnology                 ///< The enumeration value from MEMORY_DEVICE_TECHNOLOGY
+  {{                    // MemoryOperatingModeCapability
+    0,  // Reserved                        :1;
+    0,  // Other                           :1;
+    0,  // Unknown                         :1;
+    1,  // VolatileMemory                  :1;
+    0,  // ByteAccessiblePersistentMemory  :1;
+    0,  // BlockAccessiblePersistentMemory :1;
+    0   // Reserved                        :10;
+  }},
+  0,                    // FirwareVersion
+  0,                    // ModuleManufacturerID (unknown)
+  0,                    // ModuleProductID (unknown)
+  0,                    // MemorySubsystemControllerManufacturerID (unknown)
+  0,                    // MemorySubsystemControllerProductID (unknown)
+  0,                    // NonVolatileSize
+  0xFFFFFFFFFFFFFFFFULL,// VolatileSize // initialized at runtime, refer to PhyMemArrayInfoUpdateSmbiosType16()
+  0,                    // CacheSize
+  0,                    // LogicalSize (since MemoryType is not MemoryTypeLogicalNonVolatileDevice)
+  0,                    // ExtendedSpeed,
+  0                     // ExtendedConfiguredMemorySpeed
 };
 CHAR8 *mMemDevInfoType17Strings[] = {
-  "OS Virtual Memory",
-  "malloc",
-  "OSV",
+  "SDRAM",
+  "Micron",
   NULL
 };
 
@@ -563,10 +591,10 @@ SMBIOS_TABLE_TYPE19 mMemArrMapInfoType19 = {
   { EFI_SMBIOS_TYPE_MEMORY_ARRAY_MAPPED_ADDRESS, sizeof (SMBIOS_TABLE_TYPE19), 0 },
   0x00000000, // StartingAddress;
   0x00000000, // EndingAddress;
-  0,          // MemoryArrayHandle;
+  0,          // MemoryArrayHandle; // Should match SMBIOS_TABLE_TYPE16.Handle, initialized at runtime, refer to PhyMemArrayInfoUpdateSmbiosType16()
   1,          // PartitionWidth;
-  0,          // ExtendedStartingAddress;
-  0,          // ExtendedEndingAddress;
+  0,          // ExtendedStartingAddress;  // not used
+  0,          // ExtendedEndingAddress;    // not used
 };
 CHAR8 *mMemArrMapInfoType19Strings[] = {
   NULL
@@ -1008,14 +1036,37 @@ PhyMemArrayInfoUpdateSmbiosType16 (
   VOID
   )
 {
-  EFI_SMBIOS_HANDLE MemArraySmbiosHande;
+  EFI_SMBIOS_HANDLE MemArraySmbiosHandle;
+  EFI_STATUS        Status;
+  UINT32            InstalledMB = 0;
 
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mPhyMemArrayInfoType16, mPhyMemArrayInfoType16Strings, &MemArraySmbiosHande);
+ //
+ // Update memory size fields:
+ //  - Type 16 MaximumCapacity in KB
+ //  - Type 17 size in MB (since bit 15 = 0)
+ //  - Type 17 VolatileSize in Bytes
+ //
+
+ // The minimum RAM size used on any Raspberry Pi model is 256 MB
+  mMemDevInfoType17.Size = 256;
+
+  Status = mFwProtocol->GetModelInstalledMB (&InstalledMB);
+  if (Status != EFI_SUCCESS) {
+    DEBUG ((DEBUG_WARN, "Couldn't get the board memory size - defaulting to 256 MB: %r\n", Status));
+  } else {
+    mMemDevInfoType17.Size = InstalledMB; // Size in MB
+  }
+
+  mPhyMemArrayInfoType16.MaximumCapacity = mMemDevInfoType17.Size * 1024; // Size in KB
+  mMemDevInfoType17.VolatileSize = MultU64x32 (mMemDevInfoType17.Size, 1024 * 1024);  // Size in Bytes
+
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mPhyMemArrayInfoType16, mPhyMemArrayInfoType16Strings, &MemArraySmbiosHandle);
 
   //
-  // Update the memory device information
+  // Update the memory device information and memory array map with the newly added type 16 handle
   //
-  mMemDevInfoType17.MemoryArrayHandle = MemArraySmbiosHande;
+  mMemDevInfoType17.MemoryArrayHandle = MemArraySmbiosHandle;
+  mMemArrMapInfoType19.MemoryArrayHandle = MemArraySmbiosHandle;
 }
 
 /***********************************************************************
