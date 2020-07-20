@@ -292,12 +292,24 @@ CHAR8 *mProcessorInfoType4Strings[] = {
 /***********************************************************************
         SMBIOS data definition  TYPE7  Cache Information
 ************************************************************************/
-SMBIOS_TABLE_TYPE7 mCacheInfoType7 = {
+SMBIOS_TABLE_TYPE7 mCacheInfoType7_L1I = {
   { EFI_SMBIOS_TYPE_CACHE_INFORMATION, sizeof (SMBIOS_TABLE_TYPE7), 0 },
   1,                        // SocketDesignation String
-  0x018A,                                       // Cache Configuration
-  0x00FF,                                       // Maximum Size 256k
-  0x00FF,                                       // Install Size 256k
+  0x380,                    // Cache Configuration
+       //Cache Level        :3  (L1)
+       //Cache Socketed     :1  (Not Socketed)
+       //Reserved           :1
+       //Location           :2  (Internal)
+       //Enabled/Disabled   :1  (Enabled)
+       //Operational Mode   :2  (Unknown)
+       //Reserved           :6
+#if (RPI_MODEL == 4)
+  0x0030,                   // Maximum Size (RPi4: 48KB)
+  0x0030,                   // Install Size (RPi4: 48KB)
+#else
+  0x0010,                   // Maximum Size (RPi3: 16KB)
+  0x0010,                   // Install Size (RPi3: 16KB)
+#endif
   {                         // Supported SRAM Type
     0,  //Other             :1
     0,  //Unknown           :1
@@ -318,16 +330,115 @@ SMBIOS_TABLE_TYPE7 mCacheInfoType7 = {
     0,  //Asynchronous      :1
     0   //Reserved          :9
   },
-  0,                                            // Cache Speed unknown
-  CacheErrorMultiBit,           // Error Correction Multi
-  CacheTypeUnknown,                     // System Cache Type
-  CacheAssociativity2Way        // Associativity
+  0,                        // Cache Speed unknown
+  CacheErrorParity,         // Error Correction
+  CacheTypeInstruction,     // System Cache Type
+  CacheAssociativity2Way    // Associativity  (RPi4 L1 Instruction cache is 3-way set associative, but SMBIOS spec does not define that)
 };
-CHAR8  *mCacheInfoType7Strings[] = {
-  "Cache1",
+CHAR8  *mCacheInfoType7Strings_L1I[] = {
+  "L1 Instruction",
   NULL
 };
 
+SMBIOS_TABLE_TYPE7 mCacheInfoType7_L1D = {
+  { EFI_SMBIOS_TYPE_CACHE_INFORMATION, sizeof (SMBIOS_TABLE_TYPE7), 0 },
+  1,                        // SocketDesignation String
+  0x180,                    // Cache Configuration
+       //Cache Level        :3  (L1)
+       //Cache Socketed     :1  (Not Socketed)
+       //Reserved           :1
+       //Location           :2  (Internal)
+       //Enabled/Disabled   :1  (Enabled)
+       //Operational Mode   :2  (WB)
+       //Reserved           :6
+#if (RPI_MODEL == 4)
+  0x0020,                   // Maximum Size (RPi4: 32KB)
+  0x0020,                   // Install Size (RPi4: 32KB)
+#else
+  0x0010,                   // Maximum Size (RPi3: 16KB)
+  0x0010,                   // Install Size (RPi3: 16KB)
+#endif
+  {                         // Supported SRAM Type
+    0,  //Other             :1
+    0,  //Unknown           :1
+    0,  //NonBurst          :1
+    1,  //Burst             :1
+    0,  //PiplelineBurst    :1
+    1,  //Synchronous       :1
+    0,  //Asynchronous      :1
+    0   //Reserved          :9
+  },
+  {                         // Current SRAM Type
+    0,  //Other             :1
+    0,  //Unknown           :1
+    0,  //NonBurst          :1
+    1,  //Burst             :1
+    0,  //PiplelineBurst    :1
+    1,  //Synchronous       :1
+    0,  //Asynchronous      :1
+    0   //Reserved          :9
+  },
+  0,                        // Cache Speed unknown
+  CacheErrorSingleBit,      // Error Correction
+  CacheTypeData,            // System Cache Type
+#if (RPI_MODEL == 4)
+  CacheAssociativity2Way    // Associativity
+#else
+  CacheAssociativity4Way    // Associativity
+#endif
+};
+CHAR8  *mCacheInfoType7Strings_L1D[] = {
+  "L1 Data",
+  NULL
+};
+
+SMBIOS_TABLE_TYPE7 mCacheInfoType7_L2 = {
+  { EFI_SMBIOS_TYPE_CACHE_INFORMATION, sizeof (SMBIOS_TABLE_TYPE7), 0 },
+  1,                        // SocketDesignation String
+  0x0181,                   // Cache Configuration
+       //Cache Level        :3  (L2)
+       //Cache Socketed     :1  (Not Socketed)
+       //Reserved           :1
+       //Location           :2  (Internal)
+       //Enabled/Disabled   :1  (Enabled)
+       //Operational Mode   :2  (WB)
+       //Reserved           :6
+#if (RPI_MODEL == 4)
+  0x0400,                   // Maximum Size (RPi4: 1MB)
+  0x0400,                   // Install Size (RPi4: 1MB)
+#else
+  0x0200,                   // Maximum Size (RPi3: 512KB)
+  0x0200,                   // Install Size (RPi3: 512KB)
+#endif
+  {                         // Supported SRAM Type
+    0,  //Other             :1
+    0,  //Unknown           :1
+    0,  //NonBurst          :1
+    1,  //Burst             :1
+    0,  //PiplelineBurst    :1
+    1,  //Synchronous       :1
+    0,  //Asynchronous      :1
+    0   //Reserved          :9
+  },
+  {                         // Current SRAM Type
+    0,  //Other             :1
+    0,  //Unknown           :1
+    0,  //NonBurst          :1
+    1,  //Burst             :1
+    0,  //PiplelineBurst    :1
+    1,  //Synchronous       :1
+    0,  //Asynchronous      :1
+    0   //Reserved          :9
+  },
+  0,                        // Cache Speed unknown
+  CacheErrorSingleBit,      // Error Correction Multi
+  CacheTypeUnified,         // System Cache Type
+  CacheAssociativity16Way   // Associativity
+};
+CHAR8  *mCacheInfoType7Strings_L2[] = {
+  "L2",
+  NULL
+};
 /***********************************************************************
         SMBIOS data definition  TYPE9  System Slot Information
 ************************************************************************/
@@ -854,7 +965,17 @@ CacheInfoUpdateSmbiosType7 (
   VOID
   )
 {
-  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mCacheInfoType7, mCacheInfoType7Strings, NULL);
+  EFI_SMBIOS_HANDLE SmbiosHandle;
+
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mCacheInfoType7_L1I, mCacheInfoType7Strings_L1I, NULL);
+
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mCacheInfoType7_L1D, mCacheInfoType7Strings_L1D, &SmbiosHandle);
+  // Set Type4 L1CacheHandle to point to the newly added L1 Data Cache
+  mProcessorInfoType4.L1CacheHandle = (UINT16) SmbiosHandle;
+
+  LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mCacheInfoType7_L2, mCacheInfoType7Strings_L2, &SmbiosHandle);
+  // Set Type4 L2CacheHandle to point to the newly added L2 Cache
+  mProcessorInfoType4.L2CacheHandle = (UINT16) SmbiosHandle;
 }
 
 /***********************************************************************
@@ -980,10 +1101,9 @@ PlatformSmbiosDriverEntryPoint (
 
   BoardInfoUpdateSmbiosType2 ();
 
+  CacheInfoUpdateSmbiosType7 (); // Add Type 7 first to get Cache handle for use in Type 4
 
   ProcessorInfoUpdateSmbiosType4 (4);   //One example for creating and updating
-
-  CacheInfoUpdateSmbiosType7 ();
 
   SysSlotInfoUpdateSmbiosType9 ();
 
