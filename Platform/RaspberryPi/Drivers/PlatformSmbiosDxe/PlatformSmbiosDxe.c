@@ -54,11 +54,11 @@ STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
 ************************************************************************/
 SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
   { EFI_SMBIOS_TYPE_BIOS_INFORMATION, sizeof (SMBIOS_TABLE_TYPE0), 0 },
-  1,                    // Vendor String
-  2,                    // BiosVersion String
-  0x0,                  // BiosSegment
-  3,                    // BiosReleaseDate String
-  0x1F,                 // BiosSize
+  1,                                                     // Vendor String
+  2,                                                     // BiosVersion String
+  (UINT16) (FixedPcdGet32 (PcdFdBaseAddress) / 0x10000), // BiosSegment
+  3,                                                     // BiosReleaseDate String
+  (UINT8) (FixedPcdGet32 (PcdFdSize) / 0x10000),         // BiosSize (in 64KB)
   {                     // BiosCharacteristics
     0,    //  Reserved                          :2;  ///< Bits 0-1.
     0,    //  Unknown                           :1;
@@ -66,11 +66,11 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
     0,    //  IsaIsSupported                    :1;
     0,    //  McaIsSupported                    :1;
     0,    //  EisaIsSupported                   :1;
-    0,    //  PciIsSupported                    :1;
+    0,    //  PciIsSupported                    :1; /// No PCIe support since we hide ECAM from the OS
     0,    //  PcmciaIsSupported                 :1;
     0,    //  PlugAndPlayIsSupported            :1;
     0,    //  ApmIsSupported                    :1;
-    0,    //  BiosIsUpgradable                  :1;
+    1,    //  BiosIsUpgradable                  :1;
     0,    //  BiosShadowingAllowed              :1;
     0,    //  VlVesaIsSupported                 :1;
     0,    //  EscdSupportIsAvailable            :1;
@@ -104,7 +104,7 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
           //  Boot1394IsSupported               :1;
           //  SmartBatteryIsSupported           :1;
           //  BIOSCharacteristicsExtensionBytes[1]
-    0x0e, //  BiosBootSpecIsSupported              :1;
+    0x0c, //  BiosBootSpecIsSupported              :1;
           //  FunctionKeyNetworkBootIsSupported    :1;
           //  TargetContentDistributionEnabled     :1;
           //  UefiSpecificationSupported           :1;
@@ -115,6 +115,7 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
   0,                       // SystemBiosMinorRelease
   0,                       // EmbeddedControllerFirmwareMajorRelease
   0,                       // EmbeddedControllerFirmwareMinorRelease
+  { (UINT16) ((FixedPcdGet32 (PcdFdSize) + FixedPcdGet32 (PcdFdtSize)) / 0x100000) }, // BiosSize (in MB since Bits 15:14 = 00b)
 };
 
 CHAR8 mBiosVendor[128]  = "EDK2";
