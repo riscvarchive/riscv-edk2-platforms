@@ -1,20 +1,27 @@
 /** @file
  *
- *  Static SMBIOS Table for ARM platform
+ *  Static SMBIOS Table for the RaspberryPi platform
  *  Derived from EmulatorPkg package
  *
- *  Note SMBIOS 2.7.1 Required structures:
- *  BIOS Information (Type 0)
- *  System Information (Type 1)
- *  Board Information (Type 2)
- *  System Enclosure (Type 3)
- *  Processor Information (Type 4) - CPU Driver
- *  Cache Information (Type 7) - For cache that is external to processor
- *  System Slots (Type 9) - If system has slots
- *  Physical Memory Array (Type 16)
- *  Memory Device (Type 17) - For each socketed system-memory Device
- *  Memory Array Mapped Address (Type 19) - One per contiguous block per Physical Memroy Array
- *  System Boot Information (Type 32)
+ *  Note - Arm SBBR ver 1.2 required and recommended SMBIOS structures:
+ *    BIOS Information (Type 0)
+ *    System Information (Type 1)
+ *    Board Information (Type 2) - Recommended
+ *    System Enclosure (Type 3)
+ *    Processor Information (Type 4) - CPU Driver
+ *    Cache Information (Type 7) - For cache that is external to processor
+ *    Port Information (Type 8) - Recommended for platforms with physical ports
+ *    System Slots (Type 9) - If system has slots
+ *    OEM Strings (Type 11) - Recommended
+ *    BIOS Language Information (Type 13) - Recommended
+ *    System Event Log (Type 15) - Recommended (does not exit on RPi)
+ *    Physical Memory Array (Type 16)
+ *    Memory Device (Type 17) - For each socketed system-memory Device
+ *    Memory Array Mapped Address (Type 19) - One per contiguous block per Physical Memroy Array
+ *    System Boot Information (Type 32)
+ *    IPMI Device Information (Type 38) - Required for platforms with IPMIv1.0 BMC Host Interface (not applicable to RPi)
+ *    Onboard Devices Extended Information (Type 41) - Recommended
+ *    Redfish Host Interface (Type 42) - Required for platforms supporting Redfish Host Interface (not applicable to RPi)
  *
  *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2013, Linaro.org
@@ -481,7 +488,7 @@ CHAR8 *mSysSlotInfoType9Strings[] = {
 ************************************************************************/
 
 SMBIOS_TABLE_TYPE11 mOemStringsType11 = {
-  { EFI_SMBIOS_TYPE_OEM_STRINGS, sizeof (SMBIOS_TABLE_TYPE11), SMBIOS_HANDLE_PI_RESERVED },
+  { EFI_SMBIOS_TYPE_OEM_STRINGS, sizeof (SMBIOS_TABLE_TYPE11), 0 },
   1 // StringCount
 };
 CHAR8 *mOemStringsType11Strings[] = {
@@ -642,7 +649,7 @@ CHAR8 *mBootInfoType32Strings[] = {
    @param  Template    Fixed SMBIOS structure, required.
    @param  StringPack  Array of strings to convert to an SMBIOS string pack.
    NULL is OK.
-   @param  DataSmbiosHande  The new SMBIOS record handle .
+   @param  DataSmbiosHandle  The new SMBIOS record handle.
    NULL is OK.
 **/
 
@@ -651,7 +658,7 @@ EFIAPI
 LogSmbiosData (
   IN  EFI_SMBIOS_TABLE_HEADER *Template,
   IN  CHAR8                   **StringPack,
-  OUT EFI_SMBIOS_HANDLE       *DataSmbiosHande
+  OUT EFI_SMBIOS_HANDLE       *DataSmbiosHandle
   )
 {
   EFI_STATUS                Status;
@@ -717,8 +724,8 @@ LogSmbiosData (
                      Record
                    );
 
-  if ((Status == EFI_SUCCESS) && (DataSmbiosHande != NULL)) {
-    *DataSmbiosHande = SmbiosHandle;
+  if ((Status == EFI_SUCCESS) && (DataSmbiosHandle != NULL)) {
+    *DataSmbiosHandle = SmbiosHandle;
   }
 
   ASSERT_EFI_ERROR (Status);
