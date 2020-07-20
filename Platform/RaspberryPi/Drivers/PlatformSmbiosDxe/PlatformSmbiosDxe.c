@@ -32,6 +32,7 @@
 #include <Protocol/Smbios.h>
 #include <Protocol/RpiFirmware.h>
 #include <Guid/SmBios.h>
+#include <Library/ArmLib.h>
 #include <Library/DebugLib.h>
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiLib.h>
@@ -231,55 +232,13 @@ CHAR8 *mEnclosureInfoType3Strings[] = {
 ************************************************************************/
 SMBIOS_TABLE_TYPE4 mProcessorInfoType4 = {
   { EFI_SMBIOS_TYPE_PROCESSOR_INFORMATION, sizeof (SMBIOS_TABLE_TYPE4), 0},
-  1,                    // Socket String
-  CentralProcessor,       // ProcessorType;                                   ///< The enumeration value from PROCESSOR_TYPE_DATA.
+  1,                               // Socket String
+  CentralProcessor,                // ProcessorType;          ///< The enumeration value from PROCESSOR_TYPE_DATA.
   ProcessorFamilyIndicatorFamily2, // ProcessorFamily;        ///< The enumeration value from PROCESSOR_FAMILY2_DATA.
-  2,                    // ProcessorManufacture String;
-  {                     // ProcessorId;
-    {  // PROCESSOR_SIGNATURE
-      0, //  ProcessorSteppingId:4;
-      0, //  ProcessorModel:     4;
-      0, //  ProcessorFamily:    4;
-      0, //  ProcessorType:      2;
-      0, //  ProcessorReserved1: 2;
-      0, //  ProcessorXModel:    4;
-      0, //  ProcessorXFamily:   8;
-      0, //  ProcessorReserved2: 4;
-    },
-
-    {  // PROCESSOR_FEATURE_FLAGS
-      0, //  ProcessorFpu       :1;
-      0, //  ProcessorVme       :1;
-      0, //  ProcessorDe        :1;
-      0, //  ProcessorPse       :1;
-      0, //  ProcessorTsc       :1;
-      0, //  ProcessorMsr       :1;
-      0, //  ProcessorPae       :1;
-      0, //  ProcessorMce       :1;
-      0, //  ProcessorCx8       :1;
-      0, //  ProcessorApic      :1;
-      0, //  ProcessorReserved1 :1;
-      0, //  ProcessorSep       :1;
-      0, //  ProcessorMtrr      :1;
-      0, //  ProcessorPge       :1;
-      0, //  ProcessorMca       :1;
-      0, //  ProcessorCmov      :1;
-      0, //  ProcessorPat       :1;
-      0, //  ProcessorPse36     :1;
-      0, //  ProcessorPsn       :1;
-      0, //  ProcessorClfsh     :1;
-      0, //  ProcessorReserved2 :1;
-      0, //  ProcessorDs        :1;
-      0, //  ProcessorAcpi      :1;
-      0, //  ProcessorMmx       :1;
-      0, //  ProcessorFxsr      :1;
-      0, //  ProcessorSse       :1;
-      0, //  ProcessorSse2      :1;
-      0, //  ProcessorSs        :1;
-      0, //  ProcessorReserved3 :1;
-      0, //  ProcessorTm        :1;
-      0, //  ProcessorReserved4 :2;
-    }
+  2,                               // ProcessorManufacture String;
+  {                                // ProcessorId;
+    { 0x00, 0x00, 0x00, 0x00 },
+    { 0x00, 0x00, 0x00, 0x00 }
   },
   3,                    // ProcessorVersion String;
   {                     // Voltage;
@@ -294,18 +253,31 @@ SMBIOS_TABLE_TYPE4 mProcessorInfoType4 = {
   0,                      // MaxSpeed;
   0,                      // CurrentSpeed;
   0x41,                   // Status;
-  ProcessorUpgradeOther,  // ProcessorUpgrade;      ///< The enumeration value from PROCESSOR_UPGRADE.
-  0,                      // L1CacheHandle;
-  0,                      // L2CacheHandle;
-  0,                      // L3CacheHandle;
+  ProcessorUpgradeNone,   // ProcessorUpgrade;         ///< The enumeration value from PROCESSOR_UPGRADE.
+  0xFFFF,                 // L1CacheHandle;
+  0xFFFF,                 // L2CacheHandle;
+  0xFFFF,                 // L3CacheHandle;
   0,                      // SerialNumber;
   0,                      // AssetTag;
   0,                      // PartNumber;
   4,                      // CoreCount;
   4,                      // EnabledCoreCount;
   4,                      // ThreadCount;
-  0x6C,                   // ProcessorCharacteristics;
+  0x6C,                   // ProcessorCharacteristics; ///< The enumeration value from PROCESSOR_CHARACTERISTIC_FLAGS
+      // ProcessorReserved1              :1;
+      // ProcessorUnknown                :1;
+      // Processor64BitCapble            :1;
+      // ProcessorMultiCore              :1;
+      // ProcessorHardwareThread         :1;
+      // ProcessorExecuteProtection      :1;
+      // ProcessorEnhancedVirtualization :1;
+      // ProcessorPowerPerformanceCtrl    :1;
+      // Processor128bitCapble            :1;
+      // ProcessorReserved2               :7;
   ProcessorFamilyARM,     // ARM Processor Family;
+  0,                      // CoreCount2;
+  0,                      // EnabledCoreCount2;
+  0,                      // ThreadCount2;
 };
 
 CHAR8 mCpuName[128] = "Unknown ARM CPU";
@@ -840,11 +812,15 @@ ProcessorInfoUpdateSmbiosType4 (
   )
 {
   EFI_STATUS Status;
-  UINT32 Rate;
+  UINT32     Rate;
+  UINT64     *ProcessorId;
 
   mProcessorInfoType4.CoreCount = (UINT8)MaxCpus;
+  mProcessorInfoType4.CoreCount2 = (UINT8)MaxCpus;
   mProcessorInfoType4.EnabledCoreCount = (UINT8)MaxCpus;
+  mProcessorInfoType4.EnabledCoreCount2 = (UINT8)MaxCpus;
   mProcessorInfoType4.ThreadCount = (UINT8)MaxCpus;
+  mProcessorInfoType4.ThreadCount2 = (UINT8)MaxCpus;
 
   Status = mFwProtocol->GetMaxClockRate (RPI_MBOX_CLOCK_RATE_ARM, &Rate);
   if (Status != EFI_SUCCESS) {
@@ -863,6 +839,9 @@ ProcessorInfoUpdateSmbiosType4 (
   }
 
   AsciiStrCpyS (mCpuName, sizeof (mCpuName), mFwProtocol->GetCpuName (-1));
+
+  ProcessorId = (UINT64 *)&(mProcessorInfoType4.ProcessorId);
+  *ProcessorId = ArmReadMidr();
 
   LogSmbiosData ((EFI_SMBIOS_TABLE_HEADER*)&mProcessorInfoType4, mProcessorInfoType4Strings, NULL);
 }
