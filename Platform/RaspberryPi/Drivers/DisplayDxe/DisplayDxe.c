@@ -191,6 +191,10 @@ DisplayQueryMode (
   (*Info)->HorizontalResolution = Mode->Width;
   (*Info)->VerticalResolution = Mode->Height;
   (*Info)->PixelFormat = This->Mode->Info->PixelFormat;
+  (*Info)->PixelInformation.RedMask = This->Mode->Info->PixelInformation.RedMask;
+  (*Info)->PixelInformation.GreenMask = This->Mode->Info->PixelInformation.GreenMask;
+  (*Info)->PixelInformation.BlueMask = This->Mode->Info->PixelInformation.BlueMask;
+  (*Info)->PixelInformation.ReservedMask = This->Mode->Info->PixelInformation.ReservedMask;
   (*Info)->PixelsPerScanLine = Mode->Width;
 
   return EFI_SUCCESS;
