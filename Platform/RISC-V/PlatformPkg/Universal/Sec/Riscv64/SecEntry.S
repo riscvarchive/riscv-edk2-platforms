@@ -386,7 +386,7 @@ _skip_mstatush_save:
   add   a0, sp, zero
   call  sbi_trap_handler
 
-  /* Restore all general regisers except SP and T0 */
+  /* Restore all general registers except SP and T0 */
   REG_L ra, SBI_TRAP_REGS_OFFSET(ra)(sp)
   REG_L gp, SBI_TRAP_REGS_OFFSET(gp)(sp)
   REG_L tp, SBI_TRAP_REGS_OFFSET(tp)(sp)
