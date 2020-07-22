@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
@@ -170,7 +171,7 @@ DisplayQueryMode (
   EFI_STATUS Status;
   GOP_MODE_DATA *Mode;
 
-  if (ModeNumber > mLastMode) {
+  if (Info == NULL || SizeOfInfo == NULL || ModeNumber >= This->Mode->MaxMode) {
     return EFI_INVALID_PARAMETER;
   }
 
@@ -227,7 +228,7 @@ DisplaySetMode (
   EFI_PHYSICAL_ADDRESS FbBase;
   GOP_MODE_DATA *Mode = &mGopModeData[ModeNumber];
 
-  if (ModeNumber > mLastMode) {
+ if (ModeNumber >= This->Mode->MaxMode) {
     return EFI_UNSUPPORTED;
   }
 
@@ -299,6 +300,14 @@ DisplayBlt (
   UINT8 *VidBuf, *BltBuf, *VidBuf1;
   UINTN i;
 
+  if ((UINTN)BltOperation >= EfiGraphicsOutputBltOperationMax) {
+    return EFI_INVALID_PARAMETER;
+  }
+
+  if (Width == 0 || Height == 0) {
+    return EFI_INVALID_PARAMETER;
+  }
+
   switch (BltOperation) {
   case EfiBltVideoFill:
     BltBuf = (UINT8*)BltBuffer;
@@ -349,7 +358,7 @@ DisplayBlt (
     break;
 
   default:
-    ASSERT_EFI_ERROR (EFI_SUCCESS);
+    return EFI_INVALID_PARAMETER;
     break;
   }
 
