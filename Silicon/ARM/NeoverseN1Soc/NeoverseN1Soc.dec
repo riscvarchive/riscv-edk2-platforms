@@ -25,3 +25,7 @@
 [PcdsFixedAtBuild]
   # Secondary DDR memory
   gArmNeoverseN1SocTokenSpaceGuid.PcdDramBlock2Base|0|UINT64|0x00000001
+
+  #PCIe
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseAddress|0x60000000|UINT32|0x00000002
+  gArmNeoverseN1SocTokenSpaceGuid.PcdPcieRootPortConfigBaseSize|0x00001000|UINT32|0x00000003
