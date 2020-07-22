@@ -279,7 +279,8 @@ DisplaySetMode (
   This->Mode->Info->PixelsPerScanLine = Mode->Width;
   This->Mode->SizeOfInfo = sizeof (*This->Mode->Info);
   This->Mode->FrameBufferBase = FbBase;
-  This->Mode->FrameBufferSize = FbSize;
+  This->Mode->FrameBufferSize = Mode->Width * Mode->Height * PI3_BYTES_PER_PIXEL;
+  DEBUG((DEBUG_INFO, "Reported Mode->FrameBufferSize is %u\n", This->Mode->FrameBufferSize));
 
   ClearScreen (This);
   return EFI_SUCCESS;
