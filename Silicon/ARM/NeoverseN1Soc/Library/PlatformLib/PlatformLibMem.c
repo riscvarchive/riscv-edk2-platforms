@@ -13,7 +13,7 @@
 #include <NeoverseN1Soc.h>
 
 // The total number of descriptors, including the final "end-of-table" descriptor.
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 9
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS 13
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -87,6 +87,32 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = NEOVERSEN1SOC_NON_SECURE_SRAM_BASE;
   VirtualMemoryTable[Index].Length          = NEOVERSEN1SOC_NON_SECURE_SRAM_SZ;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_UNCACHED_UNBUFFERED;
+
+  // PCIe RC Configuration Space
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet32 (PcdPcieRootPortConfigBaseAddress);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet32 (PcdPcieRootPortConfigBaseAddress);
+  VirtualMemoryTable[Index].Length          = PcdGet32 (PcdPcieRootPortConfigBaseSize);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // PCIe ECAM Configuration Space
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdPciExpressBaseAddress);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdPciExpressBaseAddress);
+  VirtualMemoryTable[Index].Length          = (FixedPcdGet32 (PcdPcieBusMax) -
+                                               FixedPcdGet32 (PcdPcieBusMin) + 1) *
+                                              SIZE_1MB;
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // PCIe MMIO32 Memory Space
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet32 (PcdPcieMmio32Base);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet32 (PcdPcieMmio32Base);
+  VirtualMemoryTable[Index].Length          = PcdGet32 (PcdPcieMmio32Size);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // PCIe MMIO64 Memory Space
+  VirtualMemoryTable[++Index].PhysicalBase  = PcdGet64 (PcdPcieMmio64Base);
+  VirtualMemoryTable[Index].VirtualBase     = PcdGet64 (PcdPcieMmio64Base);
+  VirtualMemoryTable[Index].Length          = PcdGet64 (PcdPcieMmio64Size);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // SubSystem Pheripherals - UART0
   VirtualMemoryTable[++Index].PhysicalBase  = NEOVERSEN1SOC_UART0_BASE;
