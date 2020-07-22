@@ -1,0 +1,27 @@
+#
+#  Copyright (c) 2018 - 2020, ARM Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001A
+  PACKAGE_NAME                   = NeoverseN1Soc
+  PACKAGE_GUID                   = b6d2d197-76d0-401f-a3e0-826a26f350c9
+  PACKAGE_VERSION                = 0.1
+
+################################################################################
+#
+# Include Section - list of Include Paths that are provided by this package.
+#                   Comments are used for Keywords and Module Types.
+#
+################################################################################
+[Includes.common]
+  Include                        # Root include for the package
+
+[Guids.common]
+  gArmNeoverseN1SocTokenSpaceGuid = { 0xab93eb78, 0x60d7, 0x4099, { 0xac, 0xeb, 0x6d, 0xb5, 0x02, 0x58, 0x7c, 0x24 } }
+
+[PcdsFixedAtBuild]
+  # Secondary DDR memory
+  gArmNeoverseN1SocTokenSpaceGuid.PcdDramBlock2Base|0|UINT64|0x00000001

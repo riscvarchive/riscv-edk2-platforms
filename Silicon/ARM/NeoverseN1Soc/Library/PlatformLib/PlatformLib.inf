@@ -1,0 +1,43 @@
+## @file
+#
+#  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
+#
+#  SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  INF_VERSION                    = 0x0001001A
+  BASE_NAME                      = ArmNeoverseN1SocLib
+  FILE_GUID                      = 3d0eafcf-abc1-43d8-9269-709bb24f9d21
+  MODULE_TYPE                    = BASE
+  VERSION_STRING                 = 1.0
+  LIBRARY_CLASS                  = ArmPlatformLib
+
+[Packages]
+  ArmPkg/ArmPkg.dec
+  ArmPlatformPkg/ArmPlatformPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  MdePkg/MdePkg.dec
+  Silicon/ARM/NeoverseN1Soc/NeoverseN1Soc.dec
+
+[Sources.common]
+  PlatformLibMem.c
+  PlatformLib.c
+
+[Sources.AARCH64]
+  AArch64/Helper.S | GCC
+
+[FixedPcd]
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
+  gArmTokenSpaceGuid.PcdArmPrimaryCore
+  gArmTokenSpaceGuid.PcdArmPrimaryCoreMask
+
+  gArmNeoverseN1SocTokenSpaceGuid.PcdDramBlock2Base
+
+[Guids]
+  gEfiHobListGuid          ## CONSUMES  ## SystemTable
+
+[Ppis]
+  gArmMpCoreInfoPpiGuid
