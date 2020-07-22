@@ -93,6 +93,7 @@ M: Leif Lindholm <leif@nuviainc.com>
 
 ARM
 F: Platform/ARM/
+F: Silicon/ARM/
 R: Ard Biesheuvel <ard.biesheuvel@arm.com>
 R: Thomas Abraham <thomas.abraham@arm.com>
 M: Leif Lindholm <leif@nuviainc.com>
