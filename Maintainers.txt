@@ -193,6 +193,7 @@ Platform/Intel/Tools
 F: Platform/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
+R: Yuwei Chen <yuwei.chen@intel.com>
 
 Silicon/Intel/IntelSiliconPkg
 F: Silicon/Intel/IntelSiliconPkg/
@@ -231,6 +232,7 @@ Silicon/Intel/Tools
 F: Silicon/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
 M: Liming Gao <liming.gao@intel.com>
+R: Yuwei Chen <yuwei.chen@intel.com>
 
 Marvell platforms and silicon
 F: Platform/Marvell/
