@@ -155,7 +155,7 @@ GetFirstNonAddress (
     if (mBootMode != BOOT_ON_S3_RESUME) {
       DEBUG ((EFI_D_INFO, "%a: disabling 64-bit PCI host aperture\n",
         __FUNCTION__));
-      PcdSet64 (PcdPciMmio64Size, 0);
+      PcdSet64S (PcdPciMmio64Size, 0);
     }
 
     //
@@ -187,8 +187,8 @@ GetFirstNonAddress (
     // the GCD memory space map through our PciHostBridgeLib instance; here we
     // only need to set the PCDs.
     //
-    PcdSet64 (PcdPciMmio64Base, Pci64Base);
-    PcdSet64 (PcdPciMmio64Size, Pci64Size);
+    PcdSet64S (PcdPciMmio64Base, Pci64Base);
+    PcdSet64S (PcdPciMmio64Size, Pci64Size);
     DEBUG ((EFI_D_INFO, "%a: Pci64Base=0x%Lx Pci64Size=0x%Lx\n",
       __FUNCTION__, Pci64Base, Pci64Size));
   }

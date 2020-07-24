@@ -669,9 +669,9 @@ ExecutePlatformConfig (
     //
     // Pass the preferred resolution to GraphicsConsoleDxe via dynamic PCDs.
     //
-    PcdSet32 (PcdVideoHorizontalResolution,
+    PcdSet32S (PcdVideoHorizontalResolution,
       PlatformConfig.HorizontalResolution);
-    PcdSet32 (PcdVideoVerticalResolution,
+    PcdSet32S (PcdVideoVerticalResolution,
       PlatformConfig.VerticalResolution);
   }
 

@@ -1206,7 +1206,7 @@ VisitingFileSystemInstance (
       NULL,
       &mEmuVariableEventReg
       );
-  PcdSet64 (PcdEmuVariableEvent, (UINT64)(UINTN) mEmuVariableEvent);
+  PcdSet64S (PcdEmuVariableEvent, (UINT64)(UINTN) mEmuVariableEvent);
 
   return EFI_SUCCESS;
 }

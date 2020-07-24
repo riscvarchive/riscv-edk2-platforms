@@ -257,8 +257,8 @@ MemMapInitialization (
   //
   PciSize = 0xFC000000 - PciBase;
   AddIoMemoryBaseSizeHob (PciBase, PciSize);
-  PcdSet64 (PcdPciMmio32Base, PciBase);
-  PcdSet64 (PcdPciMmio32Size, PciSize);
+  PcdSet64S (PcdPciMmio32Base, PciBase);
+  PcdSet64S (PcdPciMmio32Size, PciSize);
   AddIoMemoryBaseSizeHob (0xFEC00000, SIZE_4KB);
   AddIoMemoryBaseSizeHob (0xFED00000, SIZE_1KB);
   if (mHostBridgeDevId == INTEL_ICH10_DEVICE_ID) {
@@ -300,8 +300,8 @@ MemMapInitialization (
     PciIoBase,
     PciIoSize
     );
-  PcdSet64 (PcdPciIoBase, PciIoBase);
-  PcdSet64 (PcdPciIoSize, PciIoSize);
+  PcdSet64S (PcdPciIoBase, PciIoBase);
+  PcdSet64S (PcdPciIoSize, PciIoSize);
 
   //
   // Add flash range.
@@ -367,7 +367,7 @@ MiscInitialization (
       ASSERT (FALSE);
       return;
   }
-  PcdSet16 (PcdSimicsX58HostBridgePciDevId, mHostBridgeDevId);
+  PcdSet16S (PcdSimicsX58HostBridgePciDevId, mHostBridgeDevId);
 
   //
   // If the appropriate IOspace enable bit is set, assume the ACPI PMBA
@@ -483,7 +483,7 @@ ReserveEmuVariableNvStore (
           VariableStore,
           (2 * PcdGet32 (PcdFlashNvStorageFtwSpareSize)) / 1024
         ));
-  PcdSet64 (PcdEmuVariableNvStoreReserved, VariableStore);
+  PcdSet64S (PcdEmuVariableNvStoreReserved, VariableStore);
 }
 
 
