@@ -18,7 +18,7 @@
 
 [Sources]
   Emmc.asl
-  Emmc.c
+  EmmcDxe.c
   Optee.asl
   Pci.c
   PlatformDxe.c
