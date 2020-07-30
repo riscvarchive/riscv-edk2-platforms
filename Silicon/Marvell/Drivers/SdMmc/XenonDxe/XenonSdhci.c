@@ -1,5 +1,6 @@
 /*******************************************************************************
 Copyright (C) 2016 Marvell International Ltd.
+Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -629,7 +630,7 @@ XenonTransferPio (
   // solution.
   //
   for (Index = 0; Index < BlockSize; Index += 4) {
-    Offs = Buffer + Index;
+    Offs = (UINT8*)((UINTN)Buffer + Index);
     if (Read) {
       *(UINT32 *)Offs = MmioRead32 (SDHC_DAT_BUF_PORT_ADDR);
     } else {
@@ -699,7 +700,7 @@ XenonTransferData (
 
       XenonTransferPio (Slot, Buffer, BlockSize, Read);
 
-      Buffer += BlockSize;
+      Buffer = (VOID*)((UINTN)Buffer + BlockSize);
       if (++Block >= Blocks) {
         break;
       }

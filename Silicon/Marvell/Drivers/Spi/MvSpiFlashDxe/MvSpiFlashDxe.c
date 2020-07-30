@@ -1,5 +1,6 @@
 /*******************************************************************************
 Copyright (C) 2016 Marvell International Ltd.
+Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -233,7 +234,7 @@ MvSpiFlashRead (
 
     Offset += ReadLength;
     Length -= ReadLength;
-    Buf += ReadLength;
+    Buf = (VOID*)((UINTN)Buf + ReadLength);
   }
 
   return Status;
@@ -268,8 +269,10 @@ MvSpiFlashWrite (
     SpiFlashFormatAddress (WriteAddr, Slave->AddrSize, Cmd);
 
     // Program proper write address and write data
-    Status = MvSpiFlashWriteCommon (Slave, Cmd, Slave->AddrSize + 1, Buf + ActualIndex,
-      ChunkLength);
+    Status = MvSpiFlashWriteCommon (
+      Slave, Cmd, Slave->AddrSize + 1,
+      (VOID*)((UINTN)Buf + ActualIndex), ChunkLength
+      );
     if (EFI_ERROR (Status)) {
       DEBUG((DEBUG_ERROR, "SpiFlash: Error while programming write address\n"));
       return Status;

@@ -1,5 +1,6 @@
 /********************************************************************************
 Copyright (C) 2016 Marvell International Ltd.
+Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -1342,7 +1343,7 @@ Pp2DxeInitialiseController (
 
   for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
     Mvpp2Shared->BufferLocation.TxDescs[Index] = (MVPP2_TX_DESC *)
-      (BufferSpace + Index * MVPP2_MAX_TXD * sizeof(MVPP2_TX_DESC));
+      ((UINTN)BufferSpace + Index * MVPP2_MAX_TXD * sizeof(MVPP2_TX_DESC));
   }
 
   Mvpp2Shared->BufferLocation.AggrTxDescs = (MVPP2_TX_DESC *)
@@ -1356,7 +1357,7 @@ Pp2DxeInitialiseController (
 
   for (Index = 0; Index < MVPP2_MAX_PORT; Index++) {
     Mvpp2Shared->BufferLocation.RxBuffers[Index] = (DmaAddrT)
-      (BufferSpace + (MVPP2_MAX_TXD * MVPP2_MAX_PORT + MVPP2_AGGR_TXQ_SIZE) *
+      ((UINTN)BufferSpace + (MVPP2_MAX_TXD * MVPP2_MAX_PORT + MVPP2_AGGR_TXQ_SIZE) *
       sizeof(MVPP2_TX_DESC) + MVPP2_MAX_RXD * MVPP2_MAX_PORT * sizeof(MVPP2_RX_DESC) +
       Index * MVPP2_BM_SIZE * RX_BUFFER_SIZE);
   }

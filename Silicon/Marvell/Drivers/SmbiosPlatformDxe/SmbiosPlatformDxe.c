@@ -1,7 +1,7 @@
 /** @file
   This driver installs SMBIOS information for Marvell Armada platforms
 
-  Copyright (c) 2015, ARM Limited. All rights reserved.
+  Copyright (c) 2015-2020, Arm Limited. All rights reserved.<BR>
   Copyright (c) 2019, Marvell International Ltd. and its affiliates
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -605,7 +605,7 @@ LogSmbiosData (
   CopyMem (Record, Template, Template->Length);
 
   // Append string pack
-  Str = ((VOID *)Record) + Record->Length;
+  Str = (CHAR8*)((UINTN)Record + Record->Length);
   for (Index = 0; StringArray[Index] != NULL; Index++) {
     StringSize = AsciiStrSize (StringArray[Index]);
     CopyMem (Str, StringArray[Index], StringSize);
