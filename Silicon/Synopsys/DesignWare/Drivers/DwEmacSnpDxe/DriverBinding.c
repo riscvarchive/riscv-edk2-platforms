@@ -1,6 +1,7 @@
 /** @file
 
   Copyright (c) 2011 - 2019, Intel Corporaton. All rights reserved.
+  Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
  **/
@@ -171,7 +172,7 @@ DriverStart (
     }
 
     //DMA mapping for receive buffer
-    RxBufferAddr = (VOID *)Snp->MacDriver.RxBuffer + (Index * BufferSize);
+    RxBufferAddr = (UINTN*)((UINTN)Snp->MacDriver.RxBuffer + (Index * BufferSize));
     Status = DmaMap (MapOperationBusMasterWrite,  (VOID *) RxBufferAddr,
                &BufferSize, &RxBufferAddrMap, &Snp->MacDriver.RxBufNum[Index].Mapping);
     if (EFI_ERROR (Status)) {

@@ -5,7 +5,7 @@
 
   The original software modules are licensed as follows:
 
-  Copyright (c) 2012 - 2014, ARM Limited. All rights reserved.
+  Copyright (c) 2012 - 2020, Arm Limited. All rights reserved.<BR>
   Copyright (c) 2004 - 2010, Intel Corporation. All rights reserved.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -1135,7 +1135,8 @@ SnpReceive (
   Snp->MacDriver.RxCurrentDescriptorNum = Snp->MacDriver.RxNextDescriptorNum;
   DescNum = Snp->MacDriver.RxCurrentDescriptorNum;
   RxDescriptor = Snp->MacDriver.RxdescRing[DescNum];
-  RxBufferAddr = (VOID *)Snp->MacDriver.RxBuffer + (DescNum * BufferSizeBuf);
+  RxBufferAddr = (UINTN*)((UINTN)Snp->MacDriver.RxBuffer +
+                          (DescNum * BufferSizeBuf));
   RxDescriptorMap = (VOID *)(UINTN)Snp->MacDriver.RxdescRingMap[DescNum].AddrMap;
 
   RawData = (UINT8 *) Data;
