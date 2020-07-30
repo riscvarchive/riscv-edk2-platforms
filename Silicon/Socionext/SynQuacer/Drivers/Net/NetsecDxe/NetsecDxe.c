@@ -2,6 +2,7 @@
 
   Copyright (c) 2016 Socionext Inc. All rights reserved.<BR>
   Copyright (c) 2017, Linaro, Ltd. All rights reserved.<BR>
+  Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -774,11 +775,18 @@ SnpTransmit (
     // Copy destination address
     CopyMem (BufAddr, (VOID *)DstAddr, NET_ETHER_ADDR_LEN);
     // Copy source address
-    CopyMem (BufAddr + NET_ETHER_ADDR_LEN, (VOID *)SrcAddr, NET_ETHER_ADDR_LEN);
+    CopyMem (
+      (VOID*)((UINTN)BufAddr + NET_ETHER_ADDR_LEN),
+      (VOID*)SrcAddr,
+      NET_ETHER_ADDR_LEN
+      );
     // Copy protocol
     Proto = HTONS (*Protocol);
-    CopyMem (BufAddr + (NET_ETHER_ADDR_LEN * 2), (VOID *)&Proto,
-      sizeof (UINT16));
+    CopyMem (
+      (VOID*)((UINTN)BufAddr + (NET_ETHER_ADDR_LEN * 2)),
+      (VOID*)&Proto,
+      sizeof (UINT16)
+      );
   }
 
   Status = DmaMap (MapOperationBusMasterRead, BufAddr, &BufSize,

@@ -3,6 +3,7 @@
 
   Copyright (c) 2016, Linaro, Ltd. All rights reserved.<BR>
   Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2020, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -316,7 +317,7 @@ PerformFlashWriteWithProgress (
       Print (L".");
     }
 
-    Buffer += BlockSize;
+    Buffer = (VOID*)((UINTN)Buffer + BlockSize);
     Length -= BlockSize;
     Lba++;
   }
