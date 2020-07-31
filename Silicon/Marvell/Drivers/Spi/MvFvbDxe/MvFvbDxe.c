@@ -1059,15 +1059,18 @@ MvFvbConfigureFlashInstance (
         return EFI_OUT_OF_RESOURCES;
     }
 
-    PcdSet64 (PcdFlashNvStorageVariableBase64,
-      (UINT64) FlashInstance->RegionBaseAddress);
-    PcdSet64 (PcdFlashNvStorageFtwWorkingBase64,
-      (UINT64) FlashInstance->RegionBaseAddress
-      + VariableSize);
-    PcdSet64 (PcdFlashNvStorageFtwSpareBase64,
-      (UINT64) FlashInstance->RegionBaseAddress
-      + VariableSize
-      + FtwWorkingSize);
+    Status = PcdSet64S (PcdFlashNvStorageVariableBase64,
+               (UINT64) FlashInstance->RegionBaseAddress);
+    ASSERT_EFI_ERROR (Status);
+    Status = PcdSet64S (PcdFlashNvStorageFtwWorkingBase64,
+               (UINT64) FlashInstance->RegionBaseAddress
+               + VariableSize);
+    ASSERT_EFI_ERROR (Status);
+    Status = PcdSet64S (PcdFlashNvStorageFtwSpareBase64,
+               (UINT64) FlashInstance->RegionBaseAddress
+               + VariableSize
+               + FtwWorkingSize);
+    ASSERT_EFI_ERROR (Status);
 
     // Fill the buffer with data from flash
     DataOffset = GET_DATA_OFFSET (FlashInstance->FvbOffset,
