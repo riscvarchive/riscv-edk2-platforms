@@ -202,7 +202,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdCpuClock, PcdGet32 (PcdCpuClock));
+    Status = PcdSet32S (PcdCpuClock, PcdGet32 (PcdCpuClock));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -210,25 +211,30 @@ SetupVariables (
                             &gConfigDxeFormSetGuid,
                             NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdCustomCpuClock, PcdGet32 (PcdCustomCpuClock));
+    Status = PcdSet32S (PcdCustomCpuClock, PcdGet32 (PcdCustomCpuClock));
+    ASSERT_EFI_ERROR (Status);
   }
 
   if (mModelFamily >= 4 && mModelInstalledMB > 3 * 1024) {
     /*
      * This allows changing PcdRamLimitTo3GB in forms.
      */
-    PcdSet32 (PcdRamMoreThan3GB, 1);
+    Status = PcdSet32S (PcdRamMoreThan3GB, 1);
+    ASSERT_EFI_ERROR (Status);
 
     Size = sizeof (UINT32);
     Status = gRT->GetVariable (L"RamLimitTo3GB",
                                &gConfigDxeFormSetGuid,
                                NULL, &Size, &Var32);
     if (EFI_ERROR (Status)) {
-      PcdSet32 (PcdRamLimitTo3GB, PcdGet32 (PcdRamLimitTo3GB));
+      Status = PcdSet32S (PcdRamLimitTo3GB, PcdGet32 (PcdRamLimitTo3GB));
+      ASSERT_EFI_ERROR (Status);
     }
   } else {
-    PcdSet32 (PcdRamMoreThan3GB, 0);
-    PcdSet32 (PcdRamLimitTo3GB, 0);
+    Status = PcdSet32S (PcdRamMoreThan3GB, 0);
+    ASSERT_EFI_ERROR (Status);
+    Status = PcdSet32S (PcdRamLimitTo3GB, 0);
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -236,7 +242,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdSystemTableMode, PcdGet32 (PcdSystemTableMode));
+    Status = PcdSet32S (PcdSystemTableMode, PcdGet32 (PcdSystemTableMode));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof(AssetTagVar);
@@ -260,7 +267,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdSdIsArasan, PcdGet32 (PcdSdIsArasan));
+    Status = PcdSet32S (PcdSdIsArasan, PcdGet32 (PcdSdIsArasan));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -268,7 +276,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdMmcDisableMulti, PcdGet32 (PcdMmcDisableMulti));
+    Status = PcdSet32S (PcdMmcDisableMulti, PcdGet32 (PcdMmcDisableMulti));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -276,7 +285,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdMmcForce1Bit, PcdGet32 (PcdMmcForce1Bit));
+    Status = PcdSet32S (PcdMmcForce1Bit, PcdGet32 (PcdMmcForce1Bit));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -284,7 +294,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdMmcForceDefaultSpeed, PcdGet32 (PcdMmcForceDefaultSpeed));
+    Status = PcdSet32S (PcdMmcForceDefaultSpeed, PcdGet32 (PcdMmcForceDefaultSpeed));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -292,7 +303,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdMmcSdDefaultSpeedMHz, PcdGet32 (PcdMmcSdDefaultSpeedMHz));
+    Status = PcdSet32S (PcdMmcSdDefaultSpeedMHz, PcdGet32 (PcdMmcSdDefaultSpeedMHz));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -300,7 +312,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdMmcSdHighSpeedMHz, PcdGet32 (PcdMmcSdHighSpeedMHz));
+    Status = PcdSet32S (PcdMmcSdHighSpeedMHz, PcdGet32 (PcdMmcSdHighSpeedMHz));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -308,7 +321,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdDebugEnableJTAG, PcdGet32 (PcdDebugEnableJTAG));
+    Status = PcdSet32S (PcdDebugEnableJTAG, PcdGet32 (PcdDebugEnableJTAG));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT8);
@@ -316,7 +330,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var8);
   if (EFI_ERROR (Status)) {
-    PcdSet8 (PcdDisplayEnableScaledVModes, PcdGet8 (PcdDisplayEnableScaledVModes));
+    Status = PcdSet8S (PcdDisplayEnableScaledVModes, PcdGet8 (PcdDisplayEnableScaledVModes));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);
@@ -324,7 +339,8 @@ SetupVariables (
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
-    PcdSet32 (PcdDisplayEnableSShot, PcdGet32 (PcdDisplayEnableSShot));
+    Status = PcdSet32S (PcdDisplayEnableSShot, PcdGet32 (PcdDisplayEnableSShot));
+    ASSERT_EFI_ERROR (Status);
   }
 
   if (mModelFamily == 4) {
@@ -381,7 +397,8 @@ ApplyVariables (
     if (Status != EFI_SUCCESS) {
       DEBUG ((DEBUG_ERROR, "Couldn't set the CPU speed: %r\n", Status));
     } else {
-      PcdSet32 (PcdCustomCpuClock, Rate / FREQ_1_MHZ);
+      Status = PcdSet32S (PcdCustomCpuClock, Rate / FREQ_1_MHZ);
+      ASSERT_EFI_ERROR (Status);
     }
   }
 
