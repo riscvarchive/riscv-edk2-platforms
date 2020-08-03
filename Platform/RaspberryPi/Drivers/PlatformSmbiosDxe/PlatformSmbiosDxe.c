@@ -119,11 +119,12 @@ SMBIOS_TABLE_TYPE0 mBIOSInfoType0 = {
 
 CHAR8 mBiosVendor[128]  = "EDK2";
 CHAR8 mBiosVersion[128] = "EDK2-DEV";
+CHAR8 mBiosDate[12]     = "00/00/0000";
 
 CHAR8 *mBIOSInfoType0Strings[] = {
   mBiosVendor,              // Vendor
   mBiosVersion,             // Version
-  __DATE__ " " __TIME__,    // Release Date
+  mBiosDate,                // Release Date
   NULL
 };
 
@@ -149,7 +150,7 @@ CHAR8 mSysInfoSerial[sizeof (UINT64) * 2 + 1];
 CHAR8 mSysInfoSKU[sizeof (UINT64) * 2 + 1];
 
 CHAR8 *mSysInfoType1Strings[] = {
-  mSysInfoManufName,
+  "Raspberry Pi Foundation",
   mSysInfoProductName,
   mSysInfoVersionName,
   mSysInfoSerial,
@@ -626,6 +627,9 @@ BIOSInfoUpdateSmbiosType0 (
   INTN   i;
   INTN   State = 0;
   INTN   Value[2];
+  INTN   Year = TIME_BUILD_YEAR;
+  INTN   Month = TIME_BUILD_MONTH;
+  INTN   Day = TIME_BUILD_DAY;
 
   // Populate the Firmware major and minor.
   Status = mFwProtocol->GetFirmwareRevision (&EpochSeconds);
@@ -648,6 +652,10 @@ BIOSInfoUpdateSmbiosType0 (
     mBiosVendor, sizeof (mBiosVendor));
   UnicodeStrToAsciiStrS ((CHAR16*)PcdGetPtr (PcdFirmwareVersionString),
     mBiosVersion, sizeof (mBiosVersion));
+  ASSERT (Year >= 0 && Year <= 9999);
+  ASSERT (Month >= 1 && Month <= 12);
+  ASSERT (Day >= 1 && Day <= 31);
+  AsciiSPrint (mBiosDate, sizeof (mBiosDate), "%02d/%02d/%04d", Month, Day, Year);
 
   // Look for a "x.y" numeric string anywhere in mBiosVersion and
   // try to parse it to populate the BIOS major and minor.
