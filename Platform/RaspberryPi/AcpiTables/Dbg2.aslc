@@ -3,7 +3,7 @@
  *  Debug Port Table (DBG2)
  *
  *  Copyright (c) 2019, Pete Batard <pete@akeo.ie>
- *  Copyright (c) 2012-2016, ARM Limited. All rights reserved.
+ *  Copyright (c) 2012-2020, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -21,13 +21,13 @@
 
 #define RPI_DBG2_NUM_DEBUG_PORTS                        1
 #define RPI_DBG2_NUMBER_OF_GENERIC_ADDRESS_REGISTERS    1
-#define RPI_DBG2_NAMESPACESTRING_FIELD_SIZE             10
+#define RPI_DBG2_NAMESPACESTRING_FIELD_SIZE             15
 
 #if (RPI_MODEL == 4)
 #define RPI_UART_INTERFACE_TYPE                         EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_ARM_PL011_UART
 #define RPI_UART_BASE_ADDRESS                           BCM2836_PL011_UART_BASE_ADDRESS
 #define RPI_UART_LENGTH                                 BCM2836_PL011_UART_LENGTH
-#define RPI_UART_STR                                    { '\\', '_', 'S', 'B', '.', 'U', 'R', 'T', '0', 0x00 }
+#define RPI_UART_STR                                    { '\\', '_', 'S', 'B', '.', 'G', 'D', 'V', '0', '.', 'U', 'R', 'T', '0', 0x00 }
 #else
 #define RPI_UART_INTERFACE_TYPE                         EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_BCM2835_UART
 #define RPI_UART_BASE_ADDRESS                           BCM2836_MINI_UART_BASE_ADDRESS
@@ -35,7 +35,7 @@
 //
 // RPI_UART_STR should match the value used Uart.asl
 //
-#define RPI_UART_STR                                    { '\\', '_', 'S', 'B', '.', 'U', 'R', 'T', 'M', 0x00 }
+#define RPI_UART_STR                                    { '\\', '_', 'S', 'B', '.', 'G', 'D', 'V', '0', '.', 'U', 'R', 'T', 'M', 0x00 }
 #endif
 
 typedef struct {
