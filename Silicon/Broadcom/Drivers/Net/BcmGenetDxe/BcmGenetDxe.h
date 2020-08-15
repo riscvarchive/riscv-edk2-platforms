@@ -235,6 +235,7 @@ typedef struct {
 
 extern EFI_COMPONENT_NAME_PROTOCOL            gGenetComponentName;
 extern EFI_COMPONENT_NAME2_PROTOCOL           gGenetComponentName2;
+extern EFI_DRIVER_BINDING_PROTOCOL            mGenetDriverBinding;
 
 extern CONST EFI_SIMPLE_NETWORK_PROTOCOL      gGenetSimpleNetworkTemplate;
 extern CONST EFI_ADAPTER_INFORMATION_PROTOCOL gGenetAdapterInfoTemplate;

@@ -302,7 +302,7 @@ GenetDriverBindingStop (
   return EFI_SUCCESS;
 }
 
-STATIC EFI_DRIVER_BINDING_PROTOCOL mGenetDriverBinding = {
+EFI_DRIVER_BINDING_PROTOCOL mGenetDriverBinding = {
   GenetDriverBindingSupported,
   GenetDriverBindingStart,
   GenetDriverBindingStop,

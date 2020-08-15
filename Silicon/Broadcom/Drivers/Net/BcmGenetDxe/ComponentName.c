@@ -2,6 +2,7 @@
   UEFI Component Name(2) protocol implementation for GENET UEFI driver.
 
   Copyright (c) 2020 Jared McNeill. All rights reserved.
+  Copyright (c) 2020, ARM Limited. All rights reserved.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
@@ -169,6 +170,27 @@ GenetComponentNameGetControllerName (
   OUT CHAR16                                          **ControllerName
   )
 {
+  EFI_STATUS  Status;
+
+  //
+  // This is a device driver, so ChildHandle must be NULL.
+  //
+  if (ChildHandle != NULL) {
+    return EFI_UNSUPPORTED;
+  }
+
+  //
+  // Make sure this driver is currently managing ControllerHandle
+  //
+  Status = EfiTestManagedDevice (
+             ControllerHandle,
+             mGenetDriverBinding.DriverBindingHandle,
+             &gEfiSimpleNetworkProtocolGuid
+             );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
   if (ChildHandle != NULL) {
     return EFI_UNSUPPORTED;
   }
