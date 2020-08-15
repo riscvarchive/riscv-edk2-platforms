@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *
@@ -27,6 +28,7 @@
 extern EFI_GRAPHICS_OUTPUT_PROTOCOL gDisplayProto;
 extern EFI_COMPONENT_NAME_PROTOCOL  gComponentName;
 extern EFI_COMPONENT_NAME2_PROTOCOL gComponentName2;
+extern EFI_DRIVER_BINDING_PROTOCOL  mDriverBinding;
 
 VOID
 RegisterScreenshotHandlers (

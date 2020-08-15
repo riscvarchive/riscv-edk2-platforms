@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2006-2016, Intel Corporation. All rights reserved.
  *
@@ -206,6 +207,27 @@ ComponentNameGetControllerName (
   OUT CHAR16                      **ControllerName
   )
 {
+  EFI_STATUS  Status;
+
+  //
+  // This is a device driver, so ChildHandle must be NULL.
+  //
+  if (ChildHandle != NULL) {
+    return EFI_UNSUPPORTED;
+  }
+
+  //
+  // Make sure this driver is currently managing ControllerHandle
+  //
+  Status = EfiTestManagedDevice (
+             ControllerHandle,
+             mDriverBinding.DriverBindingHandle,
+             &gEfiGraphicsOutputProtocolGuid
+             );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
   return LookupUnicodeString2 (
            Language,
            This->SupportedLanguages,
