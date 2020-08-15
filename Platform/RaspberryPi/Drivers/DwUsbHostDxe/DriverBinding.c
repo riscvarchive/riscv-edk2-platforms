@@ -36,7 +36,7 @@ DriverStop (
   IN  EFI_HANDLE                  *ChildHandleBuffer
   );
 
-STATIC EFI_DRIVER_BINDING_PROTOCOL mDriverBinding = {
+EFI_DRIVER_BINDING_PROTOCOL mDriverBinding = {
   DriverSupported,
   DriverStart,
   DriverStop,

@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2015-2016, Linaro Limited. All rights reserved.
  *
@@ -121,8 +122,9 @@ typedef struct _DWUSB_OTGHC_DEV {
   UINT16                          LastMicroFrame;
 } DWUSB_OTGHC_DEV;
 
-extern EFI_COMPONENT_NAME_PROTOCOL gComponentName;
+extern EFI_COMPONENT_NAME_PROTOCOL  gComponentName;
 extern EFI_COMPONENT_NAME2_PROTOCOL gComponentName2;
+extern EFI_DRIVER_BINDING_PROTOCOL  mDriverBinding;
 
 EFI_STATUS
 CreateDwUsbHc (

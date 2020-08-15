@@ -1,5 +1,6 @@
 /** @file
  *
+ *  Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -205,8 +206,25 @@ ComponentNameGetControllerName (
   OUT CHAR16                      **ControllerName
   )
 {
+  EFI_STATUS  Status;
+
+  //
+  // This is a device driver, so ChildHandle must be NULL.
+  //
   if (ChildHandle != NULL) {
     return EFI_UNSUPPORTED;
+  }
+
+  //
+  // Make sure this driver is currently managing ControllerHandle
+  //
+  Status = EfiTestManagedDevice (
+             ControllerHandle,
+             mDriverBinding.DriverBindingHandle,
+             &gEfiUsb2HcProtocolGuid
+             );
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
   return LookupUnicodeString2 (
