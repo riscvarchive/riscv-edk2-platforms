@@ -129,17 +129,17 @@ R: Ard Biesheuvel <ard.biesheuvel@arm.com>
 Features/Intel
 F: Features/Intel/
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
-R: Liming Gao <liming.gao@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
 
 Features/Intel/Debugging
 F: Features/Intel/Debugging/
 M: Eric Dong <eric.dong@intel.com>
-R: Liming Gao <liming.gao@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
 
 Features/Intel/UserInterface
 F: Features/Intel/UserInterface/
 M: Dandan Bi <dandan.bi@intel.com>
-R: Liming Gao <liming.gao@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
 
 Platform/Intel/QuarkPlatformPkg
 F: Platform/Intel/QuarkPlatformPkg/
@@ -154,7 +154,7 @@ M: Yi Qian <yi.qian@intel.com>
 Platform/Intel/BoardModulePkg
 F: Platform/Intel/BoardModulePkg/
 M: Eric Dong <eric.dong@intel.com>
-R: Liming Gao <liming.gao@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
 
 Platform/Intel/KabylakeOpenBoardPkg
 F: Platform/Intel/KabylakeOpenBoardPkg/
@@ -169,7 +169,7 @@ Platform/Intel/MinPlatformPkg
 F: Platform/Intel/MinPlatformPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Nate DeSimone <nathaniel.l.desimone@intel.com>
-R: Liming Gao <liming.gao@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
 R: Eric Dong <eric.dong@intel.com>
 
 Platform/Intel/WhiskeylakeOpenBoardPkg
@@ -192,7 +192,7 @@ M: Agyeman Prince <prince.agyeman@intel.com>
 Platform/Intel/Tools
 F: Platform/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
-M: Liming Gao <liming.gao@intel.com>
+M: Liming Gao <gaoliming@byosoft.com.cn>
 R: Yuwei Chen <yuwei.chen@intel.com>
 
 Platform/RISC-V/PlatformPkg
@@ -243,7 +243,7 @@ M: Agyeman Prince <prince.agyeman@intel.com>
 Silicon/Intel/Tools
 F: Silicon/Intel/Tools/
 M: Bob Feng <bob.c.feng@intel.com>
-M: Liming Gao <liming.gao@intel.com>
+M: Liming Gao <gaoliming@byosoft.com.cn>
 R: Yuwei Chen <yuwei.chen@intel.com>
 
 Marvell platforms and silicon
