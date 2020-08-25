@@ -72,4 +72,128 @@ typedef struct {
   UINT8         uid[8];
 } SBSAQEMU_ACPI_CPU_DEVICE;
 
+#define SBSAQEMU_L1_D_CACHE_SIZE         SIZE_32KB
+#define SBSAQEMU_L1_D_CACHE_SETS         256
+#define SBSAQEMU_L1_D_CACHE_ASSC         2
+
+#define SBSAQEMU_L1_I_CACHE_SIZE         SIZE_32KB
+#define SBSAQEMU_L1_I_CACHE_SETS         256
+#define SBSAQEMU_L1_I_CACHE_ASSC         2
+
+#define SBSAQEMU_L2_CACHE_SIZE           SIZE_512KB
+#define SBSAQEMU_L2_CACHE_SETS           1024
+#define SBSAQEMU_L2_CACHE_ASSC           8
+
+#define CLUSTER_INDEX    (sizeof (EFI_ACPI_DESCRIPTION_HEADER))
+#define L1_D_CACHE_INDEX (CLUSTER_INDEX + sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR))
+#define L1_I_CACHE_INDEX (L1_D_CACHE_INDEX + sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE))
+#define L2_CACHE_INDEX   (L1_I_CACHE_INDEX + sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE))
+
+#define SBSAQEMU_ACPI_PPTT_L1_D_CACHE_STRUCT {                                 \
+    EFI_ACPI_6_3_PPTT_TYPE_CACHE,                                              \
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE),                                \
+    { EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE },                        \
+    {                                                                          \
+      1,                       /* SizePropertyValid */                         \
+      1,                       /* NumberOfSetsValid */                         \
+      1,                       /* AssociativityValid */                        \
+      1,                       /* AllocationTypeValid */                       \
+      1,                       /* CacheTypeValid */                            \
+      1,                       /* WritePolicyValid */                          \
+      1,                       /* LineSizeValid */                             \
+    },                                                                         \
+    0,                         /* NextLevelOfCache */                          \
+    SBSAQEMU_L1_D_CACHE_SIZE,  /* Size */                                      \
+    SBSAQEMU_L1_D_CACHE_SETS,  /* NumberOfSets */                              \
+    SBSAQEMU_L1_D_CACHE_ASSC,  /* Associativity */                             \
+    {                                                                          \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,                     \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_CACHE_TYPE_DATA,                           \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,                   \
+    },                                                                         \
+    64                         /* LineSize */                                  \
+  }
+
+#define SBSAQEMU_ACPI_PPTT_L1_I_CACHE_STRUCT {                                 \
+    EFI_ACPI_6_3_PPTT_TYPE_CACHE,                                              \
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE),                                \
+    { EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE },                        \
+    {                                                                          \
+      1,                       /* SizePropertyValid */                         \
+      1,                       /* NumberOfSetsValid */                         \
+      1,                       /* AssociativityValid */                        \
+      1,                       /* AllocationTypeValid */                       \
+      1,                       /* CacheTypeValid */                            \
+      0,                       /* WritePolicyValid */                          \
+      1,                       /* LineSizeValid */                             \
+    },                                                                         \
+    0,                         /* NextLevelOfCache */                          \
+    SBSAQEMU_L1_I_CACHE_SIZE,  /* Size */                                      \
+    SBSAQEMU_L1_I_CACHE_SETS,  /* NumberOfSets */                              \
+    SBSAQEMU_L1_I_CACHE_ASSC,  /* Associativity */                             \
+    {                                                                          \
+      EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ,                           \
+      EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_INSTRUCTION,                    \
+      0,                                                                       \
+    },                                                                         \
+    64                         /* LineSize */                                  \
+  }
+
+#define SBSAQEMU_ACPI_PPTT_L2_CACHE_STRUCT  {                                  \
+    EFI_ACPI_6_3_PPTT_TYPE_CACHE,                                              \
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE),                                \
+    { EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE },                        \
+    {                                                                          \
+      1,                     /* SizePropertyValid */                           \
+      1,                     /* NumberOfSetsValid */                           \
+      1,                     /* AssociativityValid */                          \
+      1,                     /* AllocationTypeValid */                         \
+      1,                     /* CacheTypeValid */                              \
+      1,                     /* WritePolicyValid */                            \
+      1,                     /* LineSizeValid */                               \
+    },                                                                         \
+    0,                       /* NextLevelOfCache */                            \
+    SBSAQEMU_L2_CACHE_SIZE,  /* Size */                                        \
+    SBSAQEMU_L2_CACHE_SETS,  /* NumberOfSets */                                \
+    SBSAQEMU_L2_CACHE_ASSC,  /* Associativity */                               \
+    {                                                                          \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,                     \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,                        \
+      EFI_ACPI_6_2_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK,                   \
+    },                                                                         \
+    64            /* LineSize */                                               \
+  }
+
+#define SBSAQEMU_ACPI_PPTT_CLUSTER_STRUCT  {                                   \
+    EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,                                          \
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR),                            \
+    { EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE },                        \
+    {                                                                          \
+      EFI_ACPI_6_3_PPTT_PACKAGE_PHYSICAL,         /* PhysicalPackage */        \
+      EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,     /* AcpiProcessorIdValid */   \
+      EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,  /* Is not a Thread */        \
+      EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,         /* Not Leaf */               \
+      EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL, /* Identical Cores */        \
+    },                                                                         \
+    0,                                        /* Parent */                     \
+    0,                                        /* AcpiProcessorId */            \
+    0,                                        /* NumberOfPrivateResources */   \
+  }
+
+#define SBSAQEMU_ACPI_PPTT_CORE_STRUCT  {                                      \
+    EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,                                          \
+    (sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR) + (2 * sizeof (UINT32))),  \
+    { EFI_ACPI_RESERVED_BYTE, EFI_ACPI_RESERVED_BYTE },                        \
+    {                                                                          \
+      EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,     /* PhysicalPackage */        \
+      EFI_ACPI_6_3_PPTT_PROCESSOR_ID_VALID,       /* AcpiProcessorValid */     \
+      EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,  /* Is not a Thread */        \
+      EFI_ACPI_6_3_PPTT_NODE_IS_LEAF,             /* Leaf */                   \
+      EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL, /* Identical Cores */        \
+    },                                                                         \
+    0,                                        /* Parent */                     \
+    0,                                        /* AcpiProcessorId */            \
+    2,                                        /* NumberOfPrivateResources */   \
+  }
+
 #endif

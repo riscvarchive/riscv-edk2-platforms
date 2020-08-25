@@ -337,6 +337,111 @@ AddSsdtTable (
   return Status;
 }
 
+/*
+ * A function that adds the SSDT ACPI table.
+ */
+EFI_STATUS
+AddPpttTable (
+  IN EFI_ACPI_TABLE_PROTOCOL   *AcpiTable
+  )
+{
+  EFI_STATUS            Status;
+  UINTN                 TableHandle;
+  UINT32                TableSize;
+  EFI_PHYSICAL_ADDRESS  PageAddress;
+  UINT8                 *New;
+  UINT32                CpuId;
+  UINT32                NumCores = PcdGet32 (PcdCoreCount);
+
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE L1DCache = SBSAQEMU_ACPI_PPTT_L1_D_CACHE_STRUCT;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE L1ICache = SBSAQEMU_ACPI_PPTT_L1_I_CACHE_STRUCT;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE L2Cache = SBSAQEMU_ACPI_PPTT_L2_CACHE_STRUCT;
+
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR Cluster = SBSAQEMU_ACPI_PPTT_CLUSTER_STRUCT;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR Core = SBSAQEMU_ACPI_PPTT_CORE_STRUCT;
+
+  EFI_ACPI_DESCRIPTION_HEADER Header =
+    SBSAQEMU_ACPI_HEADER (
+      EFI_ACPI_6_3_PROCESSOR_PROPERTIES_TOPOLOGY_TABLE_STRUCTURE_SIGNATURE,
+      EFI_ACPI_DESCRIPTION_HEADER,
+      EFI_ACPI_6_3_PROCESSOR_PROPERTIES_TOPOLOGY_TABLE_REVISION);
+
+  TableSize = sizeof (EFI_ACPI_DESCRIPTION_HEADER) +
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR) +
+    (sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE) * 3) +
+    (sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR) * NumCores) +
+    (sizeof (UINT32) * 2 * NumCores);
+
+  Status = gBS->AllocatePages (
+                  AllocateAnyPages,
+                  EfiACPIReclaimMemory,
+                  EFI_SIZE_TO_PAGES (TableSize),
+                  &PageAddress
+                  );
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to allocate pages for PPTT table\n"));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  New = (UINT8 *)(UINTN) PageAddress;
+  ZeroMem (New, TableSize);
+
+  // Add the ACPI Description table header
+  CopyMem (New, &Header, sizeof (EFI_ACPI_DESCRIPTION_HEADER));
+  ((EFI_ACPI_DESCRIPTION_HEADER*) New)->Length = TableSize;
+  New += sizeof (EFI_ACPI_DESCRIPTION_HEADER);
+
+  // Add the Cluster PPTT structure
+  CopyMem (New, &Cluster, sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR));
+  New += sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR);
+
+  // Add L1 D Cache structure
+  CopyMem (New, &L1DCache, sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE));
+  ((EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE*) New)->NextLevelOfCache = L2_CACHE_INDEX;
+  New += sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE);
+
+  // Add L1 I Cache structure
+  CopyMem (New, &L1ICache, sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE));
+  ((EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE*) New)->NextLevelOfCache = L2_CACHE_INDEX;
+  New += sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE);
+
+  // Add L2 Cache structure
+  CopyMem (New, &L2Cache, sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE));
+  ((EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE*) New)->NextLevelOfCache = 0; /* L2 is LLC */
+  New += sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE);
+
+  for (CpuId = 0; CpuId < NumCores; CpuId++) {
+    EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR *CorePtr;
+    UINT32                                *PrivateResourcePtr;
+
+    CopyMem (New, &Core, sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR));
+    CorePtr = (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR *) New;
+    CorePtr->Parent = CLUSTER_INDEX;
+    CorePtr->AcpiProcessorId = CpuId;
+    New += sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR);
+
+    PrivateResourcePtr = (UINT32 *) New;
+    PrivateResourcePtr[0] = L1_D_CACHE_INDEX;
+    PrivateResourcePtr[1] = L1_I_CACHE_INDEX;
+    New += (2 * sizeof (UINT32));
+  }
+
+  // Perform Checksum
+  AcpiPlatformChecksum ((UINT8*) PageAddress, TableSize);
+
+  Status = AcpiTable->InstallAcpiTable (
+                        AcpiTable,
+                        (EFI_ACPI_COMMON_HEADER *)PageAddress,
+                        TableSize,
+                        &TableHandle
+                        );
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to install PPTT table\n"));
+  }
+
+  return Status;
+}
+
 EFI_STATUS
 EFIAPI
 InitializeSbsaQemuAcpiDxe (
@@ -369,6 +474,11 @@ InitializeSbsaQemuAcpiDxe (
   Status = AddSsdtTable (AcpiTable);
   if (EFI_ERROR(Status)) {
      DEBUG ((DEBUG_ERROR, "Failed to add SSDT table\n"));
+  }
+
+  Status = AddPpttTable (AcpiTable);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to add PPTT table\n"));
   }
 
   return EFI_SUCCESS;
