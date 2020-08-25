@@ -7,6 +7,7 @@
 *
 **/
 #include <IndustryStandard/Acpi.h>
+#include <IndustryStandard/AcpiAml.h>
 #include <IndustryStandard/SbsaQemuAcpi.h>
 #include <Library/AcpiLib.h>
 #include <Library/BaseMemoryLib.h>
@@ -198,6 +199,144 @@ AddMadtTable (
   return Status;
 }
 
+/*
+ * Function to calculate the PkgLength field in ACPI tables
+ */
+STATIC
+UINT32
+SetPkgLength (
+  IN UINT8  *TablePtr,
+  IN UINT32 Length
+)
+{
+  UINT8  ByteCount;
+  UINT8  *PkgLeadByte = TablePtr;
+
+  if (Length < 64) {
+    *TablePtr = Length;
+    return 1;
+  }
+
+  // Set the LSB of Length in PkgLeadByte and advance Length
+  *PkgLeadByte = Length & 0xF;
+  Length = Length >> 4;
+
+  while (Length) {
+    TablePtr++;
+    *TablePtr = (Length & 0xFF);
+    Length = (Length >> 8);
+  }
+
+  // Calculate the number of bytes the Length field uses
+  // and set the ByteCount field in PkgLeadByte.
+  ByteCount = (TablePtr - PkgLeadByte) & 0xF;
+  *PkgLeadByte |= (ByteCount << 6);
+
+  return ByteCount + 1;
+}
+
+/*
+ * A function that adds SSDT ACPI table.
+ */
+EFI_STATUS
+AddSsdtTable (
+  IN EFI_ACPI_TABLE_PROTOCOL   *AcpiTable
+  )
+{
+  EFI_STATUS            Status;
+  UINTN                 TableHandle;
+  UINT32                TableSize;
+  EFI_PHYSICAL_ADDRESS  PageAddress;
+  UINT8                 *New;
+  UINT32                CpuId;
+  UINT32                Offset;
+  UINT8                 ScopeOpName[] =  SBSAQEMU_ACPI_SCOPE_NAME;
+  UINT32                NumCores = PcdGet32 (PcdCoreCount);
+
+  EFI_ACPI_DESCRIPTION_HEADER Header =
+    SBSAQEMU_ACPI_HEADER (
+      EFI_ACPI_6_0_SECONDARY_SYSTEM_DESCRIPTION_TABLE_SIGNATURE,
+      EFI_ACPI_DESCRIPTION_HEADER,
+      EFI_ACPI_6_0_SECONDARY_SYSTEM_DESCRIPTION_TABLE_REVISION);
+
+  SBSAQEMU_ACPI_CPU_DEVICE CpuDevice = {
+    { AML_EXT_OP, AML_EXT_DEVICE_OP }, /* Device () */
+    SBSAQEMU_ACPI_CPU_DEV_LEN,         /* Length */
+    SBSAQEMU_ACPI_CPU_DEV_NAME,        /* Device Name "C000" */
+    SBSAQEMU_ACPI_CPU_HID,             /* Name (HID, "ACPI0007") */
+    SBSAQEMU_ACPI_CPU_UID,             /* Name (UID, 0) */
+  };
+
+  // Calculate the new table size based on the number of cores
+  TableSize = sizeof (EFI_ACPI_DESCRIPTION_HEADER) +
+              SBSAQEMU_ACPI_SCOPE_OP_MAX_LENGTH + sizeof (ScopeOpName) +
+              (sizeof (CpuDevice) * NumCores);
+
+  Status = gBS->AllocatePages (
+                  AllocateAnyPages,
+                  EfiACPIReclaimMemory,
+                  EFI_SIZE_TO_PAGES (TableSize),
+                  &PageAddress
+                  );
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to allocate pages for SSDT table\n"));
+    return EFI_OUT_OF_RESOURCES;
+  }
+
+  New = (UINT8 *)(UINTN) PageAddress;
+  ZeroMem (New, TableSize);
+
+  // Add the ACPI Description table header
+  CopyMem (New, &Header, sizeof (EFI_ACPI_DESCRIPTION_HEADER));
+  ((EFI_ACPI_DESCRIPTION_HEADER*) New)->Length = TableSize;
+  New += sizeof (EFI_ACPI_DESCRIPTION_HEADER);
+
+  // Insert the top level ScopeOp
+  *New = AML_SCOPE_OP;
+  New++;
+  Offset = SetPkgLength (New,
+             (TableSize - sizeof (EFI_ACPI_DESCRIPTION_HEADER) - 1));
+  New += Offset;
+  CopyMem (New, &ScopeOpName, sizeof (ScopeOpName));
+  New += sizeof (ScopeOpName);
+
+  // Add new Device structures for the Cores
+  for (CpuId = 0; CpuId < NumCores; CpuId++) {
+    SBSAQEMU_ACPI_CPU_DEVICE *CpuDevicePtr;
+    UINT8 CpuIdByte1, CpuIdByte2, CpuIdByte3;
+
+    CopyMem (New, &CpuDevice, sizeof (SBSAQEMU_ACPI_CPU_DEVICE));
+    CpuDevicePtr = (SBSAQEMU_ACPI_CPU_DEVICE *) New;
+
+    CpuIdByte1 = CpuId & 0xF;
+    CpuIdByte2 = (CpuId >> 4) & 0xF;
+    CpuIdByte3 = (CpuId >> 8) & 0xF;
+
+    CpuDevicePtr->dev_name[1] = SBSAQEMU_ACPI_ITOA(CpuIdByte3);
+    CpuDevicePtr->dev_name[2] = SBSAQEMU_ACPI_ITOA(CpuIdByte2);
+    CpuDevicePtr->dev_name[3] = SBSAQEMU_ACPI_ITOA(CpuIdByte1);
+
+    CpuDevicePtr->uid[6] = CpuIdByte1 | CpuIdByte2;
+    CpuDevicePtr->uid[7] = CpuIdByte3;
+    New += sizeof (SBSAQEMU_ACPI_CPU_DEVICE);
+  }
+
+  // Perform Checksum
+  AcpiPlatformChecksum ((UINT8*) PageAddress, TableSize);
+
+  Status = AcpiTable->InstallAcpiTable (
+                        AcpiTable,
+                        (EFI_ACPI_COMMON_HEADER *)PageAddress,
+                        TableSize,
+                        &TableHandle
+                        );
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to install SSDT table\n"));
+  }
+
+  return Status;
+}
+
 EFI_STATUS
 EFIAPI
 InitializeSbsaQemuAcpiDxe (
@@ -225,6 +364,11 @@ InitializeSbsaQemuAcpiDxe (
   Status = AddMadtTable (AcpiTable);
   if (EFI_ERROR(Status)) {
      DEBUG ((DEBUG_ERROR, "Failed to add MADT table\n"));
+  }
+
+  Status = AddSsdtTable (AcpiTable);
+  if (EFI_ERROR(Status)) {
+     DEBUG ((DEBUG_ERROR, "Failed to add SSDT table\n"));
   }
 
   return EFI_SUCCESS;
