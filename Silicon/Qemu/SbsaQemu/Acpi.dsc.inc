@@ -33,3 +33,4 @@
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   Silicon/Qemu/SbsaQemu/AcpiTables/AcpiTables.inf
+  Silicon/Qemu/SbsaQemu/Drivers/SbsaQemuAcpiDxe/SbsaQemuAcpiDxe.inf
