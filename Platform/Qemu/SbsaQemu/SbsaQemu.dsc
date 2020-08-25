@@ -75,6 +75,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
   FileHandleLib|MdePkg/Library/UefiFileHandleLib/UefiFileHandleLib.inf
 
+  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
   UefiRuntimeLib|MdePkg/Library/UefiRuntimeLib/UefiRuntimeLib.inf
   OrderedCollectionLib|MdePkg/Library/BaseOrderedCollectionRedBlackTreeLib/BaseOrderedCollectionRedBlackTreeLib.inf
 
@@ -217,7 +218,6 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
 
   PeiServicesTablePointerLib|ArmPkg/Library/PeiServicesTablePointerLib/PeiServicesTablePointerLib.inf
 
-  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
   ArmPlatformLib|Silicon/Qemu/SbsaQemu/Library/SbsaQemuLib/SbsaQemuLib.inf
 
 [LibraryClasses.common.DXE_CORE]
@@ -376,7 +376,6 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 
-  gArmPlatformTokenSpaceGuid.PcdCoreCount|1
   gArmTokenSpaceGuid.PcdVFPEnabled|1
 
   # System Memory Base -- fixed
@@ -477,6 +476,9 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
 [PcdsDynamicDefault.common]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3
 
+  # Core and Cluster Count
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdCoreCount|1
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdClusterCount|1
 
   # System Memory Size -- 128 MB initially, actual size will be fetched from DT
   # TODO as no DT will be used we should pass this by some other method
