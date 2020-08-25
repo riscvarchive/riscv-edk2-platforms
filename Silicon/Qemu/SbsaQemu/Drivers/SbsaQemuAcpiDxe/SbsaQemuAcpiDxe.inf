@@ -41,9 +41,27 @@
   UefiRuntimeServicesTableLib
 
 [Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiTableStorageFile
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdCoreCount
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdClusterCount
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdDeviceTreeBaseAddress
 
 [Depex]
-  TRUE
+  gEfiAcpiTableProtocolGuid                       ## CONSUMES
+
+[Guids]
+  gEdkiiPlatformHasAcpiGuid
+
+[Protocols]
+  gEfiAcpiTableProtocolGuid                       ## CONSUMES
+
+[FixedPcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemRevision
+  gArmTokenSpaceGuid.PcdGicDistributorBase
+  gArmTokenSpaceGuid.PcdGicRedistributorsBase
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorId
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultCreatorRevision
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemId
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemTableId
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemRevision
