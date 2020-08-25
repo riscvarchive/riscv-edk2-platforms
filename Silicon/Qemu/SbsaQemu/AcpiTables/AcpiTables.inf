@@ -19,6 +19,7 @@
   Dsdt.asl
   Fadt.aslc
   Gtdt.aslc
+  Mcfg.aslc
   Spcr.aslc
 
 [Packages]

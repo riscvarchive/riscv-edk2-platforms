@@ -8,6 +8,23 @@
 
 #include <IndustryStandard/SbsaQemuAcpi.h>
 
+#define LINK_DEVICE(Uid, LinkName, Irq)                                        \
+        Device (LinkName) {                                                    \
+            Name (_HID, EISAID("PNP0C0F"))                                     \
+            Name (_UID, Uid)                                                   \
+            Name (_PRS, ResourceTemplate() {                                   \
+                Interrupt (ResourceProducer, Level, ActiveHigh, Exclusive) { Irq } \
+            })                                                                 \
+            Method (_CRS, 0) { Return (_PRS) }                                 \
+            Method (_SRS, 1) { }                                               \
+            Method (_DIS) { }                                                  \
+        }
+
+#define PRT_ENTRY(Address, Pin, Link)                                          \
+        Package (4) {                                                          \
+            Address, Pin, Link, Zero                                           \
+          }
+
 DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
                  FixedPcdGet32 (PcdAcpiDefaultOemRevision)) {
   Scope (_SB) {
@@ -129,5 +146,304 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
         } // USB0_RHUB
     } // USB0
 
+    Device (PCI0)
+    {
+      Name (_HID, EISAID ("PNP0A08")) // PCI Express Root Bridge
+      Name (_CID, EISAID ("PNP0A03")) // Compatible PCI Root Bridge
+      Name (_SEG, Zero) // PCI Segment Group number
+      Name (_BBN, Zero) // PCI Base Bus Number
+      Name (_ADR, Zero)
+      Name (_UID, "PCI0")
+      Name (_CCA, One)    // Initially mark the PCI coherent (for JunoR1)
+
+      Method (_CBA, 0, NotSerialized) {
+          return (0xf0000000)
+      }
+
+      LINK_DEVICE(0, GSI0, 0x23)
+      LINK_DEVICE(1, GSI1, 0x24)
+      LINK_DEVICE(2, GSI2, 0x25)
+      LINK_DEVICE(3, GSI3, 0x26)
+
+      Name (_PRT, Package ()  // _PRT: PCI Routing Table
+      {
+        PRT_ENTRY(0x0000FFFF, 0, GSI0),
+        PRT_ENTRY(0x0000FFFF, 0, GSI1),
+        PRT_ENTRY(0x0000FFFF, 0, GSI2),
+        PRT_ENTRY(0x0000FFFF, 0, GSI3),
+
+        PRT_ENTRY(0x0001FFFF, 0, GSI1),
+        PRT_ENTRY(0x0001FFFF, 1, GSI2),
+        PRT_ENTRY(0x0001FFFF, 2, GSI3),
+        PRT_ENTRY(0x0001FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x0002FFFF, 0, GSI2),
+        PRT_ENTRY(0x0002FFFF, 1, GSI3),
+        PRT_ENTRY(0x0002FFFF, 2, GSI0),
+        PRT_ENTRY(0x0002FFFF, 3, GSI1),
+
+        PRT_ENTRY(0x0003FFFF, 0, GSI3),
+        PRT_ENTRY(0x0003FFFF, 1, GSI0),
+        PRT_ENTRY(0x0003FFFF, 2, GSI1),
+        PRT_ENTRY(0x0003FFFF, 3, GSI2),
+
+        PRT_ENTRY(0x0004FFFF, 0, GSI0),
+        PRT_ENTRY(0x0004FFFF, 1, GSI1),
+        PRT_ENTRY(0x0004FFFF, 2, GSI2),
+        PRT_ENTRY(0x0004FFFF, 3, GSI3),
+
+        PRT_ENTRY(0x0005FFFF, 0, GSI1),
+        PRT_ENTRY(0x0005FFFF, 1, GSI2),
+        PRT_ENTRY(0x0005FFFF, 2, GSI3),
+        PRT_ENTRY(0x0005FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x0006FFFF, 0, GSI2),
+        PRT_ENTRY(0x0006FFFF, 1, GSI3),
+        PRT_ENTRY(0x0006FFFF, 2, GSI0),
+        PRT_ENTRY(0x0006FFFF, 3, GSI1),
+
+        PRT_ENTRY(0x0007FFFF, 0, GSI3),
+        PRT_ENTRY(0x0007FFFF, 1, GSI0),
+        PRT_ENTRY(0x0007FFFF, 2, GSI1),
+        PRT_ENTRY(0x0007FFFF, 3, GSI2),
+
+        PRT_ENTRY(0x0008FFFF, 0, GSI0),
+        PRT_ENTRY(0x0008FFFF, 1, GSI1),
+        PRT_ENTRY(0x0008FFFF, 2, GSI2),
+        PRT_ENTRY(0x0008FFFF, 3, GSI3),
+
+        PRT_ENTRY(0x0009FFFF, 0, GSI1),
+        PRT_ENTRY(0x0009FFFF, 1, GSI2),
+        PRT_ENTRY(0x0009FFFF, 2, GSI3),
+        PRT_ENTRY(0x0009FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x000AFFFF, 0, GSI2),
+        PRT_ENTRY(0x000AFFFF, 1, GSI3),
+        PRT_ENTRY(0x000AFFFF, 2, GSI0),
+        PRT_ENTRY(0x000AFFFF, 3, GSI1),
+
+        PRT_ENTRY(0x000BFFFF, 0, GSI3),
+        PRT_ENTRY(0x000BFFFF, 1, GSI0),
+        PRT_ENTRY(0x000BFFFF, 2, GSI1),
+        PRT_ENTRY(0x000BFFFF, 3, GSI2),
+
+        PRT_ENTRY(0x000CFFFF, 0, GSI0),
+        PRT_ENTRY(0x000CFFFF, 1, GSI1),
+        PRT_ENTRY(0x000CFFFF, 2, GSI2),
+        PRT_ENTRY(0x000CFFFF, 3, GSI3),
+
+        PRT_ENTRY(0x000DFFFF, 0, GSI1),
+        PRT_ENTRY(0x000DFFFF, 1, GSI2),
+        PRT_ENTRY(0x000DFFFF, 2, GSI3),
+        PRT_ENTRY(0x000DFFFF, 3, GSI0),
+
+        PRT_ENTRY(0x000EFFFF, 0, GSI2),
+        PRT_ENTRY(0x000EFFFF, 1, GSI3),
+        PRT_ENTRY(0x000EFFFF, 2, GSI0),
+        PRT_ENTRY(0x000EFFFF, 3, GSI1),
+
+        PRT_ENTRY(0x000FFFFF, 0, GSI3),
+        PRT_ENTRY(0x000FFFFF, 1, GSI0),
+        PRT_ENTRY(0x000FFFFF, 2, GSI1),
+        PRT_ENTRY(0x000FFFFF, 3, GSI2),
+
+        PRT_ENTRY(0x0010FFFF, 0, GSI0),
+        PRT_ENTRY(0x0010FFFF, 1, GSI1),
+        PRT_ENTRY(0x0010FFFF, 2, GSI2),
+        PRT_ENTRY(0x0010FFFF, 3, GSI3),
+
+        PRT_ENTRY(0x0011FFFF, 0, GSI1),
+        PRT_ENTRY(0x0011FFFF, 1, GSI2),
+        PRT_ENTRY(0x0011FFFF, 2, GSI3),
+        PRT_ENTRY(0x0011FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x0012FFFF, 0, GSI2),
+        PRT_ENTRY(0x0012FFFF, 1, GSI3),
+        PRT_ENTRY(0x0012FFFF, 2, GSI0),
+        PRT_ENTRY(0x0012FFFF, 3, GSI1),
+
+        PRT_ENTRY(0x0013FFFF, 0, GSI3),
+        PRT_ENTRY(0x0013FFFF, 1, GSI0),
+        PRT_ENTRY(0x0013FFFF, 2, GSI1),
+        PRT_ENTRY(0x0013FFFF, 3, GSI2),
+
+        PRT_ENTRY(0x0014FFFF, 0, GSI0),
+        PRT_ENTRY(0x0014FFFF, 1, GSI1),
+        PRT_ENTRY(0x0014FFFF, 2, GSI2),
+        PRT_ENTRY(0x0014FFFF, 3, GSI3),
+
+        PRT_ENTRY(0x0015FFFF, 0, GSI1),
+        PRT_ENTRY(0x0015FFFF, 1, GSI2),
+        PRT_ENTRY(0x0015FFFF, 2, GSI3),
+        PRT_ENTRY(0x0015FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x0016FFFF, 0, GSI2),
+        PRT_ENTRY(0x0016FFFF, 1, GSI3),
+        PRT_ENTRY(0x0016FFFF, 2, GSI0),
+        PRT_ENTRY(0x0016FFFF, 3, GSI1),
+
+        PRT_ENTRY(0x0017FFFF, 0, GSI3),
+        PRT_ENTRY(0x0017FFFF, 1, GSI0),
+        PRT_ENTRY(0x0017FFFF, 2, GSI1),
+        PRT_ENTRY(0x0017FFFF, 3, GSI2),
+
+        PRT_ENTRY(0x0018FFFF, 0, GSI0),
+        PRT_ENTRY(0x0018FFFF, 1, GSI1),
+        PRT_ENTRY(0x0018FFFF, 2, GSI2),
+        PRT_ENTRY(0x0018FFFF, 3, GSI3),
+
+        PRT_ENTRY(0x0019FFFF, 0, GSI1),
+        PRT_ENTRY(0x0019FFFF, 1, GSI2),
+        PRT_ENTRY(0x0019FFFF, 2, GSI3),
+        PRT_ENTRY(0x0019FFFF, 3, GSI0),
+
+        PRT_ENTRY(0x001AFFFF, 0, GSI2),
+        PRT_ENTRY(0x001AFFFF, 1, GSI3),
+        PRT_ENTRY(0x001AFFFF, 2, GSI0),
+        PRT_ENTRY(0x001AFFFF, 3, GSI1),
+
+        PRT_ENTRY(0x001BFFFF, 0, GSI3),
+        PRT_ENTRY(0x001BFFFF, 1, GSI0),
+        PRT_ENTRY(0x001BFFFF, 2, GSI1),
+        PRT_ENTRY(0x001BFFFF, 3, GSI2),
+
+        PRT_ENTRY(0x001CFFFF, 0, GSI0),
+        PRT_ENTRY(0x001CFFFF, 1, GSI1),
+        PRT_ENTRY(0x001CFFFF, 2, GSI2),
+        PRT_ENTRY(0x001CFFFF, 3, GSI3),
+
+        PRT_ENTRY(0x001DFFFF, 0, GSI1),
+        PRT_ENTRY(0x001DFFFF, 1, GSI2),
+        PRT_ENTRY(0x001DFFFF, 2, GSI3),
+        PRT_ENTRY(0x001DFFFF, 3, GSI0),
+
+        PRT_ENTRY(0x001EFFFF, 0, GSI2),
+        PRT_ENTRY(0x001EFFFF, 1, GSI3),
+        PRT_ENTRY(0x001EFFFF, 2, GSI0),
+        PRT_ENTRY(0x001EFFFF, 3, GSI1),
+
+        PRT_ENTRY(0x001FFFFF, 0, GSI3),
+        PRT_ENTRY(0x001FFFFF, 1, GSI0),
+        PRT_ENTRY(0x001FFFFF, 2, GSI1),
+        PRT_ENTRY(0x001FFFFF, 3, GSI2),
+      })
+
+      // Root complex resources
+      Method (_CRS, 0, Serialized) {
+      Name (RBUF, ResourceTemplate () {
+        WordBusNumber ( // Bus numbers assigned to this root
+        ResourceProducer,
+        MinFixed, MaxFixed, PosDecode,
+        0,   // AddressGranularity
+        0,   // AddressMinimum - Minimum Bus Number
+        255, // AddressMaximum - Maximum Bus Number
+        0,   // AddressTranslation - Set to 0
+        256  // RangeLength - Number of Busses
+        )
+
+        DWordMemory ( // 32-bit BAR Windows
+          ResourceProducer, PosDecode,
+          MinFixed, MaxFixed,
+          Cacheable, ReadWrite,
+          0x00000000,                          // Granularity
+          0x80000000,                          // Min Base Address
+          0xEFFFFFFF,                          // Max Base Address
+          0x00000000,                          // Translate
+          0x70000000                           // Length
+          )
+
+        QWordMemory ( // 64-bit BAR Windows
+          ResourceProducer, PosDecode,
+          MinFixed, MaxFixed,
+          Cacheable, ReadWrite,
+          0x00000000,                          // Granularity
+          0x100000000,                         // Min Base Address
+          0xFFFFFFFFFF,                        // Max Base Address
+          0x00000000,                          // Translate
+          0xFF00000000                         // Length
+          )
+
+        DWordIo ( // IO window
+          ResourceProducer,
+          MinFixed,
+          MaxFixed,
+          PosDecode,
+          EntireRange,
+          0x00000000,                          // Granularity
+          0x00000000,                          // Min Base Address
+          0x0000ffff,                          // Max Base Address
+          0x7fff0000,                          // Translate
+          0x00010000,                          // Length
+          ,,,TypeTranslation
+          )
+        }) // Name(RBUF)
+
+        Return (RBUF)
+      } // Method(_CRS)
+
+      Device (RES0)
+      {
+        Name (_HID, "PNP0C02" /* PNP Motherboard Resources */)  // _HID: Hardware ID
+        Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+        {
+           QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
+           0x0000000000000000, // Granularity
+           0x00000000F0000000, // Range Minimum
+           0x00000000FFFFFFFF, // Range Maximum
+           0x0000000000000000, // Translation Offset
+           0x0000000010000000, // Length
+           ,, , AddressRangeMemory, TypeStatic)
+        })
+      }
+
+      // OS Control Handoff
+      Name (SUPP, Zero) // PCI _OSC Support Field value
+      Name (CTRL, Zero) // PCI _OSC Control Field value
+
+      /*
+       * See [1] 6.2.10, [2] 4.5
+       */
+      Method (_OSC,4) {
+        // Check for proper UUID
+        If (LEqual(Arg0,ToUUID("33DB4D5B-1FF7-401C-9657-7441C03DD766"))) {
+          // Create DWord-adressable fields from the Capabilities Buffer
+          CreateDWordField (Arg3,0,CDW1)
+          CreateDWordField (Arg3,4,CDW2)
+          CreateDWordField (Arg3,8,CDW3)
+
+          // Save Capabilities DWord2 & 3
+          Store (CDW2,SUPP)
+          Store (CDW3,CTRL)
+
+          // Only allow native hot plug control if OS supports:
+          // * ASPM
+          // * Clock PM
+          // * MSI/MSI-X
+          If (LNotEqual(And(SUPP, 0x16), 0x16)) {
+            And (CTRL,0x1E,CTRL) // Mask bit 0 (and undefined bits)
+          }
+
+          // Always allow native PME, AER (no dependencies)
+
+          // Never allow SHPC (no SHPC controller in this system)
+          And (CTRL,0x1D,CTRL)
+
+          If (LNotEqual(Arg1,One)) {        // Unknown revision
+            Or (CDW1,0x08,CDW1)
+          }
+
+          If (LNotEqual(CDW3,CTRL)) {        // Capabilities bits were masked
+            Or (CDW1,0x10,CDW1)
+          }
+
+          // Update DWORD3 in the buffer
+          Store (CTRL,CDW3)
+          Return (Arg3)
+        } Else {
+          Or (CDW1,4,CDW1) // Unrecognized UUID
+          Return (Arg3)
+        }
+      } // End _OSC
+    }
   } // Scope (_SB)
 }
