@@ -21,8 +21,8 @@
 #  BASE SEC PEI_CORE PEIM DXE_CORE DXE_DRIVER DXE_RUNTIME_DRIVER DXE_SMM_DRIVER DXE_SAL_DRIVER UEFI_DRIVER UEFI_APPLICATION
 #
 ################################################################################
-#[Includes.common]
-#  Include                        # Root include for the package
+[Includes]
+  Include                        # Root include for the package
 
 [Guids.common]
   gArmVirtSbsaQemuPlatformTokenSpaceGuid   = { 0xaab3bea9, 0xa8e8, 0x4e76, { 0xb5, 0x3a, 0x35, 0x22, 0x11, 0xce, 0xf7, 0xf7 } }
