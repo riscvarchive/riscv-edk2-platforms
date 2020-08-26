@@ -97,6 +97,7 @@ target-specific binutils. These are included with any prepackaged GCC toolchain
    $ git submodule update --init
    ...
    $ git clone https://github.com/tianocore/edk2-platforms.git
+   $ git submodule update --init
    ...
    $ git clone https://github.com/tianocore/edk2-non-osi.git
    ```
