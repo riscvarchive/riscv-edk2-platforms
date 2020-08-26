@@ -87,7 +87,7 @@ DisplayBlt (
   IN  UINTN                                   Delta         OPTIONAL
   );
 
-STATIC EFI_DRIVER_BINDING_PROTOCOL mDriverBinding = {
+EFI_DRIVER_BINDING_PROTOCOL mDriverBinding = {
   DriverSupported,
   DriverStart,
   DriverStop,
