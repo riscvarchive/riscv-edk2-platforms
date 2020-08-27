@@ -36,6 +36,7 @@
   DxeServicesLib
   FdtLib
   PcdLib
+  PrintLib
   UefiDriverEntryPoint
   UefiLib
   UefiRuntimeServicesTableLib

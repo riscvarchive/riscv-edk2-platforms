@@ -50,9 +50,6 @@
 #define SBSAQEMU_ACPI_CPU_DEV_LEN        0x1C
 #define SBSAQEMU_ACPI_CPU_DEV_NAME       { 'C', '0', '0', '0' }
 
-// Macro to convert Integer to Character
-#define SBSAQEMU_ACPI_ITOA(Byte)         (0x30 + (Byte > 9 ? (Byte + 1) : Byte))
-
 #define SBSAQEMU_ACPI_CPU_HID           {                                      \
   AML_NAME_OP, AML_NAME_CHAR__, 'H', 'I', 'D',                                 \
   AML_STRING_PREFIX, 'A', 'C', 'P', 'I', '0', '0', '0', '7',                   \
@@ -60,7 +57,7 @@
   }
 
 #define SBSAQEMU_ACPI_CPU_UID            {                                     \
-   AML_NAME_OP, AML_NAME_CHAR__, 'U', 'I', 'D', AML_BYTE_PREFIX,               \
+   AML_NAME_OP, AML_NAME_CHAR__, 'U', 'I', 'D', AML_WORD_PREFIX,               \
    AML_ZERO_OP, AML_ZERO_OP                                                    \
    }
 

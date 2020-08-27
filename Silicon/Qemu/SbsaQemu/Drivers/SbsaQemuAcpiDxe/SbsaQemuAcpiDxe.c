@@ -14,6 +14,7 @@
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
+#include <Library/PrintLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiLib.h>
@@ -248,6 +249,7 @@ AddSsdtTable (
   UINT32                TableSize;
   EFI_PHYSICAL_ADDRESS  PageAddress;
   UINT8                 *New;
+  UINT8                 *HeaderAddr;
   UINT32                CpuId;
   UINT32                Offset;
   UINT8                 ScopeOpName[] =  SBSAQEMU_ACPI_SCOPE_NAME;
@@ -283,12 +285,12 @@ AddSsdtTable (
     return EFI_OUT_OF_RESOURCES;
   }
 
-  New = (UINT8 *)(UINTN) PageAddress;
+  HeaderAddr = New = (UINT8 *)(UINTN) PageAddress;
   ZeroMem (New, TableSize);
 
   // Add the ACPI Description table header
   CopyMem (New, &Header, sizeof (EFI_ACPI_DESCRIPTION_HEADER));
-  ((EFI_ACPI_DESCRIPTION_HEADER*) New)->Length = TableSize;
+
   New += sizeof (EFI_ACPI_DESCRIPTION_HEADER);
 
   // Insert the top level ScopeOp
@@ -296,6 +298,11 @@ AddSsdtTable (
   New++;
   Offset = SetPkgLength (New,
              (TableSize - sizeof (EFI_ACPI_DESCRIPTION_HEADER) - 1));
+
+  // Adjust TableSize now we know header length of _SB
+  TableSize -= (SBSAQEMU_ACPI_SCOPE_OP_MAX_LENGTH - Offset);
+  ((EFI_ACPI_DESCRIPTION_HEADER*) HeaderAddr)->Length = TableSize;
+
   New += Offset;
   CopyMem (New, &ScopeOpName, sizeof (ScopeOpName));
   New += sizeof (ScopeOpName);
@@ -303,21 +310,17 @@ AddSsdtTable (
   // Add new Device structures for the Cores
   for (CpuId = 0; CpuId < NumCores; CpuId++) {
     SBSAQEMU_ACPI_CPU_DEVICE *CpuDevicePtr;
-    UINT8 CpuIdByte1, CpuIdByte2, CpuIdByte3;
 
     CopyMem (New, &CpuDevice, sizeof (SBSAQEMU_ACPI_CPU_DEVICE));
     CpuDevicePtr = (SBSAQEMU_ACPI_CPU_DEVICE *) New;
 
-    CpuIdByte1 = CpuId & 0xF;
-    CpuIdByte2 = (CpuId >> 4) & 0xF;
-    CpuIdByte3 = (CpuId >> 8) & 0xF;
+    AsciiSPrint((CHAR8 *)&CpuDevicePtr->dev_name[1], 4, "%03X", CpuId);
 
-    CpuDevicePtr->dev_name[1] = SBSAQEMU_ACPI_ITOA(CpuIdByte3);
-    CpuDevicePtr->dev_name[2] = SBSAQEMU_ACPI_ITOA(CpuIdByte2);
-    CpuDevicePtr->dev_name[3] = SBSAQEMU_ACPI_ITOA(CpuIdByte1);
+    /* replace character lost by above NULL termination */
+    CpuDevicePtr->hid[0] = AML_NAME_OP;
 
-    CpuDevicePtr->uid[6] = CpuIdByte1 | CpuIdByte2;
-    CpuDevicePtr->uid[7] = CpuIdByte3;
+    CpuDevicePtr->uid[6] = CpuId & 0xFF;
+    CpuDevicePtr->uid[7] = (CpuId >> 8) & 0xFF;
     New += sizeof (SBSAQEMU_ACPI_CPU_DEVICE);
   }
 
