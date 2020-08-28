@@ -3,7 +3,7 @@
 #
 # Intel QNC internal network access Library Instance.
 #
-# Copyright (c) 2013-2015 Intel Corporation.
+# Copyright (c) 2013-2020 Intel Corporation.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -38,6 +38,9 @@
   PcdLib
   UefiBootServicesTableLib
   UefiRuntimeLib
+
+[Guids]
+  gEfiEventVirtualAddressChangeGuid
 
 [Pcd]
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
