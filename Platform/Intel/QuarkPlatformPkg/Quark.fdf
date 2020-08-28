@@ -675,7 +675,7 @@ READ_LOCK_STATUS   = TRUE
 #
 # Shell and Applications
 #
-INF  RuleOverride = TIANOCOMPRESSED ShellPkg/Application/Shell/Shell.inf
+INF  ShellPkg/Application/Shell/Shell.inf
 
 !if $(CAPSULE_ENABLE) || $(RECOVERY_ENABLE)
 
