@@ -2,7 +2,7 @@
 # Clanton Peak CRB platform with 32-bit DXE for 4MB/8MB flash devices.
 #
 # This package provides Clanton Peak CRB platform specific modules.
-# Copyright (c) 2013 - 2019 Intel Corporation.
+# Copyright (c) 2013 - 2020 Intel Corporation.
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -340,9 +340,6 @@
   # Make VariableRuntimeDxe work at emulated non-volatile variable mode.
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
-  ## RTC Update Timeout Value, need to increase timeout since also
-  # waiting for RTC to be busy.
-  gEfiMdeModulePkgTokenSpaceGuid.PcdRealTimeClockUpdateTimeout|500000
 
 !if $(SECURE_BOOT_ENABLE)
   # override the default values from SecurityPkg to ensure images from all sources are verified in secure boot
