@@ -33,6 +33,7 @@
   Csrt.aslc
   Spcr.aslc
   Pptt.aslc
+  SsdtThermal.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
