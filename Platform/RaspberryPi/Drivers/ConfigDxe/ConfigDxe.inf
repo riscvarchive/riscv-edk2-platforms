@@ -91,6 +91,7 @@
   gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB
   gRaspberryPiTokenSpaceGuid.PcdFanOnGpio
+  gRaspberryPiTokenSpaceGuid.PcdFanTemp
 
 [Depex]
   gPcdProtocolGuid AND gRaspberryPiFirmwareProtocolGuid

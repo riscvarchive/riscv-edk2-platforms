@@ -516,6 +516,7 @@
   # 19 - Enabled on pin 19
   #
   gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|L"FanOnGpio"|gConfigDxeFormSetGuid|0x0|0
+  gRaspberryPiTokenSpaceGuid.PcdFanTemp|L"FanTemp"|gConfigDxeFormSetGuid|0x0|60
 
   #
   # Common UEFI ones.

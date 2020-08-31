@@ -23,6 +23,7 @@ DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPITHFAN", 2)
   {
     // Define a NameOp we will modify during InstallTable
     Name (GIOP, 0x2) //08 47 49 4f 50 0a 02 (value must be >1)
+    Name (FTMP, 0x2)
     // Describe a fan
     PowerResource (PFAN, 0, 0) {
       OperationRegion (GPIO, SystemMemory, GPIO_BASE_ADDRESS, 0x1000)
@@ -68,9 +69,9 @@ DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPITHFAN", 2)
   // merge in an active cooling point.
   Scope (\_SB_.EC00.TZ00)
   {
-    Method (_AC0) { Return (3332) }        // (60C) active cooling trip point,
-                                           // if this is lower than PSV then we
-                                           // prefer active cooling
-    Name (_AL0, Package () { \_SB_.EC00.FAN0 }) // the fan used for AC0 above
+    Method (_AC0) { Return ( (FTMP * 10) + 2732) } // (60C) active cooling trip point,
+                                                   // if this is lower than PSV then we
+                                                   // prefer active cooling
+    Name (_AL0, Package () { \_SB_.EC00.FAN0 })    // the fan used for AC0 above
   }
 }

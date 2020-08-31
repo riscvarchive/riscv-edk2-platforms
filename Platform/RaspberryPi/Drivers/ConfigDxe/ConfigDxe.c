@@ -257,6 +257,15 @@ SetupVariables (
     ASSERT_EFI_ERROR (Status);
   }
 
+  Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"FanTemp",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdFanTemp, PcdGet32 (PcdFanTemp));
+    ASSERT_EFI_ERROR (Status);
+  }
+
   Size = sizeof(AssetTagVar);
 
   Status = gRT->GetVariable(L"AssetTag",
@@ -699,6 +708,7 @@ VerifyUpdateTable (
 
 STATIC CONST AML_NAME_OP_REPLACE SsdtNameOpReplace[] = {
   { "GIOP", PcdToken (PcdFanOnGpio) },
+  { "FTMP", PcdToken (PcdFanTemp) },
   { }
 };
 

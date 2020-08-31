@@ -73,6 +73,10 @@ typedef struct {
 } ADVANCED_FAN_ON_GPIO_VARSTORE_DATA;
 
 typedef struct {
+  UINT32 Value;
+} ADVANCED_FANTEMP_VARSTORE_DATA;
+
+typedef struct {
 #define SYSTEM_TABLE_MODE_ACPI 0
 #define SYSTEM_TABLE_MODE_BOTH 1
 #define SYSTEM_TABLE_MODE_DT   2
