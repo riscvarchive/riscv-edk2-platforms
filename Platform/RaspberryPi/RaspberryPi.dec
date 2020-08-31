@@ -66,3 +66,4 @@
   gRaspberryPiTokenSpaceGuid.PcdSystemTableMode|1|UINT32|0x0000001B
   gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB|0|UINT32|0x00000019
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB|0|UINT32|0x0000001A
+  gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|0|UINT32|0x0000001C

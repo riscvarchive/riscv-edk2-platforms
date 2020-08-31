@@ -48,6 +48,12 @@
 #string STR_ADVANCED_SYSTAB_BOTH     #language en-US "ACPI + Devicetree"
 #string STR_ADVANCED_SYSTAB_DT       #language en-US "Devicetree"
 
+#string STR_ADVANCED_FANONGPIO_PROMPT #language en-US "ACPI fan control"
+#string STR_ADVANCED_FANONGPIO_HELP   #language en-US "Cycle a fan via GPIO if temp exceeds 60C"
+#string STR_ADVANCED_FANONGPIO_OFF    #language en-US "Disabled"
+#string STR_ADVANCED_FANONGPIO_18     #language en-US "Fan Shim/GPIO-18"
+#string STR_ADVANCED_FANONGPIO_19     #language en-US "GPIO-19"
+
 #string STR_ADVANCED_ASSET_TAG_PROMPT #language en-US "Asset Tag"
 #string STR_ADVANCED_ASSET_TAG_HELP   #language en-US "Set the system Asset Tag"
 

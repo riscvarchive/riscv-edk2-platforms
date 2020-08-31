@@ -499,6 +499,11 @@
   gRaspberryPiTokenSpaceGuid.PcdSystemTableMode|L"SystemTableMode"|gConfigDxeFormSetGuid|0x0|1
 
   #
+  # Enable a fan in the ACPI thermal zone on GPIO pin #
+  #
+  gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|L"FanOnGpio"|gConfigDxeFormSetGuid|0x0|0
+
+  #
   # Common UEFI ones.
   #
 

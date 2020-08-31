@@ -15,6 +15,7 @@
 #include <Library/AcpiLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DevicePathLib.h>
+#include <Library/DxeServicesLib.h>
 #include <Library/DxeServicesTableLib.h>
 #include <Library/GpioLib.h>
 #include <Library/HiiLib.h>
@@ -22,6 +23,7 @@
 #include <Library/NetLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
+#include <Protocol/AcpiTable.h>
 #include <Protocol/BcmGenetPlatformDevice.h>
 #include <Protocol/RpiFirmware.h>
 #include <ConfigVars.h>
@@ -246,6 +248,15 @@ SetupVariables (
     ASSERT_EFI_ERROR (Status);
   }
 
+  Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"FanOnGpio",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdFanOnGpio, PcdGet32 (PcdFanOnGpio));
+    ASSERT_EFI_ERROR (Status);
+  }
+
   Size = sizeof(AssetTagVar);
 
   Status = gRT->GetVariable(L"AssetTag",
@@ -368,6 +379,7 @@ ApplyVariables (
   UINT32 CpuClock = PcdGet32 (PcdCpuClock);
   UINT32 CustomCpuClock = PcdGet32 (PcdCustomCpuClock);
   UINT32 Rate = 0;
+  UINT32 FanOnGpio = PcdGet32 (PcdFanOnGpio);
 
   switch (CpuClock) {
   case CHIPSET_CPU_CLOCK_LOW:
@@ -565,6 +577,11 @@ ApplyVariables (
     GpioPinFuncSet (23, GPIO_FSEL_INPUT);
     GpioPinFuncSet (24, GPIO_FSEL_INPUT);
   }
+
+  if (FanOnGpio) {
+    DEBUG ((DEBUG_INFO, "Fan enabled on GPIO %d\n", FanOnGpio));
+    GpioPinFuncSet (FanOnGpio, GPIO_FSEL_OUTPUT);
+  }
 }
 
 
@@ -680,8 +697,17 @@ VerifyUpdateTable (
   return Result;
 }
 
+STATIC CONST AML_NAME_OP_REPLACE SsdtNameOpReplace[] = {
+  { "GIOP", PcdToken (PcdFanOnGpio) },
+  { }
+};
 
 STATIC CONST NAMESPACE_TABLES SdtTables[] = {
+  {
+    SIGNATURE_64 ('R', 'P', 'I', 'T', 'H', 'F', 'A', 'N'),
+    PcdToken(PcdFanOnGpio),
+    SsdtNameOpReplace
+  },
   {
     SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),
     0,

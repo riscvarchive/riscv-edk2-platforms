@@ -46,6 +46,7 @@
   AcpiLib
   BaseLib
   DebugLib
+  DxeServicesLib
   DxeServicesTableLib
   GpioLib
   HiiLib
@@ -89,6 +90,7 @@
   gRaspberryPiTokenSpaceGuid.PcdSystemTableMode
   gRaspberryPiTokenSpaceGuid.PcdRamMoreThan3GB
   gRaspberryPiTokenSpaceGuid.PcdRamLimitTo3GB
+  gRaspberryPiTokenSpaceGuid.PcdFanOnGpio
 
 [Depex]
   gPcdProtocolGuid AND gRaspberryPiFirmwareProtocolGuid
