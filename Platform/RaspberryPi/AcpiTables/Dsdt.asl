@@ -252,6 +252,37 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "RPIFDN", "RPI", 2)
         }
       })
     }
+
+    // Define a simple thermal zone. The idea here is we compute the SOC temp
+    // via a register we can read, and give it to the OS. This enables basic
+    // reports from the "sensors" utility, and the OS can then poll and take
+    // actions if that temp exceeds any of the given thresholds.
+    Device (EC00)
+    {
+      Name (_HID, EISAID ("PNP0C06"))
+      Name (_CCA, 0x0)
+
+      // all temps in are tenths of K (aka 2732 is the min temps in Linux (aka 0C))
+      ThermalZone (TZ00) {
+        Method (_TMP, 0, Serialized) {
+          OperationRegion (TEMS, SystemMemory, THERM_SENSOR, 0x8)
+          Field (TEMS, DWordAcc, NoLock, Preserve) {
+            TMPS, 32
+          }
+          return (((419949 - ((TMPS & 0x3ff) * 487)) / 100) + 2732);
+        }
+        Method (_SCP, 3) { }               // receive cooling policy from OS
+
+        Method (_CRT) { Return (3632) }    // (90C) Critical temp point (immediate power-off)
+        Method (_HOT) { Return (3582) }    // (85C) HOT state where OS should hibernate
+        Method (_PSV) { Return (3532) }    // (80C) Passive cooling (CPU throttling) trip point
+
+        // SSDT inserts _AC0/_AL0 @60C here, if a FAN is configured
+
+        Name (_TZP, 10)                   //The OSPM must poll this device every 1 seconds
+        Name (_PSL, Package () { \_SB_.CPU0, \_SB_.CPU1, \_SB_.CPU2, \_SB_.CPU3 })
+      }
+    }
 #endif
 
   }
