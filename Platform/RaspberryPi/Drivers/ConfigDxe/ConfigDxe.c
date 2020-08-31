@@ -568,6 +568,159 @@ ApplyVariables (
 }
 
 
+typedef struct {
+  CHAR8 Name[4];
+  UINTN PcdToken;
+} AML_NAME_OP_REPLACE;
+
+typedef struct {
+  UINT64                      OemTableId;
+  UINTN                       PcdToken;
+  CONST AML_NAME_OP_REPLACE   *SdtNameOpReplace;
+} NAMESPACE_TABLES;
+
+#define SSDT_PATTERN_LEN 5
+#define AML_NAMEOP_8   0x0A
+#define AML_NAMEOP_16  0x0B
+#define AML_NAMEOP_32  0x0C
+#define AML_NAMEOP_STR 0x0D
+//
+// Scan the given namespace table (DSDT/SSDT) for AML NameOps
+// listed in the NameOpReplace structure. If one is found then
+// update the value in the table from the specified Pcd
+//
+// This allows us to have conditionals in AML controlled
+// by options in the BDS or detected during firmware bootstrap.
+// We could extend this concept for strings/etc but due to len
+// variations its probably easier to encode the strings
+// in the ASL and pick the correct one based off a variable.
+//
+STATIC
+VOID
+UpdateSdtNameOps (
+  EFI_ACPI_DESCRIPTION_HEADER  *AcpiTable,
+  CONST AML_NAME_OP_REPLACE    *NameOpReplace
+  )
+{
+  UINTN  Idx;
+  UINTN  Index;
+  CHAR8  Pattern[SSDT_PATTERN_LEN];
+  UINTN  PcdVal;
+  UINT8  *SdtPtr;
+  UINT32 SdtSize;
+
+  SdtSize = AcpiTable->Length;
+
+  if (SdtSize > 0) {
+    SdtPtr = (UINT8 *)AcpiTable;
+
+    for (Idx = 0; NameOpReplace && NameOpReplace[Idx].PcdToken; Idx++) {
+      //
+      // Do a single NameOp variable replacement these are of the
+      // form 08 XXXX SIZE VAL, where SIZE is 0A=byte, 0B=word, 0C=dword
+      // and XXXX is the name and VAL is the value
+      //
+      Pattern[0] = 0x08;
+      Pattern[1] = NameOpReplace[Idx].Name[0];
+      Pattern[2] = NameOpReplace[Idx].Name[1];
+      Pattern[3] = NameOpReplace[Idx].Name[2];
+      Pattern[4] = NameOpReplace[Idx].Name[3];
+
+      for (Index = 0; Index < (SdtSize - SSDT_PATTERN_LEN); Index++) {
+        if (CompareMem (SdtPtr + Index, Pattern, SSDT_PATTERN_LEN) == 0) {
+          PcdVal = LibPcdGet32 (NameOpReplace[Idx].PcdToken);
+          switch (SdtPtr[Index + SSDT_PATTERN_LEN]) {
+          case AML_NAMEOP_32:
+            SdtPtr[Index + SSDT_PATTERN_LEN + 4] = (PcdVal >> 24) & 0xFF;
+            SdtPtr[Index + SSDT_PATTERN_LEN + 3] = (PcdVal >> 16) & 0xFF;
+            // Fallthrough
+          case AML_NAMEOP_16:
+            SdtPtr[Index + SSDT_PATTERN_LEN + 2] = (PcdVal >> 8) & 0xFF;
+            // Fallthrough
+          case AML_NAMEOP_8:
+            SdtPtr[Index + SSDT_PATTERN_LEN + 1] = PcdVal & 0xFF;
+            break;
+          case 0:
+          case 1:
+            SdtPtr[Index + SSDT_PATTERN_LEN + 1] = !!PcdVal;
+            break;
+          case AML_NAMEOP_STR:
+            //
+            // If the string val is added to the NameOpReplace, we can
+            // dynamically update things like _HID too as long as the
+            // string length matches.
+            //
+            break;
+          }
+          break;
+        }
+      }
+    }
+  }
+}
+
+
+STATIC
+BOOLEAN
+VerifyUpdateTable (
+  IN  EFI_ACPI_DESCRIPTION_HEADER   *AcpiHeader,
+  IN  CONST NAMESPACE_TABLES        *SdtTable
+  )
+{
+  BOOLEAN Result;
+
+  Result = TRUE;
+  if (SdtTable->PcdToken && !LibPcdGet32 (SdtTable->PcdToken)) {
+    Result = FALSE;
+  }
+  if (Result && SdtTable->SdtNameOpReplace) {
+    UpdateSdtNameOps (AcpiHeader, SdtTable->SdtNameOpReplace);
+  }
+
+  return Result;
+}
+
+
+STATIC CONST NAMESPACE_TABLES SdtTables[] = {
+  {
+    SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),
+    0,
+    NULL
+  },
+  { }
+};
+
+//
+// Monitor the ACPI tables being installed and when
+// a DSDT/SSDT is detected validate that we want to
+// install it, and if so update any "NameOp" defined
+// variables contained in the table from PCD values
+//
+STATIC
+BOOLEAN
+HandleDynamicNamespace (
+  IN  EFI_ACPI_DESCRIPTION_HEADER   *AcpiHeader
+  )
+{
+  UINTN Tables;
+
+  switch (AcpiHeader->Signature) {
+  case SIGNATURE_32 ('D', 'S', 'D', 'T'):
+  case SIGNATURE_32 ('S', 'S', 'D', 'T'):
+    for (Tables = 0; SdtTables[Tables].OemTableId; Tables++) {
+      if (AcpiHeader->OemTableId == SdtTables[Tables].OemTableId) {
+        return VerifyUpdateTable (AcpiHeader, &SdtTables[Tables]);
+      }
+    }
+    DEBUG ((DEBUG_ERROR, "Found namespace table not in table list.\n"));
+
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+
 EFI_STATUS
 EFIAPI
 ConfigInitialize (
@@ -618,7 +771,8 @@ ConfigInitialize (
 
   if (PcdGet32 (PcdSystemTableMode) == SYSTEM_TABLE_MODE_ACPI ||
       PcdGet32 (PcdSystemTableMode) == SYSTEM_TABLE_MODE_BOTH) {
-     Status = LocateAndInstallAcpiFromFv (&mAcpiTableFile);
+     Status = LocateAndInstallAcpiFromFvConditional (&mAcpiTableFile,
+                                                     &HandleDynamicNamespace);
      ASSERT_EFI_ERROR (Status);
   }
 
