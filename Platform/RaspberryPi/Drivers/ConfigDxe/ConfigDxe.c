@@ -209,9 +209,9 @@ SetupVariables (
   }
 
   Size = sizeof (UINT32);
-  Status = gRT->GetVariable(L"CustomCpuClock",
-                            &gConfigDxeFormSetGuid,
-                            NULL, &Size, &Var32);
+  Status = gRT->GetVariable (L"CustomCpuClock",
+                             &gConfigDxeFormSetGuid,
+                             NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
     Status = PcdSet32S (PcdCustomCpuClock, PcdGet32 (PcdCustomCpuClock));
     ASSERT_EFI_ERROR (Status);
@@ -266,9 +266,8 @@ SetupVariables (
     ASSERT_EFI_ERROR (Status);
   }
 
-  Size = sizeof(AssetTagVar);
-
-  Status = gRT->GetVariable(L"AssetTag",
+  Size = sizeof (AssetTagVar);
+  Status = gRT->GetVariable (L"AssetTag",
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, AssetTagVar);
 
@@ -277,7 +276,7 @@ SetupVariables (
                     L"AssetTag",
                     &gConfigDxeFormSetGuid,
                     EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS,
-                    sizeof(AssetTagVar),
+                    sizeof (AssetTagVar),
                     AssetTagVar
                     );
   }
@@ -443,9 +442,9 @@ ApplyVariables (
      * spaces. SystemMemorySizeBelow4GB tracks the maximum memory below 4GB
      * line, factoring in the limit imposed by the SoC register range.
      */
-    SystemMemorySizeBelow4GB = MIN(SystemMemorySize, 4UL * SIZE_1GB);
-    SystemMemorySizeBelow4GB = MIN(SystemMemorySizeBelow4GB, BCM2836_SOC_REGISTERS);
-    SystemMemorySizeBelow4GB = MIN(SystemMemorySizeBelow4GB, BCM2711_SOC_REGISTERS);
+    SystemMemorySizeBelow4GB = MIN (SystemMemorySize, 4UL * SIZE_1GB);
+    SystemMemorySizeBelow4GB = MIN (SystemMemorySizeBelow4GB, BCM2836_SOC_REGISTERS);
+    SystemMemorySizeBelow4GB = MIN (SystemMemorySizeBelow4GB, BCM2711_SOC_REGISTERS);
 
     ASSERT (SystemMemorySizeBelow4GB > 3UL * SIZE_1GB);
 
@@ -538,14 +537,12 @@ ApplyVariables (
       /*
        * SD card pins go to Arasan.
        */
-      MmioWrite32((GPIO_BASE_ADDRESS + 0xD0),
-                  MmioRead32(GPIO_BASE_ADDRESS + 0xD0) | 0x2);
+      MmioOr32 (GPIO_BASE_ADDRESS + 0xD0, BIT1);
     } else {
       /*
        * SD card pins back to eMMC2.
        */
-      MmioWrite32((GPIO_BASE_ADDRESS + 0xD0),
-                  MmioRead32(GPIO_BASE_ADDRESS + 0xD0) & ~0x2);
+      MmioAnd32 (GPIO_BASE_ADDRESS + 0xD0, ~BIT1);
       /*
        * WiFi back to Arasan.
        */
