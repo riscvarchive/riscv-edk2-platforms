@@ -22,6 +22,9 @@
 #include <Protocol/FdtClient.h>
 #include <libfdt.h>
 
+STATIC INT32 FdtFirstCpuOffset;
+STATIC INT32 FdtCpuNodeSize;
+
 /*
  * A function that walks through the Device Tree created
  * by Qemu and counts the number of CPUs present in it.
@@ -56,17 +59,47 @@ CountCpusFromFdt (
   // The count of these subnodes corresponds to the number of
   // CPUs created by Qemu.
   Prev = fdt_first_subnode (DeviceTreeBase, CpuNode);
+  FdtFirstCpuOffset = Prev;
   while (1) {
     CpuCount++;
     Node = fdt_next_subnode (DeviceTreeBase, Prev);
     if (Node < 0) {
       break;
     }
+    FdtCpuNodeSize = Node - Prev;
     Prev = Node;
   }
 
   PcdStatus = PcdSet32S (PcdCoreCount, CpuCount);
   ASSERT_RETURN_ERROR (PcdStatus);
+}
+
+/*
+ * Get MPIDR from device tree passed by Qemu
+ */
+STATIC
+UINT64
+GetMpidr (
+  IN UINTN   CpuId
+  )
+{
+  VOID           *DeviceTreeBase;
+  CONST UINT64   *RegVal;
+  INT32          Len;
+
+  DeviceTreeBase = (VOID *)(UINTN)PcdGet64 (PcdDeviceTreeBaseAddress);
+  ASSERT (DeviceTreeBase != NULL);
+
+  RegVal = fdt_getprop (DeviceTreeBase,
+             FdtFirstCpuOffset + (CpuId * FdtCpuNodeSize),
+             "reg",
+             &Len);
+  if (!RegVal) {
+    DEBUG ((DEBUG_ERROR, "Couldn't find reg property for CPU:%d\n", CpuId));
+    return 0;
+  }
+
+  return (fdt64_to_cpu (ReadUnaligned64 (RegVal)));
 }
 
 /*
@@ -173,7 +206,7 @@ AddMadtTable (
     CopyMem (New, &Gicc, sizeof (EFI_ACPI_6_0_GIC_STRUCTURE));
     GiccPtr = (EFI_ACPI_6_0_GIC_STRUCTURE *) New;
     GiccPtr->AcpiProcessorUid = NumCores;
-    GiccPtr->MPIDR = NumCores;
+    GiccPtr->MPIDR = GetMpidr (NumCores);
     New += sizeof (EFI_ACPI_6_0_GIC_STRUCTURE);
   }
 
