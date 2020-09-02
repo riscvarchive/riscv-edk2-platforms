@@ -10,7 +10,7 @@
 [Defines]
   DEFINE      PLATFORM_PACKAGE          = MinPlatformPkg
   DEFINE      PLATFORM_SI_PACKAGE       = CoffeelakeSiliconPkg
-  DEFINE      PLATFORM_SI_BIN_PACKAGE   = CoffeelakeSiliconBinPkg
+  DEFINE      PLATFORM_SI_BIN_PACKAGE   = CometlakeSiliconBinPkg
   DEFINE      PLATFORM_FSP_BIN_PACKAGE  = CometLakeFspBinPkg/CometLake1
   DEFINE      PLATFORM_BOARD_PACKAGE    = CometlakeOpenBoardPkg
   DEFINE      BOARD                     = CometlakeURvp
@@ -39,7 +39,8 @@
   #
   # Include PCD configuration for this board.
   #
-  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+
   !include OpenBoardPkgPcd.dsc
   !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
