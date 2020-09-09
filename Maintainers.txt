@@ -271,7 +271,7 @@ F: Platform/Qemu/SbsaQemu/
 F: Silicon/Qemu/SbsaQemu/
 M: Ard Biesheuvel <ard.biesheuvel@arm.com>
 M: Leif Lindholm <leif@nuviainc.com>
-R: Graeme Gregory <graeme.gregory@linaro.org>
+R: Graeme Gregory <graeme@nuviainc.com>
 R: Radoslaw Biernacki <rad@semihalf.com>
 R: Tanmay Jagdale <tanmay.jagdale@linaro.org>
 
