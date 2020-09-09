@@ -135,7 +135,8 @@ AddSmbiosType9Record (
   (VOID)CopyMem (SmbiosRecord, Type9Record, sizeof (SMBIOS_TABLE_TYPE9));
   SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE9);
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  (VOID)UnicodeStrToAsciiStr (SlotDesignation, OptionalStrStart);
+  Status = UnicodeStrToAsciiStrS (SlotDesignation, OptionalStrStart, SlotStrLen + 1);
+  ASSERT_EFI_ERROR (Status);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

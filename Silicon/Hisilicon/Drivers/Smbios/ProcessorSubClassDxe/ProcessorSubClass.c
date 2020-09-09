@@ -391,7 +391,8 @@ AddSmbiosCacheTypeTable (
         (VOID)CopyMem(Type7Record, &mSmbiosCacheTable[CacheLevel], sizeof (SMBIOS_TABLE_TYPE7));
 
         OptionalStrStart = (CHAR8 *) (Type7Record + 1);
-        UnicodeStrToAsciiStr (CacheSocketStr, OptionalStrStart);
+        Status = UnicodeStrToAsciiStrS (CacheSocketStr, OptionalStrStart, CacheSocketStrLen + 1);
+        ASSERT_EFI_ERROR (Status);
 
         SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
         Status = mSmbios->Add (mSmbios, NULL, &SmbiosHandle, (EFI_SMBIOS_TABLE_HEADER *)Type7Record);
@@ -610,12 +611,18 @@ AddSmbiosProcessorTypeTable (
     *ProcessorId = ArmReadMidr();
 
     OptionalStrStart = (CHAR8 *) (Type4Record + 1);
-    UnicodeStrToAsciiStr (ProcessorSocketStr, OptionalStrStart);
-    UnicodeStrToAsciiStr (ProcessorManuStr, OptionalStrStart + ProcessorSocketStrLen + 1);
-    UnicodeStrToAsciiStr (ProcessorVersionStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1);
-    UnicodeStrToAsciiStr (SerialNumberStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1);
-    UnicodeStrToAsciiStr (AssetTagStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1 + SerialNumberStrLen + 1);
-    UnicodeStrToAsciiStr (PartNumberStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1 + SerialNumberStrLen + 1 + AssetTagStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (ProcessorSocketStr, OptionalStrStart, ProcessorSocketStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ProcessorManuStr, OptionalStrStart + ProcessorSocketStrLen + 1, ProcessorManuStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ProcessorVersionStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1, ProcessorVersionStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SerialNumberStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1, SerialNumberStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (AssetTagStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1 + SerialNumberStrLen + 1, AssetTagStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (PartNumberStr, OptionalStrStart + ProcessorSocketStrLen + 1 + ProcessorManuStrLen + 1 + ProcessorVersionStrLen + 1 + SerialNumberStrLen + 1 + AssetTagStrLen + 1, PartNumberStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
 
     SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
     Status = mSmbios->Add (mSmbios, NULL, &SmbiosHandle, (EFI_SMBIOS_TABLE_HEADER *)Type4Record);

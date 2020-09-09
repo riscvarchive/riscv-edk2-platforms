@@ -142,12 +142,18 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
     FreePool(HandleArray);
 
     OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(BaseBoardManufacturer, OptionalStrStart);
-    UnicodeStrToAsciiStr(BaseBoardProductName,  OptionalStrStart + ManuStrLen + 1);
-    UnicodeStrToAsciiStr(Version,               OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1);
-    UnicodeStrToAsciiStr(SerialNumber,          OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1);
-    UnicodeStrToAsciiStr(AssetTag,              OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 );
-    UnicodeStrToAsciiStr(ChassisLocation,       OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + AssetTagStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (BaseBoardManufacturer, OptionalStrStart, ManuStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (BaseBoardProductName,  OptionalStrStart + ManuStrLen + 1, ProductNameStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (Version,               OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1, VerStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SerialNumber,          OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (AssetTag,              OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1, AssetTagStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ChassisLocation,       OptionalStrStart + ManuStrLen + 1 + ProductNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + AssetTagStrLen + 1, ChassisLocaStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
 
     Status = LogSmbiosData( (UINT8*)SmbiosRecord, &SmbiosHandle);
     if(EFI_ERROR(Status))

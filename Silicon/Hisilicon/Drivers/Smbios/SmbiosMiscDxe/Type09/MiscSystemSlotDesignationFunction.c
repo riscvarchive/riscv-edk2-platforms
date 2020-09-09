@@ -172,7 +172,8 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemSlotDesignation)
     SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE9);
 
     OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(SlotDesignation, OptionalStrStart);
+    Status = UnicodeStrToAsciiStrS (SlotDesignation, OptionalStrStart, SlotDesignationStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
     //
     // Now we have got the full smbios record, call smbios protocol to add this record.
     //
