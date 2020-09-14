@@ -562,7 +562,7 @@ ApplyVariables (
    * 1           VREF        N/A               1
    * 3           nTRST       GPIO22    ALT4    15
    * 4           GND         N/A               9
-   * 5           TDI         GPIO4     ALT5    7
+   * 5           TDI         GPIO26    ALT4    37
    * 7           TMS         GPIO27    ALT4    13
    * 9           TCK         GPIO25    ALT4    22
    * 11          RTCK        GPIO23    ALT4    16
@@ -570,14 +570,14 @@ ApplyVariables (
    */
   if (PcdGet32 (PcdDebugEnableJTAG)) {
     GpioPinFuncSet (22, GPIO_FSEL_ALT4);
-    GpioPinFuncSet (4, GPIO_FSEL_ALT5);
+    GpioPinFuncSet (26, GPIO_FSEL_ALT4);
     GpioPinFuncSet (27, GPIO_FSEL_ALT4);
     GpioPinFuncSet (25, GPIO_FSEL_ALT4);
     GpioPinFuncSet (23, GPIO_FSEL_ALT4);
     GpioPinFuncSet (24, GPIO_FSEL_ALT4);
   } else {
     GpioPinFuncSet (22, GPIO_FSEL_INPUT);
-    GpioPinFuncSet (4, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (26, GPIO_FSEL_INPUT);
     GpioPinFuncSet (27, GPIO_FSEL_INPUT);
     GpioPinFuncSet (25, GPIO_FSEL_INPUT);
     GpioPinFuncSet (23, GPIO_FSEL_INPUT);
