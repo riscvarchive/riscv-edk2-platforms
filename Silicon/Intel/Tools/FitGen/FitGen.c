@@ -363,7 +363,7 @@ Returns:
   printf ("\tMicrocodeSlotSize      - Occupied region size of each Microcode binary.\n");
   printf ("\tMicrocodeFfsGuid       - Guid of FFS which is used to save Microcode binary");
   printf ("\t-NA                    - No 0x800 aligned Microcode requirement. No -NA means Microcode is aligned with option MicrocodeAlignment value.\n");
-  printf ("\tMicrocodeAlignment     - HEX value of Microcode alignment. Ignored if \"-NA\" is specified. Default value is 0x800.\n");
+  printf ("\tMicrocodeAlignment     - HEX value of Microcode alignment. Ignored if \"-NA\" is specified. Default value is 0x800. The Microcode update data must start at a 16-byte aligned linear address.\n");
   printf ("\tRecordType             - FIT entry record type. User should ensure it is ordered.\n");
   printf ("\tRecordDataAddress      - FIT entry record data address.\n");
   printf ("\tRecordDataSize         - FIT entry record data size.\n");
@@ -1176,7 +1176,11 @@ Returns:
                 // MCU might be put at 2KB alignment, if so, we need to adjust the size as 2KB alignment.
                 //
                 if (gFitTableContext.MicrocodeIsAligned) {
-                  MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + (gFitTableContext.MicrocodeAlignValue - 1)) & ~(gFitTableContext.MicrocodeAlignValue - 1);
+                  if (gFitTableContext.MicrocodeAlignValue & 0xF) {
+                    printf ("-A Parameter incorrect, Microcode data must start at a 16-byte aligned linear address!\n");
+                    return 0;
+                  }
+                  MicrocodeSize = ROUNDUP (*(UINT32 *)(MicrocodeBuffer + 32), gFitTableContext.MicrocodeAlignValue);
                 } else {
                   MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32));
                 }
