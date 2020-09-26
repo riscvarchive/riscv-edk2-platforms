@@ -130,6 +130,7 @@
   SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DebugDualSerialPortLib.inf
 
   # Cryptographic libraries
+  RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
