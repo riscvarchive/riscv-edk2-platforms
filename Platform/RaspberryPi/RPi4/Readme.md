@@ -169,8 +169,8 @@ UEFI Setting                 |    NAME               |  VALUE
 CPU Clock                    | `CpuClock` | Low = `0x00000000`<br> Default = `0x00000001` (default)<br> Max = `0x00000002`<br> Custom = `0x00000003`
 CPU Clock Rate (MHz)         | `CustomCpuClock` | Hex numeric value, 4-bytes<br> (e.g. `0x000005DC` for 1500 MHz)
 **Display Configuration**    |
-Virtual 640x480              | `DisplayEnableScaledVModes` | Checked = Bit 0 set (i.e.  `<DisplayEnableScaledVModes> \| 0x01`)
-Virtual 800x600              | `DisplayEnableScaledVModes` | Checked = Bit 1 set (i.e.  `<DisplayEnableScaledVModes> \| 0x02`)
+Virtual 640x480              | `DisplayEnableScaledVModes` | Checked = Bit 1 set (i.e.  `<DisplayEnableScaledVModes> \| 0x02`)
+Virtual 800x600              | `DisplayEnableScaledVModes` | Checked = Bit 0 set (i.e.  `<DisplayEnableScaledVModes> \| 0x01`)
 Virtual 1024x768             | `DisplayEnableScaledVModes` | Checked = Bit 2 set (i.e.  `<DisplayEnableScaledVModes> \| 0x04`)
 Virtual 720p                 | `DisplayEnableScaledVModes` | Checked = Bit 3 set (i.e.  `<DisplayEnableScaledVModes> \| 0x08`)
 Virtual 1080p                | `DisplayEnableScaledVModes` | Checked = Bit 4 set (i.e.  `<DisplayEnableScaledVModes> \| 0x10`)

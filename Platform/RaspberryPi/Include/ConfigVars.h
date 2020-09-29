@@ -19,8 +19,8 @@ typedef struct {
    *
    * 800x600, 640x480, 1024x768, 720p, 1080p, native.
    */
-   UINT8 v640   : 1;
    UINT8 v800   : 1;
+   UINT8 v640   : 1;
    UINT8 v1024  : 1;
    UINT8 v720p  : 1;
    UINT8 v1080p : 1;
