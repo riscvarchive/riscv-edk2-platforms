@@ -1,6 +1,6 @@
 /**
 
-Copyright (c) 2016, Microsoft Corporation.  All rights reserved.
+Copyright (c) Microsoft Corporation.<BR>
 Copyright (c) 2019, Intel Corporation.  All rights reserved.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -8,7 +8,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <PiDxe.h>
-
+#include <LastAttemptStatus.h>
+#include <Guid/SystemResourceTable.h>
 #include <Library/FmpDeviceLib.h>
 
 #include <Library/DebugLib.h>
@@ -444,6 +445,194 @@ FmpDeviceGetImage (
 }
 
 /**
+  Updates a firmware device with a new firmware image.  This function returns
+  EFI_UNSUPPORTED if the firmware image is not updatable.  If the firmware image
+  is updatable, the function should perform the following minimal validations
+  before proceeding to do the firmware image update.
+    - Validate that the image is a supported image for this firmware device.
+      Return EFI_ABORTED if the image is not supported.  Additional details
+      on why the image is not a supported image may be returned in AbortReason.
+    - Validate the data from VendorCode if is not NULL.  Firmware image
+      validation must be performed before VendorCode data validation.
+      VendorCode data is ignored or considered invalid if image validation
+      fails.  Return EFI_ABORTED if the VendorCode data is invalid.
+
+  VendorCode enables vendor to implement vendor-specific firmware image update
+  policy.  Null if the caller did not specify the policy or use the default
+  policy.  As an example, vendor can implement a policy to allow an option to
+  force a firmware image update when the abort reason is due to the new firmware
+  image version is older than the current firmware image version or bad image
+  checksum.  Sensitive operations such as those wiping the entire firmware image
+  and render the device to be non-functional should be encoded in the image
+  itself rather than passed with the VendorCode.  AbortReason enables vendor to
+  have the option to provide a more detailed description of the abort reason to
+  the caller.
+
+  @param[in]  Image             Points to the new firmware image.
+  @param[in]  ImageSize         Size, in bytes, of the new firmware image.
+  @param[in]  VendorCode        This enables vendor to implement vendor-specific
+                                firmware image update policy.  NULL indicates
+                                the caller did not specify the policy or use the
+                                default policy.
+  @param[in]  Progress          A function used to report the progress of
+                                updating the firmware device with the new
+                                firmware image.
+  @param[in]  CapsuleFwVersion  The version of the new firmware image from the
+                                update capsule that provided the new firmware
+                                image.
+  @param[out] AbortReason       A pointer to a pointer to a Null-terminated
+                                Unicode string providing more details on an
+                                aborted operation. The buffer is allocated by
+                                this function with
+                                EFI_BOOT_SERVICES.AllocatePool().  It is the
+                                caller's responsibility to free this buffer with
+                                EFI_BOOT_SERVICES.FreePool().
+  @param[out] LastAttemptStatus A pointer to a UINT32 that holds the last attempt
+                                status to report back to the ESRT table in case
+                                of error. This value will only be checked when this
+                                function returns an error.
+
+                                The return status code must fall in the range of
+                                LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE to
+                                LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MAX_ERROR_CODE_VALUE.
+
+                                If the value falls outside this range, it will be converted
+                                to LAST_ATTEMPT_STATUS_ERROR_UNSUCCESSFUL.
+
+  @retval EFI_SUCCESS            The firmware device was successfully updated
+                                 with the new firmware image.
+  @retval EFI_ABORTED            The operation is aborted.  Additional details
+                                 are provided in AbortReason.
+  @retval EFI_INVALID_PARAMETER  The Image was NULL.
+  @retval EFI_INVALID_PARAMETER  LastAttemptStatus was NULL.
+  @retval EFI_UNSUPPORTED        The operation is not supported.
+
+**/
+EFI_STATUS
+EFIAPI
+FmpDeviceSetImageWithStatus (
+  IN  CONST VOID                                     *Image,
+  IN  UINTN                                          ImageSize,
+  IN  CONST VOID                                     *VendorCode,       OPTIONAL
+  IN  EFI_FIRMWARE_MANAGEMENT_UPDATE_IMAGE_PROGRESS  Progress,          OPTIONAL
+  IN  UINT32                                         CapsuleFwVersion,
+  OUT CHAR16                                         **AbortReason,
+  OUT UINT32                                         *LastAttemptStatus
+  )
+{
+  EFI_STATUS          Status;
+  UINT32              Updateable;
+  UINTN               Percentage;
+  UINTN               Index;
+  UPDATE_CONFIG_DATA  *ConfigData;
+  UINTN               TotalSize;
+  UINTN               BytesWritten;
+
+  Updateable = 0;
+  Status = FmpDeviceCheckImageWithStatus (Image, ImageSize, &Updateable, LastAttemptStatus);
+  if (EFI_ERROR (Status)) {
+    DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Check Image failed with %r.\n", Status));
+    return Status;
+  }
+
+  if (Updateable != IMAGE_UPDATABLE_VALID) {
+    DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Check Image returned that the Image was not valid for update.  Updatable value = 0x%X.\n", Updateable));
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
+    return EFI_ABORTED;
+  }
+
+  if (Progress == NULL) {
+    DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Invalid progress callback\n"));
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
+    return EFI_INVALID_PARAMETER;
+  }
+
+  Status = Progress (15);
+  if (EFI_ERROR (Status)) {
+    DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Progress Callback failed with Status %r.\n", Status));
+  }
+
+  //
+  // Write the image to the firmware device
+  //
+  Progress (20);
+  if (EFI_ERROR (Status)) {
+    DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Progress Callback failed with Status %r.\n", Status));
+  }
+
+  //
+  // Simulate update with delays between progress updates
+  //
+  for (Percentage = 20; Percentage <= 100; Percentage++) {
+    //
+    // Wait 0.05 seconds
+    //
+//    gBS->Stall (50000);
+
+//    Progress (Percentage);
+//    if (EFI_ERROR (Status)) {
+//      DEBUG((DEBUG_ERROR, "FmpDeviceSetImageWithStatus - Progress Callback failed with Status %r.\n", Status));
+//    }
+  }
+
+  DEBUG ((DEBUG_INFO, "FmpDeviceSetImageWithStatus - %d Images ...\n", ARRAY_SIZE (mUpdateConfigData)));
+
+  if (ARRAY_SIZE (mUpdateConfigData) == 0) {
+    DEBUG((DEBUG_INFO, "PlatformUpdate: BaseAddress - 0x%lx ImageOffset - 0x%x Length - 0x%x\n", 0, 0, ImageSize));
+    Status = PerformFlashWriteWithProgress (
+               PlatformFirmwareTypeSystemFirmware,  // FirmwareType
+               0x00000000,                          // FlashAddress
+               FlashAddressTypeRelativeAddress,     // FlashAddressType
+               (VOID *)(UINTN)Image,                // Buffer
+               ImageSize,                           // BufferLength
+               Progress,                            // Progress
+               20,                                  // StartPercentage
+               100                                  // EndPercentage
+               );
+  }
+
+
+  //
+  // Compute total size of update
+  //
+  for (Index = 0, TotalSize = 0; Index < ARRAY_SIZE (mUpdateConfigData); Index++) {
+    TotalSize += mUpdateConfigData[Index].Length;
+  }
+
+  BytesWritten = 0;
+  for (Index = 0, ConfigData = mUpdateConfigData; Index < ARRAY_SIZE (mUpdateConfigData); Index++, ConfigData++) {
+    DEBUG((DEBUG_INFO, "PlatformUpdate(%d): BaseAddress - 0x%lx ImageOffset - 0x%x Length - 0x%x\n",
+      Index,
+      ConfigData->BaseAddress,
+      ConfigData->ImageOffset,
+      ConfigData->Length
+      ));
+    Status = PerformFlashWriteWithProgress (
+               ConfigData->FirmwareType,                                     // FirmwareType
+               ConfigData->BaseAddress,                                      // FlashAddress
+               ConfigData->AddressType,                                      // FlashAddressType
+               (VOID *)((UINTN)Image + (UINTN)ConfigData->ImageOffset),      // Buffer
+               ConfigData->Length,                                           // BufferLength
+               Progress,                                                     // Progress
+               20 + (BytesWritten * 80) / TotalSize,                         // StartPercentage
+               20 + ((BytesWritten + ConfigData->Length) * 80) / TotalSize   // EndPercentage
+               );
+    if (EFI_ERROR(Status)) {
+      break;
+    }
+    BytesWritten += ConfigData->Length;
+  }
+
+  DEBUG ((DEBUG_INFO, "FmpDeviceSetImageWithStatus - %r\n", Status));
+
+  if (EFI_ERROR (Status)) {
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
+  }
+
+  return Status;
+}
+
+/**
   Updates the firmware image of the device.
 
   This function updates the hardware with the new firmware image.  This function
@@ -504,110 +693,101 @@ FmpDeviceSetImage (
   OUT CHAR16                                         **AbortReason
   )
 {
-  EFI_STATUS          Status;
-  UINT32              Updateable;
-  UINTN               Percentage;
-  UINTN               Index;
-  UPDATE_CONFIG_DATA  *ConfigData;
-  UINTN               TotalSize;
-  UINTN               BytesWritten;
+  UINT32  LastAttemptStatus;
 
-  Updateable = 0;
-  Status = FmpDeviceCheckImage (Image, ImageSize, &Updateable);
-  if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Check Image failed with %r.\n", Status));
-    return Status;
+  return  FmpDeviceSetImageWithStatus (
+            Image,
+            ImageSize,
+            VendorCode,
+            Progress,
+            CapsuleFwVersion,
+            AbortReason,
+            &LastAttemptStatus
+            );
+}
+
+/**
+  Checks if a new firmware image is valid for the firmware device.  This
+  function allows firmware update operation to validate the firmware image
+  before FmpDeviceSetImage() is called.
+
+  @param[in]  Image               Points to a new firmware image.
+  @param[in]  ImageSize           Size, in bytes, of a new firmware image.
+  @param[out] ImageUpdatable      Indicates if a new firmware image is valid for
+                                  a firmware update to the firmware device.  The
+                                  following values from the Firmware Management
+                                  Protocol are supported:
+                                    IMAGE_UPDATABLE_VALID
+                                    IMAGE_UPDATABLE_INVALID
+                                    IMAGE_UPDATABLE_INVALID_TYPE
+                                    IMAGE_UPDATABLE_INVALID_OLD
+                                    IMAGE_UPDATABLE_VALID_WITH_VENDOR_CODE
+  @param[out] LastAttemptStatus   A pointer to a UINT32 that holds the last attempt
+                                  status to report back to the ESRT table in case
+                                  of error. This value will only be checked when this
+                                  function returns an error.
+
+                                  The return status code must fall in the range of
+                                  LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE to
+                                  LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MAX_ERROR_CODE_VALUE.
+
+                                  If the value falls outside this range, it will be converted
+                                  to LAST_ATTEMPT_STATUS_ERROR_UNSUCCESSFUL.
+
+  @retval EFI_SUCCESS            The image was successfully checked.  Additional
+                                 status information is returned in
+                                 ImageUpdatable.
+  @retval EFI_INVALID_PARAMETER  Image is NULL.
+  @retval EFI_INVALID_PARAMETER  ImageUpdatable is NULL.
+  @retval EFI_INVALID_PARAMETER  LastAttemptStatus is NULL.
+
+**/
+EFI_STATUS
+EFIAPI
+FmpDeviceCheckImageWithStatus (
+  IN  CONST VOID  *Image,
+  IN  UINTN       ImageSize,
+  OUT UINT32      *ImageUpdatable,
+  OUT UINT32      *LastAttemptStatus
+  )
+{
+  if (LastAttemptStatus == NULL) {
+    DEBUG ((DEBUG_ERROR, "CheckImageWithStatus - LastAttemptStatus Pointer Parameter is NULL.\n"));
+    return EFI_INVALID_PARAMETER;
   }
+  *LastAttemptStatus = LAST_ATTEMPT_STATUS_SUCCESS;
 
-  if (Updateable != IMAGE_UPDATABLE_VALID) {
-    DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Check Image returned that the Image was not valid for update.  Updatable value = 0x%X.\n", Updateable));
-    return EFI_ABORTED;
-  }
-
-  if (Progress == NULL) {
-    DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Invalid progress callback\n"));
+  if (ImageUpdatable == NULL) {
+    DEBUG((DEBUG_ERROR, "CheckImageWithStatus - ImageUpdatable Pointer Parameter is NULL.\n"));
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = Progress (15);
-  if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Progress Callback failed with Status %r.\n", Status));
-  }
+  //
+  //Set to valid and then if any tests fail it will update this flag.
+  //
+  *ImageUpdatable = IMAGE_UPDATABLE_VALID;
 
-  //
-  // Write the image to the firmware device
-  //
-  Progress (20);
-  if (EFI_ERROR (Status)) {
-    DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Progress Callback failed with Status %r.\n", Status));
-  }
-
-  //
-  // Simulate update with delays between progress updates
-  //
-  for (Percentage = 20; Percentage <= 100; Percentage++) {
+  if (Image == NULL) {
+    DEBUG((DEBUG_ERROR, "CheckImageWithStatus - Image Pointer Parameter is NULL.\n"));
     //
-    // Wait 0.05 seconds
+    // Not sure if this is needed
     //
-//    gBS->Stall (50000);
-
-//    Progress (Percentage);
-//    if (EFI_ERROR (Status)) {
-//      DEBUG((DEBUG_ERROR, "FmpDeviceSetImage - Progress Callback failed with Status %r.\n", Status));
-//    }
+    *ImageUpdatable = IMAGE_UPDATABLE_INVALID;
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
+    return EFI_INVALID_PARAMETER;
   }
-
-  DEBUG ((DEBUG_INFO, "FmpDeviceSetImage - %d Images ...\n", ARRAY_SIZE (mUpdateConfigData)));
-
-  if (ARRAY_SIZE (mUpdateConfigData) == 0) {
-    DEBUG((DEBUG_INFO, "PlatformUpdate: BaseAddress - 0x%lx ImageOffset - 0x%x Length - 0x%x\n", 0, 0, ImageSize));
-    Status = PerformFlashWriteWithProgress (
-               PlatformFirmwareTypeSystemFirmware,  // FirmwareType
-               0x00000000,                          // FlashAddress
-               FlashAddressTypeRelativeAddress,     // FlashAddressType
-               (VOID *)(UINTN)Image,                // Buffer
-               ImageSize,                           // BufferLength
-               Progress,                            // Progress
-               20,                                  // StartPercentage
-               100                                  // EndPercentage
-               );
-  }
-
 
   //
-  // Compute total size of update
+  // Make sure the image size is correct
   //
-  for (Index = 0, TotalSize = 0; Index < ARRAY_SIZE (mUpdateConfigData); Index++) {
-    TotalSize += mUpdateConfigData[Index].Length;
+  if (ImageSize != PcdGet32 (PcdBiosRomSize)) {
+    *ImageUpdatable = IMAGE_UPDATABLE_INVALID;
+    *LastAttemptStatus = LAST_ATTEMPT_STATUS_DEVICE_LIBRARY_MIN_ERROR_CODE_VALUE;
+    return EFI_INVALID_PARAMETER;
   }
 
-  BytesWritten = 0;
-  for (Index = 0, ConfigData = mUpdateConfigData; Index < ARRAY_SIZE (mUpdateConfigData); Index++, ConfigData++) {
-    DEBUG((DEBUG_INFO, "PlatformUpdate(%d): BaseAddress - 0x%lx ImageOffset - 0x%x Length - 0x%x\n",
-      Index,
-      ConfigData->BaseAddress,
-      ConfigData->ImageOffset,
-      ConfigData->Length
-      ));
-    Status = PerformFlashWriteWithProgress (
-               ConfigData->FirmwareType,                                     // FirmwareType
-               ConfigData->BaseAddress,                                      // FlashAddress
-               ConfigData->AddressType,                                      // FlashAddressType
-               (VOID *)((UINTN)Image + (UINTN)ConfigData->ImageOffset),      // Buffer
-               ConfigData->Length,                                           // BufferLength
-               Progress,                                                     // Progress
-               20 + (BytesWritten * 80) / TotalSize,                         // StartPercentage
-               20 + ((BytesWritten + ConfigData->Length) * 80) / TotalSize   // EndPercentage
-               );
-    if (EFI_ERROR(Status)) {
-      break;
-    }
-    BytesWritten += ConfigData->Length;
-  }
-
-  DEBUG ((DEBUG_INFO, "FmpDeviceSetImage - %r\n", Status));
-
-  return Status;
+  return EFI_SUCCESS;
 }
 
 /**
@@ -633,34 +813,9 @@ FmpDeviceCheckImage (
   OUT UINT32      *ImageUpdateable
   )
 {
-  if (ImageUpdateable == NULL) {
-    DEBUG((DEBUG_ERROR, "CheckImage - ImageUpdateable Pointer Parameter is NULL.\n"));
-    return EFI_INVALID_PARAMETER;
-  }
+  UINT32  LastAttemptStatus;
 
-  //
-  //Set to valid and then if any tests fail it will update this flag.
-  //
-  *ImageUpdateable = IMAGE_UPDATABLE_VALID;
-
-  if (Image == NULL) {
-    DEBUG((DEBUG_ERROR, "CheckImage - Image Pointer Parameter is NULL.\n"));
-    //
-    // Not sure if this is needed
-    //
-    *ImageUpdateable = IMAGE_UPDATABLE_INVALID;
-    return EFI_INVALID_PARAMETER;
-  }
-
-  //
-  // Make sure the image size is correct
-  //
-  if (ImageSize != PcdGet32 (PcdBiosRomSize)) {
-    *ImageUpdateable = IMAGE_UPDATABLE_INVALID;
-    return EFI_INVALID_PARAMETER;
-  }
-
-  return EFI_SUCCESS;
+  return FmpDeviceCheckImageWithStatus (Image, ImageSize, ImageUpdateable, &LastAttemptStatus);
 }
 
 /**
