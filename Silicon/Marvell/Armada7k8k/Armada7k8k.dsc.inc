@@ -27,6 +27,7 @@
   FmpAuthenticationLib|SecurityPkg/Library/FmpAuthenticationLibPkcs7/FmpAuthenticationLibPkcs7.inf
   IniParsingLib|SignedCapsulePkg/Library/IniParsingLib/IniParsingLib.inf
   PlatformFlashAccessLib|Silicon/Marvell/Armada7k8k/Feature/Capsule/PlatformFlashAccessLib/PlatformFlashAccessLib.inf
+  RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
 !endif
 
 !if $(NETWORK_TLS_ENABLE)
