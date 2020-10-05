@@ -209,10 +209,12 @@ typedef struct {
 #define DEFAULT_FIT_TABLE_POINTER_OFFSET  0x40
 #define DEFAULT_FIT_ENTRY_VERSION         0x0100
 
+#define TOP_FLASH_ADDRESS  (gFitTableContext.TopFlashAddressRemapValue)
+
 #define MEMORY_TO_FLASH(FileBuffer, FvBuffer, FvSize)  \
-                 (UINTN)(0x100000000 - ((UINTN)(FvBuffer) + (UINTN)(FvSize) - (UINTN)(FileBuffer)))
+                 (UINTN)(TOP_FLASH_ADDRESS - ((UINTN)(FvBuffer) + (UINTN)(FvSize) - (UINTN)(FileBuffer)))
 #define FLASH_TO_MEMORY(Address, FvBuffer, FvSize)  \
-                 (VOID *)(UINTN)((UINTN)(FvBuffer) + (UINTN)(FvSize) - (0x100000000 - (UINTN)(Address)))
+                 (VOID *)(UINTN)((UINTN)(FvBuffer) + (UINTN)(FvSize) - (TOP_FLASH_ADDRESS - (UINTN)(Address)))
 
 #define FIT_TABLE_TYPE_HEADER                 0
 #define FIT_TABLE_TYPE_MICROCODE              1
@@ -268,6 +270,7 @@ typedef struct {
   UINT32                     MicrocodeVersion;
   FIT_TABLE_CONTEXT_ENTRY    OptionalModule[MAX_OPTIONAL_ENTRY];
   FIT_TABLE_CONTEXT_ENTRY    PortModule[MAX_PORT_ENTRY];
+  UINT64                     TopFlashAddressRemapValue;
 } FIT_TABLE_CONTEXT;
 
 FIT_TABLE_CONTEXT   gFitTableContext = {0};
@@ -330,6 +333,7 @@ Returns:
           "\t[-F <FitTablePointerOffset>] [-F <FitTablePointerOffset>] [-V <FitHeaderVersion>]\n"
           "\t[-NA]\n"
           "\t[-A <MicrocodeAlignment>]\n"
+           "\t[-REMAP <TopFlashAddress>\n"
           "\t[-CLEAR]\n"
           "\t[-L <MicrocodeSlotSize> <MicrocodeFfsGuid>]\n"
           "\t[-I <BiosInfoGuid>]\n"
@@ -986,6 +990,21 @@ Returns:
     Index += 2;
   }
 
+  if ((Index >= argc) ||
+      ((strcmp (argv[Index], "-REMAP") == 0) ||
+       (strcmp (argv[Index], "-remap") == 0)) ) {
+    //
+    // by pass
+    //
+    gFitTableContext.TopFlashAddressRemapValue = xtoi (argv[Index + 1]);
+    Index += 2;
+  } else {
+    //
+    // no remapping
+    //
+    gFitTableContext.TopFlashAddressRemapValue = 0x100000000;
+  }
+  printf ("Top Flash Address Value : 0x%llx\n", gFitTableContext.TopFlashAddressRemapValue);
   //
   // 0.4 Clear FIT table related memory
   //
