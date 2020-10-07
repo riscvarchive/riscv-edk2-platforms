@@ -103,6 +103,8 @@
   MemoryInitPeiLib|Silicon/NXP/Library/MemoryInitPeiLib/MemoryInitPeiLib.inf
   UefiScsiLib|MdePkg/Library/UefiScsiLib/UefiScsiLib.inf
 
+  GpioLib|Silicon/NXP/Library/GpioLib/GpioLib.inf
+
 [LibraryClasses.common.SEC]
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
   DebugAgentLib|ArmPkg/Library/DebugAgentSymbolsBaseLib/DebugAgentSymbolsBaseLib.inf

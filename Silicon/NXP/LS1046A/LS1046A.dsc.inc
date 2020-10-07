@@ -27,9 +27,14 @@
 
 [PcdsFixedAtBuild.common]
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x021c0500
+  gNxpQoriqLsTokenSpaceGuid.PcdNumGpioController|0x04
+  gNxpQoriqLsTokenSpaceGuid.PcdGpioModuleBaseAddress|0x02300000
+  gNxpQoriqLsTokenSpaceGuid.PcdGpioControllerOffset|0x10000
+
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|TRUE
+  gNxpQoriqLsTokenSpaceGuid.PcdGpioControllerBigEndian|TRUE
 
 ################################################################################
 #
