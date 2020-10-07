@@ -15,6 +15,69 @@
 #include <Library/SerialPortLib.h>
 
 /**
+  Or Scfg register
+
+  @param  Address The MMIO register to read.
+
+  @return The value read.
+**/
+UINT32
+EFIAPI
+ScfgOr32 (
+  IN  UINTN     Address,
+  IN  UINT32    Value
+  )
+{
+  MMIO_OPERATIONS *ScfgOps;
+
+  ScfgOps = GetMmioOperations (FeaturePcdGet (PcdScfgBigEndian));
+
+  return ScfgOps->Or32 (Address, Value);
+}
+
+/**
+  Read Scfg register
+
+  @param  Address The MMIO register to read.
+
+  @return The value read.
+**/
+UINT32
+EFIAPI
+ScfgRead32 (
+  IN  UINTN     Address
+  )
+{
+  MMIO_OPERATIONS *ScfgOps;
+
+  ScfgOps = GetMmioOperations (FeaturePcdGet (PcdScfgBigEndian));
+
+  return ScfgOps->Read32 (Address);
+}
+
+/**
+  Write Scfg register
+
+  @param  Address The MMIO register to write.
+  @param  Value   The value to write to the MMIO register.
+
+  @return Value.
+**/
+UINT32
+EFIAPI
+ScfgWrite32 (
+  IN  UINTN     Address,
+  IN  UINT32    Value
+  )
+{
+  MMIO_OPERATIONS *ScfgOps;
+
+  ScfgOps = GetMmioOperations (FeaturePcdGet (PcdScfgBigEndian));
+
+  return ScfgOps->Write32 (Address, Value);
+}
+
+/**
   Read Dcfg register
 
   @param  Address The MMIO register to read.

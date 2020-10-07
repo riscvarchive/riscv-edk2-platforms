@@ -30,6 +30,7 @@
   gNxpQoriqLsTokenSpaceGuid.PcdPciLutBigEndian|FALSE|BOOLEAN|0x00000317
   gNxpQoriqLsTokenSpaceGuid.PcdSataErratumA009185|FALSE|BOOLEAN|0x00000318
   gNxpQoriqLsTokenSpaceGuid.PcdGpioControllerBigEndian|FALSE|BOOLEAN|0x00000319
+  gNxpQoriqLsTokenSpaceGuid.PcdScfgBigEndian|FALSE|BOOLEAN|0x00000320
 
 [PcdsFixedAtBuild.common]
   # Pcds for PCI Express
