@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
+*  Copyright (c) 2011-2021, Arm Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -17,7 +17,7 @@
 #define DP_BASE_DESCRIPTOR      ((FixedPcdGet64 (PcdArmMaliDpBase) != 0) ? 1 : 0)
 
 // Number of Virtual Memory Map Descriptors
-#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS (10 + DP_BASE_DESCRIPTOR)
+#define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS (14 + DP_BASE_DESCRIPTOR)
 
 // DDR attributes
 #define DDR_ATTRIBUTES_CACHED   ARM_MEMORY_REGION_ATTRIBUTE_WRITE_BACK
@@ -159,6 +159,33 @@ ArmPlatformGetVirtualMemoryMap (
     VirtualMemoryTable[Index].VirtualBase = FixedPcdGet64 (PcdArmMaliDpBase);
     VirtualMemoryTable[Index].Length = FixedPcdGet32 (PcdArmMaliDpMemoryRegionLength);
     VirtualMemoryTable[Index].Attributes = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+  }
+
+  // Map the PCI configration and memory space if the platform is FVP RevC.
+  if ((SysId & ARM_FVP_SYS_ID_REV_MASK) == ARM_FVP_BASE_REVC_REV) {
+    // SMMUv3
+    VirtualMemoryTable[++Index].PhysicalBase  = FVP_REVC_SMMUV3_BASE;
+    VirtualMemoryTable[Index].VirtualBase     = FVP_REVC_SMMUV3_BASE;
+    VirtualMemoryTable[Index].Length          = FVP_REVC_SMMUV3_SIZE;
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+    // PCI Configuration Space
+    VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64 (PcdPciExpressBaseAddress);
+    VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64 (PcdPciExpressBaseAddress);
+    VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdPciExpressBaseSize);
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+    // PCI Memory Space
+    VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdPciMmio32Base);
+    VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdPciMmio32Base);
+    VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdPciMmio32Size);
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+    // 64-bit PCI Memory Space
+    VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64 (PcdPciMmio64Base);
+    VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64 (PcdPciMmio64Base);
+    VirtualMemoryTable[Index].Length          = FixedPcdGet64 (PcdPciMmio64Size);
+    VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
   }
 
   // Map sparse memory region if present

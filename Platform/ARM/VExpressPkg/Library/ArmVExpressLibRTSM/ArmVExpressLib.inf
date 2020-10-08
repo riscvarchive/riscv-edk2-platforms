@@ -1,5 +1,5 @@
 #/* @file
-#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2021, Arm Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -53,6 +53,16 @@
 
   gArmPlatformTokenSpaceGuid.PcdArmMaliDpBase
   gArmPlatformTokenSpaceGuid.PcdArmMaliDpMemoryRegionLength
+
+  # PCI Configuration space
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseSize
+
+  gArmTokenSpaceGuid.PcdPciMmio32Base
+  gArmTokenSpaceGuid.PcdPciMmio32Size
+
+  gArmTokenSpaceGuid.PcdPciMmio64Base
+  gArmTokenSpaceGuid.PcdPciMmio64Size
 
 [Ppis]
   gArmMpCoreInfoPpiGuid

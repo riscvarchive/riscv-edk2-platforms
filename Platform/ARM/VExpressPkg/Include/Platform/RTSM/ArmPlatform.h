@@ -1,7 +1,7 @@
 /** @file
 *  Header defining Versatile Express constants (Base addresses, sizes, flags)
 *
-*  Copyright (c) 2011, ARM Limited. All rights reserved.
+*  Copyright (c) 2011 - 2021, Arm Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -72,5 +72,9 @@
 
 #define SBSA_WATCHDOG_BASE                      0x2a440000
 #define SBSA_WATCHDOG_SIZE                      (2 * SIZE_64KB)
+
+// SMMUv3 - FVP RevC
+#define FVP_REVC_SMMUV3_BASE                    0x2B400000
+#define FVP_REVC_SMMUV3_SIZE                    SIZE_1MB
 
 #endif
