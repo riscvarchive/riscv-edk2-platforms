@@ -1,7 +1,7 @@
 /** @file
 *  Header defining Versatile Express constants (Base addresses, sizes, flags)
 *
-*  Copyright (c) 2011-2015, ARM Limited. All rights reserved.
+*  Copyright (c) 2011-2021, Arm Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -130,5 +130,8 @@
 #define ARM_RTSM_SYS_ID                (0x225F500)
 #define ARM_FVP_BASE_SYS_ID            (ARM_FVP_BASE_BOARD_SYS_ID | ARM_FVP_GIC_BASE_MMAP)
 #define ARM_FVP_FOUNDATION_SYS_ID      (ARM_FVP_FOUNDATION_BOARD_SYS_ID | ARM_FVP_GIC_BASE_MMAP)
+
+// FVP RevC model revision.
+#define ARM_FVP_BASE_REVC_REV          (UINT32)(0x2UL << 28)
 
 #endif /* VEXPRESSMOTHERBOARD_H_ */
