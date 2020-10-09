@@ -31,6 +31,9 @@
   gNxpQoriqLsTokenSpaceGuid.PcdGpioModuleBaseAddress|0x02300000
   gNxpQoriqLsTokenSpaceGuid.PcdGpioControllerOffset|0x10000
 
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbBaseAddr|0x2F00000
+  gNxpQoriqLsTokenSpaceGuid.PcdUsbSize|0x100000
+  gNxpQoriqLsTokenSpaceGuid.PcdNumUsbController|3
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|TRUE

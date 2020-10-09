@@ -43,4 +43,6 @@
     gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
   }
 
+  Silicon/NXP/Drivers/UsbHcdInitDxe/UsbHcd.inf
+
 ##
