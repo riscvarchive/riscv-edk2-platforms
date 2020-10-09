@@ -25,6 +25,7 @@
 #define LS1046A_QSPI0_SIZE           (SIZE_512MB)
 
 #define LS1046A_DCFG_ADDRESS         NXP_LAYERSCAPE_CHASSIS2_DCFG_ADDRESS
+#define LS1046A_SCFG_ADDRESS         NXP_LAYERSCAPE_CHASSIS2_SCFG_ADDRESS
 
 /**
   Reset Control Word (RCW) Bits
@@ -59,5 +60,6 @@ Bit(s) | Field Name  | Description                  | Notes/comments
 #define SYS_PLL_RAT(x)  (((x) >> 25) & 0x1f) // Bits 2-6
 
 typedef NXP_LAYERSCAPE_CHASSIS2_DEVICE_CONFIG LS1046A_DEVICE_CONFIG;
+typedef NXP_LAYERSCAPE_CHASSIS2_SUPPLEMENTAL_CONFIG LS1046A_SUPPLEMENTAL_CONFIG;
 
 #endif // SOC_H__

@@ -14,6 +14,7 @@
   LIBRARY_CLASS                  = SocLib
 
 [Packages]
+  ArmPkg/ArmPkg.dec
   MdePkg/MdePkg.dec
   Silicon/NXP/Chassis2/Chassis2.dec
   Silicon/NXP/LS1046A/LS1046A.dec

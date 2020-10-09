@@ -34,6 +34,7 @@
 
 [PcdsFeatureFlag]
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian|TRUE
+  gNxpQoriqLsTokenSpaceGuid.PcdScfgBigEndian|TRUE
   gNxpQoriqLsTokenSpaceGuid.PcdGpioControllerBigEndian|TRUE
 
 ################################################################################
