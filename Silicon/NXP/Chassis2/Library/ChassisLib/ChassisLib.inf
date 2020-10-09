@@ -28,6 +28,8 @@
 
 [Sources.common]
   ChassisLib.c
+  Erratum.c
 
 [FeaturePcd]
   gNxpQoriqLsTokenSpaceGuid.PcdDcfgBigEndian
+  gNxpQoriqLsTokenSpaceGuid.PcdScfgBigEndian

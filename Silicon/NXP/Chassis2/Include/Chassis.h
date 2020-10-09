@@ -27,6 +27,10 @@
 #define SCR0_CLIENTPD_MASK         0x00000001
 #define SACR_PAGESIZE_MASK         0x00010000
 
+#define USB_PHY1_BASE_ADDRESS      0x084F0000
+#define USB_PHY2_BASE_ADDRESS      0x08500000
+#define USB_PHY3_BASE_ADDRESS      0x08510000
+
 /**
   The Device Configuration Unit provides general purpose configuration and
   status for the device. These registers only support 32-bit accesses.

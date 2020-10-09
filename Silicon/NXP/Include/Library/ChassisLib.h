@@ -90,4 +90,24 @@ ChassisInit (
   VOID
   );
 
+VOID
+ErratumA008997 (
+  VOID
+  );
+
+VOID
+ErratumA009007 (
+  VOID
+  );
+
+VOID
+ErratumA009008 (
+  VOID
+  );
+
+VOID
+ErratumA009798 (
+  VOID
+  );
+
 #endif // CHASSIS_LIB_H__
