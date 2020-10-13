@@ -1004,7 +1004,7 @@ Returns:
     //
     gFitTableContext.TopFlashAddressRemapValue = 0x100000000;
   }
-  printf ("Top Flash Address Value : 0x%llx\n", gFitTableContext.TopFlashAddressRemapValue);
+  printf ("Top Flash Address Value : 0x%llx\n", (unsigned long long) gFitTableContext.TopFlashAddressRemapValue);
   //
   // 0.4 Clear FIT table related memory
   //
