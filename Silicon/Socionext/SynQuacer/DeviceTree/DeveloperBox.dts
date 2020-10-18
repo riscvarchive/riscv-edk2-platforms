@@ -44,6 +44,10 @@
                       "PEC-PD28",   "PEC-PD29",   "PEC-PD30",     "PEC-PD31";
 };
 
+&netsec {
+    phy-mode = "rgmii-id";
+};
+
 &mdio_netsec {
     phy_netsec: ethernet-phy@7 {
         compatible = "ethernet-phy-ieee802.3-c22";

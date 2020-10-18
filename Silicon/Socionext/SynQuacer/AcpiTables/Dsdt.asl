@@ -170,7 +170,7 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "SNI", "SYNQUACR",
       {
         ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
         Package () {
-          Package (2) { "phy-mode", "rgmii" },
+          Package (2) { "phy-mode", "" },
           Package (2) { "phy-channel", FixedPcdGet32 (PcdNetsecPhyAddress) },
           Package (2) { "max-speed", 1000 },
           Package (2) { "max-frame-size", 9000 },
