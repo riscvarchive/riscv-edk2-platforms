@@ -33,7 +33,9 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
       Name (_HID, "ARMH0011")
       Name (_UID, Zero)
       Name (_CRS, ResourceTemplate () {
-        Memory32Fixed (ReadWrite, 0x60000000, 0x00001000)
+        Memory32Fixed (ReadWrite,
+                       FixedPcdGet32 (PcdSerialRegisterBase),
+                       0x00001000)
         Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 33 }
       })
     }
@@ -48,7 +50,9 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
       })
       Name (_CCA, 1)
       Name (_CRS, ResourceTemplate() {
-        Memory32Fixed (ReadWrite, 0x60100000, 0x1000)
+        Memory32Fixed (ReadWrite,
+                       FixedPcdGet32 (PcdPlatformAhciBase),
+                       FixedPcdGet32 (PcdPlatformAhciSize))
         Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 42 }
       })
     }
@@ -60,7 +64,9 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
 
         Method (_CRS, 0x0, Serialized) {
             Name (RBUF, ResourceTemplate() {
-                Memory32Fixed (ReadWrite, 0x60110000, 0x00010000)
+                Memory32Fixed (ReadWrite,
+                               FixedPcdGet32 (PcdPlatformEhciBase),
+                               FixedPcdGet32 (PcdPlatformEhciSize))
                 Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 43 }
             })
             Return (RBUF)
@@ -157,7 +163,7 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
       Name (_CCA, One)    // Initially mark the PCI coherent (for JunoR1)
 
       Method (_CBA, 0, NotSerialized) {
-          return (0xf0000000)
+          return (FixedPcdGet32 (PcdPciExpressBaseAddress))
       }
 
       LINK_DEVICE(0, GSI0, 0x23)
@@ -335,8 +341,8 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
         ResourceProducer,
         MinFixed, MaxFixed, PosDecode,
         0,   // AddressGranularity
-        0,   // AddressMinimum - Minimum Bus Number
-        255, // AddressMaximum - Maximum Bus Number
+        FixedPcdGet32 (PcdPciBusMin),   // AddressMinimum - Minimum Bus Number
+        FixedPcdGet32 (PcdPciBusMax),   // AddressMaximum - Maximum Bus Number
         0,   // AddressTranslation - Set to 0
         256  // RangeLength - Number of Busses
         )
@@ -345,22 +351,22 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
           ResourceProducer, PosDecode,
           MinFixed, MaxFixed,
           Cacheable, ReadWrite,
-          0x00000000,                          // Granularity
-          0x80000000,                          // Min Base Address
-          0xEFFFFFFF,                          // Max Base Address
-          0x00000000,                          // Translate
-          0x70000000                           // Length
+          0x00000000,                              // Granularity
+          FixedPcdGet32 (PcdPciMmio32Base),        // Min Base Address
+          FixedPcdGet32 (PcdPciMmio32Limit),       // Max Base Address
+          FixedPcdGet32 (PcdPciMmio32Translation), // Translate
+          FixedPcdGet32 (PcdPciMmio32Size)         // Length
           )
 
         QWordMemory ( // 64-bit BAR Windows
           ResourceProducer, PosDecode,
           MinFixed, MaxFixed,
           Cacheable, ReadWrite,
-          0x00000000,                          // Granularity
-          0x100000000,                         // Min Base Address
-          0xFFFFFFFFFF,                        // Max Base Address
-          0x00000000,                          // Translate
-          0xFF00000000                         // Length
+          0x00000000,                              // Granularity
+          FixedPcdGet64 (PcdPciMmio64Base),        // Min Base Address
+          FixedPcdGet64 (PcdPciMmio64Limit),       // Max Base Address
+          FixedPcdGet64 (PcdPciMmio64Translation), // Translate
+          FixedPcdGet64 (PcdPciMmio64Size)         // Length
           )
 
         DWordIo ( // IO window
@@ -369,11 +375,11 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
           MaxFixed,
           PosDecode,
           EntireRange,
-          0x00000000,                          // Granularity
-          0x00000000,                          // Min Base Address
-          0x0000ffff,                          // Max Base Address
-          0x7fff0000,                          // Translate
-          0x00010000,                          // Length
+          0x00000000,                              // Granularity
+          FixedPcdGet32 (PcdPciIoBase),            // Min Base Address
+          FixedPcdGet32 (PcdPciIoLimit),           // Max Base Address
+          FixedPcdGet32 (PcdPciIoTranslation),     // Translate
+          FixedPcdGet32 (PcdPciIoSize),            // Length
           ,,,TypeTranslation
           )
         }) // Name(RBUF)
@@ -387,11 +393,11 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "LINARO", "SBSAQEMU",
         Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
         {
            QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-           0x0000000000000000, // Granularity
-           0x00000000F0000000, // Range Minimum
-           0x00000000FFFFFFFF, // Range Maximum
-           0x0000000000000000, // Translation Offset
-           0x0000000010000000, // Length
+           0x0000000000000000,                       // Granularity
+           FixedPcdGet64 (PcdPciExpressBaseAddress), // Range Minimum
+           FixedPcdGet64 (PcdPciExpressBarLimit),    // Range Maximum
+           0x0000000000000000,                       // Translation Offset
+           FixedPcdGet64 (PcdPciExpressBarSize),     // Length
            ,, , AddressRangeMemory, TypeStatic)
         })
       }
