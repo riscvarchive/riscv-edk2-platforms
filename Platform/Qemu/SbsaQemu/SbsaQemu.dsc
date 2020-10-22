@@ -458,15 +458,21 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   gArmTokenSpaceGuid.PcdPciBusMax|255
   gArmTokenSpaceGuid.PcdPciIoBase|0x0
   gArmTokenSpaceGuid.PcdPciIoSize|0x00010000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciIoLimit|0x0000ffff
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x80000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x70000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio32Limit|0xEFFFFFFF
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x100000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0xFF00000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio64Limit|0xFFFFFFFFFF
 
   # set PcdPciExpressBaseAddress to MAX_UINT64, which signifies that this
   # PCD and PcdPciDisableBusEnumeration have not been assigned yet
   # TODO: PcdPciExpressBaseAddress set to max_uint64
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xf0000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarSize|0x10000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarLimit|0xFFFFFFFF
+
   gArmTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
