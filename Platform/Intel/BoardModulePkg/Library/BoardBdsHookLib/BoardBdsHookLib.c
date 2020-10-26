@@ -1142,11 +1142,6 @@ BdsPciEnumCompleteCallback (
   gBootMode                  = GetBootModeHob ();
 
   //
-  // Connect Root Bridge to make PCI BAR resource allocated and all PciIo created
-  //
-  ConnectRootBridge (FALSE);
-
-  //
   // Fill ConIn/ConOut in Full Configuration boot mode
   //
   DEBUG ((DEBUG_INFO, "PlatformBootManagerInit - %x\n", gBootMode));
@@ -1180,6 +1175,42 @@ BdsPciEnumCompleteCallback (
     }
   }
 
+  //
+  // Enumerate USB keyboard
+  //
+  EnumUsbKeyboard ();
+
+  //
+  // For trusted console it must be handled here.
+  //
+  UpdateGraphicConOut (TRUE);
+
+  //
+  // Register Boot Options
+  //
+  RegisterDefaultBootOption ();
+
+  //
+  // Register Static Hot keys
+  //
+  RegisterStaticHotkey ();
+
+  //
+  // Process Physical Preo
+  //
+  PERF_START_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7010);
+  if (PcdGetBool (PcdTpm2Enable)) {
+    ProcessTcgPp ();
+    ProcessTcgMor ();
+  }
+  PERF_END_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7011);
+
+  //
+  // Perform memory test
+  // We should make all UEFI memory and GCD information populated before ExitPmAuth.
+  // SMM may consume these information.
+  //
+  MemoryTest((EXTENDMEM_COVERAGE_LEVEL) PcdGet32 (PcdPlatformMemoryCheckLevel));
 }
 
 /**
@@ -1265,41 +1296,9 @@ BdsBeforeConsoleAfterTrustedConsoleCallback (
   DEBUG ((DEBUG_INFO, "Event gBdsEventBeforeConsoleBeforeEndOfDxeGuid callback starts\n"));
 
   //
-  // Enumerate USB keyboard
+  // Connect Root Bridge to make PCI BAR resource allocated and all PciIo created
   //
-  EnumUsbKeyboard ();
-
-  //
-  // For trusted console it must be handled here.
-  //
-  UpdateGraphicConOut (TRUE);
-
-  //
-  // Register Boot Options
-  //
-  RegisterDefaultBootOption ();
-
-  //
-  // Register Static Hot keys
-  //
-  RegisterStaticHotkey ();
-
-  //
-  // Process Physical Preo
-  //
-  PERF_START_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7010);
-  if (PcdGetBool (PcdTpm2Enable)) {
-    ProcessTcgPp ();
-    ProcessTcgMor ();
-  }
-  PERF_END_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7011);
-
-  //
-  // Perform memory test
-  // We should make all UEFI memory and GCD information populated before ExitPmAuth.
-  // SMM may consume these information.
-  //
-  MemoryTest((EXTENDMEM_COVERAGE_LEVEL) PcdGet32 (PcdPlatformMemoryCheckLevel));
+  ConnectRootBridge (FALSE);
 }
 
 
