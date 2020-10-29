@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2009 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2009 - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -148,6 +148,7 @@ Base2ToByteWith64KUnit (
 MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
 {
   CHAR8                 *OptionalStrStart;
+  UINTN                 OptionalStrSize;
   UINTN                 VendorStrLen;
   UINTN                 VerStrLen;
   UINTN                 DateStrLen;
@@ -203,7 +204,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   Version = SmbiosMiscGetString (TokenToGet);
 
   ZeroMem (BIOSVersionTemp, sizeof (BIOSVersionTemp));
-  StrCat (BIOSVersionTemp,Version);
+  StrCatS (BIOSVersionTemp, sizeof (BIOSVersionTemp) / sizeof (CHAR16), Version);
   VerStrLen = StrLen(BIOSVersionTemp);
   if (VerStrLen > SMBIOS_STRING_MAX_LENGTH) {
     return EFI_UNSUPPORTED;
@@ -219,8 +220,9 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   //
   // Two zeros following the last string.
   //
-  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE0) + VendorStrLen + 1 + VerStrLen + 1 + DateStrLen + 1 + 1);
-  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE0) + VendorStrLen + 1 + VerStrLen + 1 + DateStrLen + 1 + 1);
+  OptionalStrSize = VendorStrLen + 1 + VerStrLen + 1 + DateStrLen + 1 + 1;
+  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE0) + OptionalStrSize);
+  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE0) + OptionalStrSize);
 
   SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_BIOS_INFORMATION;
   SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE0);
@@ -264,9 +266,13 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   SmbiosRecord->EmbeddedControllerFirmwareMinorRelease = ForType0InputData->BiosEmbeddedFirmwareMinorRelease;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(Char16String, OptionalStrStart);
-  UnicodeStrToAsciiStr(BIOSVersionTemp, OptionalStrStart + VendorStrLen + 1);
-  UnicodeStrToAsciiStr(ReleaseDate, OptionalStrStart + VendorStrLen + 1 + VerStrLen + 1);
+  UnicodeStrToAsciiStrS(Char16String, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (VendorStrLen + 1);
+  OptionalStrSize  -= (VendorStrLen + 1);
+  UnicodeStrToAsciiStrS(BIOSVersionTemp, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (VerStrLen + 1);
+  OptionalStrSize  -= (VerStrLen + 1);
+  UnicodeStrToAsciiStrS(ReleaseDate, OptionalStrStart, OptionalStrSize);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

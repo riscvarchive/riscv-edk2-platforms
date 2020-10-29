@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2006  - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -147,7 +147,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscProcessorCache)
 	  //
 	  SmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
 	  OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-	  UnicodeStrToAsciiStr(SocketDesignation, OptionalStrStart);
+	  UnicodeStrToAsciiStrS (SocketDesignation, OptionalStrStart,  + 7 + 1 + 1);
 
 	  Smbios->Add(
 	            Smbios,

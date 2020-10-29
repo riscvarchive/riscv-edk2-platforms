@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2009 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2009 - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -47,6 +47,7 @@ AddSmbiosManuCallback (
 {
 
   CHAR8                             *OptionalStrStart;
+  UINTN                             OptionalStrSize;
   UINTN                             ManuStrLen;
   UINTN                             VerStrLen;
   UINTN                             PdNameStrLen;
@@ -245,8 +246,9 @@ AddSmbiosManuCallback (
   //
   // Two zeros following the last string.
   //
-  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE1) + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SkuNumberStrLen + 1 + FamilyNameStrLen + 1 + 1);
-  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE1) + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SkuNumberStrLen + 1 + FamilyNameStrLen + 1 + 1);
+  OptionalStrSize = ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SkuNumberStrLen + 1 + FamilyNameStrLen + 1 + 1;
+  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE1) + OptionalStrSize);
+  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE1) + OptionalStrSize);
 
   SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_SYSTEM_INFORMATION;
   SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE1);
@@ -290,13 +292,22 @@ AddSmbiosManuCallback (
   SmbiosRecord->WakeUpType = (UINT8)ForType1InputData->SystemWakeupType;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(Manufacturer, OptionalStrStart);
-  UnicodeStrToAsciiStr(ProductName, OptionalStrStart + ManuStrLen + 1);
-  UnicodeStrToAsciiStr(Version, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1);
-  UnicodeStrToAsciiStr(SerialNumber, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1);
-
-  UnicodeStrToAsciiStr(SkuNumber, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 +  VerStrLen + 1 + SerialNumStrLen + 1);
-  UnicodeStrToAsciiStr(FamilyName, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SkuNumberStrLen +1);
+  UnicodeStrToAsciiStrS (Manufacturer, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (ManuStrLen + 1);
+  OptionalStrSize  -= (ManuStrLen + 1);
+  UnicodeStrToAsciiStrS (ProductName, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (PdNameStrLen + 1);
+  OptionalStrSize  -= (PdNameStrLen + 1);
+  UnicodeStrToAsciiStrS (Version, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (VerStrLen + 1);
+  OptionalStrSize  -= (VerStrLen + 1);
+  UnicodeStrToAsciiStrS (SerialNumber, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (SerialNumStrLen + 1);
+  OptionalStrSize  -= (SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (SkuNumber, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (SkuNumberStrLen + 1);
+  OptionalStrSize  -= (SkuNumberStrLen + 1);
+  UnicodeStrToAsciiStrS (FamilyName, OptionalStrStart, OptionalStrSize);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

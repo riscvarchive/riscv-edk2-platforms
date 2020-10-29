@@ -1,10 +1,12 @@
 /** @file
 
-Copyright (c) 2007  - 2015, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2007  - 2020, Intel Corporation. All rights reserved.<BR>
+                                                                                   
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
+                                                                                   
+
 
 **/
 
@@ -239,7 +241,7 @@ ParseCommandLine (
         PrintToken (STRING_TOKEN (STR_FWUPDATE_PATH_ERROR), HiiHandle, Argv[Index]);
         return EFI_INVALID_PARAMETER;
       }
-      StrCpy (mInputData.FileName, Argv[Index]);
+      StrCpyS (mInputData.FileName, sizeof (mInputData.FileName) / sizeof (CHAR16), Argv[Index]);
       mInputData.UpdateFromFile = TRUE;
     }
   }

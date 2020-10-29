@@ -1,7 +1,7 @@
 
 /*++
 
-Copyright (c)  2011  - 2019, Intel Corporation. All rights reserved
+Copyright (c)  2011  - 2020, Intel Corporation. All rights reserved
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -499,7 +499,7 @@ SetGOPVersionCallback (
   ZeroMem (GopVersion, sizeof (GopVersion));
   Status = GetGOPDriverVersion(GopVersion);
   if(!EFI_ERROR(Status)) {
-    StrCpy((CHAR16*)&(mIgdOpRegion.OpRegion->Header.GOPV[0]), GopVersion);
+    StrCpyS ((CHAR16*)&(mIgdOpRegion.OpRegion->Header.GOPV[0]), 16, GopVersion);
     return Status;
   }
   return EFI_UNSUPPORTED;

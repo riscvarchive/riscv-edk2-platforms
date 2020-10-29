@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2004  - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -236,8 +236,8 @@ SystemConfigCallback (
   case EFI_BROWSER_ACTION_CHANGING:
   {
     if (KeyValue == 0x1235) {
-      StrCpy (StringBuffer1, L"Will you disable PTT ? ");
-      StrCpy (StringBuffer2, L"Enter (YES)  /   Esc (NO)");
+      StrCpyS (StringBuffer1, 200, L"Will you disable PTT ? ");
+      StrCpyS (StringBuffer2, 200, L"Enter (YES)  /   Esc (NO)");
 
       //
       // Popup a menu to notice user
@@ -253,8 +253,8 @@ SystemConfigCallback (
 
       }
     } else if (KeyValue == 0x1236) {
-      StrCpy (StringBuffer1, L"Will you revoke trust ? ");
-      StrCpy (StringBuffer2, L"Enter (YES)  /   Esc (NO)");
+      StrCpyS (StringBuffer1, 200, L"Will you revoke trust ? ");
+      StrCpyS (StringBuffer2, 200, L"Enter (YES)  /   Esc (NO)");
 
       //
       // Popup a menu to notice user
@@ -271,9 +271,9 @@ SystemConfigCallback (
       }
 	 } else if (KeyValue == 0x1239) {
 	   if (Value->u8 == 0x00) {
-       StrCpy (StringBuffer1, L"WARNING: SOC may be damaged due to high temperature");
-       StrCpy (StringBuffer2, L"when DPTF is disabled and IGD turbo is enabled.");
-       StrCpy (StringBuffer3, L"Press Enter/ESC to continue...");
+       StrCpyS (StringBuffer1, 200, L"WARNING: SOC may be damaged due to high temperature");
+       StrCpyS (StringBuffer2, 200, L"when DPTF is disabled and IGD turbo is enabled.");
+       StrCpyS (StringBuffer3, 200, L"Press Enter/ESC to continue...");
 
         //
         // Popup a menu to notice user
@@ -286,9 +286,9 @@ SystemConfigCallback (
 	    //
       // Popup a menu to notice user
       //
-      StrCpy (StringBuffer1, L"WARNING: All your data on the eMMC will be lost");
-      StrCpy (StringBuffer2, L"Do you really want to enable secure erase on eMMC?");
-      StrCpy (StringBuffer3, L"       Enter (YES)    /    Esc (NO)        ");
+      StrCpyS (StringBuffer1, 200, L"WARNING: All your data on the eMMC will be lost");
+      StrCpyS (StringBuffer2, 200, L"Do you really want to enable secure erase on eMMC?");
+      StrCpyS (StringBuffer3, 200, L"       Enter (YES)    /    Esc (NO)        ");
 
       do {
         CreatePopUp (EFI_LIGHTGRAY | EFI_BACKGROUND_BLUE, &Key, StringBuffer1, StringBuffer2, StringBuffer3,NULL);
@@ -364,8 +364,8 @@ SystemConfigCallback (
       //
       // Popup a menu to notice user
       //
-      StrCpy (StringBuffer1, L"Do you want to Commit Changes and Exit?");
-      StrCpy (StringBuffer2, L"         Enter (YES) / Esc (NO)        ");
+      StrCpyS (StringBuffer1, 200, L"Do you want to Commit Changes and Exit?");
+      StrCpyS (StringBuffer2, 200, L"         Enter (YES) / Esc (NO)        ");
 
       do {
         CreatePopUp (EFI_LIGHTGRAY | EFI_BACKGROUND_BLUE, &Key, StringBuffer1, StringBuffer2, NULL);
@@ -431,8 +431,8 @@ SystemConfigCallback (
       //
       // Popup a menu to notice user
       //
-      StrCpy (StringBuffer1, L"Do you want to Discard Changes and Exit?");
-      StrCpy (StringBuffer2, L"         Enter (YES) / Esc (NO)         ");
+      StrCpyS (StringBuffer1, 200, L"Do you want to Discard Changes and Exit?");
+      StrCpyS (StringBuffer2, 200, L"         Enter (YES) / Esc (NO)         ");
 
       do {
         CreatePopUp (EFI_LIGHTGRAY | EFI_BACKGROUND_BLUE, &Key, StringBuffer1, StringBuffer2, NULL);
@@ -451,8 +451,8 @@ SystemConfigCallback (
       //
       // Popup a menu to notice user
       //
-      StrCpy (StringBuffer1, L"Do you want to load setup defaults and Exit?");
-      StrCpy (StringBuffer2, L"         Enter (YES) / Esc (NO)             ");
+      StrCpyS (StringBuffer1, 200, L"Do you want to load setup defaults and Exit?");
+      StrCpyS (StringBuffer2, 200, L"         Enter (YES) / Esc (NO)             ");
 
       do {
         CreatePopUp (EFI_LIGHTGRAY | EFI_BACKGROUND_BLUE, &Key, StringBuffer1, StringBuffer2, NULL);
@@ -522,9 +522,9 @@ SystemConfigCallback (
 			   );
       }
     } else if ((KeyValue == 0x123A) || (KeyValue == 0x123B) || (KeyValue == 0x123C)) {
-        StrCpy (StringBuffer1, L"WARNING: Enable or disable USB Controllers will ");
-        StrCpy (StringBuffer2, L"make global reset to restart system.");
-        StrCpy (StringBuffer3, L"Press Enter/ESC to continue...");
+        StrCpyS (StringBuffer1, 200, L"WARNING: Enable or disable USB Controllers will ");
+        StrCpyS (StringBuffer2, 200, L"make global reset to restart system.");
+        StrCpyS (StringBuffer3, 200, L"Press Enter/ESC to continue...");
         //
         // Popup a menu to notice user
         //

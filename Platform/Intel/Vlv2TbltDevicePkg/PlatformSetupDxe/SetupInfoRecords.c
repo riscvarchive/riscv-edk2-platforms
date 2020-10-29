@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2004  - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -138,7 +138,7 @@ GetOptionalStringByIndex (
     return EFI_NOT_FOUND;
   } else {
     *String = AllocatePool (StrSize * sizeof (CHAR16));
-    AsciiStrToUnicodeStr (OptionalStrStart, *String);
+    AsciiStrToUnicodeStrS (OptionalStrStart, *String, StrSize);
   }
 
   return EFI_SUCCESS;
@@ -418,9 +418,9 @@ PrepareSetupInformation (
     Length = StrLen(ReleaseDate) + StrLen(ReleaseTime);
 
     BuildDateTime = AllocateZeroPool ((Length+2) * sizeof(CHAR16));
-    StrCpy (BuildDateTime, ReleaseDate);
-    StrCat (BuildDateTime, L" ");
-    StrCat (BuildDateTime, ReleaseTime);
+    StrCpyS (BuildDateTime, Length + 2, ReleaseDate);
+    StrCatS (BuildDateTime, Length + 2, L" ");
+    StrCatS (BuildDateTime, Length + 2, ReleaseTime);
 
     TokenToUpdate = (STRING_REF)STR_BIOS_VERSION_VALUE;
     DEBUG ((EFI_D_ERROR, "update STR_BIOS_VERSION_VALUE\n"));
@@ -991,7 +991,7 @@ UpdatePlatformInformation (
   MrcVersion = 0x00000000;
   MrcVersion &= 0xffff;
   Index = EfiValueToString (Buffer, MrcVersion/100, PREFIX_ZERO, 0);
-  StrCat (Buffer, L".");
+  StrCatS (Buffer, sizeof (Buffer) / sizeof (CHAR16), L".");
   EfiValueToString (Buffer + Index + 1, (MrcVersion%100)/10, PREFIX_ZERO, 0);
   EfiValueToString (Buffer + Index + 2, (MrcVersion%100)%10, PREFIX_ZERO, 0);
   HiiSetString(mHiiHandle,STRING_TOKEN(STR_MRC_VERSION_VALUE), Buffer, NULL);
@@ -1081,15 +1081,16 @@ UpdatePlatformInformation (
 VOID
 GetDeviceSpeedString (
   CHAR16                      *NewString,
+  UINTN                       NewStringSize,
   IN UINTN                    DeviceSpeed
   )
 {
   if (DeviceSpeed == 0x01) {
-    StrCat (NewString, L"1.5Gb/s");
+    StrCatS (NewString, NewStringSize, L"1.5Gb/s");
   } else if (DeviceSpeed == 0x02) {
-    StrCat (NewString, L"3.0Gb/s");
+    StrCatS (NewString, NewStringSize, L"3.0Gb/s");
   } else if (DeviceSpeed == 0x03) {
-    StrCat (NewString, L"6.0Gb/s");
+    StrCatS (NewString, NewStringSize, L"6.0Gb/s");
   } else if (DeviceSpeed == 0x0) {
 
   }
@@ -1206,6 +1207,7 @@ IdeDataFilter (void)
   UINT32                      IdeDevice;
   EFI_ATA_IDENTIFY_DATA       *IdentifyDriveInfo;
   CHAR16                      *NewString;
+  UINTN                       NewStringSize;
   CHAR16                      SizeString[20];
   STRING_REF                  NameToUpdate;
   CHAR8                       StringBuffer[0x100];
@@ -1216,6 +1218,7 @@ IdeDataFilter (void)
   // Assume no line strings is longer than 256 bytes.
   //
   NewString = AllocateZeroPool (0x100);
+  NewStringSize = 0x100 / sizeof (CHAR16);
   PciDevicePath = NULL;
 
   //
@@ -1334,15 +1337,15 @@ IdeDataFilter (void)
           DriveSize = (UINT32) DivU64x32(MultU64x32(DivU64x32(DriveSize, 1000), 512), 1000);
         }
 
-        StrCat (NewString, L"(");
+        StrCatS (NewString, NewStringSize, L"(");
         EfiValueToString (SizeString, DriveSize/1000, PREFIX_BLANK, 0);
-        StrCat (NewString, SizeString);
-        StrCat (NewString, L".");
+        StrCatS (NewString, NewStringSize, SizeString);
+        StrCatS (NewString, NewStringSize, L".");
         EfiValueToString (SizeString, (DriveSize%1000)/100, PREFIX_BLANK, 0);
-        StrCat (NewString, SizeString);
-        StrCat (NewString, L"GB");
+        StrCatS (NewString, NewStringSize, SizeString);
+        StrCatS (NewString, NewStringSize, L"GB");
       } else {
-        StrCat (NewString, L"(ATAPI");
+        StrCatS (NewString, NewStringSize, L"(ATAPI");
       }
 
       //
@@ -1352,11 +1355,11 @@ IdeDataFilter (void)
       DeviceSpeed = GetChipsetSataPortSpeed(PortNumber);
 
       if (DeviceSpeed) {
-        StrCat (NewString, L"-");
-        GetDeviceSpeedString( NewString, DeviceSpeed);
+        StrCatS (NewString, NewStringSize, L"-");
+        GetDeviceSpeedString( NewString, NewStringSize, DeviceSpeed);
       }
 
-      StrCat (NewString, L")");
+      StrCatS (NewString, NewStringSize, L")");
 
       HiiSetString(mHiiHandle, NameToUpdate, NewString, NULL);
 

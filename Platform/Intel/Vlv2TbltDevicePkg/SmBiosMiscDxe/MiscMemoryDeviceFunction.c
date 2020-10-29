@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2006  - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -81,6 +81,7 @@ GetType16Hndl (
 MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
 {
     CHAR8                           *OptionalStrStart;
+    UINTN                           OptionalStrSize;
     UINTN                           MemDeviceStrLen;
     UINTN                           MemBankLocatorStrLen;
     UINTN                           MemManufacturerStrLen;
@@ -246,8 +247,9 @@ MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
       //
       // Two zeros following the last string.
       //
-      SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE17) + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
-      ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE17) +  MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1);
+      OptionalStrSize = MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1 + MemAssetTagStrLen+1 + MemPartNumberStrLen + 1 + 1;
+      SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE17) + OptionalStrSize);
+      ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE17) +  OptionalStrSize);
 
       SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_MEMORY_DEVICE;
       SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE17);
@@ -287,12 +289,22 @@ MISC_SMBIOS_TABLE_FUNCTION( MiscMemoryDevice )
       SmbiosRecord->MemoryType = MemoryType;
 
       OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-      UnicodeStrToAsciiStr(MemDevice, OptionalStrStart);
-      UnicodeStrToAsciiStr(MemBankLocator, OptionalStrStart + MemDeviceStrLen + 1);
-      UnicodeStrToAsciiStr(MemManufacturer, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1);
-      UnicodeStrToAsciiStr(MemSerialNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1);
-      UnicodeStrToAsciiStr(MemAssetTag, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1);
-      UnicodeStrToAsciiStr(MemPartNumber, OptionalStrStart + MemDeviceStrLen + 1 + MemBankLocatorStrLen + 1 + MemManufacturerStrLen + 1 + MemSerialNumberStrLen + 1+ MemAssetTagStrLen+1 );
+      UnicodeStrToAsciiStrS (MemDevice, OptionalStrStart, OptionalStrSize);
+      OptionalStrStart += (MemDeviceStrLen + 1);
+      OptionalStrSize  -= (MemDeviceStrLen + 1);
+      UnicodeStrToAsciiStrS (MemBankLocator, OptionalStrStart, OptionalStrSize);
+      OptionalStrStart += (MemBankLocatorStrLen + 1);
+      OptionalStrSize  -= (MemBankLocatorStrLen + 1);
+      UnicodeStrToAsciiStrS (MemManufacturer, OptionalStrStart, OptionalStrSize);
+      OptionalStrStart += (MemManufacturerStrLen + 1);
+      OptionalStrSize  -= (MemManufacturerStrLen + 1);
+      UnicodeStrToAsciiStrS (MemSerialNumber, OptionalStrStart, OptionalStrSize);
+      OptionalStrStart += (MemSerialNumberStrLen + 1);
+      OptionalStrSize  -= (MemSerialNumberStrLen + 1);
+      UnicodeStrToAsciiStrS (MemAssetTag, OptionalStrStart, OptionalStrSize);
+      OptionalStrStart += (MemAssetTagStrLen + 1);
+      OptionalStrSize  -= (MemAssetTagStrLen + 1);
+      UnicodeStrToAsciiStrS (MemPartNumber, OptionalStrStart, OptionalStrSize);
 
       //
       // Now we have got the full smbios record, call smbios protocol to add this record.

@@ -1,10 +1,12 @@
 /** @file
 
-Copyright (c) 1999  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 1999  - 2020, Intel Corporation. All rights reserved.<BR>
+                                                                                   
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
+                                                                                   
+
 
 
 Module Name:
@@ -118,7 +120,7 @@ MISC_SMBIOS_TABLE_FUNCTION (
   SmbiosRecord->Device[0].DeviceType = StatusAndType;
   SmbiosRecord->Device[0].DescriptionString = 1;
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(DeviceDescription, OptionalStrStart);
+  UnicodeStrToAsciiStrS (DeviceDescription, OptionalStrStart, DescriptionStrLen + 1 + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
