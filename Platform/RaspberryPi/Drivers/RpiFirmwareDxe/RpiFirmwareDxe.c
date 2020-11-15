@@ -596,6 +596,10 @@ RpiFirmwareGetModelName (
     return "Raspberry Pi Compute Module 3+";
   case 0x11:
     return "Raspberry Pi 4 Model B";
+  case 0x13:
+    return "Raspberry Pi 400";
+  case 0x14:
+    return "Raspberry Pi Compute Module 4";
   default:
     return "Unknown Raspberry Pi Model";
   }
@@ -670,6 +674,8 @@ RPiFirmwareGetModelFamily (
       *ModelFamily = 3;
       break;
   case 0x11:          // Raspberry Pi 4 Model B
+  case 0x13:          // Raspberry Pi 400
+  case 0x14:          // Raspberry Pi Computer Module 4
       *ModelFamily = 4;
       break;
   default:
