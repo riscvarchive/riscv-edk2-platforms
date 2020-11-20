@@ -111,7 +111,7 @@ PlatInitPeiEntryPoint (
   IN       CONST EFI_PEI_SERVICES   **PeiServices
   )
 {
-  EFI_STATUS                  Status = EFI_SUCCESS;
+  EFI_STATUS                  Status;
   AMD_MEMORY_RANGE_DESCRIPTOR IscpMemDescriptor = {0};
   ISCP_FUSE_INFO              IscpFuseInfo = {0};
   ISCP_CPU_RESET_INFO         CpuResetInfo = {0};
@@ -124,7 +124,8 @@ PlatInitPeiEntryPoint (
   DEBUG ((EFI_D_ERROR, "PlatInit PEIM Loaded\n"));
 
   // CPUID
-  PcdSet32 (PcdSocCpuId, *CpuIdReg);
+  Status = PcdSet32S (PcdSocCpuId, *CpuIdReg);
+  ASSERT_EFI_ERROR (Status);
   DEBUG ((EFI_D_ERROR, "SocCpuId = 0x%X\n", PcdGet32 (PcdSocCpuId)));
 
   // Update core count based on PCD option
@@ -186,7 +187,8 @@ PlatInitPeiEntryPoint (
 
   // Update SocCoreCount on Dynamic PCD
   if (PcdGet32 (PcdSocCoreCount) != mAmdCoreCount) {
-    PcdSet32 (PcdSocCoreCount, mAmdCoreCount);
+    Status = PcdSet32S (PcdSocCoreCount, mAmdCoreCount);
+    ASSERT_EFI_ERROR (Status);
   }
 
   DEBUG ((EFI_D_ERROR, "SocCoreCount = %d\n", PcdGet32 (PcdSocCoreCount)));
@@ -201,7 +203,8 @@ PlatInitPeiEntryPoint (
 
   // Update SystemMemorySize on Dynamic PCD
   if (IscpMemDescriptor.Size0) {
-    PcdSet64 (PcdSystemMemorySize, IscpMemDescriptor.Size0);
+    Status = PcdSet64S (PcdSystemMemorySize, IscpMemDescriptor.Size0);
+    ASSERT_EFI_ERROR (Status);
   }
   if (IscpMemDescriptor.Size0 == 0) {
     DEBUG ((EFI_D_ERROR, "Warning: Could not get SystemMemorySize via ISCP, using default value.\n"));

@@ -55,8 +55,9 @@ MoveNvStoreImage (
   VOID
   )
 {
-  VOID      *OldBase, *NewBase;
-  UINTN     Size;
+  VOID        *OldBase, *NewBase;
+  UINTN       Size;
+  EFI_STATUS  Status;
 
   //
   // Move the in-memory image of the NV store firmware volume to a dynamically
@@ -77,14 +78,17 @@ MoveNvStoreImage (
   DEBUG ((EFI_D_INFO, "%a: Relocating NV store FV from %p to %p\n",
     __FUNCTION__, OldBase, NewBase));
 
-  PcdSet64 (PcdFlashNvStorageVariableBase64, (UINT64)NewBase);
+  Status = PcdSet64S (PcdFlashNvStorageVariableBase64, (UINT64)NewBase);
+  ASSERT_EFI_ERROR (Status);
 
-  PcdSet64 (PcdFlashNvStorageFtwWorkingBase64, (UINT64)NewBase +
-    FixedPcdGet32 (PcdFlashNvStorageVariableSize));
+  Status = PcdSet64S (PcdFlashNvStorageFtwWorkingBase64,
+             (UINT64)NewBase + FixedPcdGet32 (PcdFlashNvStorageVariableSize));
+  ASSERT_EFI_ERROR (Status);
 
-  PcdSet64 (PcdFlashNvStorageFtwSpareBase64, (UINT64)NewBase +
-    FixedPcdGet32 (PcdFlashNvStorageVariableSize) +
-    FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize));
+  Status = PcdSet64S (PcdFlashNvStorageFtwSpareBase64, (UINT64)NewBase +
+             FixedPcdGet32 (PcdFlashNvStorageVariableSize) +
+             FixedPcdGet32 (PcdFlashNvStorageFtwWorkingSize));
+  ASSERT_EFI_ERROR (Status);
 }
 
 /*++
