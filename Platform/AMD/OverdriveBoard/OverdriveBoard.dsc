@@ -119,6 +119,7 @@ DEFINE X64EMU_ENABLE  = FALSE
   PlatformFlashAccessLib|Silicon/AMD/Styx/Library/StyxPlatformFlashAccessLib/StyxPlatformFlashAccessLib.inf
 
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
+  RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
   TlsLib|CryptoPkg/Library/TlsLib/TlsLib.inf
 
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
