@@ -21,12 +21,12 @@
 
 [FD.STANDALONE_MM]
 BaseAddress   = 0xfc000000
-Size          = 0x00040000
+Size          = 0x00060000
 ErasePolarity = 1
 
 # This one is tricky, it must be: BlockSize * NumBlocks = Size
 BlockSize     = 0x00010000
-NumBlocks     = 0x4
+NumBlocks     = 0x6
 
 ################################################################################
 #
@@ -44,7 +44,7 @@ NumBlocks     = 0x4
 #
 ################################################################################
 
-0x00000000|0x00040000
+0x00000000|0x00060000
 FV = FvStandaloneMmCompact
 
 ################################################################################
