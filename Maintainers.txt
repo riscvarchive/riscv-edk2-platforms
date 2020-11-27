@@ -125,6 +125,7 @@ F: Platform/Hisilicon/
 F: Silicon/Hisilicon/
 M: Leif Lindholm <leif@nuviainc.com>
 R: Ard Biesheuvel <ard.biesheuvel@arm.com>
+R: Wenyi Xie <xiewenyi2@huawei.com>
 
 Features/Intel
 F: Features/Intel/
