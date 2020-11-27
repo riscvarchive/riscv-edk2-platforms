@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2018, ARM Ltd. All rights reserved.<BR>
+  Copyright (c) 2018-2020, Arm Limited. All rights reserved.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -82,7 +82,7 @@ InitVirtioDevices (
 
   // Install protocol interface for storage device
   if ((FeaturePcdGet (PcdVirtioBlkSupported)) &&
-      (FixedPcdGet32 (PcdVirtioBlkBaseAddress))) {
+      (FixedPcdGet32 (PcdVirtioBlkBaseAddress) != 0)) {
     Status = gBS->InstallProtocolInterface (&mVirtIoBlkController,
                     &gEfiDevicePathProtocolGuid, EFI_NATIVE_INTERFACE,
                     &mVirtioBlockDevicePath);
@@ -111,7 +111,7 @@ InitVirtioDevices (
 
   // Install protocol interface for network device
   if ((FeaturePcdGet (PcdVirtioNetSupported)) &&
-      (FixedPcdGet32 (PcdVirtioNetBaseAddress))) {
+      (FixedPcdGet32 (PcdVirtioNetBaseAddress) != 0)) {
     Status = gBS->InstallProtocolInterface (&mVirtIoNetController,
                     &gEfiDevicePathProtocolGuid, EFI_NATIVE_INTERFACE,
                     &mVirtioNetDevicePath);
