@@ -91,6 +91,15 @@ F: Silicon/AMD/Styx/
 M: Ard Biesheuvel <ard.biesheuvel@arm.com>
 M: Leif Lindholm <leif@nuviainc.com>
 
+Ampere Computing
+F: Platform/Ampere
+F: Silicon/Ampere
+R: Nhi Pham <nhi@os.amperecomputing.com>
+R: Vu Nguyen <vunguyen@os.amperecomputing.com>
+R: Thang Nguyen <thang@os.amperecomputing.com>
+R: Chuong Tran <chuong@os.amperecomputing.com>
+M: Leif Lindholm <leif@nuviainc.com>
+
 ARM
 F: Platform/ARM/
 F: Silicon/ARM/
