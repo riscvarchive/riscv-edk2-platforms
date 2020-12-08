@@ -205,7 +205,7 @@ MemorySubClassEntryPoint (
   ArrayLink.MemoryType = EfiMemoryTypeDdr2;
 
 
-  StrCpy (StringBuffer, L"NO DIMM,MEMROY DOWN");
+  StrCpyS (StringBuffer, StringBufferSize / sizeof (CHAR16), L"NO DIMM,MEMROY DOWN");
   ArrayLink.MemoryManufacturer = HiiSetString (
                                    HiiHandle,
                                    0,
@@ -317,7 +317,7 @@ MemorySubClassEntryPoint (
     *(UINT16*)&Type6Record->CurrentMemoryType |= 1<<3;
   }
   OptionalStrStart = (CHAR8 *)(Type6Record + 1);
-  UnicodeStrToAsciiStr(DevLocStr, OptionalStrStart);
+  UnicodeStrToAsciiStrS (DevLocStr, OptionalStrStart, DevLocStrLen + 1);
   MemModuleInfoSmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
   Status = Smbios->Add (Smbios, NULL, &MemModuleInfoSmbiosHandle, (EFI_SMBIOS_TABLE_HEADER*) Type6Record);
   FreePool(Type6Record);
@@ -379,12 +379,12 @@ MemorySubClassEntryPoint (
   Type17Record->Attributes = (UINT8)(Dimm + 1);
 
   OptionalStrStart = (CHAR8 *)(Type17Record + 1);
-  UnicodeStrToAsciiStr(DevLocStr, OptionalStrStart);
-  UnicodeStrToAsciiStr(BankLocStr, OptionalStrStart + DevLocStrLen + 1);
-  UnicodeStrToAsciiStr(ManuStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1);
-  UnicodeStrToAsciiStr(SerialNumStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1);
-  UnicodeStrToAsciiStr(AssertTagStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1 + SerialNumStrLen + 1);
-  UnicodeStrToAsciiStr(PartNumStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1 + SerialNumStrLen + 1 + AssertTagStrLen + 1);
+  UnicodeStrToAsciiStrS (DevLocStr, OptionalStrStart, DevLocStrLen + 1);
+  UnicodeStrToAsciiStrS (BankLocStr, OptionalStrStart + DevLocStrLen + 1, BankLocStrLen + 1);
+  UnicodeStrToAsciiStrS (ManuStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1, ManuStrLen + 1);
+  UnicodeStrToAsciiStrS (SerialNumStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1, SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (AssertTagStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1 + SerialNumStrLen + 1, AssertTagStrLen + 1);
+  UnicodeStrToAsciiStrS (PartNumStr, OptionalStrStart + DevLocStrLen + 1 + BankLocStrLen + 1 + ManuStrLen + 1 + SerialNumStrLen + 1 + AssertTagStrLen + 1, PartNumStrLen + 1);
   MemDevSmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
   Status = Smbios->Add (Smbios, NULL, &MemDevSmbiosHandle, (EFI_SMBIOS_TABLE_HEADER*) Type17Record);
   FreePool(Type17Record);

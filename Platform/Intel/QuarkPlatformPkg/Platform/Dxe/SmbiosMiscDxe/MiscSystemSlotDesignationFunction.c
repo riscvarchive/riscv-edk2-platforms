@@ -69,7 +69,7 @@ GetMiscSLotConfigFromPcd ()
   // Type 9
   //
   SMBIOSlotConfig.SMBIOSSystemSlotNumber = PcdGet8 (PcdSMBIOSSystemSlotNumber);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot1Designation), SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot1Designation), SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotType = PcdGet8(PcdSMBIOSSystemSlot1Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot1DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot1Usage);
@@ -77,7 +77,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotId = PcdGet16(PcdSMBIOSSystemSlot1Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[0].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot1Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot2Designation), SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot2Designation), SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotType = PcdGet8(PcdSMBIOSSystemSlot2Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot2DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot2Usage);
@@ -85,7 +85,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotId = PcdGet16(PcdSMBIOSSystemSlot2Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[1].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot2Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot3Designation), SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot3Designation), SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotType = PcdGet8(PcdSMBIOSSystemSlot3Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot3DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot3Usage);
@@ -93,7 +93,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotId = PcdGet16(PcdSMBIOSSystemSlot3Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[2].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot3Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot4Designation), SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot4Designation), SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotType = PcdGet8(PcdSMBIOSSystemSlot4Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot4DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot4Usage);
@@ -101,7 +101,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotId = PcdGet16(PcdSMBIOSSystemSlot4Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[3].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot4Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot5Designation), SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot5Designation), SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotType = PcdGet8(PcdSMBIOSSystemSlot5Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot5DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot5Usage);
@@ -109,7 +109,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotId = PcdGet16(PcdSMBIOSSystemSlot5Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[4].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot5Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot6Designation), SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot6Designation), SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotType = PcdGet8(PcdSMBIOSSystemSlot6Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot6DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot6Usage);
@@ -117,7 +117,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotId = PcdGet16(PcdSMBIOSSystemSlot6Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[5].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot6Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot7Designation), SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot7Designation), SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotType = PcdGet8(PcdSMBIOSSystemSlot7Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot7DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot7Usage);
@@ -125,7 +125,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotId = PcdGet16(PcdSMBIOSSystemSlot7Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[6].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot7Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot8Designation), SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot8Designation), SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotType = PcdGet8(PcdSMBIOSSystemSlot8Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot8DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot8Usage);
@@ -133,7 +133,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotId = PcdGet16(PcdSMBIOSSystemSlot8Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[7].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot8Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot9Designation), SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot9Designation), SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotType = PcdGet8(PcdSMBIOSSystemSlot9Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot9DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot9Usage);
@@ -141,7 +141,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotId = PcdGet16(PcdSMBIOSSystemSlot9Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[8].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot9Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot10Designation), SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot10Designation), SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotType = PcdGet8(PcdSMBIOSSystemSlot10Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot10DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot10Usage);
@@ -149,7 +149,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotId = PcdGet16(PcdSMBIOSSystemSlot10Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[9].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot10Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot11Designation), SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot11Designation), SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotType = PcdGet8(PcdSMBIOSSystemSlot11Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot11DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot11Usage);
@@ -157,7 +157,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotId = PcdGet16(PcdSMBIOSSystemSlot11Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[10].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot11Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot12Designation), SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot12Designation), SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotType = PcdGet8(PcdSMBIOSSystemSlot12Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot12DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot12Usage);
@@ -165,7 +165,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotId = PcdGet16(PcdSMBIOSSystemSlot12Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[11].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot12Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot13Designation), SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot13Designation), SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotType = PcdGet8(PcdSMBIOSSystemSlot13Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot13DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot13Usage);
@@ -173,7 +173,7 @@ GetMiscSLotConfigFromPcd ()
   SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotId = PcdGet16(PcdSMBIOSSystemSlot13Id);
   SMBIOSlotConfig.SMBIOSSystemSlot[12].SlotCharacteristics = PcdGet32(PcdSMBIOSSystemSlot13Characteristics);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot14Designation), SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotDesignation);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSlot14Designation), SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotDesignation, ARRAY_SIZE (SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotDesignation));
   SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotType = PcdGet8(PcdSMBIOSSystemSlot14Type);
   SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotDataBusWidth = PcdGet8(PcdSMBIOSSystemSlot14DataBusWidth);
   SMBIOSlotConfig.SMBIOSSystemSlot[13].SlotUsage = PcdGet8(PcdSMBIOSSystemSlot14Usage);
@@ -269,7 +269,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemSlotDesignator)
   // Slot Characteristics
   //
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(SlotDesignation, OptionalStrStart);
+  UnicodeStrToAsciiStrS (SlotDesignation, OptionalStrStart, SlotDesignationStrLen + 1);
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
   //

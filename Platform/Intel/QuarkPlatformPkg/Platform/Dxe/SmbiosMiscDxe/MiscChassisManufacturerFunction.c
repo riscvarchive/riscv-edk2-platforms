@@ -59,7 +59,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
   //
   // Update strings from PCD
   //
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisManufacturer), Manufacturer);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisManufacturer), Manufacturer, ARRAY_SIZE (Manufacturer));
   if (StrLen (Manufacturer) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_CHASSIS_MANUFACTURER);
     HiiSetString (mHiiHandle, TokenToUpdate, Manufacturer, NULL);
@@ -71,7 +71,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisVersion), Version);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisVersion), Version, ARRAY_SIZE (Version));
   if (StrLen (Version) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_CHASSIS_VERSION);
     HiiSetString (mHiiHandle, TokenToUpdate, Version, NULL);
@@ -83,7 +83,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisSerialNumber), SerialNumber);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisSerialNumber), SerialNumber, ARRAY_SIZE (SerialNumber));
   if (StrLen (SerialNumber) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_CHASSIS_SERIAL_NUMBER);
     HiiSetString (mHiiHandle, TokenToUpdate, SerialNumber, NULL);
@@ -95,7 +95,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisAssetTag), AssertTag);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSChassisAssetTag), AssertTag, ARRAY_SIZE (AssertTag));
   if (StrLen (AssertTag) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_CHASSIS_ASSET_TAG);
     HiiSetString (mHiiHandle, TokenToUpdate, AssertTag, NULL);
@@ -147,10 +147,10 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
   SmbiosRecord->ContainedElementRecordLength = PcdGet8 (PcdSMBIOSChassisElementRecordLength);
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(ManufacturerPtr, OptionalStrStart);
-  UnicodeStrToAsciiStr(VersionPtr, OptionalStrStart + ManuStrLen + 1);
-  UnicodeStrToAsciiStr(SerialNumberPtr, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1);
-  UnicodeStrToAsciiStr(AssertTagPtr, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (ManufacturerPtr, OptionalStrStart, ManuStrLen + 1);
+  UnicodeStrToAsciiStrS (VersionPtr, OptionalStrStart + ManuStrLen + 1, VerStrLen + 1);
+  UnicodeStrToAsciiStrS (SerialNumberPtr, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (AssertTagPtr, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1, AssertTagStrLen + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

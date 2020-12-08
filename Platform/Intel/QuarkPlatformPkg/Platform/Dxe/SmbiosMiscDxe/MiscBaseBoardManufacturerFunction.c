@@ -64,13 +64,13 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  StrCpy (TypeString, L"");
+  StrCpyS (TypeString, ARRAY_SIZE (TypeString), L"");
   TypeStringSize = PcdGetSize (PcdPlatformTypeName);
   if (TypeStringSize > 0 && TypeStringSize <= sizeof (TypeString)) {
     CopyMem (TypeString, PcdGetPtr (PcdPlatformTypeName), TypeStringSize);
   }
   if (StrLen (TypeString) == 0) {
-    StrCpy (TypeString, L"Unknown");
+    StrCpyS (TypeString, ARRAY_SIZE (TypeString), L"Unknown");
   }
   TokenToUpdate = STRING_TOKEN (STR_MISC_BASE_BOARD_PRODUCT_NAME);
   HiiSetString (mHiiHandle, TokenToUpdate, TypeString, NULL);
@@ -158,12 +158,12 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBaseBoardManufacturer)
   // Since we fill NumberOfContainedObjectHandles = 0 for simple, just after this filed to fill string
   //
   //OptionalStrStart -= 2;
-  UnicodeStrToAsciiStr(Manufacturer, OptionalStrStart);
-  UnicodeStrToAsciiStr(Product, OptionalStrStart + ManuStrLen + 1);
-  UnicodeStrToAsciiStr(Version, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1);
-  UnicodeStrToAsciiStr(SerialNumber, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1);
-  UnicodeStrToAsciiStr(AssertTag, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1);
-  UnicodeStrToAsciiStr(Chassis, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + AssertTagStrLen + 1);
+  UnicodeStrToAsciiStrS (Manufacturer, OptionalStrStart, ManuStrLen + 1);
+  UnicodeStrToAsciiStrS (Product, OptionalStrStart + ManuStrLen + 1, ProductStrLen + 1);
+  UnicodeStrToAsciiStrS (Version, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1, VerStrLen + 1);
+  UnicodeStrToAsciiStrS (SerialNumber, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (AssertTag, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1, AssertTagStrLen + 1);
+  UnicodeStrToAsciiStrS (Chassis, OptionalStrStart + ManuStrLen + 1 + ProductStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + AssertTagStrLen + 1, ChassisStrLen + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

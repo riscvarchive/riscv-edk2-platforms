@@ -903,9 +903,9 @@ SdtCheckReturnPackage (
 
       if (DataType == EFI_ACPI_DATA_TYPE_NAME_STRING) {
         ZeroMem (NameStr, 128);
-        AsciiStrCpy (NameStr, "\\_SB.");
+        AsciiStrCpyS (NameStr, 128, "\\_SB.");
         DataSize = SdtGetNameStringSize (Data);
-        AsciiStrnCat (NameStr, (CHAR8 *)Data, DataSize);
+        AsciiStrnCatS (NameStr, 128, (CHAR8 *)Data, DataSize);
 
         NamePkgHandle = NULL;
         Status = AcpiSdt->FindPath (mDsdtHandle, NameStr, &NamePkgHandle);

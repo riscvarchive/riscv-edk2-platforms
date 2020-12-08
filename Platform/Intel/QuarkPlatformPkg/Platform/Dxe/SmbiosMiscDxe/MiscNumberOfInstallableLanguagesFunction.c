@@ -32,13 +32,14 @@ CurrentLanguageMatch (
   OUT CHAR8                            *CurrentLang
   )
 {
-  CHAR8     *DefaultLang;
-  CHAR8     *BestLanguage;
-  CHAR8     *Languages;
-  CHAR8     *MatchLang;
-  CHAR8     *EndMatchLang;
-  UINTN     CompareLength;
-  BOOLEAN   LangMatch;
+  EFI_STATUS  Status;
+  CHAR8       *DefaultLang;
+  CHAR8       *BestLanguage;
+  CHAR8       *Languages;
+  CHAR8       *MatchLang;
+  CHAR8       *EndMatchLang;
+  UINTN       CompareLength;
+  BOOLEAN     LangMatch;
 
   Languages = HiiGetSupportedLanguages (HiiHandle);
   if (Languages == NULL) {
@@ -46,7 +47,10 @@ CurrentLanguageMatch (
   }
 
   LangMatch = FALSE;
-  CurrentLang  = GetEfiGlobalVariable (L"PlatformLang");
+  Status = GetEfiGlobalVariable2 (L"PlatformLang", &CurrentLang, NULL);
+  if (EFI_ERROR (Status)) {
+    return FALSE;
+  }
   DefaultLang  = (CHAR8 *) PcdGetPtr (PcdUefiVariableDefaultPlatformLang);
   BestLanguage = GetBestLanguage (
                    Languages,
@@ -224,7 +228,7 @@ MISC_SMBIOS_TABLE_FUNCTION(NumberOfInstallableLanguages)
   SmbiosRecord->Flags = (UINT8)ForType13InputData->LanguageFlags.AbbreviatedLanguageFormat;
   SmbiosRecord->CurrentLanguages = 1;
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  AsciiStrCpy(OptionalStrStart, CurrentLang);
+  AsciiStrCpyS (OptionalStrStart, LangStrLen + 1, CurrentLang);
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
   //

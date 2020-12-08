@@ -64,7 +64,7 @@ MISC_SMBIOS_TABLE_FUNCTION(SystemOptionString)
 
   SmbiosRecord->StringCount = 1;
   OptionalStrStart = (CHAR8*) (SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(OptionString, OptionalStrStart);
+  UnicodeStrToAsciiStrS (OptionString, OptionalStrStart, OptStrLen + 1);
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
   //

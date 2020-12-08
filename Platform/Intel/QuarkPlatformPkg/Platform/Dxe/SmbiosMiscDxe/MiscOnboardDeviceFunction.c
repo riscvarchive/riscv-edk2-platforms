@@ -88,7 +88,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscOnboardDevice)
   SmbiosRecord->Device[0].DeviceType = StatusAndType;
   SmbiosRecord->Device[0].DescriptionString = 1;
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(DeviceDescription, OptionalStrStart);
+  UnicodeStrToAsciiStrS (DeviceDescription, OptionalStrStart, DescriptionStrLen + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

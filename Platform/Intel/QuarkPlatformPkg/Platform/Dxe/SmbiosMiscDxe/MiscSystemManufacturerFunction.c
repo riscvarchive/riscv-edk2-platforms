@@ -65,7 +65,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
   //
   // Update strings from PCD
   //
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemManufacturer), Manufacturer);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemManufacturer), Manufacturer, ARRAY_SIZE (Manufacturer));
   if (StrLen (Manufacturer) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_MANUFACTURER);
     HiiSetString (mHiiHandle, TokenToUpdate, Manufacturer, NULL);
@@ -77,7 +77,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemProductName), ProductName);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemProductName), ProductName, ARRAY_SIZE (ProductName));
   if (StrLen (ProductName) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_PRODUCT_NAME);
     HiiSetString (mHiiHandle, TokenToUpdate, ProductName, NULL);
@@ -89,7 +89,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemVersion), Version);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemVersion), Version, ARRAY_SIZE (Version));
   if (StrLen (Version) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_VERSION);
     HiiSetString (mHiiHandle, TokenToUpdate, Version, NULL);
@@ -101,7 +101,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSerialNumber), SerialNumber);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSerialNumber), SerialNumber, ARRAY_SIZE (SerialNumber));
   if (StrLen (SerialNumber) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_SERIAL_NUMBER);
     HiiSetString (mHiiHandle, TokenToUpdate, SerialNumber, NULL);
@@ -113,7 +113,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSKUNumber), SKUNumber);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemSKUNumber), SKUNumber, ARRAY_SIZE (SKUNumber));
   if (StrLen (SKUNumber) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_SKU_NUMBER);
     HiiSetString (mHiiHandle, TokenToUpdate, SKUNumber, NULL);
@@ -125,7 +125,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemFamily), Family);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSSystemFamily), Family, ARRAY_SIZE (Family));
   if (StrLen (Family) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_SYSTEM_FAMILY);
     HiiSetString (mHiiHandle, TokenToUpdate, Family, NULL);
@@ -176,12 +176,12 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
   SmbiosRecord->WakeUpType = (UINT8)ForType1InputData->SystemWakeupType;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(ManufacturerPtr, OptionalStrStart);
-  UnicodeStrToAsciiStr(ProductNamePtr, OptionalStrStart + ManuStrLen + 1);
-  UnicodeStrToAsciiStr(VersionPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1);
-  UnicodeStrToAsciiStr(SerialNumberPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1);
-  UnicodeStrToAsciiStr(SKUNumberPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen+ 1);
-  UnicodeStrToAsciiStr(FamilyPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SKUNumStrLen+ 1);
+  UnicodeStrToAsciiStrS (ManufacturerPtr, OptionalStrStart, ManuStrLen + 1);
+  UnicodeStrToAsciiStrS (ProductNamePtr, OptionalStrStart + ManuStrLen + 1, PdNameStrLen + 1);
+  UnicodeStrToAsciiStrS (VersionPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1, VerStrLen + 1);
+  UnicodeStrToAsciiStrS (SerialNumberPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+  UnicodeStrToAsciiStrS (SKUNumberPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen+ 1, SKUNumStrLen + 1);
+  UnicodeStrToAsciiStrS (FamilyPtr, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SKUNumStrLen+ 1, FamilyStrLen + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
