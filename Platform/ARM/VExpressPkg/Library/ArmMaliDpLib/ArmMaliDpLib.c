@@ -2,7 +2,7 @@
 
   The file contains Arm Mali DP platform specific implementation.
 
-  Copyright (c) 2017-2018, Arm Limited. All rights reserved.
+  Copyright (c) 2017 - 2020, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -375,7 +375,7 @@ LcdPlatformGetBpp (
     return EFI_INVALID_PARAMETER;
   }
 
-  *Bpp = LCD_BITS_PER_PIXEL_24;
+  *Bpp = LcdBitsPerPixel_24;
 
   return EFI_SUCCESS;
 }

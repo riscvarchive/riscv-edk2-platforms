@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2013-2018, ARM Ltd. All rights reserved.
+  Copyright (c) 2013 - 2020, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -543,7 +543,7 @@ LcdPlatformGetBpp (
 
   ASSERT (Bpp != NULL);
 
-  *Bpp = LCD_BITS_PER_PIXEL_24;
+  *Bpp = LcdBitsPerPixel_24;
 
   return EFI_SUCCESS;
 }
