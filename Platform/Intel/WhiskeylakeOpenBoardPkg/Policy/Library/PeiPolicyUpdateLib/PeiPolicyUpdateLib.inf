@@ -230,6 +230,9 @@
 
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdEcPresent
 
+  # Enable/Disable USB DCI Debug
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDciEnable                      ## CONSUMES
+
   gIntelSiliconPkgTokenSpaceGuid.PcdIntelGraphicsVbtFileGuid               ## CONSUMES
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSmbusAlertEnable               ## CONSUMES
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdSataLedEnable                  ## CONSUMES
@@ -242,6 +245,7 @@
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdMemoryThermalSensorGpioDPmsyncEnable  ## CONSUMES
   gEfiMdeModulePkgTokenSpaceGuid.PcdSystemFmpCapsuleImageTypeIdGuid   ## CONSUMES
   gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber           ## CONSUMES
+
 
 [FixedPcd]
   gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiAcpiReclaimMemorySize  ## CONSUMES

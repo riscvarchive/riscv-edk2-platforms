@@ -83,7 +83,13 @@ UpdatePeiPchPolicyPreMem (
   Status = GetConfigBlock ((VOID *) SiPreMemPolicy, &gIshPreMemConfigGuid, (VOID *) &IshPreMemConfig);
   ASSERT_EFI_ERROR (Status);
 
-  DciPreMemConfig->DciUsb3TypecUfpDbg = 2;
+  if (PcdGetBool (PcdDciEnable)) {
+    DciPreMemConfig->PlatformDebugConsent = 3;
+    DciPreMemConfig->DciUsb3TypecUfpDbg = 1;
+  } else {
+    DciPreMemConfig->DciUsb3TypecUfpDbg = 2;
+  }
+
   PchTraceHubPreMemConfig->MemReg0Size = 3;
   PchTraceHubPreMemConfig->MemReg1Size = 3;
   //

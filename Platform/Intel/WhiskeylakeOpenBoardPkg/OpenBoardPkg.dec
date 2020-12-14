@@ -554,6 +554,7 @@ gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdNCT6776FHWMON                        |
 [PcdsDynamicEx]
 
 [PcdsDynamic, PcdsDynamicEx]
+gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDciEnable           |FALSE|BOOLEAN|0x20000001
 
 [PcdsPatchableInModule]
 

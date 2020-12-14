@@ -389,6 +389,8 @@
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3Tbt|0x1
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
 
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDciEnable|FALSE
+
 [PcdsDynamicHii.X64.DEFAULT]
   ######################################
   # Edk2 Configuration
