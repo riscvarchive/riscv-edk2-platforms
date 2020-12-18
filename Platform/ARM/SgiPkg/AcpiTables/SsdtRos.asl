@@ -29,23 +29,6 @@ DefinitionBlock ("SsdtRosTable.aml", "SSDT", 1, "ARMLTD", "ARMSGI",
       })
     }
 
-    // SMSC 91C111
-    Device (ETH0) {
-      Name (_HID, "LNRO0003")
-      Name (_UID, Zero)
-      Name (_STA, 0xF)
-      Name (_CRS, ResourceTemplate () {
-        Memory32Fixed (ReadWrite, 0x18000000, 0x1000)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 111 }
-      })
-      Name (_DSD, Package() {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                Package() {
-                  Package(2) {"reg-io-width", 4 },
-                }
-      })
-    }
-
     // VIRTIO DISK
     Device (VR00) {
       Name (_HID, "LNRO0005")

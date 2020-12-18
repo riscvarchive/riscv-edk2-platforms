@@ -17,7 +17,7 @@
 
 // Total number of descriptors, including the final "end-of-table" descriptor.
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS                 \
-          (11 + (FixedPcdGet32 (PcdChipCount) * 2))
+          (10 + (FixedPcdGet32 (PcdChipCount) * 2))
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -116,14 +116,6 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64 (PcdSmcCs1Base);
   VirtualMemoryTable[Index].Length          = SIZE_64MB;
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
-
-#if defined (EDK2_ENABLE_SMSC_91X)
-  // Expansion AXI - SMSC 91X (Ethernet)
-  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdLan91xDxeBaseAddress);
-  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdLan91xDxeBaseAddress);
-  VirtualMemoryTable[Index].Length          = SIZE_64MB;
-  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
-#endif
 
   // Expansion AXI - System Peripherals
   VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64 (PcdSysPeriphBase);

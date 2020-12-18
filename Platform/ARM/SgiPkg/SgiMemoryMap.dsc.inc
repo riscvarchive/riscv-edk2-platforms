@@ -35,9 +35,6 @@
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|202
 
   # Ethernet
-!ifdef EDK2_ENABLE_SMSC_91X
-  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
-!endif
   gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress|0x1C150000
   gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|204
 

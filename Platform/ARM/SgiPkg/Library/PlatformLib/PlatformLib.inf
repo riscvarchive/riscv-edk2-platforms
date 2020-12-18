@@ -19,7 +19,6 @@
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Platform/ARM/SgiPkg/SgiPlatform.dec
-  Platform/ARM/VExpressPkg/ArmVExpressPkg.dec
   StandaloneMmPkg/StandaloneMmPkg.dec
 
 [LibraryClasses]
@@ -68,8 +67,6 @@
   gArmSgiTokenSpaceGuid.PcdSmcCs0Base
   gArmSgiTokenSpaceGuid.PcdSmcCs1Base
   gArmSgiTokenSpaceGuid.PcdSysPeriphBase
-
-  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64

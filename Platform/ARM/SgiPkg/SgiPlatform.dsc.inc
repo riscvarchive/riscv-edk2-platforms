@@ -262,10 +262,7 @@
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
 
-  # SMSC LAN 91C111 / Virtio Network
-!ifdef EDK2_ENABLE_SMSC_91X
-  Platform/ARM/VExpressPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
-!endif
+  # Virtio Network
   OvmfPkg/VirtioNetDxe/VirtioNet.inf
 
   #
