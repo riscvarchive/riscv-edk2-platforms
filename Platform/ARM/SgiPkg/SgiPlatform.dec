@@ -52,5 +52,10 @@
   # GIC
   gArmSgiTokenSpaceGuid.PcdGicSize|0|UINT64|0x0000000A
 
+  gArmSgiTokenSpaceGuid.PcdSmcCs0Base|0|UINT64|0x0000000C
+  gArmSgiTokenSpaceGuid.PcdSmcCs1Base|0|UINT64|0x0000000D
+  gArmSgiTokenSpaceGuid.PcdSysPeriphBase|0x00000000|UINT64|0x0000000E
+  gArmSgiTokenSpaceGuid.PcdSysPeriphSysRegBase|0x0|UINT64|0x0000000F
+
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

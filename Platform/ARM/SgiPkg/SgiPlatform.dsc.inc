@@ -93,11 +93,8 @@
   gArmSgiTokenSpaceGuid.PcdDramBlock2Size|0x180000000
 
   # NV Storage PCDs. Use base of 0x08000000 for NOR0, 0xC0000000 for NOR 1
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|0x0C000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize|0x01400000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|0x0D400000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize|0x01400000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|0x0E800000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize|0x01400000
 
   # Stacks for MPCores in Normal World
@@ -117,17 +114,11 @@
   gArmTokenSpaceGuid.PcdPciIoBase|0x0
   gArmTokenSpaceGuid.PcdPciIoSize|0x00800000
   gArmTokenSpaceGuid.PcdPciIoTranslation|0x77800000
-  gArmTokenSpaceGuid.PcdPciMmio32Base|0x70000000
-  gArmTokenSpaceGuid.PcdPciMmio32Size|0x07800000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
-  gArmTokenSpaceGuid.PcdPciMmio64Base|0x500000000
-  gArmTokenSpaceGuid.PcdPciMmio64Size|0x300000000
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x60000000
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
 
   ## PL011 - Serial Terminal
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x7FF80000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultReceiveFifoDepth|0
   gArmPlatformTokenSpaceGuid.PL011UartInteger|4
@@ -137,13 +128,9 @@
   gArmPlatformTokenSpaceGuid.PcdArmHdLcdBase|0x7FF60000
 
   ## PL011 - Serial Debug UART
-  gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase|0x7FF80000
   gArmPlatformTokenSpaceGuid.PcdSerialDbgUartClkInHz|7372800
   gArmPlatformTokenSpaceGuid.PcdSerialDbgUartBaudRate|115200
-  gArmPlatformTokenSpaceGuid.PL011UartInterrupt|147
 
-  ## PL031 RealTimeClock
-  gArmPlatformTokenSpaceGuid.PcdPL031RtcBase|0x1C170000
 
   # List of Device Paths that support BootMonFs
   gArmBootMonFsTokenSpaceGuid.PcdBootMonFsSupportedDevicePaths|L"VenHw(93E34C7E-B50E-11DF-9223-2443DFD72085,00)"
@@ -157,17 +144,10 @@
   gEmbeddedTokenSpaceGuid.PcdTimerPeriod|1000
 
   # Virtio Disk
-  gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress|0x1c130000
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize|0x10000
-  gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt|202
 
   # Ethernet / Virtio Network
-!ifdef EDK2_ENABLE_SMSC_91X
-  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress|0x18000000
-!endif
-  gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress|0x1c150000
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x10000
-  gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt|204
 
   #
   # Set the base address and size of the buffer used

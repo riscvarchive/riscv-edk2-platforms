@@ -13,26 +13,6 @@
 // Platform Memory Map
 ************************************************************************************/
 
-// Expansion AXI - SMC Chip Select 0
-#define SGI_EXP_SMC_CS0_BASE                      0x08000000
-#define SGI_EXP_SMC_CS0_SZ                        SIZE_64MB
-
-// Expansion AXI - SMC Chip Select 1
-#define SGI_EXP_SMC_CS1_BASE                      0x0C000000
-#define SGI_EXP_SMC_CS1_SZ                        SIZE_64MB
-
-// Expansion AXI - SMSC 91C111 (Ethernet)
-#define SGI_EXP_SMSC91X_BASE                      0x18000000
-#define SGI_EXP_SMSC91X_SZ                        SIZE_64MB
-
-// Expansion AXI - System peripherals
-#define SGI_EXP_SYS_PERIPH_BASE                   0x1C000000
-#define SGI_EXP_SYS_PERIPH_SZ                     SIZE_2MB
-
-// Base address of system peripherals
-#define SGI_EXP_SYSPH_SYSTEM_REGISTERS            0x1C010000
-#define SGI_EXP_SYSPH_VIRTIO_BLOCK_BASE           0x1C130000
-
 // Sub System Peripherals - UART0
 #define SGI_SUBSYS_UART0_BASE                     0x2A400000
 #define SGI_SUBSYS_UART0_SZ                       0x00010000
@@ -44,18 +24,6 @@
 // Sub System Peripherals - Generic Watchdog
 #define SGI_SUBSYS_GENERIC_WDOG_BASE              0x2A440000
 #define SGI_SUBSYS_GENERIC_WDOG_SZ                SIZE_128KB
-
-// Expansion AXI - Platform Peripherals - HDLCD1
-#define SGI_EXP_PLAT_PERIPH_HDLCD1_BASE           0x7FF60000
-#define SGI_EXP_PLAT_PERIPH_HDLCD1_SZ             SIZE_64KB
-
-// Expansion AXI - Platform Peripherals - UART0
-#define SGI_EXP_PLAT_PERIPH_UART0_BASE            0x7FF70000
-#define SGI_EXP_PLAT_PERIPH_UART0_SZ              SIZE_64KB
-
-// Expansion AXI - Platform Peripherals - UART1
-#define SGI_EXP_PLAT_PERIPH_UART1_BASE            0x7FF80000
-#define SGI_EXP_PLAT_PERIPH_UART1_SZ              SIZE_64KB
 
 // Register offsets into the System Registers Block
 #define SGI_SYSPH_SYS_REG_FLASH                   0x4C

@@ -25,7 +25,7 @@ DefinitionBlock ("SsdtRosTable.aml", "SSDT", 1, "ARMLTD", "ARMSGI",
           FixedPcdGet64 (PcdSerialDbgRegisterBase),
           0x1000
           )
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 147 }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { FixedPcdGet32 (PL011UartInterrupt) }
       })
     }
 

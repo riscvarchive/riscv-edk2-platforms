@@ -19,6 +19,7 @@
   MdeModulePkg/MdeModulePkg.dec
   MdePkg/MdePkg.dec
   Platform/ARM/SgiPkg/SgiPlatform.dec
+  Platform/ARM/VExpressPkg/ArmVExpressPkg.dec
   StandaloneMmPkg/StandaloneMmPkg.dec
 
 [LibraryClasses]
@@ -39,6 +40,7 @@
 [FixedPcd]
   gArmPlatformTokenSpaceGuid.PcdClusterCount
   gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmPlatformTokenSpaceGuid.PcdArmHdLcdBase
 
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base
   gArmSgiTokenSpaceGuid.PcdDramBlock2Size
@@ -63,8 +65,15 @@
 
   gArmTokenSpaceGuid.PcdMmBufferBase
   gArmTokenSpaceGuid.PcdMmBufferSize
+  gArmSgiTokenSpaceGuid.PcdSmcCs0Base
+  gArmSgiTokenSpaceGuid.PcdSmcCs1Base
+  gArmSgiTokenSpaceGuid.PcdSysPeriphBase
+
+  gArmVExpressTokenSpaceGuid.PcdLan91xDxeBaseAddress
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
 
 [Guids]
   gArmSgiPlatformIdDescriptorGuid
