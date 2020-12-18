@@ -14,97 +14,97 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI",
                  EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
 
-    Device (CP00) { // Zeus core 0
+    Device (CP00) { // Neoverse V1 core 0
       Name (_HID, "ACPI0007")
       Name (_UID, 0)
       Name (_STA, 0xF)
     }
 
-    Device (CP01) { // Zeus core 1
+    Device (CP01) { // Neoverse V1 core 1
       Name (_HID, "ACPI0007")
       Name (_UID, 1)
       Name (_STA, 0xF)
     }
 
-    Device (CP02) { // Zeus core 2
+    Device (CP02) { // Neoverse V1 core 2
       Name (_HID, "ACPI0007")
       Name (_UID, 2)
       Name (_STA, 0xF)
     }
 
-    Device (CP03) { // Zeus core 3
+    Device (CP03) { // Neoverse V1 core 3
       Name (_HID, "ACPI0007")
       Name (_UID, 3)
       Name (_STA, 0xF)
     }
 
-    Device (CP04) { // Zeus core 4
+    Device (CP04) { // Neoverse V1 core 4
       Name (_HID, "ACPI0007")
       Name (_UID, 4)
       Name (_STA, 0xF)
     }
 
-    Device (CP05) { // Zeus core 5
+    Device (CP05) { // Neoverse V1 core 5
       Name (_HID, "ACPI0007")
       Name (_UID, 5)
       Name (_STA, 0xF)
     }
 
-    Device (CP06) { // Zeus core 6
+    Device (CP06) { // Neoverse V1 core 6
       Name (_HID, "ACPI0007")
       Name (_UID, 6)
       Name (_STA, 0xF)
     }
 
-    Device (CP07) { // Zeus core 7
+    Device (CP07) { // Neoverse V1 core 7
       Name (_HID, "ACPI0007")
       Name (_UID, 7)
       Name (_STA, 0xF)
     }
 
-    Device (CP08) { // Zeus core 8
+    Device (CP08) { // Neoverse V1 core 8
       Name (_HID, "ACPI0007")
       Name (_UID, 8)
       Name (_STA, 0xF)
     }
 
-    Device (CP09) { // Zeus core 9
+    Device (CP09) { // Neoverse V1 core 9
       Name (_HID, "ACPI0007")
       Name (_UID, 9)
       Name (_STA, 0xF)
     }
 
-    Device (CP10) { // Zeus core 10
+    Device (CP10) { // Neoverse V1 core 10
       Name (_HID, "ACPI0007")
       Name (_UID, 10)
       Name (_STA, 0xF)
     }
 
-    Device (CP11) { // Zeus core 11
+    Device (CP11) { // Neoverse V1 core 11
       Name (_HID, "ACPI0007")
       Name (_UID, 11)
       Name (_STA, 0xF)
     }
 
-    Device (CP12) { // Zeus core 12
+    Device (CP12) { // Neoverse V1 core 12
       Name (_HID, "ACPI0007")
       Name (_UID, 12)
       Name (_STA, 0xF)
     }
 
-    Device (CP13) { // Zeus core 13
+    Device (CP13) { // Neoverse V1 core 13
       Name (_HID, "ACPI0007")
       Name (_UID, 13)
       Name (_STA, 0xF)
     }
 
-    Device (CP14) { // Zeus core 14
+    Device (CP14) { // Neoverse V1 core 14
       Name (_HID, "ACPI0007")
       Name (_UID, 14)
       Name (_STA, 0xF)
     }
 
-    Device (CP15) { // Zeus core 15
+    Device (CP15) { // Neoverse V1 core 15
       Name (_HID, "ACPI0007")
       Name (_UID, 15)
       Name (_STA, 0xF)

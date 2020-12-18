@@ -7,4 +7,4 @@
 # Per-platform additional content of the DXE phase firmware volume
 
   # ACPI support
-  INF RuleOverride=ACPITABLE Platform/ARM/SgiPkg/AcpiTables/RdDanielCfgXlrAcpiTables.inf
+  INF RuleOverride=ACPITABLE Platform/ARM/SgiPkg/AcpiTables/RdV1McAcpiTables.inf
