@@ -9,7 +9,7 @@
 
 [Defines]
   INF_VERSION                    = 0x0001001A
-  BASE_NAME                      = RdDanielCfgMAcpiTables
+  BASE_NAME                      = RdV1AcpiTables
   FILE_GUID                      = c712719a-0aaf-438c-9cdd-35ab4d60207d  # gArmSgiAcpiTablesGuid
   MODULE_TYPE                    = USER_DEFINED
   VERSION_STRING                 = 1.0
@@ -21,8 +21,8 @@
   Gtdt.aslc
   Iort.aslc
   Mcfg.aslc
-  RdDanielCfgM/Dsdt.asl
-  RdDanielCfgM/Madt.aslc
+  RdV1/Dsdt.asl
+  RdV1/Madt.aslc
   Spcr.aslc
 
 [Packages]

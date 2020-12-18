@@ -10,7 +10,7 @@
 #
 ################################################################################
 [Defines]
-  PLATFORM_NAME                  = RdDanielCfgM
+  PLATFORM_NAME                  = RdV1
   PLATFORM_GUID                  = d301ac4e-0828-4cef-b754-34ca9b6781b5
   PLATFORM_VERSION               = 0.1
   DSC_SPECIFICATION              = 0x0001001B
@@ -19,7 +19,7 @@
   BUILD_TARGETS                  = NOOPT|DEBUG|RELEASE
   SKUID_IDENTIFIER               = DEFAULT
   FLASH_DEFINITION               = Platform/ARM/SgiPkg/SgiPlatform.fdf
-  BOARD_DXE_FV_COMPONENTS        = Platform/ARM/SgiPkg/RdDanielCfgM/RdDanielCfgM.fdf.inc
+  BOARD_DXE_FV_COMPONENTS        = Platform/ARM/SgiPkg/RdV1/RdV1.fdf.inc
   BUILD_NUMBER                   = 1
 
 # include common definitions from SgiPlatform.dsc
@@ -48,4 +48,4 @@
 ################################################################################
 
 [Components.common]
-  Platform/ARM/SgiPkg/AcpiTables/RdDanielCfgMAcpiTables.inf
+  Platform/ARM/SgiPkg/AcpiTables/RdV1AcpiTables.inf
