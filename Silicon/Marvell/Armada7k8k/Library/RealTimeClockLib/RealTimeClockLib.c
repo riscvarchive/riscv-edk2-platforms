@@ -179,6 +179,16 @@ LibSetWakeupTime (
 {
   UINTN       WakeupSeconds;
 
+  //
+  // Because the Armada RTC uses a 32-bit counter for seconds,
+  // the maximum time span is just over 136 years.
+  // Time is stored in Unix Epoch format, so it starts in 1970,
+  // Therefore it can not exceed the year 2106.
+  //
+  if ((Time->Year < 1970) || (Time->Year >= 2106)) {
+    return EFI_UNSUPPORTED;
+  }
+
   // Convert time to raw seconds
   WakeupSeconds = EfiTimeToEpoch (Time);
   if (WakeupSeconds > MAX_UINT32) {
