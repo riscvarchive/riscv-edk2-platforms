@@ -509,6 +509,12 @@
   gRaspberryPiTokenSpaceGuid.PcdFanTemp|L"FanTemp"|gConfigDxeFormSetGuid|0x0|0
 
   #
+  # Reset-related.
+  #
+
+  gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay|L"ResetDelay"|gRaspberryPiTokenSpaceGuid|0x0|0
+
+  #
   # Common UEFI ones.
   #
 

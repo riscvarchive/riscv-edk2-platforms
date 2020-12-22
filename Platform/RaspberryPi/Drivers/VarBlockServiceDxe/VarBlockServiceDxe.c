@@ -10,6 +10,18 @@
 
 #include "VarBlockService.h"
 
+//
+// Minimum delay to enact before reset, when variables are dirty (in μs).
+// Needed to ensure that SSD-based USB 3.0 devices have time to flush their
+// write cache after updating the NV vars. A much smaller delay is applied
+// on Pi 3 compared to Pi 4, as we haven't had reports of issues there yet.
+//
+#if (RPI_MODEL == 3)
+#define PLATFORM_RESET_DELAY     500000
+#else
+#define PLATFORM_RESET_DELAY    3500000
+#endif
+
 VOID *mSFSRegistration;
 
 
@@ -154,6 +166,7 @@ DumpVars (
   )
 {
   EFI_STATUS Status;
+  RETURN_STATUS PcdStatus;
 
   if (mFvInstance->Device == NULL) {
     DEBUG ((DEBUG_INFO, "Variable store not found?\n"));
@@ -173,6 +186,17 @@ DumpVars (
   }
 
   DEBUG ((DEBUG_INFO, "Variables dumped!\n"));
+
+  //
+  // Add a reset delay to give time for slow/cached devices
+  // to flush the NV variables write to permanent storage.
+  // But only do so if this won't reduce an existing user-set delay.
+  //
+  if (PcdGet32 (PcdPlatformResetDelay) < PLATFORM_RESET_DELAY) {
+    PcdStatus = PcdSet32S (PcdPlatformResetDelay, PLATFORM_RESET_DELAY);
+    ASSERT_RETURN_ERROR (PcdStatus);
+  }
+
   mFvInstance->Dirty = FALSE;
 }
 
