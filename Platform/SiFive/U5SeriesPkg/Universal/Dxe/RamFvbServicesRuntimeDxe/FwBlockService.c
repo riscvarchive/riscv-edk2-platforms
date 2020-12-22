@@ -1087,18 +1087,21 @@ FvbInitialize (
   //
   // Set several PCD values to point to flash
   //
-  PcdSet64 (
+  Status = PcdSet64S (
     PcdFlashNvStorageVariableBase64,
     (UINTN) PcdGet32 (PcdPlatformFlashNvStorageVariableBase)
     );
-  PcdSet32 (
+  ASSERT_EFI_ERROR (Status);
+  Status = PcdSet32S (
     PcdFlashNvStorageFtwWorkingBase,
     PcdGet32 (PcdPlatformFlashNvStorageFtwWorkingBase)
     );
-  PcdSet32 (
+  ASSERT_EFI_ERROR (Status);
+  Status = PcdSet32S (
     PcdFlashNvStorageFtwSpareBase,
     PcdGet32 (PcdPlatformFlashNvStorageFtwSpareBase)
     );
+  ASSERT_EFI_ERROR (Status);
 
   FwhInstance = (EFI_FW_VOL_INSTANCE *)
     (
