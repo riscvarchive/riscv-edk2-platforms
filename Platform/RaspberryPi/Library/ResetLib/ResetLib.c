@@ -52,13 +52,13 @@ LibResetSystem (
      * Only if still in UEFI.
      */
     EfiEventGroupSignal (&gRaspberryPiEventResetGuid);
-  }
 
-  Delay = PcdGet32 (PcdPlatformResetDelay);
-  if (Delay != 0) {
-    DEBUG ((DEBUG_INFO, "Platform will be reset in %d.%d seconds...\n",
-            Delay / 1000000, (Delay % 1000000) / 100000));
-    MicroSecondDelay (Delay);
+    Delay = PcdGet32 (PcdPlatformResetDelay);
+    if (Delay != 0) {
+      DEBUG ((DEBUG_INFO, "Platform will be reset in %d.%d seconds...\n",
+              Delay / 1000000, (Delay % 1000000) / 100000));
+      MicroSecondDelay (Delay);
+    }
   }
   DEBUG ((DEBUG_INFO, "Platform %a.\n",
           (ResetType == EfiResetShutdown) ? "shutdown" : "reset"));
