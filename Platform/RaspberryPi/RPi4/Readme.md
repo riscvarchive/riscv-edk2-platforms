@@ -181,7 +181,7 @@ Limit RAM to 3 GB            | `RamLimitTo3GB` | Disable = `0x00000000` <br> Ena
 System Table Selection       | `SystemTableMode`| ACPI = `0x00000000` (default)<br> ACPI + Devicetree = `0x00000001` <br> Devicetree = `0x00000002`
 Asset Tag                    | `AssetTag` | String, 32 characters or less (e.g. `L"ABCD123"`)<br> (default `L""`)
 **SD/MMC Configuration**     |
-uSD/eMMC Routing             | `SdIsArasan` | Arasan SDHC = `0x00000001` (default) <br> eMMC2 SDHCI = `0x00000000`
+uSD/eMMC Routing             | `SdIsArasan` | Arasan SDHC = `0x00000001` <br> eMMC2 SDHCI = `0x00000000` (default)
 Multi-Block Support          | `MmcDisableMulti` | Multi-block transfers = `0x00000000` (default)<br> Single block transfers = `0x00000001`
 uSD Max Bus Width            | `MmcForce1Bit` | 4-bit Mode = `0x00000000`  (default)<br> 1-bit Mode = `0x00000001`
 uSD Force Default Speed      | `MmcForceDefaultSpeed` | Allow High Speed = `0x00000000` (default)<br> Force Default Speed = `0x00000001`
