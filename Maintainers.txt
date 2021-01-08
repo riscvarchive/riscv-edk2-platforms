@@ -80,7 +80,7 @@ EDK II Platforms Packages:
 
 96Boards
 F: Platform/96Boards/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 AMD Seattle
@@ -88,7 +88,7 @@ F: Platform/AMD/OverdriveBoard/
 F: Platform/LeMaker/CelloBoard/
 F: Platform/SoftIron/
 F: Silicon/AMD/Styx/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 Ampere Computing
@@ -103,19 +103,19 @@ M: Leif Lindholm <leif@nuviainc.com>
 ARM
 F: Platform/ARM/
 F: Silicon/ARM/
-R: Ard Biesheuvel <ard.biesheuvel@arm.com>
+R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 R: Thomas Abraham <thomas.abraham@arm.com>
 M: Leif Lindholm <leif@nuviainc.com>
 
 BeagleBoard:
 F: Platform/BeagleBoard/
 F: Silicon/TexasInstruments/
-R: Ard Biesheuvel <ard.biesheuvel@arm.com>
+R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 Comcast
 F: Platform/Comcast/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 OptionRomPkg
@@ -126,14 +126,14 @@ M: Ray Ni <ray.ni@intel.com>
 DisplayLink
 F: Drivers/DisplayLink/
 M: Leif Lindholm <leif@nuviainc.com>
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 R: Andy Hayes <andy.hayes@displaylink.com>
 
 HiSilicon
 F: Platform/Hisilicon/
 F: Silicon/Hisilicon/
 M: Leif Lindholm <leif@nuviainc.com>
-R: Ard Biesheuvel <ard.biesheuvel@arm.com>
+R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 R: Wenyi Xie <xiewenyi2@huawei.com>
 
 Features/Intel
@@ -267,7 +267,7 @@ Miscellaneous drivers
 F: Silicon/Atmel/
 F: Silicon/Openmoko/
 F: Silicon/Synopsys/DesignWare/
-R: Ard Biesheuvel <ard.biesheuvel@arm.com>
+R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 NXP platforms and silicon
@@ -279,7 +279,7 @@ R: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
 QEMU sbsa-ref platform
 F: Platform/Qemu/SbsaQemu/
 F: Silicon/Qemu/SbsaQemu/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 R: Graeme Gregory <graeme@nuviainc.com>
 R: Radoslaw Biernacki <rad@semihalf.com>
@@ -288,7 +288,7 @@ R: Tanmay Jagdale <tanmay.jagdale@linaro.org>
 Raspberry Pi platforms and silicon
 F: Platform/RaspberryPi/
 F: Silicon/Broadcom/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 R: Pete Batard <pete@akeo.ie>
 
@@ -296,7 +296,7 @@ Socionext platforms and silicon
 F: Platform/Socionext/
 F: Silicon/NXP/Library/Pcf8563RealTimeClockLib/
 F: Silicon/Socionext/
-M: Ard Biesheuvel <ard.biesheuvel@arm.com>
+M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 
 Silicon/RISC-V/ProcessorPkg
