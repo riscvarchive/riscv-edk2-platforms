@@ -431,7 +431,7 @@ RemoveStaleBootOptions (
     EFI_DEVICE_PATH_PROTOCOL *DevicePath = BootOptions[Index].FilePath;
 
     if (CompareMem (&mArasan, DevicePath, GetDevicePathSize (DevicePath)) == 0) {
-      if (PcdGet32 (PcdSdIsArasan)) {
+      if (PcdGet32 (PcdSdIsArasan) || RPI_MODEL == 4) {
         continue;
       }
     } else if (CompareMem (&mSDHost, DevicePath, GetDevicePathSize (DevicePath)) == 0) {
