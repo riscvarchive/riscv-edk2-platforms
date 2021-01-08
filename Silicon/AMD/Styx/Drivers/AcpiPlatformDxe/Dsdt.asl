@@ -353,79 +353,16 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
                     DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                         0x00000000,         // Granularity
                         0x40000000,         // Range Minimum
-                        0x5FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0x60000000,         // Range Minimum
-                        0x7FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0x80000000,         // Range Minimum
-                        0x9FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0xA0000000,         // Range Minimum
                         0xBFFFFFFF,         // Range Maximum
                         0x00000000,         // Translation Offset
-                        0x20000000          // Length
+                        0x80000000          // Length
                         )
                     QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                         0x0000000000000000, // Granularity
                         0x0000000100000000, // Range Minimum
-                        0x00000001FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000100000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000200000000, // Range Minimum
-                        0x00000003FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000200000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000400000000, // Range Minimum
-                        0x00000007FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000400000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000800000000, // Range Minimum
-                        0x0000000FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000800000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000001000000000, // Range Minimum
-                        0x0000001FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000001000000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000002000000000, // Range Minimum
-                        0x0000003FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000002000000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000004000000000, // Range Minimum
                         0x0000007FFFFFFFFF, // Range Maximum
                         0x0000000000000000, // Translation Offset
-                        0x0000004000000000  // Length
+                        0x0000007F00000000  // Length
                         )
                     DWordIo (ResourceProducer, MinFixed, MaxFixed, PosDecode, EntireRange,
                         0x00000000,         // Granularity
