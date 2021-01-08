@@ -453,15 +453,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
               }
               Return (Buffer(){0})
             } // Method(_DSM)
-
-            //
-            // Root-Complex 0
-            //
-            Device (RP0)
-            {
-                Name (_ADR, 0xF0000000)  // _ADR: Bus 0, Dev 0, Func 0
-            }
         }
     }
 }
-
