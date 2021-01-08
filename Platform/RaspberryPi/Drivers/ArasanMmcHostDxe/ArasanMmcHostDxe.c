@@ -250,7 +250,11 @@ CalculateClockFrequencyDivisor (
   UINT32 Divisor;
   UINT32 BaseFrequency = 0;
 
-  Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_EMMC, &BaseFrequency);
+  if (PcdGet32 (PcdSdIsArasan)) {
+    Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_EMMC, &BaseFrequency);
+  } else {
+    Status = mFwProtocol->GetClockRate (RPI_MBOX_CLOCK_RATE_EMMC2, &BaseFrequency);
+  }
   if (EFI_ERROR (Status)) {
     DEBUG ((DEBUG_ERROR, "Couldn't get RPI_MBOX_CLOCK_RATE_EMMC\n"));
     return Status;
@@ -472,8 +476,8 @@ MMCNotifyState (
   switch (State) {
   case MmcHwInitializationState:
     {
-      EFI_STATUS Status;
-      UINT32 Divisor;
+
+      DEBUG ((DEBUG_MMCHOST_SD, "ArasanMMCHost: current divisor %x\n", MmioRead32(MMCHS_SYSCTL)));
 
       Status = SoftReset (SRA);
       if (EFI_ERROR (Status)) {
