@@ -18,6 +18,56 @@ UINT32 LastExecutedCommand = (UINT32) -1;
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
 STATIC UINTN mMmcHsBase;
 
+STATIC
+UINT32
+EFIAPI
+SdMmioWrite32 (
+  IN      UINTN                     Address,
+  IN      UINT32                    Value
+  )
+{
+  UINT32 ret;
+  ret = (UINT32)MmioWrite32 (Address, Value);
+  // There is a bug about clock domain crossing on writes, delay to avoid it
+  gBS->Stall (STALL_AFTER_REG_WRITE_US);
+  return ret;
+}
+
+STATIC
+UINT32
+EFIAPI
+SdMmioOr32 (
+  IN      UINTN                     Address,
+  IN      UINT32                    OrData
+  )
+{
+  return SdMmioWrite32 (Address, MmioRead32 (Address) | OrData);
+}
+
+STATIC
+UINT32
+EFIAPI
+SdMmioAnd32 (
+  IN      UINTN                     Address,
+  IN      UINT32                    AndData
+  )
+{
+  return SdMmioWrite32 (Address, MmioRead32 (Address) & AndData);
+}
+
+STATIC
+UINT32
+EFIAPI
+SdMmioAndThenOr32 (
+  IN      UINTN                     Address,
+  IN      UINT32                    AndData,
+  IN      UINT32                    OrData
+  )
+{
+  return SdMmioWrite32 (Address, (MmioRead32 (Address) & AndData) | OrData);
+}
+
+
 /**
    These SD commands are optional, according to the SD Spec
 **/
@@ -175,7 +225,9 @@ SoftReset (
   IN UINT32 Mask
   )
 {
-  MmioOr32 (MMCHS_SYSCTL, Mask);
+  DEBUG ((DEBUG_MMCHOST_SD, "SoftReset with mask 0x%x\n", Mask));
+
+  SdMmioOr32 (MMCHS_SYSCTL, Mask);
   if (PollRegisterWithMask (MMCHS_SYSCTL, Mask, 0) == EFI_TIMEOUT) {
     DEBUG ((DEBUG_ERROR, "Failed to SoftReset with mask 0x%x\n", Mask));
     return EFI_TIMEOUT;
@@ -326,29 +378,29 @@ MMCSendCommand (
   }
 
   if (IsAppCmd && MmcCmd == ACMD22) {
-    MmioWrite32 (MMCHS_BLK, 4);
+    SdMmioWrite32 (MMCHS_BLK, 4);
   } else if (IsAppCmd && MmcCmd == ACMD51) {
-    MmioWrite32 (MMCHS_BLK, 8);
+    SdMmioWrite32 (MMCHS_BLK, 8);
   } else if (!IsAppCmd && MmcCmd == CMD6) {
-    MmioWrite32 (MMCHS_BLK, 64);
+    SdMmioWrite32 (MMCHS_BLK, 64);
   } else if (IsADTCCmd) {
-    MmioWrite32 (MMCHS_BLK, BLEN_512BYTES);
+    SdMmioWrite32 (MMCHS_BLK, BLEN_512BYTES);
   }
 
   // Set Data timeout counter value to max value.
-  MmioAndThenOr32 (MMCHS_SYSCTL, (UINT32) ~DTO_MASK, DTO_VAL);
+  SdMmioAndThenOr32 (MMCHS_SYSCTL, (UINT32) ~DTO_MASK, DTO_VAL);
 
   //
   // Clear Interrupt Status Register, but not the Card Inserted bit
   // to avoid messing with card detection logic.
   //
-  MmioWrite32 (MMCHS_INT_STAT, ALL_EN & ~(CARD_INS));
+  SdMmioWrite32 (MMCHS_INT_STAT, ALL_EN & ~(CARD_INS));
 
   // Set command argument register
-  MmioWrite32 (MMCHS_ARG, Argument);
+  SdMmioWrite32 (MMCHS_ARG, Argument);
 
   // Send the command
-  MmioWrite32 (MMCHS_CMD, MmcCmd);
+  SdMmioWrite32 (MMCHS_CMD, MmcCmd);
 
   // Check for the command status.
   while (RetryCount < MAX_RETRY_COUNT) {
@@ -373,7 +425,7 @@ MMCSendCommand (
 
     // Check if command is completed.
     if ((MmcStatus & CC) == CC) {
-      MmioWrite32 (MMCHS_INT_STAT, CC);
+      SdMmioWrite32 (MMCHS_INT_STAT, CC);
       break;
     }
 
@@ -428,6 +480,21 @@ MMCNotifyState (
         return Status;
       }
 
+      DEBUG ((DEBUG_MMCHOST_SD, "ArasanMMCHost: CAP %X CAPH %X\n", MmioRead32(MMCHS_CAPA),MmioRead32(MMCHS_CUR_CAPA)));
+
+      // Lets switch to card detect test mode.
+      SdMmioOr32 (MMCHS_HCTL, BIT7|BIT6);
+
+      // set card voltage
+      SdMmioAnd32 (MMCHS_HCTL, ~SDBP_ON);
+      SdMmioAndThenOr32 (MMCHS_HCTL, (UINT32) ~SDBP_MASK, SDVS_3_3_V);
+      SdMmioOr32 (MMCHS_HCTL, SDBP_ON);
+
+      DEBUG ((DEBUG_MMCHOST_SD, "ArasanMMCHost: AC12 %X HCTL %X\n", MmioRead32(MMCHS_AC12),MmioRead32(MMCHS_HCTL)));
+
+      // First turn off the clock
+      SdMmioAnd32 (MMCHS_SYSCTL, ~CEN);
+
       // Attempt to set the clock to 400Khz which is the expected initialization speed
       Status = CalculateClockFrequencyDivisor (400000, &Divisor, NULL);
       if (EFI_ERROR (Status)) {
@@ -436,10 +503,15 @@ MMCNotifyState (
       }
 
       // Set Data Timeout Counter value, set clock frequency, enable internal clock
-      MmioOr32 (MMCHS_SYSCTL, DTO_VAL | Divisor | CEN | ICS | ICE);
+      SdMmioOr32 (MMCHS_SYSCTL, DTO_VAL | Divisor | CEN | ICS | ICE);
+      SdMmioOr32 (MMCHS_HCTL, SDBP_ON);
+      // wait for ICS
+      while ((MmioRead32 (MMCHS_SYSCTL) & ICS_MASK) != ICS);
+
+      DEBUG ((DEBUG_MMCHOST_SD, "ArasanMMCHost: AC12 %X HCTL %X\n", MmioRead32(MMCHS_AC12),MmioRead32(MMCHS_HCTL)));
 
       // Enable interrupts
-      MmioWrite32 (MMCHS_IE, ALL_EN);
+      SdMmioWrite32 (MMCHS_IE, ALL_EN);
     }
     break;
   case MmcIdleState:
@@ -452,7 +524,7 @@ MMCNotifyState (
     ClockFrequency = 25000000;
 
     // First turn off the clock
-    MmioAnd32 (MMCHS_SYSCTL, ~CEN);
+    SdMmioAnd32 (MMCHS_SYSCTL, ~CEN);
 
     Status = CalculateClockFrequencyDivisor (ClockFrequency, &Divisor, NULL);
     if (EFI_ERROR (Status)) {
@@ -462,13 +534,13 @@ MMCNotifyState (
     }
 
     // Setup new divisor
-    MmioAndThenOr32 (MMCHS_SYSCTL, (UINT32) ~CLKD_MASK, Divisor);
+    SdMmioAndThenOr32 (MMCHS_SYSCTL, (UINT32) ~CLKD_MASK, Divisor);
 
     // Wait for the clock to stabilise
     while ((MmioRead32 (MMCHS_SYSCTL) & ICS_MASK) != ICS);
 
     // Set Data Timeout Counter value, set clock frequency, enable internal clock
-    MmioOr32 (MMCHS_SYSCTL, CEN);
+    SdMmioOr32 (MMCHS_SYSCTL, CEN);
     break;
   case MmcTransferState:
     break;
@@ -635,7 +707,7 @@ MMCReadBlockData (
     while (RetryCount < MAX_RETRY_COUNT) {
       MmcStatus = MmioRead32 (MMCHS_INT_STAT);
       if ((MmcStatus & BRR) != 0) {
-        MmioWrite32 (MMCHS_INT_STAT, BRR);
+        SdMmioWrite32 (MMCHS_INT_STAT, BRR);
         /*
          * Data is ready.
          */
@@ -662,7 +734,7 @@ MMCReadBlockData (
     gBS->Stall (STALL_AFTER_READ_US);
   }
 
-  MmioWrite32 (MMCHS_INT_STAT, BRR);
+  SdMmioWrite32 (MMCHS_INT_STAT, BRR);
   return EFI_SUCCESS;
 }
 
@@ -699,13 +771,13 @@ MMCWriteBlockData (
     while (RetryCount < MAX_RETRY_COUNT) {
       MmcStatus = MmioRead32 (MMCHS_INT_STAT);
       if ((MmcStatus & BWR) != 0) {
-        MmioWrite32 (MMCHS_INT_STAT, BWR);
+        SdMmioWrite32 (MMCHS_INT_STAT, BWR);
         /*
          * Can write data.
          */
         mFwProtocol->SetLed (TRUE);
         for (Count = 0; Count < BlockLen; Count += 4, Buffer++) {
-          MmioWrite32 (MMCHS_DATA, *Buffer);
+          SdMmioWrite32 (MMCHS_DATA, *Buffer);
         }
 
         mFwProtocol->SetLed (FALSE);
@@ -726,7 +798,7 @@ MMCWriteBlockData (
     gBS->Stall (STALL_AFTER_WRITE_US);
   }
 
-  MmioWrite32 (MMCHS_INT_STAT, BWR);
+  SdMmioWrite32 (MMCHS_INT_STAT, BWR);
   return EFI_SUCCESS;
 }
 
