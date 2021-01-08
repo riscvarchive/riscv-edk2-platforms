@@ -552,6 +552,13 @@ ApplyVariables (
       GpioPinFuncSet (37, GPIO_FSEL_ALT3);
       GpioPinFuncSet (38, GPIO_FSEL_ALT3);
       GpioPinFuncSet (39, GPIO_FSEL_ALT3);
+
+      Status = mFwProtocol->SetPowerState (RPI_MBOX_POWER_STATE_SDHCI,
+                                           TRUE, TRUE); //SD on with wait
+      Status = mFwProtocol->SetGpioConfig (RPI_EXP_GPIO_SD_VOLT,
+                                           RPI_EXP_GPIO_DIR_OUT, TRUE); //3.3v
+      Status = mFwProtocol->SetClockState (RPI_MBOX_CLOCK_RATE_EMMC2, TRUE);
+      Status = mFwProtocol->SetClockState (RPI_MBOX_CLOCK_RATE_EMMC, TRUE);
     }
   } else {
     DEBUG ((DEBUG_ERROR, "Model Family %d not supported...\n", mModelFamily));
