@@ -57,5 +57,16 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-VEXP", 1) {
         Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {0x2F}
       })
     }
+
+    // VIRTIO block device
+    Device (VIRT) {
+      Name (_HID, "LNRO0005")
+      Name (_UID, 0)
+
+      Name (_CRS, ResourceTemplate() {
+        Memory32Fixed (ReadWrite, 0x1c130000, 0x1000)
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {0x4A}
+      })
+    }
   } // Scope(_SB)
 }
