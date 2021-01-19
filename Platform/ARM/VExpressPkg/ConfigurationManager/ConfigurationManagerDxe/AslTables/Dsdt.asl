@@ -2,7 +2,10 @@
   Differentiated System Description Table Fields (DSDT)
 
   Copyright (c) 2014-2021, ARM Ltd. All rights reserved.<BR>
-    SPDX-License-Identifier: BSD-2-Clause-Patent
+  Copyright (c) 2013, Al Stone <al.stone@linaro.org>
+  All rights reserved.
+
+  SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
@@ -42,6 +45,17 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-VEXP", 1) {
     Device(CPU7) {
       Name(_HID, "ACPI0007")
       Name(_UID, 7)
+    }
+
+    // SMC91X
+    Device (NET0) {
+      Name (_HID, "LNRO0003")
+      Name (_UID, 0)
+
+      Name (_CRS, ResourceTemplate () {
+        Memory32Fixed (ReadWrite, 0x1a000000, 0x00010000)
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {0x2F}
+      })
     }
   } // Scope(_SB)
 }
