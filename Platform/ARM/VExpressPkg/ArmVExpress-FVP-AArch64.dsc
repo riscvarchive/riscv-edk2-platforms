@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2021, ARM Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -34,7 +34,6 @@
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
 !ifdef DYNAMIC_TABLES_FRAMEWORK
   !include DynamicTablesPkg/DynamicTables.dsc.inc
-  !include Platform/ARM/VExpressPkg/ConfigurationManager/ConfigurationManager.dsc.inc
 !endif
 
 [LibraryClasses.common]
@@ -126,7 +125,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x1c0a0000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultReceiveFifoDepth|0
-  gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x25
+  gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x26
 
   ## PL011 Serial Debug UART (DBG2)
   gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase|0x1c0b0000
@@ -267,6 +266,12 @@
 !ifndef DYNAMIC_TABLES_FRAMEWORK
   MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
   Platform/ARM/VExpressPkg/AcpiTables/AcpiTables.inf
+!else
+  Platform/ARM/VExpressPkg/ConfigurationManager/ConfigurationManagerDxe/ConfigurationManagerDxe.inf {
+    <PcdsFixedAtBuild>
+      gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x1c090000
+      gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x25
+  }
 !endif
 
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
