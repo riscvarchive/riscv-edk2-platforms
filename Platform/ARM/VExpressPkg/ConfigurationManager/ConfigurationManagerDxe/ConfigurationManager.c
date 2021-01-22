@@ -1,7 +1,7 @@
 /** @file
   Configuration Manager Dxe
 
-  Copyright (c) 2017 - 2020, Arm Limited. All rights reserved.<BR>
+  Copyright (c) 2017 - 2021, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -219,6 +219,98 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
   }
 };
 
+/** A helper function for returning the Configuration Manager Objects.
+
+  @param [in]       CmObjectId     The Configuration Manager Object ID.
+  @param [in]       Object         Pointer to the Object(s).
+  @param [in]       ObjectSize     Total size of the Object(s).
+  @param [in]       ObjectCount    Number of Objects.
+  @param [in, out]  CmObjectDesc   Pointer to the Configuration Manager Object
+                                   descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+**/
+STATIC
+EFI_STATUS
+EFIAPI
+HandleCmObject (
+  IN  CONST CM_OBJECT_ID                CmObjectId,
+  IN        VOID                *       Object,
+  IN  CONST UINTN                       ObjectSize,
+  IN  CONST UINTN                       ObjectCount,
+  IN  OUT   CM_OBJ_DESCRIPTOR   * CONST CmObjectDesc
+  )
+{
+  CmObjectDesc->ObjectId = CmObjectId;
+  CmObjectDesc->Size = ObjectSize;
+  CmObjectDesc->Data = (VOID*)Object;
+  CmObjectDesc->Count = ObjectCount;
+  DEBUG ((
+    DEBUG_INFO,
+    "INFO: CmObjectId = %x, Ptr = 0x%p, Size = %d, Count = %d\n",
+    CmObjectId,
+    CmObjectDesc->Data,
+    CmObjectDesc->Size,
+    CmObjectDesc->Count
+    ));
+  return EFI_SUCCESS;
+}
+
+/** A helper function for returning the Configuration Manager Objects that
+    match the token.
+
+  @param [in]  This               Pointer to the Configuration Manager Protocol.
+  @param [in]  CmObjectId         The Configuration Manager Object ID.
+  @param [in]  Object             Pointer to the Object(s).
+  @param [in]  ObjectSize         Total size of the Object(s).
+  @param [in]  ObjectCount        Number of Objects.
+  @param [in]  Token              A token identifying the object.
+  @param [in]  HandlerProc        A handler function to search the object
+                                  referenced by the token.
+  @param [in, out]  CmObjectDesc  Pointer to the Configuration Manager Object
+                                  descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+  @retval EFI_INVALID_PARAMETER A parameter is invalid.
+  @retval EFI_NOT_FOUND         The required object information is not found.
+**/
+STATIC
+EFI_STATUS
+EFIAPI
+HandleCmObjectRefByToken (
+  IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This,
+  IN  CONST CM_OBJECT_ID                                  CmObjectId,
+  IN        VOID                                  *       Object,
+  IN  CONST UINTN                                         ObjectSize,
+  IN  CONST UINTN                                         ObjectCount,
+  IN  CONST CM_OBJECT_TOKEN                               Token,
+  IN  CONST CM_OBJECT_HANDLER_PROC                        HandlerProc,
+  IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObjectDesc
+  )
+{
+  EFI_STATUS  Status;
+  CmObjectDesc->ObjectId = CmObjectId;
+  if (Token == CM_NULL_TOKEN) {
+    CmObjectDesc->Size = ObjectSize;
+    CmObjectDesc->Data = (VOID*)Object;
+    CmObjectDesc->Count = ObjectCount;
+    Status = EFI_SUCCESS;
+  } else {
+    Status = HandlerProc (This, CmObjectId, Token, CmObjectDesc);
+  }
+
+  DEBUG ((
+    DEBUG_INFO,
+    "INFO: Token = 0x%p, CmObjectId = %x, Ptr = 0x%p, Size = %d, Count = %d\n",
+    (VOID*)Token,
+    CmObjectId,
+    CmObjectDesc->Data,
+    CmObjectDesc->Size,
+    CmObjectDesc->Count
+    ));
+  return Status;
+}
+
 /** Initialize the platform configuration repository.
 
   @param [in]  This        Pointer to the Configuration Manager Protocol.
@@ -304,28 +396,36 @@ GetStandardNameSpaceObject (
   EFI_STATUS                      Status;
   EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
 
-  Status = EFI_SUCCESS;
   if ((This == NULL) || (CmObject == NULL)) {
     ASSERT (This != NULL);
     ASSERT (CmObject != NULL);
     return EFI_INVALID_PARAMETER;
   }
+
+  Status = EFI_NOT_FOUND;
   PlatformRepo = This->PlatRepoInfo;
 
   switch (GET_CM_OBJECT_ID (CmObjectId)) {
-    HANDLE_CM_OBJECT (
-      EStdObjCfgMgrInfo,
-      CmObjectId,
-      PlatformRepo->CmInfo,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EStdObjAcpiTableList,
-      CmObjectId,
-      PlatformRepo->CmAcpiTableList,
-      (sizeof (PlatformRepo->CmAcpiTableList) /
-        sizeof (PlatformRepo->CmAcpiTableList[0]))
-      );
+    case EStdObjCfgMgrInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->CmInfo,
+                 sizeof (PlatformRepo->CmInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EStdObjAcpiTableList:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->CmAcpiTableList,
+                 sizeof (PlatformRepo->CmAcpiTableList),
+                 ARRAY_SIZE (PlatformRepo->CmAcpiTableList),
+                 CmObject
+                 );
+      break;
+
     default: {
       Status = EFI_NOT_FOUND;
       DEBUG ((
@@ -366,100 +466,149 @@ GetArmNameSpaceObject (
   EFI_STATUS                        Status;
   EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
 
-  Status = EFI_SUCCESS;
   if ((This == NULL) || (CmObject == NULL)) {
     ASSERT (This != NULL);
     ASSERT (CmObject != NULL);
     return EFI_INVALID_PARAMETER;
   }
+
+  Status = EFI_NOT_FOUND;
   PlatformRepo = This->PlatRepoInfo;
 
   switch (GET_CM_OBJECT_ID (CmObjectId)) {
-    HANDLE_CM_OBJECT (
-      EArmObjBootArchInfo,
-      CmObjectId,
-      PlatformRepo->BootArchInfo,
-      1
-      );
+    case EArmObjBootArchInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->BootArchInfo,
+                 sizeof (PlatformRepo->BootArchInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
 #ifdef HEADLESS_PLATFORM
-    HANDLE_CM_OBJECT (
-      EArmObjFixedFeatureFlags,
-      CmObjectId,
-      PlatformRepo->FixedFeatureFlags,
-      1
-      );
+    case EArmObjFixedFeatureFlags:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->FixedFeatureFlags,
+                 sizeof (PlatformRepo->FixedFeatureFlags),
+                 1,
+                 CmObject
+                 );
+      break;
 #endif
-    HANDLE_CM_OBJECT (
-      EArmObjPowerManagementProfileInfo,
-      CmObjectId,
-      PlatformRepo->PmProfileInfo,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjGenericTimerInfo,
-      CmObjectId,
-      PlatformRepo->GenericTimerInfo,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjPlatformGenericWatchdogInfo,
-      CmObjectId,
-      PlatformRepo->Watchdog,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjPlatformGTBlockInfo,
-      CmObjectId,
-      PlatformRepo->GTBlockInfo,
-      (sizeof (PlatformRepo->GTBlockInfo) /
-         sizeof (PlatformRepo->GTBlockInfo[0]))
-      );
-    HANDLE_CM_OBJECT_REF_BY_TOKEN (
-      EArmObjGTBlockTimerFrameInfo,
-      CmObjectId,
-      PlatformRepo->GTBlock0TimerInfo,
-      (sizeof (PlatformRepo->GTBlock0TimerInfo) /
-         sizeof (PlatformRepo->GTBlock0TimerInfo[0])),
-      Token,
-      GetGTBlockTimerFrameInfo
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjGicCInfo,
-      CmObjectId,
-      PlatformRepo->GicCInfo,
-      (sizeof (PlatformRepo->GicCInfo) /
-         sizeof (PlatformRepo->GicCInfo[0]))
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjGicDInfo,
-      CmObjectId,
-      PlatformRepo->GicDInfo,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjGicRedistributorInfo,
-      CmObjectId,
-      PlatformRepo->GicRedistInfo,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjSerialConsolePortInfo,
-      CmObjectId,
-      PlatformRepo->SpcrSerialPort,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjSerialDebugPortInfo,
-      CmObjectId,
-      PlatformRepo->DbgSerialPort,
-      1
-      );
-    HANDLE_CM_OBJECT (
-      EArmObjGicItsInfo,
-      CmObjectId,
-      PlatformRepo->GicItsInfo,
-      1
-      );
+    case EArmObjPowerManagementProfileInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->PmProfileInfo,
+                 sizeof (PlatformRepo->PmProfileInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGenericTimerInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->GenericTimerInfo,
+                 sizeof (PlatformRepo->GenericTimerInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjPlatformGenericWatchdogInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->Watchdog,
+                 sizeof (PlatformRepo->Watchdog),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjPlatformGTBlockInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 PlatformRepo->GTBlockInfo,
+                 sizeof (PlatformRepo->GTBlockInfo),
+                 ARRAY_SIZE (PlatformRepo->GTBlockInfo),
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGTBlockTimerFrameInfo:
+      Status = HandleCmObjectRefByToken (
+                 This,
+                 CmObjectId,
+                 PlatformRepo->GTBlock0TimerInfo,
+                 sizeof (PlatformRepo->GTBlock0TimerInfo),
+                 ARRAY_SIZE (PlatformRepo->GTBlock0TimerInfo),
+                 Token,
+                 GetGTBlockTimerFrameInfo,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGicCInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 PlatformRepo->GicCInfo,
+                 sizeof (PlatformRepo->GicCInfo),
+                 ARRAY_SIZE (PlatformRepo->GicCInfo),
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGicDInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->GicDInfo,
+                 sizeof (PlatformRepo->GicDInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGicRedistributorInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->GicRedistInfo,
+                 sizeof (PlatformRepo->GicRedistInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjSerialConsolePortInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->SpcrSerialPort,
+                 sizeof (PlatformRepo->SpcrSerialPort),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjSerialDebugPortInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->DbgSerialPort,
+                 sizeof (PlatformRepo->DbgSerialPort),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGicItsInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->GicItsInfo,
+                 sizeof (PlatformRepo->GicItsInfo),
+                 1,
+                 CmObject
+                 );
+      break;
 
     default: {
       Status = EFI_NOT_FOUND;

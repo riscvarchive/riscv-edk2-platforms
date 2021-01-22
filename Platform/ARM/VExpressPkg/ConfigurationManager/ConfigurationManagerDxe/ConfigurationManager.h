@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2017 - 2020, Arm Limited. All rights reserved.<BR>
+  Copyright (c) 2017 - 2021, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -52,61 +52,24 @@ extern CHAR8  dsdt_aml_code[];
     EnergyEfficiency          /* UINT8   ProcessorPowerEfficiencyClass*/ \
     }
 
-/** A helper macro for returning configuration manager objects
-*/
-#define HANDLE_CM_OBJECT(ObjId, CmObjectId, Object, ObjectCount)      \
-  case ObjId: {                                                       \
-    CmObject->ObjectId = CmObjectId;                                  \
-    CmObject->Size = sizeof (Object);                                 \
-    CmObject->Data = (VOID*)&Object;                                  \
-    CmObject->Count = ObjectCount;                                    \
-    DEBUG ((                                                          \
-      DEBUG_INFO,                                                     \
-      #CmObjectId ": Ptr = 0x%p, Size = %d, Count = %d\n",            \
-      CmObject->Data,                                                 \
-      CmObject->Size,                                                 \
-      CmObject->Count                                                 \
-      ));                                                             \
-    break;                                                            \
-  }
+/** A function that prepares Configuration Manager Objects for returning.
 
-/** A helper macro for returning configuration manager objects
-    referenced by token
-*/
-#define HANDLE_CM_OBJECT_REF_BY_TOKEN(                                      \
-          ObjId,                                                            \
-          CmObjectId,                                                       \
-          Object,                                                           \
-          ObjectCount,                                                      \
-          Token,                                                            \
-          HandlerProc                                                       \
-          )                                                                 \
-  case ObjId: {                                                             \
-    CmObject->ObjectId = CmObjectId;                                        \
-    if (Token == CM_NULL_TOKEN) {                                           \
-      CmObject->Size = sizeof (Object);                                     \
-      CmObject->Data = (VOID*)&Object;                                      \
-      CmObject->Count = ObjectCount;                                        \
-      DEBUG ((                                                              \
-        DEBUG_INFO,                                                         \
-        #CmObjectId ": Ptr = 0x%p, Size = %d, Count = %d\n",                \
-        CmObject->Data,                                                     \
-        CmObject->Size,                                                     \
-        CmObject->Count                                                     \
-        ));                                                                 \
-    } else {                                                                \
-      Status = HandlerProc (This, CmObjectId, Token, CmObject);             \
-      DEBUG ((                                                              \
-        DEBUG_INFO,                                                         \
-        #CmObjectId ": Token = 0x%p, Ptr = 0x%p, Size = %d, Count = %d\n",  \
-        (VOID*)Token,                                                       \
-        CmObject->Data,                                                     \
-        CmObject->Size,                                                     \
-        CmObject->Count                                                     \
-        ));                                                                 \
-    }                                                                       \
-    break;                                                                  \
-  }
+  @param [in]  This        Pointer to the Configuration Manager Protocol.
+  @param [in]  CmObjectId  The Configuration Manager Object ID.
+  @param [in]  Token       A token for identifying the object.
+  @param [out] CmObject    Pointer to the Configuration Manager Object
+                           descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+  @retval EFI_INVALID_PARAMETER A parameter is invalid.
+  @retval EFI_NOT_FOUND         The required object information is not found.
+**/
+typedef EFI_STATUS (*CM_OBJECT_HANDLER_PROC) (
+  IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This,
+  IN  CONST CM_OBJECT_ID                                  CmObjectId,
+  IN  CONST CM_OBJECT_TOKEN                               Token,
+  IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObject
+  );
 
 /** The number of CPUs
 */
