@@ -84,6 +84,7 @@
   gRaspberryPiTokenSpaceGuid.PcdMmcSdDefaultSpeedMHz
   gRaspberryPiTokenSpaceGuid.PcdMmcSdHighSpeedMHz
   gRaspberryPiTokenSpaceGuid.PcdMmcDisableMulti
+  gRaspberryPiTokenSpaceGuid.PcdMmcEnableDma
   gRaspberryPiTokenSpaceGuid.PcdDebugEnableJTAG
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableScaledVModes
   gRaspberryPiTokenSpaceGuid.PcdDisplayEnableSShot

@@ -94,6 +94,10 @@
 #string STR_MMC_SD_HS_PROMPT     #language en-US "SD High Speed (MHz)"
 #string STR_MMC_SD_HS_HELP       #language en-US "Override default 50Mhz"
 
+#string STR_MMC_EMMC_PROMPT      #language en-US "Enable eMMC DMA modes"
+#string STR_MMC_EMMC_PIO         #language en-US "PIO"
+#string STR_MMC_EMMC_DMA         #language en-US "SDMA/ADMA2"
+#string STR_MMC_EMMC_HELP        #language en-US "Enable eMMC DMA modes for OSes that support ACPI _DMA() translations"
 
 /*
  * Display settings.

@@ -135,4 +135,12 @@ typedef struct {
   UINT32 MHz;
 } MMC_SD_HS_MHZ_VARSTORE_DATA;
 
+typedef struct {
+  /*
+   * 0 - eMMC PIO mode
+   * 1 - eMMC DMA mode
+   */
+  UINT32 EnableDma;
+} MMC_EMMC_DMA_VARSTORE_DATA;
+
 #endif /* CONFIG_VARS_H */

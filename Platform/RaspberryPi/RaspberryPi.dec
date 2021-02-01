@@ -69,3 +69,4 @@
   gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|0|UINT32|0x0000001C
   gRaspberryPiTokenSpaceGuid.PcdFanTemp|0|UINT32|0x0000001D
   gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay|0|UINT32|0x0000001E
+  gRaspberryPiTokenSpaceGuid.PcdMmcEnableDma|0|UINT32|0x0000001F

@@ -336,6 +336,15 @@ SetupVariables (
   }
 
   Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"MmcEnableDma",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdMmcEnableDma, PcdGet32 (PcdMmcEnableDma));
+    ASSERT_EFI_ERROR (Status);
+  }
+
+  Size = sizeof (UINT32);
   Status = gRT->GetVariable (L"DebugEnableJTAG",
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
@@ -720,6 +729,11 @@ STATIC CONST AML_NAME_OP_REPLACE SsdtNameOpReplace[] = {
   { }
 };
 
+STATIC CONST AML_NAME_OP_REPLACE SsdtEmmcNameOpReplace[] = {
+  { "SDMA", PcdToken (PcdMmcEnableDma) },
+  { }
+};
+
 STATIC CONST NAMESPACE_TABLES SdtTables[] = {
   {
     SIGNATURE_64 ('R', 'P', 'I', 'T', 'H', 'F', 'A', 'N'),
@@ -731,7 +745,7 @@ STATIC CONST NAMESPACE_TABLES SdtTables[] = {
     SIGNATURE_64 ('R', 'P', 'I', '4', 'E', 'M', 'M', 'C'),
     0,
     PcdToken(PcdSdIsArasan),
-    NULL
+    SsdtEmmcNameOpReplace
   },
   {
     SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),

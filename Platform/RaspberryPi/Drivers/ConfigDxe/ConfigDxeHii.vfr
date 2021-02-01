@@ -96,6 +96,11 @@ formset
       name  = MmcSdHighSpeedMHz,
       guid  = CONFIGDXE_FORM_SET_GUID;
 
+    efivarstore MMC_EMMC_DMA_VARSTORE_DATA,
+      attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
+      name  = MmcEnableDma,
+      guid  = CONFIGDXE_FORM_SET_GUID;
+
     efivarstore DEBUG_ENABLE_JTAG_VARSTORE_DATA,
       attribute = EFI_VARIABLE_BOOTSERVICE_ACCESS | EFI_VARIABLE_RUNTIME_ACCESS | EFI_VARIABLE_NON_VOLATILE,
       name  = DebugEnableJTAG,
@@ -275,6 +280,18 @@ formset
              maximum = 100,
              default = 50,
         endnumeric;
+#if (RPI_MODEL == 4)
+        grayoutif ideqval SdIsArasan.Routing == 1;
+        oneof varid = MmcEnableDma.EnableDma,
+            prompt      = STRING_TOKEN(STR_MMC_EMMC_PROMPT),
+            help        = STRING_TOKEN(STR_MMC_EMMC_HELP),
+            flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
+            option text = STRING_TOKEN(STR_MMC_EMMC_PIO), value = 0, flags = DEFAULT;
+            option text = STRING_TOKEN(STR_MMC_EMMC_DMA), value = 1, flags = 0;
+        endoneof;
+        endif;
+#endif
+
     endform;
 
     form formid = 0x1004,
