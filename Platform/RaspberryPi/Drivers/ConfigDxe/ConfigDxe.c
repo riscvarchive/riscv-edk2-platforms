@@ -606,6 +606,7 @@ typedef struct {
 typedef struct {
   UINT64                      OemTableId;
   UINTN                       PcdToken;
+  UINTN                       PcdTokenNot;
   CONST AML_NAME_OP_REPLACE   *SdtNameOpReplace;
 } NAMESPACE_TABLES;
 
@@ -703,6 +704,9 @@ VerifyUpdateTable (
   if (SdtTable->PcdToken && !LibPcdGet32 (SdtTable->PcdToken)) {
     Result = FALSE;
   }
+  if (SdtTable->PcdTokenNot && LibPcdGet32 (SdtTable->PcdTokenNot)) {
+    Result = FALSE;
+  }
   if (Result && SdtTable->SdtNameOpReplace) {
     UpdateSdtNameOps (AcpiHeader, SdtTable->SdtNameOpReplace);
   }
@@ -720,10 +724,12 @@ STATIC CONST NAMESPACE_TABLES SdtTables[] = {
   {
     SIGNATURE_64 ('R', 'P', 'I', 'T', 'H', 'F', 'A', 'N'),
     PcdToken(PcdFanOnGpio),
+    0,
     SsdtNameOpReplace
   },
   {
     SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),
+    0,
     0,
     NULL
   },
