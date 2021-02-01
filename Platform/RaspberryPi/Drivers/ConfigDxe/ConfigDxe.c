@@ -781,6 +781,12 @@ HandleDynamicNamespace (
     DEBUG ((DEBUG_ERROR, "Found namespace table not in table list.\n"));
 
     return FALSE;
+  case SIGNATURE_32 ('I', 'O', 'R', 'T'):
+    // only enable the IORT on machines with >3G and no limit
+    // to avoid problems with rhel/centos and other older OSs
+    if (PcdGet32 (PcdRamLimitTo3GB) || !PcdGet32 (PcdRamMoreThan3GB)) {
+      return FALSE;
+    }
   }
 
   return TRUE;
