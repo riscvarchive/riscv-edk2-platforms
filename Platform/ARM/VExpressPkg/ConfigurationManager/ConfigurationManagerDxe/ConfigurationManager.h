@@ -17,6 +17,7 @@
     containing the AML bytecode array.
 */
 extern CHAR8  dsdt_aml_code[];
+extern CHAR8  ssdtpci_aml_code[];
 
 /** The configuration manager version.
 */
@@ -77,13 +78,18 @@ typedef EFI_STATUS (*CM_OBJECT_HANDLER_PROC) (
           (CM_OBJECT_TOKEN)((UINT8*)&VExpressPlatRepositoryInfo + \
            OFFSET_OF (EDKII_PLATFORM_REPOSITORY_INFO, Field))
 
+/** Macro to return MPIDR for Multi Threaded Cores
+*/
+#define GET_MPID_MT(Cluster, Core, Thread)                        \
+          (((Cluster) << 16) | ((Core) << 8) | (Thread))
+
 /** The number of CPUs
 */
 #define PLAT_CPU_COUNT              8
 
 /** The number of ACPI tables to install
 */
-#define PLAT_ACPI_TABLE_COUNT       6
+#define PLAT_ACPI_TABLE_COUNT       9
 
 /** The number of platform generic timer blocks
 */
@@ -145,6 +151,28 @@ typedef struct PlatformRepositoryInfo {
 
   /// GIC ITS information
   CM_ARM_GIC_ITS_INFO                   GicItsInfo;
+
+  // FVP RevC components
+  /// SMMUv3 node
+  CM_ARM_SMMUV3_NODE                    SmmuV3Info;
+
+  /// ITS Group node
+  CM_ARM_ITS_GROUP_NODE                 ItsGroupInfo;
+
+  /// ITS Identifier array
+  CM_ARM_ITS_IDENTIFIER                 ItsIdentifierArray[1];
+
+  /// PCI Root complex node
+  CM_ARM_ROOT_COMPLEX_NODE              RootComplexInfo;
+
+  /// Array of DeviceID mapping
+  CM_ARM_ID_MAPPING                     DeviceIdMapping[2];
+
+  /// PCI configuration space information
+  CM_ARM_PCI_CONFIG_SPACE_INFO          PciConfigInfo;
+
+  /// System ID
+  UINT32                                SysId;
 } EDKII_PLATFORM_REPOSITORY_INFO;
 
 #endif // CONFIGURATION_MANAGER_H__

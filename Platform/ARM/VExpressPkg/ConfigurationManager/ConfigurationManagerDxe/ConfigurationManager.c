@@ -12,6 +12,8 @@
 
 #include <IndustryStandard/DebugPort2Table.h>
 #include <IndustryStandard/SerialPortConsoleRedirectionTable.h>
+#include <IndustryStandard/IoRemappingTable.h>
+#include <IndustryStandard/MemoryMappedConfigurationSpaceAccessTable.h>
 #include <Library/ArmLib.h>
 #include <Library/DebugLib.h>
 #include <Library/IoLib.h>
@@ -74,7 +76,30 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
       EFI_ACPI_DBG2_DEBUG_DEVICE_INFORMATION_STRUCT_REVISION,
       CREATE_STD_ACPI_TABLE_GEN_ID (EStdAcpiTableIdDbg2),
       NULL
-    }
+    },
+
+    // Note: The last 3 tables in this list are for FVP RevC only.
+    // IORT Table - FVP RevC
+    {
+      EFI_ACPI_6_2_IO_REMAPPING_TABLE_SIGNATURE,
+      EFI_ACPI_IO_REMAPPING_TABLE_REVISION,
+      CREATE_STD_ACPI_TABLE_GEN_ID (EStdAcpiTableIdIort),
+      NULL
+    },
+    // PCI MCFG Table - FVP RevC
+    {
+      EFI_ACPI_6_2_PCI_EXPRESS_MEMORY_MAPPED_CONFIGURATION_SPACE_BASE_ADDRESS_DESCRIPTION_TABLE_SIGNATURE,
+      EFI_ACPI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_TABLE_REVISION,
+      CREATE_STD_ACPI_TABLE_GEN_ID (EStdAcpiTableIdMcfg),
+      NULL
+    },
+    // SSDT table describing the PCI root complex - FVP RevC
+    {
+      EFI_ACPI_6_2_SECONDARY_SYSTEM_DESCRIPTION_TABLE_SIGNATURE,
+      0, // Unused
+      CREATE_STD_ACPI_TABLE_GEN_ID (EStdAcpiTableIdSsdt),
+      (EFI_ACPI_DESCRIPTION_HEADER*)ssdtpci_aml_code
+    },
   },
 
   // Boot architecture information
@@ -90,6 +115,8 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
 
   /* GIC CPU Interface information
      GIC_ENTRY (CPUInterfaceNumber, Mpidr, PmuIrq, VGicIrq, EnergyEfficiency)
+     Note: The MPIDR is fixed up in InitializePlatformRepository() if the
+           platform is FVP RevC.
   */
   {
     GICC_ENTRY (0, GET_MPID (0, 0), 92, 25, 0),
@@ -215,7 +242,121 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
     0,
     // The physical address for the Interrupt Translation Service
     0x2f020000
-  }
+  },
+
+  // SMMUv3 Node
+  {
+    // Reference token for this Iort node
+    REFERENCE_TOKEN (SmmuV3Info),
+    // Number of ID mappings
+    1,
+    // Reference token for the ID mapping array
+    REFERENCE_TOKEN (DeviceIdMapping[0]),
+
+    // SMMU Base Address
+    FVP_REVC_SMMUV3_BASE,
+    // SMMU flags
+    EFI_ACPI_IORT_SMMUv3_FLAG_COHAC_OVERRIDE,
+    // VATOS address
+    0,
+    // Model
+    EFI_ACPI_IORT_SMMUv3_MODEL_GENERIC,
+    // GSIV of the Event interrupt if SPI based
+    0x6A,
+    // PRI Interrupt if SPI based
+    0x6B,
+    // GERR interrupt if GSIV based
+    0x6F,
+    // Sync interrupt if GSIV based
+    0x6D,
+
+    // Proximity domain flag, ignored in this case
+    0,
+    // Index into the array of ID mapping, ignored as SMMU
+    // control interrupts are GSIV based
+    0
+  },
+
+  // ITS group node
+  {
+    // Reference token for this Iort node
+    REFERENCE_TOKEN (ItsGroupInfo),
+    // The number of ITS identifiers in the ITS node.
+    1,
+    // Reference token for the ITS identifier array
+    REFERENCE_TOKEN (ItsIdentifierArray)
+  },
+  // ITS identifier array
+  {
+    {
+      // The ITS Identifier
+      0
+    }
+  },
+
+  // Root Complex node info
+  {
+    // Reference token for this Iort node
+    REFERENCE_TOKEN (RootComplexInfo),
+    // Number of ID mappings
+    1,
+    // Reference token for the ID mapping array
+    REFERENCE_TOKEN (DeviceIdMapping[1]),
+
+    // Memory access properties : Cache coherent attributes
+    EFI_ACPI_IORT_MEM_ACCESS_PROP_CCA,
+    // Memory access properties : Allocation hints
+    0,
+    // Memory access properties : Memory access flags
+    0,
+    // ATS attributes
+    EFI_ACPI_IORT_ROOT_COMPLEX_ATS_UNSUPPORTED,
+    // PCI segment number
+    0
+  },
+
+  // Array of Device ID mappings
+  {
+    /* Mapping When SMMUv3 is defined
+       RootComplex -> SMMUv3 -> ITS Group
+    */
+
+    // SMMUv3 device ID mapping
+    {
+      // Input base
+      0x0,
+      // Number of input IDs
+      0x0000FFFF,
+      // Output Base
+      0x0,
+      // Output reference
+      REFERENCE_TOKEN (ItsGroupInfo),
+      // Flags
+      0
+    },
+    // Device ID mapping for Root complex node
+    {
+      // Input base
+      0x0,
+      // Number of input IDs
+      0x0000FFFF,
+      // Output Base
+      0x0,
+      // Output reference token for the IORT node
+      REFERENCE_TOKEN (SmmuV3Info),
+      // Flags
+      0
+    }
+  },
+
+  // PCI Configuration Space Info
+  {
+    FixedPcdGet64 (PcdPciExpressBaseAddress),
+    // PciSegmentGroupNumber
+    0,
+    FixedPcdGet32 (PcdPciBusMin),
+    FixedPcdGet32 (PcdPciBusMax)
+  },
 };
 
 /** A helper function for returning the Configuration Manager Objects.
@@ -324,6 +465,24 @@ InitializePlatformRepository (
   IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This
   )
 {
+  EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
+
+  PlatformRepo = This->PlatRepoInfo;
+
+  PlatformRepo->SysId = MmioRead32 (ARM_VE_SYS_ID_REG);
+  if ((PlatformRepo->SysId & ARM_FVP_SYS_ID_REV_MASK) ==
+       ARM_FVP_BASE_REVC_REV) {
+    // REVC affinity is shifted, update the MPIDR
+    PlatformRepo->GicCInfo[0].MPIDR = GET_MPID_MT (0, 0, 0);
+    PlatformRepo->GicCInfo[1].MPIDR = GET_MPID_MT (0, 1, 0);
+    PlatformRepo->GicCInfo[2].MPIDR = GET_MPID_MT (0, 2, 0);
+    PlatformRepo->GicCInfo[3].MPIDR = GET_MPID_MT (0, 3, 0);
+
+    PlatformRepo->GicCInfo[4].MPIDR = GET_MPID_MT (1, 0, 0);
+    PlatformRepo->GicCInfo[5].MPIDR = GET_MPID_MT (1, 1, 0);
+    PlatformRepo->GicCInfo[6].MPIDR = GET_MPID_MT (1, 2, 0);
+    PlatformRepo->GicCInfo[7].MPIDR = GET_MPID_MT (1, 3, 0);
+  }
   return EFI_SUCCESS;
 }
 
@@ -370,6 +529,91 @@ GetGTBlockTimerFrameInfo (
   return EFI_SUCCESS;
 }
 
+/** Return an ITS identifier array.
+
+  @param [in]  This        Pointer to the Configuration Manager Protocol.
+  @param [in]  CmObjectId  The Configuration Manager Object ID.
+  @param [in]  Token       A token for identifying the object
+  @param [out] CmObject    Pointer to the Configuration Manager Object
+                           descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+  @retval EFI_INVALID_PARAMETER A parameter is invalid.
+  @retval EFI_NOT_FOUND         The required object information is not found.
+*/
+EFI_STATUS
+EFIAPI
+GetItsIdentifierArray (
+  IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This,
+  IN  CONST CM_OBJECT_ID                                  CmObjectId,
+  IN  CONST CM_OBJECT_TOKEN                               Token,
+  IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObject
+  )
+{
+  EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
+
+  if ((This == NULL) || (CmObject == NULL)) {
+    ASSERT (This != NULL);
+    ASSERT (CmObject != NULL);
+    return EFI_INVALID_PARAMETER;
+  }
+
+  PlatformRepo = This->PlatRepoInfo;
+
+  if (Token != (CM_OBJECT_TOKEN)&PlatformRepo->ItsIdentifierArray) {
+    return EFI_NOT_FOUND;
+  }
+
+  CmObject->ObjectId = CmObjectId;
+  CmObject->Size = sizeof (PlatformRepo->ItsIdentifierArray);
+  CmObject->Data = (VOID*)&PlatformRepo->ItsIdentifierArray;
+  CmObject->Count = ARRAY_SIZE (PlatformRepo->ItsIdentifierArray);
+  return EFI_SUCCESS;
+}
+
+/** Return a device Id mapping array.
+
+  @param [in]  This        Pointer to the Configuration Manager Protocol.
+  @param [in]  CmObjectId  The Configuration Manager Object ID.
+  @param [in]  Token       A token for identifying the object
+  @param [out] CmObject    Pointer to the Configuration Manager Object
+                           descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+  @retval EFI_INVALID_PARAMETER A parameter is invalid.
+  @retval EFI_NOT_FOUND         The required object information is not found.
+*/
+EFI_STATUS
+EFIAPI
+GetDeviceIdMappingArray (
+  IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This,
+  IN  CONST CM_OBJECT_ID                                  CmObjectId,
+  IN  CONST CM_OBJECT_TOKEN                               Token,
+  IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObject
+  )
+{
+  EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
+
+  if ((This == NULL) || (CmObject == NULL)) {
+    ASSERT (This != NULL);
+    ASSERT (CmObject != NULL);
+    return EFI_INVALID_PARAMETER;
+  }
+
+  PlatformRepo = This->PlatRepoInfo;
+
+  if ((Token != (CM_OBJECT_TOKEN)&PlatformRepo->DeviceIdMapping[0]) &&
+      (Token != (CM_OBJECT_TOKEN)&PlatformRepo->DeviceIdMapping[1])) {
+    return EFI_NOT_FOUND;
+  }
+
+  CmObject->ObjectId = CmObjectId;
+  CmObject->Size = sizeof (CM_ARM_ID_MAPPING);
+  CmObject->Data = (VOID*)Token;
+  CmObject->Count = 1;
+  return EFI_SUCCESS;
+}
+
 /** Return a standard namespace object.
 
   @param [in]      This        Pointer to the Configuration Manager Protocol.
@@ -394,7 +638,9 @@ GetStandardNameSpaceObject (
 {
   EFI_STATUS                      Status;
   EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
+  UINTN                           AcpiTableCount;
 
+  Status = EFI_SUCCESS;
   if ((This == NULL) || (CmObject == NULL)) {
     ASSERT (This != NULL);
     ASSERT (CmObject != NULL);
@@ -402,7 +648,15 @@ GetStandardNameSpaceObject (
   }
 
   Status = EFI_NOT_FOUND;
+  AcpiTableCount = ARRAY_SIZE (PlatformRepo->CmAcpiTableList);
   PlatformRepo = This->PlatRepoInfo;
+
+  if ((PlatformRepo->SysId & ARM_FVP_SYS_ID_REV_MASK) !=
+       ARM_FVP_BASE_REVC_REV) {
+    // The last 3 tables in the ACPI table list are for FVP RevC
+    // Reduce the count by 3 if the platform is not FVP RevC
+    AcpiTableCount -= 3;
+  }
 
   switch (GET_CM_OBJECT_ID (CmObjectId)) {
     case EStdObjCfgMgrInfo:
@@ -420,7 +674,7 @@ GetStandardNameSpaceObject (
                  CmObjectId,
                  &PlatformRepo->CmAcpiTableList,
                  sizeof (PlatformRepo->CmAcpiTableList),
-                 ARRAY_SIZE (PlatformRepo->CmAcpiTableList),
+                 AcpiTableCount,
                  CmObject
                  );
       break;
@@ -464,6 +718,12 @@ GetArmNameSpaceObject (
 {
   EFI_STATUS                        Status;
   EDKII_PLATFORM_REPOSITORY_INFO  * PlatformRepo;
+  UINTN                             Smmuv3Count;
+  UINTN                             ItsGroupCount;
+  UINTN                             ItsIdentifierArrayCount;
+  UINTN                             RootComplexCount;
+  UINTN                             DeviceIdMappingArrayCount;
+  UINTN                             PciConfigSpaceCount;
 
   if ((This == NULL) || (CmObject == NULL)) {
     ASSERT (This != NULL);
@@ -473,6 +733,23 @@ GetArmNameSpaceObject (
 
   Status = EFI_NOT_FOUND;
   PlatformRepo = This->PlatRepoInfo;
+
+  if ((PlatformRepo->SysId & ARM_FVP_SYS_ID_REV_MASK) ==
+       ARM_FVP_BASE_REVC_REV) {
+    Smmuv3Count = 1;
+    ItsGroupCount = 1;
+    ItsIdentifierArrayCount = ARRAY_SIZE (PlatformRepo->ItsIdentifierArray);
+    RootComplexCount = 1;
+    DeviceIdMappingArrayCount = ARRAY_SIZE (PlatformRepo->DeviceIdMapping);
+    PciConfigSpaceCount = 1;
+  } else {
+    Smmuv3Count = 0;
+    ItsGroupCount = 0;
+    ItsIdentifierArrayCount = 0;
+    RootComplexCount = 0;
+    DeviceIdMappingArrayCount = 0;
+    PciConfigSpaceCount = 0;
+  }
 
   switch (GET_CM_OBJECT_ID (CmObjectId)) {
     case EArmObjBootArchInfo:
@@ -605,6 +882,72 @@ GetArmNameSpaceObject (
                  &PlatformRepo->GicItsInfo,
                  sizeof (PlatformRepo->GicItsInfo),
                  1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjSmmuV3:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->SmmuV3Info,
+                 sizeof (PlatformRepo->SmmuV3Info),
+                 Smmuv3Count,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjItsGroup:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->ItsGroupInfo,
+                 sizeof (PlatformRepo->ItsGroupInfo),
+                 ItsGroupCount,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjGicItsIdentifierArray:
+      Status = HandleCmObjectRefByToken (
+                 This,
+                 CmObjectId,
+                 PlatformRepo->ItsIdentifierArray,
+                 sizeof (PlatformRepo->ItsIdentifierArray),
+                 ItsIdentifierArrayCount,
+                 Token,
+                 GetItsIdentifierArray,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjRootComplex:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->RootComplexInfo,
+                 sizeof (PlatformRepo->RootComplexInfo),
+                 1,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjIdMappingArray:
+      Status = HandleCmObjectRefByToken (
+                 This,
+                 CmObjectId,
+                 PlatformRepo->DeviceIdMapping,
+                 sizeof (PlatformRepo->DeviceIdMapping),
+                 ARRAY_SIZE (PlatformRepo->DeviceIdMapping),
+                 Token,
+                 GetDeviceIdMappingArray,
+                 CmObject
+                 );
+      break;
+
+    case EArmObjPciConfigSpaceInfo:
+      Status = HandleCmObject (
+                 CmObjectId,
+                 &PlatformRepo->PciConfigInfo,
+                 sizeof (PlatformRepo->PciConfigInfo),
+                 PciConfigSpaceCount,
                  CmObject
                  );
       break;
