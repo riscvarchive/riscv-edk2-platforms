@@ -30,6 +30,7 @@
 !endif
 
   DT_SUPPORT                     = FALSE
+  DYNAMIC_TABLES_FRAMEWORK       = TRUE
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
 !ifdef DYNAMIC_TABLES_FRAMEWORK
