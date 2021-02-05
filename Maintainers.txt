@@ -242,6 +242,12 @@ F: Silicon/Intel/KabylakeSiliconPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
 
+Silicon/Intel/TigerlakeSiliconPkg
+F: Silicon/Intel/TigerlakeSiliconPkg/
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
+R: Heng Luo <heng.luo@intel.com>
+
 Silicon/Intel/SimicsX58SktPkg
 F: Silicon/Intel/SimicsX58SktPkg/
 M: Agyeman Prince <prince.agyeman@intel.com>
