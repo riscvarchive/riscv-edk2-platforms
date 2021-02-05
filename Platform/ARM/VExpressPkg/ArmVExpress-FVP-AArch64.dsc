@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2021, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2021, Arm Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -64,6 +64,11 @@
 
 [LibraryClasses.common.UEFI_DRIVER, LibraryClasses.common.UEFI_APPLICATION, LibraryClasses.common.DXE_RUNTIME_DRIVER, LibraryClasses.common.DXE_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
+
+  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+  PciHostBridgeLib|Platform/ARM/VExpressPkg/Library/ArmVExpressPciHostBridgeLib/ArmVExpressPciHostBridgeLib.inf
+  PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
 
 [BuildOptions]
   GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/RTSM
@@ -159,6 +164,21 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x2f000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x2f100000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x2C000000
+
+  #
+  # PCI Root Complex
+  #
+  gArmTokenSpaceGuid.PcdPciBusMin|0
+  gArmTokenSpaceGuid.PcdPciBusMax|255
+
+  gArmTokenSpaceGuid.PcdPciMmio32Base|0x50000000
+  gArmTokenSpaceGuid.PcdPciMmio32Size|0x10000000
+
+  gArmTokenSpaceGuid.PcdPciMmio64Base|0x4000000000
+  gArmTokenSpaceGuid.PcdPciMmio64Size|0x4000000000
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x40000000
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseSize|0x10000000
 
   #
   # ARM Architectural Timer Frequency
@@ -331,3 +351,21 @@
   #
   EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 !endif
+
+  #
+  # PCI Support
+  #
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+  #
+  # AHCI Support
+  #
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+
+  #
+  # SATA Controller
+  #
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
