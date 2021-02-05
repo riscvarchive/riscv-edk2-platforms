@@ -150,8 +150,7 @@ EDKII_PLATFORM_REPOSITORY_INFO VExpressPlatRepositoryInfo = {
       // The number of timer frames implemented in the GT Block
       FVP_TIMER_FRAMES_COUNT,
       // Reference token for the GT Block timer frame list
-      (CM_OBJECT_TOKEN)((UINT8*)&VExpressPlatRepositoryInfo +
-        OFFSET_OF (EDKII_PLATFORM_REPOSITORY_INFO, GTBlock0TimerInfo))
+      REFERENCE_TOKEN (GTBlock0TimerInfo)
     }
   },
 

@@ -71,6 +71,12 @@ typedef EFI_STATUS (*CM_OBJECT_HANDLER_PROC) (
   IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObject
   );
 
+/** A helper macro for mapping a reference token.
+*/
+#define REFERENCE_TOKEN(Field)                                    \
+          (CM_OBJECT_TOKEN)((UINT8*)&VExpressPlatRepositoryInfo + \
+           OFFSET_OF (EDKII_PLATFORM_REPOSITORY_INFO, Field))
+
 /** The number of CPUs
 */
 #define PLAT_CPU_COUNT              8
