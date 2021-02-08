@@ -105,7 +105,7 @@ F: Platform/ARM/
 F: Silicon/ARM/
 R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 R: Thomas Abraham <thomas.abraham@arm.com>
-M: Leif Lindholm <leif@nuviainc.com>
+M: Sami Mujawar <sami.mujawar@arm.com>
 
 BeagleBoard:
 F: Platform/BeagleBoard/
