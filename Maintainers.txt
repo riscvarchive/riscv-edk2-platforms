@@ -195,6 +195,12 @@ M: Rangasai V Chaganty <rangasai.v.chaganty@intel.com>
 R: Deepika Kethi Reddy <deepika.kethi.reddy@intel.com>
 R: Kathappan Esakkithevar <kathappan.esakkithevar@intel.com>
 
+Platform/Intel/TigerlakeOpenBoardPkg
+F: Platform/Intel/TigerlakeOpenBoardPkg/
+M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
+R: Heng Luo <heng.luo@intel.com>
+
 Platform/Intel/SimicsOpenBoardPkg
 F: Platform/Intel/SimicsOpenBoardPkg/
 M: Agyeman Prince <prince.agyeman@intel.com>
