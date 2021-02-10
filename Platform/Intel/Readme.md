@@ -57,6 +57,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 * The `SimicsOpenBoardPkg` contains board implementations for the Simics hardware simulator.
 * The `WhiskeylakeOpenBoardPkg` contains board implementations for WhiskeyLake systems.
 * The `CometlakeOpenBoardPkg` contains board implementations for CometLake systems.
+* The `TigerlakeOpenBoardPkg` contains board implementations for TigerLake systems.
 
 ### **Supported Hardware**
 
@@ -75,6 +76,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 | RVP 3                                 | SkyLake, KabyLake, KabyLake Refresh        | KabylakeOpenBoardPkg         | KabylakeRvp3       |
 | WHL-U DDR4 RVP                        | WhiskeyLake                                | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
 | CML-U LPDDR3 RVP                      | CometLake V1                               | CometlakeOpenBoardPkg        | CometlakeURvp      |
+| TGL-U LPDDR4 RVP                      | TigerLake                                  | TigerlakeOpenBoardPkg        | TigerlakeURvp      |
 
 *Note: RVP = Reference and Validation Platform*
 
@@ -253,6 +255,11 @@ return back to the minimum platform caller.
           |       |        |               |---build_config.cfg: CometlakeURvp specific build
           |       |        |                                     settings environment variables.
           |       |        |
+          |       |        |------TigerlakeOpenBoardPkg
+          |       |        |       |------TigerlakeURvp
+          |       |        |               |---build_config.cfg: TigerlakeURvp specific build
+          |       |        |                                     settings environment variables.
+          |       |        |
           |------FSP
   </pre>
 
@@ -282,6 +289,10 @@ return back to the minimum platform caller.
 **CometlakeOpenBoardPkg**
 1. This firmware project has been tested booting to Microsoft Windows 10 x64 with AHCI mode and External Graphic Device.
 2. This firmware project has been also tested booting to Ubuntu 17.10 with AHCI mode and Integrated Graphic Device.
+
+**TigerlakeOpenBoardPkg**
+1. This firmware project has been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic Device.
+2. This firmware project has been also tested booting to Puppy Linux BionicPup64 8.0 with AHCI mode and Integrated Graphic Device.
 
 ### **Package Builds**
 
