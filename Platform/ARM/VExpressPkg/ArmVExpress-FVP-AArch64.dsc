@@ -30,12 +30,9 @@
 !endif
 
   DT_SUPPORT                     = FALSE
-  DYNAMIC_TABLES_FRAMEWORK       = TRUE
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
-!ifdef DYNAMIC_TABLES_FRAMEWORK
-  !include DynamicTablesPkg/DynamicTables.dsc.inc
-!endif
+!include DynamicTablesPkg/DynamicTables.dsc.inc
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
@@ -284,16 +281,11 @@
 !endif
   }
 
-!ifndef DYNAMIC_TABLES_FRAMEWORK
-  MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
-  Platform/ARM/VExpressPkg/AcpiTables/AcpiTables.inf
-!else
   Platform/ARM/VExpressPkg/ConfigurationManager/ConfigurationManagerDxe/ConfigurationManagerDxe.inf {
     <PcdsFixedAtBuild>
       gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x1c090000
       gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x25
   }
-!endif
 
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
