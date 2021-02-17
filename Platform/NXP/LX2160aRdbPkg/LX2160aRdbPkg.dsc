@@ -3,6 +3,7 @@
 #  LX2160ARDB Board package.
 #
 #  Copyright 2018-2020 NXP
+#  Copyright 2020 Puresoftware Ltd
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -29,8 +30,16 @@
   DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
 
+  # This flag controls the dynamic acpi generation
+  #
+  DEFINE DYNAMIC_ACPI_ENABLE            = TRUE
+
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
 !include Silicon/NXP/LX2160A/LX2160A.dsc.inc
+
+!if $(DYNAMIC_ACPI_ENABLE) == TRUE
+  !include DynamicTablesPkg/DynamicTables.dsc.inc
+!endif
 
 [LibraryClasses.common]
   ArmPlatformLib|Platform/NXP/LX2160aRdbPkg/Library/ArmPlatformLib/ArmPlatformLib.inf
@@ -62,6 +71,25 @@
   Silicon/NXP/Drivers/PciCpuIo2Dxe/PciCpuIo2Dxe.inf
   MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+
+  #
+  # Dynamic Table Factory
+  !if $(DYNAMIC_ACPI_ENABLE) == TRUE
+    DynamicTablesPkg/Drivers/DynamicTableFactoryDxe/DynamicTableFactoryDxe.inf {
+      <LibraryClasses>
+        NULL|DynamicTablesPkg/Library/Acpi/Arm/AcpiFadtLibArm/AcpiFadtLibArm.inf
+        NULL|DynamicTablesPkg/Library/Acpi/Arm/AcpiGtdtLibArm/AcpiGtdtLibArm.inf
+        NULL|DynamicTablesPkg/Library/Acpi/Arm/AcpiMadtLibArm/AcpiMadtLibArm.inf
+        NULL|DynamicTablesPkg/Library/Acpi/Arm/AcpiMcfgLibArm/AcpiMcfgLibArm.inf
+        NULL|DynamicTablesPkg/Library/Acpi/Arm/AcpiSpcrLibArm/AcpiSpcrLibArm.inf
+    }
+  !endif
+
+  #
+  # Acpi Support
+  #
+  MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
+  MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
 
   #
   # Networking stack
