@@ -78,6 +78,15 @@ FSL_PLATFORM_REPOSITORY_INFO FslPlatformRepositoryInfo = {
       CREATE_STD_ACPI_TABLE_GEN_ID (EStdAcpiTableIdSpcr),
       NULL,
       CFG_MGR_TABLE_ID
+    },
+
+    // DSDT (OEM) Table
+    {
+      EFI_ACPI_6_2_DIFFERENTIATED_SYSTEM_DESCRIPTION_TABLE_SIGNATURE,
+      0,
+      CREATE_OEM_ACPI_TABLE_GEN_ID (PlatAcpiTableIdDsdt),
+      NULL,
+      CFG_MGR_TABLE_ID
     }
 
   },

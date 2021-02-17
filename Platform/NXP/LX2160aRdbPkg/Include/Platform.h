@@ -21,6 +21,10 @@
 
 #define SVR_LX2160A             0x873600
 
+// PCLK
+#define DCFG_BASE   0x1E00000
+#define DCFG_LEN    0x1FFFF
+
 // Gic
 #define GIC_VERSION 3
 #define GICD_BASE   0x6000000
@@ -79,6 +83,8 @@
 #define LX2160A_PCI_SEG1             0x4
 
 // Platform specific info needed by Configuration Manager
+
+#define OEM_ACPI_TABLES   1 // OEM defined DSDT
 
 #define CFG_MGR_TABLE_ID  SIGNATURE_64 ('L','X','2','1','6','0',' ',' ')
 

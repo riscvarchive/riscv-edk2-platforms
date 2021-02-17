@@ -15,6 +15,7 @@
 #define CONFIGURATION_MANAGER_H
 
 #include <Platform.h>
+#include <PlatformAcpiTableGenerator.h>
 
 /** The configuration manager version
 */
@@ -62,7 +63,8 @@ typedef EFI_STATUS (*CM_OBJECT_HANDLER_PROC) (
 
 /** The number of ACPI tables to install
 */
-#define PLAT_ACPI_TABLE_COUNT   5
+#define CM_MANDATORY_ACPI_TABLES  5
+#define PLAT_ACPI_TABLE_COUNT     (CM_MANDATORY_ACPI_TABLES + OEM_ACPI_TABLES)
 
 /** A structure describing the platform configuration
     manager repository information
