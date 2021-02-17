@@ -51,7 +51,7 @@
 
 /*
   See Reference [1] 6.1.1
-  "High word–Device #, Low word–Function #. (for example, device 3,
+  "High word Device #, Low word Function #. (for example, device 3,
   function 2 is 0x00030002). To refer to all the functions on a device #,
   use a function number of FFFF)."
 */
