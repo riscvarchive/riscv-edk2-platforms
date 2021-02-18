@@ -25,6 +25,7 @@
 
 [Sources]
   AcpiTables.h
+  Emmc.asl
   Madt.aslc
   Fadt.aslc
   Dbg2.aslc
