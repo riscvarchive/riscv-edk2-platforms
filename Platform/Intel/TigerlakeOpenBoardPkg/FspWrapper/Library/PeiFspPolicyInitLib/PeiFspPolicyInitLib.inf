@@ -52,7 +52,7 @@
   MdeModulePkg/MdeModulePkg.dec
   IntelFsp2Pkg/IntelFsp2Pkg.dec
   TigerlakeSiliconPkg/SiPkg.dec
-  TigerLakeFspBinPkg/TigerLakeFspBinPkg.dec
+  TigerLakeFspBinPkg/Client/TigerLakeFspBinPkg.dec
   TigerlakeOpenBoardPkg/OpenBoardPkg.dec
   UefiCpuPkg/UefiCpuPkg.dec
   IntelSiliconPkg/IntelSiliconPkg.dec

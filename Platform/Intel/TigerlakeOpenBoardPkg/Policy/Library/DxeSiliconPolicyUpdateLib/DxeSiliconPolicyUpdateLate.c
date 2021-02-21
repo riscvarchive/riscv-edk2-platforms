@@ -88,8 +88,8 @@ SiliconPolicyUpdateLate (
     // GOP Dxe Policy Initialization
     //
     Status = GopPolicyInitDxe (gImageHandle);
-    RETURN_ERROR (Status);
     DEBUG ((DEBUG_INFO, "GOP Dxe Policy Initialization done\n"));
+    ASSERT_EFI_ERROR (Status);
   }
 
   return Policy;
