@@ -98,7 +98,7 @@ GLOBAL_REMOVE_IF_UNREFERENCED PCH_PCIE_DEVICE_OVERRIDE mPcieDeviceTable[] = {
   //
   // Teton Glacier Endpoint
   //
-  { 0x8086, 0x0975, 0xff, 0, 0, 0, PchPcieL1SubstatesOverride, 0, 0xff, 0x3C, 0, 5, 0, 0, 0, 0 },
+  { 0x8086, 0x0975, 0xff, 0, 0, 0, PchPcieL1SubstatesOverride, 0, 0xff, 0x3C, 0, 5, 0, 0 },
 
   //
   // End of Table
