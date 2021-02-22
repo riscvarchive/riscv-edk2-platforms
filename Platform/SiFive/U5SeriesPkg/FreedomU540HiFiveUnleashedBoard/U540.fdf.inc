@@ -48,11 +48,11 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize = 0x10000
 
 SET gUefiRiscVPkgTokenSpaceGuid.PcdRiscVMachineTimerFrequencyInHerz    = 1000000
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdU5PlatformSystemClock = 1000000000 # 1GHz system clock
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdHartCount                   = 5          # Total cores on U540 platform
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId                  = 1          # Boot hart ID
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootableHartNumber          = 4          # The bootable hart core number.
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdHartCount                   = 1          # Total cores on U540 platform
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId                  = 0          # Boot hart ID
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootableHartNumber          = 1          # The bootable hart core number.
                                                                                     # Which is incorporate with OpenSBI
                                                                                     # platform hart_index2id value.
-SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores       = 4          # Total U5 cores enabled on U540 platform
+SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores       = 1          # Total U5 cores enabled on U540 platform
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdE5MCSupported         = True       # E51 MC exists.
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode        = 1          # Set PeiCore to S-Mode
