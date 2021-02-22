@@ -81,7 +81,8 @@
   PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
   OemHookStatusCodeLib|MdeModulePkg/Library/OemHookStatusCodeLibNull/OemHookStatusCodeLibNull.inf
-  SerialPortLib|Platform/SiFive/U5SeriesPkg/Library/SerialIoLib/SerialIoLib.inf
+  SerialPortLib|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+  PlatformHookLib|MdeModulePkg/Library/BasePlatformHookLibNull/BasePlatformHookLibNull.inf
   UefiLib|MdePkg/Library/UefiLib/UefiLib.inf
   UefiBootServicesTableLib|MdePkg/Library/UefiBootServicesTableLib/UefiBootServicesTableLib.inf
   UefiRuntimeServicesTableLib|MdePkg/Library/UefiRuntimeServicesTableLib/UefiRuntimeServicesTableLib.inf
@@ -332,6 +333,21 @@
   # F2 for UI APP
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
+
+  # Serial Port
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseMmio|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x10000000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|9600
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x07
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialDetectCable|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|115200
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialPciDeviceInfo|{0x14, 0x05, 0x84, 0x00, 0xFF}
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|4
+
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|115200
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|200000000
 
 ################################################################################
 #
