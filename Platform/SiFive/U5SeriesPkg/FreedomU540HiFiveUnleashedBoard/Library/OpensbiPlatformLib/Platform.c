@@ -1,216 +1,224 @@
 /*
- *
- * Copyright (c) 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
- *
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2019 Western Digital Corporation or its affiliates.
+ * Copyright (c) 2020 Western Digital Corporation or its affiliates.
  *
  * Authors:
- *   Atish Patra <atish.patra@wdc.com>
+ *   Anup Patel <anup.patel@wdc.com>
  */
 
 #include <libfdt.h>
+#include <PlatformOverride.h>
 #include <sbi/riscv_asm.h>
-#include <sbi/riscv_io.h>
-#include <sbi/riscv_encoding.h>
-#include <sbi/sbi_console.h>
-#include <sbi/sbi_const.h>
+#include <sbi/sbi_hartmask.h>
 #include <sbi/sbi_platform.h>
+#include <sbi/sbi_string.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
-#include <sbi_utils/irqchip/plic.h>
-#include <sbi_utils/serial/sifive-uart.h>
-#include <sbi_utils/sys/clint.h>
-#include <U5Clint.h>
+#include <sbi_utils/fdt/fdt_helper.h>
+#include <sbi_utils/irqchip/fdt_irqchip.h>
+#include <sbi_utils/serial/fdt_serial.h>
+#include <sbi_utils/timer/fdt_timer.h>
+#include <sbi_utils/ipi/fdt_ipi.h>
+#include <sbi_utils/reset/fdt_reset.h>
 
-#define U540_HART_COUNT          FixedPcdGet32(PcdHartCount)
-#define U540_BOOTABLE_HART_COUNT FixedPcdGet32(PcdBootableHartNumber)
-#define U540_HART_STACK_SIZE     FixedPcdGet32(PcdOpenSbiStackSize)
-#define U540_BOOT_HART_ID        FixedPcdGet32(PcdBootHartId)
+extern const struct platform_override sifive_fu540;
 
-#define U540_SYS_CLK              FixedPcdGet32(PcdU5PlatformSystemClock)
-
-#define U540_PLIC_ADDR            0xc000000
-#define U540_PLIC_NUM_SOURCES     0x35
-#define U540_PLIC_NUM_PRIORITIES  7
-
-#define U540_UART_ADDR            FixedPcdGet32(PcdU5UartBase)
-
-#define U540_UART_BAUDRATE        115200
-
-/* PRCI clock related macros */
-//TODO: Do we need a separate driver for this ?
-#define U540_PRCI_BASE_ADDR                 0x10000000
-#define U540_PRCI_CLKMUXSTATUSREG           0x002C
-#define U540_PRCI_CLKMUX_STATUS_TLCLKSEL    (0x1 << 1)
-
-/* Full tlb flush always */
-#define U540_TLB_RANGE_FLUSH_LIMIT 0
-
-unsigned long log2roundup(unsigned long x);
-
-static struct plic_data plic = {
-    .addr = U540_PLIC_ADDR,
-    .num_src = U540_PLIC_NUM_SOURCES,
+static const struct platform_override *special_platforms[] = {
+	&sifive_fu540,
 };
 
-static struct clint_data clint = {
-    .addr = CLINT_REG_BASE_ADDR,
-    .first_hartid = 0,
-    .hart_count = U540_HART_COUNT,
-    .has_64bit_mmio = TRUE,
-};
+static const struct platform_override *generic_plat = NULL;
+static const struct fdt_match *generic_plat_match = NULL;
 
-static void U540_modify_dt(void *fdt)
+static void fw_platform_lookup_special(void *fdt, int root_offset)
 {
-	fdt_cpu_fixup(fdt);
+	int pos, noff;
+	const struct platform_override *plat;
+	const struct fdt_match *match;
 
+	for (pos = 0; pos < array_size(special_platforms); pos++) {
+		plat = special_platforms[pos];
+		if (!plat->match_table)
+			continue;
+
+		noff = fdt_find_match(fdt, -1, plat->match_table, &match);
+		if (noff < 0)
+			continue;
+
+		generic_plat = plat;
+		generic_plat_match = match;
+		break;
+	}
+}
+
+extern struct sbi_platform platform;
+static u32 generic_hart_index2id[SBI_HARTMASK_MAX_BITS] = { 0 };
+
+/*
+ * The fw_platform_init() function is called very early on the boot HART
+ * OpenSBI reference firmwares so that platform specific code get chance
+ * to update "platform" instance before it is used.
+ *
+ * The arguments passed to fw_platform_init() function are boot time state
+ * of A0 to A4 register. The "arg0" will be boot HART id and "arg1" will
+ * be address of FDT passed by previous booting stage.
+ *
+ * The return value of fw_platform_init() function is the FDT location. If
+ * FDT is unchanged (or FDT is modified in-place) then fw_platform_init()
+ * can always return the original FDT location (i.e. 'arg1') unmodified.
+ */
+unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
+				unsigned long arg2, unsigned long arg3,
+				unsigned long arg4)
+{
+	const char *model, *mmu_type;
+	void *fdt = (void *)arg1;
+	u32 hartid, hart_count = 0;
+	int rc, root_offset, cpus_offset, cpu_offset, len;
+
+	root_offset = fdt_path_offset(fdt, "/");
+	if (root_offset < 0)
+		goto fail;
+
+	fw_platform_lookup_special(fdt, root_offset);
+
+	model = fdt_getprop(fdt, root_offset, "model", &len);
+	if (model)
+		sbi_strncpy(platform.name, model, sizeof(platform.name));
+
+	if (generic_plat && generic_plat->features)
+		platform.features = generic_plat->features(generic_plat_match);
+
+	cpus_offset = fdt_path_offset(fdt, "/cpus");
+	if (cpus_offset < 0)
+		goto fail;
+
+	fdt_for_each_subnode(cpu_offset, fdt, cpus_offset) {
+		rc = fdt_parse_hart_id(fdt, cpu_offset, &hartid);
+		if (rc)
+			continue;
+
+		if (SBI_HARTMASK_MAX_BITS <= hartid)
+			continue;
+
+		mmu_type = fdt_getprop(fdt, cpu_offset, "mmu-type", &len);
+		if (!mmu_type || !len)
+			hartid = -1U;
+
+		generic_hart_index2id[hart_count++] = hartid;
+	}
+
+	platform.hart_count = hart_count;
+
+	/* Return original FDT pointer */
+	return arg1;
+
+fail:
+	while (1)
+		wfi();
+}
+
+static int generic_early_init(bool cold_boot)
+{
+	int rc;
+
+	if (generic_plat && generic_plat->early_init) {
+		rc = generic_plat->early_init(cold_boot, generic_plat_match);
+		if (rc)
+			return rc;
+	}
+
+	if (!cold_boot)
+		return 0;
+
+	return fdt_reset_init();
+}
+
+static int generic_final_init(bool cold_boot)
+{
+	void *fdt;
+	int rc;
+
+	if (generic_plat && generic_plat->final_init) {
+		rc = generic_plat->final_init(cold_boot, generic_plat_match);
+		if (rc)
+			return rc;
+	}
+
+	if (!cold_boot)
+		return 0;
+
+	fdt = sbi_scratch_thishart_arg1_ptr();
+
+	fdt_cpu_fixup(fdt);
 	fdt_fixups(fdt);
 
-	/*
-	 * SiFive Freedom U540 has an erratum that prevents S-mode software
-	 * to access a PMP protected region using 1GB page table mapping, so
-	 * always add the no-map attribute on this platform.
-	 */
-	fdt_reserved_memory_nomap_fixup(fdt);
+	if (generic_plat && generic_plat->fdt_fixup) {
+		rc = generic_plat->fdt_fixup(fdt, generic_plat_match);
+		if (rc)
+			return rc;
+	}
+
+	return 0;
 }
 
-static int U540_final_init(bool cold_boot)
+static void generic_early_exit(void)
 {
-    void *fdt;
-    struct sbi_scratch *ThisScratch;
-
-    if (!cold_boot)
-        return 0;
-
-    fdt = sbi_scratch_thishart_arg1_ptr();
-    U540_modify_dt(fdt);
-    //
-    // Set PMP of firmware regions to R and X. We will lock this in the end of PEI.
-    // This region only protects SEC, PEI and Scratch buffer.
-    //
-    ThisScratch = sbi_scratch_thishart_ptr ();
-    pmp_set(0, PMP_R | PMP_X | PMP_W, ThisScratch->fw_start, log2roundup (ThisScratch->fw_size));
-    return 0;
+	if (generic_plat && generic_plat->early_exit)
+		generic_plat->early_exit(generic_plat_match);
 }
 
-static u32 U540_pmp_region_count(u32 hartid)
+static void generic_final_exit(void)
 {
-    return 1;
+	if (generic_plat && generic_plat->final_exit)
+		generic_plat->final_exit(generic_plat_match);
 }
 
-static int U540_pmp_region_info(u32 hartid, u32 index,
-                 ulong *prot, ulong *addr, ulong *log2size)
+static u64 generic_tlbr_flush_limit(void)
 {
-    int ret = 0;
-
-    switch (index) {
-    case 0:
-        *prot = PMP_R | PMP_W | PMP_X;
-        *addr = 0;
-        *log2size = __riscv_xlen;
-        break;
-    default:
-        ret = -1;
-        break;
-    };
-
-    return ret;
+	if (generic_plat && generic_plat->tlbr_flush_limit)
+		return generic_plat->tlbr_flush_limit(generic_plat_match);
+	return SBI_PLATFORM_TLB_RANGE_FLUSH_LIMIT_DEFAULT;
 }
 
-static int U540_console_init(void)
+static int generic_system_reset(u32 reset_type)
 {
-    unsigned long peri_in_freq;
-
-    peri_in_freq = U540_SYS_CLK/2;
-    return sifive_uart_init(U540_UART_ADDR, peri_in_freq, U540_UART_BAUDRATE);
-}
-
-static int U540_irqchip_init(bool cold_boot)
-{
-    int rc;
-    u32 hartid = current_hartid();
-
-    if (cold_boot) {
-        rc = plic_cold_irqchip_init(&plic);
-        if (rc)
-            return rc;
-    }
-
-    return plic_warm_irqchip_init(&plic,
-            (hartid) ? (2 * hartid - 1) : 0,
-            (hartid) ? (2 * hartid) : -1);
-}
-
-static int U540_ipi_init(bool cold_boot)
-{
-    int rc;
-
-    if (cold_boot) {
-        rc = clint_cold_ipi_init(&clint);
-        if (rc)
-            return rc;
-
-    }
-
-    return clint_warm_ipi_init();
-}
-
-static u64 U540_get_tlbr_flush_limit(void)
-{
-    return U540_TLB_RANGE_FLUSH_LIMIT;
-}
-
-static int U540_timer_init(bool cold_boot)
-{
-    int rc;
-
-    if (cold_boot) {
-        rc = clint_cold_timer_init(&clint, NULL);
-        if (rc)
-            return rc;
-    }
-
-    return clint_warm_timer_init();
-}
-/**
- * The U540 SoC has 5 HARTs, Boot HART ID is determined by
- * PcdBootHartId.
- */
-static u32 U540_hart_index2id[U540_BOOTABLE_HART_COUNT] = {1, 2, 3, 4};
-
-static int U540_system_reset(u32 type)
-{
-    /* For now nothing to do. */
-    return 0;
+	if (generic_plat && generic_plat->system_reset)
+		return generic_plat->system_reset(reset_type,
+						  generic_plat_match);
+	return fdt_system_reset(reset_type);
 }
 
 const struct sbi_platform_operations platform_ops = {
-    .pmp_region_count = U540_pmp_region_count,
-    .pmp_region_info = U540_pmp_region_info,
-    .final_init = U540_final_init,
-    .console_putc = sifive_uart_putc,
-    .console_getc = sifive_uart_getc,
-    .console_init = U540_console_init,
-    .irqchip_init = U540_irqchip_init,
-    .ipi_send = clint_ipi_send,
-    .ipi_clear = clint_ipi_clear,
-    .ipi_init = U540_ipi_init,
-    .get_tlbr_flush_limit = U540_get_tlbr_flush_limit,
-    .timer_value = clint_timer_value,
-    .timer_event_stop = clint_timer_event_stop,
-    .timer_event_start = clint_timer_event_start,
-    .timer_init = U540_timer_init,
-    .system_reset = U540_system_reset
+	.early_init		= generic_early_init,
+	.final_init		= generic_final_init,
+	.early_exit		= generic_early_exit,
+	.final_exit		= generic_final_exit,
+	.console_putc		= fdt_serial_putc,
+	.console_getc		= fdt_serial_getc,
+	.console_init		= fdt_serial_init,
+	.irqchip_init		= fdt_irqchip_init,
+	.irqchip_exit		= fdt_irqchip_exit,
+	.ipi_send		= fdt_ipi_send,
+	.ipi_clear		= fdt_ipi_clear,
+	.ipi_init		= fdt_ipi_init,
+	.ipi_exit		= fdt_ipi_exit,
+	.get_tlbr_flush_limit	= generic_tlbr_flush_limit,
+	.timer_value		= fdt_timer_value,
+	.timer_event_stop	= fdt_timer_event_stop,
+	.timer_event_start	= fdt_timer_event_start,
+	.timer_init		= fdt_timer_init,
+	.timer_exit		= fdt_timer_exit,
+	.system_reset		= generic_system_reset,
 };
 
-const struct sbi_platform platform = {
-    .opensbi_version    = OPENSBI_VERSION,                      // The OpenSBI version this platform table is built bassed on.
-    .platform_version   = SBI_PLATFORM_VERSION(0x0001, 0x0000), // SBI Platform version 1.0
-    .name               = "SiFive Freedom U540",
-    .features           = SBI_PLATFORM_DEFAULT_FEATURES,
-    .hart_count         = U540_BOOTABLE_HART_COUNT,
-    .hart_index2id      = U540_hart_index2id,
-    .hart_stack_size    = U540_HART_STACK_SIZE,
-    .platform_ops_addr  = (unsigned long)&platform_ops
+struct sbi_platform platform = {
+	.opensbi_version	= OPENSBI_VERSION,
+	.platform_version	= SBI_PLATFORM_VERSION(0x0, 0x01),
+	.name			= "Generic",
+	.features		= SBI_PLATFORM_DEFAULT_FEATURES,
+	.hart_count		= SBI_HARTMASK_MAX_BITS,
+	.hart_index2id		= generic_hart_index2id,
+	.hart_stack_size	= SBI_PLATFORM_DEFAULT_HART_STACK_SIZE,
+	.platform_ops_addr	= (unsigned long)&platform_ops
 };
