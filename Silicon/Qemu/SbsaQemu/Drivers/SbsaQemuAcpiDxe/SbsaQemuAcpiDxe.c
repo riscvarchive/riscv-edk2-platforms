@@ -88,6 +88,7 @@ AddMadtTable (
   EFI_PHYSICAL_ADDRESS  PageAddress;
   UINT8                 *New;
   UINT32                NumCores;
+  UINT32                CoreIndex;
 
   // Initialize MADT ACPI Header
   EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER Header = {
@@ -152,13 +153,13 @@ AddMadtTable (
   New += sizeof (EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER);
 
   // Add new GICC structures for the Cores
-  for (NumCores = 0; NumCores < PcdGet32 (PcdCoreCount); NumCores++) {
+  for (CoreIndex = 0; CoreIndex < PcdGet32 (PcdCoreCount); CoreIndex++) {
     EFI_ACPI_6_0_GIC_STRUCTURE *GiccPtr;
 
     CopyMem (New, &Gicc, sizeof (EFI_ACPI_6_0_GIC_STRUCTURE));
     GiccPtr = (EFI_ACPI_6_0_GIC_STRUCTURE *) New;
-    GiccPtr->AcpiProcessorUid = NumCores;
-    GiccPtr->MPIDR = GetMpidr (NumCores);
+    GiccPtr->AcpiProcessorUid = CoreIndex;
+    GiccPtr->MPIDR = GetMpidr (CoreIndex);
     New += sizeof (EFI_ACPI_6_0_GIC_STRUCTURE);
   }
 
