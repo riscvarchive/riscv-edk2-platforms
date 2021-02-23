@@ -121,6 +121,8 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   # ARM PL011 UART Driver
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
 
+  FdtHelperLib|Silicon/Qemu/SbsaQemu/Library/FdtHelperLib/FdtHelperLib.inf
+
   # Debug Support
   PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
