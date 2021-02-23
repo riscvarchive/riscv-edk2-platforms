@@ -1,4 +1,5 @@
 #
+#  Copyright (c) 2021, NUVIA Inc. All rights reserved.
 #  Copyright (c) 2019, Linaro Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -122,6 +123,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
 
   FdtHelperLib|Silicon/Qemu/SbsaQemu/Library/FdtHelperLib/FdtHelperLib.inf
+  OemMiscLib|Platform/Qemu/SbsaQemu/OemMiscLib/OemMiscLib.inf
 
   # Debug Support
   PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
@@ -486,6 +488,23 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #  enumeration to complete before installing ACPI tables.
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciDisableBusEnumeration|FALSE
 
+  gArmTokenSpaceGuid.PcdSystemProductName|L"QEMU SBSA-REF Machine"
+  gArmTokenSpaceGuid.PcdSystemVersion|L"1.0"
+  gArmTokenSpaceGuid.PcdBaseBoardManufacturer|L"QEMU"
+  gArmTokenSpaceGuid.PcdBaseBoardProductName|L"SBSA-REF"
+  gArmTokenSpaceGuid.PcdBaseBoardVersion|L"1.0"
+
+  # These values are fixed for now, but should be configurable via
+  # something like an emulated SCP.
+  gArmTokenSpaceGuid.PcdProcessorManufacturer|L"QEMU"
+  gArmTokenSpaceGuid.PcdProcessorVersion|L"arm-virt"
+  gArmTokenSpaceGuid.PcdProcessorSerialNumber|L"SN0000"
+  gArmTokenSpaceGuid.PcdProcessorAssetTag|L"AT0000"
+  gArmTokenSpaceGuid.PcdProcessorPartNumber|L"PN0000"
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"EFI Development Kit II / SbsaQemu"
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"1.0"
+
 [PcdsDynamicDefault.common]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3
 
@@ -510,8 +529,27 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   # SMBIOS entry point version
   #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0300
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0304
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosDocRev|0x0
+
+  gArmTokenSpaceGuid.PcdSystemBiosRelease|0x0100
+  gArmTokenSpaceGuid.PcdEmbeddedControllerFirmwareRelease|0x0100
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemManufacturer|L"QEMU"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemSKU|L"SK0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemFamily|L"ArmVirt"
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardAssetTag|L"AT0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardSKU|L"SK000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardLocation|L"Internal"
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisVersion|L"1.0"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisManufacturer|L"QEMU"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisAssetTag|L"AT0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisSKU|L"SK0000"
 
 ################################################################################
 #
@@ -669,6 +707,14 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+
+  #
+  # SMBIOS support
+  #
+  ArmPkg/Universal/Smbios/ProcessorSubClassDxe/ProcessorSubClassDxe.inf
+  ArmPkg/Universal/Smbios/SmbiosMiscDxe/SmbiosMiscDxe.inf
+  EmbeddedPkg/Library/FdtLib/FdtLib.inf
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
   # PCI support
