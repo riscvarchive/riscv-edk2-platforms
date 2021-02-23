@@ -34,6 +34,7 @@
   BaseLib
   DebugLib
   DxeServicesLib
+  FdtHelperLib
   FdtLib
   PcdLib
   PrintLib
