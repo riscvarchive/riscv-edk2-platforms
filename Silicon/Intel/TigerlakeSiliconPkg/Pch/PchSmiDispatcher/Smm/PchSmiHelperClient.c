@@ -29,8 +29,6 @@ GetPcieRpNumber (
   OUT UINTN   *RpNumber
   )
 {
-  UINT64  RpBase;
-  RpBase = PCI_SEGMENT_LIB_ADDRESS (SA_SEG_NUM, SA_MC_BUS, RpDev, RpFun, 0);
   GetPchPcieRpNumber (RpDev, RpFun, RpNumber);
 }
 

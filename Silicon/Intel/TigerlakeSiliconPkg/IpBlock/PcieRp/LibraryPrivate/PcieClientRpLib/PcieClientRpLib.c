@@ -104,12 +104,10 @@ ConfigureRpLtrOverride (
   UINT32       OvrEn;
   UINT32       OvrVal;
   BOOLEAN      IsCpuPcie;
-  UINT32       LtrCfgLock;
 
   IsCpuPcie = FALSE;
   OvrEn = 0;
   OvrVal = 0;
-  LtrCfgLock = 0;
 
   if (DevNum == SA_PEG0_DEV_NUM || DevNum == SA_PEG3_DEV_NUM) {
     IsCpuPcie = TRUE;
