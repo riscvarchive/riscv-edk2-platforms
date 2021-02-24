@@ -393,6 +393,7 @@ TigerlakeURvpInitPreMem (
   /// Performing PlatformInitPreMemCallBack after PeiReadOnlyVariable2 PPI produced
   ///
   Status = PeiServicesNotifyPpi (&mPreMemNotifyList);
+  ASSERT_EFI_ERROR (Status);
 
   ///
   /// After code reorangized, memorycallback will run because the PPI is already
@@ -400,6 +401,7 @@ TigerlakeURvpInitPreMem (
   /// done before.
   ///
   Status = PeiServicesNotifyPpi (&mMemDiscoveredNotifyList);
+  ASSERT_EFI_ERROR (Status);
 
   DEBUG ((DEBUG_INFO, "TigerlakeURvpInitPreMem End!\n"));
 

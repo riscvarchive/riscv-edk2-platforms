@@ -182,14 +182,6 @@ PlatformHookSerialPortInitialize (
   VOID
   )
 {
-  UINT16  IndexPort;
-  UINT16  DataPort;
-  UINT8   Index;
-
-  IndexPort = 0;
-  DataPort = 0;
-  Index = 0;
-
   //
   // Enable I/O decoding for COM1(3F8h-3FFh), COM2(2F8h-2FFh), I/O port 2Eh/2Fh, 4Eh/4Fh, 60h/64Fh and 62h/66h.
   //
