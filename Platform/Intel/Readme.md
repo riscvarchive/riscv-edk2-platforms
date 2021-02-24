@@ -76,7 +76,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 | RVP 3                                 | SkyLake, KabyLake, KabyLake Refresh        | KabylakeOpenBoardPkg         | KabylakeRvp3       |
 | WHL-U DDR4 RVP                        | WhiskeyLake                                | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
 | CML-U LPDDR3 RVP                      | CometLake V1                               | CometlakeOpenBoardPkg        | CometlakeURvp      |
-| TGL-U LPDDR4 RVP                      | TigerLake                                  | TigerlakeOpenBoardPkg        | TigerlakeURvp      |
+| TGL-U DDR4 RVP                        | TigerLake                                  | TigerlakeOpenBoardPkg        | TigerlakeURvp      |
 
 *Note: RVP = Reference and Validation Platform*
 
