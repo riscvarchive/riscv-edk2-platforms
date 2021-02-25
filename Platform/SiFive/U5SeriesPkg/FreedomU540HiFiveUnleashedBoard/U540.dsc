@@ -342,9 +342,9 @@
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x07
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialDetectCable|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|115200
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|3686400
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialPciDeviceInfo|{0x14, 0x05, 0x84, 0x00, 0xFF}
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|4
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|1
 
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|115200
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|200000000
