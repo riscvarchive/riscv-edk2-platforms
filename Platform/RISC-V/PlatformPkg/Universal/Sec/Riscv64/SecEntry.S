@@ -505,7 +505,7 @@ _reset_regs:
   .global fw_next_arg1
 fw_next_arg1:
   /* Pass device tree as next_arg1 to sbi_init */
-  li    a0, 0x1032
+  li    a0, 0x1020
   ld    a0, (a0)
   ret
 
