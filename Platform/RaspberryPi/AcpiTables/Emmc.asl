@@ -18,7 +18,7 @@ DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPI4EMMC", 2)
 #if (RPI_MODEL == 4)
     Device (GDV1) {
       Name (_HID, "ACPI0004")
-      Name (_UID, 0x0)
+      Name (_UID, 0x2)
       Name (_CCA, 0x0)
 
       Name (RBUF, ResourceTemplate ()
