@@ -27,7 +27,7 @@ static int sifive_fu540_fdt_fixup(void *fdt, const struct fdt_match *match)
 	 * to access a PMP protected region using 1GB page table mapping, so
 	 * always add the no-map attribute on this platform.
 	 */
-	fdt_reserved_memory_nomap_fixup(fdt);
+	//fdt_reserved_memory_nomap_fixup(fdt);
 
 	return 0;
 }

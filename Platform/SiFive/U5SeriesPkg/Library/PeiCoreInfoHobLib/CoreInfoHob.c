@@ -38,6 +38,8 @@ CreateU5MCCoreplexProcessorSpecificDataHob (
   IN UINTN UniqueId
   )
 {
+  return EFI_SUCCESS;
+#if 0
   EFI_STATUS Status;
   UINT32 HartIdNumber;
   RISC_V_PROCESSOR_SPECIFIC_HOB_DATA *GuidHobData;
@@ -82,6 +84,7 @@ CreateU5MCCoreplexProcessorSpecificDataHob (
     ASSERT (FALSE);
   }
   return Status;
+#endif
 }
 
 /**
@@ -103,6 +106,8 @@ CreateU5MCProcessorSmbiosDataHob (
   OUT RISC_V_PROCESSOR_SMBIOS_HOB_DATA **SmbiosHobPtr
   )
 {
+  return EFI_SUCCESS;
+#if 0
   EFI_GUID *GuidPtr;
   RISC_V_PROCESSOR_TYPE7_HOB_DATA L2CacheDataHob;
   RISC_V_PROCESSOR_SMBIOS_HOB_DATA SmbiosDataHob;
@@ -162,4 +167,5 @@ CreateU5MCProcessorSmbiosDataHob (
   DEBUG ((DEBUG_INFO, "%a: Exit\n", __FUNCTION__));
 
   return EFI_SUCCESS;
+#endif
 }

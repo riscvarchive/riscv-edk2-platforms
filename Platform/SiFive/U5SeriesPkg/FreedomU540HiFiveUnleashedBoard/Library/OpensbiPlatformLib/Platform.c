@@ -13,6 +13,7 @@
 #include <sbi/sbi_hartmask.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_string.h>
+#include <sbi/sbi_math.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/fdt/fdt_helper.h>
 #include <sbi_utils/irqchip/fdt_irqchip.h>
@@ -134,10 +135,35 @@ static int generic_early_init(bool cold_boot)
 	return fdt_reset_init();
 }
 
+static u32 U540_pmp_region_count(u32 hartid)
+{
+    return 1;
+}
+
+static int U540_pmp_region_info(u32 hartid, u32 index,
+                 ulong *prot, ulong *addr, ulong *log2size)
+{
+    int ret = 0;
+
+    switch (index) {
+    case 0:
+        *prot = PMP_R | PMP_W | PMP_X;
+        *addr = 0;
+        *log2size = __riscv_xlen;
+        break;
+    default:
+        ret = -1;
+        break;
+    };
+
+    return ret;
+}
+
 static int generic_final_init(bool cold_boot)
 {
 	void *fdt;
 	int rc;
+  struct sbi_scratch *ThisScratch;
 
 	if (generic_plat && generic_plat->final_init) {
 		rc = generic_plat->final_init(cold_boot, generic_plat_match);
@@ -159,6 +185,13 @@ static int generic_final_init(bool cold_boot)
 			return rc;
 	}
 
+  //
+  // Set PMP of firmware regions to R and X. We will lock this in the end of PEI.
+  // This region only protects SEC, PEI and Scratch buffer.
+  //
+  ThisScratch = sbi_scratch_thishart_ptr ();
+  pmp_set(0, PMP_R | PMP_X | PMP_W, ThisScratch->fw_start, log2roundup (ThisScratch->fw_size));
+
 	return 0;
 }
 
@@ -178,7 +211,7 @@ static u64 generic_tlbr_flush_limit(void)
 {
 	if (generic_plat && generic_plat->tlbr_flush_limit)
 		return generic_plat->tlbr_flush_limit(generic_plat_match);
-	return SBI_PLATFORM_TLB_RANGE_FLUSH_LIMIT_DEFAULT;
+	return 0;
 }
 
 static int generic_system_reset(u32 reset_type)
@@ -210,6 +243,8 @@ const struct sbi_platform_operations platform_ops = {
 	.timer_init		= fdt_timer_init,
 	.timer_exit		= fdt_timer_exit,
 	.system_reset		= generic_system_reset,
+  .pmp_region_count = U540_pmp_region_count,
+  .pmp_region_info = U540_pmp_region_info,
 };
 
 struct sbi_platform platform = {
@@ -219,6 +254,6 @@ struct sbi_platform platform = {
 	.features		= SBI_PLATFORM_DEFAULT_FEATURES,
 	.hart_count		= SBI_HARTMASK_MAX_BITS,
 	.hart_index2id		= generic_hart_index2id,
-	.hart_stack_size	= SBI_PLATFORM_DEFAULT_HART_STACK_SIZE,
+	.hart_stack_size	= FixedPcdGet32(PcdOpenSbiStackSize),
 	.platform_ops_addr	= (unsigned long)&platform_ops
 };
