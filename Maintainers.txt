@@ -151,6 +151,12 @@ F: Features/Intel/Debugging/
 M: Eric Dong <eric.dong@intel.com>
 R: Liming Gao <gaoliming@byosoft.com.cn>
 
+Features/Intel/OutOfBandManagement/IpmiFeaturePkg
+F: Features/Intel/OutOfBandManagement/IpmiFeaturePkg
+M: Isaac Oram <isaac.w.oram@intel.com>
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
+R: Liming Gao <gaoliming@byosoft.com.cn>
+
 Features/Intel/UserInterface
 F: Features/Intel/UserInterface/
 M: Dandan Bi <dandan.bi@intel.com>
