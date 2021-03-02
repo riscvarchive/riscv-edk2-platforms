@@ -35,7 +35,6 @@
   DebugLib
   DxeServicesLib
   FdtHelperLib
-  FdtLib
   PcdLib
   PrintLib
   UefiDriverEntryPoint
@@ -46,7 +45,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiTableStorageFile
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdCoreCount
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdClusterCount
-  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdDeviceTreeBaseAddress
 
 [Depex]
   gEfiAcpiTableProtocolGuid                       ## CONSUMES

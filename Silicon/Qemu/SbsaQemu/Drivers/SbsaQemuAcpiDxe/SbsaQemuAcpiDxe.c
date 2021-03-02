@@ -20,39 +20,6 @@
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiLib.h>
 #include <Protocol/AcpiTable.h>
-#include <Protocol/FdtClient.h>
-#include <libfdt.h>
-
-STATIC INT32 FdtFirstCpuOffset;
-STATIC INT32 FdtCpuNodeSize;
-
-/*
- * Get MPIDR from device tree passed by Qemu
- */
-STATIC
-UINT64
-GetMpidr (
-  IN UINTN   CpuId
-  )
-{
-  VOID           *DeviceTreeBase;
-  CONST UINT64   *RegVal;
-  INT32          Len;
-
-  DeviceTreeBase = (VOID *)(UINTN)PcdGet64 (PcdDeviceTreeBaseAddress);
-  ASSERT (DeviceTreeBase != NULL);
-
-  RegVal = fdt_getprop (DeviceTreeBase,
-             FdtFirstCpuOffset + (CpuId * FdtCpuNodeSize),
-             "reg",
-             &Len);
-  if (!RegVal) {
-    DEBUG ((DEBUG_ERROR, "Couldn't find reg property for CPU:%d\n", CpuId));
-    return 0;
-  }
-
-  return (fdt64_to_cpu (ReadUnaligned64 (RegVal)));
-}
 
 /*
  * A Function to Compute the ACPI Table Checksum
@@ -159,7 +126,7 @@ AddMadtTable (
     CopyMem (New, &Gicc, sizeof (EFI_ACPI_6_0_GIC_STRUCTURE));
     GiccPtr = (EFI_ACPI_6_0_GIC_STRUCTURE *) New;
     GiccPtr->AcpiProcessorUid = CoreIndex;
-    GiccPtr->MPIDR = GetMpidr (CoreIndex);
+    GiccPtr->MPIDR = FdtHelperGetMpidr (CoreIndex);
     New += sizeof (EFI_ACPI_6_0_GIC_STRUCTURE);
   }
 

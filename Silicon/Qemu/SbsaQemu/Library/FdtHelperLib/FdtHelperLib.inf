@@ -24,5 +24,10 @@
   MdePkg/MdePkg.dec
   Silicon/Qemu/SbsaQemu/SbsaQemu.dec
 
+[LibraryClasses]
+  DebugLib
+  FdtLib
+  PcdLib
+
 [FixedPcd]
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdDeviceTreeBaseAddress

@@ -14,6 +14,40 @@
 #include <Library/PcdLib.h>
 #include <libfdt.h>
 
+STATIC INT32 mFdtFirstCpuOffset;
+STATIC INT32 mFdtCpuNodeSize;
+
+/**
+  Get MPIDR for a given cpu from device tree passed by Qemu.
+
+  @param [in]   CpuId    Index of cpu to retrieve MPIDR value for.
+
+  @retval                MPIDR value of CPU at index <CpuId>
+**/
+UINT64
+FdtHelperGetMpidr (
+  IN UINTN   CpuId
+  )
+{
+  VOID           *DeviceTreeBase;
+  CONST UINT64   *RegVal;
+  INT32          Len;
+
+  DeviceTreeBase = (VOID *)(UINTN)PcdGet64 (PcdDeviceTreeBaseAddress);
+  ASSERT (DeviceTreeBase != NULL);
+
+  RegVal = fdt_getprop (DeviceTreeBase,
+             mFdtFirstCpuOffset + (CpuId * mFdtCpuNodeSize),
+             "reg",
+             &Len);
+  if (!RegVal) {
+    DEBUG ((DEBUG_ERROR, "Couldn't find reg property for CPU:%d\n", CpuId));
+    return 0;
+  }
+
+  return (fdt64_to_cpu (ReadUnaligned64 (RegVal)));
+}
+
 /** Walks through the Device Tree created by Qemu and counts the number
     of CPUs present in it.
 
@@ -49,12 +83,14 @@ FdtHelperCountCpus (
   // The count of these subnodes corresponds to the number of
   // CPUs created by Qemu.
   Prev = fdt_first_subnode (DeviceTreeBase, CpuNode);
+  mFdtFirstCpuOffset = Prev;
   while (1) {
     CpuCount++;
     Node = fdt_next_subnode (DeviceTreeBase, Prev);
     if (Node < 0) {
       break;
     }
+    mFdtCpuNodeSize = Node - Prev;
     Prev = Node;
   }
 
