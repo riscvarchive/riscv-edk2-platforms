@@ -133,7 +133,7 @@ ARM_EFI_ACPI_6_0_IO_REMAPPING_TABLE Iort =
       0,  // AllocationHints
       0,  // Reserved
       0,  // MemoryAccessFlags
-      EFI_ACPI_IORT_ROOT_COMPLEX_ATS_UNSUPPORTED,  // AtsAttribute
+      EFI_ACPI_IORT_ROOT_COMPLEX_ATS_SUPPORTED,    // AtsAttribute
       0x0,                                         // PciSegmentNumber
     },
     // EFI_ACPI_6_0_IO_REMAPPING_ID_TABLE
