@@ -123,6 +123,11 @@ F: Drivers/OptionRomPkg/
 W: https://github.com/tianocore/tianocore.github.io/wiki/OptionRomPkg
 M: Ray Ni <ray.ni@intel.com>
 
+StandAloneMMPkg for OP-TEE
+F: Platform/StandaloneMm/PlatformStandaloneMmPkg/
+M: Sami Mujawar <sami.mujawar@arm.com>
+M: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+
 DisplayLink
 F: Drivers/DisplayLink/
 M: Leif Lindholm <leif@nuviainc.com>
@@ -302,6 +307,11 @@ F: Silicon/Broadcom/
 M: Ard Biesheuvel <ardb+tianocore@kernel.org>
 M: Leif Lindholm <leif@nuviainc.com>
 R: Pete Batard <pete@akeo.ie>
+
+RPMB driver for OP-TEE
+F: Drivers/OpTee/OpteeRpmbPkg/
+M: Sami Mujawar <sami.mujawar@arm.com>
+M: Ilias Apalodimas <ilias.apalodimas@linaro.org>
 
 Socionext platforms and silicon
 F: Platform/Socionext/
