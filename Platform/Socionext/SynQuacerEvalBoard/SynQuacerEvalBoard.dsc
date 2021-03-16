@@ -39,6 +39,8 @@
   GCC:*_*_ARM_DLINK_FLAGS = -z common-page-size=0x1000
   GCC:*_*_AARCH64_DLINK_FLAGS = -z common-page-size=0x10000
 
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses.common]
   ArmPlatformLib|Silicon/Socionext/SynQuacer/Library/SynQuacerLib/SynQuacerLib.inf
   ArmHvcLib|ArmPkg/Library/ArmHvcLib/ArmHvcLib.inf

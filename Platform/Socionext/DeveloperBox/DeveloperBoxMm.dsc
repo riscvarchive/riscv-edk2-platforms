@@ -23,6 +23,7 @@
   BUILD_NUMBER                   = 1
 
 !include Platform/Socionext/DeveloperBox/DeveloperBox.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses]
   ArmSvcLib|ArmPkg/Library/ArmSvcLib/ArmSvcLib.inf

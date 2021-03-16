@@ -28,6 +28,7 @@
   DEFINE X64EMU_ENABLE           = FALSE
 
 !include Platform/Socionext/DeveloperBox/DeveloperBox.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses]
 !if $(DEBUG_ON_UART1) == FALSE
