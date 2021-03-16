@@ -4,7 +4,7 @@
 # This DSC file is used for Package Level build.
 #
 # This Module provides FRAMEWORK reference implementation for INTEL Quark SoC.
-#   Copyright (c) 2013-2016 Intel Corporation.
+#   Copyright (c) 2013-2021 Intel Corporation.
 #
 #   SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -39,6 +39,9 @@
 # Library Class section - list of all Library Classes needed by this Platform.
 #
 ################################################################################
+
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses]
   #
   # Entry point
