@@ -79,6 +79,8 @@ gUefiCpuPkgTokenSpaceGuid.PcdCpuApTargetCstate|0
   #
   !include $(PLATFORM_SI_PACKAGE)/SiPkgBuildOption.dsc
 
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses.common]
   #
   # Entry point
