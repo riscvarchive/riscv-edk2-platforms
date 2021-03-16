@@ -6,7 +6,7 @@
 # Option ROM image for all CPU architectures, including EBC target.
 # A single driver can support mixes of EFI 1.1, UEFI 2.0 and UEFI 2.1.
 #
-# Copyright (c) 2007 - 2018, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2007 - 2021, Intel Corporation. All rights reserved.<BR>
 # Copyright (c) 2016, Linaro Ltd. All rights reserved.<BR>
 # Copyright (c) 2020, ARM Limited. All rights reserved.
 #
@@ -37,6 +37,8 @@
 ################################################################################
 [SkuIds]
   0|DEFAULT              # The entry: 0|DEFAULT is reserved and always required.
+
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses]
   DebugLib|MdePkg/Library/UefiDebugLibStdErr/UefiDebugLibStdErr.inf
