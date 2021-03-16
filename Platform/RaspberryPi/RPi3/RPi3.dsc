@@ -2,7 +2,7 @@
 #
 #  Copyright (c) 2011 - 2020, ARM Limited. All rights reserved.
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
-#  Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.
+#  Copyright (c) 2015 - 2021, Intel Corporation. All rights reserved.
 #  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -54,6 +54,9 @@
 # Library Class section - list of all Library Classes needed by this Platform.
 #
 ################################################################################
+
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses.common]
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
