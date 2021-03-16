@@ -26,6 +26,9 @@
 !include Platform/ARM/SgiPkg/SgiPlatform.dsc.inc
 !include Platform/ARM/SgiPkg/SgiMemoryMap2.dsc.inc
 
+# include common/basic libraries from MdePkg.
+!include MdePkg/MdeLibs.dsc.inc
+
 ################################################################################
 #
 # Pcd Section - list of all EDK II PCD Entries defined by this Platform

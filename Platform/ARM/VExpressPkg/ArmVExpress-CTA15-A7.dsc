@@ -30,6 +30,7 @@
   DEFINE ARM_BIGLITTLE_TC2 = 1 # We build for the TC2 hardware by default
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf

@@ -32,6 +32,7 @@
   DT_SUPPORT                     = FALSE
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include DynamicTablesPkg/DynamicTables.dsc.inc
 
 [LibraryClasses.common]
