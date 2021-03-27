@@ -95,8 +95,12 @@ MV_BOARD_SDMMC_DESC mSdMmcDescTemplate[] = {
   { /* eMMC 0xF06E0000 */
     0,     /* SOC will be filled by MvBoardDescDxe */
     0,     /* SdMmcDevCount will be filled by MvBoardDescDxe */
-    FALSE, /* Xenon1v8Enabled */
-    TRUE,  /* Xenon8BitBusEnabled */
+    TRUE,  /* Xenon1v8Enabled */
+    /*
+     * Force 4-bit bus width - work-around for non
+     * functional HS400 mode.
+     */
+    FALSE, /* Xenon8BitBusEnabled */
     FALSE, /* XenonSlowModeEnabled */
     0x40,  /* XenonTuningStepDivisor */
     EmbeddedSlot /* SlotType */
