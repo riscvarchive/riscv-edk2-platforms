@@ -13,5 +13,6 @@
 #define ARMADA_70x0_DB_VBUS0_LIMIT_PIN    4
 #define ARMADA_70x0_DB_VBUS1_PIN          1
 #define ARMADA_70x0_DB_VBUS1_LIMIT_PIN    5
+#define ARMADA_70x0_DB_SDMMC_CP0_VCCQ_PIN 15
 
 #endif

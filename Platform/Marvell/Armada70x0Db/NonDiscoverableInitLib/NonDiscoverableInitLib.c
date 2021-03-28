@@ -21,6 +21,37 @@
 
 #include "NonDiscoverableInitLib.h"
 
+STATIC
+EFI_STATUS
+EFIAPI
+ConfigurePins (
+  IN  CONST MV_GPIO_PIN        *VbusPin,
+  IN  UINTN                     PinCount,
+  IN  MV_GPIO_DRIVER_TYPE       DriverType
+  )
+{
+  EMBEDDED_GPIO_MODE   Mode;
+  EMBEDDED_GPIO_PIN    Gpio;
+  EMBEDDED_GPIO       *GpioProtocol;
+  EFI_STATUS           Status;
+  UINTN                Index;
+
+  Status = MvGpioGetProtocol (DriverType, &GpioProtocol);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a: Unable to find GPIO protocol\n", __FUNCTION__));
+    return Status;
+  }
+
+  for (Index = 0; Index < PinCount; Index++) {
+    Mode = VbusPin->ActiveHigh ? GPIO_MODE_OUTPUT_1 : GPIO_MODE_OUTPUT_0;
+    Gpio = GPIO (VbusPin->ControllerId, VbusPin->PinNumber);
+    GpioProtocol->Set (GpioProtocol, Gpio, Mode);
+    VbusPin++;
+  }
+
+  return EFI_SUCCESS;
+}
+
 STATIC CONST MV_GPIO_PIN mXhciVbusPins[] = {
   {
     MV_GPIO_DRIVER_TYPE_PCA95XX,
@@ -55,28 +86,30 @@ XhciInit (
   IN  NON_DISCOVERABLE_DEVICE  *This
   )
 {
-  CONST MV_GPIO_PIN   *VbusPin;
-  EMBEDDED_GPIO_MODE   Mode;
-  EMBEDDED_GPIO_PIN    Gpio;
-  EMBEDDED_GPIO       *GpioProtocol;
-  EFI_STATUS           Status;
-  UINTN                Index;
+  return ConfigurePins (mXhciVbusPins,
+           ARRAY_SIZE (mXhciVbusPins),
+           MV_GPIO_DRIVER_TYPE_PCA95XX);
+}
 
-  Status = MvGpioGetProtocol (MV_GPIO_DRIVER_TYPE_PCA95XX, &GpioProtocol);
-  if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "%a: Unable to find GPIO protocol\n", __FUNCTION__));
-    return Status;
-  }
+STATIC CONST MV_GPIO_PIN mCp0SdMmcPins[] = {
+  {
+    MV_GPIO_DRIVER_TYPE_PCA95XX,
+    ARMADA_70x0_DB_IO_EXPANDER0,
+    ARMADA_70x0_DB_SDMMC_CP0_VCCQ_PIN,
+    TRUE,
+  },
+};
 
-  VbusPin = mXhciVbusPins;
-  for (Index = 0; Index < ARRAY_SIZE (mXhciVbusPins); Index++) {
-    Mode = VbusPin->ActiveHigh ? GPIO_MODE_OUTPUT_1 : GPIO_MODE_OUTPUT_0;
-    Gpio = GPIO (VbusPin->ControllerId, VbusPin->PinNumber);
-    GpioProtocol->Set (GpioProtocol, Gpio, Mode);
-    VbusPin++;
-  }
-
-  return EFI_SUCCESS;
+STATIC
+EFI_STATUS
+EFIAPI
+Cp0SdMmcInit (
+  IN  NON_DISCOVERABLE_DEVICE  *This
+  )
+{
+  return ConfigurePins (mCp0SdMmcPins,
+           ARRAY_SIZE (mCp0SdMmcPins),
+           MV_GPIO_DRIVER_TYPE_PCA95XX);
 }
 
 NON_DISCOVERABLE_DEVICE_INIT
@@ -90,5 +123,11 @@ NonDiscoverableDeviceInitializerGet (
         return XhciInit;
   }
 
+  if (Type == NonDiscoverableDeviceTypeSdhci) {
+    switch (Index) {
+    case 1:
+      return Cp0SdMmcInit;
+    }
+  }
   return NULL;
 }
