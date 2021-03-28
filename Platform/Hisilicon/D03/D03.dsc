@@ -34,6 +34,7 @@
   DEFINE NETWORK_VLAN_ENABLE            = FALSE
 
 !include Silicon/Hisilicon/Hisilicon.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
