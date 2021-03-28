@@ -35,6 +35,7 @@
   DEFINE DYNAMIC_ACPI_ENABLE            = TRUE
 
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include Silicon/NXP/LX2160A/LX2160A.dsc.inc
 
 !if $(DYNAMIC_ACPI_ENABLE) == TRUE
