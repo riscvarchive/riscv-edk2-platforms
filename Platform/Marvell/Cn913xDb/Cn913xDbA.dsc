@@ -39,6 +39,7 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include Platform/Marvell/Cn913xDb/Cn9130DbA.dsc.inc
 !if $(CN9131) || $(CN9132)
 !include Platform/Marvell/Cn913xDb/Cn9131DbA.dsc.inc
