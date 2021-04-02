@@ -164,6 +164,7 @@
   CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/DxeCpuExceptionHandlerLib.inf
   MpInitLib|UefiCpuPkg/Library/MpInitLib/DxeMpInitLib.inf
   VmgExitLib|UefiCpuPkg/Library/VmgExitLibNull/VmgExitLibNull.inf
+  MicrocodeLib|UefiCpuPkg/Library/MicrocodeLib/MicrocodeLib.inf
 
   #
   # ICH
