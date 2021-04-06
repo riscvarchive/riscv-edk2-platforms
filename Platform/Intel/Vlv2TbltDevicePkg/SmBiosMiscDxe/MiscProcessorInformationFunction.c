@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2006  - 2020, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2006  - 2021, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -319,7 +319,7 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     SmbiosRecord->Hdr.Handle = 0;
 
     SmbiosRecord-> Socket= 1;
-    SmbiosRecord -> ProcessorManufacture = 2;
+    SmbiosRecord -> ProcessorManufacturer = 2;
     SmbiosRecord -> ProcessorVersion = 3;
     SmbiosRecord ->SerialNumber =4;
 
@@ -455,4 +455,3 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     return Status;
 
 }
-
