@@ -52,7 +52,7 @@ Device (SDC1)
   Name (_DSD, Package () {
     ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
     Package () {
-      Package () { "sdhci-caps", 0x0100fa81 },
+      Package () { "sdhci-caps", 0x0120fa81 },
     }
   })
 
