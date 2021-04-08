@@ -32,7 +32,7 @@ DefinitionBlock (__FILE__, "SSDT", 2, "RPIFDN", "RPI4EMMC", 2)
       }
 
       Name (_DMA, ResourceTemplate() {
-        QWordMemory (ResourceConsumer,
+        QWordMemory (ResourceProducer,
           ,
           MinFixed,
           MaxFixed,

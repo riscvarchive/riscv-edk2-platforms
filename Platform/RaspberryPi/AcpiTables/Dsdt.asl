@@ -206,7 +206,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 2, "RPIFDN", "RPI", 2)
         // Only the first GB is available.
         // Bus 0xC0000000 -> CPU 0x00000000.
         //
-        QWordMemory (ResourceConsumer,
+        QWordMemory (ResourceProducer,
           ,
           MinFixed,
           MaxFixed,
