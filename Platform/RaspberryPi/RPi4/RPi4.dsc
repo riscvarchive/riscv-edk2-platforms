@@ -429,7 +429,6 @@
   gArmPlatformTokenSpaceGuid.PL011UartClkInHz|48000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseMmio|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|4
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|1000000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialExtendedTxFifoSize|8
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
@@ -464,6 +463,9 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"EDK2"
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
+
+[PcdsPatchableInModule]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|500000000
 
 [PcdsDynamicHii.common.DEFAULT]
 
@@ -621,7 +623,7 @@
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf {
     <LibraryClasses>
-      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortLib.inf
+      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortDxeLib.inf
   }
   Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
   EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf
