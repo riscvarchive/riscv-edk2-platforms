@@ -166,11 +166,13 @@ Platform/Intel/QuarkPlatformPkg
 F: Platform/Intel/QuarkPlatformPkg/
 M: Michael D Kinney <michael.d.kinney@intel.com>
 M: Kelly Steele <kelly.steele@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Platform/Intel/Vlv2TbltDevicePkg
 F: Platform/Intel/Vlv2TbltDevicePkg/
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Platform/Intel/BoardModulePkg
 F: Platform/Intel/BoardModulePkg/
@@ -243,11 +245,13 @@ Silicon/Intel/QuarkSocPkg
 F: Silicon/Intel/QuarkSocPkg/
 M: Michael D Kinney <michael.d.kinney@intel.com>
 M: Kelly Steele <kelly.steele@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Silicon/Intel/Vlv2DeviceRefCodePkg
 F: Silicon/Intel/Vlv2DeviceRefCodePkg/
 M: Zailiang Sun <zailiang.sun@intel.com>
 M: Yi Qian <yi.qian@intel.com>
+R: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Silicon/Intel/CoffeelakeSiliconPkg
 F: Silicon/Intel/CoffeelakeSiliconPkg/
