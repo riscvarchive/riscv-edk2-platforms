@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
+#  Copyright (c) 2018-2021, ARM Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -105,6 +105,9 @@
   # System Memory (1GB - 16MB of Trusted DRAM at the top of the 32bit address space)
   gArmTokenSpaceGuid.PcdSystemMemoryBase|0x80000000
   gArmTokenSpaceGuid.PcdSystemMemorySize|0x7F000000
+
+  # ACPI Table Version
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
 
   #
   # PCIe

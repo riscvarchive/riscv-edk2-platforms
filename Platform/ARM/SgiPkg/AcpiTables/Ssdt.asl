@@ -1,7 +1,7 @@
 /** @file
 *  Secondary System Description Table (SSDT)
 *
-*  Copyright (c) 2018, ARM Limited. All rights reserved.
+*  Copyright (c) 2018 - 2021, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -9,7 +9,7 @@
 
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock("SsdtPci.aml", "SSDT", 1, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM_REVISION) {
+DefinitionBlock("SsdtPci.aml", "SSDT", 2, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
     // PCI Root Complex
     Device (PCI0) {

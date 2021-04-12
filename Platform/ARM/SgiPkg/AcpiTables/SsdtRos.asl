@@ -1,7 +1,7 @@
 /** @file
 *  Secondary System Description Table Fields (SSDT)
 *
-*  Copyright (c) 2020, Arm Ltd. All rights reserved.
+*  Copyright (c) 2020-2021, Arm Ltd. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -10,7 +10,7 @@
 #include "SgiPlatform.h"
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock ("SsdtRosTable.aml", "SSDT", 1, "ARMLTD", "ARMSGI",
+DefinitionBlock ("SsdtRosTable.aml", "SSDT", 2, "ARMLTD", "ARMSGI",
                  EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
     // UART PL011

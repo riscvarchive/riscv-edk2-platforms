@@ -1,7 +1,7 @@
 /** @file
 *  Differentiated System Description Table Fields (DSDT)
 *
-*  Copyright (c) 2020, Arm Limited. All rights reserved.
+*  Copyright (c) 2020-2021, Arm Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -10,7 +10,7 @@
 #include "SgiPlatform.h"
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI",
+DefinitionBlock ("DsdtTable.aml", "DSDT", 2, "ARMLTD", "ARMSGI",
                  EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
 
