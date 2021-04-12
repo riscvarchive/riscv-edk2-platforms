@@ -109,11 +109,5 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARMSGI",
       Name (_UID, 15)
       Name (_STA, 0xF)
     }
-
-    Device (CP16) { // Zeus core 16
-      Name (_HID, "ACPI0007")
-      Name (_UID, 16)
-      Name (_STA, 0xF)
-    }
   } // Scope(_SB)
 }
