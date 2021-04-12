@@ -57,11 +57,23 @@
   gArmSgiTokenSpaceGuid.PcdSysPeriphBase|0x00000000|UINT64|0x0000000E
   gArmSgiTokenSpaceGuid.PcdSysPeriphSysRegBase|0x0|UINT64|0x0000000F
 
-  # Timer & Watchdog interrupts
+  # Counter, Timer and Watchdog
   gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv|0|UINT32|0x00000011
   gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv|0|UINT32|0x00000012
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Base|0|UINT32|0x00000015
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Size|0|UINT32|0x00000016
+  gArmSgiTokenSpaceGuid.PcdTimerControlBase|0|UINT32|0x00000017
+  gArmSgiTokenSpaceGuid.PcdTimerControlSize|0|UINT32|0x00000018
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadBase|0|UINT32|0x00000019
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadSize|0|UINT32|0x0000001A
+  gArmSgiTokenSpaceGuid.PcdWdogBase|0|UINT32|0x0000001B
+  gArmSgiTokenSpaceGuid.PcdWdogSize|0|UINT32|0x0000001C
   gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv|0|UINT32|0x00000013
   gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv|0|UINT32|0x00000014
+
+  # SMMU
+  gArmSgiTokenSpaceGuid.PcdSmmuBase|0|UINT32|0x0000001D
+  gArmSgiTokenSpaceGuid.PcdSmmuSize|0|UINT32|0x0000001E
 
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

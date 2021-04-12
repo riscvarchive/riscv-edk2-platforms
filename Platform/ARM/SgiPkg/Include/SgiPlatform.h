@@ -21,10 +21,6 @@
 #define SGI_SUBSYS_UART1_BASE                     0x2A410000
 #define SGI_SUBSYS_UART1_SZ                       0x00010000
 
-// Sub System Peripherals - Generic Watchdog
-#define SGI_SUBSYS_GENERIC_WDOG_BASE              0x2A440000
-#define SGI_SUBSYS_GENERIC_WDOG_SZ                SIZE_128KB
-
 // Register offsets into the System Registers Block
 #define SGI_SYSPH_SYS_REG_FLASH                   0x4C
 #define SGI_SYSPH_SYS_REG_FLASH_RWEN              0x1

@@ -64,9 +64,20 @@
 
   gArmTokenSpaceGuid.PcdMmBufferBase
   gArmTokenSpaceGuid.PcdMmBufferSize
+
   gArmSgiTokenSpaceGuid.PcdSmcCs0Base
   gArmSgiTokenSpaceGuid.PcdSmcCs1Base
+  gArmSgiTokenSpaceGuid.PcdSmmuBase
+  gArmSgiTokenSpaceGuid.PcdSmmuSize
   gArmSgiTokenSpaceGuid.PcdSysPeriphBase
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Base
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Size
+  gArmSgiTokenSpaceGuid.PcdTimerControlBase
+  gArmSgiTokenSpaceGuid.PcdTimerControlSize
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadBase
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadSize
+  gArmSgiTokenSpaceGuid.PcdWdogBase
+  gArmSgiTokenSpaceGuid.PcdWdogSize
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64

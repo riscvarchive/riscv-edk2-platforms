@@ -17,7 +17,7 @@
 
 // Total number of descriptors, including the final "end-of-table" descriptor.
 #define MAX_VIRTUAL_MEMORY_MAP_DESCRIPTORS                 \
-          (10 + (FixedPcdGet32 (PcdChipCount) * 2))
+          (14 + (FixedPcdGet32 (PcdChipCount) * 2))
 
 /**
   Returns the Virtual Memory Map of the platform.
@@ -124,15 +124,39 @@ ArmPlatformGetVirtualMemoryMap (
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Sub System Peripherals - Generic Watchdog
-  VirtualMemoryTable[++Index].PhysicalBase  = SGI_SUBSYS_GENERIC_WDOG_BASE;
-  VirtualMemoryTable[Index].VirtualBase     = SGI_SUBSYS_GENERIC_WDOG_BASE;
-  VirtualMemoryTable[Index].Length          = SGI_SUBSYS_GENERIC_WDOG_SZ;
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdWdogBase);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdWdogBase);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdWdogSize);
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Sub System Peripherals - GIC-600
   VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet64(PcdGicDistributorBase);
   VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet64(PcdGicDistributorBase);
   VirtualMemoryTable[Index].Length          = FixedPcdGet64(PcdGicSize);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Sub System Peripherals - Counter
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdTimerCounterReadBase);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdTimerCounterReadBase);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdTimerCounterReadSize);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Sub System Peripherals - Timer Control
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdTimerControlBase);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdTimerControlBase);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdTimerControlSize);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Sub System Peripherals - Timer Base0
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdTimerBase0Base);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdTimerBase0Base);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdTimerBase0Size);
+  VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
+
+  // Sub System Peripherals - SMMU
+  VirtualMemoryTable[++Index].PhysicalBase  = FixedPcdGet32 (PcdSmmuBase);
+  VirtualMemoryTable[Index].VirtualBase     = FixedPcdGet32 (PcdSmmuBase);
+  VirtualMemoryTable[Index].Length          = FixedPcdGet32 (PcdSmmuSize);
   VirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
 
   // Expansion AXI - Platform Peripherals - HDLCD1

@@ -152,6 +152,16 @@
   # Ethernet / Virtio Network
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize|0x10000
 
+  # Counter, Timer and Watchdog
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Base|0x2A830000
+  gArmSgiTokenSpaceGuid.PcdTimerBase0Size|0x00010000
+  gArmSgiTokenSpaceGuid.PcdTimerControlBase|0x2A810000
+  gArmSgiTokenSpaceGuid.PcdTimerControlSize|0x00010000
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadBase|0x2A800000
+  gArmSgiTokenSpaceGuid.PcdTimerCounterReadSize|0x00010000
+  gArmSgiTokenSpaceGuid.PcdWdogBase|0x2A440000
+  gArmSgiTokenSpaceGuid.PcdWdogSize|0x00020000
+
   #
   # Set the base address and size of the buffer used
   # for communication between the Normal world edk2

@@ -50,3 +50,7 @@
   gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv|91
   gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv|93
   gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv|94
+
+  # SMMU
+  gArmSgiTokenSpaceGuid.PcdSmmuBase|0x4F000000
+  gArmSgiTokenSpaceGuid.PcdSmmuSize|0x01000000
