@@ -26,6 +26,7 @@
   RdV1Mc/Madt.aslc
   RdV1Mc/Srat.aslc
   Spcr.aslc
+  Ssdt.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
