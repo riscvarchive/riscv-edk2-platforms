@@ -69,55 +69,55 @@ STATIC EFI_ACPI_6_2_MULTIPLE_APIC_DESCRIPTION_TABLE Madt = {
 
     // Chip 1
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core0
-      0, 0, GET_MPID(0x01000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 4, GET_MPID(0x01000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core1
-      0, 1, GET_MPID(0x01000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 5, GET_MPID(0x01000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core2
-      0, 2, GET_MPID(0x01000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 6, GET_MPID(0x01000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core3
-      0, 3, GET_MPID(0x01000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 7, GET_MPID(0x01000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
 
     // Chip 2
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core0
-      0, 0, GET_MPID(0x02000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 8, GET_MPID(0x02000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core1
-      0, 1, GET_MPID(0x02000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 9, GET_MPID(0x02000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core2
-      0, 2, GET_MPID(0x02000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 10, GET_MPID(0x02000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core3
-      0, 3, GET_MPID(0x02000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 11, GET_MPID(0x02000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
 
     // Chip 3
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core0
-      0, 0, GET_MPID(0x03000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 12, GET_MPID(0x03000000ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core1
-      0, 1, GET_MPID(0x03000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 13, GET_MPID(0x03000100ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core2
-      0, 2, GET_MPID(0x03000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 14, GET_MPID(0x03000200ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
     EFI_ACPI_6_2_GICC_STRUCTURE_INIT( // Zeus core3
-      0, 3, GET_MPID(0x03000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
+      0, 15, GET_MPID(0x03000300ULL, 0x0), EFI_ACPI_6_2_GIC_ENABLED, 23,
       FixedPcdGet32 (PcdGicDistributorBase),
       0x2c020000, 0x2c010000, 25, 0 /* GicRBase */, 0 /* Efficiency */),
   },
