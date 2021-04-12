@@ -23,11 +23,11 @@
 #define SGI_GT_BLOCK_CTL_BASE             0x2A810000
 #define SGI_GT_BLOCK_FRAME1_CTL_BASE      0x2A820000
 #define SGI_GT_BLOCK_FRAME1_CTL_EL0_BASE  0xFFFFFFFFFFFFFFFF
-#define SGI_GT_BLOCK_FRAME1_GSIV          0x5B
+#define SGI_GT_BLOCK_FRAME1_GSIV          FixedPcdGet32 (PcdGtFrame1Gsiv)
 
 #define SGI_GT_BLOCK_FRAME0_CTL_BASE      0x2A830000
 #define SGI_GT_BLOCK_FRAME0_CTL_EL0_BASE  0xFFFFFFFFFFFFFFFF
-#define SGI_GT_BLOCK_FRAME0_GSIV          0x5C
+#define SGI_GT_BLOCK_FRAME0_GSIV          FixedPcdGet32 (PcdGtFrame0Gsiv)
 
 #define SGI_GTX_TIMER_FLAGS               0
 #define GTX_TIMER_SECURE                  EFI_ACPI_6_2_GTDT_GT_BLOCK_COMMON_FLAG_SECURE_TIMER
@@ -127,13 +127,13 @@ STATIC EFI_ACPI_6_2_GENERIC_TIMER_DESCRIPTION_TABLES Gtdt = {
     EFI_ACPI_6_2_SBSA_GENERIC_WATCHDOG_STRUCTURE_INIT (
       FixedPcdGet32 (PcdGenericWatchdogRefreshBase),
       FixedPcdGet32 (PcdGenericWatchdogControlBase),
-      93,
+      FixedPcdGet32 (PcdWdogWS0Gsiv),
       0
     ),
     EFI_ACPI_6_2_SBSA_GENERIC_WATCHDOG_STRUCTURE_INIT (
       FixedPcdGet32 (PcdGenericWatchdogRefreshBase),
       FixedPcdGet32 (PcdGenericWatchdogControlBase),
-      94,
+      FixedPcdGet32 (PcdWdogWS1Gsiv),
       EFI_ACPI_6_2_GTDT_SBSA_GENERIC_WATCHDOG_FLAG_SECURE_TIMER
     )
   }

@@ -44,3 +44,9 @@
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x5000000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0x3000000000
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x60000000
+
+  # Timer & Watchdog interrupts
+  gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv|92
+  gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv|91
+  gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv|93
+  gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv|94
