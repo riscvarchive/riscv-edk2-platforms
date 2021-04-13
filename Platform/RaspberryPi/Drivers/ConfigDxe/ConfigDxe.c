@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c) 2019 - 2020, ARM Limited. All rights reserved.
+ *  Copyright (c) 2019 - 2021, ARM Limited. All rights reserved.
  *  Copyright (c) 2018 - 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -279,6 +279,15 @@ SetupVariables (
                     sizeof (AssetTagVar),
                     AssetTagVar
                     );
+  }
+
+  Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"BootPolicy",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdBootPolicy, PcdGet32 (PcdBootPolicy));
+    ASSERT_EFI_ERROR (Status);
   }
 
   Size = sizeof (UINT32);

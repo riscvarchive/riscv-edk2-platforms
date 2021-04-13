@@ -1,7 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2020, ARM Limited. All rights reserved.
+ *  Copyright (c) 2020 - 2021, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -59,6 +59,14 @@
 
 #string STR_ADVANCED_ASSET_TAG_PROMPT #language en-US "Asset Tag"
 #string STR_ADVANCED_ASSET_TAG_HELP   #language en-US "Set the system Asset Tag"
+
+#string STR_BOOT_POLICY_PROMPT        #language en-US "Boot Policy"
+#string STR_BOOT_POLICY_HELP          #language en-US "When Fast Boot is selected, only required devices will be discovered for reducing "
+                                                      "the boot time. "
+                                                      "When Full Discovery is selected, all the devices will be discovered for some "
+                                                      "scenarios such as system deployment and diagnostic tests."
+#string STR_FAST_BOOT                 #language en-US "Fast Boot"
+#string STR_FULL_DISCOVERY            #language en-US "Full Discovery"
 
 /*
  * MMC/SD configuration.
