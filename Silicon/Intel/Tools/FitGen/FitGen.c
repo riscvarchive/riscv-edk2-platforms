@@ -2,7 +2,7 @@
 This utility is part of build process for IA32/X64 FD.
 It generates FIT table.
 
-Copyright (c) 2010-2020, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2010-2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -48,6 +48,7 @@ typedef struct {
 #define ACM_PKCS_1_5_RSA_SIGNATURE_SHA384_SIZE          384
 
 #define ACM_HEADER_VERSION_3  (3 << 16)
+#define ACM_HEADER_VERSION_0  (0)
 #define ACM_MODULE_TYPE_CHIPSET_ACM                     2
 #define ACM_MODULE_SUBTYPE_CAPABLE_OF_EXECUTE_AT_RESET  0x1
 #define ACM_MODULE_SUBTYPE_ANC_MODULE                   0x2
@@ -2456,7 +2457,16 @@ Returns:
   DumpHex (Buffer, Acm->KeySize * 4);
   printf ("\n");
   Buffer += Acm->KeySize * 4;
-
+  //
+  // To simplify the tool and making it independent of ACM header change,
+  // the rest of ACM parsing  will be skipped starting ACM_HEADER_VERSION4
+  //
+  if((Acm->HeaderVersion != ACM_HEADER_VERSION_3) && (Acm->HeaderVersion != ACM_HEADER_VERSION_0)){
+     printf (
+        "*****************************************************************************\n\n"
+        );
+    return;
+  }
   if (Acm->HeaderVersion == ACM_HEADER_VERSION_3) {
     printf ("  RSASig                     - \n");
     DumpHex (Buffer, ACM_PKCS_1_5_RSA_SIGNATURE_SHA384_SIZE); // PKCS #1.5 RSA Signature
@@ -2580,6 +2590,14 @@ Returns:
     return FALSE;
   }
 
+  //
+  // To simplify the tool and making it independent of ACM header change,
+  // the following check will be skipped starting ACM_HEADER_VERSION3
+  //
+  if((Acm->HeaderVersion != ACM_HEADER_VERSION_3) && (Acm->HeaderVersion != ACM_HEADER_VERSION_0)){
+    printf ("ACM header Version 4 or higher, bypassing other checks!\n");
+    return TRUE;
+  }
   Buffer = (UINT8 *)(Acm + 1);
   Buffer += Acm->KeySize * 4;
   if (Acm->HeaderVersion == ACM_HEADER_VERSION_3) {
