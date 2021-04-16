@@ -67,6 +67,7 @@ DefinitionBlock ("Cn9131DbASsdt.aml", "SSDT", 2, "MVEBU ", "CN9131", 3)
             {
                 Memory32Fixed (ReadWrite, 0xf4000000 , 0x100000)
                 Memory32Fixed (ReadWrite, 0xf4129000 , 0xb000)
+                Memory32Fixed (ReadWrite, 0xf4220000 , 0x800)
             })
             Name (_DSD, Package () {
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),

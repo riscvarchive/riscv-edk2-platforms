@@ -237,6 +237,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
             {
                 Memory32Fixed (ReadWrite, 0xf2000000 , 0x100000)
                 Memory32Fixed (ReadWrite, 0xf2129000 , 0xb000)
+                Memory32Fixed (ReadWrite, 0xf2220000 , 0x800)
             })
             Name (_DSD, Package () {
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -274,6 +275,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
             {
                 Memory32Fixed (ReadWrite, 0xf4000000 , 0x100000)
                 Memory32Fixed (ReadWrite, 0xf4129000 , 0xb000)
+                Memory32Fixed (ReadWrite, 0xf4220000 , 0x800)
             })
             Name (_DSD, Package () {
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
