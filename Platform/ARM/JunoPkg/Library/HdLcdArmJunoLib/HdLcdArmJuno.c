@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2013 - 2020, Arm Limited. All rights reserved.<BR>
+  Copyright (c) 2013 - 2021, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -352,12 +352,31 @@ ProbeHdLcdClock (
     return Status;
   }
 
-  DEBUG ((DEBUG_ERROR, "Clock ID = %d Clock name = %a\n", *ClockId, ClockName));
-  DEBUG ((DEBUG_ERROR, "Minimum frequency = %uHz\n", ClockRate.Min));
-  DEBUG ((DEBUG_ERROR, "Maximum frequency = %uHz\n", ClockRate.Max));
-  DEBUG ((DEBUG_ERROR, "Clock rate step = %uHz\n", ClockRate.Step));
-
-  DEBUG ((DEBUG_ERROR, "HDLCD Current frequency = %uHz\n", CurrentHdLcdFreq));
+  DEBUG ((
+    DEBUG_ERROR,
+    "Clock ID = %d Clock name = %a\n",
+    *ClockId, ClockName
+    ));
+  DEBUG ((
+    DEBUG_ERROR,
+    "Minimum frequency = %uHz\n",
+    ClockRate.ContinuousRate.Min
+    ));
+  DEBUG ((
+    DEBUG_ERROR,
+    "Maximum frequency = %uHz\n",
+    ClockRate.ContinuousRate.Max
+    ));
+  DEBUG ((
+    DEBUG_ERROR,
+    "Clock rate step = %uHz\n",
+    ClockRate.ContinuousRate.Step
+    ));
+  DEBUG ((
+    DEBUG_ERROR,
+    "HDLCD Current frequency = %uHz\n",
+    CurrentHdLcdFreq
+    ));
 
   return EFI_SUCCESS;
 }
