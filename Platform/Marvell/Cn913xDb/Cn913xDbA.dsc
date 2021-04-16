@@ -54,6 +54,8 @@
 !ifndef $(CN9132)
 [Components.AARCH64]
   Silicon/Marvell/OcteonTx/AcpiTables/T91/$(PLATFORM_NAME).inf
+!else
+  Silicon/Marvell/OcteonTx/AcpiTables/T91/Cn9131DbA.inf
 !endif
 
 [LibraryClasses.common]
