@@ -320,7 +320,27 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
                     Package () { "phy-mode", "sgmii"},
                   }
               })
-           }
+            }
+            Device (ETH2)
+            {
+              Name (_ADR, 0x0)
+              Name (_CRS, ResourceTemplate ()
+              {
+                  Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
+                  {
+                    CP_GIC_SPI_PP2_CP1_PORT2
+                  }
+              })
+              Name (_DSD, Package () {
+                  ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                  Package () {
+                    Package () { "port-id", 2 },
+                    Package () { "gop-port-id", 3 },
+                    Package () { "phy-mode", "2500base-x"},
+                    Package () { "managed", "in-band-status"},
+                  }
+              })
+            }
         }
 
         Device (RNG0)
