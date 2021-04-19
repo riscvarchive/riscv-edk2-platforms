@@ -120,6 +120,12 @@ READ_LOCK_STATUS   = TRUE
   # Virtio Block Device support
   INF OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 
+  # Networking stack
+  !include NetworkPkg/Network.fdf.inc
+
+  # Virtio Net support
+  INF OvmfPkg/VirtioNetDxe/VirtioNet.inf
+
   # FAT filesystem + GPT/MBR partitioning
   INF FatPkg/EnhancedFatDxe/Fat.inf
   INF MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf

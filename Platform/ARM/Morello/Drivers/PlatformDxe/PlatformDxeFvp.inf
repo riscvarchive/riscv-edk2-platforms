@@ -34,11 +34,13 @@
 [FeaturePcd]
   gArmMorelloTokenSpaceGuid.PcdRamDiskSupported
   gArmMorelloTokenSpaceGuid.PcdVirtioBlkSupported
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetSupported
 
 [FixedPcd]
   gArmMorelloTokenSpaceGuid.PcdRamDiskBase
   gArmMorelloTokenSpaceGuid.PcdRamDiskSize
   gArmMorelloTokenSpaceGuid.PcdVirtioBlkBaseAddress
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetBaseAddress
 
 [Depex]
   gEfiRamDiskProtocolGuid

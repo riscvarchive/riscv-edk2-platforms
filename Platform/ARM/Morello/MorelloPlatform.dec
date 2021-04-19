@@ -55,6 +55,12 @@
   gArmMorelloTokenSpaceGuid.PcdPciMmio64Translation|0x0|UINT64|0x00000017
   gArmMorelloTokenSpaceGuid.PcdPciExpressBaseAddress|0x20000000|UINT64|0x00000018
 
+  # Virtio Net device
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetBaseAddress|0x00000000|UINT32|0x00000019
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetSize|0x00000000|UINT32|0x0000001A
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetInterrupt|0x00000000|UINT32|0x0000001B
+
 [PcdsFeatureFlag.common]
   gArmMorelloTokenSpaceGuid.PcdRamDiskSupported|FALSE|BOOLEAN|0x00000007
   gArmMorelloTokenSpaceGuid.PcdVirtioBlkSupported|FALSE|BOOLEAN|0x00000008
+  gArmMorelloTokenSpaceGuid.PcdVirtioNetSupported|FALSE|BOOLEAN|0x0000001C
