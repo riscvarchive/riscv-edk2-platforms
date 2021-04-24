@@ -2,7 +2,7 @@
 #  FDF file of Platform.
 #
 #
-#  Copyright (c) 2020, Intel Corporation. All rights reserved.<BR>
+#  Copyright (c) 2020 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -47,9 +47,7 @@ SET gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase = $(gSiPkgTokenSpaceGuid.PcdBio
 SET gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize)
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase) + 0x60
 SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize) - 0x60
-SET gIntelFsp2WrapperTokenSpaceGuid.PcdCpuMicrocodePatchAddress = $(gSiPkgTokenSpaceGuid.PcdBiosAreaBaseAddress) + $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset)
-SET gIntelFsp2WrapperTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize = $(gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize)
-SET gIntelFsp2WrapperTokenSpaceGuid.PcdFlashMicrocodeOffset = 0x60
+SET gMinPlatformPkgTokenSpaceGuid.PcdMicrocodeOffsetInFv     = 0x60
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeBase    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvBase
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeSize    = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvSize
 SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeOffset  = gSiPkgTokenSpaceGuid.PcdFlashMicrocodeFvOffset
