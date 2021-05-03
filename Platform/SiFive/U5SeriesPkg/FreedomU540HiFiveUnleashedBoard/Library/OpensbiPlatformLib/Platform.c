@@ -132,30 +132,6 @@ static int generic_early_init(bool cold_boot)
 	return fdt_reset_init();
 }
 
-static u32 U540_pmp_region_count(u32 hartid)
-{
-    return 1;
-}
-
-static int U540_pmp_region_info(u32 hartid, u32 index,
-                 ulong *prot, ulong *addr, ulong *log2size)
-{
-    int ret = 0;
-
-    switch (index) {
-    case 0:
-        *prot = PMP_R | PMP_W | PMP_X;
-        *addr = 0;
-        *log2size = __riscv_xlen;
-        break;
-    default:
-        ret = -1;
-        break;
-    };
-
-    return ret;
-}
-
 static int generic_final_init(bool cold_boot)
 {
 	void *fdt;
@@ -260,8 +236,6 @@ const struct sbi_platform_operations platform_ops = {
 	.timer_exit		= fdt_timer_exit,
 	.system_reset_check	= generic_system_reset_check,
 	.system_reset		= generic_system_reset,
-  .pmp_region_count = U540_pmp_region_count,
-  .pmp_region_info = U540_pmp_region_info,
 };
 
 struct sbi_platform platform = {
