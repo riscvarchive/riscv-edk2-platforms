@@ -199,7 +199,7 @@ MiscInitialization (
   // of IO space. (Side note: unlike other HOBs, the CPU HOB is needed during
   // S3 resume as well, so we build it unconditionally.)
   //
-  BuildCpuHob (32, 32);
+  BuildCpuHob (48, 32);
 }
 
 /**
