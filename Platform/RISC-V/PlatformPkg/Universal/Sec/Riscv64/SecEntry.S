@@ -528,4 +528,4 @@ RISCV_PTR SecCoreStartUpWithStack
   .globl fdt_bin
 fdt_bin:
   /* TODO: Rename to a generic name and think about where we want to put this */
-  .incbin "U540.dtb"
+  .incbin "starfive_vic7100_beagle_v.dtb"
