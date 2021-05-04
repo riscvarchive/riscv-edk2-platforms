@@ -1,0 +1,66 @@
+name: Docker
+
+on:
+  # Run CI for this branch and all PRs
+  push:
+    branches:
+      - riscv-virt-gh-actions
+  pull_request:
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  build:
+    name: Build the firmware image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/checkout@v2
+        with:
+          repository: riscv/riscv-edk2
+          ref: riscv-virt-540-mod
+          submodules: true
+          path: edk2
+
+      - name: Pull image
+        run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
+
+      - name: ls edk2
+        run: ls -l edk2
+
+      - name: ls
+        run: ls -l
+
+      - name: Build
+        run: |
+          docker run --rm \
+            -v $(pwd)/:/edk2-platforms \
+            -v $(pwd)/edk2:/edk2 \
+            -i ghcr.io/johnazoidberg/riscv-edk2:latest \
+            /edk2-platforms/build-edk2.sh
+
+      - name: Check if U540.fd is there
+        run: ls -l U540.fd
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: U540.fd
+          path: U540.fd
+
+  test:
+    name: Boot the image to UEFI Shell
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@master
+        with:
+          name: U540.fd
+          path: U540.fd
+
+      # Call the custom action in this repo at /action.yml
+      - uses: ./
