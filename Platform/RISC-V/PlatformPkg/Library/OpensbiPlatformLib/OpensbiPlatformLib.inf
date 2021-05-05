@@ -25,7 +25,6 @@
 
 [Sources]
   Platform.c
-  SifiveFu540.c
   PlatformOverride.h
 
 [Packages]
