@@ -96,6 +96,9 @@ jobs:
           name: U540.fd
           path: U540.fd
 
+      - name: Chmod U540.fd
+        run: chmod +w U540.fd
+
       # Call the custom action in this repo at /action.yml
       - uses: ./
         with:
