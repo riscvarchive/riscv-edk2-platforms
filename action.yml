@@ -8,5 +8,7 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  # The docker action only supports variables in args, so we can't directly use entrypoint here
+  # See https://github.community/t/expressions-in-docker-uri/16271
   args:
     - ${{ inputs.entrypoint }}
