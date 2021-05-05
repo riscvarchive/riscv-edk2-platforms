@@ -83,7 +83,47 @@ jobs:
           name: U540
           path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
 
-  test:
+  build-virt:
+    name: Build the QEMU RiscvVirt firmware image
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/checkout@v2
+        with:
+          repository: riscv/riscv-edk2
+          # TODO: Branch specific until riscv-virt is its own platform
+          ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
+          submodules: true
+          path: edk2
+
+      - name: Pull image
+        run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
+
+      - name: Make build directory to access build results
+        run: mkdir Build
+
+      - name: Build RiscvVirt
+        run: |
+          docker run --rm \
+            -v $(pwd)/Build:/Build \
+            -v $(pwd)/:/edk2-platforms \
+            -v $(pwd)/edk2:/edk2 \
+            -i ghcr.io/johnazoidberg/riscv-edk2:latest \
+            /edk2-platforms/build-edk2.sh \
+            Platform/Qemu/RiscvVirt/RiscvVirt.dsc
+
+      - name: Check if FD files are there
+        run: ls -l RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+
+      - uses: actions/upload-artifact@master
+        with:
+          name: RiscvVirt
+          path: RiscvVirt/DEBUG_GCC5/FV
+
+  test-u540:
     name: Boot the image to UEFI Shell
     if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
@@ -102,4 +142,25 @@ jobs:
       # Call the custom action in this repo at /action.yml
       - uses: ./
         with:
-          entrypoint: ${{ contains(github.ref, 'riscv-virt') && './run-virt.sh' || './run-u540.sh' }}
+          entrypoint: './run-u540.sh'
+
+  test-virt:
+    name: Boot the image to UEFI Shell
+    if: ${{ contains(github.ref, 'riscv-virt') }}
+    runs-on: ubuntu-latest
+    needs: build-virt
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: RiscvVirt
+          path: Build/RiscvVirt/DEBUG_GCC5/FV
+
+      - name: Chmod RISCVVIRT.fd
+        run: chmod +w Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+
+      # Call the custom action in this repo at /action.yml
+      - uses: ./
+        with:
+          entrypoint: './run-virt.sh'
