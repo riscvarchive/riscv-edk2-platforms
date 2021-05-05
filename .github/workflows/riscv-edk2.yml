@@ -21,34 +21,45 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: riscv/riscv-edk2
-          ref: riscv-virt-540-mod
+          ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
           submodules: true
           path: edk2
 
       - name: Pull image
         run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
 
-      - name: ls edk2
-        run: ls -l edk2
+      - name: Make build directory to cache between builds
+        run: mkdir Build
 
-      - name: ls
-        run: ls -l
-
-      - name: Build
+      - name: Build U500
         run: |
           docker run --rm \
+            -v $(pwd)/Build:/Build \
             -v $(pwd)/:/edk2-platforms \
             -v $(pwd)/edk2:/edk2 \
             -i ghcr.io/johnazoidberg/riscv-edk2:latest \
-            /edk2-platforms/build-edk2.sh
+            /edk2-platforms/build-edk2.sh \
+            Platform/SiFive/U5SeriesPkg/FreedomU500VC707Board/U500.dsc
 
-      - name: Check if U540.fd is there
-        run: ls -l U540.fd
+      - name: Build U540
+        run: |
+          docker run --rm \
+            -v $(pwd)/Build:/Build \
+            -v $(pwd)/:/edk2-platforms \
+            -v $(pwd)/edk2:/edk2 \
+            -i ghcr.io/johnazoidberg/riscv-edk2:latest \
+            /edk2-platforms/build-edk2.sh \
+            Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/U540.dsc
+
+      - name: Check if FD files are there
+        run: |
+          ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+          ls -l Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
 
       - uses: actions/upload-artifact@master
         with:
           name: U540.fd
-          path: U540.fd
+          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
   test:
     name: Boot the image to UEFI Shell
