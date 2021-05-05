@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-u500:
-    name: Build the U500 firmware image
+    name: Build U500 firmware image
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +49,7 @@ jobs:
           path: Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
 
   build-u540:
-    name: Build the U540 firmware image
+    name: Build U540 firmware image
     runs-on: ubuntu-latest
 
     steps:
@@ -89,7 +89,7 @@ jobs:
           path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
 
   build-beaglev:
-    name: Build the BeagleV firmware image
+    name: Build BeagleV firmware image
     runs-on: ubuntu-latest
 
     steps:
@@ -129,7 +129,7 @@ jobs:
           path: Build/BeagleV/DEBUG_GCC5/FV/BEAGLEV.fd
 
   build-virt:
-    name: Build the QEMU RiscvVirt firmware image
+    name: Build QEMU RiscvVirt firmware image
     runs-on: ubuntu-latest
 
     steps:
@@ -169,7 +169,7 @@ jobs:
           path: Build/RiscvVirt/DEBUG_GCC5/FV
 
   test-u540:
-    name: Boot the image to UEFI Shell
+    name: Boot U540 to UEFI Shell
     if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
     needs: build-u540
@@ -190,7 +190,7 @@ jobs:
           entrypoint: './run-u540.sh'
 
   test-virt:
-    name: Boot the image to UEFI Shell
+    name: Boot RiscvVirt to UEFI Shell
     if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
     needs: build-virt
