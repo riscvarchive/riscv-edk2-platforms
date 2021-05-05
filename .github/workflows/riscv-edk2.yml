@@ -121,7 +121,7 @@ jobs:
       - uses: actions/upload-artifact@master
         with:
           name: RiscvVirt
-          path: RiscvVirt/DEBUG_GCC5/FV
+          path: Build/RiscvVirt/DEBUG_GCC5/FV
 
   test-u540:
     name: Boot the image to UEFI Shell
