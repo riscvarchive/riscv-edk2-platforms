@@ -8,29 +8,27 @@ on:
   pull_request:
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  build:
-    name: Build the firmware image
-    runs-on: ubuntu-latest
+# build-u500:
+#   name: Build the U500 firmware image
+#   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - uses: actions/checkout@v2
-        with:
-          repository: riscv/riscv-edk2
-          # TODO: Branch specific until riscv-virt is its own platform
-          ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
-          submodules: true
-          path: edk2
+#   steps:
+#     - uses: actions/checkout@v2
+#       with:
+#         submodules: true
+#     - uses: actions/checkout@v2
+#       with:
+#         repository: riscv/riscv-edk2
+#         # TODO: Branch specific until riscv-virt is its own platform
+#         ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
+#         submodules: true
+#         path: edk2
 
-      - name: Pull image
-        run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
+#     - name: Pull image
+#       run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
 
-      - name: Make build directory to cache between builds of different platforms
-        run: mkdir Build
+#     - name: Make build directory to access build results
+#       run: mkdir Build
 
 #     - name: Build U500
 #       run: |
@@ -42,38 +40,61 @@ jobs:
 #           /edk2-platforms/build-edk2.sh \
 #           Platform/SiFive/U5SeriesPkg/FreedomU500VC707Board/U500.dsc
 
-      - name: Build U540
-        run: |
-          docker run --rm \
-            -v $(pwd)/Build:/Build \
-            -v $(pwd)/:/edk2-platforms \
-            -v $(pwd)/edk2:/edk2 \
-            -i ghcr.io/johnazoidberg/riscv-edk2:latest \
-            /edk2-platforms/build-edk2.sh \
-            Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/U540.dsc
+#     - name: Check if FD files are there
+#       run: ls -l Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
 
-      - name: Check if FD files are there
-        run: |
-          ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
-#         ls -l Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
+# build-u540:
+#   name: Build the U540 firmware image
+#   runs-on: ubuntu-latest
 
-      - uses: actions/upload-artifact@master
-        with:
-          name: U540.fd
-          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+#   steps:
+#     - uses: actions/checkout@v2
+#       with:
+#         submodules: true
+#     - uses: actions/checkout@v2
+#       with:
+#         repository: riscv/riscv-edk2
+#         # TODO: Branch specific until riscv-virt is its own platform
+#         ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
+#         submodules: true
+#         path: edk2
+
+#     - name: Pull image
+#       run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
+
+#     - name: Make build directory to access build results
+#       run: mkdir Build
+
+#     - name: Build U540
+#       run: |
+#         docker run --rm \
+#           -v $(pwd)/Build:/Build \
+#           -v $(pwd)/:/edk2-platforms \
+#           -v $(pwd)/edk2:/edk2 \
+#           -i ghcr.io/johnazoidberg/riscv-edk2:latest \
+#           /edk2-platforms/build-edk2.sh \
+#           Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/U540.dsc
+
+#     - name: Check if FD files are there
+#       run: ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+
+#     - uses: actions/upload-artifact@master
+#       with:
+#         name: U540.fd
+#         path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
   test:
     name: Boot the image to UEFI Shell
     if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
-    needs: build
+#   needs: build-u540
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/download-artifact@master
-        with:
-          name: U540.fd
-          path: U540.fd
+#     - uses: actions/download-artifact@master
+#       with:
+#         name: U540.fd
+#         path: U540.fd
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
