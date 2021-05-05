@@ -78,23 +78,23 @@ jobs:
       - name: Check if FD files are there
         run: ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
-#     - uses: actions/upload-artifact@master
-#       with:
-#         name: U540.fd
-#         path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+      - uses: actions/upload-artifact@master
+        with:
+          name: U540.fd
+          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
-# test:
-#   name: Boot the image to UEFI Shell
-#   if: ${{ contains(github.ref, 'riscv-virt') }}
-#   runs-on: ubuntu-latest
-#   needs: build-u540
-#   steps:
-#     - uses: actions/checkout@v2
+  test:
+    name: Boot the image to UEFI Shell
+    if: ${{ contains(github.ref, 'riscv-virt') }}
+    runs-on: ubuntu-latest
+    needs: build-u540
+    steps:
+      - uses: actions/checkout@v2
 
-#     - uses: actions/download-artifact@master
-#       with:
-#         name: U540.fd
-#         path: U540.fd
+      - uses: actions/download-artifact@v2
+        with:
+          name: U540.fd
+          path: U540.fd
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
