@@ -116,7 +116,7 @@ jobs:
             Platform/Qemu/RiscvVirt/RiscvVirt.dsc
 
       - name: Check if FD files are there
-        run: ls -l RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+        run: ls -l Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
 
       - uses: actions/upload-artifact@master
         with:
