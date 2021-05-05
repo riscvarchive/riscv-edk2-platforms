@@ -5,7 +5,5 @@ RUN apt-get update
 RUN apt-get -y install qemu-system-misc
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
-COPY run-qemu.sh /run-qemu.sh
-
-# Code file to execute when the docker container starts up (`run-qemu.sh`)
-ENTRYPOINT ["/run-qemu.sh"]
+COPY run-virt.sh /run-virt.sh
+COPY run-u540.sh /run-u540.sh

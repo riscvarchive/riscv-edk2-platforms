@@ -4,7 +4,7 @@ on:
   # Run CI for this branch and all PRs
   push:
     branches:
-      - riscv-virt-gh-actions
+      - '*-gh-actions'
   pull_request:
 
 jobs:
@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           repository: riscv/riscv-edk2
+          # TODO: Branch specific until riscv-virt is its own platform
           ref: ${{ contains(github.ref, 'riscv-virt') && 'riscv-virt-540-mod' || 'master' }}
           submodules: true
           path: edk2
@@ -28,18 +29,18 @@ jobs:
       - name: Pull image
         run: docker pull ghcr.io/johnazoidberg/riscv-edk2:latest
 
-      - name: Make build directory to cache between builds
+      - name: Make build directory to cache between builds of different platforms
         run: mkdir Build
 
-      - name: Build U500
-        run: |
-          docker run --rm \
-            -v $(pwd)/Build:/Build \
-            -v $(pwd)/:/edk2-platforms \
-            -v $(pwd)/edk2:/edk2 \
-            -i ghcr.io/johnazoidberg/riscv-edk2:latest \
-            /edk2-platforms/build-edk2.sh \
-            Platform/SiFive/U5SeriesPkg/FreedomU500VC707Board/U500.dsc
+#     - name: Build U500
+#       run: |
+#         docker run --rm \
+#           -v $(pwd)/Build:/Build \
+#           -v $(pwd)/:/edk2-platforms \
+#           -v $(pwd)/edk2:/edk2 \
+#           -i ghcr.io/johnazoidberg/riscv-edk2:latest \
+#           /edk2-platforms/build-edk2.sh \
+#           Platform/SiFive/U5SeriesPkg/FreedomU500VC707Board/U500.dsc
 
       - name: Build U540
         run: |
@@ -54,7 +55,7 @@ jobs:
       - name: Check if FD files are there
         run: |
           ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
-          ls -l Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
+#         ls -l Build/FreedomU500VC707/DEBUG_GCC5/FV/U500.fd
 
       - uses: actions/upload-artifact@master
         with:
@@ -63,6 +64,7 @@ jobs:
 
   test:
     name: Boot the image to UEFI Shell
+    if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -75,3 +77,5 @@ jobs:
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
+        with:
+          entrypoint: ${{ contains(github.ref, 'riscv-virt') && './run-virt.sh' || './run-u540.sh' }}

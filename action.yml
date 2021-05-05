@@ -1,16 +1,12 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
-#inputs:
-#  who-to-greet:  # id of input
-#    description: 'Who to greet'
-#    required: true
-#    default: 'World'
-#outputs:
-#  time: # id of output
-#    description: 'The time we greeted you'
+name: 'qemu-system-riscv64'
+description: 'Run with QEMU RISCV-64 system emulation'
+inputs:
+  entrypoint:
+    description: 'Which script to test with QEMU'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
-# args:
-#   - ${{ inputs.who-to-greet }}
+  args:
+    - ${{ inputs.entrypoint }}

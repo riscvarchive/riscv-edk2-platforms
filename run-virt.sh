@@ -4,4 +4,7 @@ timeout --foreground 10 \
   -bios U540.fd \
   -m 1024 -nographic -smp cpus=1,maxcpus=1 | tee boot.log \
   || true
-grep -q 'Shell>' boot.log
+cat boot.log
+grep -q 'Shell>' boot.log \
+  && echo 'Booted to UEFI Shell' \
+  || echo 'Failed to boot to UEFI Shell'
