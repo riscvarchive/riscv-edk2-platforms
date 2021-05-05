@@ -7,6 +7,7 @@ timeout --foreground 10 \
   -m 1024 -nographic -smp cpus=1,maxcpus=1 | tee boot.log \
   || true
 
+chown $(whoami) U540.fd
 chmod +rw U540.fd
 ls -l U540.fd
 timeout --foreground 10 \
