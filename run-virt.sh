@@ -7,9 +7,20 @@ timeout --foreground 10 \
   -m 1024 -nographic -smp cpus=1,maxcpus=1 | tee boot.log \
   || true
 
-chown $(whoami) U540.fd
-chmod +rw U540.fd
+whoami
+sudo chown $(whoami) U540.fd
+sudo chmod +rw U540.fd
 ls -l U540.fd
+ls -l precompiled-U540.fd
+
+timeout --foreground 10 \
+  qemu-system-riscv64 -machine virt \
+  -bios U540.fd \
+  -m 1024 -nographic -smp cpus=1,maxcpus=1 | tee boot.log \
+  || true
+
+cp precompiled-U540.fd U540.fd
+
 timeout --foreground 10 \
   qemu-system-riscv64 -machine virt \
   -bios U540.fd \
