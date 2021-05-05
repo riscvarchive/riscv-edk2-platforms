@@ -80,8 +80,8 @@ jobs:
 
       - uses: actions/upload-artifact@master
         with:
-          name: U540.fd
-          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+          name: U540
+          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
 
   test:
     name: Boot the image to UEFI Shell
@@ -93,11 +93,11 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: U540.fd
-          path: U540.fd
+          name: U540
+          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
 
       - name: Chmod U540.fd
-        run: chmod +w U540.fd
+        run: chmod +w Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
