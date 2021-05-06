@@ -211,7 +211,7 @@ jobs:
           entrypoint: './run-virt.sh'
 
   test-virt-linux:
-    name: Boot RiscvVirt to UEFI Shell
+    name: Boot RiscvVirt to Linux
     if: ${{ contains(github.ref, 'riscv-virt') }}
     runs-on: ubuntu-latest
     needs: build-virt
