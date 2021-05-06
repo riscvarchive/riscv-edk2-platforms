@@ -13,15 +13,18 @@
 
 // MMC/SD/SDIO1 register definitions.
 #define MMCHS1_OFFSET     0x00300000
+#define MMCHS2_OFFSET     0x00340000
 #define MMCHS1_BASE       (BCM2836_SOC_REGISTERS + MMCHS1_OFFSET)
+#define MMCHS2_BASE       (BCM2836_SOC_REGISTERS + MMCHS2_OFFSET)
 #define MMCHS1_LENGTH     0x00000100
+#define MMCHS2_LENGTH     0x00000100
 
-#define MMCHS_BLK         (MMCHS1_BASE + 0x4)
+#define MMCHS_BLK         (mMmcHsBase + 0x4)
 #define BLEN_512BYTES     (0x200UL << 0)
 
-#define MMCHS_ARG         (MMCHS1_BASE + 0x8)
+#define MMCHS_ARG         (mMmcHsBase + 0x8)
 
-#define MMCHS_CMD         (MMCHS1_BASE + 0xC)
+#define MMCHS_CMD         (mMmcHsBase + 0xC)
 #define BCE_ENABLE        BIT1
 #define DDIR_READ         BIT4
 #define DDIR_WRITE        (0x0UL << 4)
@@ -43,13 +46,13 @@
 #define INDX(CMD_INDX)       (TYPE(CMD_TYPE_NORMAL) | _INDX(CMD_INDX))
 #define INDX_ABORT(CMD_INDX) (TYPE(CMD_TYPE_ABORT) | _INDX(CMD_INDX))
 
-#define MMCHS_RSP10       (MMCHS1_BASE + 0x10)
-#define MMCHS_RSP32       (MMCHS1_BASE + 0x14)
-#define MMCHS_RSP54       (MMCHS1_BASE + 0x18)
-#define MMCHS_RSP76       (MMCHS1_BASE + 0x1C)
-#define MMCHS_DATA        (MMCHS1_BASE + 0x20)
+#define MMCHS_RSP10       (mMmcHsBase + 0x10)
+#define MMCHS_RSP32       (mMmcHsBase + 0x14)
+#define MMCHS_RSP54       (mMmcHsBase + 0x18)
+#define MMCHS_RSP76       (mMmcHsBase + 0x1C)
+#define MMCHS_DATA        (mMmcHsBase + 0x20)
 
-#define MMCHS_PRES_STATE  (MMCHS1_BASE + 0x24)
+#define MMCHS_PRES_STATE  (mMmcHsBase + 0x24)
 #define CMDI_MASK         BIT0
 #define CMDI_ALLOWED      (0x0UL << 0)
 #define CMDI_NOT_ALLOWED  BIT0
@@ -58,17 +61,19 @@
 #define DATI_NOT_ALLOWED  BIT1
 #define WRITE_PROTECT_OFF BIT19
 
-#define MMCHS_HCTL        (MMCHS1_BASE + 0x28)
+#define MMCHS_HCTL        (mMmcHsBase + 0x28)
 #define DTW_1_BIT         (0x0UL << 1)
 #define DTW_4_BIT         BIT1
 #define SDBP_MASK         BIT8
 #define SDBP_OFF          (0x0UL << 8)
 #define SDBP_ON           BIT8
+#define SDVS_MASK         (0x7UL << 9)
 #define SDVS_1_8_V        (0x5UL << 9)
 #define SDVS_3_0_V        (0x6UL << 9)
+#define SDVS_3_3_V        (0x7UL << 9)
 #define IWE               BIT24
 
-#define MMCHS_SYSCTL      (MMCHS1_BASE + 0x2C)
+#define MMCHS_SYSCTL      (mMmcHsBase + 0x2C)
 #define ICE               BIT0
 #define ICS_MASK          BIT1
 #define ICS               BIT1
@@ -84,7 +89,7 @@
 #define SRC               BIT25
 #define SRD               BIT26
 
-#define MMCHS_INT_STAT    (MMCHS1_BASE + 0x30)
+#define MMCHS_INT_STAT    (mMmcHsBase + 0x30)
 #define CC                BIT0
 #define TC                BIT1
 #define BWR               BIT4
@@ -96,7 +101,7 @@
 #define DCRC              BIT21
 #define DEB               BIT22
 
-#define MMCHS_IE          (MMCHS1_BASE + 0x34)
+#define MMCHS_IE          (mMmcHsBase + 0x34)
 #define CC_EN             BIT0
 #define TC_EN             BIT1
 #define BWR_EN            BIT4
@@ -112,7 +117,7 @@
 #define BADA_EN           BIT29
 #define ALL_EN            0xFFFFFFFF
 
-#define MMCHS_ISE         (MMCHS1_BASE + 0x38)
+#define MMCHS_ISE         (mMmcHsBase + 0x38)
 #define CC_SIGEN          BIT0
 #define TC_SIGEN          BIT1
 #define BWR_SIGEN         BIT4
@@ -127,14 +132,15 @@
 #define CERR_SIGEN        BIT28
 #define BADA_SIGEN        BIT29
 
-#define MMCHS_AC12        (MMCHS1_BASE + 0x3C)
+#define MMCHS_AC12        (mMmcHsBase + 0x3C)
+#define MMCHS_HC2R        (mMmcHsBase + 0x3E)
 
-#define MMCHS_CAPA        (MMCHS1_BASE + 0x40)
+#define MMCHS_CAPA        (mMmcHsBase + 0x40)
 #define VS30              BIT25
 #define VS18              BIT26
 
-#define MMCHS_CUR_CAPA    (MMCHS1_BASE + 0x48)
-#define MMCHS_REV         (MMCHS1_BASE + 0xFC)
+#define MMCHS_CUR_CAPA    (mMmcHsBase + 0x48)
+#define MMCHS_REV         (mMmcHsBase + 0xFC)
 
 #define BLOCK_COUNT_SHIFT 16
 #define RCA_SHIFT         16

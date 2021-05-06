@@ -1,7 +1,7 @@
 /** @file
   FIT based microcode shadow PEIM.
 
-Copyright (c) 2020, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2020 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -13,6 +13,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/DebugLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/MicrocodeLib.h>
 #include <IndustryStandard/FirmwareInterfaceTable.h>
 #include <Register/Intel/Microcode.h>
 #include <Register/Intel/Cpuid.h>
@@ -69,114 +70,6 @@ EFI_PEI_PPI_DESCRIPTOR           mPeiShadowMicrocodePpiList[] = {
     &mPeiShadowMicrocodePpi
   }
 };
-
-/**
-  Determine if a microcode patch matchs the specific processor signature and flag.
-
-  @param[in]  CpuIdCount            Number of elements in MicrocodeCpuId array.
-  @param[in]  MicrocodeCpuId        A pointer to an array of EDKII_PEI_MICROCODE_CPU_ID
-                                    structures.
-  @param[in]  ProcessorSignature    The processor signature field value
-                                    supported by a microcode patch.
-  @param[in]  ProcessorFlags        The prcessor flags field value supported by
-                                    a microcode patch.
-
-  @retval TRUE     The specified microcode patch will be loaded.
-  @retval FALSE    The specified microcode patch will not be loaded.
-**/
-BOOLEAN
-IsProcessorMatchedMicrocodePatch (
-  IN  UINTN                           CpuIdCount,
-  IN  EDKII_PEI_MICROCODE_CPU_ID      *MicrocodeCpuId,
-  IN UINT32                           ProcessorSignature,
-  IN UINT32                           ProcessorFlags
-  )
-{
-  UINTN          Index;
-
-  for (Index = 0; Index < CpuIdCount; Index++) {
-    if ((ProcessorSignature == MicrocodeCpuId[Index].ProcessorSignature) &&
-        (ProcessorFlags & (1 << MicrocodeCpuId[Index].PlatformId)) != 0) {
-      return TRUE;
-    }
-  }
-
-  return FALSE;
-}
-
-/**
-  Check the 'ProcessorSignature' and 'ProcessorFlags' of the microcode
-  patch header with the CPUID and PlatformID of the processors within
-  system to decide if it will be copied into memory.
-
-  @param[in]  CpuIdCount            Number of elements in MicrocodeCpuId array.
-  @param[in]  MicrocodeCpuId        A pointer to an array of EDKII_PEI_MICROCODE_CPU_ID
-                                    structures.
-  @param[in]  MicrocodeEntryPoint   The pointer to the microcode patch header.
-
-  @retval TRUE     The specified microcode patch need to be loaded.
-  @retval FALSE    The specified microcode patch dosen't need to be loaded.
-**/
-BOOLEAN
-IsMicrocodePatchNeedLoad (
-  IN  UINTN                         CpuIdCount,
-  IN  EDKII_PEI_MICROCODE_CPU_ID    *MicrocodeCpuId,
-  CPU_MICROCODE_HEADER              *MicrocodeEntryPoint
-  )
-{
-  BOOLEAN                                NeedLoad;
-  UINTN                                  DataSize;
-  UINTN                                  TotalSize;
-  CPU_MICROCODE_EXTENDED_TABLE_HEADER    *ExtendedTableHeader;
-  UINT32                                 ExtendedTableCount;
-  CPU_MICROCODE_EXTENDED_TABLE           *ExtendedTable;
-  UINTN                                  Index;
-
-  //
-  // Check the 'ProcessorSignature' and 'ProcessorFlags' in microcode patch header.
-  //
-  NeedLoad = IsProcessorMatchedMicrocodePatch (
-               CpuIdCount,
-               MicrocodeCpuId,
-               MicrocodeEntryPoint->ProcessorSignature.Uint32,
-               MicrocodeEntryPoint->ProcessorFlags
-               );
-
-  //
-  // If the Extended Signature Table exists, check if the processor is in the
-  // support list
-  //
-  DataSize  = MicrocodeEntryPoint->DataSize;
-  TotalSize = (DataSize == 0) ? 2048 : MicrocodeEntryPoint->TotalSize;
-  if ((!NeedLoad) && (DataSize != 0) &&
-      (TotalSize - DataSize > sizeof (CPU_MICROCODE_HEADER) +
-                              sizeof (CPU_MICROCODE_EXTENDED_TABLE_HEADER))) {
-    ExtendedTableHeader = (CPU_MICROCODE_EXTENDED_TABLE_HEADER *) ((UINT8 *) (MicrocodeEntryPoint)
-                            + DataSize + sizeof (CPU_MICROCODE_HEADER));
-    ExtendedTableCount  = ExtendedTableHeader->ExtendedSignatureCount;
-    ExtendedTable       = (CPU_MICROCODE_EXTENDED_TABLE *) (ExtendedTableHeader + 1);
-
-    for (Index = 0; Index < ExtendedTableCount; Index ++) {
-      //
-      // Check the 'ProcessorSignature' and 'ProcessorFlag' of the Extended
-      // Signature Table entry with the CPUID and PlatformID of the processors
-      // within system to decide if it will be copied into memory
-      //
-      NeedLoad = IsProcessorMatchedMicrocodePatch (
-                   CpuIdCount,
-                   MicrocodeCpuId,
-                   ExtendedTable->ProcessorSignature.Uint32,
-                   ExtendedTable->ProcessorFlag
-                   );
-      if (NeedLoad) {
-        break;
-      }
-      ExtendedTable ++;
-    }
-  }
-
-  return NeedLoad;
-}
 
 /**
   Actual worker function that shadows the required microcode patches into memory.
@@ -373,6 +266,9 @@ IsValidFitTable (
                                    with microcode patches data in it.
 
   @retval EFI_SUCCESS              The microcode has been shadowed to memory.
+  @retval EFI_INVALID_PARAMETER    BufferSize or Buffer is NULL.
+  @retval EFI_INVALID_PARAMETER    CpuIdCount not equal to 0 and MicrocodeCpuId is NULL.
+  @retval EFI_NOT_FOUND            No valid microcode found.
   @retval EFI_OUT_OF_RESOURCES     The operation fails due to lack of resources.
 
 **/
@@ -386,6 +282,7 @@ ShadowMicrocode (
   OUT VOID                                  **Buffer
   )
 {
+  EFI_STATUS                        Status;
   UINT64                            FitPointer;
   FIRMWARE_INTERFACE_TABLE_ENTRY    *FitEntry;
   UINT32                            EntryNum;
@@ -430,6 +327,11 @@ ShadowMicrocode (
     return EFI_OUT_OF_RESOURCES;
   }
 
+  if (FeaturePcdGet (PcdShadowAllMicrocode)) {
+    MicrocodeCpuId = NULL;
+    CpuIdCount     = 0;
+  }
+
   //
   // Fill up microcode patch info buffer according to FIT table.
   //
@@ -438,10 +340,10 @@ ShadowMicrocode (
   for (Index = 0; Index < EntryNum; Index++) {
     if (FitEntry[Index].Type == FIT_TYPE_01_MICROCODE) {
       MicrocodeEntryPoint = (CPU_MICROCODE_HEADER *) (UINTN) FitEntry[Index].Address;
-      TotalSize = (MicrocodeEntryPoint->DataSize == 0) ? 2048 : MicrocodeEntryPoint->TotalSize;
-      if (IsMicrocodePatchNeedLoad (CpuIdCount, MicrocodeCpuId, MicrocodeEntryPoint)) {
-        PatchInfoBuffer[PatchCount].Address     = (UINTN) MicrocodeEntryPoint;
-        PatchInfoBuffer[PatchCount].Size        = TotalSize;
+      TotalSize = GetMicrocodeLength (MicrocodeEntryPoint);
+      if (IsValidMicrocode (MicrocodeEntryPoint, TotalSize, 0, MicrocodeCpuId, CpuIdCount, FALSE)) {
+        PatchInfoBuffer[PatchCount].Address = (UINTN) MicrocodeEntryPoint;
+        PatchInfoBuffer[PatchCount].Size    = TotalSize;
         TotalLoadSize += TotalSize;
         PatchCount++;
       }
@@ -456,10 +358,13 @@ ShadowMicrocode (
       ));
 
     ShadowMicrocodePatchWorker (PatchInfoBuffer, PatchCount, TotalLoadSize, BufferSize, Buffer);
+    Status = EFI_SUCCESS;
+  } else {
+    Status = EFI_NOT_FOUND;
   }
 
   FreePool (PatchInfoBuffer);
-  return EFI_SUCCESS;
+  return Status;
 }
 
 

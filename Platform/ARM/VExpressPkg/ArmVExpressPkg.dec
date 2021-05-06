@@ -1,7 +1,7 @@
 #/** @file
 # Arm Versatile Express package.
 #
-#  Copyright (c) 2012-2018, ARM Limited. All rights reserved.
+#  Copyright (c) 2012-2020, Arm Limited. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -27,7 +27,6 @@
 
 [LibraryClasses]
   ArmPlatformSysConfigLib|Include/Library/ArmPlatformSysConfigLib.h
-  LcdPlatformLib|Include/Library/LcdPlatformLib.h
 
 [Guids.common]
   gArmVExpressTokenSpaceGuid    =  { 0x9c0aaed4, 0x74c5, 0x4043, { 0xb4, 0x17, 0xa3, 0x22, 0x38, 0x14, 0xce, 0x76 } }

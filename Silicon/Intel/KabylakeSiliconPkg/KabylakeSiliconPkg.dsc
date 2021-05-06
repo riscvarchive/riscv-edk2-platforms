@@ -1,7 +1,7 @@
 ## @file
 #  Component description file for the SkyLake SiPkg DSC file.
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -69,6 +69,8 @@ gSiPkgTokenSpaceGuid.PcdSiPciExpressBaseAddress|gEfiMdePkgTokenSpaceGuid.PcdPciE
   # Definition for Build Flag
   #
   !include $(PLATFORM_SI_PACKAGE)/SiPkgBuildOption.dsc
+
+  !include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses.common]
   #

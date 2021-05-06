@@ -169,8 +169,8 @@ UEFI Setting                 |    NAME               |  VALUE
 CPU Clock                    | `CpuClock` | Low = `0x00000000`<br> Default = `0x00000001` (default)<br> Max = `0x00000002`<br> Custom = `0x00000003`
 CPU Clock Rate (MHz)         | `CustomCpuClock` | Hex numeric value, 4-bytes<br> (e.g. `0x000005DC` for 1500 MHz)
 **Display Configuration**    |
-Virtual 640x480              | `DisplayEnableScaledVModes` | Checked = Bit 0 set (i.e.  `<DisplayEnableScaledVModes> \| 0x01`)
-Virtual 800x600              | `DisplayEnableScaledVModes` | Checked = Bit 1 set (i.e.  `<DisplayEnableScaledVModes> \| 0x02`)
+Virtual 640x480              | `DisplayEnableScaledVModes` | Checked = Bit 1 set (i.e.  `<DisplayEnableScaledVModes> \| 0x02`)
+Virtual 800x600              | `DisplayEnableScaledVModes` | Checked = Bit 0 set (i.e.  `<DisplayEnableScaledVModes> \| 0x01`)
 Virtual 1024x768             | `DisplayEnableScaledVModes` | Checked = Bit 2 set (i.e.  `<DisplayEnableScaledVModes> \| 0x04`)
 Virtual 720p                 | `DisplayEnableScaledVModes` | Checked = Bit 3 set (i.e.  `<DisplayEnableScaledVModes> \| 0x08`)
 Virtual 1080p                | `DisplayEnableScaledVModes` | Checked = Bit 4 set (i.e.  `<DisplayEnableScaledVModes> \| 0x10`)
@@ -181,7 +181,7 @@ Limit RAM to 3 GB            | `RamLimitTo3GB` | Disable = `0x00000000` <br> Ena
 System Table Selection       | `SystemTableMode`| ACPI = `0x00000000` (default)<br> ACPI + Devicetree = `0x00000001` <br> Devicetree = `0x00000002`
 Asset Tag                    | `AssetTag` | String, 32 characters or less (e.g. `L"ABCD123"`)<br> (default `L""`)
 **SD/MMC Configuration**     |
-uSD/eMMC Routing             | `SdIsArasan` | Arasan SDHC = `0x00000001` (default) <br> eMMC2 SDHCI = `0x00000000`
+uSD/eMMC Routing             | `SdIsArasan` | Arasan SDHC = `0x00000001` <br> eMMC2 SDHCI = `0x00000000` (default)
 Multi-Block Support          | `MmcDisableMulti` | Multi-block transfers = `0x00000000` (default)<br> Single block transfers = `0x00000001`
 uSD Max Bus Width            | `MmcForce1Bit` | 4-bit Mode = `0x00000000`  (default)<br> 1-bit Mode = `0x00000001`
 uSD Force Default Speed      | `MmcForceDefaultSpeed` | Allow High Speed = `0x00000000` (default)<br> Force Default Speed = `0x00000001`

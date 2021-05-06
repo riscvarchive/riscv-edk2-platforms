@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2017 - 2019, ARM Limited. All rights reserved.
+  Copyright (c) 2017 - 2021, Arm Limited. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -11,6 +11,13 @@
 
 #ifndef CONFIGURATION_MANAGER_H__
 #define CONFIGURATION_MANAGER_H__
+
+/** C array containing the compiled AML template.
+    This symbol is defined in the auto generated C file
+    containing the AML bytecode array.
+*/
+extern CHAR8  dsdt_aml_code[];
+extern CHAR8  ssdtpci_aml_code[];
 
 /** The configuration manager version.
 */
@@ -46,61 +53,35 @@
     EnergyEfficiency          /* UINT8   ProcessorPowerEfficiencyClass*/ \
     }
 
-/** A helper macro for returning configuration manager objects
-*/
-#define HANDLE_CM_OBJECT(ObjId, CmObjectId, Object, ObjectCount)      \
-  case ObjId: {                                                       \
-    CmObject->ObjectId = CmObjectId;                                  \
-    CmObject->Size = sizeof (Object);                                 \
-    CmObject->Data = (VOID*)&Object;                                  \
-    CmObject->Count = ObjectCount;                                    \
-    DEBUG ((                                                          \
-      DEBUG_INFO,                                                     \
-      #CmObjectId ": Ptr = 0x%p, Size = %d, Count = %d\n",            \
-      CmObject->Data,                                                 \
-      CmObject->Size,                                                 \
-      CmObject->Count                                                 \
-      ));                                                             \
-    break;                                                            \
-  }
+/** A function that prepares Configuration Manager Objects for returning.
 
-/** A helper macro for returning configuration manager objects
-    referenced by token
+  @param [in]  This        Pointer to the Configuration Manager Protocol.
+  @param [in]  CmObjectId  The Configuration Manager Object ID.
+  @param [in]  Token       A token for identifying the object.
+  @param [out] CmObject    Pointer to the Configuration Manager Object
+                           descriptor describing the requested Object.
+
+  @retval EFI_SUCCESS           Success.
+  @retval EFI_INVALID_PARAMETER A parameter is invalid.
+  @retval EFI_NOT_FOUND         The required object information is not found.
+**/
+typedef EFI_STATUS (*CM_OBJECT_HANDLER_PROC) (
+  IN  CONST EDKII_CONFIGURATION_MANAGER_PROTOCOL  * CONST This,
+  IN  CONST CM_OBJECT_ID                                  CmObjectId,
+  IN  CONST CM_OBJECT_TOKEN                               Token,
+  IN  OUT   CM_OBJ_DESCRIPTOR                     * CONST CmObject
+  );
+
+/** A helper macro for mapping a reference token.
 */
-#define HANDLE_CM_OBJECT_REF_BY_TOKEN(                                      \
-          ObjId,                                                            \
-          CmObjectId,                                                       \
-          Object,                                                           \
-          ObjectCount,                                                      \
-          Token,                                                            \
-          HandlerProc                                                       \
-          )                                                                 \
-  case ObjId: {                                                             \
-    CmObject->ObjectId = CmObjectId;                                        \
-    if (Token == CM_NULL_TOKEN) {                                           \
-      CmObject->Size = sizeof (Object);                                     \
-      CmObject->Data = (VOID*)&Object;                                      \
-      CmObject->Count = ObjectCount;                                        \
-      DEBUG ((                                                              \
-        DEBUG_INFO,                                                         \
-        #CmObjectId ": Ptr = 0x%p, Size = %d, Count = %d\n",                \
-        CmObject->Data,                                                     \
-        CmObject->Size,                                                     \
-        CmObject->Count                                                     \
-        ));                                                                 \
-    } else {                                                                \
-      Status = HandlerProc (This, CmObjectId, Token, CmObject);             \
-      DEBUG ((                                                              \
-        DEBUG_INFO,                                                         \
-        #CmObjectId ": Token = 0x%p, Ptr = 0x%p, Size = %d, Count = %d\n",  \
-        (VOID*)Token,                                                       \
-        CmObject->Data,                                                     \
-        CmObject->Size,                                                     \
-        CmObject->Count                                                     \
-        ));                                                                 \
-    }                                                                       \
-    break;                                                                  \
-  }
+#define REFERENCE_TOKEN(Field)                                    \
+          (CM_OBJECT_TOKEN)((UINT8*)&VExpressPlatRepositoryInfo + \
+           OFFSET_OF (EDKII_PLATFORM_REPOSITORY_INFO, Field))
+
+/** Macro to return MPIDR for Multi Threaded Cores
+*/
+#define GET_MPID_MT(Cluster, Core, Thread)                        \
+          (((Cluster) << 16) | ((Core) << 8) | (Thread))
 
 /** The number of CPUs
 */
@@ -108,7 +89,7 @@
 
 /** The number of ACPI tables to install
 */
-#define PLAT_ACPI_TABLE_COUNT       6
+#define PLAT_ACPI_TABLE_COUNT       9
 
 /** The number of platform generic timer blocks
 */
@@ -170,6 +151,28 @@ typedef struct PlatformRepositoryInfo {
 
   /// GIC ITS information
   CM_ARM_GIC_ITS_INFO                   GicItsInfo;
+
+  // FVP RevC components
+  /// SMMUv3 node
+  CM_ARM_SMMUV3_NODE                    SmmuV3Info;
+
+  /// ITS Group node
+  CM_ARM_ITS_GROUP_NODE                 ItsGroupInfo;
+
+  /// ITS Identifier array
+  CM_ARM_ITS_IDENTIFIER                 ItsIdentifierArray[1];
+
+  /// PCI Root complex node
+  CM_ARM_ROOT_COMPLEX_NODE              RootComplexInfo;
+
+  /// Array of DeviceID mapping
+  CM_ARM_ID_MAPPING                     DeviceIdMapping[2];
+
+  /// PCI configuration space information
+  CM_ARM_PCI_CONFIG_SPACE_INFO          PciConfigInfo;
+
+  /// System ID
+  UINT32                                SysId;
 } EDKII_PLATFORM_REPOSITORY_INFO;
 
 #endif // CONFIGURATION_MANAGER_H__

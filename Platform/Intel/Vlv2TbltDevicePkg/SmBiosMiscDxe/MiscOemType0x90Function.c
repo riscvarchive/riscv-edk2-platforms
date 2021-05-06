@@ -1,10 +1,12 @@
 /*++
 
-Copyright (c) 1999  - 2014, Intel Corporation.  All rights reserved.
-                                                                                   
+Copyright (c) 1999  - 2020, Intel Corporation.  All rights reserved.
+                                                                                   
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
+                                                                                   
+
 
 
 
@@ -286,6 +288,7 @@ AddSmbiosT0x90Callback (
   CHAR16                *Stepping;
   STRING_REF            TokenToGet;
   CHAR8                 *OptionalStrStart;
+  UINTN                 OptionalStrSize;
   EFI_SMBIOS_PROTOCOL               *SmbiosProtocol;
 
   DEBUG ((EFI_D_INFO, "Executing SMBIOS T0x90 callback.\n"));
@@ -340,8 +343,9 @@ AddSmbiosT0x90Callback (
     return EFI_UNSUPPORTED;
   }
 
-  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE90) + SECVerStrLen + 1 + uCodeVerStrLen + 1 + GOPStrLen + 1 + SteppingStrLen + 1 + 1);
-  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE90) + SECVerStrLen + 1 + uCodeVerStrLen + 1 + GOPStrLen + 1 + SteppingStrLen + 1 + 1);
+  OptionalStrSize = SECVerStrLen + 1 + uCodeVerStrLen + 1 + GOPStrLen + 1 + SteppingStrLen + 1 + 1;
+  SmbiosRecord = AllocatePool(sizeof (SMBIOS_TABLE_TYPE90) + OptionalStrSize);
+  ZeroMem(SmbiosRecord, sizeof (SMBIOS_TABLE_TYPE90) + OptionalStrSize);
 
   SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_FIRMWARE_VERSION_INFO;
   SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE90);
@@ -372,10 +376,16 @@ AddSmbiosT0x90Callback (
   SmbiosRecord->CpuStepping = 4;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(SECVer, OptionalStrStart);
-  UnicodeStrToAsciiStr(uCodeVer, OptionalStrStart + SECVerStrLen + 1);
-  UnicodeStrToAsciiStr(GOPVer, OptionalStrStart + SECVerStrLen + 1 + uCodeVerStrLen + 1);
-  UnicodeStrToAsciiStr(Stepping, OptionalStrStart + SECVerStrLen + 1 + uCodeVerStrLen + 1 + GOPStrLen + 1);
+  UnicodeStrToAsciiStrS (SECVer, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (SECVerStrLen + 1);
+  OptionalStrSize  -= (SECVerStrLen + 1);
+  UnicodeStrToAsciiStrS (uCodeVer, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (uCodeVerStrLen + 1);
+  OptionalStrSize  -= (uCodeVerStrLen + 1);
+  UnicodeStrToAsciiStrS (GOPVer, OptionalStrStart, OptionalStrSize);
+  OptionalStrStart += (GOPStrLen + 1);
+  OptionalStrSize  -= (GOPStrLen + 1);
+  UnicodeStrToAsciiStrS (Stepping, OptionalStrStart, OptionalStrSize);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

@@ -65,6 +65,47 @@ SocGetClock (
 }
 
 /**
+   Function to select pins depending upon pcd using supplemental
+   configuration unit(SCFG) extended RCW controlled pinmux control
+   register which contains the bits to provide pin multiplexing control.
+   This register is reset on HRESET.
+ **/
+STATIC
+VOID
+ConfigScfgMux (VOID)
+{
+  LS1046A_SUPPLEMENTAL_CONFIG  *Scfg;
+  UINT32 UsbPwrFault;
+
+  Scfg = (LS1046A_SUPPLEMENTAL_CONFIG *)LS1046A_SCFG_ADDRESS;
+  // Configures functionality of the IIC3_SCL to USB2_DRVVBUS
+  // Configures functionality of the IIC3_SDA to USB2_PWRFAULT
+  // USB3 is not used, configure mux to IIC4_SCL/IIC4_SDA
+  ScfgWrite32 ((UINTN)&Scfg->RcwPMuxCr0, SCFG_RCWPMUXCRO_NOT_SELCR_USB);
+
+  ScfgWrite32 ((UINTN)&Scfg->UsbDrvVBusSelCr, SCFG_USBDRVVBUS_SELCR_USB1);
+  UsbPwrFault = (SCFG_USBPWRFAULT_DEDICATED << SCFG_USBPWRFAULT_USB3_SHIFT) |
+                (SCFG_USBPWRFAULT_DEDICATED << SCFG_USBPWRFAULT_USB2_SHIFT) |
+                (SCFG_USBPWRFAULT_SHARED << SCFG_USBPWRFAULT_USB1_SHIFT);
+  ScfgWrite32 ((UINTN)&Scfg->UsbPwrFaultSelCr, UsbPwrFault);
+  ScfgWrite32 ((UINTN)&Scfg->UsbPwrFaultSelCr, UsbPwrFault);
+}
+
+STATIC
+VOID
+ApplyErrata (
+  VOID
+  )
+{
+  ErratumA008997 ();
+  ErratumA009007 ();
+  ErratumA009008 ();
+  ErratumA009798 ();
+}
+
+
+
+/**
   Function to initialize SoC specific constructs
  **/
 VOID
@@ -72,7 +113,30 @@ SocInit (
   VOID
   )
 {
+  LS1046A_SUPPLEMENTAL_CONFIG  *Scfg;
+
+  Scfg = (LS1046A_SUPPLEMENTAL_CONFIG *)LS1046A_SCFG_ADDRESS;
+
+  /* Make SEC, SATA and USB reads and writes snoopable */
+  ScfgOr32((UINTN)&Scfg->SnpCnfgCr, SCFG_SNPCNFGCR_SECRDSNP |
+    SCFG_SNPCNFGCR_SECWRSNP | SCFG_SNPCNFGCR_USB1RDSNP |
+    SCFG_SNPCNFGCR_USB1WRSNP | SCFG_SNPCNFGCR_USB2RDSNP |
+    SCFG_SNPCNFGCR_USB2WRSNP | SCFG_SNPCNFGCR_USB3RDSNP |
+    SCFG_SNPCNFGCR_USB3WRSNP | SCFG_SNPCNFGCR_SATARDSNP |
+    SCFG_SNPCNFGCR_SATAWRSNP);
+
+  ApplyErrata ();
   ChassisInit ();
+
+  //
+  // Due to the extensive functionality present on the chip and the limited number of external
+  // signals available, several functional blocks share signal resources through multiplexing.
+  // In this case when there is alternate functionality between multiple functional blocks,
+  // the signal's function is determined at the chip level (rather than at the block level)
+  // typically by a reset configuration word (RCW) option. Some of the signals' function are
+  // determined externel to RCW at Power-on Reset Sequence.
+  //
+  ConfigScfgMux ();
 
   return;
 }

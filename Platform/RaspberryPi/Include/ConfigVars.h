@@ -1,7 +1,7 @@
 /** @file
  *
  *  Copyright (c) 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
- *  Copyright (c) 2020, ARM Limited. All rights reserved.
+ *  Copyright (c) 2020 - 2021, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -19,8 +19,8 @@ typedef struct {
    *
    * 800x600, 640x480, 1024x768, 720p, 1080p, native.
    */
-   UINT8 v640   : 1;
    UINT8 v800   : 1;
+   UINT8 v640   : 1;
    UINT8 v1024  : 1;
    UINT8 v720p  : 1;
    UINT8 v1080p : 1;
@@ -134,5 +134,23 @@ typedef struct {
    */
   UINT32 MHz;
 } MMC_SD_HS_MHZ_VARSTORE_DATA;
+
+typedef struct {
+  /*
+   * 0 - eMMC PIO mode
+   * 1 - eMMC DMA mode
+   */
+  UINT32 EnableDma;
+} MMC_EMMC_DMA_VARSTORE_DATA;
+
+#define FAST_BOOT      0
+#define FULL_DISCOVERY 1
+typedef struct {
+  /*
+   * 0 - Fast Boot
+   * 1 - Full Discovery (Connect All)
+   */
+  UINT32 BootPolicy;
+} BOOT_POLICY_VARSTORE_DATA;
 
 #endif /* CONFIG_VARS_H */

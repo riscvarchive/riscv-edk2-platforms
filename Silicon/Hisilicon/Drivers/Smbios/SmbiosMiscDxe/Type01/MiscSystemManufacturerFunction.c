@@ -135,12 +135,18 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscSystemManufacturer)
     }
 
     OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(Manufacturer, OptionalStrStart);
-    UnicodeStrToAsciiStr(ProductName,  OptionalStrStart + ManuStrLen + 1);
-    UnicodeStrToAsciiStr(Version,      OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1);
-    UnicodeStrToAsciiStr(SerialNumber, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1);
-    UnicodeStrToAsciiStr(SKUNumber,    OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1);
-    UnicodeStrToAsciiStr(Family,       OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SKUNumStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (Manufacturer, OptionalStrStart, ManuStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ProductName,  OptionalStrStart + ManuStrLen + 1, PdNameStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (Version,      OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1, VerStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SerialNumber, OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SKUNumber,    OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1, SKUNumStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (Family,       OptionalStrStart + ManuStrLen + 1 + PdNameStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1 + SKUNumStrLen + 1, FamilyStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
 
     //
     // Now we have got the full smbios record, call smbios protocol to add this record.

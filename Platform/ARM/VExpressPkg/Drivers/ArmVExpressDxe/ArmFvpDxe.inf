@@ -1,6 +1,6 @@
 #/** @file
 #
-#  Copyright (c) 2013-2015, ARM Ltd. All rights reserved.<BR>
+#  Copyright (c) 2013-2021, Arm Ltd. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -28,6 +28,8 @@
 [LibraryClasses]
   ArmShellCmdRunAxfLib
   BaseMemoryLib
+  IoLib
+  TimerLib
   UefiDriverEntryPoint
   UefiBootServicesTableLib
   VirtioMmioDeviceLib

@@ -223,6 +223,9 @@ they will be documented with the platform.
 * [Overdrive](Platform/AMD/OverdriveBoard)
 * [Overdrive 1000](Platform/SoftIron/Overdrive1000Board)
 
+## [Ampere](Platform/Ampere/Readme.md)
+* [Mt. Jade](Platform/Ampere/JadePkg)
+
 ## [ARM](Platform/ARM/Readme.md)
 * [Juno](Platform/ARM/JunoPkg)
 * [SGI family](Platform/ARM/SgiPkg)

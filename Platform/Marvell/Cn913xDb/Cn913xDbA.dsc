@@ -39,6 +39,7 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
 
 !include Silicon/Marvell/Armada7k8k/Armada7k8k.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include Platform/Marvell/Cn913xDb/Cn9130DbA.dsc.inc
 !if $(CN9131) || $(CN9132)
 !include Platform/Marvell/Cn913xDb/Cn9131DbA.dsc.inc
@@ -53,6 +54,8 @@
 !ifndef $(CN9132)
 [Components.AARCH64]
   Silicon/Marvell/OcteonTx/AcpiTables/T91/$(PLATFORM_NAME).inf
+!else
+  Silicon/Marvell/OcteonTx/AcpiTables/T91/Cn9131DbA.inf
 !endif
 
 [LibraryClasses.common]

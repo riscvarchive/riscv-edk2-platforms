@@ -23,6 +23,7 @@
   BUILD_NUMBER                   = 1
 
 !include Platform/Socionext/DeveloperBox/DeveloperBox.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses]
   ArmSvcLib|ArmPkg/Library/ArmSvcLib/ArmSvcLib.inf
@@ -89,4 +90,5 @@
       DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
       VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
+      NULL|MdeModulePkg/Library/VarCheckPolicyLib/VarCheckPolicyLibStandaloneMm.inf
   }

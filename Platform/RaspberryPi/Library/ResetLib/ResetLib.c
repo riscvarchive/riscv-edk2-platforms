@@ -16,6 +16,7 @@
 
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
+#include <Library/TimerLib.h>
 #include <Library/EfiResetSystemLib.h>
 #include <Library/ArmSmcLib.h>
 #include <Library/UefiLib.h>
@@ -44,13 +45,23 @@ LibResetSystem (
   )
 {
   ARM_SMC_ARGS ArmSmcArgs;
+  UINT32 Delay;
 
   if (!EfiAtRuntime ()) {
     /*
      * Only if still in UEFI.
      */
     EfiEventGroupSignal (&gRaspberryPiEventResetGuid);
+
+    Delay = PcdGet32 (PcdPlatformResetDelay);
+    if (Delay != 0) {
+      DEBUG ((DEBUG_INFO, "Platform will be reset in %d.%d seconds...\n",
+              Delay / 1000000, (Delay % 1000000) / 100000));
+      MicroSecondDelay (Delay);
+    }
   }
+  DEBUG ((DEBUG_INFO, "Platform %a.\n",
+          (ResetType == EfiResetShutdown) ? "shutdown" : "reset"));
 
   switch (ResetType) {
   case EfiResetPlatformSpecific:

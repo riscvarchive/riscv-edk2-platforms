@@ -625,12 +625,18 @@ SmbiosAddType17Table (
     SmbiosGetDimmVoltageInfo (pGblData, Skt, Ch, Dimm, Type17Record);
 
     OptionalStrStart = (CHAR8 *) (Type17Record + 1);
-    UnicodeStrToAsciiStr (DeviceLocatorStr, OptionalStrStart);
-    UnicodeStrToAsciiStr (BankLocatorStr, OptionalStrStart + DeviceLocatorStrLen + 1);
-    UnicodeStrToAsciiStr (ManufactureStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1);
-    UnicodeStrToAsciiStr (SerialNumberStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1);
-    UnicodeStrToAsciiStr (AssertTagStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1 + SerialNumberStrLen + 1);
-    UnicodeStrToAsciiStr (PartNumberStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1 + SerialNumberStrLen + 1 + AssertTagStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (DeviceLocatorStr, OptionalStrStart, DeviceLocatorStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (BankLocatorStr, OptionalStrStart + DeviceLocatorStrLen + 1, BankLocatorStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ManufactureStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1, ManufactureStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SerialNumberStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1, SerialNumberStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (AssertTagStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1 + SerialNumberStrLen + 1, AssertTagStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (PartNumberStr, OptionalStrStart + DeviceLocatorStrLen + 1 + BankLocatorStrLen + 1 + ManufactureStrLen + 1 + SerialNumberStrLen + 1 + AssertTagStrLen + 1, PartNumberStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
 
     MemDevSmbiosHandle = SMBIOS_HANDLE_PI_RESERVED;
     Status = mSmbios->Add (mSmbios, NULL, &MemDevSmbiosHandle, (EFI_SMBIOS_TABLE_HEADER*) Type17Record);

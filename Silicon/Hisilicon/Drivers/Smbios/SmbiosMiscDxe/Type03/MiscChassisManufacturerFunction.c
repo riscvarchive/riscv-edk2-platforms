@@ -147,11 +147,16 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscChassisManufacturer)
     *((UINT8 *)SmbiosRecord + sizeof (SMBIOS_TABLE_TYPE3) + ExtendLength) = 5;
 
     OptionalStrStart = (CHAR8 *)((UINT8 *)SmbiosRecord + sizeof (SMBIOS_TABLE_TYPE3) + ExtendLength + 1);
-    UnicodeStrToAsciiStr(Manufacturer,     OptionalStrStart);
-    UnicodeStrToAsciiStr(Version,          OptionalStrStart + ManuStrLen + 1);
-    UnicodeStrToAsciiStr(SerialNumber,     OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1);
-    UnicodeStrToAsciiStr(AssertTag,        OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1);
-    UnicodeStrToAsciiStr(ChassisSkuNumber, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen +1 + AssertTagStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (Manufacturer,     OptionalStrStart, ManuStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (Version,          OptionalStrStart + ManuStrLen + 1, VerStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (SerialNumber,     OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1, SerialNumStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (AssertTag,        OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen + 1, AssertTagStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ChassisSkuNumber, OptionalStrStart + ManuStrLen + 1 + VerStrLen + 1 + SerialNumStrLen +1 + AssertTagStrLen + 1, ChaNumStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
     //
     // Now we have got the full smbios record, call smbios protocol to add this record.
     //

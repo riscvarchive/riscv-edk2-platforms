@@ -1,22 +1,16 @@
 /** @file
 *  Secondary System Description Table Fields (SSDT)
 *
-*  Copyright (c) 2020, ARM Ltd. All rights reserved.
+*  Copyright (c) 2020-2021, Arm Ltd. All rights reserved.
 *
-*  This program and the accompanying materials are licensed and made available
-*  under the terms and conditions of the BSD License which accompanies this
-*  distribution.  The full text of the license may be found at
-*  http://opensource.org/licenses/bsd-license.php
-*
-*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+*  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
 **/
 
 #include "SgiPlatform.h"
 #include "SgiAcpiHeader.h"
 
-DefinitionBlock ("SsdtRosTable.aml", "SSDT", 1, "ARMLTD", "ARMSGI",
+DefinitionBlock ("SsdtRosTable.aml", "SSDT", 2, "ARMLTD", "ARMSGI",
                  EFI_ACPI_ARM_OEM_REVISION) {
   Scope (_SB) {
     // UART PL011
@@ -31,24 +25,7 @@ DefinitionBlock ("SsdtRosTable.aml", "SSDT", 1, "ARMLTD", "ARMSGI",
           FixedPcdGet64 (PcdSerialDbgRegisterBase),
           0x1000
           )
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 147 }
-      })
-    }
-
-    // SMSC 91C111
-    Device (ETH0) {
-      Name (_HID, "LNRO0003")
-      Name (_UID, Zero)
-      Name (_STA, 0xF)
-      Name (_CRS, ResourceTemplate () {
-        Memory32Fixed (ReadWrite, 0x18000000, 0x1000)
-        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { 111 }
-      })
-      Name (_DSD, Package() {
-        ToUUID ("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
-                Package() {
-                  Package(2) {"reg-io-width", 4 },
-                }
+        Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) { FixedPcdGet32 (PL011UartInterrupt) }
       })
     }
 

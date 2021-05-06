@@ -1,7 +1,7 @@
 ## @file
 #  Configuration Manager Dxe
 #
-#  Copyright (c) 2017 - 2019, ARM Limited. All rights reserved.
+#  Copyright (c) 2017 - 2021, Arm Limited. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 ##
@@ -22,6 +22,8 @@
 
 [Sources]
   ConfigurationManager.c
+  AslTables/Dsdt.asl
+  AslTables/SsdtPci.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -33,7 +35,6 @@
 
 [LibraryClasses]
   ArmPlatformLib
-  PlatformAslTablesLib
   PrintLib
   UefiBootServicesTableLib
   UefiDriverEntryPoint
@@ -67,6 +68,13 @@
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate
+
+  # PCI Root complex specific PCDs
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseSize
+
+  gArmTokenSpaceGuid.PcdPciBusMin
+  gArmTokenSpaceGuid.PcdPciBusMax
 
 [Pcd]
 

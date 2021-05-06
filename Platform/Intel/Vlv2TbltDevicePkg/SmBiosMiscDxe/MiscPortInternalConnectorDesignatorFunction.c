@@ -1,10 +1,12 @@
 /** @file
 
-Copyright (c) 2004  - 2014, Intel Corporation. All rights reserved.<BR>
-                                                                                   
+Copyright (c) 2004  - 2020, Intel Corporation. All rights reserved.<BR>
+                                                                                   
+
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
-                                                                                   
+                                                                                   
+
 
 
 Module Name:
@@ -134,8 +136,8 @@ MISC_SMBIOS_TABLE_FUNCTION (
   SmbiosRecord->PortType = (UINT8)ForType8InputData->PortType;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(InternalRef, OptionalStrStart);
-  UnicodeStrToAsciiStr(ExternalRef, OptionalStrStart + InternalRefStrLen + 1);
+  UnicodeStrToAsciiStrS (InternalRef, OptionalStrStart, InternalRefStrLen + 1 + ExternalRefStrLen + 1 + 1);
+  UnicodeStrToAsciiStrS (ExternalRef, OptionalStrStart + InternalRefStrLen + 1, ExternalRefStrLen + 1 + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

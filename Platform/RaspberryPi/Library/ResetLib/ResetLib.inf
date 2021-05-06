@@ -33,8 +33,13 @@
   DebugLib
   BaseLib
   ArmSmcLib
+  PcdLib
+  TimerLib
   UefiLib
   UefiRuntimeLib
 
 [Guids]
   gRaspberryPiEventResetGuid
+
+[Pcd]
+  gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay      ## CONSUMES

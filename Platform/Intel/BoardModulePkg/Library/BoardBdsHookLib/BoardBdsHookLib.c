@@ -20,6 +20,8 @@
 
 #include "BoardBdsHook.h"
 
+#define IS_FIRST_BOOT_VAR_NAME L"IsFirstBoot"
+
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_BOOT_MODE    gBootMode;
 BOOLEAN                                        gPPRequireUIConfirm;
 extern UINTN                                   mBootMenuOptionNumber;
@@ -992,37 +994,6 @@ ConnectSequence (
   EfiBootManagerConnectAll ();
 }
 
-
-/**
-  The function is to consider the boot order which is not in our expectation.
-  In the case that we need to re-sort the boot option.
-
-  @retval  TRUE         Need to sort Boot Option.
-  @retval  FALSE        Don't need to sort Boot Option.
-**/
-BOOLEAN
-IsNeedSortBootOption (
-  VOID
-  )
-{
-  EFI_BOOT_MANAGER_LOAD_OPTION  *BootOptions;
-  UINTN                         BootOptionCount;
-
-  BootOptions = EfiBootManagerGetLoadOptions (&BootOptionCount, LoadOptionTypeBoot);
-
-  //
-  // If setup is the first priority in boot option, we need to sort boot option.
-  //
-  if ((BootOptionCount > 1) &&
-    (((StrnCmp (BootOptions->Description, L"Enter Setup", StrLen (L"Enter Setup"))) == 0) ||
-    ((StrnCmp (BootOptions->Description, L"BootManagerMenuApp", StrLen (L"BootManagerMenuApp"))) == 0))) {
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-
 /**
   Connects Root Bridge
  **/
@@ -1142,11 +1113,6 @@ BdsPciEnumCompleteCallback (
   gBootMode                  = GetBootModeHob ();
 
   //
-  // Connect Root Bridge to make PCI BAR resource allocated and all PciIo created
-  //
-  ConnectRootBridge (FALSE);
-
-  //
   // Fill ConIn/ConOut in Full Configuration boot mode
   //
   DEBUG ((DEBUG_INFO, "PlatformBootManagerInit - %x\n", gBootMode));
@@ -1180,6 +1146,42 @@ BdsPciEnumCompleteCallback (
     }
   }
 
+  //
+  // Enumerate USB keyboard
+  //
+  EnumUsbKeyboard ();
+
+  //
+  // For trusted console it must be handled here.
+  //
+  UpdateGraphicConOut (TRUE);
+
+  //
+  // Register Boot Options
+  //
+  RegisterDefaultBootOption ();
+
+  //
+  // Register Static Hot keys
+  //
+  RegisterStaticHotkey ();
+
+  //
+  // Process Physical Preo
+  //
+  PERF_START_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7010);
+  if (PcdGetBool (PcdTpm2Enable)) {
+    ProcessTcgPp ();
+    ProcessTcgMor ();
+  }
+  PERF_END_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7011);
+
+  //
+  // Perform memory test
+  // We should make all UEFI memory and GCD information populated before ExitPmAuth.
+  // SMM may consume these information.
+  //
+  MemoryTest((EXTENDMEM_COVERAGE_LEVEL) PcdGet32 (PcdPlatformMemoryCheckLevel));
 }
 
 /**
@@ -1265,41 +1267,9 @@ BdsBeforeConsoleAfterTrustedConsoleCallback (
   DEBUG ((DEBUG_INFO, "Event gBdsEventBeforeConsoleBeforeEndOfDxeGuid callback starts\n"));
 
   //
-  // Enumerate USB keyboard
+  // Connect Root Bridge to make PCI BAR resource allocated and all PciIo created
   //
-  EnumUsbKeyboard ();
-
-  //
-  // For trusted console it must be handled here.
-  //
-  UpdateGraphicConOut (TRUE);
-
-  //
-  // Register Boot Options
-  //
-  RegisterDefaultBootOption ();
-
-  //
-  // Register Static Hot keys
-  //
-  RegisterStaticHotkey ();
-
-  //
-  // Process Physical Preo
-  //
-  PERF_START_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7010);
-  if (PcdGetBool (PcdTpm2Enable)) {
-    ProcessTcgPp ();
-    ProcessTcgMor ();
-  }
-  PERF_END_EX(NULL,"EventRec", NULL, AsmReadTsc(), 0x7011);
-
-  //
-  // Perform memory test
-  // We should make all UEFI memory and GCD information populated before ExitPmAuth.
-  // SMM may consume these information.
-  //
-  MemoryTest((EXTENDMEM_COVERAGE_LEVEL) PcdGet32 (PcdPlatformMemoryCheckLevel));
+  ConnectRootBridge (FALSE);
 }
 
 
@@ -1333,6 +1303,9 @@ BdsAfterConsoleReadyBeforeBootOptionCallback (
   )
 {
   EFI_BOOT_MODE                 LocalBootMode;
+  EFI_STATUS                    Status;
+  BOOLEAN                       IsFirstBoot;
+  UINTN                         DataSize;
 
   DEBUG ((DEBUG_INFO, "Event gBdsAfterConsoleReadyBeforeBootOptionEvent callback starts\n"));
   //
@@ -1377,14 +1350,42 @@ BdsAfterConsoleReadyBeforeBootOptionCallback (
       //
       // PXE boot option may appear after boot option enumeration
       //
+
+      EfiBootManagerRefreshAllBootOption ();
+      DataSize = sizeof (BOOLEAN);
+      Status = gRT->GetVariable (
+                      IS_FIRST_BOOT_VAR_NAME,
+                      &gEfiCallerIdGuid,
+                      NULL,
+                      &DataSize,
+                      &IsFirstBoot
+                      );
+      if (EFI_ERROR (Status)) {
+        //
+        // If can't find the variable, see it as the first boot
+        //
+        IsFirstBoot = TRUE;
+      }
+
+      if (IsFirstBoot) {
+        //
+        // In the first boot, sort the boot option
+        //
+        EfiBootManagerSortLoadOptionVariable (LoadOptionTypeBoot, CompareBootOption);
+        IsFirstBoot = FALSE;
+        Status = gRT->SetVariable (
+                        IS_FIRST_BOOT_VAR_NAME,
+                        &gEfiCallerIdGuid,
+                        EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS,
+                        sizeof (BOOLEAN),
+                        &IsFirstBoot
+                        );
+      }
+
       break;
   }
 
   Print (L"Press F7 for BootMenu!\n");
 
-  EfiBootManagerRefreshAllBootOption ();
 
-  if (IsNeedSortBootOption()) {
-    EfiBootManagerSortLoadOptionVariable (LoadOptionTypeBoot, CompareBootOption);
-  }
 }

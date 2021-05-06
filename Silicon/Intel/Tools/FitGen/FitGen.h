@@ -31,7 +31,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 // Utility version information
 //
 #define UTILITY_MAJOR_VERSION 0
-#define UTILITY_MINOR_VERSION 62
+#define UTILITY_MINOR_VERSION 64
 #define UTILITY_DATE          __DATE__
 
 //
@@ -44,5 +44,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define GETOCCUPIEDSIZE(ActualSize, Alignment) \
   (ActualSize) + (((Alignment) - ((ActualSize) & ((Alignment) - 1))) & ((Alignment) - 1))
 ;
+
+#define ROUNDUP(Size, Alignment) (((Size) + (Alignment) - 1) / (Alignment) * (Alignment))
 
 #endif

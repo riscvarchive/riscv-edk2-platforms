@@ -8,10 +8,17 @@
 
 #include <Library/ArmLib.h>
 #include <Library/ArmPlatformLib.h>
+#include <Library/GpioLib.h>
 #include <Library/SocLib.h>
 
 #include <Ppi/ArmMpCoreInfo.h>
 #include <Ppi/NxpPlatformGetClock.h>
+
+/**
+  Documents use bit number as per Power PC notation,
+  so need to convert it to support ARMv8 architecture
+**/
+#define USB2_MUX_SEL_GPIO    (31 - 23)
 
 ARM_CORE_INFO mLS1046aMpCoreInfoTable[] = {
   {
@@ -89,6 +96,19 @@ NxpPlatformGetClock(
 }
 
 /**
+  FRWY-LS1046A GPIO 23 use for USB2
+  mux seclection
+**/
+STATIC VOID  MuxSelectUsb2 (VOID)
+{
+
+  GpioSetDirection (GPIO3, USB2_MUX_SEL_GPIO, OUTPUT);
+  GpioSetData (GPIO3, USB2_MUX_SEL_GPIO, HIGH);
+
+  return;
+}
+
+/**
   Initialize controllers that must setup in the normal world
 
   This function is called by the ArmPlatformPkg/PrePi or ArmPlatformPkg/PlatformPei
@@ -101,6 +121,7 @@ ArmPlatformInitialize (
   )
 {
   SocInit ();
+  MuxSelectUsb2 ();
 
   return EFI_SUCCESS;
 }

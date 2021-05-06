@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c) 2019 - 2020, ARM Limited. All rights reserved.
+ *  Copyright (c) 2019 - 2021, ARM Limited. All rights reserved.
  *  Copyright (c) 2018 - 2020, Andrei Warkentin <andrey.warkentin@gmail.com>
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -282,6 +282,15 @@ SetupVariables (
   }
 
   Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"BootPolicy",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdBootPolicy, PcdGet32 (PcdBootPolicy));
+    ASSERT_EFI_ERROR (Status);
+  }
+
+  Size = sizeof (UINT32);
   Status = gRT->GetVariable (L"SdIsArasan",
                   &gConfigDxeFormSetGuid,
                   NULL, &Size, &Var32);
@@ -332,6 +341,15 @@ SetupVariables (
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
     Status = PcdSet32S (PcdMmcSdHighSpeedMHz, PcdGet32 (PcdMmcSdHighSpeedMHz));
+    ASSERT_EFI_ERROR (Status);
+  }
+
+  Size = sizeof (UINT32);
+  Status = gRT->GetVariable (L"MmcEnableDma",
+                  &gConfigDxeFormSetGuid,
+                  NULL, &Size, &Var32);
+  if (EFI_ERROR (Status)) {
+    Status = PcdSet32S (PcdMmcEnableDma, PcdGet32 (PcdMmcEnableDma));
     ASSERT_EFI_ERROR (Status);
   }
 
@@ -552,6 +570,13 @@ ApplyVariables (
       GpioPinFuncSet (37, GPIO_FSEL_ALT3);
       GpioPinFuncSet (38, GPIO_FSEL_ALT3);
       GpioPinFuncSet (39, GPIO_FSEL_ALT3);
+
+      Status = mFwProtocol->SetPowerState (RPI_MBOX_POWER_STATE_SDHCI,
+                                           TRUE, TRUE); //SD on with wait
+      Status = mFwProtocol->SetGpioConfig (RPI_EXP_GPIO_SD_VOLT,
+                                           RPI_EXP_GPIO_DIR_OUT, TRUE); //3.3v
+      Status = mFwProtocol->SetClockState (RPI_MBOX_CLOCK_RATE_EMMC2, TRUE);
+      Status = mFwProtocol->SetClockState (RPI_MBOX_CLOCK_RATE_EMMC, TRUE);
     }
   } else {
     DEBUG ((DEBUG_ERROR, "Model Family %d not supported...\n", mModelFamily));
@@ -562,7 +587,7 @@ ApplyVariables (
    * 1           VREF        N/A               1
    * 3           nTRST       GPIO22    ALT4    15
    * 4           GND         N/A               9
-   * 5           TDI         GPIO4     ALT5    7
+   * 5           TDI         GPIO26    ALT4    37
    * 7           TMS         GPIO27    ALT4    13
    * 9           TCK         GPIO25    ALT4    22
    * 11          RTCK        GPIO23    ALT4    16
@@ -570,14 +595,14 @@ ApplyVariables (
    */
   if (PcdGet32 (PcdDebugEnableJTAG)) {
     GpioPinFuncSet (22, GPIO_FSEL_ALT4);
-    GpioPinFuncSet (4, GPIO_FSEL_ALT5);
+    GpioPinFuncSet (26, GPIO_FSEL_ALT4);
     GpioPinFuncSet (27, GPIO_FSEL_ALT4);
     GpioPinFuncSet (25, GPIO_FSEL_ALT4);
     GpioPinFuncSet (23, GPIO_FSEL_ALT4);
     GpioPinFuncSet (24, GPIO_FSEL_ALT4);
   } else {
     GpioPinFuncSet (22, GPIO_FSEL_INPUT);
-    GpioPinFuncSet (4, GPIO_FSEL_INPUT);
+    GpioPinFuncSet (26, GPIO_FSEL_INPUT);
     GpioPinFuncSet (27, GPIO_FSEL_INPUT);
     GpioPinFuncSet (25, GPIO_FSEL_INPUT);
     GpioPinFuncSet (23, GPIO_FSEL_INPUT);
@@ -599,6 +624,7 @@ typedef struct {
 typedef struct {
   UINT64                      OemTableId;
   UINTN                       PcdToken;
+  UINTN                       PcdTokenNot;
   CONST AML_NAME_OP_REPLACE   *SdtNameOpReplace;
 } NAMESPACE_TABLES;
 
@@ -696,6 +722,9 @@ VerifyUpdateTable (
   if (SdtTable->PcdToken && !LibPcdGet32 (SdtTable->PcdToken)) {
     Result = FALSE;
   }
+  if (SdtTable->PcdTokenNot && LibPcdGet32 (SdtTable->PcdTokenNot)) {
+    Result = FALSE;
+  }
   if (Result && SdtTable->SdtNameOpReplace) {
     UpdateSdtNameOps (AcpiHeader, SdtTable->SdtNameOpReplace);
   }
@@ -709,14 +738,27 @@ STATIC CONST AML_NAME_OP_REPLACE SsdtNameOpReplace[] = {
   { }
 };
 
+STATIC CONST AML_NAME_OP_REPLACE SsdtEmmcNameOpReplace[] = {
+  { "SDMA", PcdToken (PcdMmcEnableDma) },
+  { }
+};
+
 STATIC CONST NAMESPACE_TABLES SdtTables[] = {
   {
     SIGNATURE_64 ('R', 'P', 'I', 'T', 'H', 'F', 'A', 'N'),
     PcdToken(PcdFanOnGpio),
+    0,
     SsdtNameOpReplace
   },
   {
+    SIGNATURE_64 ('R', 'P', 'I', '4', 'E', 'M', 'M', 'C'),
+    0,
+    PcdToken(PcdSdIsArasan),
+    SsdtEmmcNameOpReplace
+  },
+  {
     SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),
+    0,
     0,
     NULL
   },
@@ -748,6 +790,12 @@ HandleDynamicNamespace (
     DEBUG ((DEBUG_ERROR, "Found namespace table not in table list.\n"));
 
     return FALSE;
+  case SIGNATURE_32 ('I', 'O', 'R', 'T'):
+    // only enable the IORT on machines with >3G and no limit
+    // to avoid problems with rhel/centos and other older OSs
+    if (PcdGet32 (PcdRamLimitTo3GB) || !PcdGet32 (PcdRamMoreThan3GB)) {
+      return FALSE;
+    }
   }
 
   return TRUE;

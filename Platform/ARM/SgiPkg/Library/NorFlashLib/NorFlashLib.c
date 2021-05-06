@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2018, ARM Ltd. All rights reserved.
+  Copyright (c) 2020, ARM Ltd. All rights reserved.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -14,14 +14,14 @@
 
 STATIC NOR_FLASH_DESCRIPTION mNorFlashDevices[] = {
   {
-    SGI_EXP_SMC_CS0_BASE,
-    SGI_EXP_SMC_CS0_BASE,
+    FixedPcdGet64 (PcdSmcCs0Base),
+    FixedPcdGet64 (PcdSmcCs0Base),
     SIZE_256KB * 256,
     SIZE_256KB,
   },
   {
-    SGI_EXP_SMC_CS1_BASE,
-    SGI_EXP_SMC_CS1_BASE,
+    FixedPcdGet64 (PcdSmcCs1Base),
+    FixedPcdGet64 (PcdSmcCs1Base),
     SIZE_256KB * 256,
     SIZE_256KB,
   },
@@ -34,7 +34,7 @@ NorFlashPlatformInitialization (
 {
   UINT64 SysRegFlash;
 
-  SysRegFlash = SGI_EXP_SYSPH_SYSTEM_REGISTERS + SGI_SYSPH_SYS_REG_FLASH;
+  SysRegFlash = FixedPcdGet64 (PcdSysPeriphSysRegBase) + SGI_SYSPH_SYS_REG_FLASH;
   MmioOr32 (SysRegFlash, SGI_SYSPH_SYS_REG_FLASH_RWEN);
   return EFI_SUCCESS;
 }

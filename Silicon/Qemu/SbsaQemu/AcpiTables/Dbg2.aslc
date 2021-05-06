@@ -54,9 +54,9 @@ STATIC DBG2_TABLE Dbg2 = {
       OFFSET_OF (DBG2_DEBUG_DEVICE_INFORMATION, BaseAddressRegister),
       OFFSET_OF (DBG2_DEBUG_DEVICE_INFORMATION, AddressSize)
     },
-    ARM_GAS32 (SBSAQEMU_UART0_BASE),         /* BaseAddressRegister */
-    0x1000,                                  /* AddressSize */
-    SBSAQEMU_UART_STR,                       /* NameSpaceString */
+    ARM_GAS32 (FixedPcdGet32(PcdSerialRegisterBase)),  /* BaseAddressRegister */
+    0x1000,                                            /* AddressSize */
+    SBSAQEMU_UART_STR,                                 /* NameSpaceString */
   }
 };
 

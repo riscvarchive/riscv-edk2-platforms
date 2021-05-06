@@ -1,7 +1,8 @@
 ## @file
 #  Platform description.
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) Microsoft Corporation.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -44,6 +45,7 @@
     gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|FALSE
     gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
     gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE
+    gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable|FALSE
 
 ################################################################################
 #
@@ -76,8 +78,8 @@
   FspWrapperPlatformLib|MinPlatformPkg/FspWrapper/Library/PeiFspWrapperPlatformLib/PeiFspWrapperPlatformLib.inf
 
   BoardInitLib|MinPlatformPkg/PlatformInit/Library/BoardInitLibNull/BoardInitLibNull.inf
-  BoardAcpiTableLib|MinPlatformPkg/Acpi/Library/BoardAcpiLibNull/BoardAcpiTableLibNull.inf
-  BoardAcpiEnableLib|MinPlatformPkg/Acpi/Library/BoardAcpiLibNull/BoardAcpiEnableLibNull.inf
+  BoardAcpiTableLib|MinPlatformPkg/Acpi/Library/BoardAcpiTableLibNull/BoardAcpiTableLibNull.inf
+  BoardAcpiEnableLib|MinPlatformPkg/Acpi/Library/BoardAcpiEnableLibNull/BoardAcpiEnableLibNull.inf
   SiliconPolicyInitLib|MinPlatformPkg/PlatformInit/Library/SiliconPolicyInitLibNull/SiliconPolicyInitLibNull.inf
   SiliconPolicyUpdateLib|MinPlatformPkg/PlatformInit/Library/SiliconPolicyUpdateLibNull/SiliconPolicyUpdateLibNull.inf
 
@@ -111,6 +113,16 @@
   TestPointCheckLib|MinPlatformPkg/Test/Library/TestPointCheckLib/SmmTestPointCheckLib.inf
   TestPointLib|MinPlatformPkg/Test/Library/TestPointLib/SmmTestPointLib.inf
 
+[LibraryClasses.common.MM_STANDALONE]
+  DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+  MemoryAllocationLib|StandaloneMmPkg/Library/StandaloneMmMemoryAllocationLib/StandaloneMmMemoryAllocationLib.inf
+  MmServicesTableLib|MdePkg/Library/StandaloneMmServicesTableLib/StandaloneMmServicesTableLib.inf
+  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+  SpiFlashCommonLib|MinPlatformPkg/Flash/Library/SpiFlashCommonLibNull/SpiFlashCommonLibNull.inf
+  StandaloneMmDriverEntryPoint|MdePkg/Library/StandaloneMmDriverEntryPoint/StandaloneMmDriverEntryPoint.inf
+  VariableReadLib|MinPlatformPkg/Library/SmmVariableReadLib/StandaloneMmVariableReadLib.inf
+  VariableWriteLib|MinPlatformPkg/Library/SmmVariableWriteLib/StandaloneMmVariableWriteLib.inf
+
 ###################################################################################################
 #
 # Components Section - list of the modules and components that will be processed by compilation
@@ -138,15 +150,17 @@
 
   MinPlatformPkg/Acpi/AcpiTables/AcpiPlatform.inf
   MinPlatformPkg/Acpi/AcpiSmm/AcpiSmm.inf
+  MinPlatformPkg/Acpi/AcpiSmm/AcpiStandaloneMm.inf
   MinPlatformPkg/Acpi/Library/DxeAslUpdateLib/DxeAslUpdateLib.inf
-  MinPlatformPkg/Acpi/Library/BoardAcpiLibNull/BoardAcpiEnableLibNull.inf
-  MinPlatformPkg/Acpi/Library/BoardAcpiLibNull/BoardAcpiTableLibNull.inf
+  MinPlatformPkg/Acpi/Library/BoardAcpiEnableLibNull/BoardAcpiEnableLibNull.inf
+  MinPlatformPkg/Acpi/Library/BoardAcpiTableLibNull/BoardAcpiTableLibNull.inf
   MinPlatformPkg/Acpi/Library/MultiBoardAcpiSupportLib/DxeMultiBoardAcpiSupportLib.inf
   MinPlatformPkg/Acpi/Library/MultiBoardAcpiSupportLib/SmmMultiBoardAcpiSupportLib.inf
 
   MinPlatformPkg/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
 
   MinPlatformPkg/Flash/SpiFvbService/SpiFvbServiceSmm.inf
+  MinPlatformPkg/Flash/SpiFvbService/SpiFvbServiceStandaloneMm.inf
   MinPlatformPkg/Flash/Library/SpiFlashCommonLibNull/SpiFlashCommonLibNull.inf
 
   MinPlatformPkg/FspWrapper/SaveMemoryConfig/SaveMemoryConfig.inf

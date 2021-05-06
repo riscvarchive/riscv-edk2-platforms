@@ -23,6 +23,7 @@
   FLASH_DEFINITION               = Platform/NXP/LS1046aFrwyPkg/LS1046aFrwyPkg.fdf
 
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include Silicon/NXP/LS1046A/LS1046A.dsc.inc
 
 [LibraryClasses.common]
@@ -42,5 +43,7 @@
     <PcdsFixedAtBuild>
     gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvModeEnable|TRUE
   }
+
+  Silicon/NXP/Drivers/UsbHcdInitDxe/UsbHcd.inf
 
 ##

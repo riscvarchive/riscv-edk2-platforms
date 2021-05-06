@@ -27,10 +27,10 @@ EFI_ACPI_MEMORY_MAPPED_CONFIGURATION_SPACE_ACCESS_DESCRIPTION_TABLE Mcfg = {
   },
   {
     {
-      SBSAQEMU_PCI_SEG0_CONFIG_BASE,
+      FixedPcdGet32 (PcdPciExpressBaseAddress),
       0,
-      SBSAQEMU_PCI_SEG0_BUSNUM_MIN,
-      SBSAQEMU_PCI_SEG0_BUSNUM_MAX,
+      FixedPcdGet32 (PcdPciBusMin),
+      FixedPcdGet32 (PcdPciBusMax),
       EFI_ACPI_RESERVED_DWORD
     }
   }

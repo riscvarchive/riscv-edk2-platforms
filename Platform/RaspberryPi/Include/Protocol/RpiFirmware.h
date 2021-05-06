@@ -37,6 +37,20 @@ EFI_STATUS
 
 typedef
 EFI_STATUS
+(EFIAPI *GET_CLOCK_STATE) (
+  IN  UINT32    ClockId,
+  OUT UINT32    *ClockState
+  );
+
+typedef
+EFI_STATUS
+(EFIAPI *SET_CLOCK_STATE) (
+  IN  UINT32 ClockId,
+  IN  UINT32 ClockState
+  );
+
+typedef
+EFI_STATUS
 (EFIAPI *GET_CLOCK_RATE) (
   IN  UINT32    ClockId,
   OUT UINT32    *ClockRate
@@ -149,6 +163,14 @@ EFI_STATUS
   UINTN FunctionNumber
   );
 
+typedef
+EFI_STATUS
+(EFIAPI *GPIO_SET_CFG) (
+  UINTN Gpio,
+  UINTN Direction,
+  UINTN State
+  );
+
 typedef struct {
   SET_POWER_STATE        SetPowerState;
   GET_MAC_ADDRESS        GetMacAddress;
@@ -172,6 +194,9 @@ typedef struct {
   GET_ARM_MEM            GetArmMem;
   GET_MODEL_INSTALLED_MB GetModelInstalledMB;
   NOTIFY_XHCI_RESET      NotifyXhciReset;
+  GET_CLOCK_STATE        GetClockState;
+  SET_CLOCK_STATE        SetClockState;
+  GPIO_SET_CFG           SetGpioConfig;
 } RASPBERRY_PI_FIRMWARE_PROTOCOL;
 
 extern EFI_GUID gRaspberryPiFirmwareProtocolGuid;

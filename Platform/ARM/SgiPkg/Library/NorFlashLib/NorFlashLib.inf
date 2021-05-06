@@ -1,6 +1,6 @@
 #/** @file
 #
-#  Copyright (c) 2018, ARM Ltd. All rights reserved.
+#  Copyright (c) 2020, ARM Ltd. All rights reserved.
 
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -26,3 +26,8 @@
   BaseLib
   DebugLib
   IoLib
+
+[FixedPcd]
+  gArmSgiTokenSpaceGuid.PcdSysPeriphSysRegBase
+  gArmSgiTokenSpaceGuid.PcdSmcCs0Base
+  gArmSgiTokenSpaceGuid.PcdSmcCs1Base

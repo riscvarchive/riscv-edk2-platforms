@@ -2,6 +2,7 @@
 #  LX2160A Soc package.
 #
 #  Copyright 2018-2020 NXP
+#  Copyright 2020 Puresoftware Ltd
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -62,5 +63,14 @@
 ################################################################################
 [Components.common]
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+
+  #
+  # Configuration Manager
+!if $(DYNAMIC_ACPI_ENABLE) == TRUE
+  Platform/NXP/ConfigurationManagerPkg/ConfigurationManagerDxe/ConfigurationManagerDxe.inf {
+    <BuildOptions>
+      *_*_*_PLATFORM_FLAGS = -I$(WORKSPACE)/Platform/NXP/LX2160aRdbPkg/Include
+  }
+!endif
 
 ##

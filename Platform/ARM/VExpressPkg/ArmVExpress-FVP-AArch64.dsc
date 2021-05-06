@@ -1,5 +1,5 @@
 #
-#  Copyright (c) 2011-2018, ARM Limited. All rights reserved.
+#  Copyright (c) 2011-2021, Arm Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -32,10 +32,8 @@
   DT_SUPPORT                     = FALSE
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
-!ifdef DYNAMIC_TABLES_FRAMEWORK
-  !include DynamicTablesPkg/DynamicTables.dsc.inc
-  !include Platform/ARM/VExpressPkg/ConfigurationManager/ConfigurationManager.dsc.inc
-!endif
+!include MdePkg/MdeLibs.dsc.inc
+!include DynamicTablesPkg/DynamicTables.dsc.inc
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf
@@ -65,6 +63,11 @@
 
 [LibraryClasses.common.UEFI_DRIVER, LibraryClasses.common.UEFI_APPLICATION, LibraryClasses.common.DXE_RUNTIME_DRIVER, LibraryClasses.common.DXE_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
+
+  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
+  PciHostBridgeLib|Platform/ARM/VExpressPkg/Library/ArmVExpressPciHostBridgeLib/ArmVExpressPciHostBridgeLib.inf
+  PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
+  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
 
 [BuildOptions]
   GCC:*_*_AARCH64_PLATFORM_FLAGS == -I$(WORKSPACE)/Platform/ARM/VExpressPkg/Include/Platform/RTSM
@@ -126,7 +129,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x1c0a0000
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultReceiveFifoDepth|0
-  gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x25
+  gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x26
 
   ## PL011 Serial Debug UART (DBG2)
   gArmPlatformTokenSpaceGuid.PcdSerialDbgRegisterBase|0x1c0b0000
@@ -160,6 +163,21 @@
   gArmTokenSpaceGuid.PcdGicDistributorBase|0x2f000000
   gArmTokenSpaceGuid.PcdGicRedistributorsBase|0x2f100000
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase|0x2C000000
+
+  #
+  # PCI Root Complex
+  #
+  gArmTokenSpaceGuid.PcdPciBusMin|0
+  gArmTokenSpaceGuid.PcdPciBusMax|255
+
+  gArmTokenSpaceGuid.PcdPciMmio32Base|0x50000000
+  gArmTokenSpaceGuid.PcdPciMmio32Size|0x10000000
+
+  gArmTokenSpaceGuid.PcdPciMmio64Base|0x4000000000
+  gArmTokenSpaceGuid.PcdPciMmio64Size|0x4000000000
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0x40000000
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseSize|0x10000000
 
   #
   # ARM Architectural Timer Frequency
@@ -264,10 +282,11 @@
 !endif
   }
 
-!ifndef DYNAMIC_TABLES_FRAMEWORK
-  MdeModulePkg/Universal/Acpi/AcpiPlatformDxe/AcpiPlatformDxe.inf
-  Platform/ARM/VExpressPkg/AcpiTables/AcpiTables.inf
-!endif
+  Platform/ARM/VExpressPkg/ConfigurationManager/ConfigurationManagerDxe/ConfigurationManagerDxe.inf {
+    <PcdsFixedAtBuild>
+      gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x1c090000
+      gArmPlatformTokenSpaceGuid.PL011UartInterrupt|0x25
+  }
 
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
@@ -326,3 +345,21 @@
   #
   EmbeddedPkg/Drivers/DtPlatformDxe/DtPlatformDxe.inf
 !endif
+
+  #
+  # PCI Support
+  #
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+  #
+  # AHCI Support
+  #
+  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
+
+  #
+  # SATA Controller
+  #
+  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf

@@ -1,7 +1,7 @@
 /** @file
   Differentiated System Description Table Fields (DSDT)
 
-  Copyright (c) 2014-2018, ARM Ltd. All rights reserved.<BR>
+  Copyright (c) 2014-2021, ARM Ltd. All rights reserved.<BR>
     SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -233,20 +233,6 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-JUNO", EFI_ACPI_ARM_O
     }
 
     //
-    // Keyboard and Mouse
-    //
-    Device(KMI0) {
-      Name(_HID, "ARMH0501")
-      Name(_CID, "PL050_KBD")
-      Name(_CRS, ResourceTemplate() {
-              Memory32Fixed(ReadWrite, 0x1C060008, 0x4)
-              Memory32Fixed(ReadWrite, 0x1C060000, 0x4)
-              Memory32Fixed(ReadOnly, 0x1C060004, 0x4)
-              Interrupt(ResourceConsumer, Level, ActiveHigh, Exclusive) { 197 }
-      })
-    }
-
-    //
     // LAN9118 Ethernet
     //
     Device(ETH0) {
@@ -270,7 +256,6 @@ DefinitionBlock("DsdtTable.aml", "DSDT", 1, "ARMLTD", "ARM-JUNO", EFI_ACPI_ARM_O
     // UART PL011
     Device(COM0) {
       Name(_HID, "ARMH0011")
-      Name(_CID, "PL011")
       Name(_UID, Zero)
       Name(_CRS, ResourceTemplate() {
         Memory32Fixed(ReadWrite, 0x7FF80000, 0x1000)

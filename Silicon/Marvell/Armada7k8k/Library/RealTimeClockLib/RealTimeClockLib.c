@@ -102,7 +102,7 @@ LibSetTime (
   )
 {
   EFI_STATUS  Status = EFI_SUCCESS;
-  UINT32      EpochSeconds;
+  UINTN       EpochSeconds;
 
   // Check the input parameters are within the range specified by UEFI
   if (!IsTimeValid (Time)) {
@@ -111,9 +111,12 @@ LibSetTime (
 
   // Convert time to raw seconds
   EpochSeconds = EfiTimeToEpoch (Time);
+  if (EpochSeconds > MAX_UINT32) {
+    return EFI_INVALID_PARAMETER;
+  }
 
   // Issue delayed write to time register
-  RtcDelayedWrite (RTC_TIME_REG, EpochSeconds);
+  RtcDelayedWrite (RTC_TIME_REG, (UINT32)EpochSeconds);
 
   return Status;
 }
@@ -174,13 +177,26 @@ LibSetWakeupTime (
   OUT EFI_TIME    *Time
   )
 {
-  UINT32      WakeupSeconds;
+  UINTN       WakeupSeconds;
+
+  //
+  // Because the Armada RTC uses a 32-bit counter for seconds,
+  // the maximum time span is just over 136 years.
+  // Time is stored in Unix Epoch format, so it starts in 1970,
+  // Therefore it can not exceed the year 2106.
+  //
+  if ((Time->Year < 1970) || (Time->Year >= 2106)) {
+    return EFI_UNSUPPORTED;
+  }
 
   // Convert time to raw seconds
   WakeupSeconds = EfiTimeToEpoch (Time);
+  if (WakeupSeconds > MAX_UINT32) {
+    return EFI_INVALID_PARAMETER;
+  }
 
   // Issue delayed write to alarm register
-  RtcDelayedWrite (RTC_ALARM_2_REG, WakeupSeconds);
+  RtcDelayedWrite (RTC_ALARM_2_REG, (UINT32)WakeupSeconds);
 
   if (Enabled) {
     MmioWrite32 (mArmadaRtcBase + RTC_IRQ_2_CONFIG_REG, RTC_IRQ_ALARM_EN);

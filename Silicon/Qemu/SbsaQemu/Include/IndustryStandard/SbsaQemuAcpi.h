@@ -37,12 +37,6 @@
    SBSAQEMU_MADT_GICR_SIZE                   /* DiscoveryRangeLength */        \
    }
 
-#define SBSAQEMU_UART0_BASE              0x60000000
-
-#define SBSAQEMU_PCI_SEG0_CONFIG_BASE    0xf0000000
-#define SBSAQEMU_PCI_SEG0_BUSNUM_MIN     0x00
-#define SBSAQEMU_PCI_SEG0_BUSNUM_MAX     0xFF
-
 #define SBSAQEMU_ACPI_SCOPE_OP_MAX_LENGTH 5
 
 #define SBSAQEMU_ACPI_SCOPE_NAME         { '_', 'S', 'B', '_' }

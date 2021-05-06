@@ -63,6 +63,7 @@
 [Pcd]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan
+  gRaspberryPiTokenSpaceGuid.PcdBootPolicy
 
 [Guids]
   gEfiFileInfoGuid

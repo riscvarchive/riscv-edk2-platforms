@@ -1,8 +1,8 @@
 # @file
 #
-#  Copyright (c) 2011 - 2020, ARM Limited. All rights reserved.
+#  Copyright (c) 2011 - 2021, ARM Limited. All rights reserved.
 #  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
-#  Copyright (c) 2015 - 2016, Intel Corporation. All rights reserved.
+#  Copyright (c) 2015 - 2021, Intel Corporation. All rights reserved.
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -52,6 +52,9 @@
 # Library Class section - list of all Library Classes needed by this Platform.
 #
 ################################################################################
+
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses.common]
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
@@ -130,6 +133,7 @@
   SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DebugDualSerialPortLib.inf
 
   # Cryptographic libraries
+  RngLib|MdePkg/Library/DxeRngLib/DxeRngLib.inf
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
@@ -168,6 +172,8 @@
   AuthVariableLib|MdeModulePkg/Library/AuthVariableLibNull/AuthVariableLibNull.inf
 !endif
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
+  VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLib.inf
+  VariablePolicyHelperLib|MdeModulePkg/Library/VariablePolicyHelperLib/VariablePolicyHelperLib.inf
   GpioLib|Silicon/Broadcom/Bcm283x/Library/GpioLib/GpioLib.inf
 
   #
@@ -225,6 +231,7 @@
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
   EfiResetSystemLib|Platform/RaspberryPi/Library/ResetLib/ResetLib.inf
   ArmSmcLib|ArmPkg/Library/ArmSmcLib/ArmSmcLib.inf
+  VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
 
 !if $(SECURE_BOOT_ENABLE) == TRUE
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/RuntimeCryptLib.inf
@@ -422,7 +429,6 @@
   gArmPlatformTokenSpaceGuid.PL011UartClkInHz|48000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseMmio|TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|4
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|1000000000
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x27
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialExtendedTxFifoSize|8
   gEfiMdePkgTokenSpaceGuid.PcdUartDefaultBaudRate|115200
@@ -436,10 +442,10 @@
   gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceHBase|0xFF844000
   gRaspberryPiTokenSpaceGuid.PcdGicInterruptInterfaceVBase|0xFF846000
   gRaspberryPiTokenSpaceGuid.PcdGicGsivId|0x19
-  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0|23
-  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1|23
-  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2|23
-  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3|23
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq0|0x30
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq1|0x31
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq2|0x32
+  gRaspberryPiTokenSpaceGuid.PcdGicPmuIrq3|0x33
 
   #
   # Fixed CPU settings.
@@ -458,6 +464,9 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"EDK2"
   gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 
+[PcdsPatchableInModule]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|500000000
+
 [PcdsDynamicHii.common.DEFAULT]
 
   #
@@ -471,12 +480,13 @@
   # SD-related.
   #
 
-  gRaspberryPiTokenSpaceGuid.PcdSdIsArasan|L"SdIsArasan"|gConfigDxeFormSetGuid|0x0|1
+  gRaspberryPiTokenSpaceGuid.PcdSdIsArasan|L"SdIsArasan"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdMmcForce1Bit|L"MmcForce1Bit"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdMmcForceDefaultSpeed|L"MmcForceDefaultSpeed"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdMmcSdDefaultSpeedMHz|L"MmcSdDefaultSpeedMHz"|gConfigDxeFormSetGuid|0x0|25
   gRaspberryPiTokenSpaceGuid.PcdMmcSdHighSpeedMHz|L"MmcSdHighSpeedMHz"|gConfigDxeFormSetGuid|0x0|50
   gRaspberryPiTokenSpaceGuid.PcdMmcDisableMulti|L"MmcDisableMulti"|gConfigDxeFormSetGuid|0x0|0
+  gRaspberryPiTokenSpaceGuid.PcdMmcEnableDma|L"MmcEnableDma"|gConfigDxeFormSetGuid|0x0|0
 
   #
   # Debug-related.
@@ -517,6 +527,19 @@
   #
   gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|L"FanOnGpio"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdFanTemp|L"FanTemp"|gConfigDxeFormSetGuid|0x0|60
+
+  #
+  # Boot Policy
+  # 0  - Fast Boot
+  # 1  - Full Discovery (Connect All)
+  #
+  gRaspberryPiTokenSpaceGuid.PcdBootPolicy|L"BootPolicy"|gConfigDxeFormSetGuid|0x0|1
+
+  #
+  # Reset-related.
+  #
+
+  gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay|L"ResetDelay"|gRaspberryPiTokenSpaceGuid|0x0|0
 
   #
   # Common UEFI ones.
@@ -607,7 +630,7 @@
   MdeModulePkg/Universal/Console/TerminalDxe/TerminalDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf {
     <LibraryClasses>
-      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortLib.inf
+      SerialPortLib|Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortDxeLib.inf
   }
   Platform/RaspberryPi/Drivers/DisplayDxe/DisplayDxe.inf
   EmbeddedPkg/Drivers/ConsolePrefDxe/ConsolePrefDxe.inf

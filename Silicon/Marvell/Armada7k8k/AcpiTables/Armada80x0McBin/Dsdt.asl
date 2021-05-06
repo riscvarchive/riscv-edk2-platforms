@@ -86,6 +86,65 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
             })
         }
 
+        Device (MMC0)
+        {
+            Name (_HID, "MRVL0002")     // _HID: Hardware ID
+            Name (_UID, 0x00)           // _UID: Unique ID
+            Name (_CCA, 0x01)           // _CCA: Cache Coherency Attribute
+
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                Memory32Fixed (ReadWrite,
+                    0xF06E0000,         // Address Base (MMIO)
+                    0x00000300,         // Address Length
+                    )
+                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
+                {
+                  48
+                }
+            })
+            Name (_DSD, Package () {
+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                Package () {
+                      Package () { "clock-frequency", 400000000 },
+                      Package () { "bus-width", 8 },
+                      Package () { "marvell,xenon-phy-slow-mode", 0x1 },
+                      Package () { "no-1-8-v", 0x1 },
+                      Package () { "no-sd", 0x1 },
+                      Package () { "no-sdio", 0x1  },
+                      Package () { "non-removable", 0x1  },
+                }
+            })
+        }
+
+        Device (MMC1)
+        {
+            Name (_HID, "MRVL0004")     // _HID: Hardware ID
+            Name (_UID, 0x01)           // _UID: Unique ID
+            Name (_CCA, 0x01)           // _CCA: Cache Coherency Attribute
+
+            Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+            {
+                Memory32Fixed (ReadWrite,
+                    0xF2780000,         // Address Base (MMIO)
+                    0x00000300,         // Address Length
+                    )
+                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
+                {
+                  CP_GIC_SPI_CP0_SDMMC
+                }
+            })
+            Name (_DSD, Package () {
+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                Package () {
+                      Package () { "clock-frequency", 400000000 },
+                      Package () { "bus-width", 4 },
+                      Package () { "broken-cd", 0x1 },
+                      Package () { "no-1-8-v", 0x1 },
+                }
+            })
+        }
+
         Device (XHC0)
         {
             Name (_HID, "PNP0D10")      // _HID: Hardware ID
@@ -178,6 +237,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
             {
                 Memory32Fixed (ReadWrite, 0xf2000000 , 0x100000)
                 Memory32Fixed (ReadWrite, 0xf2129000 , 0xb000)
+                Memory32Fixed (ReadWrite, 0xf2220000 , 0x800)
             })
             Name (_DSD, Package () {
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -215,6 +275,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
             {
                 Memory32Fixed (ReadWrite, 0xf4000000 , 0x100000)
                 Memory32Fixed (ReadWrite, 0xf4129000 , 0xb000)
+                Memory32Fixed (ReadWrite, 0xf4220000 , 0x800)
             })
             Name (_DSD, Package () {
                 ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
@@ -259,7 +320,27 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA8K", 3)
                     Package () { "phy-mode", "sgmii"},
                   }
               })
-           }
+            }
+            Device (ETH2)
+            {
+              Name (_ADR, 0x0)
+              Name (_CRS, ResourceTemplate ()
+              {
+                  Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
+                  {
+                    CP_GIC_SPI_PP2_CP1_PORT2
+                  }
+              })
+              Name (_DSD, Package () {
+                  ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                  Package () {
+                    Package () { "port-id", 2 },
+                    Package () { "gop-port-id", 3 },
+                    Package () { "phy-mode", "2500base-x"},
+                    Package () { "managed", "in-band-status"},
+                  }
+              })
+            }
         }
 
         Device (RNG0)

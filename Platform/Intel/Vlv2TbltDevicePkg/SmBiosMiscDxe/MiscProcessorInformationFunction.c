@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 2006  - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2006  - 2021, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -199,6 +199,7 @@ MeasureTscFrequency (
 MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
 {
     CHAR8                           *OptionalStrStart;
+    UINTN                           OptionalStrSize;
     EFI_STRING                      SerialNumber;
     CHAR16                          *Version=NULL;
     CHAR16                          *Manufacturer=NULL;
@@ -306,7 +307,8 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     //
     // Two zeros following the last string.
     //
-    SmbiosRecord = AllocateZeroPool(sizeof (SMBIOS_TABLE_TYPE4) + AssetTagStrLen + 1 + SocketStrLen + 1+ ManufacturerStrLen +1 + VersionStrLen+ 1+ SerialNumberStrLen + 1 + PartNumberStrLen+ 1 + 1);
+    OptionalStrSize = AssetTagStrLen + 1 + SocketStrLen + 1+ ManufacturerStrLen +1 + VersionStrLen+ 1+ SerialNumberStrLen + 1 + PartNumberStrLen+ 1 + 1;
+    SmbiosRecord = AllocateZeroPool(sizeof (SMBIOS_TABLE_TYPE4) + OptionalStrSize);
 
     SmbiosRecord->Hdr.Type = EFI_SMBIOS_TYPE_PROCESSOR_INFORMATION;
     SmbiosRecord->Hdr.Length = sizeof (SMBIOS_TABLE_TYPE4);
@@ -317,7 +319,7 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     SmbiosRecord->Hdr.Handle = 0;
 
     SmbiosRecord-> Socket= 1;
-    SmbiosRecord -> ProcessorManufacture = 2;
+    SmbiosRecord -> ProcessorManufacturer = 2;
     SmbiosRecord -> ProcessorVersion = 3;
     SmbiosRecord ->SerialNumber =4;
 
@@ -421,12 +423,22 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     SmbiosRecord->L3CacheHandle  = L3CacheHandle;
 
     OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(Socket, OptionalStrStart);
-    UnicodeStrToAsciiStr(Manufacturer, OptionalStrStart + SocketStrLen + 1);
-    UnicodeStrToAsciiStr(Version, OptionalStrStart + SocketStrLen + 1 + ManufacturerStrLen+ 1);
-    UnicodeStrToAsciiStr(SerialNumber, OptionalStrStart + SocketStrLen + 1 + VersionStrLen + 1 + ManufacturerStrLen + 1);
-    UnicodeStrToAsciiStr(AssetTag, OptionalStrStart + SerialNumberStrLen + 1 + VersionStrLen + 1 + ManufacturerStrLen + 1 + SocketStrLen + 1);
-    UnicodeStrToAsciiStr(PartNumber, OptionalStrStart + SerialNumberStrLen + 1 + VersionStrLen + 1 + ManufacturerStrLen + 1 + SocketStrLen + 1 + AssetTagStrLen + 1 );
+    UnicodeStrToAsciiStrS (Socket, OptionalStrStart, OptionalStrSize);
+    OptionalStrStart += (SocketStrLen + 1);
+    OptionalStrSize  -= (SocketStrLen + 1);
+    UnicodeStrToAsciiStrS (Manufacturer, OptionalStrStart, OptionalStrSize);
+    OptionalStrStart += (ManufacturerStrLen + 1);
+    OptionalStrSize  -= (ManufacturerStrLen + 1);
+    UnicodeStrToAsciiStrS (Version, OptionalStrStart, OptionalStrSize);
+    OptionalStrStart += (VersionStrLen + 1);
+    OptionalStrSize  -= (VersionStrLen + 1);
+    UnicodeStrToAsciiStrS (SerialNumber, OptionalStrStart, OptionalStrSize);
+    OptionalStrStart += (SerialNumberStrLen + 1);
+    OptionalStrSize  -= (SerialNumberStrLen + 1);
+    UnicodeStrToAsciiStrS (AssetTag, OptionalStrStart, OptionalStrSize);
+    OptionalStrStart += (AssetTagStrLen + 1);
+    OptionalStrSize  -= (AssetTagStrLen + 1);
+    UnicodeStrToAsciiStrS (PartNumber, OptionalStrStart, OptionalStrSize);
 
     //
     // Now we have got the full Smbios record, call Smbios protocol to add this record.
@@ -443,4 +455,3 @@ MISC_SMBIOS_TABLE_FUNCTION (MiscProcessorInformation)
     return Status;
 
 }
-

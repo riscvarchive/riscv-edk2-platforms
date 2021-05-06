@@ -40,6 +40,10 @@
   gEdkiiPlatformHasAcpiGuid
   gEfiEventReadyToBootGuid
 
+[FixedPcd]
+  gMarvellTokenSpaceGuid.PcdProductManufacturer
+  gMarvellTokenSpaceGuid.PcdProductPlatformName
+
 [Protocols]
   gMarvellPlatformInitCompleteProtocolGuid    ## PRODUCES
 

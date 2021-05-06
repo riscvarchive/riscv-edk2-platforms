@@ -49,11 +49,15 @@
   gArmTokenSpaceGuid.PcdPciBusMin
   gArmTokenSpaceGuid.PcdPciBusMax
 
+  gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv
+  gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt
   gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize
   gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt
+  gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv
+  gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress

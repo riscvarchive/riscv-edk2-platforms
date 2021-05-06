@@ -1,5 +1,6 @@
 /** @file
  *
+*   Copyright (c) 2020, ARM Limited. All rights reserved.
  *  Copyright (c) 2017-2018, Andrey Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2015-2016, Linaro Limited. All rights reserved.
  *
@@ -498,6 +499,21 @@ DwHcReset (
   DWUSB_OTGHC_DEV *DwHc;
   DwHc = DWHC_FROM_THIS (This);
 
+  switch (Attributes) {
+  case EFI_USB_HC_RESET_GLOBAL:
+  case EFI_USB_HC_RESET_HOST_CONTROLLER:
+    break;
+
+  case EFI_USB_HC_RESET_GLOBAL_WITH_DEBUG:
+  case EFI_USB_HC_RESET_HOST_WITH_DEBUG:
+    Status = EFI_UNSUPPORTED;
+    goto Exit;
+
+  default:
+    Status = EFI_INVALID_PARAMETER;
+    goto Exit;
+  }
+
   Status = gBS->CreateEvent (EVT_TIMER, 0, NULL, NULL, &TimeoutEvt);
   ASSERT_EFI_ERROR (Status);
   if (EFI_ERROR (Status)) {
@@ -553,6 +569,10 @@ DwHcGetState (
 
   DwHc = DWHC_FROM_THIS (This);
 
+  if (State == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
+
   *State = DwHc->DwHcState;
 
   return EFI_SUCCESS;
@@ -565,13 +585,25 @@ DwHcSetState (
   IN  EFI_USB_HC_STATE     State
   )
 {
-  DWUSB_OTGHC_DEV *DwHc;
+  DWUSB_OTGHC_DEV   *DwHc;
+  EFI_STATUS        Status;
 
   DwHc = DWHC_FROM_THIS (This);
 
-  DwHc->DwHcState = State;
+  switch (State) {
+  case EfiUsbHcStateHalt:
+  case EfiUsbHcStateOperational:
+  case EfiUsbHcStateSuspend:
+    DwHc->DwHcState = State;
+    Status = EFI_SUCCESS;
+    break;
 
-  return EFI_SUCCESS;
+  default:
+    Status = EFI_INVALID_PARAMETER;
+    break;
+  }
+
+  return Status;
 }
 
 EFI_STATUS
@@ -1170,6 +1202,12 @@ DwHcSyncInterruptTransfer (
   }
 
   if ((*DataToggle != 0) && (*DataToggle != 1)) {
+    return EFI_INVALID_PARAMETER;
+  }
+
+  if (((DeviceSpeed == EFI_USB_SPEED_LOW) && (MaximumPacketLength != 8))  ||
+      ((DeviceSpeed == EFI_USB_SPEED_FULL) && (MaximumPacketLength > 64)) ||
+      ((DeviceSpeed == EFI_USB_SPEED_HIGH) && (MaximumPacketLength > 3072))) {
     return EFI_INVALID_PARAMETER;
   }
 

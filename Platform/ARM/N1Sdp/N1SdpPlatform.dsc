@@ -22,6 +22,7 @@
   BUILD_NUMBER                   = 1
 
 !include Platform/ARM/VExpressPkg/ArmVExpress.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 
 [LibraryClasses.common]
   ArmLib|ArmPkg/Library/ArmLib/ArmBaseLib.inf

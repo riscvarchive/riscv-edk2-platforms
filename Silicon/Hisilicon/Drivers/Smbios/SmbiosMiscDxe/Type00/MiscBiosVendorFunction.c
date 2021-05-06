@@ -213,9 +213,12 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
     SmbiosRecord->BiosSize = Base2ToByteWith64KUnit(BiosPhysicalSizeHexValue) - 1;
 
     OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-    UnicodeStrToAsciiStr(Vendor, OptionalStrStart);
-    UnicodeStrToAsciiStr(Version, OptionalStrStart + VendorStrLen + 1);
-    UnicodeStrToAsciiStr(ReleaseDate, OptionalStrStart + VendorStrLen + 1 + VerStrLen + 1);
+    Status = UnicodeStrToAsciiStrS (Vendor, OptionalStrStart, VendorStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (Version, OptionalStrStart + VendorStrLen + 1, VerStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
+    Status = UnicodeStrToAsciiStrS (ReleaseDate, OptionalStrStart + VendorStrLen + 1 + VerStrLen + 1, DateStrLen + 1);
+    ASSERT_EFI_ERROR (Status);
     //
     // Now we have got the full smbios record, call smbios protocol to add this record.
     //

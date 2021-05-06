@@ -182,10 +182,6 @@ READ_LOCK_STATUS   = TRUE
   # Networking stack
   #
 !include NetworkPkg/Network.fdf.inc
-
-!ifdef EDK2_ENABLE_SMSC_91X
-  INF Platform/ARM/VExpressPkg/Drivers/Lan91xDxe/Lan91xDxe.inf
-!endif
   INF OvmfPkg/VirtioNetDxe/VirtioNet.inf
 
 [FV.FVMAIN_COMPACT]

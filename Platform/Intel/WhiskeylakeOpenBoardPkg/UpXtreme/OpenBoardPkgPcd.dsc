@@ -127,6 +127,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable|TRUE
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 1
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|TRUE
@@ -397,6 +398,8 @@
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtWakeupSupport|0x0
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3Tbt|0x1
   gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdRtd3TbtClkReq|0x1
+
+  gWhiskeylakeOpenBoardPkgTokenSpaceGuid.PcdDciEnable|FALSE
 
 [PcdsDynamicHii.X64.DEFAULT]
   ######################################

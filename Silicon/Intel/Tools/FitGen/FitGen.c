@@ -2,7 +2,7 @@
 This utility is part of build process for IA32/X64 FD.
 It generates FIT table.
 
-Copyright (c) 2010-2020, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2010-2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -48,6 +48,7 @@ typedef struct {
 #define ACM_PKCS_1_5_RSA_SIGNATURE_SHA384_SIZE          384
 
 #define ACM_HEADER_VERSION_3  (3 << 16)
+#define ACM_HEADER_VERSION_0  (0)
 #define ACM_MODULE_TYPE_CHIPSET_ACM                     2
 #define ACM_MODULE_SUBTYPE_CAPABLE_OF_EXECUTE_AT_RESET  0x1
 #define ACM_MODULE_SUBTYPE_ANC_MODULE                   0x2
@@ -209,10 +210,12 @@ typedef struct {
 #define DEFAULT_FIT_TABLE_POINTER_OFFSET  0x40
 #define DEFAULT_FIT_ENTRY_VERSION         0x0100
 
+#define TOP_FLASH_ADDRESS  (gFitTableContext.TopFlashAddressRemapValue)
+
 #define MEMORY_TO_FLASH(FileBuffer, FvBuffer, FvSize)  \
-                 (UINTN)(0x100000000 - ((UINTN)(FvBuffer) + (UINTN)(FvSize) - (UINTN)(FileBuffer)))
+                 (UINTN)(TOP_FLASH_ADDRESS - ((UINTN)(FvBuffer) + (UINTN)(FvSize) - (UINTN)(FileBuffer)))
 #define FLASH_TO_MEMORY(Address, FvBuffer, FvSize)  \
-                 (VOID *)(UINTN)((UINTN)(FvBuffer) + (UINTN)(FvSize) - (0x100000000 - (UINTN)(Address)))
+                 (VOID *)(UINTN)((UINTN)(FvBuffer) + (UINTN)(FvSize) - (TOP_FLASH_ADDRESS - (UINTN)(Address)))
 
 #define FIT_TABLE_TYPE_HEADER                 0
 #define FIT_TABLE_TYPE_MICROCODE              1
@@ -268,6 +271,7 @@ typedef struct {
   UINT32                     MicrocodeVersion;
   FIT_TABLE_CONTEXT_ENTRY    OptionalModule[MAX_OPTIONAL_ENTRY];
   FIT_TABLE_CONTEXT_ENTRY    PortModule[MAX_PORT_ENTRY];
+  UINT64                     TopFlashAddressRemapValue;
 } FIT_TABLE_CONTEXT;
 
 FIT_TABLE_CONTEXT   gFitTableContext = {0};
@@ -330,8 +334,10 @@ Returns:
           "\t[-F <FitTablePointerOffset>] [-F <FitTablePointerOffset>] [-V <FitHeaderVersion>]\n"
           "\t[-NA]\n"
           "\t[-A <MicrocodeAlignment>]\n"
+          "\t[-REMAP <TopFlashAddress>\n"
           "\t[-CLEAR]\n"
           "\t[-L <MicrocodeSlotSize> <MicrocodeFfsGuid>]\n"
+          "\t[-LF <MicrocodeSlotSize>]\n"
           "\t[-I <BiosInfoGuid>]\n"
           "\t[-S <StartupAcmAddress StartupAcmSize>|<StartupAcmGuid>] [-V <StartupAcmVersion>]\n"
           "\t[-U <DiagnstAcmAddress>|<DiagnstAcmGuid>]\n"
@@ -362,8 +368,9 @@ Returns:
   printf ("\tMicrocodeGuid          - Guid of Microcode Module.\n");
   printf ("\tMicrocodeSlotSize      - Occupied region size of each Microcode binary.\n");
   printf ("\tMicrocodeFfsGuid       - Guid of FFS which is used to save Microcode binary");
+  printf ("\t-LF                    - Microcode Slot mode without FFS check, treat all Microcode FV as slot mode. In this case the Microcode FV should only contain one FFS.\n");
   printf ("\t-NA                    - No 0x800 aligned Microcode requirement. No -NA means Microcode is aligned with option MicrocodeAlignment value.\n");
-  printf ("\tMicrocodeAlignment     - HEX value of Microcode alignment. Ignored if \"-NA\" is specified. Default value is 0x800.\n");
+  printf ("\tMicrocodeAlignment     - HEX value of Microcode alignment. Ignored if \"-NA\" is specified. Default value is 0x800. The Microcode update data must start at a 16-byte aligned linear address.\n");
   printf ("\tRecordType             - FIT entry record type. User should ensure it is ordered.\n");
   printf ("\tRecordDataAddress      - FIT entry record data address.\n");
   printf ("\tRecordDataSize         - FIT entry record data size.\n");
@@ -878,11 +885,13 @@ Returns:
   UINTN                       FitEntryNumber;
   BOOLEAN                     BiosInfoExist;
   BOOLEAN                     SlotMode;
+  BOOLEAN                     SlotModeForce;
   BIOS_INFO_HEADER            *BiosInfo;
   BIOS_INFO_STRUCT            *BiosInfoStruct;
   UINTN                       BiosInfoIndex;
 
-  SlotMode = FALSE;
+  SlotMode      = FALSE;
+  SlotModeForce = FALSE;
 
   //
   // Init index
@@ -986,6 +995,21 @@ Returns:
     Index += 2;
   }
 
+  if ((Index >= argc) ||
+      ((strcmp (argv[Index], "-REMAP") == 0) ||
+       (strcmp (argv[Index], "-remap") == 0)) ) {
+    //
+    // by pass
+    //
+    gFitTableContext.TopFlashAddressRemapValue = xtoi (argv[Index + 1]);
+    Index += 2;
+  } else {
+    //
+    // no remapping
+    //
+    gFitTableContext.TopFlashAddressRemapValue = 0x100000000;
+  }
+  printf ("Top Flash Address Value : 0x%llx\n", (unsigned long long) gFitTableContext.TopFlashAddressRemapValue);
   //
   // 0.4 Clear FIT table related memory
   //
@@ -1012,7 +1036,9 @@ Returns:
   //
   if ((Index + 1 >= argc) ||
       ((strcmp (argv[Index], "-L") != 0) &&
-       (strcmp (argv[Index], "-l") != 0)) ) {
+       (strcmp (argv[Index], "-l") != 0) &&
+       (strcmp (argv[Index], "-LF") != 0) &&
+       (strcmp (argv[Index], "-lf") != 0))) {
     //
     // Bypass
     //
@@ -1020,18 +1046,21 @@ Returns:
   } else {
     SlotSize = xtoi (argv[Index + 1]);
 
-    if (SlotSize == 0) {
-      printf ("Invalid slotsize = %d\n", SlotSize);
+    if (SlotSize == 0 || SlotSize & 0xF) {
+      printf ("Invalid slotsize = 0x%x, slot size should not be zero, or start at a non-16-byte aligned linear address!\n", SlotSize);
       return 0;
     }
-
-    SlotMode = IsGuidData(argv[Index + 2], &MicrocodeFfsGuid);
-    if (!SlotMode) {
-      printf ("Need a ffs GUID for search uCode ffs\n");
-      return 0;
+    if (strcmp (argv[Index], "-LF") == 0 || strcmp (argv[Index], "-lf") == 0) {
+      SlotModeForce = TRUE;
+      Index += 2;
+    } else {
+      SlotMode = IsGuidData(argv[Index + 2], &MicrocodeFfsGuid);
+      if (!SlotMode) {
+        printf ("Need a ffs GUID for search uCode ffs\n");
+        return 0;
+      }
+      Index += 3;
     }
-
-    Index += 3;
   }
 
   //
@@ -1176,7 +1205,11 @@ Returns:
                 // MCU might be put at 2KB alignment, if so, we need to adjust the size as 2KB alignment.
                 //
                 if (gFitTableContext.MicrocodeIsAligned) {
-                  MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32) + (gFitTableContext.MicrocodeAlignValue - 1)) & ~(gFitTableContext.MicrocodeAlignValue - 1);
+                  if (gFitTableContext.MicrocodeAlignValue & 0xF) {
+                    printf ("-A Parameter incorrect, Microcode data must start at a 16-byte aligned linear address!\n");
+                    return 0;
+                  }
+                  MicrocodeSize = ROUNDUP (*(UINT32 *)(MicrocodeBuffer + 32), gFitTableContext.MicrocodeAlignValue);
                 } else {
                   MicrocodeSize = (*(UINT32 *)(MicrocodeBuffer + 32));
                 }
@@ -1196,6 +1229,10 @@ Returns:
               gFitTableContext.FitEntryNumber++;
 
               if (SlotSize != 0) {
+                if (SlotSize < MicrocodeSize) {
+                  printf ("Parameter incorrect, Slot size: %x is too small for Microcode size: %x!\n", SlotSize, MicrocodeSize);
+                  return 0;
+                }
                 MicrocodeBuffer += SlotSize;
               } else {
                 MicrocodeBuffer += MicrocodeSize;
@@ -1205,7 +1242,7 @@ Returns:
             ///
             /// Check the remaining buffer
             ///
-            if (((UINT32)(MicrocodeBuffer - MicrocodeFileBuffer) < MicrocodeFileSize) && SlotMode != 0) {
+            if (((UINT32)(MicrocodeBuffer - MicrocodeFileBuffer) < MicrocodeFileSize) && (SlotMode || SlotModeForce)) {
               for (Walker = MicrocodeBuffer; Walker < MicrocodeFileBuffer + MicrocodeFileSize; Walker++) {
                 if (*Walker != 0xFF) {
                   printf ("Error: detect non-spare space after uCode array, please check uCode array!\n");
@@ -2420,7 +2457,16 @@ Returns:
   DumpHex (Buffer, Acm->KeySize * 4);
   printf ("\n");
   Buffer += Acm->KeySize * 4;
-
+  //
+  // To simplify the tool and making it independent of ACM header change,
+  // the rest of ACM parsing  will be skipped starting ACM_HEADER_VERSION4
+  //
+  if((Acm->HeaderVersion != ACM_HEADER_VERSION_3) && (Acm->HeaderVersion != ACM_HEADER_VERSION_0)){
+     printf (
+        "*****************************************************************************\n\n"
+        );
+    return;
+  }
   if (Acm->HeaderVersion == ACM_HEADER_VERSION_3) {
     printf ("  RSASig                     - \n");
     DumpHex (Buffer, ACM_PKCS_1_5_RSA_SIGNATURE_SHA384_SIZE); // PKCS #1.5 RSA Signature
@@ -2544,6 +2590,14 @@ Returns:
     return FALSE;
   }
 
+  //
+  // To simplify the tool and making it independent of ACM header change,
+  // the following check will be skipped starting ACM_HEADER_VERSION3
+  //
+  if((Acm->HeaderVersion != ACM_HEADER_VERSION_3) && (Acm->HeaderVersion != ACM_HEADER_VERSION_0)){
+    printf ("ACM header Version 4 or higher, bypassing other checks!\n");
+    return TRUE;
+  }
   Buffer = (UINT8 *)(Acm + 1);
   Buffer += Acm->KeySize * 4;
   if (Acm->HeaderVersion == ACM_HEADER_VERSION_3) {

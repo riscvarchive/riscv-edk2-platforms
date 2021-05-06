@@ -353,79 +353,16 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
                     DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                         0x00000000,         // Granularity
                         0x40000000,         // Range Minimum
-                        0x5FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0x60000000,         // Range Minimum
-                        0x7FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0x80000000,         // Range Minimum
-                        0x9FFFFFFF,         // Range Maximum
-                        0x00000000,         // Translation Offset
-                        0x20000000          // Length
-                        )
-                    DWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x00000000,         // Granularity
-                        0xA0000000,         // Range Minimum
                         0xBFFFFFFF,         // Range Maximum
                         0x00000000,         // Translation Offset
-                        0x20000000          // Length
+                        0x80000000          // Length
                         )
                     QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                         0x0000000000000000, // Granularity
                         0x0000000100000000, // Range Minimum
-                        0x00000001FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000100000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000200000000, // Range Minimum
-                        0x00000003FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000200000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000400000000, // Range Minimum
-                        0x00000007FFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000400000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000000800000000, // Range Minimum
-                        0x0000000FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000000800000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000001000000000, // Range Minimum
-                        0x0000001FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000001000000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000002000000000, // Range Minimum
-                        0x0000003FFFFFFFFF, // Range Maximum
-                        0x0000000000000000, // Translation Offset
-                        0x0000002000000000  // Length
-                        )
-                    QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
-                        0x0000000000000000, // Granularity
-                        0x0000004000000000, // Range Minimum
                         0x0000007FFFFFFFFF, // Range Maximum
                         0x0000000000000000, // Translation Offset
-                        0x0000004000000000  // Length
+                        0x0000007F00000000  // Length
                         )
                     DWordIo (ResourceProducer, MinFixed, MaxFixed, PosDecode, EntireRange,
                         0x00000000,         // Granularity
@@ -497,92 +434,14 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
                   // Function 0: Return supported functions
                   //
                   case(0) {
-                    Return (Buffer() {0xFF})
-                  }
-
-                  //
-                  // Function 1: Return PCIe Slot Information
-                  //
-                  case(1) {
-                    Return (Package(2) {
-                      One, // Success
-                      Package(3) {
-                        0x1,  // x1 PCIe link
-                        0x1,  // PCI express card slot
-                        0x1   // WAKE# signal supported
-                      }
-                    })
-                  }
-
-                  //
-                  // Function 2: Return PCIe Slot Number.
-                  //
-                  case(2) {
-                    Return (Package(1) {
-                      Package(4) {
-                        2,  // Source ID
-                        4,  // Token ID: ID refers to a slot
-                        0,  // Start bit of the field to use.
-                        7   // End bit of the field to use.
-                      }
-                    })
-                  }
-
-                  //
-                  // Function 3: Return Vendor-specific Token ID Strings.
-                  //
-                  case(3) {
-                    Return (Package(0) {})
-                  }
-
-                  //
-                  // Function 4: Return PCI Bus Capabilities
-                  //
-                  case(4) {
-                    Return (Package(2) {
-                      One, // Success
-                      Buffer() {
-                        1,0,            // Version
-                        0,0,            // Status, 0:Success
-                        24,0,0,0,       // Length
-                        1,0,            // PCI
-                        16,0,           // Length
-                        0,              // Attributes
-                        0x0D,           // Current Speed/Mode
-                        0x3F,0,         // Supported Speeds/Modes
-                        0,              // Voltage
-                        0,0,0,0,0,0,0   // Reserved
-                      }
-                    })
+                    Return (Buffer() {0x21})
                   }
 
                   //
                   // Function 5: Return Ignore PCI Boot Configuration
                   //
                   case(5) {
-                    Return (Package(1) {1})
-                  }
-
-                  //
-                  // Function 6: Return LTR Maximum Latency
-                  //
-                  case(6) {
-                    Return (Package(4) {
-                      Package(1){0},  // Maximum Snoop Latency Scale
-                      Package(1){0},  // Maximum Snoop Latency Value
-                      Package(1){0},  // Maximum No-Snoop Latency Scale
-                      Package(1){0}   // Maximum No-Snoop Latency Value
-                    })
-                  }
-
-                  //
-                  // Function 7: Return PCI Express Naming
-                  //
-                  case(7) {
-                    Return (Package(2) {
-                      Package(1) {0},
-                      Package(1) {Unicode("PCI0")}
-                    })
+                    Return (0)
                   }
 
                   //
@@ -594,15 +453,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "AMDINC", "SEATTLE ", 3)
               }
               Return (Buffer(){0})
             } // Method(_DSM)
-
-            //
-            // Root-Complex 0
-            //
-            Device (RP0)
-            {
-                Name (_ADR, 0xF0000000)  // _ADR: Bus 0, Dev 0, Func 0
-            }
         }
     }
 }
-

@@ -1,4 +1,5 @@
 #
+#  Copyright (c) 2021, NUVIA Inc. All rights reserved.
 #  Copyright (c) 2019, Linaro Limited. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -40,6 +41,9 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
 # Library Class section - list of all Library Classes needed by this Platform.
 #
 ################################################################################
+
+!include MdePkg/MdeLibs.dsc.inc
+
 [LibraryClasses.common]
 !if $(TARGET) == RELEASE
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
@@ -121,6 +125,9 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   # ARM PL011 UART Driver
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
 
+  FdtHelperLib|Silicon/Qemu/SbsaQemu/Library/FdtHelperLib/FdtHelperLib.inf
+  OemMiscLib|Platform/Qemu/SbsaQemu/OemMiscLib/OemMiscLib.inf
+
   # Debug Support
   PeCoffExtraActionLib|ArmPkg/Library/DebugPeCoffExtraActionLib/DebugPeCoffExtraActionLib.inf
   DebugAgentLib|MdeModulePkg/Library/DebugAgentLibNull/DebugAgentLibNull.inf
@@ -141,6 +148,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   IntrinsicLib|CryptoPkg/Library/IntrinsicLib/IntrinsicLib.inf
   OpensslLib|CryptoPkg/Library/OpensslLib/OpensslLib.inf
+  RngLib|MdePkg/Library/BaseRngLibTimerLib/BaseRngLibTimerLib.inf
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
 
   #
@@ -153,6 +161,9 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   PlatformSecureLib|OvmfPkg/Library/PlatformSecureLib/PlatformSecureLib.inf
 
   VarCheckLib|MdeModulePkg/Library/VarCheckLib/VarCheckLib.inf
+  VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLib.inf
+  VariablePolicyHelperLib|MdeModulePkg/Library/VariablePolicyHelperLib/VariablePolicyHelperLib.inf
+
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
 
   ReportStatusCodeLib|MdePkg/Library/BaseReportStatusCodeLibNull/BaseReportStatusCodeLibNull.inf
@@ -249,6 +260,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]
   MemoryAllocationLib|MdePkg/Library/UefiMemoryAllocationLib/UefiMemoryAllocationLib.inf
   CapsuleLib|MdeModulePkg/Library/DxeCapsuleLibNull/DxeCapsuleLibNull.inf
+  VariablePolicyLib|MdeModulePkg/Library/VariablePolicyLib/VariablePolicyLibRuntimeDxe.inf
 !if $(TARGET) != RELEASE
   DebugLib|MdePkg/Library/DxeRuntimeDebugLibSerialPort/DxeRuntimeDebugLibSerialPort.inf
 !endif
@@ -457,21 +469,44 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   gArmTokenSpaceGuid.PcdPciBusMax|255
   gArmTokenSpaceGuid.PcdPciIoBase|0x0
   gArmTokenSpaceGuid.PcdPciIoSize|0x00010000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciIoLimit|0x0000ffff
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x80000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x70000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio32Limit|0xEFFFFFFF
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x100000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0xFF00000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio64Limit|0xFFFFFFFFFF
 
   # set PcdPciExpressBaseAddress to MAX_UINT64, which signifies that this
   # PCD and PcdPciDisableBusEnumeration have not been assigned yet
   # TODO: PcdPciExpressBaseAddress set to max_uint64
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xf0000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarSize|0x10000000
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarLimit|0xFFFFFFFF
+
   gArmTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
   ## If TRUE, OvmfPkg/AcpiPlatformDxe will not wait for PCI
   #  enumeration to complete before installing ACPI tables.
   gEfiMdeModulePkgTokenSpaceGuid.PcdPciDisableBusEnumeration|FALSE
+
+  gArmTokenSpaceGuid.PcdSystemProductName|L"QEMU SBSA-REF Machine"
+  gArmTokenSpaceGuid.PcdSystemVersion|L"1.0"
+  gArmTokenSpaceGuid.PcdBaseBoardManufacturer|L"QEMU"
+  gArmTokenSpaceGuid.PcdBaseBoardProductName|L"SBSA-REF"
+  gArmTokenSpaceGuid.PcdBaseBoardVersion|L"1.0"
+
+  # These values are fixed for now, but should be configurable via
+  # something like an emulated SCP.
+  gArmTokenSpaceGuid.PcdProcessorManufacturer|L"QEMU"
+  gArmTokenSpaceGuid.PcdProcessorVersion|L"arm-virt"
+  gArmTokenSpaceGuid.PcdProcessorSerialNumber|L"SN0000"
+  gArmTokenSpaceGuid.PcdProcessorAssetTag|L"AT0000"
+  gArmTokenSpaceGuid.PcdProcessorPartNumber|L"PN0000"
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVendor|L"EFI Development Kit II / SbsaQemu"
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"1.0"
 
 [PcdsDynamicDefault.common]
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|3
@@ -497,8 +532,27 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   # SMBIOS entry point version
   #
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0300
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0304
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosDocRev|0x0
+
+  gArmTokenSpaceGuid.PcdSystemBiosRelease|0x0100
+  gArmTokenSpaceGuid.PcdEmbeddedControllerFirmwareRelease|0x0100
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemManufacturer|L"QEMU"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemSKU|L"SK0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdSystemFamily|L"ArmVirt"
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardAssetTag|L"AT0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardSKU|L"SK000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdBaseBoardLocation|L"Internal"
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisSerialNumber|L"SN0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisVersion|L"1.0"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisManufacturer|L"QEMU"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisAssetTag|L"AT0000"
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdChassisSKU|L"SK0000"
 
 ################################################################################
 #
@@ -656,6 +710,14 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   #
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
+
+  #
+  # SMBIOS support
+  #
+  ArmPkg/Universal/Smbios/ProcessorSubClassDxe/ProcessorSubClassDxe.inf
+  ArmPkg/Universal/Smbios/SmbiosMiscDxe/SmbiosMiscDxe.inf
+  EmbeddedPkg/Library/FdtLib/FdtLib.inf
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
 
   #
   # PCI support

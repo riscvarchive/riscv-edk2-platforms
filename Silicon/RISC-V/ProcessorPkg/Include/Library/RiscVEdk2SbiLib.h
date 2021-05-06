@@ -551,9 +551,8 @@ SbiVendorCall (
   access the firmware context.
 
   @param[out] ScratchSpace         The scratch space pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetMscratch (
   OUT SBI_SCRATCH                    **ScratchSpace
@@ -564,9 +563,8 @@ SbiGetMscratch (
 
   @param[in]  HartId               The hart id.
   @param[out] ScratchSpace         The scratch space pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetMscratchHartid (
   IN  UINTN                            HartId,
@@ -577,9 +575,8 @@ SbiGetMscratchHartid (
   Get firmware context of the calling hart.
 
   @param[out] FirmwareContext      The firmware context pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetFirmwareContext (
   OUT EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT **FirmwareContext
@@ -589,9 +586,8 @@ SbiGetFirmwareContext (
   Set firmware context of the calling hart.
 
   @param[in] FirmwareContext       The firmware context pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiSetFirmwareContext (
   IN EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext

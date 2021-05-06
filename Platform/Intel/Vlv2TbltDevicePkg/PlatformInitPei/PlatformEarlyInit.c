@@ -1,6 +1,6 @@
 /** @file
 
-  Copyright (c) 2004  - 2019, Intel Corporation. All rights reserved.<BR>
+  Copyright (c) 2004  - 2020, Intel Corporation. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -363,9 +363,9 @@ MeasuredBootInit (
   )
 {
   if (SystemConfiguration->MeasuredBootEnable) {
-    PcdSetBool (PcdMeasuredBootEnable, TRUE);
+    PcdSetBoolS (PcdMeasuredBootEnable, TRUE);
   } else {
-    PcdSetBool (PcdMeasuredBootEnable, FALSE);
+    PcdSetBoolS (PcdMeasuredBootEnable, FALSE);
   }
 
   return EFI_SUCCESS;

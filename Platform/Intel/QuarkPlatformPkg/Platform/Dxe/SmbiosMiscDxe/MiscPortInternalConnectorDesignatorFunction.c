@@ -81,86 +81,86 @@ GetMiscPortConfigFromPcd ()
   // Type 8
   //
   SMBIOSPortConnector.SMBIOSConnectorNumber = PcdGet8 (PcdSMBIOSConnectorNumber);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort1InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[0].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort1ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[0].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort1InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[0].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[0].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort1ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[0].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[0].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[0].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort1InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[0].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort1ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[0].PortType = PcdGet8 (PcdSMBIOSPort1Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort2InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[1].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort2ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[1].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort2InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[1].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[1].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort2ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[1].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[1].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[1].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort2InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[1].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort2ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[1].PortType = PcdGet8 (PcdSMBIOSPort2Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort3InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[2].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort3ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[2].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort3InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[2].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[2].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort3ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[2].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[2].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[2].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort3InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[2].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort3ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[2].PortType = PcdGet8 (PcdSMBIOSPort3Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort4InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[3].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort4ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[3].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort4InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[3].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[3].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort4ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[3].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[3].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[3].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort4InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[3].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort4ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[3].PortType = PcdGet8 (PcdSMBIOSPort4Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort5InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[4].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort5ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[4].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort5InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[4].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[4].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort5ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[4].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[4].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[4].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort5InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[4].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort5ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[4].PortType = PcdGet8 (PcdSMBIOSPort5Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort6InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[5].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort6ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[5].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort6InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[5].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[5].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort6ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[5].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[5].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[5].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort6InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[5].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort6ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[5].PortType = PcdGet8 (PcdSMBIOSPort6Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort7InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[6].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort7ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[6].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort7InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[6].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[6].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort7ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[6].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[6].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[6].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort7InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[6].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort7ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[6].PortType = PcdGet8 (PcdSMBIOSPort7Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort8InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[7].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort8ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[7].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort8InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[7].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[7].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort8ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[7].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[7].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[7].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort8InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[7].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort8ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[7].PortType = PcdGet8 (PcdSMBIOSPort8Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort9InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[8].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort9ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[8].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort9InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[8].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[8].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort9ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[8].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[8].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[8].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort9InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[8].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort9ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[8].PortType = PcdGet8 (PcdSMBIOSPort9Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort10InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[9].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort10ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[9].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort10InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[9].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[9].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort10ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[9].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[9].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[9].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort10InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[9].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort10ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[9].PortType = PcdGet8 (PcdSMBIOSPort10Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort11InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[10].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort11ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[10].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort11InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[10].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[10].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort11ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[10].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[10].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[10].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort11InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[10].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort11ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[10].PortType = PcdGet8 (PcdSMBIOSPort11Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort12InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[11].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort12ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[11].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort12InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[11].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[11].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort12ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[11].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[11].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[11].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort12InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[11].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort12ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[11].PortType = PcdGet8 (PcdSMBIOSPort12Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort13InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[12].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort13ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[12].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort13InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[12].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[12].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort13ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[12].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[12].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[12].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort13InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[12].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort13ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[12].PortType = PcdGet8 (PcdSMBIOSPort13Type);
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort14InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[13].PortInternalConnectorDesignator);
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort14ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[13].PortExternalConnectorDesignator);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort14InternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[13].PortInternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[13].PortInternalConnectorDesignator));
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr(PcdSMBIOSPort14ExternalConnectorDesignator), SMBIOSPortConnector.SMBIOSPortConnector[13].PortExternalConnectorDesignator, ARRAY_SIZE (SMBIOSPortConnector.SMBIOSPortConnector[13].PortExternalConnectorDesignator));
   SMBIOSPortConnector.SMBIOSPortConnector[13].PortInternalConnectorType = PcdGet8 (PcdSMBIOSPort14InternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[13].PortExternalConnectorType = PcdGet8 (PcdSMBIOSPort14ExternalConnectorType);
   SMBIOSPortConnector.SMBIOSPortConnector[13].PortType = PcdGet8 (PcdSMBIOSPort14Type);
@@ -274,8 +274,8 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscPortInternalConnectorDesignator)
   SmbiosRecord->PortType = PortType;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(InternalRef, OptionalStrStart);
-  UnicodeStrToAsciiStr(ExternalRef, OptionalStrStart + InternalRefStrLen + 1);
+  UnicodeStrToAsciiStrS (InternalRef, OptionalStrStart, InternalRefStrLen + 1);
+  UnicodeStrToAsciiStrS (ExternalRef, OptionalStrStart + InternalRefStrLen + 1, ExternalRefStrLen + 1);
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

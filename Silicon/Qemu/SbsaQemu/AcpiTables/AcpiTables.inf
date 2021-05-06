@@ -45,3 +45,32 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemId
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemTableId
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiDefaultOemRevision
+
+  gArmTokenSpaceGuid.PcdPciBusMin
+  gArmTokenSpaceGuid.PcdPciBusMax
+
+  gArmTokenSpaceGuid.PcdPciIoBase
+  gArmTokenSpaceGuid.PcdPciIoSize
+  gArmTokenSpaceGuid.PcdPciIoTranslation
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciIoLimit
+
+  gArmTokenSpaceGuid.PcdPciMmio32Base
+  gArmTokenSpaceGuid.PcdPciMmio32Size
+  gArmTokenSpaceGuid.PcdPciMmio32Translation
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio32Limit
+
+  gArmTokenSpaceGuid.PcdPciMmio64Base
+  gArmTokenSpaceGuid.PcdPciMmio64Size
+  gArmTokenSpaceGuid.PcdPciMmio64Translation
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciMmio64Limit
+
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarSize
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarLimit
+
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase
+
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformAhciBase
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformAhciSize
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformEhciBase
+  gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPlatformEhciSize

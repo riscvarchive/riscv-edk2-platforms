@@ -6,7 +6,7 @@
 # INF files to generate AutoGen.c and AutoGen.h files
 # for the build infrastructure.
 #
-# Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -76,6 +76,17 @@
   SetCacheMtrrLib|Include/Library/SetCacheMtrrLib.h
 
   ReportCpuHobLib|Include/Library/ReportCpuHobLib.h
+
+  BoardBootManagerLib|Include/Library/BoardBootManagerLib.h
+  CompressLib|Include/Library/CompressLib.h
+  HobVariableLib|Include/Library/HobVariableLib.h
+  MultiBoardAcpiSupportLib|Include/Library/MultiBoardAcpiSupportLib.h
+  ReportFvLib|Include/Library/ReportFvLib.h
+
+  VariableReadLib|Include/Library/VariableReadLib.h
+  VariableWriteLib|Include/Library/VariableWriteLib.h
+  LargeVariableReadLib|Include/Library/LargeVariableReadLib.h
+  LargeVariableWriteLib|Include/Library/LargeVariableWriteLib.h
 
 [PcdsFixedAtBuild, PcdsPatchableInModule]
 
@@ -156,9 +167,17 @@
   gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaBaseAddress|0xFF800000|UINT32|0x10000001
   gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaSize|0x00800000|UINT32|0x10000002
 
+  ## Indicates the MMIO base address of the microcode FV in flash.
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeBase|0xFFE60000|UINT32|0x30000004
+
+  ## Indicates the size of the microcode FV in flash.
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeSize|0x000A0000|UINT32|0x30000005
+
+  ## Indicates the offset of the microcode FV relative to the beginning of flash.
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeOffset|0x00660000|UINT32|0x30000006
+
+  ## Indicates the offset of the actual microcode content relative to the beginning of the microcode FV.
+  gMinPlatformPkgTokenSpaceGuid.PcdMicrocodeOffsetInFv|0x90|UINT32|0x30000007
 
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemoryBase|0x00000000|UINT32|0x20000004
   gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemorySize|0x00000000|UINT32|0x20000005
@@ -318,3 +337,4 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable             |FALSE|BOOLEAN|0xF00000A5
   gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE|BOOLEAN|0xF00000A6
   gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable      |FALSE|BOOLEAN|0xF00000A7
+  gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable   |FALSE|BOOLEAN|0xF00000B0

@@ -12,6 +12,7 @@
 #include <Library/AcpiLib.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/DebugLib.h>
+#include <Library/FdtHelperLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PrintLib.h>
@@ -19,88 +20,6 @@
 #include <Library/UefiDriverEntryPoint.h>
 #include <Library/UefiLib.h>
 #include <Protocol/AcpiTable.h>
-#include <Protocol/FdtClient.h>
-#include <libfdt.h>
-
-STATIC INT32 FdtFirstCpuOffset;
-STATIC INT32 FdtCpuNodeSize;
-
-/*
- * A function that walks through the Device Tree created
- * by Qemu and counts the number of CPUs present in it.
- */
-STATIC
-VOID
-CountCpusFromFdt (
-  VOID
-)
-{
-  VOID           *DeviceTreeBase;
-  INT32          Node, Prev;
-  RETURN_STATUS  PcdStatus;
-  INT32          CpuNode;
-  INT32          CpuCount;
-
-  DeviceTreeBase = (VOID *)(UINTN)PcdGet64 (PcdDeviceTreeBaseAddress);
-  ASSERT (DeviceTreeBase != NULL);
-
-  // Make sure we have a valid device tree blob
-  ASSERT (fdt_check_header (DeviceTreeBase) == 0);
-
-  CpuNode = fdt_path_offset (DeviceTreeBase, "/cpus");
-  if (CpuNode <= 0) {
-    DEBUG ((DEBUG_ERROR, "Unable to locate /cpus in device tree\n"));
-    return;
-  }
-
-  CpuCount = 0;
-
-  // Walk through /cpus node and count the number of subnodes.
-  // The count of these subnodes corresponds to the number of
-  // CPUs created by Qemu.
-  Prev = fdt_first_subnode (DeviceTreeBase, CpuNode);
-  FdtFirstCpuOffset = Prev;
-  while (1) {
-    CpuCount++;
-    Node = fdt_next_subnode (DeviceTreeBase, Prev);
-    if (Node < 0) {
-      break;
-    }
-    FdtCpuNodeSize = Node - Prev;
-    Prev = Node;
-  }
-
-  PcdStatus = PcdSet32S (PcdCoreCount, CpuCount);
-  ASSERT_RETURN_ERROR (PcdStatus);
-}
-
-/*
- * Get MPIDR from device tree passed by Qemu
- */
-STATIC
-UINT64
-GetMpidr (
-  IN UINTN   CpuId
-  )
-{
-  VOID           *DeviceTreeBase;
-  CONST UINT64   *RegVal;
-  INT32          Len;
-
-  DeviceTreeBase = (VOID *)(UINTN)PcdGet64 (PcdDeviceTreeBaseAddress);
-  ASSERT (DeviceTreeBase != NULL);
-
-  RegVal = fdt_getprop (DeviceTreeBase,
-             FdtFirstCpuOffset + (CpuId * FdtCpuNodeSize),
-             "reg",
-             &Len);
-  if (!RegVal) {
-    DEBUG ((DEBUG_ERROR, "Couldn't find reg property for CPU:%d\n", CpuId));
-    return 0;
-  }
-
-  return (fdt64_to_cpu (ReadUnaligned64 (RegVal)));
-}
 
 /*
  * A Function to Compute the ACPI Table Checksum
@@ -136,6 +55,7 @@ AddMadtTable (
   EFI_PHYSICAL_ADDRESS  PageAddress;
   UINT8                 *New;
   UINT32                NumCores;
+  UINT32                CoreIndex;
 
   // Initialize MADT ACPI Header
   EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER Header = {
@@ -200,13 +120,13 @@ AddMadtTable (
   New += sizeof (EFI_ACPI_6_0_MULTIPLE_APIC_DESCRIPTION_TABLE_HEADER);
 
   // Add new GICC structures for the Cores
-  for (NumCores = 0; NumCores < PcdGet32 (PcdCoreCount); NumCores++) {
+  for (CoreIndex = 0; CoreIndex < PcdGet32 (PcdCoreCount); CoreIndex++) {
     EFI_ACPI_6_0_GIC_STRUCTURE *GiccPtr;
 
     CopyMem (New, &Gicc, sizeof (EFI_ACPI_6_0_GIC_STRUCTURE));
     GiccPtr = (EFI_ACPI_6_0_GIC_STRUCTURE *) New;
-    GiccPtr->AcpiProcessorUid = NumCores;
-    GiccPtr->MPIDR = GetMpidr (NumCores);
+    GiccPtr->AcpiProcessorUid = CoreIndex;
+    GiccPtr->MPIDR = FdtHelperGetMpidr (CoreIndex);
     New += sizeof (EFI_ACPI_6_0_GIC_STRUCTURE);
   }
 
@@ -487,9 +407,12 @@ InitializeSbsaQemuAcpiDxe (
 {
   EFI_STATUS                     Status;
   EFI_ACPI_TABLE_PROTOCOL        *AcpiTable;
+  UINT32                         NumCores;
 
   // Parse the device tree and get the number of CPUs
-  CountCpusFromFdt ();
+  NumCores = FdtHelperCountCpus ();
+  Status = PcdSet32S (PcdCoreCount, NumCores);
+  ASSERT_RETURN_ERROR (Status);
 
   // Check if ACPI Table Protocol has been installed
   Status = gBS->LocateProtocol (

@@ -269,7 +269,7 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 5, "RPIFDN", "RPI", 2)
           Field (TEMS, DWordAcc, NoLock, Preserve) {
             TMPS, 32
           }
-          return (((419949 - ((TMPS & 0x3ff) * 487)) / 100) + 2732);
+          return (((410040 - ((TMPS & 0x3ff) * 487)) / 100) + 2732);
         }
         Method (_SCP, 3) { }               // receive cooling policy from OS
 

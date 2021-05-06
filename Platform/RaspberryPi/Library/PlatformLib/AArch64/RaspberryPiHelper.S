@@ -85,13 +85,11 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     adr     x2, mBoardRevision
     str     w0, [x2]
 
-#if (RPI_MODEL == 3)
     run     .Lclkinfo_buffer
 
     ldr     w0, .Lfrequency
     adr     x2, _gPcd_BinaryPatch_PcdSerialClockRate
     str     w0, [x2]
-#endif
 
     ret
 
@@ -135,7 +133,6 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     .long   0                           // end tag
     .set    .Lrevinfo_size, . - .Lrevinfo_buffer
 
-#if (RPI_MODEL == 3)
     .align  4
 .Lclkinfo_buffer:
     .long   .Lclkinfo_size
@@ -148,7 +145,6 @@ ASM_FUNC (ArmPlatformPeiBootAction)
     .long   0                           // frequency
     .long   0                           // end tag
     .set    .Lclkinfo_size, . - .Lclkinfo_buffer
-#endif
 
 //UINTN
 //ArmPlatformGetPrimaryCoreMpId (

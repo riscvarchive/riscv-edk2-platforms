@@ -128,7 +128,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   //
   // Update strings from PCD
   //
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr (PcdSMBIOSBiosVendor), Vendor);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr (PcdSMBIOSBiosVendor), Vendor, ARRAY_SIZE (Vendor));
   if (StrLen (Vendor) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_BIOS_VENDOR);
     HiiSetString (mHiiHandle, TokenToUpdate, Vendor, NULL);
@@ -152,7 +152,7 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
     return EFI_UNSUPPORTED;
   }
 
-  AsciiStrToUnicodeStr ((CHAR8 *) PcdGetPtr (PcdSMBIOSBiosReleaseDate), ReleaseDate);
+  AsciiStrToUnicodeStrS ((CHAR8 *) PcdGetPtr (PcdSMBIOSBiosReleaseDate), ReleaseDate, ARRAY_SIZE (ReleaseDate));
   if (StrLen (ReleaseDate) > 0) {
     TokenToUpdate = STRING_TOKEN (STR_MISC_BIOS_RELEASE_DATE);
     HiiSetString (mHiiHandle, TokenToUpdate, ReleaseDate, NULL);
@@ -203,9 +203,9 @@ MISC_SMBIOS_TABLE_FUNCTION(MiscBiosVendor)
   SmbiosRecord->EmbeddedControllerFirmwareMinorRelease = ForType0InputData->BiosEmbeddedFirmwareMinorRelease;
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(VendorPtr, OptionalStrStart);
-  UnicodeStrToAsciiStr(VersionPtr, OptionalStrStart + VendorStrLen + 1);
-  UnicodeStrToAsciiStr(ReleaseDatePtr, OptionalStrStart + VendorStrLen + 1 + VerStrLen + 1);
+  UnicodeStrToAsciiStrS (VendorPtr, OptionalStrStart, VendorStrLen + 1);
+  UnicodeStrToAsciiStrS (VersionPtr, OptionalStrStart + VendorStrLen + 1, VendorStrLen + 1);
+  UnicodeStrToAsciiStrS (ReleaseDatePtr, OptionalStrStart + VendorStrLen + 1 + VerStrLen + 1, DateStrLen + 1);
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.
   //

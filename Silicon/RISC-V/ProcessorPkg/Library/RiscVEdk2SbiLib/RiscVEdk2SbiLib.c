@@ -843,9 +843,8 @@ SbiVendorCall (
   access the firmware context.
 
   @param[out] ScratchSpace         The scratch space pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetMscratch (
   OUT SBI_SCRATCH                    **ScratchSpace
@@ -853,11 +852,10 @@ SbiGetMscratch (
 {
   SbiRet Ret = SbiCall (SBI_EDK2_FW_EXT, SBI_EXT_FW_MSCRATCH_FUNC, 0);
 
-  if (!Ret.Error) {
-    *ScratchSpace = (SBI_SCRATCH *)Ret.Value;
-  }
+  // Our ecall handler never returns an error, only when the func id is invalid
+  ASSERT (Ret.Error == SBI_OK);
 
-  return EFI_SUCCESS;
+  *ScratchSpace = (SBI_SCRATCH *)Ret.Value;
 }
 
 /**
@@ -865,9 +863,8 @@ SbiGetMscratch (
 
   @param[in]  HartId               The hart id.
   @param[out] ScratchSpace         The scratch space pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetMscratchHartid (
   IN  UINTN                            HartId,
@@ -881,11 +878,10 @@ SbiGetMscratchHartid (
                  HartId
                  );
 
-  if (!Ret.Error) {
-    *ScratchSpace = (SBI_SCRATCH *)Ret.Value;
-  }
+  // Our ecall handler never returns an error, only when the func id is invalid
+  ASSERT (Ret.Error == SBI_OK);
 
-  return EFI_SUCCESS;
+  *ScratchSpace = (SBI_SCRATCH *)Ret.Value;
 }
 
 /**
@@ -894,7 +890,7 @@ SbiGetMscratchHartid (
   @param[out] FirmwareContext      The firmware context pointer.
   @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiGetFirmwareContext (
   OUT EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT **FirmwareContext
@@ -902,24 +898,18 @@ SbiGetFirmwareContext (
 {
   SBI_SCRATCH  *ScratchSpace;
   SBI_PLATFORM *SbiPlatform;
-  SbiRet Ret = SbiCall (SBI_EDK2_FW_EXT, SBI_EXT_FW_MSCRATCH_FUNC, 0);
 
-  if (!Ret.Error) {
-    ScratchSpace = (SBI_SCRATCH *)Ret.Value;
-    SbiPlatform = (SBI_PLATFORM *)sbi_platform_ptr(ScratchSpace);
-    *FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)SbiPlatform->firmware_context;
-  }
-
-  return EFI_SUCCESS;
+  SbiGetMscratch(&ScratchSpace);
+  SbiPlatform = (SBI_PLATFORM *)sbi_platform_ptr(ScratchSpace);
+  *FirmwareContext = (EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *)SbiPlatform->firmware_context;
 }
 
 /**
   Set firmware context of the calling hart.
 
   @param[in] FirmwareContext       The firmware context pointer.
-  @retval EFI_SUCCESS              The operation succeeds.
 **/
-EFI_STATUS
+VOID
 EFIAPI
 SbiSetFirmwareContext (
   IN EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext
@@ -927,13 +917,9 @@ SbiSetFirmwareContext (
 {
   SBI_SCRATCH  *ScratchSpace;
   SBI_PLATFORM *SbiPlatform;
-  SbiRet Ret = SbiCall (SBI_EDK2_FW_EXT, SBI_EXT_FW_MSCRATCH_FUNC, 0);
 
-  if (!Ret.Error) {
-    ScratchSpace = (SBI_SCRATCH *)Ret.Value;
-    SbiPlatform = (SBI_PLATFORM *)sbi_platform_ptr (ScratchSpace);
-    SbiPlatform->firmware_context = (UINTN)FirmwareContext;
-  }
+  SbiGetMscratch(&ScratchSpace);
 
-  return EFI_SUCCESS;
+  SbiPlatform = (SBI_PLATFORM *)sbi_platform_ptr (ScratchSpace);
+  SbiPlatform->firmware_context = (UINTN)FirmwareContext;
 }

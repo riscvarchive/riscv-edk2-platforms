@@ -79,6 +79,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase
   gRaspberryPiTokenSpaceGuid.PcdNvStorageEventLogBase
+  gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64
 
 [FeaturePcd]

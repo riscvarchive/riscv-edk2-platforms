@@ -1,6 +1,6 @@
 /*++
 
-Copyright (c) 1999  - 2019, Intel Corporation.  All rights reserved.
+Copyright (c) 1999  - 2020, Intel Corporation.  All rights reserved.
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -604,7 +604,7 @@ UpdatePlatformInformation (
   MrcVersion = MmioRead32 (MmPciAddress (0, 0, 0, 0, 0xF0));
   MrcVersion &= 0xffff;
   Index = EfiValueToString (Buffer, MrcVersion/100, PREFIX_ZERO, 0);
-  StrCat (Buffer, L".");
+  StrCatS (Buffer, sizeof (Buffer) / sizeof (CHAR16), L".");
   EfiValueToString (Buffer + Index + 1, (MrcVersion%100)/10, PREFIX_ZERO, 0);
   EfiValueToString (Buffer + Index + 2, (MrcVersion%100)%10, PREFIX_ZERO, 0);
   HiiSetString(mHiiHandle,STRING_TOKEN(STR_MISC_MRC_VERSION_VALUE), Buffer, NULL);
@@ -1064,72 +1064,95 @@ AddSmbiosT0x94Callback (
 
 
   OptionalStrStart = (CHAR8 *)(SmbiosRecord + 1);
-  UnicodeStrToAsciiStr(GOPVer, OptionalStrStart);
-  StrIdx +=  GOPStrLen + 1;
+  RecordLen -= sizeof (SMBIOS_TABLE_TYPE94);
+  UnicodeStrToAsciiStrS (GOPVer, OptionalStrStart, RecordLen);
+  StrIdx    += GOPStrLen + 1;
+  RecordLen -= GOPStrLen + 1;
 
-  UnicodeStrToAsciiStr(SECVer, OptionalStrStart + StrIdx);
-  StrIdx +=  SECVerStrLen + 1;
+  UnicodeStrToAsciiStrS (SECVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += SECVerStrLen + 1;
+  RecordLen -= SECVerStrLen + 1;
 
-  UnicodeStrToAsciiStr(MrcVer, OptionalStrStart + StrIdx);
-  StrIdx +=  MRCVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (MrcVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += MRCVersionStrLen + 1;
+  RecordLen -= MRCVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(uCodeVer, OptionalStrStart + StrIdx);
-  StrIdx +=  uCodeVerStrLen + 1;
+  UnicodeStrToAsciiStrS (uCodeVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += uCodeVerStrLen + 1;
+  RecordLen -= uCodeVerStrLen + 1;
 
-  UnicodeStrToAsciiStr(PunitVer, OptionalStrStart + StrIdx);
-  StrIdx +=  PUNITVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (PunitVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += PUNITVersionStrLen + 1;
+  RecordLen -= PUNITVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(PmcVer, OptionalStrStart + StrIdx);
-  StrIdx +=  PMCVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (PmcVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += PMCVersionStrLen + 1;
+  RecordLen -= PMCVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(UlpmcVer, OptionalStrStart + StrIdx);
-  StrIdx +=  ULPMCVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (UlpmcVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += ULPMCVersionStrLen + 1;
+  RecordLen -= ULPMCVersionStrLen + 1;
 
 
-  UnicodeStrToAsciiStr(SocVer, OptionalStrStart + StrIdx);
-  StrIdx +=  SOCVersionStrLen +1;
+  UnicodeStrToAsciiStrS (SocVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += SOCVersionStrLen +1;
+  RecordLen -= SOCVersionStrLen +1;
 
-  UnicodeStrToAsciiStr(BoardVer, OptionalStrStart + StrIdx);
-  StrIdx +=  BOARDVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (BoardVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += BOARDVersionStrLen + 1;
+  RecordLen -= BOARDVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(FabVer, OptionalStrStart + StrIdx);
-  StrIdx +=  FABVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (FabVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += FABVersionStrLen + 1;
+  RecordLen -= FABVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(CpuFlavor, OptionalStrStart + StrIdx);
-  StrIdx +=  CPUFLAVORStrLen + 1;
+  UnicodeStrToAsciiStrS (CpuFlavor, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += CPUFLAVORStrLen + 1;
+  RecordLen -= CPUFLAVORStrLen + 1;
 
-  UnicodeStrToAsciiStr(BiosVer, OptionalStrStart + StrIdx);
-  StrIdx +=  BIOSVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (BiosVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += BIOSVersionStrLen + 1;
+  RecordLen -= BIOSVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(PmicVer, OptionalStrStart + StrIdx);
-  StrIdx +=  PMICVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (PmicVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += PMICVersionStrLen + 1;
+  RecordLen -= PMICVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(TouchVer, OptionalStrStart + StrIdx);
-  StrIdx +=  TOUCHVersionStrLen + 1;
+  UnicodeStrToAsciiStrS (TouchVer, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += TOUCHVersionStrLen + 1;
+  RecordLen -= TOUCHVersionStrLen + 1;
 
-  UnicodeStrToAsciiStr(SecureBootMode, OptionalStrStart + StrIdx);
-  StrIdx +=  SecureBootModeLen + 1;
+  UnicodeStrToAsciiStrS (SecureBootMode, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += SecureBootModeLen + 1;
+  RecordLen -= SecureBootModeLen + 1;
 
-  UnicodeStrToAsciiStr(BootMode, OptionalStrStart + StrIdx);
-  StrIdx +=  BootModeLen + 1;
+  UnicodeStrToAsciiStrS (BootMode, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += BootModeLen + 1;
+  RecordLen -= BootModeLen + 1;
 
-  UnicodeStrToAsciiStr(SpeedStepMode, OptionalStrStart + StrIdx);
-  StrIdx +=  SpeedStepModeLen + 1;
+  UnicodeStrToAsciiStrS (SpeedStepMode, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += SpeedStepModeLen + 1;
+  RecordLen -= SpeedStepModeLen + 1;
 
-  UnicodeStrToAsciiStr(CpuTurbo, OptionalStrStart + StrIdx);
-  StrIdx +=  CpuTurboLen + 1;
+  UnicodeStrToAsciiStrS (CpuTurbo, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += CpuTurboLen + 1;
+  RecordLen -= CpuTurboLen + 1;
 
-  UnicodeStrToAsciiStr(MaxCState, OptionalStrStart + StrIdx);
-  StrIdx +=  MaxCStateLen + 1;
+  UnicodeStrToAsciiStrS (MaxCState, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += MaxCStateLen + 1;
+  RecordLen -= MaxCStateLen + 1;
 
-  UnicodeStrToAsciiStr(GfxTurbo, OptionalStrStart + StrIdx);
-  StrIdx +=  GfxTurboLen + 1;
+  UnicodeStrToAsciiStrS (GfxTurbo, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += GfxTurboLen + 1;
+  RecordLen -= GfxTurboLen + 1;
 
-  UnicodeStrToAsciiStr(IdleReserve, OptionalStrStart + StrIdx);
-  StrIdx +=  S0ixLen + 1;
+  UnicodeStrToAsciiStrS (IdleReserve, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += S0ixLen + 1;
+  RecordLen -= S0ixLen + 1;
 
-  UnicodeStrToAsciiStr(RC6, OptionalStrStart + StrIdx);
-  StrIdx +=  RC6Len + 1;
+  UnicodeStrToAsciiStrS (RC6, OptionalStrStart + StrIdx, RecordLen);
+  StrIdx    += RC6Len + 1;
+  RecordLen -= RC6Len + 1;
 
   //
   // Now we have got the full smbios record, call smbios protocol to add this record.

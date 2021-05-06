@@ -30,6 +30,7 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
 
 !include Silicon/NXP/NxpQoriqLs.dsc.inc
+!include MdePkg/MdeLibs.dsc.inc
 !include Silicon/NXP/LS1043A/LS1043A.dsc.inc
 
 [LibraryClasses.common]

@@ -38,7 +38,7 @@
 
   @return EFI_SUCCESS     The PEIM initialized successfully.
           EFI_UNSUPPORTED HART is ignored by platform.
-
+          EFI_NOT_FOUND   Processor specific data hob is not available.
 **/
 EFI_STATUS
 EFIAPI
@@ -56,7 +56,6 @@ CreateU54E51CoreProcessorSpecificDataHob (
   RISC_V_PROCESSOR_SPECIFIC_HOB_DATA ProcessorSpecDataHob;
   EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT *FirmwareContext;
   EFI_RISCV_FIRMWARE_CONTEXT_HART_SPECIFIC *FirmwareContextHartSpecific;
-  EFI_STATUS Status;
 
   DEBUG ((DEBUG_INFO, "%a: Entry.\n", __FUNCTION__));
 
@@ -64,9 +63,14 @@ CreateU54E51CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  Status = SbiGetFirmwareContext (&FirmwareContext);
-  ASSERT_EFI_ERROR (Status);
+  SbiGetFirmwareContext (&FirmwareContext);
+  ASSERT (FirmwareContext != NULL);
+  if (FirmwareContext == NULL) {
+    DEBUG ((DEBUG_ERROR, "Failed to get the pointer of EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT of hart %d\n", HartId));
+    return EFI_NOT_FOUND;
+  }
   DEBUG ((DEBUG_INFO, "    Firmware Context is at 0x%x.\n", FirmwareContext));
+
   FirmwareContextHartSpecific = FirmwareContext->HartSpecific[HartId];
   DEBUG ((DEBUG_INFO, "    Firmware Context Hart specific is at 0x%x.\n", FirmwareContextHartSpecific));
   if (FirmwareContextHartSpecific == NULL) {
@@ -101,7 +105,6 @@ CreateU54E51CoreProcessorSpecificDataHob (
     // Configuration for U54
     ProcessorSpecDataHob.ProcessorSpecificData.SupervisorModeXlen       = RegisterLen64;
   }
-
 
   DebugPrintHartSpecificInfo (&ProcessorSpecDataHob);
 
@@ -195,7 +198,7 @@ CreateU54SmbiosType4DataHob (
   ProcessorDataHob.SmbiosType4Processor.Socket = TO_BE_FILLED_BY_VENDOR;
   ProcessorDataHob.SmbiosType4Processor.ProcessorType = CentralProcessor;
   ProcessorDataHob.SmbiosType4Processor.ProcessorFamily = ProcessorFamilyIndicatorFamily2;
-  ProcessorDataHob.SmbiosType4Processor.ProcessorManufacture = TO_BE_FILLED_BY_VENDOR;
+  ProcessorDataHob.SmbiosType4Processor.ProcessorManufacturer = TO_BE_FILLED_BY_VENDOR;
   SetMem ((VOID *)&ProcessorDataHob.SmbiosType4Processor.ProcessorId, sizeof (PROCESSOR_ID_DATA), TO_BE_FILLED_BY_CODE);
   ProcessorDataHob.SmbiosType4Processor.ProcessorVersion = TO_BE_FILLED_BY_VENDOR;
   ProcessorDataHob.SmbiosType4Processor.Voltage.ProcessorVoltageCapability3_3V = 1;

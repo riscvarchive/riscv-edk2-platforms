@@ -13,6 +13,48 @@
 #include <Chassis.h>
 
 /**
+  Or Scfg register
+
+  @param  Address The MMIO register to read.
+
+  @return The value read.
+**/
+UINT32
+EFIAPI
+ScfgOr32 (
+  IN  UINTN     Address,
+  IN  UINT32    Value
+  );
+
+/**
+  Read Scfg register
+
+  @param  Address The MMIO register to read.
+
+  @return The value read.
+**/
+UINT32
+EFIAPI
+ScfgRead32 (
+  IN  UINTN     Address
+  );
+
+/**
+  Write Scfg register
+
+  @param  Address The MMIO register to write.
+  @param  Value   The value to write to the MMIO register.
+
+  @return Value.
+**/
+UINT32
+EFIAPI
+ScfgWrite32 (
+  IN  UINTN     Address,
+  IN  UINT32    Value
+  );
+
+/**
   Read Dcfg register
 
   @param  Address The MMIO register to read.
@@ -45,6 +87,26 @@ DcfgWrite32 (
  **/
 VOID
 ChassisInit (
+  VOID
+  );
+
+VOID
+ErratumA008997 (
+  VOID
+  );
+
+VOID
+ErratumA009007 (
+  VOID
+  );
+
+VOID
+ErratumA009008 (
+  VOID
+  );
+
+VOID
+ErratumA009798 (
   VOID
   );
 

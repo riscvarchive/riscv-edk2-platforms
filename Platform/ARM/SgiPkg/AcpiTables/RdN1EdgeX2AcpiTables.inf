@@ -1,7 +1,7 @@
 ## @file
 #  ACPI table data and ASL sources required to boot the platform.
 #
-#  Copyright (c) 2020, ARM Ltd. All rights reserved.
+#  Copyright (c) 2020-2021, ARM Ltd. All rights reserved.
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -22,6 +22,7 @@
   Iort.aslc
   Mcfg.aslc
   RdN1Edge/Dsdt.asl
+  RdN1EdgeX2/Hmat.aslc
   RdN1EdgeX2/Madt.aslc
   RdN1EdgeX2/Srat.aslc
   Spcr.aslc
@@ -45,6 +46,8 @@
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base
   gArmSgiTokenSpaceGuid.PcdDramBlock2Size
 
+  gArmSgiTokenSpaceGuid.PcdChipCount
+
   gArmTokenSpaceGuid.PcdArmArchTimerSecIntrNum
   gArmTokenSpaceGuid.PcdArmArchTimerIntrNum
   gArmTokenSpaceGuid.PcdArmArchTimerHypIntrNum
@@ -56,11 +59,15 @@
   gArmTokenSpaceGuid.PcdPciBusMin
   gArmTokenSpaceGuid.PcdPciBusMax
 
+  gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv
+  gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt
   gArmSgiTokenSpaceGuid.PcdVirtioNetBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioNetSize
   gArmSgiTokenSpaceGuid.PcdVirtioNetInterrupt
+  gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv
+  gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv
 
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress
