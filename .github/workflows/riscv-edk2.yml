@@ -209,3 +209,57 @@ jobs:
       - uses: ./
         with:
           entrypoint: './run-virt.sh'
+
+  test-virt-linux:
+    name: Boot RiscvVirt to UEFI Shell
+    if: ${{ contains(github.ref, 'riscv-virt') }}
+    runs-on: ubuntu-latest
+    needs: build-virt
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: RiscvVirt
+          path: Build/RiscvVirt/DEBUG_GCC5/FV
+
+      - name: Chmod RISCVVIRT.fd
+        run: chmod +w Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+
+      - name: Prepare ESP
+        run: |
+          # Get prebuild Linux EFISTUB, initrd and rootfs
+          wget https://danielschaefer.me/static/riscv/ci/Image
+          wget https://danielschaefer.me/static/riscv/ci/rootfs.cpio
+          wget https://danielschaefer.me/static/riscv/ci/rootfs.ext2
+
+          fallocate -l 64M esp.iso
+          # Create GPT partition table and create one EFI System Partition
+          # TODO: Put ESP and actual root fs on a single disk
+          sudo apt install -y parted multipath-tools # multipath-tools for kpartx
+          parted esp.iso mklabel gpt --script
+          parted esp.iso mkpart primary fat32 0% 100% --script
+          parted esp.iso set 1 esp on --script
+
+          # Load image as disk, create filesystem and mount
+          LOOP_DEV=$(sudo losetup --find --show esp.iso)
+          sudo kpartx -a "$LOOP_DEV"
+          sudo mkfs.vfat /dev/mapper/loop*p1
+          sudo mount /dev/mapper/loop*p1 /mnt
+
+          # Copy EFISTUB and initrd to ESP
+          sudo cp Image /mnt/linux-riscv64.efi
+          sudo cp rootfs.cpio /mnt/initramfs.cpio
+          # Create autostart script
+          echo 'linux-riscv64.efi root=/dev/vda rootwait earlycon initrd=\initramfs.cpio' | sudo tee /mnt/startup.nsh
+
+          # Unmount
+          sudo umount /mnt
+          sudo kpartx -d "$LOOP_DEV"
+          sudo losetup -d "$LOOP_DEV"
+
+
+      # Call the custom action in this repo at /action.yml
+      - uses: ./
+        with:
+          entrypoint: './run-virt-linux.sh'
