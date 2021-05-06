@@ -55,4 +55,5 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootableHartNumber          = 1      
                                                                                     # platform hart_index2id value.
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores       = 1          # Total U5 cores enabled on U540 platform
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdE5MCSupported         = True       # E51 MC exists.
+SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdU5UartBase            = 0x10010000 # Serial port base address
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode        = 1          # Set PeiCore to S-Mode
