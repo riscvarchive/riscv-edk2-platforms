@@ -359,15 +359,17 @@
   #
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootManagerMenuFile|{ 0x21, 0xaa, 0x2c, 0x46, 0x14, 0x76, 0x03, 0x45, 0x83, 0x6e, 0x8a, 0xb6, 0xf4, 0x66, 0x23, 0x31 }
 
-  # Serial Port
+  # Serial Port (BeagleV UART3)
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseMmio|TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x10000000
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|9600
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x12440000
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|9600
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialBaudRate|115200
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialLineControl|0x03
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialFifoControl|0x07
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialDetectCable|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|3686400
+  #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|3686400
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialClockRate|100000000
   #gEfiMdeModulePkgTokenSpaceGuid.PcdSerialPciDeviceInfo|{0x14, 0x05, 0x84, 0x00, 0xFF}
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterStride|1
 
