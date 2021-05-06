@@ -505,8 +505,14 @@ _reset_regs:
   .global fw_next_arg1
 fw_next_arg1:
   /* Pass device tree as next_arg1 to sbi_init */
+#if FixedPcdGetBool (PcdGetDeviceTreeFromQemu)
+  /* On QEMU take it from hardcoded address provided by QEMU */
   li    a0, 0x1020
   ld    a0, (a0)
+#else
+  /* On U540 take it from binary embedded into executable */
+  la    a0, fdt_bin
+#endif
   ret
 
   .align 3
@@ -523,9 +529,11 @@ fw_next_addr:
 _jump_addr:
 RISCV_PTR SecCoreStartUpWithStack
 
+#if !FixedPcdGetBool (PcdGetDeviceTreeFromQemu)
   .section .text, "ax", %progbits
   .align 4
   .globl fdt_bin
 fdt_bin:
   /* TODO: Rename to a generic name and think about where we want to put this */
   .incbin "U540.dtb"
+#endif

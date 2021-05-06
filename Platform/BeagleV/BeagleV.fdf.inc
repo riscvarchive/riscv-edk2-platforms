@@ -57,3 +57,5 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootableHartNumber          = 1      
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdNumberofU5Cores       = 1          # Total U5 cores enabled on U540 platform
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdE5MCSupported         = True       # E51 MC exists.
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode        = 1          # Set PeiCore to S-Mode
+
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdGetDeviceTreeFromQemu       = True

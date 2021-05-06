@@ -57,6 +57,7 @@
 [FixedPcd]
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVPeiFvBase
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVPeiFvSize
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdGetDeviceTreeFromQemu
 
 [Pcd]
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId

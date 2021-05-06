@@ -66,6 +66,8 @@
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize|0|UINT32|0x00001104
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode|0|UINT32|0x00001105
 
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdGetDeviceTreeFromQemu|FALSE|BOOLEAN|0x00001107
+
 [PcdsPatchableInModule]
 
 [PcdsFeatureFlag]
