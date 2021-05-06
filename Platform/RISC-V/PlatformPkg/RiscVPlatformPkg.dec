@@ -67,6 +67,8 @@
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode|0|UINT32|0x00001105
 
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdGetDeviceTreeFromQemu|FALSE|BOOLEAN|0x00001107
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdStarfiveDeviceTree|FALSE|BOOLEAN|0x00001108
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdU540DeviceTree|FALSE|BOOLEAN|0x00001109
 
 [PcdsPatchableInModule]
 

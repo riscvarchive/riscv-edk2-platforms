@@ -58,6 +58,8 @@
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVPeiFvBase
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVPeiFvSize
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdGetDeviceTreeFromQemu
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdStarfiveDeviceTree
+  gUefiRiscVPlatformPkgTokenSpaceGuid.PcdU540DeviceTree
 
 [Pcd]
   gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId
