@@ -251,7 +251,9 @@ jobs:
           sudo cp Image /mnt/linux-riscv64.efi
           sudo cp rootfs.cpio /mnt/initramfs.cpio
           # Create autostart script
-          echo 'linux-riscv64.efi root=/dev/vda rootwait earlycon initrd=\initramfs.cpio' | sudo tee /mnt/startup.nsh
+          echo 'fs0:' | sudo tee /mnt/startup.nsh
+          echo 'initrd initramfs.cpio' | sudo tee -a /mnt/startup.nsh
+          echo 'linux-riscv64.efi root=/dev/vda rootwait earlycon' | sudo tee -a /mnt/startup.nsh
 
           # Unmount
           sudo umount /mnt

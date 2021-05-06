@@ -515,6 +515,7 @@
       gEfiShellPkgTokenSpaceGuid.PcdShellLibAutoInitialize|FALSE
     <LibraryClasses>
       ShellLib|ShellPkg/Library/UefiShellLib/UefiShellLib.inf
+      SortLib|MdeModulePkg/Library/UefiSortLib/UefiSortLib.inf
   }
 
   ShellPkg/Application/Shell/Shell.inf {
