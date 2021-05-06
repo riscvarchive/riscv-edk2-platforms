@@ -77,6 +77,8 @@
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
   DxeServicesTableLib|MdePkg/Library/DxeServicesTableLib/DxeServicesTableLib.inf
   PeCoffGetEntryPointLib|MdePkg/Library/BasePeCoffGetEntryPointLib/BasePeCoffGetEntryPointLib.inf
+  PciCf8Lib|MdePkg/Library/BasePciCf8Lib/BasePciCf8Lib.inf
+  PciLib|MdePkg/Library/BasePciLibCf8/BasePciLibCf8.inf
   IoLib|MdePkg/Library/BaseIoLibIntrinsic/BaseIoLibIntrinsic.inf
   OemHookStatusCodeLib|MdeModulePkg/Library/OemHookStatusCodeLibNull/OemHookStatusCodeLibNull.inf
   SerialPortLib|Platform/SiFive/U5SeriesPkg/Library/SerialIoLib/SerialIoLib.inf
@@ -92,7 +94,6 @@
   CustomizedDisplayLib|MdeModulePkg/Library/CustomizedDisplayLib/CustomizedDisplayLib.inf
   SortLib|MdeModulePkg/Library/BaseSortLib/BaseSortLib.inf
   UefiBootManagerLib|MdeModulePkg/Library/UefiBootManagerLib/UefiBootManagerLib.inf
-  FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
 
 # RISC-V Platform Library
   TimeBaseLib|EmbeddedPkg//Library/TimeBaseLib/TimeBaseLib.inf
@@ -140,29 +141,9 @@
   RiscVPlatformTimerLib|Platform/SiFive/U5SeriesPkg/Library/RiscVPlatformTimerLib/RiscVPlatformTimerLib.inf
   CpuExceptionHandlerLib|Silicon/RISC-V/ProcessorPkg/Library/RiscVExceptionLib/CpuExceptionHandlerDxeLib.inf
 
+
   # Flattened Device Tree (FDT) access library
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf
-
-  # PCI Libraries
-  PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
-  PciExpressLib|ArmVirtPkg/Library/BaseCachingPciExpressLib/BaseCachingPciExpressLib.inf
-  PciExpressLib|MdePkg/Library/BasePciExpressLib/BasePciExpressLib.inf
-  PciCapLib|OvmfPkg/Library/BasePciCapLib/BasePciCapLib.inf
-  PciCapPciSegmentLib|OvmfPkg/Library/BasePciCapPciSegmentLib/BasePciCapPciSegmentLib.inf
-  PciCapPciIoLib|OvmfPkg/Library/UefiPciCapPciIoLib/UefiPciCapPciIoLib.inf
-
-  # Virtio Support
-  VirtioLib|OvmfPkg/Library/VirtioLib/VirtioLib.inf
-  VirtioMmioDeviceLib|OvmfPkg/Library/VirtioMmioDeviceLib/VirtioMmioDeviceLib.inf
-  QemuFwCfgLib|ArmVirtPkg/Library/QemuFwCfgLib/QemuFwCfgLib.inf
-  QemuFwCfgS3Lib|OvmfPkg/Library/QemuFwCfgS3Lib/BaseQemuFwCfgS3LibNull.inf
-  QemuFwCfgSimpleParserLib|OvmfPkg/Library/QemuFwCfgSimpleParserLib/QemuFwCfgSimpleParserLib.inf
-  QemuLoadImageLib|OvmfPkg/Library/GenericQemuLoadImageLib/GenericQemuLoadImageLib.inf
-
-  # PCI support
-  PciPcdProducerLib|ArmVirtPkg/Library/FdtPciPcdProducerLib/FdtPciPcdProducerLib.inf
-  PciSegmentLib|MdePkg/Library/BasePciSegmentLibPci/BasePciSegmentLibPci.inf
-  PciHostBridgeLib|ArmVirtPkg/Library/FdtPciHostBridgeLib/FdtPciHostBridgeLib.inf
 
 [LibraryClasses.common.SEC]
 !ifdef $(DEBUG_ON_SERIAL_PORT)
@@ -412,8 +393,6 @@
       PcdLib|MdePkg/Library/PeiPcdLib/PeiPcdLib.inf
   }
 
-  Platform/RISC-V/PlatformPkg/Universal/FdtPeim/FdtPeim.inf
-
   #
   # DXE Phase modules
   #
@@ -442,11 +421,11 @@
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 !endif
 
-  #UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
-  #MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf {
-  #  <LibraryClasses>
-  #    PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
-  #}
+  UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf {
+    <LibraryClasses>
+      PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
+  }
   MdeModulePkg/Universal/Metronome/Metronome.inf
   MdeModulePkg/Universal/BdsDxe/BdsDxe.inf
   MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf {
@@ -523,33 +502,6 @@
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
 
   #
-  # PCI support
-  #
-  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf {
-    <LibraryClasses>
-      NULL|ArmVirtPkg/Library/FdtPciPcdProducerLib/FdtPciPcdProducerLib.inf
-  }
-  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
-  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf {
-    <LibraryClasses>
-      NULL|ArmVirtPkg/Library/FdtPciPcdProducerLib/FdtPciPcdProducerLib.inf
-  }
-  OvmfPkg/VirtioPciDeviceDxe/VirtioPciDeviceDxe.inf
-  OvmfPkg/Virtio10Dxe/Virtio10.inf
-
-  #
-  # Platform Driver
-  #
-  ArmVirtPkg/VirtioFdtDxe/VirtioFdtDxe.inf
-  ArmVirtPkg/FdtClientDxe/FdtClientDxe.inf
-  ArmVirtPkg/HighMemDxe/HighMemDxe.inf
-  OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
-  OvmfPkg/VirtioScsiDxe/VirtioScsi.inf
-  OvmfPkg/VirtioNetDxe/VirtioNet.inf
-  OvmfPkg/VirtioRngDxe/VirtioRng.inf
-  Silicon/RISC-V/ProcessorPkg/Universal/FdtDxe/FdtDxe.inf
-
-  #
   # FAT filesystem + GPT/MBR partitioning + UDF filesystem
   #
   #MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
@@ -593,18 +545,3 @@
 !endif
 
   MdeModulePkg/Application/UiApp/UiApp.inf
-
-[PcdsDynamicDefault.common]
-  # set PcdPciExpressBaseAddress to MAX_UINT64, which signifies that this
-  # PCD and PcdPciDisableBusEnumeration above have not been assigned yet
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xFFFFFFFFFFFFFFFF
-
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x0
-
-[PcdsFeatureFlag.common]
-  gUefiOvmfPkgTokenSpaceGuid.PcdQemuBootOrderPciTranslation|TRUE
-  gUefiOvmfPkgTokenSpaceGuid.PcdQemuBootOrderMmioTranslation|TRUE
-
-[PcdsFixedAtBuild.common]
-  # initial location of the device tree blob passed by QEMU
-  gArmVirtTokenSpaceGuid.PcdDeviceTreeInitialBaseAddress|0x1020
