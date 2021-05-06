@@ -8,6 +8,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
+#include <Guid/RootBridgesConnectedEventGroup.h>
 #include "PlatformBootManager.h"
 
 
@@ -154,6 +155,8 @@ PlatformBootManagerBeforeConsole (
   EFI_INPUT_KEY                Enter;
   EFI_INPUT_KEY                F2;
   EFI_BOOT_MANAGER_LOAD_OPTION BootOption;
+
+  EfiEventGroupSignal (&gRootBridgesConnectedEventGroupGuid);
 
   //
   // Signal EndOfDxe PI Event
