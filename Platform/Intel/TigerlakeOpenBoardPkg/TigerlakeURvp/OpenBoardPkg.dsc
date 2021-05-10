@@ -89,7 +89,6 @@
 
   PciSegmentLib|$(PLATFORM_SI_PACKAGE)/Library/BasePciSegmentMultiSegLibPci/BasePciSegmentMultiSegLibPci.inf
   PciLib|MdePkg/Library/BasePciLibPciExpress/BasePciLibPciExpress.inf
-  ReportCpuHobLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/ReportCpuHobLib/ReportCpuHobLib.inf
 
   #
   # Silicon Init Package
@@ -115,6 +114,7 @@
   #
   # Silicon Init Package
   #
+  ReportCpuHobLib|IntelSiliconPkg/Library/ReportCpuHobLib/ReportCpuHobLib.inf
   !include $(PLATFORM_SI_PACKAGE)/SiPkgPeiLib.dsc
 
   #
