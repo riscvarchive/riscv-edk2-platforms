@@ -1,6 +1,6 @@
 /** @file
  *
- *  Copyright (c) 2021 Arm. All rights reserved.
+ *  Copyright (c) 2021, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -11,7 +11,7 @@
 
 #include "AcpiTables.h"
 
-DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPI4EMMC", 2)
+DefinitionBlock (__FILE__, "SSDT", 2, "RPIFDN", "RPI4EMMC", 2)
 {
   Scope (\_SB_)
   {

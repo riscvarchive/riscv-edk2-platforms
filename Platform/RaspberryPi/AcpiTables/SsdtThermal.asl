@@ -14,7 +14,7 @@
 
 #include <IndustryStandard/Acpi.h>
 
-DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPITHFAN", 2)
+DefinitionBlock (__FILE__, "SSDT", 2, "RPIFDN", "RPITHFAN", 2)
 {
   External (\_SB_.EC00, DeviceObj)
   External (\_SB_.EC00.TZ00, DeviceObj)
