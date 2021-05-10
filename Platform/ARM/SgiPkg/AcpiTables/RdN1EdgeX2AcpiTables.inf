@@ -24,6 +24,7 @@
   RdN1EdgeX2/Dsdt.asl
   RdN1EdgeX2/Hmat.aslc
   RdN1EdgeX2/Madt.aslc
+  RdN1EdgeX2/Pptt.aslc
   RdN1EdgeX2/Srat.aslc
   Spcr.aslc
   Ssdt.asl
