@@ -1,7 +1,7 @@
 ## @file
 #  The main build description file for the KabylakeRvp3 board.
 #
-# Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -37,7 +37,8 @@
   #
   # Include PCD configuration for this board.
   #
-  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+
   !include OpenBoardPkgPcd.dsc
   !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
@@ -202,6 +203,11 @@
 
 [LibraryClasses.common.PEIM]
   #######################################
+  # Silicon Package
+  #######################################
+  ReportCpuHobLib|IntelSiliconPkg/Library/ReportCpuHobLib/ReportCpuHobLib.inf
+
+  #######################################
   # Platform Package
   #######################################
   BoardInitLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/MultiBoardInitSupportLib/PeiMultiBoardInitSupportLib.inf
@@ -212,7 +218,6 @@
   TestPointCheckLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointCheckLib/PeiTestPointCheckLib.inf
 !endif
   SetCacheMtrrLib|$(PLATFORM_PACKAGE)/Library/SetCacheMtrrLib/SetCacheMtrrLibNull.inf
-  ReportCpuHobLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/ReportCpuHobLib/ReportCpuHobLib.inf
 
   #######################################
   # Board Package

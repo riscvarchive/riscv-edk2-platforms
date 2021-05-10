@@ -1,7 +1,7 @@
 ## @file
 #  The main build description file for the GalagoPro3 board.
 #
-# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -38,7 +38,8 @@
   #
   # Include PCD configuration for this board.
   #
-  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+
   !include OpenBoardPkgPcd.dsc
   !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
@@ -160,7 +161,11 @@
   DebugLib|MdeModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
   SerialPortLib|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
   SetCacheMtrrLib|$(PLATFORM_PACKAGE)/Library/SetCacheMtrrLib/SetCacheMtrrLibNull.inf
-  ReportCpuHobLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/ReportCpuHobLib/ReportCpuHobLib.inf
+
+  #######################################
+  # Silicon Package
+  #######################################
+  ReportCpuHobLib|IntelSiliconPkg/Library/ReportCpuHobLib/ReportCpuHobLib.inf
 
   #######################################
   # Platform Package
