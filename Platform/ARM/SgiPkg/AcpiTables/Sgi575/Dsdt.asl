@@ -12,53 +12,62 @@
 
 DefinitionBlock("DsdtTable.aml", "DSDT", 2, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM_REVISION) {
   Scope(_SB) {
+    Device (CLU0) {   // Cluster 0
+      Name (_HID, "ACPI0010")
+      Name (_UID, 0)
 
-    Device(CP00) { // A75-0: Cluster 0, Cpu 0
-      Name(_HID, "ACPI0007")
-      Name(_UID, 0)
-      Name(_STA, 0xF)
+      Device (CP00) { // A75-0: Cluster 0, Cpu 0
+        Name (_HID, "ACPI0007")
+        Name (_UID, 0)
+        Name (_STA, 0xF)
+      }
+
+      Device (CP01) { // A75-0: Cluster 0, Cpu 1
+        Name (_HID, "ACPI0007")
+        Name (_UID, 1)
+        Name (_STA, 0xF)
+      }
+
+      Device (CP02) { // A75-0: Cluster 0, Cpu 2
+        Name (_HID, "ACPI0007")
+        Name (_UID, 2)
+        Name (_STA, 0xF)
+      }
+
+      Device (CP03) { // A75-0: Cluster 0, Cpu 3
+        Name (_HID, "ACPI0007")
+        Name (_UID, 3)
+        Name (_STA, 0xF)
+      }
     }
 
-    Device(CP01) { // A75-0: Cluster 0, Cpu 1
-      Name(_HID, "ACPI0007")
-      Name(_UID, 1)
-      Name(_STA, 0xF)
-    }
+    Device (CLU1) {   // Cluster 1
+      Name (_HID, "ACPI0010")
+      Name (_UID, 1)
 
-    Device(CP02) { // A75-0: Cluster 0, Cpu 2
-      Name(_HID, "ACPI0007")
-      Name(_UID, 2)
-      Name(_STA, 0xF)
-    }
+      Device (CP04) { // A75-0: Cluster 1, Cpu 0
+        Name (_HID, "ACPI0007")
+        Name (_UID, 4)
+        Name (_STA, 0xF)
+      }
 
-    Device(CP03) { // A75-0: Cluster 0, Cpu 3
-      Name(_HID, "ACPI0007")
-      Name(_UID, 3)
-      Name(_STA, 0xF)
-    }
+      Device (CP05) { // A75-0: Cluster 1, Cpu 1
+        Name (_HID, "ACPI0007")
+        Name (_UID, 5)
+        Name (_STA, 0xF)
+      }
 
-    Device(CP04) { // A75-0: Cluster 1, Cpu 0
-      Name(_HID, "ACPI0007")
-      Name(_UID, 4)
-      Name(_STA, 0xF)
-    }
+      Device (CP06) { // A75-0: Cluster 1, Cpu 2
+        Name (_HID, "ACPI0007")
+        Name (_UID, 6)
+        Name (_STA, 0xF)
+      }
 
-    Device(CP05) { // A75-0: Cluster 1, Cpu 1
-      Name(_HID, "ACPI0007")
-      Name(_UID, 5)
-      Name(_STA, 0xF)
-    }
-
-    Device(CP06) { // A75-0: Cluster 1, Cpu 2
-      Name(_HID, "ACPI0007")
-      Name(_UID, 6)
-      Name(_STA, 0xF)
-    }
-
-    Device(CP07) { // A75-0: Cluster 1, Cpu 3
-      Name(_HID, "ACPI0007")
-      Name(_UID, 7)
-      Name(_STA, 0xF)
+      Device (CP07) { // A75-0: Cluster 1, Cpu 3
+        Name (_HID, "ACPI0007")
+        Name (_UID, 7)
+        Name (_STA, 0xF)
+      }
     }
 
     // UART PL011
