@@ -1,7 +1,7 @@
 ## @file
 #  The main build description file for the X58Ich10 board.
 #
-# Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -42,7 +42,8 @@
   DEFINE NETWORK_ISCSI_ENABLE           = FALSE
   DEFINE NETWORK_ALLOW_HTTP_CONNECTIONS = TRUE
 
-  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+  !include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+
   !include $(PROJECT)/OpenBoardPkgPcd.dsc
   !include AdvancedFeaturePkg/Include/AdvancedFeatures.dsc
 
@@ -138,6 +139,11 @@
   VmgExitLib|UefiCpuPkg/Library/VmgExitLibNull/VmgExitLibNull.inf
 
   #####################################
+  # Silicon Package
+  #####################################
+  ReportCpuHobLib|IntelSiliconPkg/Library/ReportCpuHobLib/ReportCpuHobLib.inf
+
+  #####################################
   # Platform Package
   #####################################
 !if $(TARGET) == DEBUG
@@ -145,7 +151,6 @@
 !endif
   TestPointLib|$(PLATFORM_PACKAGE)/Test/Library/TestPointLib/PeiTestPointLib.inf
   SetCacheMtrrLib|$(PLATFORM_PACKAGE)/Library/SetCacheMtrrLib/SetCacheMtrrLib.inf
-  ReportCpuHobLib|$(PLATFORM_PACKAGE)/PlatformInit/Library/ReportCpuHobLib/ReportCpuHobLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
 
