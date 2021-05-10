@@ -20,6 +20,141 @@
 #define EFI_ACPI_ARM_CREATOR_ID       SIGNATURE_32('A','R','M',' ')
 #define EFI_ACPI_ARM_CREATOR_REVISION 0x00000099
 
+#define CORE_COUNT      FixedPcdGet32 (PcdCoreCount)
+#define CLUSTER_COUNT   FixedPcdGet32 (PcdClusterCount)
+
+#pragma pack(1)
+// PPTT processor core structure
+typedef struct {
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR  Core;
+  UINT32                                 ResourceOffset[2];
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      DCache;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      ICache;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      L2Cache;
+} RD_PPTT_CORE;
+
+// PPTT processor cluster structure
+typedef struct {
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR  Cluster;
+  UINT32                                 ResourceOffset;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      L3Cache;
+  RD_PPTT_CORE                           Core[CORE_COUNT];
+} RD_PPTT_CLUSTER;
+
+// PPTT processor cluster structure without cache
+typedef struct {
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR  Cluster;
+  RD_PPTT_CORE                           Core[CORE_COUNT];
+} RD_PPTT_MINIMAL_CLUSTER;
+
+// PPTT processor package structure
+typedef struct {
+  EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR  Package;
+  UINT32                                 ResourceOffset;
+  EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE      Slc;
+  RD_PPTT_MINIMAL_CLUSTER                Cluster[CLUSTER_COUNT];
+} RD_PPTT_SLC_PACKAGE;
+#pragma pack ()
+
+//
+// PPTT processor structure flags for different SoC components as defined in
+// ACPI 6.3 specification
+//
+
+// Processor structure flags for SoC package
+#define PPTT_PROCESSOR_PACKAGE_FLAGS                                           \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_PHYSICAL,                                        \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,                                 \
+    EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,                                        \
+    EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL                                 \
+  }
+
+// Processor structure flags for cluster
+#define PPTT_PROCESSOR_CLUSTER_FLAGS                                           \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_VALID,                                      \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,                                 \
+    EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,                                        \
+    EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL                                 \
+  }
+
+// Processor structure flags for cluster with multi-thread core
+#define PPTT_PROCESSOR_CLUSTER_THREADED_FLAGS                                  \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,                                 \
+    EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,                                        \
+    EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL                                 \
+  }
+
+// Processor structure flags for single-thread core
+#define PPTT_PROCESSOR_CORE_FLAGS                                              \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_VALID,                                      \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,                                 \
+    EFI_ACPI_6_3_PPTT_NODE_IS_LEAF                                             \
+  }
+
+// Processor structure flags for multi-thread core
+#define PPTT_PROCESSOR_CORE_THREADED_FLAGS                                     \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_INVALID,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_NOT_THREAD,                                 \
+    EFI_ACPI_6_3_PPTT_NODE_IS_NOT_LEAF,                                        \
+    EFI_ACPI_6_3_PPTT_IMPLEMENTATION_IDENTICAL                                 \
+  }
+
+// Processor structure flags for CPU thread
+#define PPTT_PROCESSOR_THREAD_FLAGS                                            \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_PACKAGE_NOT_PHYSICAL,                                    \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_ID_VALID,                                      \
+    EFI_ACPI_6_3_PPTT_PROCESSOR_IS_THREAD,                                     \
+    EFI_ACPI_6_3_PPTT_NODE_IS_LEAF                                             \
+  }
+
+// PPTT cache structure flags as defined in ACPI 6.3 Specification
+#define PPTT_CACHE_STRUCTURE_FLAGS                                             \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_CACHE_SIZE_VALID,                                        \
+    EFI_ACPI_6_3_PPTT_NUMBER_OF_SETS_VALID,                                    \
+    EFI_ACPI_6_3_PPTT_ASSOCIATIVITY_VALID,                                     \
+    EFI_ACPI_6_3_PPTT_ALLOCATION_TYPE_VALID,                                   \
+    EFI_ACPI_6_3_PPTT_CACHE_TYPE_VALID,                                        \
+    EFI_ACPI_6_3_PPTT_WRITE_POLICY_VALID,                                      \
+    EFI_ACPI_6_3_PPTT_LINE_SIZE_VALID                                          \
+  }
+
+// PPTT cache attributes for data cache
+#define PPTT_DATA_CACHE_ATTR                                                   \
+  {                                                                            \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,                       \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_DATA,                             \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK                      \
+  }
+
+// PPTT cache attributes for instruction cache
+#define PPTT_INST_CACHE_ATTR                                                   \
+  {                                                                            \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ,                             \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_INSTRUCTION,                      \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK                      \
+  }
+
+// PPTT cache attributes for unified cache
+#define PPTT_UNIFIED_CACHE_ATTR                                                \
+  {                                                                            \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_ALLOCATION_READ_WRITE,                       \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_CACHE_TYPE_UNIFIED,                          \
+    EFI_ACPI_6_3_CACHE_ATTRIBUTES_WRITE_POLICY_WRITE_BACK                      \
+  }
+
 // A macro to initialise the common header part of EFI ACPI tables as defined by
 // EFI_ACPI_DESCRIPTION_HEADER structure.
 #define ARM_ACPI_HEADER(Signature, Type, Revision) {             \
@@ -245,5 +380,40 @@
 {                                                                              \
   TotalCacheLevels, CacheLevel, CacheAssociativity, WritePolicy, CacheLineSize \
 }
+
+// EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR
+#define EFI_ACPI_6_3_PPTT_STRUCTURE_PROCESSOR_INIT(Length, Flag, Parent,       \
+  ACPIProcessorID, NumberOfPrivateResource)                                    \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_TYPE_PROCESSOR,                 /* Type 0 */             \
+    Length,                                           /* Length */             \
+    {                                                                          \
+      EFI_ACPI_RESERVED_BYTE,                                                  \
+      EFI_ACPI_RESERVED_BYTE,                                                  \
+    },                                                                         \
+    Flag,                                             /* Processor flags */    \
+    Parent,                                           /* Ref to parent node */ \
+    ACPIProcessorID,                                  /* UID, as per MADT */   \
+    NumberOfPrivateResource                           /* Resource count */     \
+  }
+
+// EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE
+#define EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE_INIT(Flag, NextLevelCache, Size,     \
+  NoOfSets, Associativity, Attributes, LineSize)                               \
+  {                                                                            \
+    EFI_ACPI_6_3_PPTT_TYPE_CACHE,                     /* Type 1 */             \
+    sizeof (EFI_ACPI_6_3_PPTT_STRUCTURE_CACHE),       /* Length */             \
+    {                                                                          \
+      EFI_ACPI_RESERVED_BYTE,                                                  \
+      EFI_ACPI_RESERVED_BYTE,                                                  \
+    },                                                                         \
+    Flag,                                             /* Cache flags */        \
+    NextLevelCache,                                   /* Ref to next level */  \
+    Size,                                             /* Size in bytes */      \
+    NoOfSets,                                         /* Num of sets */        \
+    Associativity,                                    /* Num of ways */        \
+    Attributes,                                       /* Cache attributes */   \
+    LineSize                                          /* Line size in bytes */ \
+  }
 
 #endif /* __SGI_ACPI_HEADER__ */
