@@ -88,4 +88,6 @@
 
 #define THERM_SENSOR               0xfd5d2200
 
+#define ID_CHIPREV                 0xfc404000
+
 #endif /* BCM2711_H__ */
