@@ -23,6 +23,22 @@
 #define CORE_COUNT      FixedPcdGet32 (PcdCoreCount)
 #define CLUSTER_COUNT   FixedPcdGet32 (PcdClusterCount)
 
+// ACPI OSC Status bits
+#define OSC_STS_BIT0_RES              (1U << 0)
+#define OSC_STS_FAILURE               (1U << 1)
+#define OSC_STS_UNRECOGNIZED_UUID     (1U << 2)
+#define OSC_STS_UNRECOGNIZED_REV      (1U << 3)
+#define OSC_STS_CAPABILITY_MASKED     (1U << 4)
+#define OSC_STS_MASK                  (OSC_STS_BIT0_RES          | \
+                                       OSC_STS_FAILURE           | \
+                                       OSC_STS_UNRECOGNIZED_UUID | \
+                                       OSC_STS_UNRECOGNIZED_REV  | \
+                                       OSC_STS_CAPABILITY_MASKED)
+
+// ACPI OSC for Platform-Wide Capability
+#define OSC_CAP_CPPC_SUPPORT          (1U << 5)
+#define OSC_CAP_OS_INITIATED_LPI      (1U << 8)
+
 #pragma pack(1)
 // PPTT processor core structure
 typedef struct {
