@@ -195,6 +195,11 @@ M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 R: Liming Gao <gaoliming@byosoft.com.cn>
 R: Eric Dong <eric.dong@intel.com>
 
+Platform/Intel/PurleyOpenBoardPkg
+F: Platform/Intel/PurleyOpenBoardPkg/
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
+M: Chasel Chiu <chasel.chiu@intel.com>
+
 Platform/Intel/WhiskeylakeOpenBoardPkg
 F: Platform/Intel/WhiskeylakeOpenBoardPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
@@ -262,6 +267,11 @@ Silicon/Intel/KabylakeSiliconPkg
 F: Silicon/Intel/KabylakeSiliconPkg/
 M: Chasel Chiu <chasel.chiu@intel.com>
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
+
+Silicon/Intel/PurleyRefreshSiliconPkg
+F: Silicon/Intel/PurleyRefreshSiliconPkg/
+M: Chasel Chiu <chasel.chiu@intel.com>
+M: Nate DeSimone <nathaniel.l.desimone@intel.com>
 
 Silicon/Intel/TigerlakeSiliconPkg
 F: Silicon/Intel/TigerlakeSiliconPkg/
