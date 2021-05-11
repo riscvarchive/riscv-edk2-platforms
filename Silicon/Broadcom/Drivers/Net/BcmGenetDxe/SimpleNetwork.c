@@ -13,6 +13,7 @@
 #include <Library/DebugLib.h>
 #include <Library/DmaLib.h>
 #include <Library/NetLib.h>
+#include <Library/UefiBootServicesTableLib.h>
 #include <Protocol/SimpleNetwork.h>
 
 #include "BcmGenetDxe.h"
@@ -573,6 +574,7 @@ GenetSimpleNetworkTransmit (
   UINT8               Desc;
   PHYSICAL_ADDRESS    DmaDeviceAddress;
   UINTN               DmaNumberOfBytes;
+  INTN                Retries;
 
   if (This == NULL || Buffer == NULL) {
     DEBUG ((DEBUG_ERROR, "%a: Invalid parameter (missing handle or buffer)\n",
@@ -590,9 +592,28 @@ GenetSimpleNetworkTransmit (
 
   if (!Genet->SnpMode.MediaPresent) {
     //
-    // Don't bother transmitting if there's no link.
+    // We should only really get here if the link was up
+    // and is now down due to a stop/shutdown sequence, and
+    // the app (grub) doesn't bother to check link state
+    // because it was up a moment before.
+    // Lets wait a bit for the link to resume, rather than
+    // failing to send. In the case of grub it works either way
+    // but we can't be sure that is universally true, and
+    // hanging for a couple seconds is nicer than a screen of
+    // grub send failure messages.
     //
-    return EFI_NOT_READY;
+    Retries = 1000;
+    DEBUG ((DEBUG_INFO, "%a: Waiting 10s for link\n", __FUNCTION__));
+    do {
+      gBS->Stall (10000);
+      Status = GenericPhyUpdateConfig (&Genet->Phy);
+    } while (EFI_ERROR (Status) && Retries-- > 0);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "%a: no link\n", __FUNCTION__));
+      return EFI_NOT_READY;
+    } else {
+      Genet->SnpMode.MediaPresent = TRUE;
+    }
   }
 
   if (HeaderSize != 0) {
