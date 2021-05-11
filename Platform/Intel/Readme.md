@@ -54,6 +54,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 
 ## Board Support
 * The `KabylakeOpenBoardPkg` contains board implementations for KabyLake systems.
+* The `PurleyOpenBoardPkg` contains board implementations for Purley systems.
 * The `SimicsOpenBoardPkg` contains board implementations for the Simics hardware simulator.
 * The `WhiskeylakeOpenBoardPkg` contains board implementations for WhiskeyLake systems.
 * The `CometlakeOpenBoardPkg` contains board implementations for CometLake systems.
@@ -79,6 +80,12 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 | TGL-U DDR4 RVP                        | TigerLake                                  | TigerlakeOpenBoardPkg        | TigerlakeURvp      |
 
 *Note: RVP = Reference and Validation Platform*
+
+#### Microsoft
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| Mt. Olympus                           | Purley                                     | PurleyOpenBoardPkg           | BoardMtOlympus     |
 
 #### Simics
 
@@ -237,6 +244,13 @@ return back to the minimum platform caller.
           |       |        |               |---build_board.py: Optional board-specific pre-build, build
           |       |        |                                   and clean post-build functions.
           |       |        |
+          |       |        |------PurleyOpenBoardPkg
+          |       |        |       |------BoardMtOlympus
+          |       |        |               |---build_config.cfg: BoardMtOlympus specific
+          |       |        |               |                     build settings, environment variables.
+          |       |        |               |---build_board.py: Optional board-specific pre-build,
+          |       |        |                                   build, post-build and clean functions.
+          |       |        |
           |       |        |------SimicsOpenBoardPkg
           |       |        |       |------BoardX58Ich10
           |       |        |               |---build_config.cfg: BoardX58Ich10 specific
@@ -263,6 +277,21 @@ return back to the minimum platform caller.
           |------FSP
   </pre>
 
+**Building with the batch scripts**
+
+Only PurleyOpenBoardPkg still supports batch script build (in addition to Python build). Batch scripts are deprecated
+and will be removed from PurleyOpenBoardPkg in the future. All other board packages must only use the Python build
+infrastructure.
+
+For PurleyOpenBoardPkg
+1. Open command window, go to the workspace directory, e.g. c:\Edk2Workspace.
+2. Type "cd edk2-platforms\Platform\Intel\PurleyOpenBoardPkg\BoardMtOlympus".
+3. Type "GitEdk2MinMtOlympus.bat" to setup GIT environment.
+4. Type "bld" to build Purley Mt Olympus board UEFI firmware image, "bld release" for release build, "bld clean" to
+   remove intermediate files."bld cache-produce" Generate a cache of binary files in the specified directory,
+   "bld cache-consume" Consume a cache of binary files from the specified directory, BINARY_CACHE_PATH is empty,
+   used "BinCache" as default path.
+
 ### **Known limitations**
 
 **KabylakeOpenBoardPkg**
@@ -272,6 +301,11 @@ return back to the minimum platform caller.
 *KabylakeRvp3*
 1. This firmware project has only been tested for Microsoft Windows 10 x64 boot with AHCI mode and Integrated Graphic
    Device.
+
+**PurleyOpenBoardPkg**
+1. This firmware project has only been tested booting to Microsoft Windows Server 2016 with NVME on M.2 slot.
+2. This firmware project does not build with the GCC compiler.
+3. The validated version of iASL compiler that can build MinPurley is 20180629. Older versions may generate ACPI build errors.
 
 **SimicsOpenBoardPkg**
 1. This firmware project has only been tested booting to Microsoft Windows 10 x64 and Ubuntu 17.10 with AHCI mode.
