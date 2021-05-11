@@ -725,7 +725,7 @@
   Silicon/Broadcom/Drivers/Net/BcmGenetDxe/BcmGenetDxe.inf {
     <PcdsFixedAtBuild>
       gEmbeddedTokenSpaceGuid.PcdDmaDeviceOffset|0x00000000
-      gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit|0xffffffff
+      gEmbeddedTokenSpaceGuid.PcdDmaDeviceLimit|0xffffffffff
   }
 
   #
