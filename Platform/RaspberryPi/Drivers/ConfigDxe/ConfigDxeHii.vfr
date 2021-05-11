@@ -300,8 +300,8 @@ formset
             prompt      = STRING_TOKEN(STR_MMC_EMMC_PROMPT),
             help        = STRING_TOKEN(STR_MMC_EMMC_HELP),
             flags       = NUMERIC_SIZE_4 | INTERACTIVE | RESET_REQUIRED,
-            option text = STRING_TOKEN(STR_MMC_EMMC_PIO), value = 0, flags = DEFAULT;
-            option text = STRING_TOKEN(STR_MMC_EMMC_DMA), value = 1, flags = 0;
+            option text = STRING_TOKEN(STR_MMC_EMMC_PIO), value = 0, flags = 0;
+            option text = STRING_TOKEN(STR_MMC_EMMC_DMA), value = 1, flags = DEFAULT;
         endoneof;
         endif;
 #endif
