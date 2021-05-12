@@ -10,6 +10,7 @@
 #include <libfdt.h>
 #include <PlatformOverride.h>
 #include <sbi/riscv_asm.h>
+#include <sbi/sbi_domain.h>
 #include <sbi/sbi_hartmask.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_string.h>
@@ -160,6 +161,7 @@ static int generic_final_init(bool cold_boot)
   // Set PMP of firmware regions to R and X. We will lock this in the end of PEI.
   // This region only protects SEC, PEI and Scratch buffer.
   //
+  // TODO: Can be removed when OpenSBI properly marks the FW region as RWX.
   ThisScratch = sbi_scratch_thishart_ptr ();
   pmp_set(0, PMP_R | PMP_X | PMP_W, ThisScratch->fw_start, log2roundup (ThisScratch->fw_size));
 
@@ -210,11 +212,47 @@ static void generic_system_reset(u32 reset_type, u32 reset_reason)
 	fdt_system_reset(reset_type, reset_reason);
 }
 
+#define ROOT_EDK2_REGION	0
+#define ROOT_FW_REGION		1
+#define ROOT_ALL_REGION		2
+#define ROOT_END_REGION		3
+static struct sbi_domain_memregion root_memregs[ROOT_END_REGION + 1] = { 0 };
+
+struct sbi_domain_memregion *get_mem_regions(void) {
+	/* Root domain firmware memory region */
+	root_memregs[ROOT_FW_REGION].order = log2roundup(FixedPcdGet32(PcdFwEndAddress) - FixedPcdGet32(PcdFwStartAddress));
+	//root_memregs[ROOT_FW_REGION].base = scratch->fw_start & ~((1UL << root_memregs[0].order) - 1UL);
+	root_memregs[ROOT_FW_REGION].base = FixedPcdGet32(PcdFwStartAddress)
+		& ~((1UL << root_memregs[0].order) - 1UL);
+	// TODO: Why isn't this SBI_DOMAIN_MEMREGION_EXECUTABLE?
+	root_memregs[ROOT_FW_REGION].flags = 0;
+
+	root_memregs[ROOT_EDK2_REGION].order = log2roundup(FixedPcdGet32(PcdFwEndAddress) - FixedPcdGet32(PcdFwStartAddress));
+	//root_memregs[ROOT_FW_REGION].base = scratch->fw_start & ~((1UL << root_memregs[0].order) - 1UL);
+	root_memregs[ROOT_EDK2_REGION].base = FixedPcdGet32(PcdFwStartAddress)
+		& ~((1UL << root_memregs[0].order) - 1UL);
+	// TODO: Why isn't this SBI_DOMAIN_MEMREGION_EXECUTABLE?
+	root_memregs[ROOT_EDK2_REGION].flags = SBI_DOMAIN_MEMREGION_EXECUTABLE;
+
+	/* Root domain allow everything memory region */
+	root_memregs[ROOT_ALL_REGION].order = __riscv_xlen;
+	root_memregs[ROOT_ALL_REGION].base = 0;
+	root_memregs[ROOT_ALL_REGION].flags = (SBI_DOMAIN_MEMREGION_READABLE |
+						SBI_DOMAIN_MEMREGION_WRITEABLE |
+						SBI_DOMAIN_MEMREGION_EXECUTABLE);
+
+	/* Root domain memory region end */
+	root_memregs[ROOT_END_REGION].order = 0;
+
+	return root_memregs;
+}
+
 const struct sbi_platform_operations platform_ops = {
 	.early_init		= generic_early_init,
 	.final_init		= generic_final_init,
 	.early_exit		= generic_early_exit,
 	.final_exit		= generic_final_exit,
+	.domains_root_regions	= get_mem_regions,
 	.domains_init		= generic_domains_init,
 	.console_putc		= fdt_serial_putc,
 	.console_getc		= fdt_serial_getc,
