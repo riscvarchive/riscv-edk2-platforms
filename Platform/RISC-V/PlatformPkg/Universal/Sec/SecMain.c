@@ -618,7 +618,8 @@ LaunchPeiCore (
   PeiCoreMode = FixedPcdGet32 (PcdPeiCorePrivilegeMode);
   if (PeiCoreMode == PRV_S) {
     DEBUG ((DEBUG_INFO, "%a: Switch to S-Mode for PeiCore.\n", __FUNCTION__));
-    sbi_hart_switch_mode (ThisHartId, FuncArg1, (UINTN)PeiCore, PRV_S, FALSE);
+    PeiCore (ThisHartId, FuncArg1);
+    //sbi_hart_switch_mode (ThisHartId, FuncArg1, (UINTN)PeiCore, PRV_S, FALSE);
   } else if (PeiCoreMode == PRV_M) {
     DEBUG ((DEBUG_INFO, "%a: Switch to M-Mode for PeiCore.\n", __FUNCTION__));
     PeiCore (ThisHartId, FuncArg1);
@@ -723,7 +724,7 @@ VOID EFIAPI SecCoreStartUpWithStack(
 
   if (HartId == FixedPcdGet32(PcdBootHartId)) {
     Scratch->next_addr = (UINTN)LaunchPeiCore;
-    Scratch->next_mode = PRV_M;
+    Scratch->next_mode = PRV_S;
     DEBUG ((DEBUG_INFO, "%a: Initializing OpenSBI library for booting hart %d\n", __FUNCTION__, HartId));
     sbi_init(Scratch);
   }
