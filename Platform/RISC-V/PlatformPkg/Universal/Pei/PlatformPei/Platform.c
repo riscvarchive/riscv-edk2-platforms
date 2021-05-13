@@ -199,11 +199,12 @@ MiscInitialization (
   // of IO space. (Side note: unlike other HOBs, the CPU HOB is needed during
   // S3 resume as well, so we build it unconditionally.)
   //
+  // TODO: Determine this dynamically from the MSR.
   BuildCpuHob (48, 32);
 }
 
 /**
-  Check if system retunrs from S3.
+  Check if system returns from S3.
 
   @return BOOLEAN   TRUE, system returned from S3
                     FALSE, system is not returned from S3
@@ -254,6 +255,7 @@ BuildCoreInformationHob (
   EFI_STATUS Status;
   RISC_V_PROCESSOR_SMBIOS_HOB_DATA *SmbiosHobPtr;
 
+  // TODO: Create SMBIOS libs for non-U540 platforms
   Status = CreateU5MCCoreplexProcessorSpecificDataHob (0);
   if (EFI_ERROR (Status)) {
     ASSERT(FALSE);
