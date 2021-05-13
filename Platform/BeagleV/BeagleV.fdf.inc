@@ -10,8 +10,8 @@
 DEFINE BLOCK_SIZE        = 0x1000
 
 DEFINE FW_BASE_ADDRESS   = 0x80000000
-DEFINE FW_SIZE           = 0x00220000 # $(FW_BLOCKS) * 0x1000
-DEFINE FW_BLOCKS         = 0x220      # $(CODE_BLOCKS) + $(VARS_BLOCKS)
+DEFINE FW_SIZE           = 0x00240000 # $(FW_BLOCKS) * 0x1000
+DEFINE FW_BLOCKS         = 0x240      # $(CODE_BLOCKS) + $(VARS_BLOCKS)
 
 #
 # 0x000000-0x7DFFFF code (uncompressed)
@@ -38,14 +38,15 @@ DEFINE VARS_SIZE_1       = 0x00001000
 DEFINE VARS_OFFSET_2     = 0x00208000 # $(VARS_OFFSET_1) + $(VARS_SIZE_1)
 DEFINE VARS_SIZE_2       = 0x00018000
 DEFINE VARS_SIZE         = 0x00020000 # $(VARS_SIZE_0) + $(VARS_SIZE_1) + $(VARS_SIZE_2)
-
+DEFINE DTB_OFFSET        = 0x00220000
+DEFINE DTB_SIZE          = 0x00020000
 
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdVariableFdBaseAddress = $(FW_BASE_ADDRESS) + $(VARS_OFFSET)
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdVariableFdSize        = $(VARS_SIZE)
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdVariableFdBlockSize   = $(BLOCK_SIZE)
 
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdFwStartAddress   = $(CODE_BASE_ADDRESS)
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdFwEndAddress     = $(CODE_BASE_ADDRESS) + $(SECFV_SIZE) + $(PEIFV_SIZE) + $(SCRATCH_SIZE)
+SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdFwEndAddress     = $(CODE_BASE_ADDRESS) + $(SECFV_SIZE) + $(PEIFV_SIZE) + $(SCRATCH_SIZE) + $(DTB_SIZE)
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdOpenSbiStackSize = 8192
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdScratchRamBase   = $(CODE_BASE_ADDRESS) + $(SCRATCH_OFFSET)
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdScratchRamSize   = $(SCRATCH_SIZE)

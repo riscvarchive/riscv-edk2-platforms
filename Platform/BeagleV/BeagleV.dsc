@@ -511,6 +511,8 @@
   MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
 
+  Platform/BeagleV/DeviceTree/BeagleVStarlightDeviceTree.inf
+
   #
   # SMBIOS Support
   #
