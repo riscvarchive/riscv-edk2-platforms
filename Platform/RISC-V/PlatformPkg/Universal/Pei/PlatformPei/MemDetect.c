@@ -46,6 +46,11 @@ PublishPeiMemory (
   EFI_PHYSICAL_ADDRESS        MemoryBase;
   UINT64                      MemorySize;
 
+  // TODO: Why these values?
+  // Seems like we have PCDs for this.
+  // MemoryBase = PcdGet32 (PcdTemporaryRamBase);
+  // MemorySize = PcdGet32 (PcdTemporaryRamSize);
+  // Doesn't work, though.
   MemoryBase = 0x80000000UL + 0x1000000UL;
   MemorySize = 0x40000000UL - 0x1000000UL; //1GB - 16MB
 
@@ -69,6 +74,9 @@ InitializeRamRegions (
   VOID
   )
 {
+  // TODO: Why these values?
+  // Seems like we have PCDs for this
+  // AddMemoryRangeHob(PcdGet32 (PcdTemporaryRamBase), PcdGet32 (PcdTemporaryRamSize));
+  // Doesn't work, though.
   AddMemoryRangeHob(0x81000000UL, 0x81000000UL + 0x3F000000UL);
-
 }
