@@ -11,6 +11,8 @@
 
 #include <IndustryStandard/Acpi.h>
 
+#define MV_UART_AS32(Address) { EFI_ACPI_5_0_SYSTEM_MEMORY, 32, 0, EFI_ACPI_5_0_BYTE, Address }
+
 #define ACPI_OEM_ID_ARRAY        {'M','V','E','B','U',' '}
 #define ACPI_OEM_REVISION        0
 #define ACPI_CREATOR_ID          SIGNATURE_32('L','N','R','O')
