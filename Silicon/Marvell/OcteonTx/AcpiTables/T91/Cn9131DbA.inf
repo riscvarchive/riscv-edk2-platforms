@@ -19,6 +19,7 @@
 
 [Sources]
   Cn9131DbA/Ssdt.asl
+  Cn913xDbA/Dbg2.aslc
   Cn913xDbA/Dsdt.asl
   Cn913xDbA/Mcfg.aslc
   Fadt.aslc

@@ -18,6 +18,7 @@
   VERSION_STRING                 = 1.0
 
 [Sources]
+  Cn913xDbA/Dbg2.aslc
   Cn913xDbA/Dsdt.asl
   Cn913xDbA/Mcfg.aslc
   Fadt.aslc

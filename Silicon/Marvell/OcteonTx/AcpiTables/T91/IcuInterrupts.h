@@ -22,6 +22,8 @@
 #define CP_GIC_SPI_CP0_USB_H1          112
 #define CP_GIC_SPI_CP0_USB_H0          113
 #define CP_GIC_SPI_CP0_SATA_H0         114
+#define CP_GIC_SPI_CP0_UART0           121
+#define CP_GIC_SPI_CP0_UART1           122
 
 #define CP_GIC_SPI_CP1_PCI0            288
 #define CP_GIC_SPI_CP1_PCI1            289

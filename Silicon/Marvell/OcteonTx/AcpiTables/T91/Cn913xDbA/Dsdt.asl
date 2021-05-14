@@ -9,6 +9,7 @@
 
 **/
 
+#include "Cn913xDbA/Dbg2.h"
 #include "Cn913xDbA/Pcie.h"
 #include "IcuInterrupts.h"
 
@@ -163,6 +164,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "CN9130", 3)
         {
             Name (_HID, "MRVL0001")                             // _HID: Hardware ID
             Name (_CID, "HISI0031")                             // _CID: Compatible ID
+            Name (_UID, 0x00)                                   // _UID: Unique ID
             Name (_ADR, FixedPcdGet64(PcdSerialRegisterBase))   // _ADR: Address
             Name (_CRS, ResourceTemplate ()                     // _CRS: Current Resource Settings
             {
@@ -173,6 +175,33 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "CN9130", 3)
                 Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
                 {
                   51
+                }
+            })
+            Name (_DSD, Package () {
+                ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+                Package () {
+                      Package () { "clock-frequency", FixedPcdGet32 (PcdSerialClockRate) },
+                      Package () { "reg-io-width", 1 },
+                      Package () { "reg-shift", 2 },
+                }
+            })
+        }
+
+        Device (COM2)
+        {
+            Name (_HID, "MRVL0001")                             // _HID: Hardware ID
+            Name (_CID, "HISI0031")                             // _CID: Compatible ID
+            Name (_UID, 0x01)                                   // _UID: Unique ID
+            Name (_ADR, CN913X_DBG2_UART_REG_BASE)              // _ADR: Address
+            Name (_CRS, ResourceTemplate ()                     // _CRS: Current Resource Settings
+            {
+                Memory32Fixed (ReadWrite,
+                    CN913X_DBG2_UART_REG_BASE,                  // Address Base
+                    0x00000100,                                 // Address Length
+                    )
+                Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive, ,, )
+                {
+                  CP_GIC_SPI_CP0_UART0
                 }
             })
             Name (_DSD, Package () {
