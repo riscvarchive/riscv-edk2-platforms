@@ -33,6 +33,7 @@ gUefiRiscVPlatformPkgTokenSpaceGuid.PcdRiscVDxeFvBase|gUefiRiscVPlatformPkgToken
 FV = FVMAIN_COMPACT
 
 !include VarStore.fdf.inc
+!include DeviceTree.fdf.inc
 
 ################################################################################
 
@@ -325,4 +326,9 @@ FILE FV_IMAGE = 9E21FD93-9C72-4c15-8C4B-E77F1DB2D792 {
   FILE FREEFORM = $(NAMED_GUID) {
     RAW ACPI               |.acpi
     RAW ASL                |.aml
+  }
+
+[Rule.Common.USER_DEFINED.DTB]
+  FILE FREEFORM = $(NAMED_GUID) {
+    RAW BIN                |.dtb
   }
