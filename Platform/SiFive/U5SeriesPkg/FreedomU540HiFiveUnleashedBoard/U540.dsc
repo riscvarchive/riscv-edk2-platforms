@@ -488,6 +488,8 @@
   MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
   MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
 
+  Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/DeviceTree/U540DeviceTree.inf
+
   #
   # SMBIOS Support
   #
