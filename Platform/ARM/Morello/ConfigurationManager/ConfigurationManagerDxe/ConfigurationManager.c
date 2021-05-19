@@ -389,8 +389,7 @@ EDKII_COMMON_PLATFORM_REPOSITORY_INFO CommonPlatformInfo = {
   // Resources private to each individual 'core instance in Cluster
   {
     { REFERENCE_TOKEN (CacheInfo[1]) }, // -> 'core's L1 I-cache in Cluster
-    { REFERENCE_TOKEN (CacheInfo[2]) }, // -> 'core's L1 D-cache in Cluster
-    { REFERENCE_TOKEN (CacheInfo[3]) }  // -> 'core's L2 cache in Cluster
+    { REFERENCE_TOKEN (CacheInfo[2]) }  // -> 'core's L1 D-cache in Cluster
   },
 
   // Resources private to the SoC

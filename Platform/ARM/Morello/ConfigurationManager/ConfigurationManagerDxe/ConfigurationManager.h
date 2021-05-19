@@ -205,9 +205,8 @@ HandleCmObjectRefByToken (
 /** The number of resources private to 'core instance
     - L1 data cache
     - L1 instruction cache
-    - L2 cache
 */
-#define CORE_RESOURCE_COUNT  3
+#define CORE_RESOURCE_COUNT  2
 
 /** The number of resources private to SoC
     - slc cache
