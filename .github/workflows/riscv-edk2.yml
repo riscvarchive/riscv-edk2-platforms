@@ -102,10 +102,15 @@ jobs:
       - name: Check if FD files are there
         run: ls -l Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
 
+      - name: Copy FD to own directory to avoid uploading everything else
+        run: |
+          mkdir U540-FV
+          cp Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd U540-FV/
+
       - uses: actions/upload-artifact@master
         with:
           name: U540
-          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
+          path: U540-FV
 
   build-beaglev:
     name: Build BeagleV firmware image
@@ -200,10 +205,16 @@ jobs:
       - name: Check if FD files are there
         run: ls -l Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
 
+
+      - name: Copy FD to own directory to avoid uploading everything else
+        run: |
+          mkdir RISCVVIRT-FV
+          cp Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd RISCVVIRT-FV/
+
       - uses: actions/upload-artifact@master
         with:
           name: RiscvVirt
-          path: Build/RiscvVirt/DEBUG_GCC5/FV
+          path: RISCVVIRT-FV
 
   test-u540:
     name: Boot U540 to UEFI Shell
@@ -215,10 +226,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: U540
-          path: Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV
+          path: U540-FV
 
       - name: Chmod U540.fd
-        run: chmod +w Build/FreedomU540HiFiveUnleashed/DEBUG_GCC5/FV/U540.fd
+        run: chmod +w U540-FV/U540.fd
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
@@ -235,10 +246,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: RiscvVirt
-          path: Build/RiscvVirt/DEBUG_GCC5/FV
+          path: RISCVVIRT-FV
 
       - name: Chmod RISCVVIRT.fd
-        run: chmod +w Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+        run: chmod +w RISCVVIRT-FV/RISCVVIRT.fd
 
       # Call the custom action in this repo at /action.yml
       - uses: ./
@@ -255,10 +266,10 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: RiscvVirt
-          path: Build/RiscvVirt/DEBUG_GCC5/FV
+          path: RISCVVIRT-FV
 
       - name: Chmod RISCVVIRT.fd
-        run: chmod +w Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd
+        run: chmod +w RISCVVIRT-FV/RISCVVIRT.fd
 
       - name: Cache EFISTUB, initrd, and rootfs
         id: cache-efistub-initrd-rootfs
