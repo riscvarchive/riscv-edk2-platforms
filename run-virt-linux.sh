@@ -3,7 +3,7 @@ set -o xtrace
 
 timeout --foreground 15 \
   qemu-system-riscv64 -machine virt \
-  -bios Build/RiscvVirt/DEBUG_GCC5/FV/RISCVVIRT.fd \
+  -bios RISCVVIRT-FV/RISCVVIRT.fd \
   -drive file=rootfs.ext2,format=raw,id=hd0 \
   -device virtio-blk-device,drive=hd0 \
   -drive file=esp.iso,format=raw,id=hd1 \
