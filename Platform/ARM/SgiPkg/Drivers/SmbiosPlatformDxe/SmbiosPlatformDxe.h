@@ -29,4 +29,23 @@ InstallType0BiosInformation (
   IN     EFI_SMBIOS_PROTOCOL    *Smbios
   );
 
+/**
+  Install SMBIOS System information Table.
+
+  Install the SMBIOS system information (type 1) table for Arm's reference
+  design platforms.
+
+  @param[in]  Smbios   SMBIOS protocol.
+
+  @retval EFI_SUCCESS           Record was added.
+  @retval EFI_NOT_FOUND         Unknown product id.
+  @retval EFI_OUT_OF_RESOURCES  Record was not added.
+  @retval EFI_ALREADY_STARTED   The SmbiosHandle passed is already in use.
+**/
+EFI_STATUS
+EFIAPI
+InstallType1SystemInformation (
+  IN     EFI_SMBIOS_PROTOCOL    *Smbios
+  );
+
 #endif // SMBIOS_PLATFORM_DXE_H_
