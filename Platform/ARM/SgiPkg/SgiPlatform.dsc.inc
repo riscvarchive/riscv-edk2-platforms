@@ -109,6 +109,10 @@
   # ACPI Table Version
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
 
+  # SMBIOS entry point version
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0304
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosDocRev|0x0
+
   #
   # PCIe
   #
@@ -246,6 +250,12 @@
   #
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/HiiDatabaseDxe/HiiDatabaseDxe.inf
+
+  #
+  # SMBIOS/DMI
+  #
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  Platform/ARM/SgiPkg/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
 
   #
   # platform driver
