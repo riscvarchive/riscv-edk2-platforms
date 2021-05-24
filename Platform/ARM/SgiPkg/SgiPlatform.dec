@@ -54,6 +54,7 @@
 
   gArmSgiTokenSpaceGuid.PcdSmcCs0Base|0|UINT64|0x0000000C
   gArmSgiTokenSpaceGuid.PcdSmcCs1Base|0|UINT64|0x0000000D
+  gArmSgiTokenSpaceGuid.PcdSmcCs2Base|0|UINT64|0x00001000
   gArmSgiTokenSpaceGuid.PcdSysPeriphBase|0x00000000|UINT64|0x0000000E
   gArmSgiTokenSpaceGuid.PcdSysPeriphSysRegBase|0x0|UINT64|0x0000000F
 
