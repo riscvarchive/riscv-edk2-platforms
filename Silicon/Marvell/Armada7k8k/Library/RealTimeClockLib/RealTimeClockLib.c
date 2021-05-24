@@ -79,9 +79,6 @@ LibGetTime (
   // Convert from internal 32-bit time to UEFI time
   EpochToEfiTime (RegVal, Time);
 
-  Time->TimeZone = EFI_UNSPECIFIED_TIMEZONE;
-  Time->Daylight = 0;
-
   return Status;
 }
 
