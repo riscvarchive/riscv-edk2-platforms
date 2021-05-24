@@ -23,6 +23,7 @@
   Type16PhysicalMemoryArray.c
   Type17MemoryDevice.c
   Type19MemoryArrayMappedAddress.c
+  Type32SystemBootInformation.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
