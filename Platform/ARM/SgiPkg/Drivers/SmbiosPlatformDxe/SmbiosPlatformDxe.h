@@ -85,6 +85,25 @@ InstallType4ProcessorInformation (
   IN     EFI_SMBIOS_PROTOCOL    *Smbios
   );
 
+/**
+  Install SMBIOS Cache information Table
+
+  Install the SMBIOS Cache information (type 7) table for Arm's Reference
+  Design platforms.
+
+  @param[in] Smbios   SMBIOS protocol.
+
+  @retval EFI_SUCCESS           Record was added.
+  @retval EFI_NOT_FOUND         Unknown product id.
+  @retval EFI_OUT_OF_RESOURCES  Record was not added.
+  @retval EFI_ALREADY_STARTED   The SmbiosHandle passed is already in use.
+**/
+EFI_STATUS
+EFIAPI
+InstallType7CacheInformation (
+  IN     EFI_SMBIOS_PROTOCOL    *Smbios
+  );
+
 typedef enum {
   SMBIOS_HANDLE_ENCLOSURE = 0x1000,
   SMBIOS_HANDLE_CLUSTER1,

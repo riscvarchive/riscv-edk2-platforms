@@ -19,6 +19,7 @@
   Type1SystemInformation.c
   Type3SystemEnclosure.c
   Type4ProcessorInformation.c
+  Type7CacheInformation.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
