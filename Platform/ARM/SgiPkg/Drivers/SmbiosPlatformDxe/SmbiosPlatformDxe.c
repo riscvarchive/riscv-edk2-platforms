@@ -31,6 +31,7 @@ ARM_RD_SMBIOS_TABLE_INSTALL_FPTR mSmbiosTableList[] = {
   &InstallType3SystemEnclosure,
   &InstallType4ProcessorInformation,
   &InstallType7CacheInformation,
+  &InstallType16PhysicalMemoryArray,
 };
 
 /**

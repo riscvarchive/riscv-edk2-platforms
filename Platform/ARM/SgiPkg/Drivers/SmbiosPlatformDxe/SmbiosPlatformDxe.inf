@@ -20,6 +20,7 @@
   Type3SystemEnclosure.c
   Type4ProcessorInformation.c
   Type7CacheInformation.c
+  Type16PhysicalMemoryArray.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -44,6 +45,9 @@
   gArmPlatformTokenSpaceGuid.PcdClusterCount
   gArmPlatformTokenSpaceGuid.PcdCoreCount
   gArmSgiTokenSpaceGuid.PcdChipCount
+  gArmSgiTokenSpaceGuid.PcdDramBlock2Size
+  gArmTokenSpaceGuid.PcdSystemMemoryBase
+  gArmTokenSpaceGuid.PcdSystemMemorySize
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision
 
 [Protocols]

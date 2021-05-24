@@ -104,6 +104,24 @@ InstallType7CacheInformation (
   IN     EFI_SMBIOS_PROTOCOL    *Smbios
   );
 
+/**
+  Install SMBIOS physical memory array table.
+
+  Install the SMBIOS physical memory array (type 16) table for Arm's Reference
+  Design platforms.
+
+  @param[in] Smbios   SMBIOS protocol.
+
+  @retval EFI_SUCCESS           Record was added.
+  @retval EFI_OUT_OF_RESOURCES  Record was not added.
+  @retval EFI_ALREADY_STARTED   The SmbiosHandle passed is already in use.
+**/
+EFI_STATUS
+EFIAPI
+InstallType16PhysicalMemoryArray (
+  IN     EFI_SMBIOS_PROTOCOL    *Smbios
+  );
+
 typedef enum {
   SMBIOS_HANDLE_ENCLOSURE = 0x1000,
   SMBIOS_HANDLE_CLUSTER1,
@@ -112,6 +130,7 @@ typedef enum {
   SMBIOS_HANDLE_L2_CACHE,
   SMBIOS_HANDLE_L3_CACHE,
   SMBIOS_HANDLE_L4_CACHE,
+  SMBIOS_HANDLE_PHYSICAL_MEMORY,
 } SMBIOS_REFRENCE_HANDLES;
 
 #endif // SMBIOS_PLATFORM_DXE_H_
