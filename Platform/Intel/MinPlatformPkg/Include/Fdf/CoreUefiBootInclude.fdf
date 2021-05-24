@@ -13,10 +13,14 @@ INF  MdeModulePkg/Universal/PCD/Dxe/Pcd.inf
 INF  MdeModulePkg/Universal/ReportStatusCodeRouter/RuntimeDxe/ReportStatusCodeRouterRuntimeDxe.inf
 INF  MdeModulePkg/Universal/StatusCodeHandler/RuntimeDxe/StatusCodeHandlerRuntimeDxe.inf
 
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
 INF  UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
+!endif
 INF  MdeModulePkg/Universal/Metronome/Metronome.inf
 INF  MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
 INF  PcAtChipsetPkg/PcatRealTimeClockRuntimeDxe/PcatRealTimeClockRuntimeDxe.inf
+!endif
 INF  MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == TRUE
@@ -39,7 +43,9 @@ INF  MdeModulePkg/Universal/CapsuleRuntimeDxe/CapsuleRuntimeDxe.inf
 #INF  UefiCpuPkg/CpuDxe/CpuDxe.inf
 
 INF  MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
 INF  PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
+!endif
 
 #INF  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
 INF  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf

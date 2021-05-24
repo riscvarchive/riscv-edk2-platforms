@@ -26,10 +26,12 @@
   UefiCpuPkg/CpuIo2Dxe/CpuIo2Dxe.inf
   MdeModulePkg/Universal/Metronome/Metronome.inf
   MdeModulePkg/Universal/WatchdogTimerDxe/WatchdogTimer.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   PcAtChipsetPkg/PcatRealTimeClockRuntimeDxe/PcatRealTimeClockRuntimeDxe.inf
+!endif
   MdeModulePkg/Core/RuntimeDxe/RuntimeDxe.inf
 
-!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE AND gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteSmm.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmmRuntimeDxe.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableSmm.inf {
@@ -75,7 +77,9 @@
   #UefiCpuPkg/CpuDxe/CpuDxe.inf
 
   MdeModulePkg/Universal/ResetSystemRuntimeDxe/ResetSystemRuntimeDxe.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
+!endif
 
   #MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
   MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
@@ -122,7 +126,7 @@
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
 
-!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE AND gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   MdeModulePkg/Core/PiSmmCore/PiSmmIpl.inf
   MdeModulePkg/Core/PiSmmCore/PiSmmCore.inf
 
@@ -138,7 +142,9 @@
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableDxe/FirmwarePerformanceDxe.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   MdeModulePkg/Universal/Acpi/FirmwarePerformanceDataTableSmm/FirmwarePerformanceSmm.inf
+!endif
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 !endif
 
@@ -154,7 +160,9 @@
       NULL|SecurityPkg/Library/Tpm2DeviceLibDTpm/Tpm2InstanceLibDTpm.inf
       NULL|SecurityPkg/Library/HashInstanceLibSha256/HashInstanceLibSha256.inf
   }
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   SecurityPkg/Tcg/Tcg2Smm/Tcg2Smm.inf
+!endif
   SecurityPkg/Tcg/Tcg2Acpi/Tcg2Acpi.inf
   SecurityPkg/Tcg/Tcg2Config/Tcg2ConfigDxe.inf
 !endif

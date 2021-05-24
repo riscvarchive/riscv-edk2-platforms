@@ -24,18 +24,24 @@
 
   HstiLib|MdePkg/Library/DxeHstiLib/DxeHstiLib.inf
 
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   LockBoxLib|MdeModulePkg/Library/SmmLockBoxLib/SmmLockBoxDxeLib.inf
+!endif
 
   CpuExceptionHandlerLib|UefiCpuPkg/Library/CpuExceptionHandlerLib/DxeCpuExceptionHandlerLib.inf
 
   MpInitLib|UefiCpuPkg/Library/MpInitLib/DxeMpInitLib.inf
   FrameBufferBltLib|MdeModulePkg/Library/FrameBufferBltLib/FrameBufferBltLib.inf
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   TimerLib|PcAtChipsetPkg/Library/AcpiTimerLib/DxeAcpiTimerLib.inf
+!endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   PerformanceLib|MdeModulePkg/Library/DxePerformanceLib/DxePerformanceLib.inf
 !endif
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
   TimerLib|PcAtChipsetPkg/Library/AcpiTimerLib/DxeAcpiTimerLib.inf
+!endif
   TpmMeasurementLib|SecurityPkg/Library/DxeTpmMeasurementLib/DxeTpmMeasurementLib.inf
 
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/BaseCryptLib.inf
@@ -72,6 +78,7 @@
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
 #  PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
 
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
 [LibraryClasses.common.DXE_SMM_DRIVER]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   SmmServicesTableLib|MdePkg/Library/SmmServicesTableLib/SmmServicesTableLib.inf
@@ -95,7 +102,9 @@
   BaseCryptLib|CryptoPkg/Library/BaseCryptLib/SmmCryptLib.inf
   VariableReadLib|MinPlatformPkg/Library/SmmVariableReadLib/TraditionalMmVariableReadLib.inf
   VariableWriteLib|MinPlatformPkg/Library/SmmVariableWriteLib/TraditionalMmVariableWriteLib.inf
+!endif
 
+!if gMinPlatformPkgTokenSpaceGuid.PcdIsX86 == TRUE
 [LibraryClasses.common.SMM_CORE]
   PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   HobLib|MdePkg/Library/DxeHobLib/DxeHobLib.inf
@@ -111,6 +120,8 @@
 
 !if $(TARGET) == DEBUG
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+!endif
+
 !endif
 
 [LibraryClasses.common.DXE_RUNTIME_DRIVER]

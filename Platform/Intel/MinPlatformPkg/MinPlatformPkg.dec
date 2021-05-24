@@ -338,3 +338,4 @@
   gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|FALSE|BOOLEAN|0xF00000A6
   gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable      |FALSE|BOOLEAN|0xF00000A7
   gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable   |FALSE|BOOLEAN|0xF00000B0
+  gMinPlatformPkgTokenSpaceGuid.PcdIsX86                  |TRUE |BOOLEAN|0xF00000B1
