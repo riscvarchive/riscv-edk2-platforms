@@ -8,7 +8,8 @@
 ##
 
 #INF  UefiCpuPkg/SecCore/SecCore.inf
-#INF  MdeModulePkg/Core/Pei/PeiMain.inf
+# Why was this commented out?
+INF  MdeModulePkg/Core/Pei/PeiMain.inf
 
 INF  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
 INF  MdeModulePkg/Universal/ReportStatusCodeRouter/Pei/ReportStatusCodeRouterPei.inf
