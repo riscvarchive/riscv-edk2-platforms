@@ -68,4 +68,34 @@ typedef struct {
   UINTN  MultiChipMode;
 } SGI_PLATFORM_DESCRIPTOR;
 
+// Arm SGI/RD Product IDs
+typedef enum {
+  UnknownId = 0,
+  Sgi575,
+  RdN1Edge,
+  RdN1EdgeX2,
+  RdE1Edge,
+  RdV1,
+  RdV1Mc,
+  RdN2
+} ARM_RD_PRODUCT_ID;
+
+// Arm ProductId look-up table
+typedef struct {
+  UINTN  ProductId;
+  UINTN  PlatformId;
+  UINTN  ConfigId;
+  UINTN  MultiChipMode;
+} SGI_PRODUCT_ID_LOOKUP;
+
+/**
+  Derermine the product ID.
+
+  Determine the product ID by using the data in the Platform ID Descriptor HOB
+  to lookup for a matching product ID.
+
+  @retval Zero           Failed identify platform.
+  @retval Others         ARM_RD_PRODUCT_ID of the identified platform.
+**/
+UINT8 SgiGetProductId (VOID);
 #endif // __SGI_PLATFORM_H__
