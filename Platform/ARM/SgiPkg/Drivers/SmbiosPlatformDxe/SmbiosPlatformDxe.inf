@@ -21,6 +21,7 @@
   Type4ProcessorInformation.c
   Type7CacheInformation.c
   Type16PhysicalMemoryArray.c
+  Type17MemoryDevice.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
