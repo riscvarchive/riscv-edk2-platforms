@@ -14,6 +14,8 @@
   MdeModulePkg/Core/Dxe/DxeMain.inf {
     <LibraryClasses>
       NULL|MdeModulePkg/Library/LzmaCustomDecompressLib/LzmaCustomDecompressLib.inf
+      # /edk2-platform-riscv/Platform/Qemu/RiscvVirt/RiscvVirt.dsc(...): error 1001: Module type [DXE_CORE] is not supported by library instance [/edk2/MdePkg/Library/UefiDevicePathLibDevicePathProtocol/UefiDevicePathLibDevicePathProtocol.inf]
+      DevicePathLib|MdePkg/Library/UefiDevicePathLib/UefiDevicePathLib.inf
   }
   MdeModulePkg/Universal/PCD/Dxe/Pcd.inf {
     <LibraryClasses>
@@ -105,7 +107,9 @@
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
 
-  MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
+  # ASSERT_EFI_ERROR (Status = Not Found)
+  # ASSERT [DevicePathDxe] /edk2/MdePkg/Library/UefiDevicePathLibDevicePathProtocol/UefiDevicePathLib.c(67): !EFI_ERROR (Status)
+  # MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
 
   MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
 
