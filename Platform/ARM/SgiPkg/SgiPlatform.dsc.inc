@@ -56,6 +56,7 @@
   HobLib|MdePkg/Library/DxeCoreHobLib/DxeCoreHobLib.inf
   MemoryAllocationLib|MdeModulePkg/Library/DxeCoreMemoryAllocationLib/DxeCoreMemoryAllocationLib.inf
   PcdLib|MdePkg/Library/BasePcdLibNull/BasePcdLibNull.inf
+  PrintLib|MdePkg/Library/BasePrintLib/BasePrintLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
   FdtLib|EmbeddedPkg/Library/FdtLib/FdtLib.inf

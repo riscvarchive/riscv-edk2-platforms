@@ -18,6 +18,7 @@
   Type0BiosInformation.c
   Type1SystemInformation.c
   Type3SystemEnclosure.c
+  Type4ProcessorInformation.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -27,9 +28,11 @@
   Platform/ARM/SgiPkg/SgiPlatform.dec
 
 [LibraryClasses]
+  ArmLib
   ArmPlatformLib
   DebugLib
   HobLib
+  PrintLib
   UefiDriverEntryPoint
 
 [Guids]
@@ -37,6 +40,9 @@
   gArmSgiPlatformIdDescriptorGuid
 
 [FixedPcd]
+  gArmPlatformTokenSpaceGuid.PcdClusterCount
+  gArmPlatformTokenSpaceGuid.PcdCoreCount
+  gArmSgiTokenSpaceGuid.PcdChipCount
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareRevision
 
 [Protocols]
