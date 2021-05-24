@@ -38,3 +38,18 @@
 [PcdsFixedAtBuild]
   ## PL011 - Serial Terminal
   gEfiMdeModulePkgTokenSpaceGuid.PcdSerialRegisterBase|0x0EF80000
+
+!if $(SECURE_STORAGE_ENABLE) == TRUE
+  ##Secure NOR Flash 2
+  gArmSgiTokenSpaceGuid.PcdSmcCs2Base|0x1054000000
+  gArmSgiTokenSpaceGuid.PcdSysPeriphBase|0x0C000000
+  gArmSgiTokenSpaceGuid.PcdSysPeriphSysRegBase|0x0C010000
+
+  ##Secure Variable Storage in NOR Flash 2
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64|0x1054000000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize|0x00100000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase64|0x1054100000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize|0x00100000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase64|0x1054200000
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize|0x00100000
+!endif
