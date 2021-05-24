@@ -1,6 +1,6 @@
 /** @file
 *
-*  Copyright (c) 2018-2020, ARM Limited. All rights reserved.
+*  Copyright (c) 2018-2021, ARM Limited. All rights reserved.
 *
 *  SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -38,6 +38,10 @@
 #define RD_V1_PART_NUM                            0x78A
 #define RD_V1_CONF_ID                             0x1
 #define RD_V1_MC_CONF_ID                          0x2
+
+// RD-N2 Platform Identification values
+#define RD_N2_PART_NUM                            0x7B7
+#define RD_N2_CONF_ID                             0x1
 
 #define SGI_CONFIG_MASK                           0x0F
 #define SGI_CONFIG_SHIFT                          0x1C
