@@ -22,6 +22,7 @@
   Type7CacheInformation.c
   Type16PhysicalMemoryArray.c
   Type17MemoryDevice.c
+  Type19MemoryArrayMappedAddress.c
 
 [Packages]
   ArmPkg/ArmPkg.dec

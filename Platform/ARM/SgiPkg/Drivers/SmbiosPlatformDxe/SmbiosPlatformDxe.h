@@ -140,6 +140,24 @@ InstallType17MemoryDevice (
   IN     EFI_SMBIOS_PROTOCOL    *Smbios
   );
 
+/**
+  Install SMBIOS memory array mapped address table
+
+  Install the SMBIOS memory array mapped address (type 19) table for RD
+  platforms.
+
+  @param[in] Smbios   SMBIOS protocol.
+
+  @retval EFI_SUCCESS           Record was added.
+  @retval EFI_OUT_OF_RESOURCES  Record was not added.
+  @retval EFI_ALREADY_STARTED   The SmbiosHandle passed is already in use.
+**/
+EFI_STATUS
+EFIAPI
+InstallType19MemoryArrayMappedAddress (
+  IN     EFI_SMBIOS_PROTOCOL    *Smbios
+  );
+
 typedef enum {
   SMBIOS_HANDLE_ENCLOSURE = 0x1000,
   SMBIOS_HANDLE_CLUSTER1,
