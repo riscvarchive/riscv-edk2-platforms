@@ -28,6 +28,7 @@ STATIC CONST
 ARM_RD_SMBIOS_TABLE_INSTALL_FPTR mSmbiosTableList[] = {
   &InstallType0BiosInformation,
   &InstallType1SystemInformation,
+  &InstallType3SystemEnclosure,
 };
 
 /**

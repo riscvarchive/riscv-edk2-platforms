@@ -48,4 +48,26 @@ InstallType1SystemInformation (
   IN     EFI_SMBIOS_PROTOCOL    *Smbios
   );
 
+/**
+  Install SMBIOS System Enclosure Table
+
+  Install the SMBIOS System Enclosure (type 3) table for Arm's Reference Design
+  platforms.
+
+  @param[in]  Smbios   SMBIOS protocol.
+
+  @retval EFI_SUCCESS           Record was added.
+  @retval EFI_OUT_OF_RESOURCES  Record was not added.
+  @retval EFI_ALREADY_STARTED   The SmbiosHandle passed is already in use.
+**/
+EFI_STATUS
+EFIAPI
+InstallType3SystemEnclosure (
+  IN     EFI_SMBIOS_PROTOCOL    *Smbios
+  );
+
+typedef enum {
+  SMBIOS_HANDLE_ENCLOSURE = 0x1000,
+} SMBIOS_REFRENCE_HANDLES;
+
 #endif // SMBIOS_PLATFORM_DXE_H_

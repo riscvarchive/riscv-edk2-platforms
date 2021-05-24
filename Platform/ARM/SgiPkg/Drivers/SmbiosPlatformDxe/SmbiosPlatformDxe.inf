@@ -17,6 +17,7 @@
   SmbiosPlatformDxe.c
   Type0BiosInformation.c
   Type1SystemInformation.c
+  Type3SystemEnclosure.c
 
 [Packages]
   ArmPkg/ArmPkg.dec
