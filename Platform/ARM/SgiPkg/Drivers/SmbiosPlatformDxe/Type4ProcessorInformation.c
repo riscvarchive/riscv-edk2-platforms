@@ -27,7 +27,7 @@
 #define SOCKET_TYPE_BASE        3
 #define SOCKET_TYPE_NUM         1
 #define PROCESSOR_VERSION_BASE  (SOCKET_TYPE_BASE + SOCKET_TYPE_NUM)
-#define PROCESSOR_VERSION_NUM   8
+#define PROCESSOR_VERSION_NUM   9
 #define SERIAL_NUMBER_BASE      (PROCESSOR_VERSION_BASE + PROCESSOR_VERSION_NUM)
 #define TYPE4_STRINGS                                   \
   "0x000\0"                     /* Part Number */       \
@@ -41,6 +41,7 @@
   "Neoverse-V1\0"                                       \
   "Neoverse-V1\0"                                       \
   "Neoverse-N2\0"                                       \
+  "Neoverse-N2\0"                                       \
   "000-0\0"                     /* Serial number */     \
   "783-3\0"                                             \
   "786-1\0"                                             \
@@ -48,7 +49,8 @@
   "786-2\0"                                             \
   "78A-1\0"                                             \
   "78A-2\0"                                             \
-  "7B7-1\0"
+  "7B7-1\0"                                             \
+  "7B6-1\0"
 
 typedef enum {
   PartNumber = 1,
@@ -173,6 +175,7 @@ InstallType4ProcessorInformation (
     mArmRdSmbiosType4.Base.ThreadCount = CoreCount;
     break;
   case RdN2:
+  case RdN2Cfg1:
     mArmRdSmbiosType4.Base.CoreCount = CoreCount;
     mArmRdSmbiosType4.Base.EnabledCoreCount = CoreCount;
     mArmRdSmbiosType4.Base.ThreadCount = CoreCount;
