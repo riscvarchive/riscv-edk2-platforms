@@ -22,6 +22,7 @@
   Mcfg.aslc
   RdN2Cfg1/Dsdt.asl
   RdN2Cfg1/Madt.aslc
+  RdN2Cfg1/Pptt.aslc
   Spcr.aslc
   Ssdt.asl
   SsdtRos.asl
