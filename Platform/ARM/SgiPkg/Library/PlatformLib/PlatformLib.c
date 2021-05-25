@@ -66,7 +66,13 @@ STATIC CONST SGI_PRODUCT_ID_LOOKUP SgiProductIdLookup[] = {
     RD_N2_PART_NUM,
     RD_N2_CONF_ID,
     0
-  }
+  },
+  {
+    RdN2Cfg1,
+    RD_N2_CFG1_PART_NUM,
+    RD_N2_CFG1_CONF_ID,
+    0
+  },
 };
 
 EFI_BOOT_MODE

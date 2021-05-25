@@ -39,6 +39,10 @@
 #define RD_V1_CONF_ID                             0x1
 #define RD_V1_MC_CONF_ID                          0x2
 
+// RD-N2-Cfg1 Platform Identification values
+#define RD_N2_CFG1_PART_NUM                       0x7B6
+#define RD_N2_CFG1_CONF_ID                        0x1
+
 // RD-N2 Platform Identification values
 #define RD_N2_PART_NUM                            0x7B7
 #define RD_N2_CONF_ID                             0x1
@@ -77,7 +81,8 @@ typedef enum {
   RdE1Edge,
   RdV1,
   RdV1Mc,
-  RdN2
+  RdN2,
+  RdN2Cfg1
 } ARM_RD_PRODUCT_ID;
 
 // Arm ProductId look-up table
