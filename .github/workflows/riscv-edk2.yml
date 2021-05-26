@@ -24,13 +24,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-7f6b250c76efdc3b048bf392ceb62ad2efb5c313
+          key: edk2-commit-b480ef53e8a3bc16e07805a6c8aca4f59276723b
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
           repository: riscv/riscv-edk2
-          ref: 7f6b250c76efdc3b048bf392ceb62ad2efb5c313 # branch riscv-to-upstream
+          ref: b480ef53e8a3bc16e07805a6c8aca4f59276723b # branch riscv-to-upstream
           submodules: true
           path: edk2
 
@@ -73,13 +73,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-7f6b250c76efdc3b048bf392ceb62ad2efb5c313
+          key: edk2-commit-b480ef53e8a3bc16e07805a6c8aca4f59276723b
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
           repository: riscv/riscv-edk2
-          ref: 7f6b250c76efdc3b048bf392ceb62ad2efb5c313 # branch riscv-to-upstream
+          ref: b480ef53e8a3bc16e07805a6c8aca4f59276723b # branch riscv-to-upstream
           submodules: true
           path: edk2
 
@@ -127,13 +127,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-7f6b250c76efdc3b048bf392ceb62ad2efb5c313
+          key: edk2-commit-b480ef53e8a3bc16e07805a6c8aca4f59276723b
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
           repository: riscv/riscv-edk2
-          ref: 7f6b250c76efdc3b048bf392ceb62ad2efb5c313 # branch riscv-to-upstream
+          ref: b480ef53e8a3bc16e07805a6c8aca4f59276723b # branch riscv-to-upstream
           submodules: true
           path: edk2
 
@@ -176,13 +176,13 @@ jobs:
         with:
           path: |
             edk2
-          key: edk2-commit-7f6b250c76efdc3b048bf392ceb62ad2efb5c313
+          key: edk2-commit-b480ef53e8a3bc16e07805a6c8aca4f59276723b
 
       - uses: actions/checkout@v2
         if: steps.cache-edk2.outputs.cache-hit != 'true'
         with:
           repository: riscv/riscv-edk2
-          ref: 7f6b250c76efdc3b048bf392ceb62ad2efb5c313 # branch riscv-to-upstream
+          ref: b480ef53e8a3bc16e07805a6c8aca4f59276723b # branch riscv-to-upstream
           submodules: true
           path: edk2
 
