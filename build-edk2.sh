@@ -1,5 +1,5 @@
 #!/bin/bash
-export GCC5_RISCV64_PREFIX=/riscv-gnu-toolchain-binaries/bin/riscv64-unknown-elf-
+export GCC5_RISCV64_PREFIX=riscv64-linux-gnu-
 export PACKAGES_PATH=/edk2:/edk2-platforms:/edk2-platforms/Platform/Intel
 export EDK_TOOLS_PATH=/edk2/BaseTools
 
