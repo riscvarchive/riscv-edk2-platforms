@@ -8,10 +8,8 @@ can be found here:
 
 ##Requirements
 - A 32-bit or 64-bit Linux host machine.
-- Visual Studio is not officially supported, experimental support can be found here:
-[https://git.linaro.org/people/leif.lindholm/edk2.git/log/?h=aarch64-vs]
 
-# Build EDK2 Tianocore
+# Build EDK2 TianoCore
 
 `build -a AARCH64 -p Platform/ARM/VExpressPkg/ArmVExpress-FVP-AArch64.dsc -t GCC5`
 
@@ -26,7 +24,7 @@ prebuilt edk2 image.
 
 We will also rely on the "run_model" script that comes with the prebuilts, it
 is entirely possible to run the model without this but would require quite a bit
-of knowledge regarding the areguments ARM fastmodel (documentation can be found here:
+of knowledge regarding the arguments of the ARM fastmodel (documentation can be found here:
 [https://developer.arm.com/docs/100966/1101/programming-reference-for-base-fvps/base-platform-revc-features])
 however the manual set of the FVP is outside the scope of this document. If you are interested
 please consult the documentation.
@@ -40,16 +38,18 @@ the binaries in the same directory.
 	- Select Armv8-A Base Platform FVP based on Fast Models 11.4
 	- It has a click through license but is free.
 
-2. Download the 18.10 Linaro ARM Landing Team release for FVP booting UEFI
-https://releases.linaro.org/members/arm/platforms/18.10/fvp-uefi.zip
+2. Download the 20.01 Linaro ARM Landing Team release for FVP booting UEFI
+https://releases.linaro.org/members/arm/platforms/20.01/fvp-uefi.zip
 
-3. Download the prebuilt fiptool from https://git.linaro.org/landing-teams/working/arm/prebuilt_tools.git
+3. Clone the trusted firmware repo from https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git
 
-4. Update the fip.bin image from fvp-uefi.zip by running the following command:
+4. Build fiptool: `make -C trusted-firmware-a/tools/fiptool`
 
-	`fiptool update --nt-fw=[path to binary built above] fip.bin`
+5. Update the fip.bin image from fvp-uefi.zip by running the following command:
 
-5. Execute the FVP run_model.sh script from fvp-uefi.zip and provide a path to the FVP binaries
+    `./trusted-firmware-a/tools/fiptool/fiptool update --nt-fw=[path to binary built above] fip.bin`
+
+6. Execute the FVP run_model.sh script from fvp-uefi.zip and provide a path to the FVP binaries
 downloaded in step 1):
 
 	`MODEL=[path to FVP binary] ./run_model.sh`
