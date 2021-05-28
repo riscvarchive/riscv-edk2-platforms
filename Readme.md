@@ -61,9 +61,8 @@ RISCV64             | riscv64-unknown-elf-
 \* i386, i486, i586 or i686
 
 ### GCC
-Linaro provides GCC toolchains for
-[aarch64-linux-gnu](https://releases.linaro.org/components/toolchain/binaries/latest/aarch64-linux-gnu/)
-and [arm-linux-gnueabihf](https://releases.linaro.org/components/toolchain/binaries/latest/arm-linux-gnueabihf/)
+Arm provides GCC toolchains for aarch64-linux-gnu and arm-linux-gnueabihf at
+[GNU Toolchain for the A-profile Architecture](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-a/downloads)
 compiled to run on x86_64/i686 Linux and i686 Windows. Some Linux distributions
 provide their own packaged cross-toolchains.
 
