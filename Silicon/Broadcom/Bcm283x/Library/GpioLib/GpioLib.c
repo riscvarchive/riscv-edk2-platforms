@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 2020, Pete Batard <pete@akeo.ie>
  *  Copyright (c) 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
+ *  Copyright (c) 2021, ARM Limited. All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -85,9 +86,9 @@ GpioPinFuncGet (
 }
 
 VOID
-GpioPinSet (
-  IN  UINTN Pin,
-  IN  UINTN Val
+GpioPinConfigure (
+  IN  UINTN   Pin,
+  IN  BOOLEAN Config
   )
 {
   EFI_PHYSICAL_ADDRESS Reg;
@@ -102,7 +103,7 @@ GpioPinSet (
   //
   // Different base addresses are used for clear and set
   //
-  Reg = (Val == 0) ? GPIO_GPCLR0 : GPIO_GPSET0;
+  Reg = (Config == CLEAR_GPIO) ? GPIO_GPCLR0 : GPIO_GPSET0;
   Reg += RegIndex * sizeof (UINT32);
   MmioWrite32 (Reg, 1 << SelIndex);
 }
