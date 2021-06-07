@@ -568,6 +568,14 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase|0
 
+  #
+  # UART in use
+  # This value will be synchronized with the setting in config.txt
+  # 0  - PL011_UART_IN_USE
+  # 1  - MINI_UART_IN_USE
+  #
+  gRaspberryPiTokenSpaceGuid.PcdUartInUse|0
+
 ################################################################################
 #
 # Components Section - list of all EDK II Modules needed by this Platform

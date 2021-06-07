@@ -12,6 +12,10 @@
 #include <IndustryStandard/Bcm2836.h>
 #include <IndustryStandard/Bcm2836Gpio.h>
 #include <IndustryStandard/RpiMbox.h>
+#include <IndustryStandard/SerialPortConsoleRedirectionTable.h>
+#include <IndustryStandard/RpiDebugPort2Table.h>
+#include <UartSelection.h>
+
 #include <Library/AcpiLib.h>
 #include <Library/DebugLib.h>
 #include <Library/DevicePathLib.h>
@@ -23,6 +27,7 @@
 #include <Library/NetLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 #include <Library/UefiRuntimeServicesTableLib.h>
+#include <Library/PcdLib.h>
 #include <Protocol/AcpiTable.h>
 #include <Protocol/BcmGenetPlatformDevice.h>
 #include <Protocol/RpiFirmware.h>
@@ -743,6 +748,11 @@ STATIC CONST AML_NAME_OP_REPLACE SsdtEmmcNameOpReplace[] = {
   { }
 };
 
+STATIC CONST AML_NAME_OP_REPLACE DsdtNameOpReplace[] = {
+  { "URIU", PcdToken (PcdUartInUse) },
+  { }
+};
+
 STATIC CONST NAMESPACE_TABLES SdtTables[] = {
   {
     SIGNATURE_64 ('R', 'P', 'I', 'T', 'H', 'F', 'A', 'N'),
@@ -756,11 +766,11 @@ STATIC CONST NAMESPACE_TABLES SdtTables[] = {
     PcdToken(PcdSdIsArasan),
     SsdtEmmcNameOpReplace
   },
-  {
+  { // DSDT
     SIGNATURE_64 ('R', 'P', 'I', 0, 0, 0, 0, 0),
     0,
     0,
-    NULL
+    DsdtNameOpReplace
   },
   { }
 };
@@ -779,6 +789,9 @@ HandleDynamicNamespace (
 {
   UINTN Tables;
 
+  EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE *SpcrTable;
+  DBG2_TABLE                                     *Dbg2Table;
+
   switch (AcpiHeader->Signature) {
   case SIGNATURE_32 ('D', 'S', 'D', 'T'):
   case SIGNATURE_32 ('S', 'S', 'D', 'T'):
@@ -788,14 +801,37 @@ HandleDynamicNamespace (
       }
     }
     DEBUG ((DEBUG_ERROR, "Found namespace table not in table list.\n"));
-
     return FALSE;
+
   case SIGNATURE_32 ('I', 'O', 'R', 'T'):
     // only enable the IORT on machines with >3G and no limit
     // to avoid problems with rhel/centos and other older OSs
     if (PcdGet32 (PcdRamLimitTo3GB) || !PcdGet32 (PcdRamMoreThan3GB)) {
       return FALSE;
     }
+    return TRUE;
+
+  case SIGNATURE_32 ('S', 'P', 'C', 'R'):
+    SpcrTable = (EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE *)AcpiHeader;
+    if ((PcdGet32 (PcdUartInUse) == PL011_UART_IN_USE) &&
+        (SpcrTable->InterfaceType == EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERFACE_TYPE_ARM_PL011_UART)) {
+      return TRUE;
+    } else if ((PcdGet32 (PcdUartInUse) == MINI_UART_IN_USE) &&
+               (SpcrTable->InterfaceType == EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERFACE_TYPE_BCM2835_UART)) {
+      return TRUE;
+    }
+    return FALSE;
+
+  case SIGNATURE_32 ('D', 'B', 'G', '2'):
+    Dbg2Table = (DBG2_TABLE *)AcpiHeader;
+    if ((PcdGet32 (PcdUartInUse) == PL011_UART_IN_USE) &&
+        (Dbg2Table->Dbg2DeviceInfo[0].Dbg2Device.PortSubtype == EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_ARM_PL011_UART)) {
+      return TRUE;
+    } else if ((PcdGet32 (PcdUartInUse) == MINI_UART_IN_USE) &&
+               (Dbg2Table->Dbg2DeviceInfo[0].Dbg2Device.PortSubtype == EFI_ACPI_DBG2_PORT_SUBTYPE_SERIAL_BCM2835_UART)) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   return TRUE;
@@ -811,6 +847,12 @@ ConfigInitialize (
 {
   EFI_STATUS                      Status;
   EFI_EVENT                       EndOfDxeEvent;
+
+  if ((MmioRead32(GPIO_GPFSEL1) & GPFSEL1_UART_MASK) == PL011_UART_IN_USE_REG_VALUE) {
+    PcdSet32S (PcdUartInUse, PL011_UART_IN_USE);
+  } else if ((MmioRead32(GPIO_GPFSEL1) & GPFSEL1_UART_MASK) == MINI_UART_IN_USE_REG_VALUE) {
+    PcdSet32S (PcdUartInUse, MINI_UART_IN_USE);
+  }
 
   Status = gBS->LocateProtocol (&gRaspberryPiFirmwareProtocolGuid,
                   NULL, (VOID**)&mFwProtocol);

@@ -2,7 +2,7 @@
 #
 #  ACPI table data and ASL sources required to boot the platform.
 #
-#  Copyright (c) 2019, ARM Limited. All rights reserved.
+#  Copyright (c) 2019-2021, ARM Limited. All rights reserved.
 #  Copyright (c) 2017, Andrey Warkentin <andrey.warkentin@gmail.com>
 #  Copyright (c) Microsoft Corporation. All rights reserved.
 #
@@ -28,12 +28,14 @@
   Emmc.asl
   Madt.aslc
   Fadt.aslc
-  Dbg2.aslc
+  Dbg2MiniUart.aslc
+  Dbg2Pl011.aslc
   Gtdt.aslc
   Iort.aslc
   Dsdt.asl
   Csrt.aslc
-  Spcr.aslc
+  SpcrMiniUart.aslc
+  SpcrPl011.aslc
   Pptt.aslc
   SsdtThermal.asl
 

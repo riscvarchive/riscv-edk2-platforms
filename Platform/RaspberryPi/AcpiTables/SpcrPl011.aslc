@@ -2,7 +2,7 @@
 * SPCR Table
 *
 * Copyright (c) 2019 Pete Batard <pete@akeo.ie>
-* Copyright (c) 2014-2016, ARM Limited. All rights reserved.
+* Copyright (c) 2014-2021, ARM Limited. All rights reserved.
 *
 * SPDX-License-Identifier: BSD-2-Clause-Patent
 *
@@ -18,16 +18,10 @@
 
 #define RPI_UART_FLOW_CONTROL_NONE           0
 
-// Prefer PL011 serial output on the Raspberry Pi 4
-#if (RPI_MODEL == 4)
 #define RPI_UART_INTERFACE_TYPE              EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERFACE_TYPE_ARM_PL011_UART
 #define RPI_UART_BASE_ADDRESS                BCM2836_PL011_UART_BASE_ADDRESS
 #define RPI_UART_INTERRUPT                   BCM2836_PL011_UART_INTERRUPT
-#else
-#define RPI_UART_INTERFACE_TYPE              EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_INTERFACE_TYPE_BCM2835_UART
-#define RPI_UART_BASE_ADDRESS                BCM2836_MINI_UART_BASE_ADDRESS
-#define RPI_UART_INTERRUPT                   BCM2836_MINI_UART_INTERRUPT
-#endif
+
 STATIC EFI_ACPI_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE Spcr = {
   ACPI_HEADER (
     EFI_ACPI_6_3_SERIAL_PORT_CONSOLE_REDIRECTION_TABLE_SIGNATURE,
