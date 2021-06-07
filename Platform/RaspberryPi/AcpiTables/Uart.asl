@@ -71,14 +71,6 @@ Device (URTM)
     MEMORY32FIXED (ReadWrite, 0, BCM2836_MINI_UART_LENGTH, RMEM)
     Interrupt(ResourceConsumer, Level, ActiveHigh, Shared) { BCM2836_MINI_UART_INTERRUPT }
 
-    // NTRAID#MSFT-7141401-2016/04/7-jordanrh - disable UART muxing
-    // until a proper solution can be created for the dmap conflict.
-    // When muxing is enabled, must consider DBG2 table conflict.
-    // The alternate function resource needs to be reserved when
-    // the kernel debugger is enabled to prevent another client
-    // from muxing the pins away.
-
-    // PinFunction (Exclusive, PullDown, BCM_ALT5, "\\_SB.GPI0", 0, ResourceConsumer, , ) { 14, 15 }
   })
   Method (_CRS, 0x0, Serialized)
   {
@@ -143,10 +135,6 @@ Device(BTH0)
       UAR0,          // DescriptorName: creates name
                     //   for offset of resource descriptor
     )                // Vendor data
-    //
-    // RPIQ connection for BT_ON/OFF
-    //
-    GpioIO (Shared, PullUp, 0, 0, IoRestrictionNone, "\\_SB.GDV0.RPIQ", 0, ResourceConsumer, , ) { 128 }
   })
 
   //
@@ -190,10 +178,6 @@ Device(BTH0)
       UARM,          // DescriptorName: creates name
                     //   for offset of resource descriptor
     )                // Vendor data
-    //
-    // RPIQ connection for BT_ON/OFF
-    //
-    GpioIO (Shared, PullUp, 0, 0, IoRestrictionNone, "\\_SB.GDV0.RPIQ", 0, ResourceConsumer, , ) { 128 }
   })
 
   Method (_CRS, 0x0, Serialized)

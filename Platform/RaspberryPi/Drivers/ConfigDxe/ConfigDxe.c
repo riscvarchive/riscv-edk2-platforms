@@ -618,6 +618,28 @@ ApplyVariables (
     DEBUG ((DEBUG_INFO, "Fan enabled on GPIO %d\n", FanOnGpio));
     GpioPinFuncSet (FanOnGpio, GPIO_FSEL_OUTPUT);
   }
+
+  //
+  // Fake the CTS signal as we don't support HW flow control yet.
+  // Pin 31 must be held LOW so that we can talk to the BT chip
+  // without flow control
+  //
+  GpioPinFuncSet (31, GPIO_FSEL_OUTPUT);
+  GpioPinConfigure (31, CLEAR_GPIO);
+
+  //
+  // Bluetooth pin muxing
+  //
+  if ((PcdGet32 (PcdUartInUse) == PL011_UART_IN_USE)) {
+    DEBUG ((DEBUG_INFO, "Enable Bluetooth over MiniUART\n"));
+    GpioPinFuncSet (32, GPIO_FSEL_ALT5);
+    GpioPinFuncSet (33, GPIO_FSEL_ALT5);
+  } else {
+    DEBUG ((DEBUG_INFO, "Enable Bluetooth over PL011 UART\n"));
+    GpioPinFuncSet (32, GPIO_FSEL_ALT3);
+    GpioPinFuncSet (33, GPIO_FSEL_ALT3);
+  }
+
 }
 
 
