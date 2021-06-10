@@ -1,7 +1,7 @@
 /** @file
   PCH SMBUS library implementation built upon I/O library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017-2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -201,14 +201,24 @@ InternalSmBusNonBlock (
     HostControl      |= B_PCH_SMBUS_PEC_EN;
   }
   //
-  // Set Host Commond Register.
+  // We do not need Data Register for SendByte Command
   //
-  IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HCMD, (UINT8) SMBUS_LIB_COMMAND (SmBusAddress));
-  //
-  // Write value to Host Data 0 and Host Data 1 Registers.
-  //
-  IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HD0, (UINT8) Value);
-  IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HD1, (UINT8) (Value >> 8));
+  if ((HostControl == V_PCH_SMBUS_SMB_CMD_BYTE) && ((SmBusAddress & BIT0) == B_PCH_SMBUS_WRITE)) {
+    //
+    // Set Host Command Register.
+    //
+    IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HCMD, (UINT8)Value);
+  } else {
+    //
+    // Set Host Command Register.
+    //
+    IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HCMD, (UINT8) SMBUS_LIB_COMMAND (SmBusAddress));
+    //
+    // Write value to Host Data 0 and Host Data 1 Registers.
+    //
+    IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HD0, (UINT8) Value);
+    IoWrite8 (IoPortBaseAddress + R_PCH_SMBUS_HD1, (UINT8) (Value >> 8));
+  }
   //
   // Set Auxiliary Control Regiester.
   //
