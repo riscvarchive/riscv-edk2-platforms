@@ -1,7 +1,7 @@
 /** @file
 Intel QNC SMBUS library implementation built upon I/O library.
 
-Copyright (c) 2013-2015 Intel Corporation.
+Copyright (c) 2013-2021, Intel Corporation.
 
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -165,15 +165,24 @@ InternalSmBusNonBlock (
   }
 
   //
-  // Set Host Commond Register.
+  // We do not need Data Register for SendByte Command
   //
-  IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HCMD, (UINT8) SMBUS_LIB_COMMAND (SmBusAddress));
-  //
-  // Write value to Host Data 0 and Host Data 1 Registers.
-  //
-  IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HD0, (UINT8) Value);
-  IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HD1, (UINT8) (Value >> 8));
-
+  if ((HostControl == V_QNC_SMBUS_HCTL_CMD_BYTE) && ((SmBusAddress & BIT0) == V_QNC_SMBUS_RW_SEL_WRITE)) {
+    //
+    // Set Host Command Register.
+    //
+    IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HCMD, (UINT8)Value);
+  } else {
+    //
+    // Set Host Command Register.
+    //
+    IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HCMD, (UINT8) SMBUS_LIB_COMMAND (SmBusAddress));
+    //
+    // Write value to Host Data 0 and Host Data 1 Registers.
+    //
+    IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HD0, (UINT8) Value);
+    IoWrite8 (IoPortBaseAddress + R_QNC_SMBUS_HD1, (UINT8) (Value >> 8));
+  }
 
   //
   // Set SMBUS slave address for the device to send/receive from.
@@ -351,7 +360,7 @@ SmBusSendByte (
 
   return (UINT8) InternalSmBusNonBlock (
                    V_QNC_SMBUS_HCTL_CMD_BYTE,
-                   SmBusAddress & V_QNC_SMBUS_RW_SEL_WRITE,
+                   SmBusAddress | V_QNC_SMBUS_RW_SEL_WRITE,
                    Value,
                    Status
                    );
