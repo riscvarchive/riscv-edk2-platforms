@@ -81,5 +81,10 @@
   gArmSgiTokenSpaceGuid.PcdGpioController0Size|0|UINT32|0x00000020
   gArmSgiTokenSpaceGuid.PcdGpioController0Interrupt|0|UINT32|0x00000021
 
+  # SP804 Dual Timer
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerBaseAddress|0|UINT32|0x00000022
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerSize|0|UINT32|0x00000023
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerInterrupt|0|UINT32|0x00000024
+
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

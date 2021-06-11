@@ -51,6 +51,11 @@
   gArmSgiTokenSpaceGuid.PcdWdogWS0Gsiv|110
   gArmSgiTokenSpaceGuid.PcdWdogWS1Gsiv|111
 
+  # SP804 dual timer
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerBaseAddress|0x0C110000
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerSize|0x00010000
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerInterrupt|486
+
   # SMMU
   gArmSgiTokenSpaceGuid.PcdSmmuBase|0x40000000
   gArmSgiTokenSpaceGuid.PcdSmmuSize|0x10000000

@@ -58,6 +58,9 @@
   gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv
   gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv
   gArmSgiTokenSpaceGuid.PcdSmmuBase
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerBaseAddress
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerSize
+  gArmSgiTokenSpaceGuid.PcdSp804DualTimerInterrupt
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
   gArmSgiTokenSpaceGuid.PcdVirtioBlkSize
   gArmSgiTokenSpaceGuid.PcdVirtioBlkInterrupt

@@ -9,12 +9,20 @@
   Interrupt is received by OSPM and that GPIO Interrupt Connection is listed in
   a GPIO controller device’s _AEI object.
 
+  Interrupt Signalled ACPI event is another method of signalling events in
+  HW-Reduced ACPI model. In this method, ACPI event is generated when an
+  interrupt is received by the OSPM which is listed in the Generic Event Device
+  (GED) _CRS object.
+
   Copyright (c) 2021, ARM Limited. All rights reserved.
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
   @par Specification Reference:
     - ACPI 6.4, Chapter 5.6.5, GPIO-signaled ACPI Events
     - Arm Base Boot Requirements 1.0, Issue F, Chapter 8.5.3, GPIO controllers
+    - ACPI 6.4, Chapter 5.6.9, Interrupt-signaled ACPI events
+    - Arm Base Boot Requirements 1.0, Issue F, Chapter 8.5.4 Generic Event
+      Devices
 **/
 
 #include "SgiAcpiHeader.h"
@@ -64,4 +72,45 @@ DefinitionBlock("SsdtEvent.aml", "SSDT", 2, "ARMLTD", "ARMSGI", EFI_ACPI_ARM_OEM
       INC0, 8
     }
   }
+
+  /* ACPI GED object Template. Arm's reference design platforms include a SP804
+     dual timer which is implemented as part of the RoS sub-system. The SP804
+     interrupt is used in GED as interrupt source. */
+  Device (\_SB.GED0) {
+    Name (_HID, "ACPI0013")
+    Name (_UID, 0)
+
+    /* Resource setting for GED */
+    Name (_CRS, ResourceTemplate () {
+      Interrupt (ResourceConsumer, Level, ActiveHigh, Exclusive) {
+        FixedPcdGet32 (PcdSp804DualTimerInterrupt)
+      }
+    })
+
+    Method (_STA, 0x0, NotSerialized) {
+      return (0xF);
+    }
+
+    /* Register map for interrupt clear register */
+    OperationRegion (
+      DTIM,
+      SystemMemory,
+      FixedPcdGet32 (PcdSp804DualTimerBaseAddress),
+      FixedPcdGet32 (PcdSp804DualTimerSize))
+    Field (DTIM, DWordAcc, NoLock, Preserve) {
+      Offset (0x0C),
+      T1IC, 32,       /* 0x0C Timer 1 Interrupt clear */
+    }
+
+    /* GED event handler */
+    Method (_EVT, 1, Serialized) {
+      switch (ToInteger (Arg0))
+      {
+        case (FixedPcdGet32 (PcdSp804DualTimerInterrupt)) {
+          Store (0x01, T1IC)
+        }
+      }
+    }
+  } /* Device (\_SB.GED0) */
+
 }
