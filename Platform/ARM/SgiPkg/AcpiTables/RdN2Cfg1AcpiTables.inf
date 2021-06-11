@@ -57,6 +57,8 @@
   gArmSgiTokenSpaceGuid.PcdGpioController0Interrupt
   gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv
   gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv
+  gArmSgiTokenSpaceGuid.PcdOscLpiEnable
+  gArmSgiTokenSpaceGuid.PcdOscCppcEnable
   gArmSgiTokenSpaceGuid.PcdSmmuBase
   gArmSgiTokenSpaceGuid.PcdSp804DualTimerBaseAddress
   gArmSgiTokenSpaceGuid.PcdSp804DualTimerSize

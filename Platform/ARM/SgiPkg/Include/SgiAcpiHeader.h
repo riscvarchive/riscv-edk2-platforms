@@ -37,6 +37,8 @@
 
 // ACPI OSC for Platform-Wide Capability
 #define OSC_CAP_CPPC_SUPPORT          (1U << 5)
+#define OSC_CAP_CPPC2_SUPPORT         (1U << 6)
+#define OSC_CAP_PLAT_COORDINATED_LPI  (1U << 7)
 #define OSC_CAP_OS_INITIATED_LPI      (1U << 8)
 
 #pragma pack(1)

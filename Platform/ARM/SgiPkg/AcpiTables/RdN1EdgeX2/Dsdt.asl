@@ -31,6 +31,14 @@ DefinitionBlock ("DsdtTable.aml", "DSDT", 2, "ARMLTD", "ARMSGI",
             And (CAP0, Not (OSC_CAP_OS_INITIATED_LPI), CAP0)
             Or (STS0, OSC_STS_CAPABILITY_MASKED, STS0)
           }
+
+          If (And (CAP0, OSC_CAP_PLAT_COORDINATED_LPI)) {
+            if (LEqual (FixedPcdGet32 (PcdOscLpiEnable), Zero)) {
+              And (CAP0, Not (OSC_CAP_PLAT_COORDINATED_LPI), CAP0)
+              Or (STS0, OSC_STS_CAPABILITY_MASKED, STS0)
+            }
+          }
+
         } Else {
           And (STS0, Not (OSC_STS_MASK), STS0)
           Or (STS0, Or (OSC_STS_FAILURE, OSC_STS_UNRECOGNIZED_REV), STS0)

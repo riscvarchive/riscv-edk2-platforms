@@ -17,6 +17,10 @@
   # To allow HDLCD display using the Graphics Output Protocol, set this to TRUE.
   DEFINE ENABLE_GOP                         = FALSE
 
+  # To enable LPI and CPPC power management functionality, set this to TRUE.
+  DEFINE LPI_EN                             = FALSE
+  DEFINE CPPC_EN                            = FALSE
+
 [BuildOptions]
   *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
 
@@ -107,6 +111,16 @@
   # DRAM Block2 Base and Size
   gArmSgiTokenSpaceGuid.PcdDramBlock2Base|0x8080000000
   gArmSgiTokenSpaceGuid.PcdDramBlock2Size|0x180000000
+
+!if $(LPI_EN) == TRUE
+  # Allow use of LPI in the response to _OSC method call
+  gArmSgiTokenSpaceGuid.PcdOscLpiEnable|1
+!endif
+
+!if $(CPPC_EN) == TRUE
+  # Allow use of CPPC in the response to _OSC method call
+  gArmSgiTokenSpaceGuid.PcdOscCppcEnable|1
+!endif
 
   # NV Storage PCDs. Use base of 0x08000000 for NOR0, 0xC0000000 for NOR 1
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize|0x01400000
