@@ -153,7 +153,9 @@ READ_LOCK_STATUS   = TRUE
   INF OvmfPkg/VirtioBlkDxe/VirtioBlk.inf
 
   # Graphics Output Protocol
+!if $(ENABLE_GOP) == TRUE
   INF ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+!endif
 
   INF Platform/ARM/Drivers/BootMonFs/BootMonFs.inf
   INF MdeModulePkg/Universal/PCD/Dxe/Pcd.inf

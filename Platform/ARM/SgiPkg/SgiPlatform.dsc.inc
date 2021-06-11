@@ -14,6 +14,9 @@
   # Secure boot requires secure storage to be enabled as well.
   DEFINE SECURE_BOOT_ENABLE                 = FALSE
 
+  # To allow HDLCD display using the Graphics Output Protocol, set this to TRUE.
+  DEFINE ENABLE_GOP                         = FALSE
+
 [BuildOptions]
   *_*_*_CC_FLAGS = -D DISABLE_NEW_DEPRECATED_INTERFACES
 
@@ -234,7 +237,9 @@
   ArmPkg/Drivers/ArmGic/ArmGicDxe.inf
   ArmPkg/Drivers/TimerDxe/TimerDxe.inf
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
+!if $(ENABLE_GOP) == TRUE
   ArmPlatformPkg/Drivers/LcdGraphicsOutputDxe/LcdGraphicsOutputDxe.inf
+!endif
   ArmPlatformPkg/Drivers/NorFlashDxe/NorFlashDxe.inf
   EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
   EmbeddedPkg/MetronomeDxe/MetronomeDxe.inf
