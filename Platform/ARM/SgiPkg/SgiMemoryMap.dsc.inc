@@ -54,3 +54,8 @@
   # SMMU
   gArmSgiTokenSpaceGuid.PcdSmmuBase|0x4F000000
   gArmSgiTokenSpaceGuid.PcdSmmuSize|0x01000000
+
+  # GPIO Controller
+  gArmSgiTokenSpaceGuid.PcdGpioController0BaseAddress|0x1C1D0000
+  gArmSgiTokenSpaceGuid.PcdGpioController0Size|0x00010000
+  gArmSgiTokenSpaceGuid.PcdGpioController0Interrupt|136

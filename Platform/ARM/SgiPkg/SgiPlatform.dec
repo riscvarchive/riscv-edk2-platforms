@@ -76,5 +76,10 @@
   gArmSgiTokenSpaceGuid.PcdSmmuBase|0|UINT32|0x0000001D
   gArmSgiTokenSpaceGuid.PcdSmmuSize|0|UINT32|0x0000001E
 
+  # GPIO Controller
+  gArmSgiTokenSpaceGuid.PcdGpioController0BaseAddress|0|UINT32|0x0000001F
+  gArmSgiTokenSpaceGuid.PcdGpioController0Size|0|UINT32|0x00000020
+  gArmSgiTokenSpaceGuid.PcdGpioController0Interrupt|0|UINT32|0x00000021
+
 [Ppis]
   gNtFwConfigDtInfoPpiGuid     = { 0x6f606eb3, 0x9123, 0x4e15, { 0xa8, 0x9b, 0x0f, 0xac, 0x66, 0xef, 0xd0, 0x17 } }

@@ -26,6 +26,7 @@
   RdV1/Pptt.aslc
   Spcr.aslc
   Ssdt.asl
+  SsdtEvents.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -51,6 +52,9 @@
   gArmTokenSpaceGuid.PcdPciBusMin
   gArmTokenSpaceGuid.PcdPciBusMax
 
+  gArmSgiTokenSpaceGuid.PcdGpioController0BaseAddress
+  gArmSgiTokenSpaceGuid.PcdGpioController0Size
+  gArmSgiTokenSpaceGuid.PcdGpioController0Interrupt
   gArmSgiTokenSpaceGuid.PcdGtFrame0Gsiv
   gArmSgiTokenSpaceGuid.PcdGtFrame1Gsiv
   gArmSgiTokenSpaceGuid.PcdVirtioBlkBaseAddress
