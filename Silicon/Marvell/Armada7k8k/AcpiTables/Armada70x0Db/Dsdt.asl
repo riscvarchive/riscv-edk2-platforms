@@ -182,6 +182,27 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
             })
         }
 
+        Device (SMI0)
+        {
+            Name (_HID, "MRVL0100")                             // _HID: Hardware ID
+            Name (_UID, 0x00)                                   // _UID: Unique ID
+            Name (_CRS, ResourceTemplate ()
+            {
+                Memory32Fixed (ReadWrite,
+                    0xf212a200,                                 // Address Base
+                    0x00000010,                                 // Address Length
+                    )
+            })
+            Device (PHY0)
+            {
+                Name (_ADR, 0x0)
+            }
+            Device (PHY1)
+            {
+                Name (_ADR, 0x1)
+            }
+        }
+
         Device (PP20)
         {
             Name (_HID, "MRVL0110")                             // _HID: Hardware ID
@@ -215,6 +236,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
                     Package () { "port-id", 0 },
                     Package () { "gop-port-id", 0 },
                     Package () { "phy-mode", "10gbase-kr"},
+                    Package () { "managed", "in-band-status"},
                   }
               })
             }
@@ -234,6 +256,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
                     Package () { "port-id", 1 },
                     Package () { "gop-port-id", 2 },
                     Package () { "phy-mode", "sgmii"},
+                    Package () { "phy-handle", \_SB.SMI0.PHY0},
                   }
               })
             }
@@ -253,6 +276,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "MVEBU ", "ARMADA7K", 3)
                     Package () { "port-id", 2 },
                     Package () { "gop-port-id", 3 },
                     Package () { "phy-mode", "rgmii-id"},
+                    Package () { "phy-handle", \_SB.SMI0.PHY1},
                   }
               })
             }
