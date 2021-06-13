@@ -91,6 +91,7 @@ DefinitionBlock ("Cn9131DbASsdt.aml", "SSDT", 2, "MVEBU ", "CN9131", 3)
                     Package () { "port-id", 0 },
                     Package () { "gop-port-id", 0 },
                     Package () { "phy-mode", "10gbase-kr"},
+                    Package () { "managed", "in-band-status"},
                   }
               })
             }
