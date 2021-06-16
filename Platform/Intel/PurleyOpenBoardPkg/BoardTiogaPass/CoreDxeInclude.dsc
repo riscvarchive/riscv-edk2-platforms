@@ -78,7 +78,10 @@
   PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
 
   #MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
-  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+#TiogaPass Override START :Skip  OPROM for specific Mellanox card & SPI Controller
+  #MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  $(PLATFORM_BOARD_PACKAGE)/Override/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+#TiogaPass Override END
 
   MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
