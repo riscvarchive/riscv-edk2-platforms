@@ -2,7 +2,7 @@
 # Component description file for IPMI platform hook Library.
 #
 # Copyright (c) 2018 - 2021, Intel Corporation. All rights reserved.<BR>
-#
+# Copyright (c) 2021, American Megatrends International LLC.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 ##
@@ -20,7 +20,7 @@
 
 [Packages]
   MdePkg/MdePkg.dec
-  AdvancedFeaturePkg/AdvancedFeaturePkg.dec
+  OutOfBandManagement/IpmiFeaturePkg/IpmiFeaturePkg.dec
   PurleyRefreshSiliconPkg/SiPkg.dec
 
 [LibraryClasses]

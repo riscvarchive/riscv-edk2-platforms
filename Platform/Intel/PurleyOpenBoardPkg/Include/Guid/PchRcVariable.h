@@ -1,6 +1,7 @@
 /** @file
 
 Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2021, American Megatrends International LLC.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -20,6 +21,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 typedef struct {
 
   UINT8   BiosGuard;
+  UINT8   Reserved1; 
   UINT8   Dwr_Enable;
   UINT8   Dwr_Stall;
   UINT8   Dwr_BmcRootPort;
@@ -387,6 +389,10 @@ typedef struct {
   UINT8   AdrMultiplierVal;
   UINT8   AdrGpioSel;
   UINT8   AdrHostPartitionReset;
+  UINT8   AdrSysPwrOk;
+  UINT8   AdrOverClockingWdt;
+  UINT8   AdrCpuThermalWdt;
+  UINT8   AdrPmcParityError;
 
   //
   // Audio DSP Configuration

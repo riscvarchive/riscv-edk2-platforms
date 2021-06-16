@@ -5,6 +5,7 @@
 # imported functions from board directory
 #
 # Copyright (c) 2019 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2021, American Megatrends International LLC.<BR>
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
 

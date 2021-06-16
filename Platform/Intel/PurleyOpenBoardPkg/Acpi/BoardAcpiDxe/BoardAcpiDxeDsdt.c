@@ -1,6 +1,7 @@
 /** @file
 
 Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2021, American Megatrends International LLC.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -292,6 +293,8 @@ PatchDsdtTable (
         case (SIGNATURE_32 ('F', 'I', 'X', '0')):
           DEBUG ((DEBUG_INFO, "FIX0 - 0x%x\n", mAcpiParameter));
           * (UINT32 *) DsdtPointer = (UINT32) (UINTN) mAcpiParameter;
+          Fixes++;
+          break;
         //
         // "FIX8" OperationRegion() in Acpi\AcpiTables\Dsdt\PcieHp.asi
         //

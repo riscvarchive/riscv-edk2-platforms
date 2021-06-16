@@ -1,6 +1,7 @@
 /** @file
 
 Copyright (c) 2018, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2021, American Megatrends International LLC.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -41,6 +42,13 @@ typedef struct {
   UINT8         TpmEnable;
   UINT8         TpmState;
   UINT8         MorState;
+
+  //
+  // XmlCli
+  //
+  UINT8 XmlCliSupport;
+  UINT8 SkipXmlComprs;
+  UINT8 PublishSetupPgPtr;
 
   //
   // Breakpoints
@@ -493,7 +501,6 @@ typedef struct {
   UINT8 BClkOverride;
   UINT8 BclkAdjustable;
   UINT8 DmiPegRatio;
-  UINT8 SkipXmlComprs;
   UINT8 DfxAdvDebugJumper;
   UINT8 DfxAltPostCode;
 
@@ -519,6 +526,12 @@ typedef struct {
 // PC_SIO_END
 //
   UINT8   RsaSupport;
+  UINT8   FnvErrorMailbox;             // 0 - DDRT, 1 - SMBUS
+  UINT8   ReportAlertSPA;              // Include SPA when reporting DDRT alert. Only to disable for MCE recovery test.
+  UINT8   AEPErrorInjEn;
+  UINT8   NgnHostAlertPatrolScrubUNC;  // Signal DDRT interrupt upon receiving Uncorrectable Error for NGN Patrol Scrub
+  UINT8   DcpmmUncPoison;
+  UINT8   UCErrChkForVariableSrv;
 
 } SYSTEM_CONFIGURATION;
 
