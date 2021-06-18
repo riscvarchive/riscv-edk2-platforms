@@ -163,6 +163,7 @@
 
   ReportStatusCodeLib|MdeModulePkg/Library/PeiReportStatusCodeLib/PeiReportStatusCodeLib.inf
   ExtractGuidedSectionLib|MdePkg/Library/BaseExtractGuidedSectionLib/BaseExtractGuidedSectionLib.inf
+  RiscVSpecialPlatformLib|Platform/SiFive/U5SeriesPkg/FreedomU540HiFiveUnleashedBoard/Library/RiscVSpecialPlatformLib/RiscVSpecialPlatformLib.inf
 
 !ifdef $(SOURCE_DEBUG_ENABLE)
   DebugAgentLib|SourceLevelDebugPkg/Library/DebugAgent/SecPeiDebugAgentLib.inf
