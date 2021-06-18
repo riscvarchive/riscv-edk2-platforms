@@ -1,7 +1,7 @@
 /**@file
   Build up platform processor information of SiFive U54 core.
 
-  Copyright (c) 2019 - 2020, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+  Copyright (c) 2019 - 2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
@@ -17,7 +17,7 @@
 #include <Library/FirmwareContextProcessorSpecificLib.h>
 #include <Library/HobLib.h>
 #include <Library/PcdLib.h>
-#include <Library/RiscVEdk2SbiLib.h>
+#include <Library/RiscVFirmwareContextLib.h>
 
 #include <RiscVImpl.h>
 #include <sbi/sbi_hart.h>
@@ -63,7 +63,7 @@ CreateU54E51CoreProcessorSpecificDataHob (
     return EFI_INVALID_PARAMETER;
   }
 
-  SbiGetFirmwareContext (&FirmwareContext);
+  GetFirmwareContextPointer (&FirmwareContext);
   ASSERT (FirmwareContext != NULL);
   if (FirmwareContext == NULL) {
     DEBUG ((DEBUG_ERROR, "Failed to get the pointer of EFI_RISCV_OPENSBI_FIRMWARE_CONTEXT of hart %d\n", HartId));

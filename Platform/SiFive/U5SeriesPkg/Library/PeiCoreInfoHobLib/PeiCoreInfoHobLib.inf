@@ -34,9 +34,10 @@
 
 [LibraryClasses]
   BaseLib
-  PcdLib
   MemoryAllocationLib
+  PcdLib
   PrintLib
+  RiscVFirmwareContextLib
   SiliconSiFiveU54CoreInfoLib
 
 [Guids]
