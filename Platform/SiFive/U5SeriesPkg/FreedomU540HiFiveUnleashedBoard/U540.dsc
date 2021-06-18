@@ -516,6 +516,8 @@
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
 
+  Silicon/RISC-V/ProcessorPkg/Universal/FdtDxe/FdtDxe.inf
+
   #
   # FAT filesystem + GPT/MBR partitioning + UDF filesystem
   #
