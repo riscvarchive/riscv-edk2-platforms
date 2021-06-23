@@ -10,7 +10,7 @@
 [Defines]
   INF_VERSION                    = 0x0001001B
   BASE_NAME                      = ConfigurationManagerDxe
-  FILE_GUID                      = A97F70AC-3BB4-4596-B4D2-9F948EC12D17
+  FILE_GUID                      = 7437A2D1-BF1A-46BD-8774-2A4C5755808D
   MODULE_TYPE                    = DXE_DRIVER
   VERSION_STRING                 = 1.0
   ENTRY_POINT                    = ConfigurationManagerDxeInitialize
