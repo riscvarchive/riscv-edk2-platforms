@@ -75,14 +75,7 @@ CreateU5MCCoreplexProcessorSpecificDataHob (
   }
   DEBUG ((DEBUG_INFO, "Support %d U5 application cores on U5 platform\n", HartIdNumber - (UINT32)MCSupport));
 
-  if (HartIdNumber != FixedPcdGet32 (PcdHartCount)) {
-    DEBUG ((DEBUG_ERROR, "Improper core settings...\n"));
-    DEBUG ((DEBUG_ERROR, "    PcdHartCount\n"));
-    DEBUG ((DEBUG_ERROR, "    PcdNumberofU5Cores\n"));
-    DEBUG ((DEBUG_ERROR, "    PcdE5MCSupported\n\n"));
-    ASSERT (FALSE);
-  }
-  return Status;
+  return EFI_SUCCESS;
 }
 
 /**
