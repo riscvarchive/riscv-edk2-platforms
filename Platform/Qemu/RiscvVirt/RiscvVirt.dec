@@ -1,0 +1,25 @@
+## @file  RISC-V RiscvVirt RISC-V platformm
+# This Package provides RiscvVirt modules and libraries.
+#
+# Copyright (c) 2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+#
+# SPDX-License-Identifier: BSD-2-Clause-Patent
+#
+##
+
+[Defines]
+  DEC_SPECIFICATION              = 0x0001001b
+  PACKAGE_NAME                   = RiscvVirt
+  PACKAGE_UNI_FILE               = RiscvVirt.uni
+  PACKAGE_GUID                   = 389803d8-8c14-4839-8d7d-fc5b553aa3de
+  PACKAGE_VERSION                = 1.0
+
+[Includes]
+
+[LibraryClasses]
+
+[Guids]
+  gUefiRiscVPlatformRiscvVirtPkgTokenSpaceGuid  = {0x27A81261, 0x6D02, 0x4471, { 0x99, 0xA8, 0x84, 0x7F, 0x62, 0x11, 0x16, 0x4A }}
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  RiscvVirtPkgExtra.uni
