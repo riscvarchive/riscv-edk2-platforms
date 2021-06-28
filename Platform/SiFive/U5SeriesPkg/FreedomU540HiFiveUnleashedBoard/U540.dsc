@@ -192,6 +192,7 @@
   PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
   # RISC-V platform PEI core entry point.
   PeiCoreEntryPoint|Platform/RISC-V/PlatformPkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
+  PlatformSecPpiLib|Platform/SiFive/U5SeriesPkg/Library/PlatformSecPpiLib/PlatformSecPpiLib.inf
 
 [LibraryClasses.common.PEIM]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
