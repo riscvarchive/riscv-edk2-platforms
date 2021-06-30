@@ -400,9 +400,6 @@
   gArmTokenSpaceGuid.PcdPciIoTranslation|0xEFF00000
   gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
 
-  # SoC Configuration Space
-  gMarvellTokenSpaceGuid.PcdConfigSpaceBaseAddress|0xE0000000
-
 !if $(CAPSULE_ENABLE)
 [PcdsDynamicExDefault.common.DEFAULT]
   gEfiSignedCapsulePkgTokenSpaceGuid.PcdEdkiiSystemFirmwareImageDescriptor|{0x0}|VOID*|0x100

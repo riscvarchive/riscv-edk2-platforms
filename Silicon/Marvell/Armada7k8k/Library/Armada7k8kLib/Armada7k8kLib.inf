@@ -20,6 +20,7 @@
   Silicon/Marvell/Marvell.dec
 
 [LibraryClasses]
+  ArmadaBoardDescLib
   ArmadaSoCDescLib
   ArmLib
   ArmSmcLib

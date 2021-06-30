@@ -100,8 +100,5 @@
   # RTC
   gMarvellTokenSpaceGuid.PcdRtcBaseAddress|0xF2284000
 
-  # SoC Configuration Space
-  gMarvellTokenSpaceGuid.PcdConfigSpaceBaseAddress|0xD0000000
-
   # Variable store
   gMarvellTokenSpaceGuid.PcdSpiMemoryMapped|FALSE
