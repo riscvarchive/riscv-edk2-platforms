@@ -77,9 +77,9 @@ STATIC SMBIOS_TABLE_TYPE0 mArmadaDefaultType0 = {
 };
 
 STATIC CHAR8 CONST *mArmadaDefaultType0Strings[] = {
-  "EFI Development Kit II / Marvell\0", /* Vendor */
-  "EDK II\0",                           /* BiosVersion */
-  __DATE__"\0",                         /* BiosReleaseDate */
+  (CHAR8 CONST *)PcdGetPtr (PcdFirmwareVendor),   /* Vendor */
+  (CHAR8 CONST *)PcdGetPtr (PcdFirmwareVersion),  /* BiosVersion */
+  __DATE__"\0",                                   /* BiosReleaseDate */
   NULL
 };
 

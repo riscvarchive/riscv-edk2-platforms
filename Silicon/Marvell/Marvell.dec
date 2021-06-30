@@ -170,6 +170,8 @@
   gMarvellTokenSpaceGuid.PcdPciESdhci|{ 0x0 }|VOID*|0x3000035
 
 #Platform description
+  gMarvellTokenSpaceGuid.PcdFirmwareVendor|"EFI Development Kit II / Semihalf"|VOID*|0x50000104
+  gMarvellTokenSpaceGuid.PcdFirmwareVersion|"EDK II"|VOID*|0x50000105
   gMarvellTokenSpaceGuid.PcdProductManufacturer|"Marvell"|VOID*|0x50000100
   gMarvellTokenSpaceGuid.PcdProductPlatformName|"Marvell Development Board"|VOID*|0x50000101
   gMarvellTokenSpaceGuid.PcdProductSerial|"Serial Not Set"|VOID*|0x50000103
