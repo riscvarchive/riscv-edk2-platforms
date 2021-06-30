@@ -83,6 +83,7 @@
   $(PLATFORM_BOARD_PACKAGE)/Override/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 #TiogaPass Override END
 
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == FALSE
   MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
   MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
@@ -97,10 +98,11 @@
   MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
   MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
   FatPkg/EnhancedFatDxe/Fat.inf
-
+!endif
   #MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
   MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
 
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == FALSE
   MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
   MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
 
@@ -124,6 +126,7 @@
     <LibraryClasses>
       PcdLib|MdePkg/Library/DxePcdLib/DxePcdLib.inf
   }
+!endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly == FALSE
   MdeModulePkg/Core/PiSmmCore/PiSmmIpl.inf

@@ -51,7 +51,14 @@
 
   gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|TRUE
 
+  gPlatformTokenSpaceGuid.PcdLinuxBootEnable|FALSE
+
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == TRUE
+  gPlatformTokenSpaceGuid.PcdFastBoot|TRUE
+!else
   gPlatformTokenSpaceGuid.PcdFastBoot|FALSE
+!endif
+
 !if gPlatformTokenSpaceGuid.PcdFastBoot == TRUE
   gIpmiFeaturePkgTokenSpaceGuid.PcdIpmiFeatureEnable|FALSE
   gPlatformTokenSpaceGuid.PcdUpdateConsoleInBds|FALSE

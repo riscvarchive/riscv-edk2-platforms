@@ -2,6 +2,7 @@
   This file include all platform action which can be customized by IBV/OEM.
 
 Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2021, American Megatrends International LLC.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -30,6 +31,12 @@ GLOBAL_REMOVE_IF_UNREFERENCED EFI_BOOT_MODE                 gBootMode;
 BOOLEAN                      gPPRequireUIConfirm;
 
 extern UINTN                                      mBootMenuOptionNumber;
+
+EFI_STATUS
+LinuxBootStart (
+  VOID
+  );
+
 
 GLOBAL_REMOVE_IF_UNREFERENCED USB_CLASS_FORMAT_DEVICE_PATH gUsbClassKeyboardDevicePath = {
   {
@@ -1268,6 +1275,8 @@ PlatformBootManagerAfterConsole (
   LocalBootMode = gBootMode;
   DEBUG ((DEBUG_INFO, "Current local bootmode - %x\n", LocalBootMode));
 
+  LinuxBootStart();
+  
   //
   // Go the different platform policy with different boot mode
   // Notes: this part code can be change with the table policy

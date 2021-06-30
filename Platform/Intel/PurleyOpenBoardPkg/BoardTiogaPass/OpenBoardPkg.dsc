@@ -104,6 +104,13 @@
 ################################################################################
 
 [LibraryClasses.common]
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == TRUE
+  LinuxBootLib|$(PLATFORM_BOARD_PACKAGE)/Features/LinuxBoot/LinuxBoot.inf
+  LoadLinuxLib|OvmfPkg/Library/LoadLinuxLib/LoadLinuxLib.inf
+!else
+  LinuxBootLib|$(PLATFORM_BOARD_PACKAGE)/Features/LinuxBoot/LinuxBootNull.inf
+!endif 
+
 !if gPlatformTokenSpaceGuid.PcdFastBoot == FALSE
   PlatformBootManagerLib|$(PLATFORM_PACKAGE)/Bds/Library/DxePlatformBootManagerLib/DxePlatformBootManagerLib.inf
 !else

@@ -47,6 +47,7 @@ INF  PcAtChipsetPkg/HpetTimerDxe/HpetTimerDxe.inf
  INF  $(PLATFORM_BOARD_PACKAGE)/Override/MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
 #TiogaPass Override END
 
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == FALSE
 INF  MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
 INF  MdeModulePkg/Bus/Ata/AtaBusDxe/AtaBusDxe.inf
 INF  MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
@@ -62,10 +63,12 @@ INF  MdeModulePkg/Universal/Disk/DiskIoDxe/DiskIoDxe.inf
 INF  MdeModulePkg/Universal/Disk/PartitionDxe/PartitionDxe.inf
 INF  MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 INF  FatPkg/EnhancedFatDxe/Fat.inf
+!endif
 
 #INF  MdeModulePkg/Universal/Console/GraphicsOutputDxe/GraphicsOutputDxe.inf
 INF  MdeModulePkg/Universal/Console/GraphicsConsoleDxe/GraphicsConsoleDxe.inf
 
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == FALSE
 INF  MdeModulePkg/Universal/Console/ConPlatformDxe/ConPlatformDxe.inf
 INF  MdeModulePkg/Universal/Console/ConSplitterDxe/ConSplitterDxe.inf
 
@@ -79,4 +82,4 @@ INF  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
 
 INF  MdeModulePkg/Application/UiApp/UiApp.inf
 INF  MdeModulePkg/Application/BootManagerMenuApp/BootManagerMenuApp.inf
-
+!endif

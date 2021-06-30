@@ -19,6 +19,38 @@
 #       Also all values will have a PCD assigned so that they can be used in the system, and
 #       the FlashMap edit tool can be used to change the values here, without effecting the code.
 #       This requires all code to only use the PCD tokens to recover the values.
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == TRUE
+
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedOffset          = 0x00000000  # Flash addr (0xFF840000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize            = 0x00300000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecurityOffset          = 0x00300000  # Flash addr (0xFF8A0000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecuritySize            = 0x00100000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootOffset            = 0x00400000  # Flash addr (0xFF910000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootSize              = 0x00100000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUOffset              = 0x00500000  # Flash addr (0xFFE00000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUSize                = 0x00100000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootOffset          = 0x00600000  # Flash addr (0xFF9A0000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootSize            = 0x00600000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashNvStorageVariableOffset   = 0x00C00000  # Flash addr (0xFF800000)
+SET gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize    = 0x0007C000  #
+
+!else
+
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedOffset          = 0x00000000  # Flash addr (0xFF840000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize            = 0x00500000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecurityOffset          = 0x00500000  # Flash addr (0xFF8A0000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecuritySize            = 0x00100000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootOffset            = 0x00600000  # Flash addr (0xFF910000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootSize              = 0x00100000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUOffset              = 0x00700000  # Flash addr (0xFFE00000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUSize                = 0x00200000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootOffset          = 0x00900000  # Flash addr (0xFF9A0000)
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootSize            = 0x00300000  #
+SET gMinPlatformPkgTokenSpaceGuid.PcdFlashNvStorageVariableOffset   = 0x00C00000  # Flash addr (0xFF800000)
+SET gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize    = 0x0007C000  #
+
+!endif
+
 
 [FD.Platform]
 BaseAddress   = 0xFF000000     | gEfiPchTokenSpaceGuid.PcdFlashAreaBaseAddress
@@ -27,27 +59,27 @@ ErasePolarity = 1
 BlockSize     = 0x10000
 NumBlocks     = 0x100
 
-0x00000000|0x00500000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedBase|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvAdvancedSize
 FV = FvAdvanced
 
-0x00500000|0x00100000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecurityOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecuritySize
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecurityBase|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvSecuritySize
 FV = FvSecurity
 
-0x00600000|0x00100000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootSize
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootBase|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvOsBootSize
 FV = FvOsBoot
 
-0x00700000|0x00200000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUSize
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUBase|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspUSize
 FV = FvLateSiliconCompressed
 
-0x00900000|0x00300000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootOffset|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootSize
 gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootBase|gMinPlatformPkgTokenSpaceGuid.PcdFlashFvUefiBootSize
 FV = FvUefiBoot
 
-0x00C00000|0x0007C000
+gMinPlatformPkgTokenSpaceGuid.PcdFlashNvStorageVariableOffset|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
 gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
 #NV_VARIABLE_STORE
 DATA = {
@@ -302,6 +334,19 @@ FILE DRIVER = db90bb7e-e4ba-4f07-96d6-b7076713bd2c {
   }
 
 INF  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+
+!if gPlatformTokenSpaceGuid.PcdLinuxBootEnable == TRUE
+
+FILE DRIVER = 81339b04-fa8c-4be0-9ca7-916fc5319eb5 {
+    SECTION DXE_DEPEX_EXP = {FALSE}
+    SECTION PE32 = $(PLATFORM_BOARD_PACKAGE)/Features/LinuxBoot/LinuxBinaries/linux.efi
+}
+
+FILE FREEFORM = 16b60e5d-f1c5-42f0-9b34-08C81C430473 {
+  SECTION RAW = $(PLATFORM_BOARD_PACKAGE)/Features/LinuxBoot/LinuxBinaries/initrd.cpio.xz
+}
+
+!endif
 
 
 [FV.FvUefiBoot]

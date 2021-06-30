@@ -49,6 +49,8 @@
 
   gPlatformTokenSpaceGuid.PcdUpdateConsoleInBds|TRUE|BOOLEAN|0x30000035
 
+  gPlatformTokenSpaceGuid.PcdLinuxBootEnable|FALSE|BOOLEAN|0x30000036
+  
 [PcdsDynamicEx]
   gPlatformTokenSpaceGuid.PcdDfxAdvDebugJumper|FALSE|BOOLEAN|0x6000001D
 

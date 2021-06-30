@@ -2,6 +2,7 @@
 # Component name for module DxePlatformBootManagerLib
 #
 # Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2021, American Megatrends International LLC.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -40,6 +41,7 @@
   PerformanceLib
   TimerLib
   Tcg2PhysicalPresenceLib
+  LinuxBootLib
 
 [Packages]
   MdePkg/MdePkg.dec

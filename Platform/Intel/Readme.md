@@ -90,6 +90,11 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
 | Mt. Olympus                           | Purley                                     | PurleyOpenBoardPkg           | BoardMtOlympus     |
 
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| TiogaPass                             | Purley                                     | PurleyOpenBoardPkg           | BoardTiogaPass     |
+
+
 #### Simics
 
 | Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
@@ -253,6 +258,12 @@ return back to the minimum platform caller.
           |       |        |               |                     build settings, environment variables.
           |       |        |               |---build_board.py: Optional board-specific pre-build,
           |       |        |                                   build, post-build and clean functions.
+          |       |        |------PurleyOpenBoardPkg
+          |       |        |       |------BoardTiogaPass
+          |       |        |               |---build_config.cfg: BoardTiogaPass specific
+          |       |        |               |                     build settings, environment variables.
+          |       |        |               |---build_board.py: Optional board-specific pre-build,
+          |       |        |                                   build, post-build and clean functions.          
           |       |        |
           |       |        |------SimicsOpenBoardPkg
           |       |        |       |------BoardX58Ich10
@@ -303,6 +314,18 @@ For PurleyOpenBoardPkg
    "bld cache-consume" Consume a cache of binary files from the specified directory, BINARY_CACHE_PATH is empty,
    used "BinCache" as default path.
 
+For PurleyOpenBoardPkg (TiogaPass)
+1. Open command window, go to the workspace directory, e.g. c:\Edk2Workspace.
+2. Type "cd edk2-platforms\Platform\Intel\PurleyOpenBoardPkg\BoardTiogaPass".
+3. Type "GitEdk2MinBoardTiogaPass.bat" to setup GIT environment.
+4. Type "bld" to build Purley BoardTiogaPass board UEFI firmware image, "bld release" for release build, "bld clean" to
+   remove intermediate files."bld cache-produce" Generate a cache of binary files in the specified directory,
+   "bld cache-consume" Consume a cache of binary files from the specified directory, BINARY_CACHE_PATH is empty,
+   used "BinCache" as default path.  
+5. Final BIOS image will be Build\PurleyOpenBoardPkg\BoardTiagoPass\DEBUG_VS2015x86\FV\PLATFORM.fd or    
+   Build\PurleyOpenBoardPkg\BoardTiagoPass\RELEASE_VS2015x86\FV\PLATFORM.fd, depending on bld batch script input.
+6. This BIOS image needs to be merged with SPS FW    
+
 ### **Known limitations**
 
 **KabylakeOpenBoardPkg**
@@ -317,6 +340,25 @@ For PurleyOpenBoardPkg
 1. This firmware project has only been tested booting to Microsoft Windows Server 2016 with NVME on M.2 slot.
 2. This firmware project does not build with the GCC compiler.
 3. The validated version of iASL compiler that can build MinPurley is 20180629. Older versions may generate ACPI build errors.
+
+**PurleyOpenBoardPkg Tioga Pass **
+1. This firmware project has only been tested on the Tioga Pass hardware.
+2. This firmware project build has only been tested using the Microsoft Visual Studio 2015 build tools.
+3. This firmware project does not build with the GCC compiler.
+4. The validated version of iASL compiler that can build MinPurley is 20180629. Older versions may generate ACPI build errors.
+5. Installed and booted to UEFI Windows 2016 on M.2 NVME slot
+6. Installed and booted to UEFI Windows 2019 on M.2 NVME slot and with SATA HDD.
+7. Installed and booted to UEFI RHEL 7.3 on SATA HDD
+8. Installed and booted to Ubuntu 18.04 on M.2 NVME slot.
+9. Verified Mellanox card detection during POST and OS
+10. LINUX Boot Support (PcdLinuxBootEnable needs to be enabled)
+
+1.	Follow directions on http://osresearch.net/Building/ to compile the heads kernel and initrd for qemu-system_x86_64 
+2.	Copy the following built files 
+(1) initrd.cpio.xz  to LinuxBootPkg/LinuxBinaries/initrd.cpio.xz 
+(2) bzimage to LinuxBootPkg/LinuxBinaries/linux.efi
+
+
 
 **SimicsOpenBoardPkg**
 1. This firmware project has only been tested booting to Microsoft Windows 10 x64 and Ubuntu 17.10 with AHCI mode.
