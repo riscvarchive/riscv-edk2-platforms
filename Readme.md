@@ -246,6 +246,8 @@ they will be documented with the platform.
 * [Simics](Platform/Intel/SimicsOpenBoardPkg)
 * [Whiskey Lake](Platform/Intel/WhiskeylakeOpenBoardPkg)
 * [Comet Lake](Platform/Intel/CometlakeOpenBoardPkg)
+* [Tiger Lake](Platform/Intel/TigerlakeOpenBoardPkg)
+* [Whitley/Cedar Island](Platform/Intel/WhitleyOpenBoardPkg)
 
 For more information, see the
 [EDK II Minimum Platform Specification](https://edk2-docs.gitbooks.io/edk-ii-minimum-platform-specification).

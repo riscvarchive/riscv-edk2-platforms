@@ -59,6 +59,7 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 * The `WhiskeylakeOpenBoardPkg` contains board implementations for WhiskeyLake systems.
 * The `CometlakeOpenBoardPkg` contains board implementations for CometLake systems.
 * The `TigerlakeOpenBoardPkg` contains board implementations for TigerLake systems.
+* The `WhitleyOpenBoardPkg` contains board implementations for Ice Lake-SP and Cooper Lake systems.
 
 ### **Supported Hardware**
 
@@ -78,6 +79,8 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 | WHL-U DDR4 RVP                        | WhiskeyLake                                | WhiskeylakeOpenBoardPkg      | WhiskeylakeURvp    |
 | CML-U LPDDR3 RVP                      | CometLake V1                               | CometlakeOpenBoardPkg        | CometlakeURvp      |
 | TGL-U DDR4 RVP                        | TigerLake                                  | TigerlakeOpenBoardPkg        | TigerlakeURvp      |
+| Wilson City RVP                       | IceLake-SP (Xeon Scalable)                 | WhitleyOpenBoardPkg          | WilsonCityRvp      |
+| Cooper City RVP                       | Copper Lake                                | WhitleyOpenBoardPkg          | CooperCityRvp      |
 
 *Note: RVP = Reference and Validation Platform*
 
@@ -257,6 +260,14 @@ return back to the minimum platform caller.
           |       |        |                                     build settings, environment variables.
           |       |        |
           |       |        |------WhiskeylakeOpenBoardPkg
+          |       |        |       |------CooperCityRvp
+          |       |        |       |       |---build_config.cfg: CooperCityRvp specific build
+          |       |        |       |                             settings environment variables.
+          |       |        |       |------WilsonCityRvp
+          |       |        |               |---build_config.cfg: WilsonCityRvp specific build
+          |       |        |                                     settings environment variables.
+          |       |        |
+          |       |        |------WhitleyOpenBoardPkg
           |       |        |       |------UpXtreme
           |       |        |               |---build_config.cfg: UpXtreme specific build
           |       |        |                                     settings environment variables.
@@ -327,6 +338,9 @@ For PurleyOpenBoardPkg
 **TigerlakeOpenBoardPkg**
 1. This firmware project has been tested booting to Microsoft Windows 10 x64 with AHCI mode and Integrated Graphic Device.
 2. This firmware project has been also tested booting to Puppy Linux BionicPup64 8.0 with AHCI mode and Integrated Graphic Device.
+
+**WhitleyOpenBoardPkg**
+1. This firmware project has been tested booting to UEFI shell with headless serial console
 
 ### **Package Builds**
 
