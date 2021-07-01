@@ -924,7 +924,7 @@ GetArmNameSpaceObject (
                  CmObjectId,
                  &PlatformRepo->RootComplexInfo,
                  sizeof (PlatformRepo->RootComplexInfo),
-                 1,
+                 RootComplexCount,
                  CmObject
                  );
       break;
@@ -935,7 +935,7 @@ GetArmNameSpaceObject (
                  CmObjectId,
                  PlatformRepo->DeviceIdMapping,
                  sizeof (PlatformRepo->DeviceIdMapping),
-                 ARRAY_SIZE (PlatformRepo->DeviceIdMapping),
+                 DeviceIdMappingArrayCount,
                  Token,
                  GetDeviceIdMappingArray,
                  CmObject
