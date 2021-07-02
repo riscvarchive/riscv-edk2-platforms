@@ -13,6 +13,8 @@
 #include <sbi/sbi_hartmask.h>
 #include <sbi/sbi_platform.h>
 #include <sbi/sbi_string.h>
+#include <sbi/sbi_math.h>
+#include <sbi_utils/fdt/fdt_domain.h>
 #include <sbi_utils/fdt/fdt_fixup.h>
 #include <sbi_utils/fdt/fdt_helper.h>
 #include <sbi_utils/irqchip/fdt_irqchip.h>
@@ -71,7 +73,7 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
         unsigned long arg2, unsigned long arg3,
         unsigned long arg4)
 {
-  const char *model, *mmu_type;
+  const char *model;
   void *fdt = (void *)arg1;
   u32 hartid, hart_count = 0;
   int rc, root_offset, cpus_offset, cpu_offset, len;
@@ -100,10 +102,6 @@ unsigned long fw_platform_init(unsigned long arg0, unsigned long arg1,
 
     if (SBI_HARTMASK_MAX_BITS <= hartid)
       continue;
-
-    mmu_type = fdt_getprop(fdt, cpu_offset, "mmu-type", &len);
-    if (!mmu_type || !len)
-      hartid = -1U;
 
     generic_hart_index2id[hart_count++] = hartid;
   }
@@ -152,6 +150,7 @@ static int generic_final_init(bool cold_boot)
 
   fdt_cpu_fixup(fdt);
   fdt_fixups(fdt);
+  fdt_domain_fixup(fdt);
 
   if (generic_plat && generic_plat->fdt_fixup) {
     rc = generic_plat->fdt_fixup(fdt, generic_plat_match);
@@ -174,6 +173,11 @@ static void generic_final_exit(void)
     generic_plat->final_exit(generic_plat_match);
 }
 
+static int generic_domains_init(void)
+{
+  return fdt_domains_populate(sbi_scratch_thishart_arg1_ptr());
+}
+
 static u64 generic_tlbr_flush_limit(void)
 {
   if (generic_plat && generic_plat->tlbr_flush_limit)
@@ -181,35 +185,20 @@ static u64 generic_tlbr_flush_limit(void)
   return SBI_PLATFORM_TLB_RANGE_FLUSH_LIMIT_DEFAULT;
 }
 
-static int generic_system_reset(u32 reset_type)
-{
-  if (generic_plat && generic_plat->system_reset)
-    return generic_plat->system_reset(reset_type,
-              generic_plat_match);
-  return fdt_system_reset(reset_type);
-}
-
 const struct sbi_platform_operations platform_ops = {
   .early_init    = generic_early_init,
   .final_init    = generic_final_init,
   .early_exit    = generic_early_exit,
   .final_exit    = generic_final_exit,
-  .console_putc    = fdt_serial_putc,
-  .console_getc    = fdt_serial_getc,
+  .domains_init    = generic_domains_init,
   .console_init    = fdt_serial_init,
   .irqchip_init    = fdt_irqchip_init,
   .irqchip_exit    = fdt_irqchip_exit,
-  .ipi_send    = fdt_ipi_send,
-  .ipi_clear    = fdt_ipi_clear,
   .ipi_init    = fdt_ipi_init,
   .ipi_exit    = fdt_ipi_exit,
   .get_tlbr_flush_limit  = generic_tlbr_flush_limit,
-  .timer_value    = fdt_timer_value,
-  .timer_event_stop  = fdt_timer_event_stop,
-  .timer_event_start  = fdt_timer_event_start,
   .timer_init    = fdt_timer_init,
   .timer_exit    = fdt_timer_exit,
-  .system_reset    = generic_system_reset,
 };
 
 struct sbi_platform platform = {
