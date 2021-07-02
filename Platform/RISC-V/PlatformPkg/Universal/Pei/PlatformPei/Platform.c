@@ -1,7 +1,7 @@
 /**@file
   Platform PEI driver
 
-  Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+  Copyright (c) 2019-2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
   Copyright (c) 2006 - 2014, Intel Corporation. All rights reserved.<BR>
   Copyright (c) 2011, Andrei Warkentin <andreiw@motorola.com>
 
@@ -199,11 +199,14 @@ MiscInitialization (
   // of IO space. (Side note: unlike other HOBs, the CPU HOB is needed during
   // S3 resume as well, so we build it unconditionally.)
   //
-  BuildCpuHob (32, 32);
+  // TODO: Determine this dynamically from the platform
+  // setting or the HART configuration.
+  //
+  BuildCpuHob (48, 32);
 }
 
 /**
-  Check if system retunrs from S3.
+  Check if system returns from S3.
 
   @return BOOLEAN   TRUE, system returned from S3
                     FALSE, system is not returned from S3
@@ -254,6 +257,7 @@ BuildCoreInformationHob (
   EFI_STATUS Status;
   RISC_V_PROCESSOR_SMBIOS_HOB_DATA *SmbiosHobPtr;
 
+  // TODO: Create SMBIOS libs for non-U540 platforms
   Status = CreateU5MCCoreplexProcessorSpecificDataHob (0);
   if (EFI_ERROR (Status)) {
     ASSERT(FALSE);
