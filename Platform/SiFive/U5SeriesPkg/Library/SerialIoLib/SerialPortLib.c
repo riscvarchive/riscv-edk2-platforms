@@ -8,6 +8,7 @@
 **/
 
 #include <Base.h>
+#include <Library/DebugLib.h>
 #include <Library/IoLib.h>
 #include <Library/SerialPortLib.h>
 #include <Include/SifiveU5Uart.h>
@@ -41,7 +42,7 @@
 #define UART_BAUDRATE  115200
 #define SYS_CLK        FixedPcdGet32(PcdU5PlatformSystemClock)
 
-BOOLEAN Initiated = FALSE;
+BOOLEAN Initiated = TRUE;
 
 /**
   Get value from serial port register.
@@ -55,7 +56,9 @@ UINT32 GetReg (
   IN UINT32 RegIndex
   )
 {
-  return MmioRead32 (FixedPcdGet32(PcdU5UartBase) + (RegIndex * 0x4));
+  STATIC volatile UINT32 * const uart = (UINT32 *)FixedPcdGet32(PcdU5UartBase);
+
+  return readl ((volatile void *)(uart + RegIndex));
 }
 
 /**
@@ -70,7 +73,9 @@ VOID SetReg (
   IN UINT32 Value
   )
 {
-  MmioWrite32 (Value, FixedPcdGet32(PcdU5UartBase) + (RegIndex * 0x4));
+  STATIC volatile UINT32 * const uart = (UINT32 *)FixedPcdGet32(PcdU5UartBase);
+
+  writel (Value, (volatile void *)(uart + RegIndex));
 }
 
 /**
@@ -104,7 +109,36 @@ UINT32 SifiveUartGetChar (VOID)
   }
   return -1;
 }
+/**
+  Find minimum divisor divides in_freq to max_target_hz;
+  Based on uart driver n SiFive FSBL.
 
+  f_baud = f_in / (div + 1) => div = (f_in / f_baud) - 1
+  The nearest integer solution requires rounding up as to not exceed max_target_hz.
+  div  = ceil(f_in / f_baud) - 1
+   = floor((f_in - 1 + f_baud) / f_baud) - 1
+  This should not overflow as long as (f_in - 1 + f_baud) does not exceed
+  2^32 - 1, which is unlikely since we represent frequencies in kHz.
+
+  @param Freq         The given clock to UART.
+  @param MaxTargetHZ  Target baudrate.
+
+**/
+UINT32
+UartMinClkDivisor (
+  IN UINT64 Freq,
+  IN UINT64 MaxTargetHZ
+  )
+{
+    UINT64 Quotient;
+
+    Quotient = (Freq + MaxTargetHZ - 1) / (MaxTargetHZ);
+    if (Quotient == 0) {
+        return 0;
+    } else {
+        return Quotient - 1;
+    }
+}
 /**
   Initialize the serial device hardware.
 
@@ -116,20 +150,24 @@ UINT32 SifiveUartGetChar (VOID)
   @retval RETURN_DEVICE_ERROR   The serail device could not be initialized.
 
 **/
-RETURN_STATUS
+EFI_STATUS
 EFIAPI
 SerialPortInitialize (
   VOID
   )
 {
-  if (Initiated) {
-    return RETURN_SUCCESS;
+  UINT32 Divisor;
+  UINT32 CurrentDivisor;
+
+  Divisor = UartMinClkDivisor (SYS_CLK / 2, UART_BAUDRATE);
+  if (Divisor == 0) {
+    return EFI_INVALID_PARAMETER;
   }
-  if (sifive_uart_init (FixedPcdGet32(PcdU5UartBase), SYS_CLK / 2, UART_BAUDRATE) != 0) {
-      return EFI_DEVICE_ERROR;
+  CurrentDivisor = GetReg(UART_REG_DIV);
+  if (Divisor != CurrentDivisor) {
+    sifive_uart_init (FixedPcdGet32(PcdU5UartBase), SYS_CLK / 2, UART_BAUDRATE);
   }
-  Initiated = TRUE;
-  return RETURN_SUCCESS;
+  return EFI_SUCCESS;
 }
 
 /**
