@@ -15,9 +15,6 @@
 #include <sbi/riscv_atomic.h>
 #include <U5Clint.h>
 
-STATIC volatile VOID * const p_mtime = (VOID *)CLINT_REG_MTIME;
-#define MTIME          (*p_mtime)
-#define MTIMECMP(i)    (p_mtimecmp[i])
 BOOLEAN TimerHandlerReentry = FALSE;
 
 //
@@ -73,7 +70,7 @@ TimerInterruptHandler (
     // MMode timer occurred when processing
     // SMode timer handler.
     //
-    RiscvTimer = readq_relaxed(p_mtime);
+    RiscvTimer = RiscVReadMachineTimerInterface();
     SbiSetTimer (RiscvTimer += mTimerPeriod);
     csr_clear(CSR_SIP, MIP_STIP);
     return;
@@ -91,7 +88,7 @@ TimerInterruptHandler (
   if (mTimerNotifyFunction != NULL) {
       mTimerNotifyFunction (mTimerPeriod);
   }
-  RiscvTimer = readq_relaxed(p_mtime);
+  RiscvTimer = RiscVReadMachineTimerInterface();
   SbiSetTimer (RiscvTimer += mTimerPeriod);
   gBS->RestoreTPL (OriginalTPL);
   csr_set(CSR_SIE, MIP_STIP); // enable SMode timer int
@@ -185,10 +182,9 @@ TimerDriverSetTimerPeriod (
     return EFI_SUCCESS;
   }
 
-  mTimerPeriod = TimerPeriod / 10; // convert unit from 100ns to 1us
-
-  RiscvTimer = readq_relaxed(p_mtime);
-  SbiSetTimer(RiscvTimer + mTimerPeriod);
+  mTimerPeriod = TimerPeriod; // convert unit from 100ns to 1us
+  RiscvTimer = RiscVReadMachineTimerInterface();
+  SbiSetTimer(RiscvTimer + mTimerPeriod / 10);
 
   mCpu->EnableInterrupt(mCpu);
   csr_set(CSR_SIE, MIP_STIP); // enable timer int

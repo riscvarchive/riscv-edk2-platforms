@@ -30,6 +30,7 @@
   BaseLib
   DebugLib
   IoLib
+  MachineModeTimerLib
   RiscVCpuLib
   RiscVEdk2SbiLib
   UefiBootServicesTableLib
