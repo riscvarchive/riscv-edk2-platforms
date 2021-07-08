@@ -7,7 +7,7 @@
 # 1. Present a consolidated and simplified view of all available advanced features to board packages.
 # 2. Provide a simple, single package build for all available advanced features.
 #
-# Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -30,7 +30,12 @@
   PEI_ARCH                            = IA32
   DXE_ARCH                            = X64
 
-!include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+[Packages]
+  MdePkg/MdePkg.dec
+  MinPlatformPkg/MinPlatformPkg.dec
+
+!include AdvancedFeaturePkg/Include/AdvancedFeaturesPcd.dsc
+
 
 ################################################################################
 #
@@ -48,6 +53,16 @@
   gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable    |TRUE
   gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable                      |TRUE
   gLogoFeaturePkgTokenSpaceGuid.PcdJpgEnable                              |FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable                |FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable                   |FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable                      |FALSE
+
+#
+# Include common library
+#
+!include MinPlatformPkg/Include/Dsc/CoreCommonLib.dsc
+!include MinPlatformPkg/Include/Dsc/CorePeiLib.dsc
+!include MinPlatformPkg/Include/Dsc/CoreDxeLib.dsc
 
 #
 # This package builds all advanced features.
