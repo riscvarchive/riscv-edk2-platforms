@@ -10,6 +10,7 @@
 #ifndef SIFIVE_U5_SERIES_UART_H_
 #define SIFIVE_U5_SERIES_UART_H_
 
+#include <include/sbi/riscv_io.h>
 #include <include/sbi_utils/serial/sifive-uart.h>
 
 #endif
