@@ -2,6 +2,7 @@
   Serial I/O Port library implementation for output to SPI flash
 
 Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) Microsoft Corporation.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -17,40 +18,23 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/SpiLib.h>
 
 typedef struct {
-  PCH_SPI_PPI           *PchSpiPpi;
   UINT32                CurrentWriteOffset;
 } SPI_FLASH_DEBUG_CONTEXT;
 
 /**
-  Update reference to the most recent PCH SPI PPI installed
+  Returns a pointer to the PCH SPI PPI.
 
-  @param PeiServices       An indirect pointer to the EFI_PEI_SERVICES table published by the PEI Foundation
-  @param NotifyDescriptor  Address of the notification descriptor data structure.
-  @param Ppi               Address of the PPI that was installed.
-
-  @retval EFI_SUCCESS      Successfully update the PCH SPI PPI reference
-  @retval EFI_NOT_FOUND    An error occurred locating a required interface
-  @retval EFI_NOT_SUPPORTED
+  @return Pointer to PCH_SPI_PPI    If an instance of the PCH SPI PPI is found
+  @return NULL                      If an instance of the PCH SPI PPI is not found
 
 **/
-EFI_STATUS
-EFIAPI
-SpiPpiNotifyCallback (
-  IN EFI_PEI_SERVICES           **PeiServices,
-  IN EFI_PEI_NOTIFY_DESCRIPTOR  *NotifyDescriptor,
-  IN VOID                       *Ppi
+PCH_SPI_PPI *
+GetSpiPpi (
+  VOID
   )
 {
-  EFI_STATUS                Status;
-  EFI_HOB_GUID_TYPE         *GuidHob;
-  PCH_SPI_PPI               *PchSpiPpi;
-  SPI_FLASH_DEBUG_CONTEXT   *Context;
-
-  GuidHob = GetFirstGuidHob (&gSpiFlashDebugHobGuid);
-  if (GuidHob == NULL) {
-    return EFI_NOT_FOUND;
-  }
-  Context = GET_GUID_HOB_DATA (GuidHob);
+  EFI_STATUS    Status;
+  PCH_SPI_PPI   *PchSpiPpi;
 
   Status =  PeiServicesLocatePpi (
               &gPchSpiPpiGuid,
@@ -59,27 +43,17 @@ SpiPpiNotifyCallback (
               (VOID **) &PchSpiPpi
               );
   if (EFI_ERROR (Status)) {
-    return EFI_NOT_FOUND;
+    return NULL;
   }
 
-  Context->PchSpiPpi = PchSpiPpi;
-
-  return EFI_SUCCESS;
+  return PchSpiPpi;
 }
-
-EFI_PEI_NOTIFY_DESCRIPTOR mSpiPpiNotifyList[] = {
-  {
-    (EFI_PEI_PPI_DESCRIPTOR_NOTIFY_CALLBACK | EFI_PEI_PPI_DESCRIPTOR_TERMINATE_LIST),
-    &gPchSpiPpiGuid,
-    SpiPpiNotifyCallback
-  }
-};
 
 /**
   Common function to write trace data to a chosen debug interface like
   UART Serial device, USB Serial device or Trace Hub device
 
-  @param  Buffer           Point of data buffer which need to be writed.
+  @param  Buffer           Point of data buffer which needs to be written.
   @param  NumberOfBytes    Number of output bytes which are cached in Buffer.
 
 **/
@@ -93,6 +67,7 @@ SerialPortWrite (
   EFI_STATUS                Status;
   EFI_HOB_GUID_TYPE         *GuidHob;
   SPI_FLASH_DEBUG_CONTEXT   *Context;
+  PCH_SPI_PPI               *PchSpiPpi;
   UINT32                    BytesWritten;
   UINT32                    SourceBufferOffset;
   UINT32                    NvMessageAreaSize;
@@ -111,18 +86,22 @@ SerialPortWrite (
     return 0;
   }
   Context = GET_GUID_HOB_DATA (GuidHob);
-  if (Context == NULL || Context->PchSpiPpi == NULL || Context->CurrentWriteOffset >= NvMessageAreaSize) {
+  if (Context == NULL || Context->CurrentWriteOffset >= NvMessageAreaSize) {
+    return 0;
+  }
+  PchSpiPpi = GetSpiPpi ();
+  if (PchSpiPpi == NULL) {
     return 0;
   }
 
   if ((Context->CurrentWriteOffset + NumberOfBytes) / NvMessageAreaSize > 0) {
     LinearOffset = (UINT32) (FixedPcdGet32 (PcdFlashNvDebugMessageBase) - FixedPcdGet32 (PcdFlashAreaBaseAddress));
-    Status =  Context->PchSpiPpi->FlashErase (
-                                    Context->PchSpiPpi,
-                                    FlashRegionBios,
-                                    LinearOffset,
-                                    NvMessageAreaSize
-                                    );
+    Status = PchSpiPpi->FlashErase (
+                          PchSpiPpi,
+                          FlashRegionBios,
+                          LinearOffset,
+                          NvMessageAreaSize
+                          );
     if (!EFI_ERROR (Status)) {
       Context->CurrentWriteOffset = 0;
     } else {
@@ -137,13 +116,13 @@ SerialPortWrite (
 
   LinearOffset = (FixedPcdGet32 (PcdFlashNvDebugMessageBase) + Context->CurrentWriteOffset) - FixedPcdGet32 (PcdFlashAreaBaseAddress);
 
-  Status =  Context->PchSpiPpi->FlashWrite (
-                                  Context->PchSpiPpi,
-                                  FlashRegionBios,
-                                  LinearOffset,
-                                  BytesWritten,
-                                  (UINT8 *) &Buffer[SourceBufferOffset]
-                                  );
+  Status = PchSpiPpi->FlashWrite (
+                        PchSpiPpi,
+                        FlashRegionBios,
+                        LinearOffset,
+                        BytesWritten,
+                        (UINT8 *) &Buffer[SourceBufferOffset]
+                        );
   if (!EFI_ERROR (Status)) {
     Context->CurrentWriteOffset += BytesWritten;
     return BytesWritten;
@@ -295,17 +274,13 @@ SerialPortInitialize (
   )
 {
   EFI_STATUS                Status;
+  EFI_HOB_GUID_TYPE         *GuidHob;
   SPI_FLASH_DEBUG_CONTEXT   *Context;
 
-  Context = (SPI_FLASH_DEBUG_CONTEXT *) BuildGuidHob (&gSpiFlashDebugHobGuid, sizeof (SPI_FLASH_DEBUG_CONTEXT));
-  if (Context == NULL) {
-    return EFI_DEVICE_ERROR;
-  }
-  ZeroMem ((VOID *) Context, sizeof (SPI_FLASH_DEBUG_CONTEXT));
-
-  Status = PeiServicesNotifyPpi (&mSpiPpiNotifyList[0]);
-  if (EFI_ERROR (Status)) {
-    return EFI_DEVICE_ERROR;
+  GuidHob = GetFirstGuidHob (&gSpiFlashDebugHobGuid);
+  if (GuidHob != NULL) {
+    // Initialization only needs to occur once
+    return EFI_SUCCESS;
   }
 
   //
@@ -313,8 +288,15 @@ SerialPortInitialize (
   //
   Status = SpiServiceInit ();
   if (EFI_ERROR (Status)) {
-    Status = EFI_DEVICE_ERROR;
+    return EFI_DEVICE_ERROR;
   }
 
-  return Status;
+  Context = (SPI_FLASH_DEBUG_CONTEXT *) BuildGuidHob (&gSpiFlashDebugHobGuid, sizeof (SPI_FLASH_DEBUG_CONTEXT));
+  if (Context == NULL) {
+    return EFI_DEVICE_ERROR;
+  }
+
+  ZeroMem ((VOID *) Context, sizeof (SPI_FLASH_DEBUG_CONTEXT));
+
+  return EFI_SUCCESS;
 }
