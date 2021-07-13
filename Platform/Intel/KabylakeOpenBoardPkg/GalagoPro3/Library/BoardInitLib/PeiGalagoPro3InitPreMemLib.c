@@ -1,7 +1,7 @@
 /** @file
   System 76 GalagoPro3 board pre-memory initialization.
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -208,6 +208,12 @@ GalagoPro3BoardInitBeforeMemoryInit (
   /// Do basic PCH init
   ///
   SiliconInit ();
+
+  //
+  // Install PCH RESET PPI and EFI RESET2 PeiService
+  //
+  Status = PchInitializeReset ();
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }

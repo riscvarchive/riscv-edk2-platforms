@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -28,6 +28,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <SioRegs.h>
 #include <Library/PchPcrLib.h>
 #include <Library/SiliconInitLib.h>
+#include <Library/PchResetLib.h>
 
 #include "PeiKabylakeRvp3InitLib.h"
 
@@ -282,6 +283,8 @@ KabylakeRvp3BoardInitBeforeMemoryInit (
   VOID
   )
 {
+  EFI_STATUS    Status;
+
   if (LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) {
     KabylakeRvp3InitPreMem ();
   } else if (LibPcdGetSku () == BoardIdSkylakeRvp3) {
@@ -297,11 +300,17 @@ KabylakeRvp3BoardInitBeforeMemoryInit (
 
   GpioInitPreMem ();
   SioInit ();
-    
+
   ///
   /// Do basic PCH init
   ///
   SiliconInit ();
+
+  //
+  // Install PCH RESET PPI and EFI RESET2 PeiService
+  //
+  Status = PchInitializeReset ();
+  ASSERT_EFI_ERROR (Status);
 
   return EFI_SUCCESS;
 }

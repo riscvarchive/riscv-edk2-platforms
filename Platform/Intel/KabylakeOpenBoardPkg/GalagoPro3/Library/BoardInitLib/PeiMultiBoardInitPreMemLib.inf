@@ -1,7 +1,7 @@
 ## @file
 # Component information file for PEI GalagoPro3 Board Init Pre-Mem Library
 #
-# Copyright (c) 2019 - 2020 Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2021 Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -24,6 +24,7 @@
   PcdLib
   SiliconInitLib
   MultiBoardInitSupportLib
+  PchResetLib
 
 [Packages]
   MinPlatformPkg/MinPlatformPkg.dec
