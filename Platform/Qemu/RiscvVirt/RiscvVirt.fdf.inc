@@ -86,7 +86,5 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize = 0x10000
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdDeviceTreeAddress = 0x1020
 
 SET gUefiRiscVPkgTokenSpaceGuid.PcdRiscVMachineTimerFrequencyInHerz    = 1000000
-# TODO: This can be dynamically configured in QEMU
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdHartCount                   = 1          # Total cores on U540 platform
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootHartId                  = 0          # Boot hart ID
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPeiCorePrivilegeMode        = 1          # Set PeiCore to S-Mode
