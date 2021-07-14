@@ -616,6 +616,8 @@
       NULL|SecurityPkg/Library/DxeImageVerificationLib/DxeImageVerificationLib.inf
   }
   SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+  SecurityPkg/EnrollFromDefaultKeysApp/EnrollFromDefaultKeysApp.inf
+  SecurityPkg/VariableAuthenticated/SecureBootDefaultKeysDxe/SecureBootDefaultKeysDxe.inf
 !else
   MdeModulePkg/Universal/SecurityStubDxe/SecurityStubDxe.inf
 !endif

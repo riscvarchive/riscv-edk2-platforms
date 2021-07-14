@@ -189,7 +189,9 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableRuntimeDxe.inf
 !if $(SECURE_BOOT_ENABLE) == TRUE
+!include ArmPlatformPkg/SecureBootDefaultKeys.fdf.inc
   INF SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+  INF SecurityPkg/VariableAuthenticated/SecureBootDefaultKeysDxe/SecureBootDefaultKeysDxe.inf
 !endif
   INF MdeModulePkg/Universal/MonotonicCounterRuntimeDxe/MonotonicCounterRuntimeDxe.inf
   INF EmbeddedPkg/ResetRuntimeDxe/ResetRuntimeDxe.inf
