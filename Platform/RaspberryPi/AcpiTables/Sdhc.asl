@@ -23,7 +23,7 @@
 Device (SDC1)
 {
   Name (_HID, "BCM2847")
-  Name (_CID, "ARASAN")
+  Name (_CID, "BCM2847")
   Name (_UID, 0x0)
   Name (_CCA, 0x0)
   Name (_S1D, 0x1)
@@ -78,7 +78,7 @@ Device (SDC1)
 Device (SDC2)
 {
   Name (_HID, "BCM2855")
-  Name (_CID, "SDHST")
+  Name (_CID, "BCM2855")
   Name (_UID, 0x0)
   Name (_CCA, 0x0)
   Name (_S1D, 0x1)

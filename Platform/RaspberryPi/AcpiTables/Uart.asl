@@ -59,7 +59,7 @@ Device (URT0)
 Device (URTM)
 {
   Name (_HID, "BCM2836")
-  Name (_CID, "MINIUART")
+  Name (_CID, "BCM2836")
   Name (_UID, 0x0)
   Name (_CCA, 0x0)
   Method (_STA)
