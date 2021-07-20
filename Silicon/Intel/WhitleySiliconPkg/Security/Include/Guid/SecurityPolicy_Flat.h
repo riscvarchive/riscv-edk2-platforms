@@ -1,6 +1,6 @@
 /** @file
   Provides data structure information used by ServerSecurity features in literally all products
-  Header is flat and injected directly in SecurityPolicy sructuture and SOCKET_PROCESSORCORE_CONFIGURATION.
+  Header is flat and injected directly in SecurityPolicy structure and SOCKET_PROCESSORCORE_CONFIGURATION.
 
   @copyright
   Copyright 2020 - 2021 Intel Corporation. <BR>
@@ -8,7 +8,7 @@
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-  // Header is flat and injected directly in SecurityPolicy sructuture and SOCKET_PROCESSORCORE_CONFIGURATION.
+  // Header is flat and injected directly in SecurityPolicy structure and SOCKET_PROCESSORCORE_CONFIGURATION.
   // Put common definitons here either directly or via intermediate header file..
 
 // SECURITY_IP_MKTME_1V0  MkTme;

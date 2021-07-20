@@ -8,15 +8,15 @@
 **/
 
 //
-// TME
+// TME (Total Memory Encryption)
 //
-UINT8  EnableTme;                      // TME Enable
-UINT8  EnableTmeCR;                    // Exclude Crystal Ridge memory from encryption.
+UINT8  EnableTme;                               ///< TME Enable
+UINT8  EnableTmeCR;                             ///< TME for Optane Persistent Memory. Set to 0 exclude Optane from encryption.
 
 //
 // MK-TME
 //
-UINT8  EnableMktme;                    // MK-TME Enable
+UINT8  EnableMktme;                             ///< MK-TME Enable
 
 UINT8  ReservedS234;
 UINT8  ReservedS235;

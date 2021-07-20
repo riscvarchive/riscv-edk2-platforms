@@ -7,7 +7,7 @@
   SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
-UINT8  EnableTdx; // TDX Enable
-UINT8  KeySplit; // TDX/MK-TME key split
+UINT8  EnableTdx;                               ///< TDX Enable
+UINT8  KeySplit;                                ///< TDX/MK-TME key split
 
 UINT8  ReservedS245;

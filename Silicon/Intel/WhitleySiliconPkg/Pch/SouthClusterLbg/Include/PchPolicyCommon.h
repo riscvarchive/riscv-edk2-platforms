@@ -23,6 +23,9 @@ extern EFI_GUID gFlashProtectionConfigGuid;
 // ---------------------------- PCH General Config -------------------------------
 //
 
+/**
+  PCH General Configuration
+**/
 typedef struct {
   /**
     Subsystem Vendor ID and Subsystem ID of the PCH devices.
@@ -775,6 +778,9 @@ typedef enum  {
   PchHdaIDispMode1T = 1
 } PCH_HDAUDIO_IDISP_TMODE;
 
+/**
+  This structure contains the policies which are related to HD Audio device (cAVS).
+**/
 typedef struct {
   /**
     This member describes whether or not Intel HD Audio (Azalia) should be enabled.
@@ -1674,6 +1680,9 @@ typedef struct {
   UINT16                ProtectedRangeBase;
 } PROTECTED_RANGE;
 
+/**
+  PCH Flash Protection Configuration
+**/
 typedef struct {
   PROTECTED_RANGE       ProtectRange[PCH_FLASH_PROTECTED_RANGES];
 } PCH_FLASH_PROTECTION_CONFIG;

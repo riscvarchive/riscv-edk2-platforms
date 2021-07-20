@@ -10,9 +10,9 @@
 //
 // MK-TME
 //
-// NAK - Not a knob, used just for indication
-UINT8  TmeCapability; // TME Capable
-UINT8  TmeCrSupport; // Flag used to check if Crystal Ridge is supported in UEFI
-UINT8  MktmeCapability; // MK-TME Capable
-UINT16 MktmeMaxKeys; // Max number of keys used for encryption
-UINT8  MkTmeKeyIdBits; // Used to suppress setup menu key-splits
+// NAK (Not a knob) - Used just for indication
+UINT8  TmeCapability;                           // NAK (Not a knob) - TME Capable
+UINT8  TmeCrSupport;                            // NAK (Not a knob) - Flag used to check if Crystal Ridge is supported in UEFI
+UINT8  MktmeCapability;                         // NAK (Not a knob) - MK-TME Capable
+UINT16 MktmeMaxKeys;                            // NAK (Not a knob) - Max number of keys used for encryption
+UINT8  MkTmeKeyIdBits;                          // NAK (Not a knob) - Used to suppress setup menu key-splits

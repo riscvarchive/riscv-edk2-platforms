@@ -24,6 +24,9 @@
 
 typedef struct _UPI_POLICY_PPI UPI_POLICY_PPI;
 
+/**
+  UPI Policy Structure
+**/
 struct _UPI_POLICY_PPI {
   /**
     This member specifies the revision of the UPI_POLICY_PPI. This field is used to
@@ -32,7 +35,7 @@ struct _UPI_POLICY_PPI {
     to correctly interpret the content of the INTERFACE fields.
   **/
   UINT32        Revision;
-  KTI_HOST_IN   Upi;
+  KTI_HOST_IN   Upi;        ///< KTIRC input structure
 };
 
 #endif  // _UPI_POLICY_PPI_H_

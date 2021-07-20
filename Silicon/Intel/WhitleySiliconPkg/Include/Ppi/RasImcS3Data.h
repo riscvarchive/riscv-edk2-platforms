@@ -44,7 +44,13 @@ EFI_STATUS
   OUT       VOID                            *Data
   );
 
+/**
+ RAS IMC S3 Data PPI
+**/
 struct _RAS_IMC_S3_DATA_PPI {
+  /**
+    Retrieves data for S3 saved memory RAS features from non-volatile storage.
+  **/
   RAS_IMC_S3_DATA_PPI_GET_IMC_S3_RAS_DATA  GetImcS3RasData;
 };
 
