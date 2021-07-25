@@ -141,7 +141,9 @@ ArmPlatformGetVirtualMemoryMap (
   for (PcieIndex = 0; PcieIndex < PcieControllerCount; PcieIndex++) {
     mVirtualMemoryTable[++Index].PhysicalBase  = PcieControllers[PcieIndex].ConfigSpaceAddress;
     mVirtualMemoryTable[Index].VirtualBase     = PcieControllers[PcieIndex].ConfigSpaceAddress;
-    mVirtualMemoryTable[Index].Length = SIZE_256MB;
+    mVirtualMemoryTable[Index].Length          = (PcieControllers[PcieIndex].ConfigSpaceSize == 0) ?
+                                                 SIZE_256MB :
+                                                 PcieControllers[PcieIndex].ConfigSpaceSize;
     mVirtualMemoryTable[Index].Attributes      = ARM_MEMORY_REGION_ATTRIBUTE_DEVICE;
   }
 
