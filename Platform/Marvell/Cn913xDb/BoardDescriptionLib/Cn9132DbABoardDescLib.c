@@ -17,6 +17,17 @@
 #include <Library/UefiBootServicesTableLib.h>
 
 //
+// General purpose routine for per-board initalization
+//
+EFI_STATUS
+ArmadaBoardInit (
+  VOID
+  )
+{
+  return EFI_SUCCESS;
+}
+
+//
 // GPIO Expander
 //
 STATIC MV_GPIO_EXPANDER mGpioExpander = {

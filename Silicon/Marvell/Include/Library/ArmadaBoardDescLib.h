@@ -12,6 +12,15 @@
 #include <Library/MvGpioLib.h>
 
 //
+// General purpose routine for per-board initalization
+//
+EFI_STATUS
+EFIAPI
+ArmadaBoardInit (
+  VOID
+  );
+
+//
 // COMPHY controllers per-board description
 //
 typedef struct {

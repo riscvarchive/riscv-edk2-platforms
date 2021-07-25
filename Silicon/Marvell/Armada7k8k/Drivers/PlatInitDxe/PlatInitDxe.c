@@ -110,6 +110,8 @@ ArmadaPlatInitDxeEntryPoint (
   UtmiPhyInit ();
   MppInitialize ();
   ArmadaIcuInitialize ();
+  Status = ArmadaBoardInit ();
+  ASSERT_EFI_ERROR (Status);
 
   /*
    * Enable EL3 PMU interrupt handler and
