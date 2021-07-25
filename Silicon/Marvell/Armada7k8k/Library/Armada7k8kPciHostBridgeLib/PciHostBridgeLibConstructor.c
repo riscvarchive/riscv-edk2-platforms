@@ -219,7 +219,6 @@ Armada7k8kPciHostBridgeLibConstructor (
     PcieController = &(BoardPcieDescription->PcieControllers[Index]);
 
     ASSERT (PcieController->PcieBusMin == 0);
-    ASSERT (PcieController->ConfigSpaceAddress % SIZE_256MB == 0);
 
     if (PcieController->HaveResetGpio == TRUE) {
       /* Reset PCIE slot */
