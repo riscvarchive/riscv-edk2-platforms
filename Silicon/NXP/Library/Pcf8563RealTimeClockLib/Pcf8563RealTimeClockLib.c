@@ -117,6 +117,8 @@ LibGetTime (
     return EFI_DEVICE_ERROR;
   }
 
+  Time->Nanosecond = 0;
+
   if ((DateTime.VL_seconds & PCF8563_CLOCK_INVALID) != 0) {
       Time->Second  = 0;
       Time->Minute  = 0;
