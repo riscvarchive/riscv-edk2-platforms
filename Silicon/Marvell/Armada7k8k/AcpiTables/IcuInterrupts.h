@@ -11,28 +11,28 @@
 
 **/
 
-#define CP_GIC_SPI_CP0_PCI0            64
-#define CP_GIC_SPI_CP0_PCI1            65
-#define CP_GIC_SPI_CP0_PCI2            66
-#define CP_GIC_SPI_CP0_SDMMC           67
-#define CP_GIC_SPI_PP2_CP0_PORT0       69, 72, 75, 78, 81, 127
-#define CP_GIC_SPI_PP2_CP0_PORT1       70, 73, 76, 79, 82, 126
-#define CP_GIC_SPI_PP2_CP0_PORT2       71, 74, 77, 80, 83, 125
-#define CP_GIC_SPI_CP0_EIP_RNG0        105
-#define CP_GIC_SPI_CP0_USB_H1          112
-#define CP_GIC_SPI_CP0_USB_H0          113
-#define CP_GIC_SPI_CP0_SATA_H0         114
-#define CP_GIC_SPI_CP0_UART0           121
-#define CP_GIC_SPI_CP0_UART1           122
+#define CP_GIC_SPI_CP0_SDMMC           64
+#define CP_GIC_SPI_PP2_CP0_PORT0       65, 68, 71, 74, 77, 90
+#define CP_GIC_SPI_PP2_CP0_PORT1       66, 69, 72, 75, 78, 89
+#define CP_GIC_SPI_PP2_CP0_PORT2       67, 70, 73, 76, 79, 88
+#define CP_GIC_SPI_CP0_EIP_RNG0        80
+#define CP_GIC_SPI_CP0_USB_H1          81
+#define CP_GIC_SPI_CP0_USB_H0          82
+#define CP_GIC_SPI_CP0_SATA_H0         83
+#define CP_GIC_SPI_CP0_UART0           84
+#define CP_GIC_SPI_CP0_UART1           85
+#define CP_GIC_SPI_CP0_UART2           86
+#define CP_GIC_SPI_CP0_UART3           87
 
-#define CP_GIC_SPI_CP1_PCI0            288
-#define CP_GIC_SPI_CP1_PCI1            289
-#define CP_GIC_SPI_CP1_PCI2            290
-#define CP_GIC_SPI_CP1_SDMMC           291
-#define CP_GIC_SPI_PP2_CP1_PORT0       293, 296, 299, 302, 305, 351
-#define CP_GIC_SPI_PP2_CP1_PORT1       294, 297, 300, 303, 306, 350
-#define CP_GIC_SPI_PP2_CP1_PORT2       295, 298, 301, 304, 307, 349
-#define CP_GIC_SPI_CP1_EIP_RNG0        329
-#define CP_GIC_SPI_CP1_USB_H1          336
-#define CP_GIC_SPI_CP1_USB_H0          337
-#define CP_GIC_SPI_CP1_SATA_H0         338
+#define CP_GIC_SPI_CP1_SDMMC           96
+#define CP_GIC_SPI_PP2_CP1_PORT0       97, 100, 103, 106, 109, 122
+#define CP_GIC_SPI_PP2_CP1_PORT1       98, 101, 104, 107, 110, 121
+#define CP_GIC_SPI_PP2_CP1_PORT2       99, 102, 105, 108, 111, 120
+#define CP_GIC_SPI_CP1_EIP_RNG0        112
+#define CP_GIC_SPI_CP1_USB_H1          113
+#define CP_GIC_SPI_CP1_USB_H0          114
+#define CP_GIC_SPI_CP1_SATA_H0         115
+#define CP_GIC_SPI_CP1_UART0           116
+#define CP_GIC_SPI_CP1_UART1           117
+#define CP_GIC_SPI_CP1_UART2           118
+#define CP_GIC_SPI_CP1_UART3           119

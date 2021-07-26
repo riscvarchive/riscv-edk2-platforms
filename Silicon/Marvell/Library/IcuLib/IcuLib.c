@@ -16,73 +16,34 @@
 STATIC EFI_EVENT mEfiExitBootServicesEvent;
 
 STATIC CONST ICU_IRQ IrqMapNonSecure[] = {
-  {22,   0, IcuIrqTypeLevel}, /* PCIx4 INT A interrupt */
-  {23,   1, IcuIrqTypeLevel}, /* PCIx1 INT A interrupt */
-  {24,   2, IcuIrqTypeLevel}, /* PCIx1 INT A interrupt */
-  {27,   3, IcuIrqTypeLevel}, /* SD/MMC */
-  {33,   4, IcuIrqTypeLevel}, /* PPv2 DBG AXI monitor */
-  {34,   4, IcuIrqTypeLevel}, /* HB1      AXI monitor */
-  {35,   4, IcuIrqTypeLevel}, /* AP       AXI monitor */
-  {36,   4, IcuIrqTypeLevel}, /* PPv2     AXI monitor */
-  {39,   5, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {40,   6, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {41,   7, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {43,   8, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {44,   9, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {45,  10, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {47,  11, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {48,  12, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {49,  13, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {51,  14, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {52,  15, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {53,  16, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {55,  17, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {56,  18, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {57,  19, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {59,  20, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {60,  21, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {61,  22, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {63,  23, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {64,  24, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {65,  25, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {67,  26, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {68,  27, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {69,  28, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {71,  29, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {72,  30, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {73,  31, IcuIrqTypeLevel}, /* PPv2 Irq */
-  {78,  32, IcuIrqTypeLevel}, /* MG Irq */
-  {79,  33, IcuIrqTypeLevel}, /* GPIO 56-63 */
-  {80,  34, IcuIrqTypeLevel}, /* GPIO 48-55 */
-  {81,  35, IcuIrqTypeLevel}, /* GPIO 40-47 */
-  {82,  36, IcuIrqTypeLevel}, /* GPIO 32-39 */
-  {83,  37, IcuIrqTypeLevel}, /* GPIO 24-31 */
-  {84,  38, IcuIrqTypeLevel}, /* GPIO 16-23 */
-  {85,  39, IcuIrqTypeLevel}, /* GPIO  8-15 */
-  {86,  40, IcuIrqTypeLevel}, /* GPIO  0-7  */
-  {88,  41, IcuIrqTypeLevel}, /* EIP-197 ring-0 */
-  {89,  42, IcuIrqTypeLevel}, /* EIP-197 ring-1 */
-  {90,  43, IcuIrqTypeLevel}, /* EIP-197 ring-2 */
-  {91,  44, IcuIrqTypeLevel}, /* EIP-197 ring-3 */
-  {92,  45, IcuIrqTypeLevel}, /* EIP-197 int */
-  {95,  46, IcuIrqTypeLevel}, /* EIP-150 Irq */
-  {102, 47, IcuIrqTypeLevel}, /* USB3 Device Irq */
-  {105, 48, IcuIrqTypeLevel}, /* USB3 Host-1 Irq */
-  {106, 49, IcuIrqTypeLevel}, /* USB3 Host-0 Irq */
-  {107, 50, IcuIrqTypeLevel}, /* SATA Host-1 Irq */
-  {109, 50, IcuIrqTypeLevel}, /* SATA Host-0 Irq */
-  {115, 52, IcuIrqTypeLevel}, /* NAND Irq */
-  {117, 53, IcuIrqTypeLevel}, /* SPI-1 Irq */
-  {118, 54, IcuIrqTypeLevel}, /* SPI-0 Irq */
-  {120, 55, IcuIrqTypeLevel}, /* I2C 0 Irq */
-  {121, 56, IcuIrqTypeLevel}, /* I2C 1 Irq */
-  {122, 57, IcuIrqTypeLevel}, /* UART 0 Irq */
-  {123, 58, IcuIrqTypeLevel}, /* UART 1 Irq */
-  {124, 59, IcuIrqTypeLevel}, /* UART 2 Irq */
-  {125, 60, IcuIrqTypeLevel}, /* UART 3 Irq */
-  {127, 61, IcuIrqTypeLevel}, /* GOP-3 Irq */
-  {128, 62, IcuIrqTypeLevel}, /* GOP-2 Irq */
-  {129, 63, IcuIrqTypeLevel}, /* GOP-0 Irq */
+  {27,   0, IcuIrqTypeLevel}, /* SD/MMC */
+  {39,   1, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {40,   2, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {41,   3, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {43,   4, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {44,   5, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {45,   6, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {47,   7, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {48,   8, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {49,   9, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {51,  10, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {52,  11, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {53,  12, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {55,  13, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {56,  14, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {57,  15, IcuIrqTypeLevel}, /* PPv2 Irq */
+  {88,  16, IcuIrqTypeLevel}, /* EIP-197 ring-0 */
+  {105, 17, IcuIrqTypeLevel}, /* USB3 Host-1 Irq */
+  {106, 18, IcuIrqTypeLevel}, /* USB3 Host-0 Irq */
+  {107, 19, IcuIrqTypeLevel}, /* SATA Host-1 Irq */
+  {109, 19, IcuIrqTypeLevel}, /* SATA Host-0 Irq */
+  {122, 20, IcuIrqTypeLevel}, /* UART 0 Irq */
+  {123, 21, IcuIrqTypeLevel}, /* UART 1 Irq */
+  {124, 22, IcuIrqTypeLevel}, /* UART 2 Irq */
+  {125, 23, IcuIrqTypeLevel}, /* UART 3 Irq */
+  {127, 24, IcuIrqTypeLevel}, /* GOP-3 Irq */
+  {128, 25, IcuIrqTypeLevel}, /* GOP-2 Irq */
+  {129, 26, IcuIrqTypeLevel}, /* GOP-0 Irq */
 };
 
 /*
@@ -177,7 +138,7 @@ IcuConfigure (
   /* Get the base of the GIC SPI ID in the MSI message */
   SpiBase = IcuDesc->IcuSpiBase;
   /* Get multiple CP110 instances SPI ID shift */
-  SpiOffset = CpIndex * ICU_MAX_IRQS_PER_CP;
+  SpiOffset = ICU_SPI_OFFSET (CpIndex);
   /* Get MSI addresses per interrupt group */
   Msi = IcuDesc->IcuMsi;
 
@@ -230,7 +191,7 @@ IcuClearGicSpi (
   /* Get the base of the GIC SPI ID in the MSI message */
   SpiBase = IcuDesc->IcuSpiBase;
   /* Get multiple CP110 instances SPI ID shift */
-  SpiOffset = CpIndex * ICU_MAX_IRQS_PER_CP;
+  SpiOffset = ICU_SPI_OFFSET (CpIndex);
   /* Get MSI addresses per interrupt group */
   Msi = IcuDesc->IcuMsi;
 
@@ -254,10 +215,6 @@ IcuCleanUp (
   IcuDesc = Context;
 
   CpCount = FixedPcdGet8 (PcdMaxCpCount);
-  if (CpCount > ICU_MAX_SUPPORTED_UNITS) {
-    CpCount = ICU_MAX_SUPPORTED_UNITS;
-  }
-
   for (CpIndex = 0; CpIndex < CpCount; CpIndex++) {
     IcuClearGicSpi (CpIndex, IcuDesc);
   }
@@ -272,18 +229,8 @@ ArmadaIcuInitialize (
   UINTN CpCount, CpIndex;
   EFI_STATUS Status;
 
-  /*
-   * Due to limited amount of interrupt lanes, only 2 units can be
-   * wired to the GIC.
-   */
   CpCount = FixedPcdGet8 (PcdMaxCpCount);
-  if (CpCount > ICU_MAX_SUPPORTED_UNITS) {
-    DEBUG ((DEBUG_ERROR,
-      "%a: Default ICU to GIC mapping is available for maximum %d CP110 units",
-      __FUNCTION__,
-      ICU_MAX_SUPPORTED_UNITS));
-    CpCount = ICU_MAX_SUPPORTED_UNITS;
-  }
+  ASSERT (CpCount <= ICU_MAX_SUPPORTED_UNITS);
 
   /* Obtain SoC description of the ICU */
   Status = ArmadaSoCDescIcuGet (&IcuDesc);

@@ -22,7 +22,7 @@
 #include <Library/PcdLib.h>
 #include <Library/UefiBootServicesTableLib.h>
 
-#define ICU_REG_BASE(Cp)        (ArmadaSoCDescCpBaseGet (CpIndex) + 0x1E0000)
+#define ICU_REG_BASE(CpIndex)   (ArmadaSoCDescCpBaseGet (CpIndex) + 0x1E0000)
 
 #define ICU_GROUP_REGISTER_BASE_OFFSET    0x10
 #define ICU_SET_SPI_AL(x)       (0x10 + (ICU_GROUP_REGISTER_BASE_OFFSET * x))
@@ -35,7 +35,7 @@
 #define ICU_IS_EDGE_OFFSET       28
 #define ICU_GROUP_OFFSET         29
 
-#define ICU_MAX_SUPPORTED_UNITS  2
-#define ICU_MAX_IRQS_PER_CP      64
+#define ICU_MAX_SUPPORTED_UNITS  3
+#define ICU_SPI_OFFSET(CpIndex)  ((CpIndex) * 32)
 
 #define MAX_ICU_IRQS             207
