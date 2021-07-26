@@ -98,8 +98,7 @@ GetInfo (
   @retval EFI_NOT_READY           There is not enough random data available to
                                   satisfy the length requested by
                                   RNGValueLength.
-  @retval EFI_INVALID_PARAMETER   RNGValue is NULL and RNGValueLength is
-                                  non-zero.
+  @retval EFI_INVALID_PARAMETER   RNGValue is NULL or RNGValueLength is zero.
 
 **/
 STATIC
@@ -119,7 +118,7 @@ GetRNG (
   UINTN                      OutSize;
   UINTN                      WaitMiliSeconds;
 
-  if ((Value == NULL) && (ValueLength != 0)) {
+  if ((Value == NULL) || (ValueLength == 0)) {
     return EFI_INVALID_PARAMETER;
   }
 
