@@ -248,7 +248,7 @@
 !endif
 
 [PcdsFixedAtBuild.common]
-  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2 SH 1.0"
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2 SH 1.1"
   gArmPlatformTokenSpaceGuid.PcdCoreCount|4
 
   gEfiMdePkgTokenSpaceGuid.PcdMaximumUnicodeStringLength|1000000
@@ -388,7 +388,7 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosDocRev|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosEntryPointProvideMethod|0x2
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0302
-  gMarvellTokenSpaceGuid.PcdFirmwareVersion|"EDK2 SH 1.0"
+  gMarvellTokenSpaceGuid.PcdFirmwareVersion|"EDK2 SH 1.1"
 
   # TRNG
   gMarvellTokenSpaceGuid.PcdEip76TrngBaseAddress|0xF2760000
