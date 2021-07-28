@@ -1,7 +1,7 @@
 /** @file
   This file provides services for PEI policy default initialization
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -19,6 +19,9 @@ extern EFI_GUID gMemoryConfigNoCrcGuid;
 extern EFI_GUID gGraphicsPeiConfigGuid;
 extern EFI_GUID gVtdConfigGuid;
 
+#define DEFAULT_OPTION_ROM_TEMP_BAR            0x80000000
+#define DEFAULT_OPTION_ROM_TEMP_MEM_LIMIT      0xC0000000
+
 //
 // Function call to Load defaults for Individial IP Blocks
 //
@@ -33,6 +36,38 @@ LoadSaMiscPeiPreMemDefault (
 
   DEBUG ((DEBUG_INFO, "MiscPeiPreMemConfig->Header.GuidHob.Name = %g\n", &MiscPeiPreMemConfig->Header.GuidHob.Name));
   DEBUG ((DEBUG_INFO, "MiscPeiPreMemConfig->Header.GuidHob.Header.HobLength = 0x%x\n", MiscPeiPreMemConfig->Header.GuidHob.Header.HobLength));
+
+  //
+  // Policy initialization commented out here is because it's the same with default 0 and no need to re-do again.
+  //
+  MiscPeiPreMemConfig->LockPTMregs                      = 1;
+
+  //
+  // Initialize the Platform Configuration
+  //
+  MiscPeiPreMemConfig->MchBar              = (UINT32) PcdGet64 (PcdMchBaseAddress);
+  MiscPeiPreMemConfig->DmiBar              = 0xFED18000;
+  MiscPeiPreMemConfig->EpBar               = 0xFED19000;
+  MiscPeiPreMemConfig->EdramBar            = 0xFED80000;
+  MiscPeiPreMemConfig->SmbusBar            = PcdGet16 (PcdSmbusBaseAddress);
+  MiscPeiPreMemConfig->TsegSize            = PcdGet32 (PcdTsegSize);
+  MiscPeiPreMemConfig->GdxcBar             = 0xFED84000;
+
+  //
+  // Initialize the Switchable Graphics Default Configuration
+  //
+  MiscPeiPreMemConfig->SgDelayAfterHoldReset  = 100; //100ms
+  MiscPeiPreMemConfig->SgDelayAfterPwrEn      = 300; //300ms
+  MiscPeiPreMemConfig->SgDelayAfterOffMethod  = 0;
+  MiscPeiPreMemConfig->SgDelayAfterLinkEnable = 0;
+  MiscPeiPreMemConfig->SgGenSpeedChangeEnable = 0;
+
+  ///
+  /// Initialize the DataPtr for S3 resume
+  ///
+  MiscPeiPreMemConfig->S3DataPtr = NULL;
+  MiscPeiPreMemConfig->OpRomScanTempMmioBar      = DEFAULT_OPTION_ROM_TEMP_BAR;
+  MiscPeiPreMemConfig->OpRomScanTempMmioLimit    = DEFAULT_OPTION_ROM_TEMP_MEM_LIMIT;
 }
 
 VOID

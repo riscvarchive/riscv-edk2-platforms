@@ -1,7 +1,7 @@
 /** @file
   Provides silicon policy update library functions.
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -398,6 +398,8 @@ SiliconPolicyUpdatePreMem (
   SA_MISC_PEI_PREMEM_CONFIG     *MiscPeiPreMemConfig;
   MEMORY_CONFIG_NO_CRC          *MemConfigNoCrc;
   VOID                          *Buffer;
+  UINTN                         VariableSize;
+  VOID                          *MemorySavedData;
   UINT8                         SpdAddressTable[4];
 
   DEBUG((DEBUG_INFO, "\nUpdating Policy in Pre-Mem\n"));
@@ -417,6 +419,41 @@ SiliconPolicyUpdatePreMem (
       // Pass board specific SpdAddressTable to policy
       //
       CopyMem ((VOID *) MiscPeiPreMemConfig->SpdAddressTable, (VOID *) SpdAddressTable, (sizeof (UINT8) * 4));
+
+      //
+      // Set size of SMRAM
+      //
+      MiscPeiPreMemConfig->TsegSize = PcdGet32 (PcdTsegSize);
+
+      //
+      // Initialize S3 Data variable (S3DataPtr). It may be used for warm and fast boot paths.
+      // Note: AmberLake FSP does not implement the FSPM_ARCH_CONFIG_PPI added in FSP 2.1, hence
+      // the platform specific S3DataPtr must be used instead.
+      //
+      VariableSize = 0;
+      MemorySavedData = NULL;
+      Status = PeiGetVariable (
+                L"MemoryConfig",
+                &gFspNonVolatileStorageHobGuid,
+                &MemorySavedData,
+                &VariableSize
+                );
+      DEBUG ((DEBUG_INFO, "Get L\"MemoryConfig\" gFspNonVolatileStorageHobGuid - %r\n", Status));
+      DEBUG ((DEBUG_INFO, "MemoryConfig Size - 0x%x\n", VariableSize));
+      if (!EFI_ERROR (Status)) {
+        MiscPeiPreMemConfig->S3DataPtr = MemorySavedData;
+      }
+
+      //
+      // In FSP Dispatch Mode these BAR values are initialized by SiliconPolicyInitPreMem() in
+      // KabylakeSiliconPkg/Library/PeiSiliconPolicyInitLib/PeiPolicyInitPreMem.c; this function calls
+      // PEI_PREMEM_SI_DEFAULT_POLICY_INIT_PPI->PeiPreMemPolicyInit() to initialize all Config Blocks
+      // with default policy values (including these BAR values.) PEI_PREMEM_SI_DEFAULT_POLICY_INIT_PPI
+      // is implemented in the FSP. Make sure the value that FSP is using matches the value we are using.
+      //
+      ASSERT (PcdGet64 (PcdMchBaseAddress)  <= 0xFFFFFFFF);
+      ASSERT (MiscPeiPreMemConfig->MchBar   == (UINT32) PcdGet64 (PcdMchBaseAddress));
+      ASSERT (MiscPeiPreMemConfig->SmbusBar == PcdGet16 (PcdSmbusBaseAddress));
     }
     MemConfigNoCrc = NULL;
     Status = GetConfigBlock (Policy, &gMemoryConfigNoCrcGuid, (VOID *) &MemConfigNoCrc);
