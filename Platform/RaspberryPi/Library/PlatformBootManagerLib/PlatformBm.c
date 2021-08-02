@@ -6,6 +6,7 @@
  *  Copyright (c) 2015-2016, Red Hat, Inc.
  *  Copyright (c) 2014-2021, ARM Ltd. All rights reserved.
  *  Copyright (c) 2004-2016, Intel Corporation. All rights reserved.
+ *  Copyright (c) 2021, Semihalf All rights reserved.
  *
  *  SPDX-License-Identifier: BSD-2-Clause-Patent
  *
@@ -19,10 +20,12 @@
 #include <Library/UefiBootManagerLib.h>
 #include <Library/UefiLib.h>
 #include <Library/PrintLib.h>
+#include <Protocol/BootManagerPolicy.h>
 #include <Protocol/DevicePath.h>
 #include <Protocol/EsrtManagement.h>
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/LoadedImage.h>
+#include <Guid/BootDiscoveryPolicy.h>
 #include <Guid/EventGroup.h>
 #include <Guid/TtyTerm.h>
 #include <ConfigVars.h>
@@ -599,6 +602,89 @@ PlatformBootManagerBeforeConsole (
 }
 
 /**
+  Connect device specified by BootDiscoverPolicy variable and refresh
+  Boot order for newly discovered boot device.
+
+  @retval  EFI_SUCCESS  Devices connected succesfully or connection
+                        not required.
+  @retval  others       Return values from GetVariable(), LocateProtocol()
+                        and ConnectDeviceClass().
+--*/
+STATIC
+EFI_STATUS
+BootDiscoveryPolicyHandler (
+  VOID
+  )
+{
+  EFI_STATUS                       Status;
+  UINT32                           DiscoveryPolicy;
+  UINTN                            Size;
+  EFI_BOOT_MANAGER_POLICY_PROTOCOL *BMPolicy;
+  EFI_GUID                         *Class;
+
+  Size = sizeof (DiscoveryPolicy);
+  Status = gRT->GetVariable (
+                  BOOT_DISCOVERY_POLICY_VAR,
+                  &gBootDiscoveryPolicyMgrFormsetGuid,
+                  NULL,
+                  &Size,
+                  &DiscoveryPolicy
+                  );
+  if (Status == EFI_NOT_FOUND) {
+    Status = PcdSet32S (PcdBootDiscoveryPolicy, PcdGet32 (PcdBootDiscoveryPolicy));
+    DiscoveryPolicy = PcdGet32 (PcdBootDiscoveryPolicy);
+    if (Status == EFI_NOT_FOUND) {
+      return EFI_SUCCESS;
+    } else if (EFI_ERROR (Status)) {
+      return Status;
+    }
+  } else if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  if (DiscoveryPolicy == BDP_CONNECT_MINIMAL) {
+    return EFI_SUCCESS;
+  }
+
+  switch (DiscoveryPolicy) {
+    case BDP_CONNECT_NET:
+      Class = &gEfiBootManagerPolicyNetworkGuid;
+      break;
+    case BDP_CONNECT_ALL:
+      Class = &gEfiBootManagerPolicyConnectAllGuid;
+      break;
+    default:
+      DEBUG ((
+        DEBUG_INFO,
+        "%a - Unexpected DiscoveryPolicy (0x%x). Run Minimal Discovery Policy\n",
+        __FUNCTION__,
+        DiscoveryPolicy
+        ));
+      return EFI_SUCCESS;
+  }
+
+  Status = gBS->LocateProtocol (
+                  &gEfiBootManagerPolicyProtocolGuid,
+                  NULL,
+                  (VOID **)&BMPolicy
+                  );
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "%a - Failed to locate gEfiBootManagerPolicyProtocolGuid - %r\n", __FUNCTION__, Status));
+    return Status;
+  }
+
+  Status = BMPolicy->ConnectDeviceClass (BMPolicy, Class);
+  if (EFI_ERROR (Status)){
+    DEBUG ((DEBUG_ERROR, "%a - ConnectDeviceClass returns - %r\n", __FUNCTION__, Status));
+    return Status;
+  }
+
+  EfiBootManagerRefreshAllBootOption();
+
+  return EFI_SUCCESS;
+}
+
+/**
   Do the platform specific action after the console is ready
   Possible things that can be done in PlatformBootManagerAfterConsole:
   > Console post action:
@@ -642,6 +728,11 @@ PlatformBootManagerAfterConsole (
     EfiBootManagerConnectAll ();
   } else if (PcdGet32 (PcdBootPolicy) == FAST_BOOT) {
     DEBUG ((DEBUG_INFO, "Boot Policy is Fast Boot. Skip connecting all devices\n"));
+  }
+
+  Status = BootDiscoveryPolicyHandler ();
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_INFO, "Error applying Boot Discovery Policy:%r\n", Status));
   }
 
   Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL, (VOID**)&EsrtManagement);
