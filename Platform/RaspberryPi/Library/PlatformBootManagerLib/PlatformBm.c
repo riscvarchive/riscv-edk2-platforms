@@ -724,6 +724,11 @@ PlatformBootManagerAfterConsole (
     DEBUG ((DEBUG_INFO, "Error applying Boot Discovery Policy:%r\n", Status));
   }
 
+  Status = BootDiscoveryPolicyHandler ();
+  if (EFI_ERROR(Status)) {
+    DEBUG ((DEBUG_INFO, "Error applying Boot Discovery Policy:%r\n", Status));
+  }
+
   Status = gBS->LocateProtocol (&gEsrtManagementProtocolGuid, NULL, (VOID**)&EsrtManagement);
   if (!EFI_ERROR (Status)) {
     EsrtManagement->SyncEsrtFmp ();
