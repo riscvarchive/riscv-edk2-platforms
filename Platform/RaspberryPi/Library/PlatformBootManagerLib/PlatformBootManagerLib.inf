@@ -64,7 +64,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdBootDiscoveryPolicy
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut
   gRaspberryPiTokenSpaceGuid.PcdSdIsArasan
-  gRaspberryPiTokenSpaceGuid.PcdBootPolicy
 
 [Guids]
   gBootDiscoveryPolicyMgrFormsetGuid

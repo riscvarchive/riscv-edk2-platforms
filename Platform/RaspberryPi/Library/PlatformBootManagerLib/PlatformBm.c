@@ -4,7 +4,7 @@
  *  Copyright (c) 2017-2018, Andrei Warkentin <andrey.warkentin@gmail.com>
  *  Copyright (c) 2016, Linaro Ltd. All rights reserved.
  *  Copyright (c) 2015-2016, Red Hat, Inc.
- *  Copyright (c) 2014-2021, ARM Ltd. All rights reserved.
+ *  Copyright (c) 2014-2020, ARM Ltd. All rights reserved.
  *  Copyright (c) 2004-2016, Intel Corporation. All rights reserved.
  *  Copyright (c) 2021, Semihalf All rights reserved.
  *
@@ -28,11 +28,10 @@
 #include <Guid/BootDiscoveryPolicy.h>
 #include <Guid/EventGroup.h>
 #include <Guid/TtyTerm.h>
-#include <ConfigVars.h>
 
 #include "PlatformBm.h"
 
-#define BOOT_PROMPT L"ESC (setup), F1 (shell), ENTER (boot)\n"
+#define BOOT_PROMPT L"ESC (setup), F1 (shell), ENTER (boot)"
 
 #define DP_NODE_LEN(Type) { (UINT8)sizeof (Type), (UINT8)(sizeof (Type) >> 8) }
 
@@ -718,16 +717,6 @@ PlatformBootManagerAfterConsole (
     SerialConPrint (BOOT_PROMPT);
   } else {
     Print (BOOT_PROMPT);
-  }
-
-  //
-  // Connect the rest of the devices if the boot polcy is set to Full discovery
-  //
-  if (PcdGet32 (PcdBootPolicy) == FULL_DISCOVERY) {
-    DEBUG ((DEBUG_INFO, "Boot Policy is Full Discovery. Connect all devices\n"));
-    EfiBootManagerConnectAll ();
-  } else if (PcdGet32 (PcdBootPolicy) == FAST_BOOT) {
-    DEBUG ((DEBUG_INFO, "Boot Policy is Fast Boot. Skip connecting all devices\n"));
   }
 
   Status = BootDiscoveryPolicyHandler ();

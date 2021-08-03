@@ -1,0 +1,31 @@
+--- Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortLib.c
++++ Platform/RaspberryPi/Library/DualSerialPortLib/DualSerialPortLib.c
+@@ -34,25 +34,16 @@ SerialPortGetDivisor (
+   UINT32  SerialBaudRate
+ )
+ {
+-  UINT64              BaseClockRate;
++  UINT32              BaseClockRate;
+   UINT32              Divisor;
+ 
+-  //
+-  // On the Raspberry Pi, the clock to use for the 16650-compatible UART
+-  // is the base clock divided by the 12.12 fixed point VPU clock divisor.
+-  //
+-  BaseClockRate = (UINT64)PcdGet32 (PcdSerialClockRate);
+-#if (RPI_MODEL == 4)
+-  Divisor = MmioRead32(BCM2836_CM_BASE + BCM2836_CM_VPU_CLOCK_DIVISOR) & 0xFFFFFF;
+-  if (Divisor != 0)
+-    BaseClockRate = (BaseClockRate << 12) / Divisor;
+-#endif
++  BaseClockRate = PcdGet32 (PcdSerialClockRate);
+ 
+   //
+   // As per the BCM2xxx datasheets:
+   // baudrate = system_clock_freq / (8 * (divisor + 1)).
+   //
+-  Divisor = (UINT32)BaseClockRate / (SerialBaudRate * 8);
++  Divisor = BaseClockRate / (SerialBaudRate * 8);
+   if (Divisor != 0) {
+     Divisor--;
+   }

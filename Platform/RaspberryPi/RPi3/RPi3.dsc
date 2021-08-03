@@ -1,6 +1,6 @@
 # @file
 #
-#  Copyright (c) 2011 - 2021, ARM Limited. All rights reserved.
+#  Copyright (c) 2011 - 2020, ARM Limited. All rights reserved.
 #  Copyright (c) 2014, Linaro Limited. All rights reserved.
 #  Copyright (c) 2015 - 2021, Intel Corporation. All rights reserved.
 #  Copyright (c) 2017 - 2018, Andrei Warkentin <andrey.warkentin@gmail.com>
@@ -511,13 +511,6 @@
   #
   gRaspberryPiTokenSpaceGuid.PcdFanOnGpio|L"FanOnGpio"|gConfigDxeFormSetGuid|0x0|0
   gRaspberryPiTokenSpaceGuid.PcdFanTemp|L"FanTemp"|gConfigDxeFormSetGuid|0x0|0
-
-  #
-  # Boot Policy
-  # 0  - Fast Boot
-  # 1  - Full Discovery (Connect All)
-  #
-  gRaspberryPiTokenSpaceGuid.PcdBootPolicy|L"BootPolicy"|gConfigDxeFormSetGuid|0x0|1
 
   #
   # Reset-related.
