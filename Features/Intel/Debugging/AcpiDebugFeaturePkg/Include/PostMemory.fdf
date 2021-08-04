@@ -7,5 +7,5 @@
 #
 ##
 
-  INF Debugging/AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugDxe.inf
-  INF Debugging/AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugSmm.inf
+  INF RuleOverride = DRIVER_ACPITABLE Debugging/AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugDxe.inf
+  INF RuleOverride = DRIVER_ACPITABLE Debugging/AcpiDebugFeaturePkg/AcpiDebugDxeSmm/AcpiDebugSmm.inf
