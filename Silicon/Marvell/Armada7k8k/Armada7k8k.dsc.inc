@@ -240,6 +240,13 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareBase64|0xF93E0000
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingBase64|0xF93D0000
 
+  #
+  # Select ACPI as a default HW description
+  #
+!if $(ARCH) == AARCH64
+  gEmbeddedTokenSpaceGuid.PcdDefaultDtPref|FALSE
+!endif
+
 [PcdsFixedAtBuild.common]
   gEfiMdeModulePkgTokenSpaceGuid.PcdFirmwareVersionString|L"EDK2 SH 1.0"
   gArmPlatformTokenSpaceGuid.PcdCoreCount|4
