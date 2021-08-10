@@ -68,7 +68,7 @@ ReadWriteRpmb (
 
   ZeroMem (&SvcArgs, sizeof (SvcArgs));
 
-  SvcArgs.Arg0 = ARM_SVC_ID_FFA_MSG_SEND_DIRECT_REQ_AARCH64;
+  SvcArgs.Arg0 = ARM_SVC_ID_FFA_MSG_SEND_DIRECT_REQ;
   SvcArgs.Arg1 = mStorageId;
   SvcArgs.Arg2 = 0;
   SvcArgs.Arg3 = SvcAct;

@@ -13,8 +13,20 @@
  contract between OP-TEE and EDK2.
  For more details check core/arch/arm/include/kernel/stmm_sp.h in OP-TEE
 **/
-#define SP_SVC_RPMB_READ                0xC4000066
-#define SP_SVC_RPMB_WRITE               0xC4000067
+#define SP_SVC_RPMB_READ_AARCH64        0xC4000066
+#define SP_SVC_RPMB_WRITE_AARCH64       0xC4000067
+
+#define SP_SVC_RPMB_READ_AARCH32        0x84000066
+#define SP_SVC_RPMB_WRITE_AARCH32       0x84000067
+
+#ifdef MDE_CPU_AARCH64
+#define SP_SVC_RPMB_READ                SP_SVC_RPMB_READ_AARCH64
+#define SP_SVC_RPMB_WRITE               SP_SVC_RPMB_WRITE_AARCH64
+#endif
+#ifdef MDE_CPU_ARM
+#define SP_SVC_RPMB_READ                SP_SVC_RPMB_READ_AARCH32
+#define SP_SVC_RPMB_WRITE               SP_SVC_RPMB_WRITE_AARCH32
+#endif
 
 #define FLASH_SIGNATURE            SIGNATURE_32 ('r', 'p', 'm', 'b')
 #define INSTANCE_FROM_FVB_THIS(a)  CR (a, MEM_INSTANCE, FvbProtocol, \
