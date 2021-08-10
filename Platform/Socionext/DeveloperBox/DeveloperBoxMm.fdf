@@ -111,7 +111,7 @@ READ_LOCK_STATUS   = TRUE
   INF Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006StandaloneMm.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteStandaloneMm.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableStandaloneMm.inf
-  INF StandaloneMmPkg/Drivers/StandaloneMmCpu/AArch64/StandaloneMmCpu.inf
+  INF StandaloneMmPkg/Drivers/StandaloneMmCpu/StandaloneMmCpu.inf
 
 ################################################################################
 #

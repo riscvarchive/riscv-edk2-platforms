@@ -80,7 +80,7 @@
       gEfiMdePkgTokenSpaceGuid.PcdMaximumGuidedExtractHandler|0x2
   }
 
-  StandaloneMmPkg/Drivers/StandaloneMmCpu/AArch64/StandaloneMmCpu.inf
+  StandaloneMmPkg/Drivers/StandaloneMmCpu/StandaloneMmCpu.inf
   Silicon/Socionext/SynQuacer/Drivers/Fip006Dxe/Fip006StandaloneMm.inf
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteStandaloneMm.inf
   MdeModulePkg/Universal/Variable/RuntimeDxe/VariableStandaloneMm.inf {
