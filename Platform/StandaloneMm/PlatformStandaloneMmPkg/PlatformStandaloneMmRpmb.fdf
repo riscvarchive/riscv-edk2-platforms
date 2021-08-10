@@ -68,7 +68,8 @@ READ_LOCK_STATUS   = TRUE
   INF Drivers/OpTee/OpteeRpmbPkg/OpTeeRpmbFv.inf
   INF MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteStandaloneMm.inf
   INF MdeModulePkg/Universal/Variable/RuntimeDxe/VariableStandaloneMm.inf
-  INF StandaloneMmPkg/Drivers/StandaloneMmCpu/AArch64/StandaloneMmCpu.inf
+  INF StandaloneMmPkg/Drivers/StandaloneMmCpu/StandaloneMmCpu.inf
+
 ################################################################################
 #
 # Rules are use with the [FV] section's module INF type to define
