@@ -20,6 +20,10 @@ DefinitionBlock ("Cn9131DbASsdt.aml", "SSDT", 2, "MVEBU ", "CN9131", 3)
             Name (_HID, "LNRO001E")     // _HID: Hardware ID
             Name (_UID, 0x01)           // _UID: Unique ID
             Name (_CCA, 0x01)           // _CCA: Cache Coherency Attribute
+            Method (_STA)               // _STA: Device status
+            {
+                Return (0xF)
+            }
             Name (_CLS, Package (0x03)  // _CLS: Class Code
             {
                 0x01,
@@ -45,6 +49,10 @@ DefinitionBlock ("Cn9131DbASsdt.aml", "SSDT", 2, "MVEBU ", "CN9131", 3)
             Name (_HID, "PNP0D10")      // _HID: Hardware ID
             Name (_UID, 0x02)           // _UID: Unique ID
             Name (_CCA, 0x01)           // _CCA: Cache Coherency Attribute
+            Method (_STA)               // _STA: Device status
+            {
+                Return (0xF)
+            }
 
             Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
             {
@@ -63,6 +71,10 @@ DefinitionBlock ("Cn9131DbASsdt.aml", "SSDT", 2, "MVEBU ", "CN9131", 3)
             Name (_HID, "MRVL0110")                             // _HID: Hardware ID
             Name (_CCA, 0x01)                                   // Cache-coherent controller
             Name (_UID, 0x01)                                   // _UID: Unique ID
+            Method (_STA)                                       // _STA: Device status
+            {
+                Return (0xF)
+            }
             Name (_CRS, ResourceTemplate ()
             {
                 Memory32Fixed (ReadWrite, 0xf4000000 , 0x100000)
