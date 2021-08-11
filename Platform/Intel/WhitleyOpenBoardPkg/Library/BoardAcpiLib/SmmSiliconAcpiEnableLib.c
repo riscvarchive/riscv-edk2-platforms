@@ -16,8 +16,8 @@
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
 #include <PchAccess.h>
-#include <Protocol/DynamicSiLibraryProtocol.h>
-#include <Library/UefiBootServicesTableLib.h>
+#include <Protocol/DynamicSiLibrarySmmProtocol.h>
+#include <Library/SmmServicesTableLib.h>
 
 /**
   Clear Port 80h
@@ -61,9 +61,9 @@ SiliconEnableAcpi (
   UINT16                           Pm1Cnt;
   UINT16                           PchPmBase;
   EFI_STATUS                       Status;
-  DYNAMIC_SI_LIBARY_PROTOCOL       *DynamicSiLibraryProtocol = NULL;
+  DYNAMIC_SI_LIBARY_SMM_PROTOCOL   *DynamicSiLibrarySmmProtocol = NULL;
 
-  Status = gBS->LocateProtocol (&gDynamicSiLibraryProtocolGuid, NULL, &DynamicSiLibraryProtocol);
+  Status = gSmst->SmmLocateProtocol (&gDynamicSiLibrarySmmProtocolGuid, NULL, &DynamicSiLibrarySmmProtocol);
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
     return Status;
@@ -72,7 +72,7 @@ SiliconEnableAcpi (
   //
   // Init Power Management I/O Base aka ACPI Base
   //
-  PchPmBase = DynamicSiLibraryProtocol->PmcGetAcpiBase ();
+  PchPmBase = DynamicSiLibrarySmmProtocol->PmcGetAcpiBase ();
 
   SmiEn = IoRead32 (PchPmBase + R_ACPI_IO_SMI_EN);
 
@@ -112,9 +112,9 @@ SiliconDisableAcpi (
   UINT16                           Pm1Cnt;
   UINT16                           PchPmBase;
   EFI_STATUS                       Status;
-  DYNAMIC_SI_LIBARY_PROTOCOL       *DynamicSiLibraryProtocol = NULL;
+  DYNAMIC_SI_LIBARY_SMM_PROTOCOL   *DynamicSiLibrarySmmProtocol = NULL;
 
-  Status = gBS->LocateProtocol (&gDynamicSiLibraryProtocolGuid, NULL, &DynamicSiLibraryProtocol);
+  Status = gSmst->SmmLocateProtocol (&gDynamicSiLibrarySmmProtocolGuid, NULL, &DynamicSiLibrarySmmProtocol);
   if (EFI_ERROR (Status)) {
     ASSERT_EFI_ERROR (Status);
     return Status;
@@ -123,7 +123,7 @@ SiliconDisableAcpi (
   //
   // Init Power Management I/O Base aka ACPI Base
   //
-  PchPmBase = DynamicSiLibraryProtocol->PmcGetAcpiBase ();
+  PchPmBase = DynamicSiLibrarySmmProtocol->PmcGetAcpiBase ();
 
   Pm1Cnt = IoRead16 (PchPmBase + R_ACPI_IO_PM1_CNT);
 
