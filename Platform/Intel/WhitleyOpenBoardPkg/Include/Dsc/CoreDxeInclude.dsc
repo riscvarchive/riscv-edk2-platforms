@@ -119,7 +119,9 @@
   MdeModulePkg/Universal/Acpi/AcpiTableDxe/AcpiTableDxe.inf
   MdeModulePkg/Universal/Acpi/BootGraphicsResourceTableDxe/BootGraphicsResourceTableDxe.inf
 
+!if gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable == TRUE
   SecurityPkg/VariableAuthenticated/SecureBootConfigDxe/SecureBootConfigDxe.inf
+!endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
   SecurityPkg/Tcg/MemoryOverwriteControl/TcgMor.inf
