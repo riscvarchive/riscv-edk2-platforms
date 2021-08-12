@@ -29,6 +29,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <SioRegs.h>
 #include <Library/PchPcrLib.h>
 #include <Library/SiliconInitLib.h>
+#include <Library/PchResetLib.h>
 
 #include "PeiGalagoPro3InitLib.h"
 
@@ -192,6 +193,8 @@ GalagoPro3BoardInitBeforeMemoryInit (
   VOID
   )
 {
+  EFI_STATUS    Status;
+
   GalagoPro3InitPreMem ();
 
   //
