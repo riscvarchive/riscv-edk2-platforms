@@ -33,5 +33,9 @@ MdePkg/MdePkg.dec
 KabylakeSiliconPkg/SiPkg.dec
 
 
+[Pcd]
+gSiPkgTokenSpaceGuid.PcdAcpiBaseAddress
+
+
 [Sources]
 PchPmcLib.c

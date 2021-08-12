@@ -41,4 +41,19 @@ PchIsRtcBatteryGood (
   VOID
   );
 
+/**
+  Returns the sleep type after system wakeup.
+
+  @param[out] SleepType  Sleep type to be returned.
+
+  @retval     TRUE       A wake event occurred without power failure.
+  @retval     FALSE      Power failure occurred or not a wakeup.
+
+**/
+BOOLEAN
+EFIAPI
+GetSleepTypeAfterWakeup (
+  OUT UINT32            *SleepType
+  );
+
 #endif // _PCH_PMC_LIB_H_

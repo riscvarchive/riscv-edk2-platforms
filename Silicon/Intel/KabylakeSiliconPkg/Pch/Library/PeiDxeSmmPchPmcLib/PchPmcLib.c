@@ -128,3 +128,57 @@ PchIsRtcBatteryGood (
   }
   return FALSE;
 }
+
+/**
+  Returns the sleep type after system wakeup.
+
+  @param[out] SleepType  Sleep type to be returned.
+
+  @retval     TRUE       A wake event occurred without power failure.
+  @retval     FALSE      Power failure occurred or not a wakeup.
+
+**/
+BOOLEAN
+EFIAPI
+GetSleepTypeAfterWakeup (
+  OUT UINT32            *SleepType
+  )
+{
+  UINT16                Pm1Sts;
+  UINT32                Pm1Cnt;
+  UINTN                 PmcBaseAddress;
+
+  PmcBaseAddress = MmPciBase (
+                     DEFAULT_PCI_BUS_NUMBER_PCH,
+                     PCI_DEVICE_NUMBER_PCH_PMC,
+                     PCI_FUNCTION_NUMBER_PCH_PMC
+                     );
+
+  ///
+  /// Read the ACPI registers
+  ///
+  Pm1Sts  = IoRead16 (PcdGet16 (PcdAcpiBaseAddress) + R_PCH_ACPI_PM1_STS);
+  Pm1Cnt  = IoRead32 (PcdGet16 (PcdAcpiBaseAddress) + R_PCH_ACPI_PM1_CNT);
+
+  ///
+  /// Get sleep type if a wake event occurred and there is no power failure and reset
+  ///
+  if ((Pm1Sts & B_PCH_ACPI_PM1_STS_WAK) != 0) {
+    if ((MmioRead16 (PmcBaseAddress + R_PCH_PMC_GEN_PMCON_B) & (B_PCH_PMC_GEN_PMCON_B_RTC_PWR_STS | B_PCH_PMC_GEN_PMCON_B_PWR_FLR)) == 0) {
+      *SleepType = Pm1Cnt & B_PCH_ACPI_PM1_CNT_SLP_TYP;
+
+      return  TRUE;
+    } else {
+      ///
+      /// Clear Wake Status (WAK_STS) and Sleep Type (SLP_TYP)
+      ///
+      IoWrite16 (PcdGet16 (PcdAcpiBaseAddress) + R_PCH_ACPI_PM1_STS, B_PCH_ACPI_PM1_STS_WAK);
+      Pm1Cnt &= ~B_PCH_ACPI_PM1_CNT_SLP_TYP;
+      IoWrite32 (PcdGet16 (PcdAcpiBaseAddress) + R_PCH_ACPI_PM1_CNT, Pm1Cnt);
+
+      return  FALSE;
+    }
+  }
+
+  return  FALSE;
+}
