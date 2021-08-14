@@ -15,6 +15,7 @@ BOOLEAN    mHotKeypressed = FALSE;
 EFI_EVENT  HotKeyEvent    = NULL;
 
 UINTN      mBootMenuOptionNumber;
+UINTN      mSetupOptionNumber;
 
 
 /**
@@ -361,20 +362,11 @@ RegisterDefaultBootOption (
   if (mBootMenuOptionNumber == LoadOptionNumberUnassigned) {
     DEBUG ((DEBUG_INFO, "BootMenuOptionNumber (%d) should not be same to LoadOptionNumberUnassigned(%d).\n", mBootMenuOptionNumber, LoadOptionNumberUnassigned));
   }
-#if 0
+
   //
   // Boot Manager Menu
   //
-  EfiInitializeFwVolDevicepathNode (&FileNode, &mUiFile);
-
-  gBS->HandleProtocol (
-         gImageHandle,
-         &gEfiLoadedImageProtocolGuid,
-         (VOID **) &LoadedImage
-         );
-  DevicePath = AppendDevicePathNode (DevicePathFromHandle (LoadedImage->DeviceHandle), (EFI_DEVICE_PATH_PROTOCOL *) &FileNode);
-#endif
-
+  mSetupOptionNumber = RegisterFvBootOption (&mUiFile, L"Enter Setup", (UINTN) -1, LOAD_OPTION_CATEGORY_APP | LOAD_OPTION_ACTIVE | LOAD_OPTION_HIDDEN, NULL, 0);
 }
 
 /**
@@ -444,8 +436,6 @@ RegisterStaticHotkey (
   EFI_KEY_DATA                  F2;
   EFI_KEY_DATA                  F7;
   BOOLEAN                       EnterSetup;
-  EFI_STATUS                    Status;
-  EFI_BOOT_MANAGER_LOAD_OPTION  BootOption;
 
   EnterSetup = FALSE;
 
@@ -463,14 +453,13 @@ RegisterStaticHotkey (
   //
   // [F2]/[F7]
   //
-  F2.Key.ScanCode    = SCAN_F2;
-  F2.Key.UnicodeChar = CHAR_NULL;
-  F2.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID;
-  F2.KeyState.KeyToggleState = 0;
-  Status = EfiBootManagerGetBootManagerMenu (&BootOption);
-  ASSERT_EFI_ERROR (Status);
-  RegisterBootOptionHotkey ((UINT16) BootOption.OptionNumber, &F2.Key, TRUE);
-  EfiBootManagerFreeLoadOption (&BootOption);
+  if (mSetupOptionNumber) {
+    F2.Key.ScanCode    = SCAN_F2;
+    F2.Key.UnicodeChar = CHAR_NULL;
+    F2.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID;
+    F2.KeyState.KeyToggleState = 0;
+    RegisterBootOptionHotkey ((UINT16) mSetupOptionNumber, &F2.Key, TRUE);
+  }
 
   F7.Key.ScanCode    = SCAN_F7;
   F7.Key.UnicodeChar = CHAR_NULL;

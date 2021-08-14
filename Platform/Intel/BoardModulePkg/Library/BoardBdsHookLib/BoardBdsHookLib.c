@@ -1385,7 +1385,7 @@ BdsAfterConsoleReadyBeforeBootOptionCallback (
       break;
   }
 
-  Print (L"Press F7 for BootMenu!\n");
+  Print (L"Press F2 for Setup, or F7 for BootMenu!\n");
 
 
 }
