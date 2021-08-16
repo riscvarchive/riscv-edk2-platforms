@@ -1,7 +1,7 @@
 /** @file
   This file is PeiCpuPolicy library.
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -45,13 +45,31 @@ LoadCpuConfigLibPreMemConfigDefault (
   CpuConfigLibPreMemConfig->BootFrequency           = 1;    // Maximum non-turbo Performance
   CpuConfigLibPreMemConfig->ActiveCoreCount         = 0;    // All cores active
   CpuConfigLibPreMemConfig->VmxEnable               = CPU_FEATURE_ENABLE;
-  CpuConfigLibPreMemConfig->CpuRatio = ((AsmReadMsr64 (MSR_PLATFORM_INFO) >> N_PLATFORM_INFO_MAX_RATIO) & B_PLATFORM_INFO_RATIO_MASK);
+  CpuConfigLibPreMemConfig->CpuRatio = RShiftU64 (AsmReadMsr64 (MSR_PLATFORM_INFO), N_PLATFORM_INFO_MAX_RATIO) & B_PLATFORM_INFO_RATIO_MASK;
+
   ///
   /// FCLK Frequency
   ///
-  CpuFamily  = GetCpuFamily();
-  CpuSku     = GetCpuSku();
-  MchBar = MmioRead64 (MmPciBase (SA_MC_BUS, SA_MC_DEV, SA_MC_FUN) + R_SA_MCHBAR) &~BIT0;
+  CpuFamily = GetCpuFamily ();
+  CpuSku    = GetCpuSku ();
+
+  DEBUG_CODE_BEGIN ();
+  ///
+  /// Ensure the upper 7-bits [38:32] of MCHBAR are zero so we can access MCHBAR in 32-bit mode.
+  ///
+  MchBar = MmioRead32 (MmPciBase (SA_MC_BUS, SA_MC_DEV, SA_MC_FUN) + R_SA_MCHBAR + 0x4) & 0x7F;
+  if (MchBar != 0x0) {
+    DEBUG ((
+      DEBUG_ERROR,
+      "Error: [%a]:[%dL] MCHBAR configured to >4GB\n",
+      __FUNCTION__,
+      __LINE__
+      ));
+  }
+  ASSERT (MchBar == 0x0);
+  DEBUG_CODE_END ();
+
+  MchBar = MmioRead32 (MmPciBase (SA_MC_BUS, SA_MC_DEV, SA_MC_FUN) + R_SA_MCHBAR) &~BIT0;
   if (IsPchLinkDmi (CpuFamily) && (MmioRead16 (MmPciBase (SA_PEG_BUS_NUM, SA_PEG_DEV_NUM, SA_PEG10_FUN_NUM) + PCI_VENDOR_ID_OFFSET) != 0xFFFF)) {
     PegDisabled = MmioRead32 ((UINTN) MchBar + R_SA_MCHBAR_BIOS_RESET_CPL_OFFSET) & BIT3;
   } else {
@@ -67,6 +85,8 @@ LoadCpuConfigLibPreMemConfigDefault (
   } else {
     CpuConfigLibPreMemConfig->FClkFrequency = 0;  // 800MHz
   }
+
+  CpuConfigLibPreMemConfig->PeciC10Reset = 1;  // Disables Peci Reset on C10 exit
 }
 
 /**
