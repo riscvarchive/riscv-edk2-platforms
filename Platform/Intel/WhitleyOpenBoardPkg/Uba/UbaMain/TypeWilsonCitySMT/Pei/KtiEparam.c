@@ -12,10 +12,9 @@
 
 extern EFI_GUID gPlatformKtiEparamUpdateDataGuid;
 
-ALL_LANES_EPARAM_LINK_INFO  KtiWilsonCityRPIcxAllLanesEparamTable[] = {
+ALL_LANES_EPARAM_LINK_INFO  KtiWilsonCitySMTIcxAllLanesEparamTable[] = {
   //
   // SocketID, Freq, Link, TXEQL, CTLEPEAK
-  // Please propagate changes to WilsonCitySMT and WilsonCityModular UBA KtiEparam tables
   //
   //
   // Socket 0
@@ -28,21 +27,33 @@ ALL_LANES_EPARAM_LINK_INFO  KtiWilsonCityRPIcxAllLanesEparamTable[] = {
   //
   {0x1, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK0), 0x2A31383F, ADAPTIVE_CTLE},
   {0x1, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK1), 0x2A30393F, ADAPTIVE_CTLE},
-  {0x1, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK2), 0x2C34373F, ADAPTIVE_CTLE}
+  {0x1, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK2), 0x2C34373F, ADAPTIVE_CTLE},
+  //
+  // Socket 2
+  //
+  {0x2, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK0), 0x2D37353F, ADAPTIVE_CTLE},
+  {0x2, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK1), 0x2F3A343F, ADAPTIVE_CTLE},
+  {0x2, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK2), 0x2F3A343F, ADAPTIVE_CTLE},
+  //
+  // Socket 3
+  //
+  {0x3, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK0), 0x2D37353F, ADAPTIVE_CTLE},
+  {0x3, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK1), 0x2F3A343F, ADAPTIVE_CTLE},
+  {0x3, (1 << SPEED_REC_96GT) | (1 << SPEED_REC_104GT) | (1 << SPEED_REC_112GT), (1 << KTI_LINK2), 0x2F3A343F, ADAPTIVE_CTLE}
 };
 
-PLATFORM_KTI_EPARAM_UPDATE_TABLE  TypeWilsonCityRPIcxKtiEparamUpdate = {
+PLATFORM_KTI_EPARAM_UPDATE_TABLE  TypeWilsonCitySMTIcxKtiEparamUpdate = {
   PLATFORM_KTIEP_UPDATE_SIGNATURE,
   PLATFORM_KTIEP_UPDATE_VERSION,
-  KtiWilsonCityRPIcxAllLanesEparamTable,
-  sizeof (KtiWilsonCityRPIcxAllLanesEparamTable),
+  KtiWilsonCitySMTIcxAllLanesEparamTable,
+  sizeof (KtiWilsonCitySMTIcxAllLanesEparamTable),
   NULL,
   0
 };
 
 
 EFI_STATUS
-TypeWilsonCityRPInstallKtiEparamData (
+TypeWilsonCitySMTInstallKtiEparamData (
   IN UBA_CONFIG_DATABASE_PPI    *UbaConfigPpi
 )
 {
@@ -60,8 +71,8 @@ TypeWilsonCityRPInstallKtiEparamData (
   Status = UbaConfigPpi->AddData (
                                  UbaConfigPpi,
                                  &gPlatformKtiEparamUpdateDataGuid,
-                                 &TypeWilsonCityRPIcxKtiEparamUpdate,
-                                 sizeof(TypeWilsonCityRPIcxKtiEparamUpdate)
+                                 &TypeWilsonCitySMTIcxKtiEparamUpdate,
+                                 sizeof(TypeWilsonCitySMTIcxKtiEparamUpdate)
                                  );
 
   return Status;

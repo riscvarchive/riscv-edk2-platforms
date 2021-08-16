@@ -15,6 +15,7 @@ $(RP_PKG)/Uba/BoardInit/Pei/BoardInitPei.inf {
         <LibraryClasses>
            NULL|$(RP_PKG)/Uba/UbaMain/TypeWilsonCityRP/Pei/PeiBoardInitLib.inf
            NULL|$(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Pei/PeiBoardInitLib.inf
+           NULL|$(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Pei/PeiBoardInitLib.inf
            #
            #### NO PLATFORM SPECIFIC LIBRARY CLASSES AFTER THIS LINE!!!!
            #
@@ -42,3 +43,10 @@ $(RP_PKG)/Uba/UbaMain/TypeWilsonCityRP/Dxe/SlotDataUpdateDxe/SlotDataUpdateDxe.i
 $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/UsbOcUpdateDxe/UsbOcUpdateDxe.inf
 $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/IioCfgUpdateDxe/IioCfgUpdateDxe.inf
 $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/SlotDataUpdateDxe/SlotDataUpdateDxe.inf
+
+#
+# Platform TypeWilsonCitySMT
+#
+$(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/UsbOcUpdateDxe/UsbOcUpdateDxe.inf
+$(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/IioCfgUpdateDxe/IioCfgUpdateDxe.inf
+$(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/SlotDataUpdateDxe/SlotDataUpdateDxe.inf

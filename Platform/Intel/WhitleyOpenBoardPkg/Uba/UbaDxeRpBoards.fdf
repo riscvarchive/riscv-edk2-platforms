@@ -20,3 +20,10 @@ INF  $(RP_PKG)/Uba/UbaMain/TypeWilsonCityRP/Dxe/SlotDataUpdateDxe/SlotDataUpdate
 INF  $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/UsbOcUpdateDxe/UsbOcUpdateDxe.inf
 INF  $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/IioCfgUpdateDxe/IioCfgUpdateDxe.inf
 INF  $(RP_PKG)/Uba/UbaMain/TypeCooperCityRP/Dxe/SlotDataUpdateDxe/SlotDataUpdateDxe.inf
+
+#
+# Platform TypeWilsonCitySMT
+#
+INF  $(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/UsbOcUpdateDxe/UsbOcUpdateDxe.inf
+INF  $(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/IioCfgUpdateDxe/IioCfgUpdateDxe.inf
+INF  $(RP_PKG)/Uba/UbaMain/TypeWilsonCitySMT/Dxe/SlotDataUpdateDxe/SlotDataUpdateDxe.inf

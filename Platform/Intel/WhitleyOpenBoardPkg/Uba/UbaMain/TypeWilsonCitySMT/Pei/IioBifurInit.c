@@ -41,6 +41,9 @@ typedef enum {
 #define ENABLE            1
 #define DISABLE           0
 
+//
+// WilsonCitySMT should has the same settings like WilsomCity-LCC
+//
 
 //
 //  config file  : Wilson_City_PCIe_Slot_Config_1p70.xlsx
@@ -149,21 +152,21 @@ static IIO_SLOT_CONFIG_DATA_ENTRY_EX   IioSlotTable[] = {
 };
 
 EFI_STATUS
-UpdateWilsonCityRPIioConfig (
+UpdateWilsonCitySMTIioConfig (
   IN  IIO_GLOBALS             *IioGlobalData
   )
 {
   return EFI_SUCCESS;
 }
 
-PLATFORM_IIO_CONFIG_UPDATE_TABLE_EX  TypeWilsonCityRPIioConfigTable =
+PLATFORM_IIO_CONFIG_UPDATE_TABLE_EX  TypeWilsonCitySMTIioConfigTable =
 {
   PLATFORM_IIO_CONFIG_UPDATE_SIGNATURE,
   PLATFORM_IIO_CONFIG_UPDATE_VERSION_2,
 
   IioBifurcationTable,
   sizeof(IioBifurcationTable),
-  UpdateWilsonCityRPIioConfig,
+  UpdateWilsonCitySMTIioConfig,
   IioSlotTable,
   sizeof(IioSlotTable)
 };
@@ -178,7 +181,7 @@ PLATFORM_IIO_CONFIG_UPDATE_TABLE_EX  TypeWilsonCityRPIioConfigTable =
 
 **/
 EFI_STATUS
-TypeWilsonCityRPIioPortBifurcationInit (
+TypeWilsonCitySMTIioPortBifurcationInit (
   IN UBA_CONFIG_DATABASE_PPI    *UbaConfigPpi
 )
 {
@@ -199,8 +202,8 @@ TypeWilsonCityRPIioPortBifurcationInit (
   //
   // This is config for ICX
   //
-  PlatformIioInfoPtr = &TypeWilsonCityRPIioConfigTable;
-  PlatformIioInfoSize = sizeof(TypeWilsonCityRPIioConfigTable);
+  PlatformIioInfoPtr = &TypeWilsonCitySMTIioConfigTable;
+  PlatformIioInfoSize = sizeof(TypeWilsonCitySMTIioConfigTable);
 
   Status = UbaConfigPpi->AddData (
                                  UbaConfigPpi,
