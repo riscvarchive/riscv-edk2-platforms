@@ -1,5 +1,5 @@
 ### @file
-# Kaby Lake RVP 3 Board ACPI library
+# Acer Aspire VN7-572G Board ACPI library
 #
 # Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
@@ -26,6 +26,7 @@
   IoLib
   PciLib
   AslUpdateLib
+  EcLib
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -38,11 +39,9 @@
 [Pcd]
   gBoardModulePkgTokenSpaceGuid.PcdPs2KbMsEnable
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPciExpNative
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdNativeAspmEnable
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLowPowerS0Idle
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdAcpiGnvsAddress
 
 [Sources]
-  DxeKabylakeRvp3AcpiTableLib.c
+  DxeAspireVn7Dash572GAcpiTableLib.c
   DxeBoardAcpiTableLib.c
-

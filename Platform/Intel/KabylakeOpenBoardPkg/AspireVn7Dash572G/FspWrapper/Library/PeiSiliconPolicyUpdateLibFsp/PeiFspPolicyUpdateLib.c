@@ -7,10 +7,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <PiPei.h>
-#include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
-#include <Library/BaseMemoryLib.h>
-#include <Library/MemoryAllocationLib.h>
 #include <Library/FspWrapperApiLib.h>
 #include <Library/SiliconPolicyUpdateLib.h>
 
@@ -91,6 +88,36 @@ PeiFspSaPolicyUpdate (
   IN OUT FSPS_UPD    *FspsUpd
   );
 
+/**
+  Performs the remainder of board-specific FSP Policy initialization.
+
+  @param[in][out]  FspmUpd             Pointer to FSP UPD Data.
+
+  @retval          EFI_SUCCESS         FSP UPD Data is updated.
+  @retval          EFI_NOT_FOUND       Fail to locate required PPI.
+  @retval          Other               FSP UPD Data update process fail.
+**/
+EFI_STATUS
+EFIAPI
+PeiFspBoardPolicyUpdatePreMem (
+  IN OUT FSPM_UPD    *FspmUpd
+  );
+
+/**
+  Performs the remainder of board-specific FSP Policy initialization.
+
+  @param[in][out]  FspsUpd             Pointer to FSP UPD Data.
+
+  @retval          EFI_SUCCESS         FSP UPD Data is updated.
+  @retval          EFI_NOT_FOUND       Fail to locate required PPI.
+  @retval          Other               FSP UPD Data update process fail.
+**/
+EFI_STATUS
+EFIAPI
+PeiFspBoardPolicyUpdate (
+  IN OUT FSPS_UPD    *FspsUpd
+  );
+
 VOID
 InternalPrintVariableData (
   IN UINT8   *Data8,
@@ -113,9 +140,9 @@ InternalPrintVariableData (
 
   The meaning of Policy is defined by silicon code.
   It could be the raw data, a handle, a PPI, etc.
-  
+
   The input Policy must be returned by SiliconPolicyDonePreMem().
-  
+
   1) In FSP path, the input Policy should be FspmUpd.
   A platform may use this API to update the FSPM UPD policy initialized
   by the silicon module or the default UPD data.
@@ -140,6 +167,7 @@ SiliconPolicyUpdatePreMem (
   PeiFspSaPolicyUpdatePreMem (FspmUpdDataPtr);
   PeiFspPchPolicyUpdatePreMem (FspmUpdDataPtr);
   PeiFspMiscUpdUpdatePreMem (FspmUpdDataPtr);
+  PeiFspBoardPolicyUpdatePreMem (FspmUpdDataPtr);
 
   InternalPrintVariableData ((VOID *)FspmUpdDataPtr, sizeof(FSPM_UPD));
 
@@ -151,9 +179,9 @@ SiliconPolicyUpdatePreMem (
 
   The meaning of Policy is defined by silicon code.
   It could be the raw data, a handle, a PPI, etc.
-  
+
   The input Policy must be returned by SiliconPolicyDonePostMem().
-  
+
   1) In FSP path, the input Policy should be FspsUpd.
   A platform may use this API to update the FSPS UPD policy initialized
   by the silicon module or the default UPD data.
@@ -177,10 +205,9 @@ SiliconPolicyUpdatePostMem (
   FspsUpdDataPtr = FspsUpd;
   PeiFspSaPolicyUpdate (FspsUpdDataPtr);
   PeiFspPchPolicyUpdate (FspsUpdDataPtr);
-  
+  PeiFspBoardPolicyUpdate (FspsUpdDataPtr);
+
   InternalPrintVariableData ((VOID *)FspsUpdDataPtr, sizeof(FSPS_UPD));
 
   return FspsUpd;
 }
-
-

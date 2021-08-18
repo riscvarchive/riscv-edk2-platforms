@@ -1,5 +1,5 @@
 ## @file
-# Component information file for PEI KabylakeRvp3 Board Init Pre-Mem Library
+# Component information file for PEI AspireVn7Dash572G Board Init Pre-Mem Library
 #
 # Copyright (c) 2017 - 2021 Intel Corporation. All rights reserved.<BR>
 #
@@ -22,8 +22,14 @@
   MemoryAllocationLib
   PcdLib
   SiliconInitLib
-  EcLib
+  TimerLib
+  PchCycleDecodingLib
   PchResetLib
+  IoLib
+  EcLib
+  BoardEcLib
+  GpioLib
+  PeiLib
 
 [Packages]
   MinPlatformPkg/MinPlatformPkg.dec
@@ -34,14 +40,15 @@
   IntelSiliconPkg/IntelSiliconPkg.dec
 
 [Sources]
-  PeiKabylakeRvp3Detect.c
-  PeiKabylakeRvp3InitPreMemLib.c
-  KabylakeRvp3HsioPtssTables.c
-  KabylakeRvp3SpdTable.c
+  PeiAspireVn7Dash572GDetect.c
+  PeiAspireVn7Dash572GInitPreMemLib.c
+  AspireVn7Dash572GGpioTable.c
+  AspireVn7Dash572GHsioPtssTables.c
   PeiBoardInitPreMemLib.c
 
 [Pcd]
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcSioConfigDefaultPort
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLpcIoDecodeRange
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PchLpcIoEnableDecoding
 
   # PCH-LP HSIO PTSS Table
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSpecificLpHsioPtssTable1
@@ -59,22 +66,9 @@
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSaMiscUserBd
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMapSize
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2Dram
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqsMapCpu2DramSize
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqPinsInterleaved
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdData
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdDataSize
-
-  # PEG Reset By GPIO
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0WakeGpioNo
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstExpanderNo
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstGpioNo
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0HoldRstActive
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableExpanderNo
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableGpioNo
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPcie0PwrEnableActive
-
 
   # SPD Address Table
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable0
@@ -83,6 +77,7 @@
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcSpdAddressTable3
 
   # CA Vref Configuration
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcCaVrefConfig
 
   # Root Port Clock Info
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdRootPort0ClkInfo
@@ -128,8 +123,3 @@
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort3
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort4
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdUsb30OverCurrentPinPort5
-
-  # Misc
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdIoExpanderPresent
-
-

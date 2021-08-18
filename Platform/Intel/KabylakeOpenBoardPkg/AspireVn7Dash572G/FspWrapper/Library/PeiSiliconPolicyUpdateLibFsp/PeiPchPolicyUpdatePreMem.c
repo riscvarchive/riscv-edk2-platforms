@@ -8,15 +8,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include "PeiPchPolicyUpdate.h"
 #include <Library/BaseMemoryLib.h>
-#include <Library/MemoryAllocationLib.h>
-#include <Library/HobLib.h>
-#include <Guid/GlobalVariable.h>
 #include <Library/PchInfoLib.h>
 #include <Library/PchPcrLib.h>
 #include <Library/PchHsioLib.h>
 #include <Library/PchPcieRpLib.h>
 #include <PchHsioPtssTables.h>
-#include <Library/DebugLib.h>
 
 VOID
 InstallPlatformHsioPtssTable (
@@ -245,4 +241,3 @@ PeiFspPchPolicyUpdatePreMem (
   InstallPlatformHsioPtssTable (FspmUpd);
   return EFI_SUCCESS;
 }
-

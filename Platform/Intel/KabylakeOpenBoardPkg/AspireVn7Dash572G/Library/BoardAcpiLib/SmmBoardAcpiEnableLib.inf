@@ -1,5 +1,5 @@
 ### @file
-# Kaby Lake RVP 3 SMM Board ACPI Enable library
+# Acer Aspire VN7-572G SMM Board ACPI Enable library
 #
 # Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 #
@@ -23,6 +23,7 @@
 
 [LibraryClasses]
   BaseLib
+  EcLib
   IoLib
   PciLib
   MmPciLib
@@ -38,10 +39,7 @@
 [Pcd]
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSmcExtSmiBitPosition   ## CONSUMES
 
-[Protocols]
-
 [Sources]
-  SmmKabylakeRvp3AcpiEnableLib.c
+  SmmAspireVn7Dash572GAcpiEnableLib.c
   SmmSiliconAcpiEnableLib.c
   SmmBoardAcpiEnableLib.c
-

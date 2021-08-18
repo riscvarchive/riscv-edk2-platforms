@@ -9,17 +9,13 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <PiPei.h>
 
 #include <Library/DebugLib.h>
+#include <Library/PciLib.h>
 #include <Library/PeiLib.h>
-#include <Library/ConfigBlockLib.h>
 
 #include <FspEas.h>
 #include <FspmUpd.h>
 #include <FspsUpd.h>
 
-#include <Library/MemoryAllocationLib.h>
-#include <Library/DebugLib.h>
-#include <Library/DebugPrintErrorLevelLib.h>
-#include <Library/PciLib.h>
 #include <Guid/MemoryOverwriteControl.h>
 #include <PchAccess.h>
 
@@ -84,4 +80,3 @@ PeiFspMiscUpdUpdatePreMem (
 
   return EFI_SUCCESS;
 }
-

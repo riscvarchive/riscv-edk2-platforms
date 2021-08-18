@@ -1,5 +1,5 @@
 /** @file
-  Kaby Lake RVP 3 Board ACPI Library
+  Aspire VN7-572G Board ACPI Library
 
 Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -7,26 +7,21 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <Base.h>
-#include <Uefi.h>
 #include <PiDxe.h>
-#include <Library/BaseLib.h>
-#include <Library/IoLib.h>
 #include <Library/BoardAcpiTableLib.h>
+#include <Library/EcLib.h>
 #include <Library/PcdLib.h>
-#include <Library/DebugLib.h>
-#include <Library/UefiBootServicesTableLib.h>
-#include <Library/AslUpdateLib.h>
 #include <Protocol/GlobalNvsArea.h>
-
-#include <PlatformBoardId.h>
 
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_GLOBAL_NVS_AREA_PROTOCOL              mGlobalNvsArea;
 
 VOID
-KabylakeRvp3UpdateGlobalNvs (
+AspireVn7Dash572GUpdateGlobalNvs (
   VOID
   )
 {
+  EFI_STATUS  Status;
+  UINT8       PowerRegister;
 
   //
   // Allocate and initialize the NVS area for SMM and ASL communication.
@@ -40,7 +35,11 @@ KabylakeRvp3UpdateGlobalNvs (
   //
   // Enable PowerState
   //
-  mGlobalNvsArea.Area->PowerState = 1; // AC =1; for mobile platform, will update this value in SmmPlatform.c
+  Status = EcRead (0x70, &PowerRegister);
+  if (EFI_ERROR (Status)) {
+    PowerRegister = 0;
+  }
+  mGlobalNvsArea.Area->PowerState = (PowerRegister & BIT5) == BIT5;
 
   mGlobalNvsArea.Area->NativePCIESupport        = PcdGet8 (PcdPciExpNative);
 
@@ -54,7 +53,7 @@ KabylakeRvp3UpdateGlobalNvs (
   //
   mGlobalNvsArea.Area->LowPowerS0Idle = PcdGet8 (PcdLowPowerS0Idle);
 
-  mGlobalNvsArea.Area->Ps2MouseEnable     = FALSE;
+  mGlobalNvsArea.Area->Ps2MouseEnable     = PcdGet8 (PcdPs2KbMsEnable);
   mGlobalNvsArea.Area->Ps2KbMsEnable      = PcdGet8 (PcdPs2KbMsEnable);
 
   mGlobalNvsArea.Area->BoardId = (UINT8) LibPcdGetSku ();
@@ -62,15 +61,14 @@ KabylakeRvp3UpdateGlobalNvs (
 
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardUpdateAcpiTable (
+AspireVn7Dash572GBoardUpdateAcpiTable (
   IN OUT EFI_ACPI_COMMON_HEADER       *Table,
   IN OUT EFI_ACPI_TABLE_VERSION       *Version
   )
 {
   if (Table->Signature == EFI_ACPI_2_0_DIFFERENTIATED_SYSTEM_DESCRIPTION_TABLE_SIGNATURE) {
-    KabylakeRvp3UpdateGlobalNvs ();
+    AspireVn7Dash572GUpdateGlobalNvs ();
   }
 
   return EFI_SUCCESS;
 }
-

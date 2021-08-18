@@ -6,182 +6,117 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <PiPei.h>
-#include <SaPolicyCommon.h>
+#include <Library/BoardEcLib.h>
 #include <Library/DebugLib.h>
-#include <Library/BaseMemoryLib.h>
+#include <Library/EcLib.h>
+#include <Library/GpioLib.h>
 #include <Library/IoLib.h>
-#include <Library/HobLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PchCycleDecodingLib.h>
 #include <Library/PciLib.h>
-#include <Library/PeiSaPolicyLib.h>
-#include <Library/BoardInitLib.h>
-#include <PchAccess.h>
-#include <Library/GpioNativeLib.h>
-#include <Library/GpioLib.h>
-#include <GpioPinsSklLp.h>
-#include <GpioPinsSklH.h>
-#include <Library/GpioExpanderLib.h>
-#include <SioRegs.h>
-#include <Library/PchPcrLib.h>
-#include <IoExpander.h>
-#include <Library/PcdLib.h>
+#include <Library/PeiServicesLib.h>
 #include <Library/SiliconInitLib.h>
+#include <PchAccess.h>
+#include <GpioPinsSklLp.h>
 
-#include "PeiKabylakeRvp3InitLib.h"
+#include "PeiAspireVn7Dash572GInitLib.h"
 
 /**
-  SkylaeA0Rvp3 board configuration init function for PEI post memory phase.
+  Init from vendor's PeiOemModule. KbcPeim does not appear to be used
+  (It implements commands also found in RtKbcDriver and SmmKbcDriver).
 
-  PEI_BOARD_CONFIG_PCD_INIT
+  Mostly, this puts the system back to sleep if the lid is closed during
+  an S3 resume.
 
-  @param  Content  pointer to the buffer contain init information for board init.
-
-  @retval EFI_SUCCESS             The function completed successfully.
-  @retval EFI_INVALID_PARAMETER   The parameter is NULL.
 **/
-EFI_STATUS
-EFIAPI
-KabylakeRvp3Init (
+VOID
+EcInit (
   VOID
   )
 {
-  PcdSet32S (PcdHdaVerbTable, (UINTN) &HdaVerbTableAlc286Rvp3);
+  EFI_BOOT_MODE  BootMode;
+  UINT8          PowerRegister;
+  UINT8          OutData;
+  UINT16         ABase;
+  UINT16         Pm1Sts;
+  UINT32         GpeSts;
+  UINT16         XhciPmCs;
 
-  //
-  // Assign the GPIO table with pin configs to be used for UCMC
-  //
-  PcdSet32S (PcdBoardUcmcGpioTable, (UINTN)mGpioTableLpddr3Rvp3UcmcDevice);
-  PcdSet16S (PcdBoardUcmcGpioTableSize, mGpioTableLpddr3Rvp3UcmcDeviceSize);
+  /* This is called via a "$FNC" in a PeiOemModule pointer table, with "$DPX" on SiInit */
+  IoWrite8 (0x6C, 0x5A);  // 6Ch is the EC sideband port
+  PeiServicesGetBootMode (&BootMode);
+  if (BootMode == BOOT_ON_S3_RESUME) {
+    /* "MLID" in LGMR-based memory map is equivalent to "ELID" in EC-based
+     * memory map. Vendor firmware accesses through LGMR; remapped
+     * - EcCmd* function calls will not remapped */
+    EcRead (0x70, &PowerRegister);
+    if (!(PowerRegister & BIT1)) {   // Lid is closed
+      EcCmd90Read (0x0A, &OutData);
+      if (!(OutData & BIT1)) {
+        EcCmd91Write (0x0A, OutData | BIT1);
+      }
 
-  return EFI_SUCCESS;
+      /* Clear events and go back to sleep */
+      PchAcpiBaseGet (&ABase);
+      /* Clear ABase PM1_STS - RW/1C set bits */
+      Pm1Sts = IoRead16 (ABase + R_PCH_ACPI_PM1_STS);
+      IoWrite16 (ABase + R_PCH_ACPI_PM1_STS, Pm1Sts);
+      /* Clear ABase GPE0_STS[127:96] - RW/1C set bits */
+      GpeSts = IoRead32 (ABase + R_PCH_ACPI_GPE0_STS_127_96);
+      IoWrite32 (ABase + R_PCH_ACPI_GPE0_STS_127_96, GpeSts);
+      /* Clear xHCI PM_CS[PME_Status] - RW/1C - and disable xHCI PM_CS[PME_En] */
+      PciAndThenOr16 (PCI_LIB_ADDRESS(PCI_BUS_NUMBER_PCH_XHCI, PCI_DEVICE_NUMBER_PCH_XHCI, PCI_FUNCTION_NUMBER_PCH_XHCI, R_PCH_XHCI_PWR_CNTL_STS),
+                      ~B_PCH_XHCI_PWR_CNTL_STS_PME_EN,
+                      B_PCH_XHCI_PWR_CNTL_STS_PME_STS
+                      );
+
+      /* Enter S3 sleep */
+      IoAndThenOr32 (ABase + R_PCH_ACPI_PM1_CNT,
+                     ~(B_PCH_ACPI_PM1_CNT_SLP_TYP | B_PCH_ACPI_PM1_CNT_SLP_EN),
+                     V_PCH_ACPI_PM1_CNT_S3
+                     );
+      IoWrite32 (ABase + R_PCH_ACPI_PM1_CNT, B_PCH_ACPI_PM1_CNT_SLP_EN);
+      CpuDeadLoop ();
+    }
+  }
 }
 
-#define EXPANDERS                                 2                    // defines expander's quantity
+/**
+  Aspire VN7-572G board configuration init function for PEI post memory phase.
+
+**/
+VOID
+AspireVn7Dash572GInit (
+  VOID
+  )
+{
+  PcdSet32S (PcdHdaVerbTable, (UINTN) &HdaVerbTableAlc255AspireVn7Dash572G);
+  PcdSet32S (PcdDisplayAudioHdaVerbTable, (UINTN) &HdaVerbTableDisplayAudio);
+}
 
 /**
   Configures GPIO
 
-  @param[in]  GpioTable       Point to Platform Gpio table
-  @param[in]  GpioTableCount  Number of Gpio table entries
-
 **/
-VOID
-ConfigureGpio (
-  IN GPIO_INIT_CONFIG                 *GpioDefinition,
-  IN UINT16                           GpioTableCount
-  )
-{
-  EFI_STATUS          Status;
-
-  DEBUG ((DEBUG_INFO, "ConfigureGpio() Start\n"));
-
-  Status = GpioConfigurePads (GpioTableCount, GpioDefinition);
-
-  DEBUG ((DEBUG_INFO, "ConfigureGpio() End\n"));
-}
-
-VOID
-SetBit (
-  IN OUT UINT32  *Value,
-  IN     UINT32  BitNumber,
-  IN     BOOLEAN NewBitValue
-  )
-{
-  if (NewBitValue) {
-    *Value |= 1 << BitNumber;
-  } else {
-    *Value &= ~(1 << BitNumber);
-  }
-}
-
-/**
-  Configures IO Expander GPIO device
-
-  @param[in]  IOExpGpioDefinition  Point to IO Expander Gpio table
-  @param[in]  IOExpGpioTableCount  Number of Gpio table entries
-
-**/
-void
-ConfigureIoExpanderGpio (
-  IN IO_EXPANDER_GPIO_CONFIG        *IoExpGpioDefinition,
-  IN UINT16                          IoExpGpioTableCount
-  )
-{
-  UINT8               Index;
-  UINT32              Direction[EXPANDERS] = {0x00FFFFFF, 0x00FFFFFF};
-  UINT32              Level[EXPANDERS] = {0};
-  UINT32              Polarity[EXPANDERS] = {0};
-
-   // IoExpander {TCA6424A}
-  DEBUG ((DEBUG_INFO, "IO Expander Configuration Start\n"));
-  for (Index = 0; Index < IoExpGpioTableCount; Index++) {   //Program IO Expander as per the table defined in PeiPlatformHooklib.c
-    SetBit(&Direction[IoExpGpioDefinition[Index].IoExpanderNumber], IoExpGpioDefinition[Index].GpioPinNumber, (BOOLEAN)IoExpGpioDefinition[Index].GpioDirection);
-    SetBit(&Level[IoExpGpioDefinition[Index].IoExpanderNumber], IoExpGpioDefinition[Index].GpioPinNumber, (BOOLEAN)IoExpGpioDefinition[Index].GpioLevel);
-    SetBit(&Polarity[IoExpGpioDefinition[Index].IoExpanderNumber], IoExpGpioDefinition[Index].GpioPinNumber, (BOOLEAN)IoExpGpioDefinition[Index].GpioInversion);
-  }
-  for (Index = 0; Index < EXPANDERS; Index++) {
-    GpioExpBulkConfig(Index, Direction[Index], Polarity[Index], Level[Index]);
-  }
-  DEBUG ((DEBUG_INFO, "IO Expander Configuration End\n"));
-  return;
-}
-
-/**
-  Configure GPIO behind IoExpander.
-
-  @param[in]  PeiServices       General purpose services available to every PEIM.
-  @param[in]  NotifyDescriptor
-  @param[in]  Interface
-
-  @retval     EFI_SUCCESS       Operation success.
-**/
-VOID
-ExpanderGpioInit (
+EFI_STATUS
+EFIAPI
+GpioInitPostMem (
   VOID
   )
 {
-  ConfigureIoExpanderGpio(mGpioTableIoExpander, mGpioTableIoExpanderSize);
-}
+  EFI_STATUS  Status;
 
-/**
-  Configure single GPIO pad for touchpanel interrupt
+  DEBUG ((DEBUG_INFO, "GpioInitPostMem() Start\n"));
 
-**/
-VOID
-TouchpanelGpioInit (
-  VOID
-  )
-{
-  GPIO_INIT_CONFIG*     TouchpanelPad;
-  GPIO_PAD_OWN          PadOwnVal;
-
-  PadOwnVal = 0;
-  TouchpanelPad = &mGpioTableLpDdr3Rvp3Touchpanel;
-
-  GpioGetPadOwnership (TouchpanelPad->GpioPad, &PadOwnVal);
-  if (PadOwnVal == GpioPadOwnHost) {
-    GpioConfigurePads (1, TouchpanelPad);
+  Status = GpioConfigurePads (mGpioTableAspireVn7Dash572GSize, mGpioTableAspireVn7Dash572G);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to configure early GPIOs!\n"));
+    return EFI_DEVICE_ERROR;
   }
+
+  DEBUG ((DEBUG_INFO, "GpioInitPostMem() End\n"));
+  return EFI_SUCCESS;
 }
-
-
-/**
-  Configure GPIO
-
-**/
-VOID
-GpioInit (
-  VOID
-  )
-{
-  ConfigureGpio (mGpioTableLpDdr3Rvp3, mGpioTableLpDdr3Rvp3Size);
-
-  TouchpanelGpioInit();
-
-  return;
-}
-
 
 /**
   Configure GPIO and SIO
@@ -190,19 +125,33 @@ GpioInit (
 **/
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardInitBeforeSiliconInit (
+AspireVn7Dash572GBoardInitBeforeSiliconInit (
   VOID
   )
 {
-  KabylakeRvp3Init ();
+  GpioInitPostMem ();
+  AspireVn7Dash572GInit ();
 
-  GpioInit ();
-  ExpanderGpioInit ();
-    
   ///
   /// Do Late PCH init
   ///
   LateSiliconInit ();
+
+  return EFI_SUCCESS;
+}
+
+/**
+  Notify EC
+
+  @retval  EFI_SUCCESS   Operation success.
+**/
+EFI_STATUS
+EFIAPI
+AspireVn7Dash572GBoardInitAfterSiliconInit (
+  VOID
+  )
+{
+  EcInit ();
 
   return EFI_SUCCESS;
 }

@@ -7,20 +7,8 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiSaPolicyUpdate.h"
-#include <CpuRegs.h>
-#include <Library/CpuPlatformLib.h>
-#include <Guid/MemoryTypeInformation.h>
-#include <Guid/MemoryOverwriteControl.h>
-#include <Library/HobLib.h>
-#include <PchAccess.h>
-#include <SaAccess.h>
-#include <Library/CpuMailboxLib.h>
 #include <Library/BaseMemoryLib.h>
-#include <Library/MemoryAllocationLib.h>
 #include <Library/PeiSaPolicyLib.h>
-#include <Library/GpioLib.h>
-#include <GpioPinsSklH.h>
-
 
 /**
   Performs FSP SA PEI Policy initialization in pre-memory.
@@ -76,4 +64,3 @@ PeiFspSaPolicyUpdatePreMem (
   }
   return EFI_SUCCESS;
 }
-

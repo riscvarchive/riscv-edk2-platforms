@@ -28,6 +28,39 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include <Library/MmPciLib.h>
 #include <Library/IoLib.h>
 
+//
+// Function prototypes
+//
+/**
+  Performs the remainder of board-specific FSP Policy initialization.
+
+  @param[in] Policy - Policy PPI pointer.
+
+  @retval          EFI_SUCCESS         FSP UPD Data is updated.
+  @retval          EFI_NOT_FOUND       Fail to locate required PPI.
+  @retval          Other               FSP UPD Data update process fail.
+**/
+EFI_STATUS
+EFIAPI
+PeiFspBoardPolicyUpdatePreMem (
+  IN VOID *Policy
+  );
+
+/**
+  Performs the remainder of board-specific FSP Policy initialization.
+
+  @param[in] Policy - Policy PPI pointer.
+
+  @retval          EFI_SUCCESS         FSP UPD Data is updated.
+  @retval          EFI_NOT_FOUND       Fail to locate required PPI.
+  @retval          Other               FSP UPD Data update process fail.
+**/
+EFI_STATUS
+EFIAPI
+PeiFspBoardPolicyUpdate (
+  IN VOID *Policy
+  );
+
 /**
   Get the next microcode patch pointer.
 
@@ -498,6 +531,9 @@ SiliconPolicyUpdatePreMem (
     // Update PCD policy
     //
     InstallPlatformHsioPtssTable (Policy);
+
+    // Board-specific policy overrides
+    PeiFspBoardPolicyUpdatePreMem (Policy);
   }
 
   return Policy;
@@ -579,6 +615,11 @@ SiliconPolicyUpdatePostMem (
 
   if (CpuConfig != NULL) {
     CpuConfig->MicrocodePatchAddress = PlatformCpuLocateMicrocodePatch ();
+  }
+
+  if (Policy != NULL) {
+    // Board-specific policy overrides
+    PeiFspBoardPolicyUpdate (Policy);
   }
   return Policy;
 }

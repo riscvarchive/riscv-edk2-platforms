@@ -6,8 +6,9 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
 
-#include "DxeGopPolicyInit.h"
+#include <Library/EcLib.h>
 #include <Protocol/GopPolicy.h>
+#include "DxeGopPolicyInit.h"
 
 GLOBAL_REMOVE_IF_UNREFERENCED GOP_POLICY_PROTOCOL        mGOPPolicy;
 GLOBAL_REMOVE_IF_UNREFERENCED UINT32                     mVbtSize = 0;
@@ -30,8 +31,20 @@ GetPlatformLidStatus (
   OUT LID_STATUS *CurrentLidStatus
   )
 {
-  return EFI_UNSUPPORTED;
+  EFI_STATUS  Status;
+  UINT8       PowerRegister;
+
+  Status = EcRead (0x70, &PowerRegister);
+  if (EFI_ERROR (Status)) {
+    return EFI_UNSUPPORTED;
+  }
+
+  // "ELID"
+  *CurrentLidStatus = (PowerRegister & BIT1) ? LidOpen : LidClosed;
+
+  return EFI_SUCCESS;
 }
+
 /**
 
   @param[out] CurrentDockStatus
@@ -45,9 +58,9 @@ GetPlatformDockStatus (
   OUT DOCK_STATUS  CurrentDockStatus
   )
 {
-    return EFI_UNSUPPORTED;
+  // TODO: UnDocked or no dock
+  return EFI_UNSUPPORTED;
 }
-
 
 /**
 
@@ -72,7 +85,6 @@ GetVbtData (
   UINT32                        AuthenticationStatus;
   UINT8                         *Buffer;
   UINTN                         VbtBufferSize;
-
 
   Status = EFI_NOT_FOUND;
   if ( mVbtAddress == 0) {
@@ -118,7 +130,7 @@ GetVbtData (
     }
 
     if (FvHandles != NULL) {
-      FreePool (FvHandles);
+      gBS->FreePool (FvHandles);
       FvHandles = NULL;
     }
   } else {
@@ -129,8 +141,6 @@ GetVbtData (
 
   return Status;
 }
-
-
 
 /**
 Initialize GOP DXE Policy
@@ -154,7 +164,7 @@ GopPolicyInitDxe (
   //
   // Initialize the EFI Driver Library
   //
-  SetMem (&mGOPPolicy, sizeof (GOP_POLICY_PROTOCOL), 0);
+  ZeroMem (&mGOPPolicy, sizeof (GOP_POLICY_PROTOCOL));
 
   mGOPPolicy.Revision                = GOP_POLICY_PROTOCOL_REVISION_03;
   mGOPPolicy.GetPlatformLidStatus    = GetPlatformLidStatus;

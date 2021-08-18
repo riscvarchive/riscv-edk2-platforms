@@ -7,11 +7,9 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <Base.h>
-#include <Uefi.h>
 #include <PiDxe.h>
 #include <Library/BaseLib.h>
 #include <Library/IoLib.h>
-#include <Library/BoardAcpiEnableLib.h>
 #include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
 #include <PchAccess.h>
@@ -127,7 +125,6 @@ SiliconEnableAcpi (
   OutputValue = IoRead32 (AcpiBaseAddr + 0x38);
   OutputValue = OutputValue & ~(1 << (UINTN) PcdGet8 (PcdSmcExtSmiBitPosition));
   IoWrite32 (AcpiBaseAddr + 0x38, OutputValue);
-
 
   //
   // Enable SCI

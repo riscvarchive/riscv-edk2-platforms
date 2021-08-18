@@ -29,21 +29,19 @@ UpdateRmrrUsbAddress (
   Status = GetConfigBlock ((VOID *)SaPolicy, &gMiscDxeConfigGuid, (VOID *)&MiscDxeConfig);
   ASSERT_EFI_ERROR (Status);
 
-  if (1) {
-    mSize = EFI_SIZE_TO_PAGES(SA_VTD_RMRR_USB_LENGTH);
-    mAddress = SIZE_4GB;
+  mSize = EFI_SIZE_TO_PAGES(SA_VTD_RMRR_USB_LENGTH);
+  mAddress = SIZE_4GB;
 
-    Status = (gBS->AllocatePages) (
-                     AllocateMaxAddress,
-                     EfiReservedMemoryType,
-                     mSize,
-                     &mAddress
-                    );
-    ASSERT_EFI_ERROR (Status);
+  Status = gBS->AllocatePages (
+                   AllocateMaxAddress,
+                   EfiReservedMemoryType,
+                   mSize,
+                   &mAddress
+                  );
+  ASSERT_EFI_ERROR (Status);
 
-    MiscDxeConfig->RmrrUsbBaseAddress[0] = mAddress;
-    MiscDxeConfig->RmrrUsbBaseAddress[1] = mAddress + SA_VTD_RMRR_USB_LENGTH - 1;
-  }
+  MiscDxeConfig->RmrrUsbBaseAddress[0] = mAddress;
+  MiscDxeConfig->RmrrUsbBaseAddress[1] = mAddress + SA_VTD_RMRR_USB_LENGTH - 1;
 }
 
 /**
@@ -63,4 +61,3 @@ UpdateDxeSaPolicy (
   UpdateRmrrUsbAddress (SaPolicy);
   return EFI_SUCCESS;
 }
-

@@ -41,8 +41,10 @@
 
 [Sources]
   PeiSiliconPolicyUpdateLib.c
+  PeiBoardPolicyUpdate.c
 
 [Guids]
+  gMemoryConfigGuid
   gMemoryConfigNoCrcGuid
   gTianoLogoGuid                                ## CONSUMES
   gGraphicsPeiConfigGuid                        ## CONSUMES
@@ -51,6 +53,16 @@
   gHsioSataPreMemConfigGuid                     ## CONSUMES
   gSaMiscPeiPreMemConfigGuid                    ## CONSUMES
   gFspNonVolatileStorageHobGuid                 ## CONSUMES
+  gLockDownConfigGuid
+  gPchGeneralConfigGuid
+  gCpuPowerMgmtBasicConfigGuid
+  gCpuPowerMgmtVrConfigGuid
+  gUsbConfigGuid
+  gSataConfigGuid
+  gPcieRpConfigGuid
+  gPmConfigGuid
+  gSerialIrqConfigGuid
+  gHdAudioConfigGuid
 
 [Pcd]
   gSiPkgTokenSpaceGuid.PcdPeiMinMemorySize
@@ -60,6 +72,9 @@
   gSiPkgTokenSpaceGuid.PcdSmbusBaseAddress
   gSiPkgTokenSpaceGuid.PcdTsegSize
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdGraphicsVbtGuid
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdSaMiscUserBd           ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcCaVrefConfig        ## CONSUMES
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqPinsInterleaved   ## CONSUMES
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompResistor       ## CONSUMES
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcRcompTarget         ## CONSUMES
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMrcDqByteMap           ## CONSUMES

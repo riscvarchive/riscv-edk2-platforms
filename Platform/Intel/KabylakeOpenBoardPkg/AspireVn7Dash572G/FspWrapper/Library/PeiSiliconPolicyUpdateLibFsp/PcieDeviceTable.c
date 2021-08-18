@@ -7,24 +7,14 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiPchPolicyUpdate.h"
-#include <Library/BaseMemoryLib.h>
-#include <Library/MemoryAllocationLib.h>
-#include <Library/HobLib.h>
-#include <Guid/GlobalVariable.h>
-#include <Library/PchGbeLib.h>
-#include <Library/PchInfoLib.h>
-#include <Library/PchPcrLib.h>
-#include <Library/PchHsioLib.h>
-#include <Library/PchSerialIoLib.h>
 #include <Library/PchPcieRpLib.h>
-#include <GpioConfig.h>
-#include <GpioPinsSklH.h>
-#include <Library/DebugLib.h>
-#include <Library/PchGbeLib.h>
 
 #define PCI_CLASS_NETWORK             0x02
 #define PCI_CLASS_NETWORK_ETHERNET    0x00
 #define PCI_CLASS_NETWORK_OTHER       0x80
+
+/* BUGBUG: Tested, table entries cannot configure PCI config space
+ * - FspsUpd.h: "only used in PostMem phase" */
 
 GLOBAL_REMOVE_IF_UNREFERENCED PCH_PCIE_DEVICE_OVERRIDE mPcieDeviceTable[] = {
   //
@@ -112,4 +102,3 @@ GLOBAL_REMOVE_IF_UNREFERENCED PCH_PCIE_DEVICE_OVERRIDE mPcieDeviceTable[] = {
   //
   { 0 }
 };
-

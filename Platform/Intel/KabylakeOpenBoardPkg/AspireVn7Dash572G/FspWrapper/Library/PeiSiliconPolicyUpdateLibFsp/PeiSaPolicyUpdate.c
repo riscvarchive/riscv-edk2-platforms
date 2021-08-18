@@ -7,12 +7,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include "PeiSaPolicyUpdate.h"
-#include <Guid/MemoryTypeInformation.h>
-#include <Library/HobLib.h>
-#include <PchAccess.h>
-#include <SaAccess.h>
-#include <Pi/PiFirmwareFile.h>
-#include <Pi/PiPeiCis.h>
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
 #include <Library/PeiSaPolicyLib.h>
@@ -81,4 +75,3 @@ PeiFspSaPolicyUpdate (
 
   return EFI_SUCCESS;
 }
-

@@ -1,5 +1,5 @@
 ## @file
-#  PCD configuration build description file for the KabylakeRvp3 board.
+#  PCD configuration build description file for the Aspire VN7-572G board.
 #
 # Copyright (c) 2017 - 2020, Intel Corporation. All rights reserved.<BR>
 #
@@ -12,6 +12,10 @@
 # Pcd Section - list of all PCD Entries used by this board.
 #
 ################################################################################
+
+# TODO: Harden and tune platform by PCDs
+# TODO: Consider removing PCDs declared by build report to be unused (but confirm first)
+# - Also, consider more "fixed" and more "dynamic"/"patchable"
 
 [PcdsFixedAtBuild.common]
   ######################################
@@ -26,7 +30,7 @@
   # Stage 5 - boot to OS with security boot enabled
   # Stage 6 - boot with advanced features enabled
   #
-  gMinPlatformPkgTokenSpaceGuid.PcdBootStage|4
+  gMinPlatformPkgTokenSpaceGuid.PcdBootStage|6
 
   #
   # 0: FSP Wrapper is running in Dispatch mode.
@@ -70,25 +74,25 @@
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamBase|0xFEF80000
   gSiPkgTokenSpaceGuid.PcdTemporaryRamSize|0x00040000
-  gSiPkgTokenSpaceGuid.PcdTsegSize|0x1000000
+  gSiPkgTokenSpaceGuid.PcdTsegSize|0x0800000  # Now hooked up
 
 !if gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1
   #
   # FSP API mode does not share stack with the boot loader,
   # so FSP needs more temporary memory for FSP heap + stack size.
   #
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize|0x26000
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize|0x28000  # FIXME: Confirm matches UPD default
   #
   # FSP API mode does not need to enlarge the boot loader stack size
   # since the stacks are separate.
   #
-  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000
+  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x20000  # Not hooked up, not used (functionally equivalent and equal to UefiCpuPkg)
 !else
   #
   # In FSP Dispatch mode boot loader stack size must be large
   # enough for executing both boot loader and FSP.
   #
-  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x40000
+  gSiPkgTokenSpaceGuid.PcdPeiTemporaryRamStackSize|0x40000 # Not hooked up, not used (functionally equivalent but NOT equal to UefiCpuPkg)
 !endif
 
 !if (gMinPlatformPkgTokenSpaceGuid.PcdFspWrapperBootMode == FALSE) || (gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection == 1)
@@ -107,13 +111,42 @@
   # Edk2 Configuration
   ######################################
   gEfiMdeModulePkgTokenSpaceGuid.PcdPeiCoreImageLoaderSearchTeSectionFirst|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConOutUgaSupport|FALSE  # Deprecated, only use GOP
+  gEfiMdePkgTokenSpaceGuid.PcdUgaConsumeSupport|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdPs2KbdExtendedVerification|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdPs2MouseExtendedVerification|FALSE  # TODO/TEST
+  gEfiMdeModulePkgTokenSpaceGuid.PcdHiiOsRuntimeSupport|FALSE
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmEnableBspElection|FALSE
   gUefiCpuPkgTokenSpaceGuid.PcdCpuSmmProfileEnable|FALSE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdInstallAcpiSdtProtocol|TRUE
+
+# TODO: Prune this list to relevant features only
+!if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 6
+  # FIXME: SMM path also PatchAndLoadAcpiTable()
+  gAcpiDebugFeaturePkgTokenSpaceGuid.PcdAcpiDebugFeatureEnable            |FALSE
+  # PcdIpmiFeatureEnable will not be enabled (no BMC)
+  # TODO: Can be build-time (user) choice
+  gNetworkFeaturePkgTokenSpaceGuid.PcdNetworkFeatureEnable                |FALSE
+  # TODO: Continue developing support. Broken at present.
+  # - PeiSmmAccessLib in IntelSiliconPkg seems like a stub
+  #   - May require a PeiSmmControlLib to SMM communicate
+  gS3FeaturePkgTokenSpaceGuid.PcdS3FeatureEnable                          |FALSE
+  # TODO: Definitions (now added SmbiosDxe)
+  gSmbiosFeaturePkgTokenSpaceGuid.PcdSmbiosFeatureEnable                  |TRUE
+  # Requires actual hook-up
+  gUsb3DebugFeaturePkgTokenSpaceGuid.PcdUsb3DebugFeatureEnable            |FALSE
+  # FIXME: (Similar) DXE module is duplicate?
+  gUserAuthFeaturePkgTokenSpaceGuid.PcdUserAuthenticationFeatureEnable    |FALSE
+  # FIXME: Must BootLogoEnableLogo() to turn platform logo into boot logo
+  # - BGRT must be BMP, but this duplicates FSP logo. Can GetSectionFromAnyFv()?
+  gLogoFeaturePkgTokenSpaceGuid.PcdLogoFeatureEnable                      |FALSE
+  gLogoFeaturePkgTokenSpaceGuid.PcdJpgEnable                              |FALSE
+!endif
 
   ######################################
   # Silicon Configuration
   ######################################
+  # TODO: Set FSP policy by switches? Otherwise, only FSP binary builds?
   # Build switches
   gSiPkgTokenSpaceGuid.PcdOptimizeCompilerEnable|TRUE
 
@@ -151,7 +184,7 @@
   gSiPkgTokenSpaceGuid.PcdPpmEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdS3Enable|TRUE
   gSiPkgTokenSpaceGuid.PcdSerialGpioEnable|TRUE
-  gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|FALSE
+  gSiPkgTokenSpaceGuid.PcdSiCatalogDebugEnable|$(RELEASE_LOGGING)
   gSiPkgTokenSpaceGuid.PcdSiCsmEnable|FALSE
   gSiPkgTokenSpaceGuid.PcdSmbiosEnable|TRUE
   gSiPkgTokenSpaceGuid.PcdSmmVariableEnable|TRUE
@@ -165,10 +198,10 @@
   gMinPlatformPkgTokenSpaceGuid.PcdBootToShellOnly|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterMemInit|FALSE
-  gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable|FALSE  # FIXME: Define by PERFORMANCE_BUILD?
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|FALSE
   gMinPlatformPkgTokenSpaceGuid.PcdUefiSecureBootEnable|FALSE
-  gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable|FALSE
+  gMinPlatformPkgTokenSpaceGuid.PcdSerialTerminalEnable|FALSE  # FIXME: Define in build-system?
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 1
   gMinPlatformPkgTokenSpaceGuid.PcdStopAfterDebugInit|TRUE
@@ -193,6 +226,7 @@
   gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable|TRUE
 !endif
 
+# TODO: Is TESTING setting, is not test point
 !if $(TARGET) == DEBUG
   gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable|TRUE
 !else
@@ -202,49 +236,71 @@
   ######################################
   # Board Configuration
   ######################################
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport|TRUE
-  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable|FALSE
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdMultiBoardSupport|FALSE
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdTbtEnable|FALSE  # TODO: Enable if supporting Newgate
 
 [PcdsFixedAtBuild.common]
   ######################################
   # Edk2 Configuration
   ######################################
 !if $(TARGET) == RELEASE
+!if $(RELEASE_LOGGING) == TRUE
+!if $(TESTING) == TRUE
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x07
+!else
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x03
+!endif # $(TESTING)
+  gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
+!else
   gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x0
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x3
+!endif # $(RELEASE_LOGGING)
 !else
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x2F
+  # FIXME: More than just compiler optimisation is hooked to DEBUG builds.
+  #        Make asserts non-fatal for limited debugging system
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPropertyMask|0x0F
   gEfiMdePkgTokenSpaceGuid.PcdReportStatusCodePropertyMask|0x07
-!endif
-  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
+!endif # $(TARGET)
 !if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
   gEfiMdePkgTokenSpaceGuid.PcdPerformanceLibraryPropertyMask|0x1
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
 !endif
+  gEfiMdePkgTokenSpaceGuid.PcdPciExpressBaseAddress|0xE0000000
 
   gEfiMdeModulePkgTokenSpaceGuid.PcdAriSupport|FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserFieldTextColor|0x01
   gEfiMdeModulePkgTokenSpaceGuid.PcdBrowserSubtitleTextColor|0x0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdCpuStackGuard|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdFastPS2Detection|TRUE  # TODO/TEST
   gEfiMdeModulePkgTokenSpaceGuid.PcdHwErrStorageSize|0x00000800
   gEfiMdeModulePkgTokenSpaceGuid.PcdLoadModuleAtFixAddressEnable|$(TOP_MEMORY_ADDRESS)
   gEfiMdeModulePkgTokenSpaceGuid.PcdMaxHardwareErrorVariableSize|0x400
-!if gMinPlatformPkgTokenSpaceGuid.PcdPerformanceEnable == TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxPeiPerformanceLogEntries|140
+  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x8000
+!if $(TESTING) == TRUE
+  # Test with non-stop mode, so not disabling for loader.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdNullPointerDetectionPropertyMask|0x43
+!else
+  # FIXME: Can be broken for CSM. At this time, be permissive for loader.
+  gEfiMdeModulePkgTokenSpaceGuid.PcdNullPointerDetectionPropertyMask|0x83
 !endif
-  gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x5000
   gEfiMdeModulePkgTokenSpaceGuid.PcdReclaimVariableSpaceAtEndOfDxe|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSetNxForStack|TRUE
 !if gMinPlatformPkgTokenSpaceGuid.PcdSmiHandlerProfileEnable == TRUE
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
 !endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdSrIovSupport|FALSE
-!if $(TARGET) == DEBUG
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
-!endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseMemory|FALSE
 !if $(TARGET) == RELEASE
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|FALSE
 !else
   gEfiMdeModulePkgTokenSpaceGuid.PcdStatusCodeUseSerial|TRUE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdSerialUseHardwareFlowControl|FALSE
 !endif
+
+  # UPDs are updated at runtime, don't bother measuring
+  # BUGBUG: FSP-S measurement returns DEVICE_ERROR from PtpCrbTpmCommand() - Step 0.
+  # - Similarly, Tcg2Dxe.c:Tpm2GetCapabilityManufactureID() - first command - fails?
+  gIntelFsp2WrapperTokenSpaceGuid.PcdFspMeasurementConfig|0x00000006
 
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoBarEnableMask|0x80
   gPcAtChipsetPkgTokenSpaceGuid.PcdAcpiIoPciBarRegisterOffset|0x40
@@ -267,7 +323,7 @@
   #
   ## Specifies max supported number of Logical Processors.
   # @Prompt Configure max supported number of Logical Processors
-  gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|12
+  gUefiCpuPkgTokenSpaceGuid.PcdCpuMaxLogicalProcessorNumber|8
 
   ## Specifies the size of the microcode Region.
   # @Prompt Microcode Region size.
@@ -287,14 +343,14 @@
   ######################################
 
   # Refer to HstiFeatureBit.h for bit definitions
-  gSiPkgTokenSpaceGuid.PcdHstiIhvFeature1|0xF2
+  gSiPkgTokenSpaceGuid.PcdHstiIhvFeature1|0xF2  # FIXME: Boot Guard and BIOS Guard not present, measured boot enforcement checking code not present
   gSiPkgTokenSpaceGuid.PcdHstiIhvFeature2|0x07
 
   ######################################
   # Platform Configuration
   ######################################
   gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuSocketCount|1
-  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuCoreCount|8
+  gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuCoreCount|4
   gMinPlatformPkgTokenSpaceGuid.PcdMaxCpuThreadCount|2
   gMinPlatformPkgTokenSpaceGuid.PcdPciExpressRegionLength|0x10000000
 
@@ -309,13 +365,26 @@
   #
   gMinPlatformPkgTokenSpaceGuid.PcdWsmtProtectionFlags|0x07
 
-!if $(TARGET) == RELEASE
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x402
-!else
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B
-!endif
+  ## This PCD is to control which device is the potential trusted console input device.<BR><BR>
+  # For example:<BR>
+  # PS/2 keyboard: PciRoot(0x0)/Pci(0x1F,0x0)/Acpi(PNP0303,0x0)<BR>
+  #   //Header                    HID                     UID<BR>
+  #     {0x02, 0x01, 0x0C, 0x00,  0xd0, 0x41, 0x03, 0x0A, 0x00, 0x00, 0x00, 0x00,<BR>
+  #   //Header                    Func  Dev<BR>
+  #      0x01, 0x01, 0x06, 0x00,  0x00, 0x1F,<BR>
+  #   //Header                    HID                     UID<BR>
+  #      0x02, 0x01, 0x0C, 0x00,  0xd0, 0x41, 0x03, 0x03, 0x00, 0x00, 0x00, 0x00,<BR>
+  #   //Header<BR>
+  #      0x7F, 0xFF, 0x04, 0x00}<BR>
+  gMinPlatformPkgTokenSpaceGuid.PcdTrustedConsoleInputDevicePath|{0x02, 0x01, 0x0C, 0x00,  0xd0, 0x41, 0x03, 0x0A, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x06, 0x00,  0x00, 0x1F, 0x02, 0x01, 0x0C, 0x00,  0xd0, 0x41, 0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x7F, 0xFF, 0x04, 0x00}
 
-  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x4b
+!if $(TARGET) == RELEASE
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x800
+!else
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiReservedMemorySize|0x188B  # TODO
+!endif
+  # TODO: Consider using reserved space instead for debug log
+  gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtDataMemorySize|0x200
 !if $(TARGET) == RELEASE
   gMinPlatformPkgTokenSpaceGuid.PcdPlatformEfiRtCodeMemorySize|0x70
 !else
@@ -335,17 +404,16 @@
 !endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 4
-  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x1F, 0x00, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x07, 0x03, 0x05, 0x3F, 0x00, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage == 5
-  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x3F, 0x0F, 0x0F, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
 
 !if gMinPlatformPkgTokenSpaceGuid.PcdBootStage >= 6
-  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x1F, 0x0F, 0x0F, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+  gMinPlatformPkgTokenSpaceGuid.PcdTestPointIbvPlatformFeature|{0x03, 0x0F, 0x07, 0x1F, 0x3F, 0x0F, 0x0F, 0x07, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
 !endif
-
 
   ######################################
   # Board Configuration
@@ -357,7 +425,6 @@
   ######################################
   # Edk2 Configuration
   ######################################
-  gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress|0x0
   gIntelFsp2PkgTokenSpaceGuid.PcdGlobalDataPointerAddress|0xFED00148
   gIntelFsp2WrapperTokenSpaceGuid.PcdPeiMinMemSize|0x3800000
 
@@ -378,8 +445,7 @@
   ######################################
   # Edk2 Configuration
   ######################################
-  gEfiMdeModulePkgTokenSpaceGuid.PcdSmbiosVersion|0x0208
-  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000046  # 0x804800C7/0x806A15CF give useful information, but is very noisy
 
   ######################################
   # Silicon Configuration
@@ -388,12 +454,21 @@
   gSiPkgTokenSpaceGuid.PcdSerialIoUartDebugEnable|1
 !endif
 
+  ######################################
+  # Platform Configuration
+  ######################################
+!if $(TARGET) == DEBUG
+  gMinPlatformPkgTokenSpaceGuid.PcdSecSerialPortDebugEnable|1
+!else
+  gMinPlatformPkgTokenSpaceGuid.PcdSecSerialPortDebugEnable|0
+!endif
+
 [PcdsDynamicDefault]
   ######################################
   # Edk2 Configuration
   ######################################
-  gEfiMdeModulePkgTokenSpaceGuid.PcdAtaSmartEnable|TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdConInConnectOnDemand|FALSE
+  gEfiMdeModulePkgTokenSpaceGuid.PcdAtaSmartEnable|TRUE  # Why dynamic?
+  gEfiMdeModulePkgTokenSpaceGuid.PcdConInConnectOnDemand|FALSE  # Why dynamic?
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutColumn|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdConOutRow|0x0
   gEfiMdeModulePkgTokenSpaceGuid.PcdS3BootScriptTablePrivateDataPtr|0x0
@@ -421,8 +496,11 @@
   ######################################
   # Board Configuration
   ######################################
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDisablePassiveTripPoints|1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdLowPowerS0Idle|1
+  gKabylakeOpenBoardPkgTokenSpaceGuid.PcdPciExpNative|1
 
-  # Thunderbolt Configuration
+  # Thunderbolt Configuration (FIXME: Remove if not supporting Newgate)
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcDcSwitch|0x0
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcpiGpeSignature|0
   gKabylakeOpenBoardPkgTokenSpaceGuid.PcdDTbtAcpiGpeSignaturePorting|0
@@ -461,4 +539,8 @@
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|1 # Variable: L"Timeout"
 !else
   gEfiMdePkgTokenSpaceGuid.PcdPlatformBootTimeOut|L"Timeout"|gEfiGlobalVariableGuid|0x0|5 # Variable: L"Timeout"
+!endif
+!if gMinPlatformPkgTokenSpaceGuid.PcdTpm2Enable == TRUE
+  gEfiSecurityPkgTokenSpaceGuid.PcdTcgPhysicalPresenceInterfaceVer|L"TCG2_VERSION"|gTcg2ConfigFormSetGuid|0x0|"1.3"|NV,BS
+  gEfiSecurityPkgTokenSpaceGuid.PcdTpm2AcpiTableRev|L"TCG2_VERSION"|gTcg2ConfigFormSetGuid|0x8|3|NV,BS
 !endif

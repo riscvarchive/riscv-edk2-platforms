@@ -6,87 +6,78 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <PiPei.h>
-#include <SaPolicyCommon.h>
 #include <Library/DebugLib.h>
-#include <Library/BaseMemoryLib.h>
 #include <Library/IoLib.h>
-#include <Library/HobLib.h>
+#include <Library/MemoryAllocationLib.h>
 #include <Library/PcdLib.h>
 #include <Library/PchCycleDecodingLib.h>
-#include <Library/PciLib.h>
-#include <Library/PcdLib.h>
-#include <Library/BaseMemoryLib.h>
+#include <Library/PchResetLib.h>
+#include <Library/SiliconInitLib.h>
+#include <Library/TimerLib.h>
+#include <Library/PeiLib.h>
 
-#include <Library/PeiSaPolicyLib.h>
-#include <Library/BoardInitLib.h>
-#include <PchAccess.h>
-#include <Library/GpioNativeLib.h>
 #include <Library/GpioLib.h>
 #include <GpioPinsSklLp.h>
-#include <GpioPinsSklH.h>
-#include <Library/GpioExpanderLib.h>
-#include <SioRegs.h>
-#include <Library/PchPcrLib.h>
-#include <Library/SiliconInitLib.h>
-#include <Library/PchResetLib.h>
+#include <IndustryStandard/TpmPtp.h>
+#include <PchAccess.h>
 
-#include "PeiKabylakeRvp3InitLib.h"
+#include "PeiAspireVn7Dash572GInitLib.h"
 
 #include <ConfigBlock.h>
 #include <ConfigBlock/MemoryConfig.h>
 
-//
-// Reference RCOMP resistors on motherboard - for SKL RVP1
-//
-GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompResistorSklRvp1[SA_MRC_MAX_RCOMP] = { 200, 81, 162 };
-//
-// RCOMP target values for RdOdt, WrDS, WrDSCmd, WrDSCtl, WrDSClk - for SKL RVP1
-//
-GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompTargetSklRvp1[SA_MRC_MAX_RCOMP_TARGETS] = { 100, 40, 40, 23, 40 };
+#ifndef STALL_ONE_MILLI_SECOND
+#define STALL_ONE_MILLI_SECOND  1000
+#endif
 
-/**
-  SkylaeA0Rvp3 board configuration init function for PEI pre-memory phase.
+//
+// Reference RCOMP resistors on motherboard - for Aspire VN7-572G
+//
+GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompResistorAspireVn7Dash572G[SA_MRC_MAX_RCOMP] = { 121, 80, 100 };
+//
+// RCOMP target values for RdOdt, WrDS, WrDSCmd, WrDSCtl, WrDSClk - for Aspire VN7-572G
+//
+GLOBAL_REMOVE_IF_UNREFERENCED const UINT16 RcompTargetAspireVn7Dash572G[SA_MRC_MAX_RCOMP_TARGETS] = { 100, 40, 40, 23, 40 };
 
-  PEI_BOARD_CONFIG_PCD_INIT
+//
+// dGPU power GPIO definitions
+#define DGPU_PRESENT	GPIO_SKL_LP_GPP_A20	/* Active low */
+#define DGPU_HOLD_RST	GPIO_SKL_LP_GPP_B4	/* Active low */
+#define DGPU_PWR_EN	GPIO_SKL_LP_GPP_B21	/* Active low */
 
-  @param  Content  pointer to the buffer contain init information for board init.
-
-  @retval EFI_SUCCESS             The function completed successfully.
-  @retval EFI_INVALID_PARAMETER   The parameter is NULL.
-**/
 EFI_STATUS
 EFIAPI
-KabylakeRvp3InitPreMem (
+AspireVn7Dash572GBoardDetect (
+  VOID
+  );
+
+/**
+  Aspire VN7-572G board configuration init function for PEI pre-memory phase.
+
+**/
+VOID
+AspireVn7Dash572GInitPreMem (
   VOID
   )
 {
-  PcdSet32S (PcdPcie0WakeGpioNo, 0);
-  PcdSet8S  (PcdPcie0HoldRstExpanderNo, 0);
-  PcdSet32S (PcdPcie0HoldRstGpioNo, 8);
-  PcdSetBoolS (PcdPcie0HoldRstActive, TRUE);
-  PcdSet8S  (PcdPcie0PwrEnableExpanderNo, 0);
-  PcdSet32S (PcdPcie0PwrEnableGpioNo, 16);
-  PcdSetBoolS (PcdPcie0PwrEnableActive, FALSE);
-
   //
   // HSIO PTSS Table
   //
-  PcdSet32S (PcdSpecificLpHsioPtssTable1,     (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3);
-  PcdSet16S (PcdSpecificLpHsioPtssTable1Size, (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3_Size);
-  PcdSet32S (PcdSpecificLpHsioPtssTable2,     (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3);
-  PcdSet16S (PcdSpecificLpHsioPtssTable2Size, (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3_Size);
+  PcdSet32S (PcdSpecificLpHsioPtssTable1,     (UINTN) PchLpHsioPtss_AspireVn7Dash572G);
+  PcdSet16S (PcdSpecificLpHsioPtssTable1Size, (UINTN) PchLpHsioPtss_AspireVn7Dash572G_Size);
+  PcdSet32S (PcdSpecificLpHsioPtssTable2,     (UINTN) PchLpHsioPtss_AspireVn7Dash572G);
+  PcdSet16S (PcdSpecificLpHsioPtssTable2Size, (UINTN) PchLpHsioPtss_AspireVn7Dash572G_Size);
 
   //
   // DRAM related definition
   //
-  PcdSet8S (PcdSaMiscUserBd, 5);
+  PcdSet8S (PcdSaMiscUserBd, 5);     // ULT/ULX/Mobile Halo
+  PcdSet8S (PcdMrcCaVrefConfig, 2);  // DDR4: "VREF_CA to CH_A and VREF_DQ_B to CH_B"
+  // TODO: Clear Dq/Dqs?
+  PcdSetBoolS (PcdMrcDqPinsInterleaved, TRUE);
 
-  PcdSet32S (PcdMrcDqByteMap, (UINTN) mDqByteMapSklRvp3);
-  PcdSet16S (PcdMrcDqByteMapSize, sizeof (mDqByteMapSklRvp3));
-  PcdSet32S (PcdMrcDqsMapCpu2Dram, (UINTN) mDqsMapCpu2DramSklRvp3);
-  PcdSet16S (PcdMrcDqsMapCpu2DramSize, sizeof (mDqsMapCpu2DramSklRvp3));
-  PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorSklRvp1);
-  PcdSet32S (PcdMrcRcompTarget, (UINTN) RcompTargetSklRvp1);
+  PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorAspireVn7Dash572G);
+  PcdSet32S (PcdMrcRcompTarget,   (UINTN) RcompTargetAspireVn7Dash572G);
   //
   // Example policy for DIMM slots implementation boards:
   // 1. Assign Smbus address of DIMMs and SpdData will be updated later
@@ -100,176 +91,87 @@ KabylakeRvp3InitPreMem (
   //   PcdMrcSpdData = 0
   //   PcdMrcSpdDataSize = 0
   //
-  // Kabylake RVP3 has 8GB Memory down implementation withouit SPD,
-  // So assign all SpdAddress to 0 and apply static SpdData buffers:
-  //   PcdMrcSpdAddressTable0 = 0
-  //   PcdMrcSpdAddressTable1 = 0
-  //   PcdMrcSpdAddressTable2 = 0
-  //   PcdMrcSpdAddressTable3 = 0
-  //   PcdMrcSpdData = static data buffer
-  //   PcdMrcSpdDataSize = sizeof (static data buffer)
-  //
-  PcdSet8S (PcdMrcSpdAddressTable0, 0);
+  PcdSet8S (PcdMrcSpdAddressTable0, 0xA0);
   PcdSet8S (PcdMrcSpdAddressTable1, 0);
-  PcdSet8S (PcdMrcSpdAddressTable2, 0);
+  PcdSet8S (PcdMrcSpdAddressTable2, 0xA4);
   PcdSet8S (PcdMrcSpdAddressTable3, 0);
-  PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd110);
-  PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3Spd110Size);
-
-  PcdSetBoolS (PcdIoExpanderPresent, TRUE);
-
-  return EFI_SUCCESS;
+  PcdSet32S (PcdMrcSpdData, 0);
+  PcdSet16S (PcdMrcSpdDataSize, 0);
 }
 
 /**
-  SkylaeA0Rvp3 board configuration init function for PEI pre-memory phase.
+  Configures GPIO before memory is ready.
 
-  PEI_BOARD_CONFIG_PCD_INIT
-
-  @param  Content  pointer to the buffer contain init information for board init.
-
-  @retval EFI_SUCCESS             The function completed successfully.
-  @retval EFI_INVALID_PARAMETER   The parameter is NULL.
 **/
 EFI_STATUS
 EFIAPI
-SkylakeRvp3InitPreMem (
-  VOID
-  )
-{
-  PcdSet32S (PcdPcie0WakeGpioNo, 0);
-  PcdSet8S  (PcdPcie0HoldRstExpanderNo, 0);
-  PcdSet32S (PcdPcie0HoldRstGpioNo, 8);
-  PcdSetBoolS (PcdPcie0HoldRstActive, TRUE);
-  PcdSet8S  (PcdPcie0PwrEnableExpanderNo, 0);
-  PcdSet32S (PcdPcie0PwrEnableGpioNo, 16);
-  PcdSetBoolS (PcdPcie0PwrEnableActive, FALSE);
-
-  //
-  // HSIO PTSS Table
-  //
-  PcdSet32S (PcdSpecificLpHsioPtssTable1,     (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3);
-  PcdSet16S (PcdSpecificLpHsioPtssTable1Size, (UINTN) PchLpHsioPtss_Bx_KabylakeRvp3_Size);
-  PcdSet32S (PcdSpecificLpHsioPtssTable2,     (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3);
-  PcdSet16S (PcdSpecificLpHsioPtssTable2Size, (UINTN) PchLpHsioPtss_Cx_KabylakeRvp3_Size);
-
-  //
-  // DRAM related definition
-  //
-  PcdSet8S (PcdSaMiscUserBd, 5);
-
-  PcdSet32S (PcdMrcDqByteMap, (UINTN) mDqByteMapSklRvp3);
-  PcdSet16S (PcdMrcDqByteMapSize, sizeof (mDqByteMapSklRvp3));
-  PcdSet32S (PcdMrcDqsMapCpu2Dram, (UINTN) mDqsMapCpu2DramSklRvp3);
-  PcdSet16S (PcdMrcDqsMapCpu2DramSize, sizeof (mDqsMapCpu2DramSklRvp3));
-  PcdSet32S (PcdMrcRcompResistor, (UINTN) RcompResistorSklRvp1);
-  PcdSet32S (PcdMrcRcompTarget, (UINTN) RcompTargetSklRvp1);
-  //
-  // Example policy for DIMM slots implementation boards:
-  // 1. Assign Smbus address of DIMMs and SpdData will be updated later
-  //    by reading from DIMM SPD.
-  // 2. No need to apply hardcoded SpdData buffers here for such board.
-  //   Example:
-  //   PcdMrcSpdAddressTable0 = 0xA0
-  //   PcdMrcSpdAddressTable1 = 0xA2
-  //   PcdMrcSpdAddressTable2 = 0xA4
-  //   PcdMrcSpdAddressTable3 = 0xA6
-  //   PcdMrcSpdData = 0
-  //   PcdMrcSpdDataSize = 0
-  //
-  // Skylake RVP3 has 4GB Memory down implementation withouit SPD,
-  // So assign all SpdAddress to 0 and apply static SpdData buffers:
-  //   PcdMrcSpdAddressTable0 = 0
-  //   PcdMrcSpdAddressTable1 = 0
-  //   PcdMrcSpdAddressTable2 = 0
-  //   PcdMrcSpdAddressTable3 = 0
-  //   PcdMrcSpdData = static data buffer
-  //   PcdMrcSpdDataSize = sizeof (static data buffer)
-  //
-  PcdSet8S (PcdMrcSpdAddressTable0, 0);
-  PcdSet8S (PcdMrcSpdAddressTable1, 0);
-  PcdSet8S (PcdMrcSpdAddressTable2, 0);
-  PcdSet8S (PcdMrcSpdAddressTable3, 0);
-  PcdSet32S (PcdMrcSpdData, (UINTN) mSkylakeRvp3Spd);
-  PcdSet16S (PcdMrcSpdDataSize, mSkylakeRvp3SpdSize);
-
-  PcdSetBoolS (PcdIoExpanderPresent, TRUE);
-
-  return EFI_SUCCESS;
-}
-
-#define SIO_RUNTIME_REG_BASE_ADDRESS                          0x0680
-
-/**
-  Configures GPIO.
-
-  @param[in]  GpioTable       Point to Platform Gpio table
-  @param[in]  GpioTableCount  Number of Gpio table entries
-
-**/
-VOID
-ConfigureGpio (
-  IN GPIO_INIT_CONFIG                 *GpioDefinition,
-  IN UINT16                           GpioTableCount
-  )
-{
-  EFI_STATUS          Status;
-
-  DEBUG ((DEBUG_INFO, "ConfigureGpio() Start\n"));
-
-  Status = GpioConfigurePads (GpioTableCount, GpioDefinition);
-
-  DEBUG ((DEBUG_INFO, "ConfigureGpio() End\n"));
-}
-
-/**
-  Configure GPIO Before Memory is not ready.
-
-**/
-VOID
 GpioInitPreMem (
   VOID
   )
 {
-  // ConfigureGpio ();
+  EFI_STATUS  Status;
+
+  DEBUG ((DEBUG_INFO, "GpioInitPreMem() Start\n"));
+
+  Status = GpioConfigurePads (mGpioTableAspireVn7Dash572G_earlySize, mGpioTableAspireVn7Dash572G_early);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_ERROR, "Failed to configure early GPIOs!\n"));
+    return EFI_DEVICE_ERROR;
+  }
+
+  DEBUG ((DEBUG_INFO, "GpioInitPreMem() End\n"));
+  return EFI_SUCCESS;
 }
 
 /**
-  Configure Super IO.
+  Initialises the dGPU.
 
 **/
 VOID
-SioInit (
+DgpuPowerOn (
+  VOID
+  )
+{
+  UINT32         OutputVal;
+
+  DEBUG ((DEBUG_INFO, "DgpuPowerOn() Start\n"));
+
+  GpioGetOutputValue (DGPU_PRESENT, &OutputVal);
+  if (!OutputVal) {
+    DEBUG ((DEBUG_INFO, "dGPU present, enable power...\n"));
+    GpioSetOutputValue (DGPU_HOLD_RST, 0);  // Assert dGPU_HOLD_RST#
+    MicroSecondDelay (2 * STALL_ONE_MILLI_SECOND);
+    GpioSetOutputValue (DGPU_PWR_EN, 0);    // Assert dGPU_PWR_EN#
+    MicroSecondDelay (7 * STALL_ONE_MILLI_SECOND);
+    GpioSetOutputValue (DGPU_HOLD_RST, 1);  // Deassert dGPU_HOLD_RST#
+    MicroSecondDelay (30 * STALL_ONE_MILLI_SECOND);
+  } else {
+    DEBUG ((DEBUG_INFO, "dGPU not present, disable power...\n"));
+    GpioSetOutputValue (DGPU_HOLD_RST, 0);  // Assert dGPU_HOLD_RST#
+    GpioSetOutputValue (DGPU_PWR_EN, 1);    // Deassert dGPU_PWR_EN#
+  }
+
+  DEBUG ((DEBUG_INFO, "DgpuPowerOn() End\n"));
+}
+
+/**
+  Configure LPC.
+
+**/
+VOID
+LpcInit (
   VOID
   )
 {
   //
-  // Program and Enable Default Super IO Configuration Port Addresses and range
+  // Program and Enable EC (sideband) Port Addresses and range
   //
-  PchLpcGenIoRangeSet (PcdGet16 (PcdLpcSioConfigDefaultPort) & (~0xF), 0x10);
+  PchLpcGenIoRangeSet (0x68, 0x08);
 
   //
-  // 128 Byte Boundary and SIO Runtime Register Range is 0x0 to 0xF;
+  // Program and Enable EC (index) Port Addresses and range
   //
-  PchLpcGenIoRangeSet (SIO_RUNTIME_REG_BASE_ADDRESS  & (~0x7F), 0x10);
-
-  return;
-}
-
-/**
-  Configues the IC2 Controller on which GPIO Expander Communicates.
-  This Function is to enable the I2CGPIOExapanderLib to programm the Gpios
-  Complete intilization will be done in later Stage
-
-**/
-VOID
-EFIAPI
-I2CGpioExpanderInitPreMem(
-  VOID
-  )
-{
-  ConfigureSerialIoController (PchSerialIoIndexI2C4, PchSerialIoAcpiHidden);
-  SerialIoI2cGpioInit (PchSerialIoIndexI2C4, PchSerialIoAcpiHidden, PchSerialIoIs33V);
+  PchLpcGenIoRangeSet (0x1200, 0x10);
 }
 
 /**
@@ -279,32 +181,29 @@ I2CGpioExpanderInitPreMem(
 **/
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardInitBeforeMemoryInit (
+AspireVn7Dash572GBoardInitBeforeMemoryInit (
   VOID
   )
 {
   EFI_STATUS    Status;
 
-  if (LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) {
-    KabylakeRvp3InitPreMem ();
-  } else if (LibPcdGetSku () == BoardIdSkylakeRvp3) {
-    SkylakeRvp3InitPreMem ();
+  Status = GpioInitPreMem ();
+  if (!EFI_ERROR (Status)) {
+    DgpuPowerOn ();
   }
-
-  //
-  // Configures the I2CGpioExpander
-  //
-  if (PcdGetBool (PcdIoExpanderPresent)) {
-    I2CGpioExpanderInitPreMem();
-  }
-
-  GpioInitPreMem ();
-  SioInit ();
+  AspireVn7Dash572GInitPreMem ();
 
   ///
   /// Do basic PCH init
   ///
   SiliconInit ();
+
+  //
+  // Fix-up LPC configuration
+  // Enable I/O decoding for COM1(3F8h-3FFh), COM2(2F8h-2FFh), I/O port 2Eh/2Fh, 4Eh/4Fh, 60h/64h and 62h/66h.
+  //
+  PchLpcIoDecodeRangesSet (PcdGet16 (PcdLpcIoDecodeRange));
+  PchLpcIoEnableDecodingSet (PcdGet16 (PchLpcIoEnableDecoding));
 
   //
   // Install PCH RESET PPI and EFI RESET2 PeiService
@@ -315,9 +214,37 @@ KabylakeRvp3BoardInitBeforeMemoryInit (
   return EFI_SUCCESS;
 }
 
+/**
+  Configure GPIO and SIO before memory ready.
+
+  @retval  EFI_SUCCESS   Operation success.
+**/
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardDebugInit (
+AspireVn7Dash572GBoardInitAfterMemoryInit (
+  VOID
+  )
+{
+  EFI_STATUS  Status;
+
+  // BUGBUG: Workaround for a misbehaving system firmware not setting goIdle
+  // - Based on prior investigation for coreboot, I suspect FSP
+  if ((MmioRead32 (0xFED40044) & PTP_CRB_CONTROL_AREA_STATUS_TPM_IDLE) == 0) {
+    DEBUG ((DEBUG_WARN, "TPM no-IdleBypass bug: workaround enabled\n"));
+    MmioWrite32 (0xFED40040, PTP_CRB_CONTROL_AREA_REQUEST_GO_IDLE);
+  }
+
+  // Program the same 64K range of EC memory as vendor FW
+  Status = PchLpcMemRangeSet (0xFE800000);
+  if (EFI_ERROR (Status)) {
+    DEBUG ((DEBUG_WARN, "Failed to enable LGMR. Were ACPI tables built for LGMR memory map?\n"));
+  }
+  return EFI_SUCCESS;
+}
+
+EFI_STATUS
+EFIAPI
+AspireVn7Dash572GBoardDebugInit (
   VOID
   )
 {
@@ -325,15 +252,41 @@ KabylakeRvp3BoardDebugInit (
   /// Do Early PCH init
   ///
   EarlySiliconInit ();
+  LpcInit ();
+
+  // NB: MinPlatform specification defines platform initialisation flow.
+  // Therefore, we defer board detection until we can program LPC.
+  // - Alternatively, move the preceding calls to BoardDetect()
+  AspireVn7Dash572GBoardDetect ();
+
   return EFI_SUCCESS;
 }
 
 EFI_BOOT_MODE
 EFIAPI
-KabylakeRvp3BoardBootModeDetect (
+AspireVn7Dash572GBoardBootModeDetect (
   VOID
   )
 {
-  return BOOT_WITH_FULL_CONFIGURATION;
-}
+  UINT16         ABase;
+  UINT32         SleepType;
 
+  DEBUG ((DEBUG_INFO, "Performing boot mode detection\n"));
+
+  // TODO: Perform advanced detection (recovery/capsule)
+  // FIXME: This violates PI specification? But BOOT_WITH* would always take precedence
+  //        over BOOT_ON_S{4,5}...
+  PchAcpiBaseGet (&ABase);
+  SleepType = IoRead32 (ABase + R_PCH_ACPI_PM1_CNT) & B_PCH_ACPI_PM1_CNT_SLP_TYP;
+
+  switch (SleepType) {
+    case V_PCH_ACPI_PM1_CNT_S3:
+      return BOOT_ON_S3_RESUME;
+    case V_PCH_ACPI_PM1_CNT_S4:
+      return BOOT_ON_S4_RESUME;
+//    case V_PCH_ACPI_PM1_CNT_S5:
+//      return BOOT_ON_S5_RESUME;
+    default:
+      return BOOT_WITH_FULL_CONFIGURATION;
+  }
+}

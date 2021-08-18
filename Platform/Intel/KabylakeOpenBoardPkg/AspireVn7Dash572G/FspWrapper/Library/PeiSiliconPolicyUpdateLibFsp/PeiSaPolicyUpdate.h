@@ -12,19 +12,18 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 // External include files do NOT need to be explicitly specified in real EDKII
 // environment
 //
-#include <SaPolicyCommon.h>
-#include <Library/DebugPrintErrorLevelLib.h>
-#include <CpuRegs.h>
-#include <Library/CpuPlatformLib.h>
-#include "PeiPchPolicyUpdate.h"
-#include <Library/PcdLib.h>
-#include <CpuAccess.h>
+#include <PiPei.h>
+
+#include <Library/DebugLib.h>
+#include <Library/IoLib.h>
+#include <Library/MmPciLib.h>
 
 #include <FspEas.h>
 #include <FspmUpd.h>
 #include <FspsUpd.h>
 
+#include <SaPolicyCommon.h>
+
 extern EFI_GUID gTianoLogoGuid;
 
 #endif
-

@@ -20,6 +20,7 @@
   PcdLib
   DebugLib
   ConfigBlockLib
+  EcLib
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -44,8 +45,8 @@
   gGopPolicyProtocolGuid                        ## PRODUCES
 
 [Guids]
+  gGraphicsDxeConfigGuid
   gMiscDxeConfigGuid
 
 [Depex]
   gEfiVariableArchProtocolGuid
-

@@ -17,7 +17,6 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 
 #include <SaAccess.h>
 
-
 /**
   <b>SA DXE Policy Driver Entry Point</b> \n
   - <b>Introduction</b> \n

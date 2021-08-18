@@ -9,18 +9,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #include "PeiPchPolicyUpdate.h"
 #include <Library/BaseMemoryLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Library/HobLib.h>
-#include <Guid/GlobalVariable.h>
-#include <Library/PchGbeLib.h>
-#include <Library/PchInfoLib.h>
-#include <Library/PchPcrLib.h>
-#include <Library/PchHsioLib.h>
 #include <Library/PchSerialIoLib.h>
-#include <Library/PchPcieRpLib.h>
-#include <GpioConfig.h>
-#include <GpioPinsSklH.h>
-#include <Library/DebugLib.h>
-#include <Library/PchGbeLib.h>
 
 extern PCH_PCIE_DEVICE_OVERRIDE mPcieDeviceTable[];
 
@@ -103,6 +92,7 @@ InternalAddPlatformVerbTables (
       InternalAddVerbTable (&VerbTableEntryNum, VerbTableArray, (VOID *) (UINTN) PcdGet32 (PcdHdaVerbTable));
       InternalAddVerbTable (&VerbTableEntryNum, VerbTableArray, (VOID *) (UINTN) PcdGet32 (PcdHdaVerbTable2));
       InternalAddVerbTable (&VerbTableEntryNum, VerbTableArray, NULL);
+      DEBUG ((DEBUG_INFO, "HDA: No external codecs to install!\n"));
     }
   } else {
     DEBUG ((DEBUG_INFO, "HDA Policy: External codec kit selected\n"));
@@ -133,15 +123,12 @@ PeiFspPchPolicyUpdate (
   IN OUT FSPS_UPD    *FspsUpd
   )
 {
-
-  FspsUpd->FspsConfig.PchSubSystemVendorId = V_PCH_INTEL_VENDOR_ID;
-  FspsUpd->FspsConfig.PchSubSystemId       = V_PCH_DEFAULT_SID;
-
   FspsUpd->FspsConfig.PchPcieDeviceOverrideTablePtr = (UINT32) mPcieDeviceTable;
 
   InternalAddPlatformVerbTables (FspsUpd, PchHdaCodecPlatformOnboard, PcdGet8 (PcdAudioConnector));
 
 DEBUG_CODE_BEGIN();
+// FIXME: Policy sets to PCI
 if ((PcdGet8 (PcdSerialIoUartDebugEnable) == 1) &&
       FspsUpd->FspsConfig.SerialIoDevMode[PchSerialIoIndexUart0 + PcdGet8 (PcdSerialIoUartNumber)] == PchSerialIoDisabled ) {
     FspsUpd->FspsConfig.SerialIoDevMode[PchSerialIoIndexUart0 + PcdGet8 (PcdSerialIoUartNumber)] = PchSerialIoLegacyUart;
@@ -150,4 +137,3 @@ DEBUG_CODE_END();
 
   return EFI_SUCCESS;
 }
-

@@ -1,0 +1,105 @@
+/** @file
+  Board-specific EC library
+
+  Copyright (c) 2021, Benjamin Doran
+  SPDX-License-Identifier: BSD-2-Clause-Patent
+
+**/
+
+#ifndef _BOARD_EC_LIB_H_
+#define _BOARD_EC_LIB_H_
+
+/**
+  Reads a byte of EC RAM.
+
+  @param[in]  Address          Address to read
+  @param[out] Data             Data received
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+EFI_STATUS
+EcCmd90Read (
+  IN  UINT8                  Address,
+  OUT UINT8                  *Data
+  );
+
+/**
+  Writes a byte of EC RAM.
+
+  @param[in] Address           Address to write
+  @param[in] Data              Data to write
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+EFI_STATUS
+EcCmd91Write (
+  IN  UINT8                  Address,
+  IN  UINT8                  Data
+  );
+
+/**
+  Query the EC status.
+
+  @param[out] Status           EC status byte
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+EFI_STATUS
+EcCmd94Query (
+  OUT UINT8                  *Data
+  );
+
+/**
+  Reads a byte of EC (index) RAM.
+
+  @param[in]  Address          Address to read
+  @param[out] Data             Data received
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+VOID
+EcIdxRead (
+  IN  UINT16                 Address,
+  OUT UINT8                  *Data
+  );
+
+/**
+  Writes a byte of EC (index) RAM.
+
+  @param[in]  Address          Address to read
+  @param[out] Data             Data received
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+VOID
+EcIdxWrite (
+  IN  UINT16                 Address,
+  IN  UINT8                  Data
+  );
+
+/**
+  Read EC analog-digital converter.
+  TODO: Check if ADC is valid.
+
+  @param[out] DataBuffer
+
+  @retval     EFI_SUCCESS       Command success
+  @retval     EFI_DEVICE_ERROR  Command error
+**/
+VOID
+ReadEcAdcConverter (
+  IN  UINT8        Adc,
+  OUT UINT16       *DataBuffer
+  );
+
+#endif

@@ -1,5 +1,5 @@
 /** @file
-  Kaby Lake RVP 3 Board Initialization Pre-Memory library
+  Aspire VN7-572G Board Initialization Pre-Memory library
 
 Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
@@ -7,34 +7,30 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 **/
 
 #include <PiPei.h>
-#include <Library/BaseLib.h>
-#include <Library/IoLib.h>
 #include <Library/BoardInitLib.h>
-#include <Library/PcdLib.h>
 #include <Library/DebugLib.h>
-#include <PlatformBoardId.h>
 
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardDetect (
+AspireVn7Dash572GBoardDebugInit (
   VOID
   );
 
 EFI_BOOT_MODE
 EFIAPI
-KabylakeRvp3BoardBootModeDetect (
+AspireVn7Dash572GBoardBootModeDetect (
   VOID
   );
 
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardDebugInit (
+AspireVn7Dash572GBoardInitBeforeMemoryInit (
   VOID
   );
 
 EFI_STATUS
 EFIAPI
-KabylakeRvp3BoardInitBeforeMemoryInit (
+AspireVn7Dash572GBoardInitAfterMemoryInit (
   VOID
   );
 
@@ -44,7 +40,7 @@ BoardDetect (
   VOID
   )
 {
-  KabylakeRvp3BoardDetect ();
+  DEBUG ((DEBUG_INFO, "%a(): Deferred until LPC programming is complete\n", __FUNCTION__));
   return EFI_SUCCESS;
 }
 
@@ -54,8 +50,7 @@ BoardDebugInit (
   VOID
   )
 {
-  KabylakeRvp3BoardDebugInit ();
-  return EFI_SUCCESS;
+  return AspireVn7Dash572GBoardDebugInit ();
 }
 
 EFI_BOOT_MODE
@@ -64,7 +59,7 @@ BoardBootModeDetect (
   VOID
   )
 {
-  return KabylakeRvp3BoardBootModeDetect ();
+  return AspireVn7Dash572GBoardBootModeDetect ();
 }
 
 EFI_STATUS
@@ -73,10 +68,7 @@ BoardInitBeforeMemoryInit (
   VOID
   )
 {
-  if ((LibPcdGetSku () == BoardIdKabyLakeYLpddr3Rvp3) || (LibPcdGetSku () == BoardIdSkylakeRvp3)) {
-    KabylakeRvp3BoardInitBeforeMemoryInit ();
-  }
-  return EFI_SUCCESS;
+  return AspireVn7Dash572GBoardInitBeforeMemoryInit ();
 }
 
 EFI_STATUS
@@ -85,7 +77,7 @@ BoardInitAfterMemoryInit (
   VOID
   )
 {
-  return EFI_SUCCESS;
+  return AspireVn7Dash572GBoardInitAfterMemoryInit ();
 }
 
 EFI_STATUS
@@ -105,4 +97,3 @@ BoardInitAfterTempRamExit (
 {
   return EFI_SUCCESS;
 }
-

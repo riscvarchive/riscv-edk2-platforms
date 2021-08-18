@@ -25,6 +25,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 //
 // Status Port 0x62
 //
+// FIXME: Some bits may be reserved
 #define EC_S_OVR_TMP     0x80    // Current CPU temperature exceeds the threshold
 #define EC_S_SMI_EVT     0x40    // SMI event is pending
 #define EC_S_SCI_EVT     0x20    // SCI event is pending
@@ -39,7 +40,9 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 // New commands and command parameters should only be written by the host when IBF=0.
 // Data read from the EC data port is valid only when OBF=1.
 //
-#define EC_C_FAB_ID                    0x0D    // Get the board fab ID in the lower 3 bits
+// TODO: It's unclear if the EC has such a command. Currently, we read model ID from ADCs.
+// As a definition is required for build, use a known safe command: EC query will do nicely.
+#define EC_C_FAB_ID                    0x84    // Get the board fab ID in the lower 3 bits
 #define EC_C_ACPI_READ                 0x80    // Read a byte of EC RAM
 #define EC_C_ACPI_WRITE                0x81    // Write a byte of EC RAM
 
