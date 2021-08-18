@@ -32,7 +32,9 @@ typedef struct {
 } EC_COMMAND_TABLE;
 
 EC_COMMAND_TABLE mEcCommand[] = {
-  {EC_C_FAB_ID                   , 0, 2, TRUE}   // Get the board fab ID in the lower 3 bits
+  {EC_C_FAB_ID                   , 0, 2, TRUE},  // Get the board fab ID in the lower 3 bits
+  {EC_C_ACPI_READ                , 1, 1, TRUE},  // Read a byte of EC RAM
+  {EC_C_ACPI_WRITE               , 2, 0, TRUE}   // Write a byte of EC RAM
 };
 
 //

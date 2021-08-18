@@ -40,5 +40,7 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 // Data read from the EC data port is valid only when OBF=1.
 //
 #define EC_C_FAB_ID                    0x0D    // Get the board fab ID in the lower 3 bits
+#define EC_C_ACPI_READ                 0x80    // Read a byte of EC RAM
+#define EC_C_ACPI_WRITE                0x81    // Write a byte of EC RAM
 
 #endif // EC_COMMANDS_H_

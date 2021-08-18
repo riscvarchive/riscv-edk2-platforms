@@ -103,4 +103,36 @@ LpcEcInterface (
   IN OUT UINT8                 *DataBuffer
   );
 
+/**
+  Read a byte of EC RAM.
+
+  @param[in]  Address          Address to read
+  @param[out] Data             Data received
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+EFI_STATUS
+EcRead (
+  IN  UINT8                  Address,
+  OUT UINT8                  *Data
+  );
+
+/**
+  Write a byte of EC RAM.
+
+  @param[in] Address           Address to write
+  @param[in] Data              Data to write
+
+  @retval    EFI_SUCCESS       Command success
+  @retval    EFI_DEVICE_ERROR  Command error
+  @retval    EFI_TIMEOUT       Command timeout
+**/
+EFI_STATUS
+EcWrite (
+  IN  UINT8                  Address,
+  IN  UINT8                  Data
+  );
+
 #endif

@@ -27,3 +27,4 @@
 
 [Sources]
   BaseEcLib.c
+  EcCommands.c
