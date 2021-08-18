@@ -69,6 +69,14 @@ A UEFI firmware implementation using MinPlatformPkg is constructed using the fol
 ----------------------------------------|--------------------------------------------|------------------------------|--------------------|
 | UP Xtreme                             | Whiskey Lake                               | WhiskeylakeOpenBoardPkg      | UpXtreme           |
 
+#### Acer
+
+***Aspire VN7-572G Laptop***
+
+| Machine Name                          | Supported Chipsets                         | BoardPkg                     | Board Name         |
+----------------------------------------|--------------------------------------------|------------------------------|--------------------|
+| Aspire VN7-572G                       | SkyLake                                    | KabylakeOpenBoardPkg         | AspireVn7Dash572G  |
+
 #### Intel
 
 ***Intel Reference and Validation Platform***
