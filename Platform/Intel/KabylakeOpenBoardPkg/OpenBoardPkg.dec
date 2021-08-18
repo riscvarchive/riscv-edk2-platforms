@@ -20,6 +20,7 @@ PACKAGE_GUID = 0A8BA6E8-C8AC-4AC1-87AC-52772FA6AE5E
 
 [Includes]
 Include
+AspireVn7Dash572G/Include
 GalagoPro3/Include
 KabylakeRvp3/Include
 Features/Tbt/Include

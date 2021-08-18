@@ -22,6 +22,8 @@ Kaby Lake Platform Board Identifiers
 
 #define BoardIdSkylakeRvp3                  0x4
 #define BoardIdGalagoPro3                   0x20
+#define BoardIdRayleighSLx_dGPU             0x41
+#define BoardIdNewgateSLx_dGPU              0x42
 #define BoardIdKabyLakeYLpddr3Rvp3          0x60
 
 #define BoardIdUnknown1                     0xffff
