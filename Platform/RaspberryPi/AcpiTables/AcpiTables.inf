@@ -39,6 +39,7 @@
   Pptt.aslc
   SsdtThermal.asl
   Xhci.asl
+  Pci.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
@@ -59,6 +60,8 @@
   gArmTokenSpaceGuid.PcdGicInterruptInterfaceBase
   gArmTokenSpaceGuid.PcdGicDistributorBase
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciCpuMmioAdr
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioAdr
+  gBcm27xxTokenSpaceGuid.PcdBcm27xxPciBusMmioLen
   gBcm27xxTokenSpaceGuid.PcdBcm27xxPciRegBase
   gBcm27xxTokenSpaceGuid.PcdBcmGenetRegistersAddress
   gBcm283xTokenSpaceGuid.PcdBcm283xRegistersAddress
