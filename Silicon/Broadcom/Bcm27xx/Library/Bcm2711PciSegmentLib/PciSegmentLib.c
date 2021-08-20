@@ -105,6 +105,13 @@ PciSegmentLibGetConfigBase (
           return 0xFFFFFFFF;
       }
 
+      /* Don't probe slots if the link is down */
+      Data = MmioRead32 (PCIE_REG_BASE + PCIE_MISC_PCIE_STATUS);
+      if ((Data & 0x30) != 0x30) {
+          DEBUG ((DEBUG_ERROR, "PCIe link not ready (status=%x)\n", Data));
+          return 0xFFFFFFFF;
+      }
+
       MmioWrite32 (PCIE_REG_BASE + PCIE_EXT_CFG_INDEX, Address);
       mPciSegmentLastAccess = Address;
     }

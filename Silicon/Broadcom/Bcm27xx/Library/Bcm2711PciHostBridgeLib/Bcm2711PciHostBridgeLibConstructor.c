@@ -204,11 +204,6 @@ Bcm2711PciHostBridgeLibConstructor (
   } while (((Data & 0x30) != 0x030) && (Timeout));
   DEBUG ((DEBUG_VERBOSE, "PCIe link ready (status=%x) Timeout=%d\n", Data, Timeout));
 
-  if ((Data & 0x30) != 0x30) {
-    DEBUG ((DEBUG_ERROR, "PCIe link not ready (status=%x)\n", Data));
-    return EFI_DEVICE_ERROR;
-  }
-
   if ((Data & 0x80) != 0x80) {
     DEBUG ((DEBUG_ERROR, "PCIe link not in RC mode (status=%x)\n", Data));
     return EFI_UNSUPPORTED;
