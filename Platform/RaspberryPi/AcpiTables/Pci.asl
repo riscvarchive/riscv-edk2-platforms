@@ -62,6 +62,13 @@ DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPI4PCIE", 2)
         Package (4) { 0x0000FFFF, 3, zero, 178 }
       })
 
+      Name (_DSD, Package () {
+        ToUUID("daffd814-6eba-4d8c-8a91-bc9bbf4aa301"),
+          Package () {
+            Package () { "linux-ecam-quirk-id", "bcm2711" },
+          }
+      })
+
       // Root complex resources
       Method (_CRS, 0, Serialized) {
         Name (RBUF, ResourceTemplate () {
