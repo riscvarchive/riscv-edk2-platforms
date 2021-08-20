@@ -64,9 +64,6 @@ DefinitionBlock ("Dsdt.aml", "DSDT", 2, "RPIFDN", "RPI", 2)
   Scope (\_SB_)
   {
     include ("Pep.asl")
-#if (RPI_MODEL == 4)
-    include ("Xhci.asl")
-#endif
 
     Device (CPU0)
     {

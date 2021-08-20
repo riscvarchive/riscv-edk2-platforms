@@ -38,6 +38,7 @@
   SpcrPl011.aslc
   Pptt.aslc
   SsdtThermal.asl
+  Xhci.asl
 
 [Packages]
   ArmPkg/ArmPkg.dec
