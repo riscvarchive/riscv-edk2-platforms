@@ -754,6 +754,11 @@
   }
 
   #
+  # NVMe boot devices
+  #
+  MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+
+  #
   # UEFI application (Shell Embedded Boot Loader)
   #
   ShellPkg/Application/Shell/Shell.inf {

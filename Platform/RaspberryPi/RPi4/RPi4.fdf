@@ -283,6 +283,11 @@ READ_LOCK_STATUS   = TRUE
   INF EmbeddedPkg/Drivers/NonCoherentIoMmuDxe/NonCoherentIoMmuDxe.inf
 
   #
+  # NVMe boot devices
+  #
+  INF MdeModulePkg/Bus/Pci/NvmExpressDxe/NvmExpressDxe.inf
+
+  #
   # SCSI Bus and Disk Driver
   #
   INF MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
