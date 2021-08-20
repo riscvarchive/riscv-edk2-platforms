@@ -536,6 +536,14 @@
 
   gRaspberryPiTokenSpaceGuid.PcdPlatformResetDelay|L"ResetDelay"|gRaspberryPiTokenSpaceGuid|0x0|0
 
+  # Select XHCI/PCIe mode
+  #
+  # 0  - XHCI Enabled (default on !cm4)
+  # 1  - PCIe Enabled
+  # 2  - PCIe Enabled (default on cm4)
+  #
+  gRaspberryPiTokenSpaceGuid.PcdXhciPci|L"XhciPci"|gConfigDxeFormSetGuid|0x0|0
+
   #
   # Common UEFI ones.
   #

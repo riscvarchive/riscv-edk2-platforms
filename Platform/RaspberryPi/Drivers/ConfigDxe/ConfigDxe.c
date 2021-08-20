@@ -43,6 +43,7 @@ extern UINT8 ConfigDxeStrings[];
 STATIC RASPBERRY_PI_FIRMWARE_PROTOCOL *mFwProtocol;
 STATIC UINT32 mModelFamily = 0;
 STATIC UINT32 mModelInstalledMB = 0;
+STATIC UINT32 mModelRevision = 0;
 
 STATIC EFI_MAC_ADDRESS  mMacAddress;
 
@@ -268,6 +269,40 @@ SetupVariables (
                   NULL, &Size, &Var32);
   if (EFI_ERROR (Status)) {
     Status = PcdSet32S (PcdFanTemp, PcdGet32 (PcdFanTemp));
+    ASSERT_EFI_ERROR (Status);
+  }
+
+  if (mModelFamily >= 4) {
+    if (((mModelRevision >> 4) & 0xFF) == 0x14) {
+      /*
+       * Enable PCIe by default on CM4
+       */
+      Status = PcdSet32S (PcdXhciPci, 2);
+      ASSERT_EFI_ERROR (Status);
+    } else {
+      Size = sizeof (UINT32);
+      Status = gRT->GetVariable (L"XhciPci",
+                                 &gConfigDxeFormSetGuid,
+                                 NULL, &Size, &Var32);
+      if (EFI_ERROR (Status) || (Var32 == 0)) {
+        /*
+         * Enable XHCI by default
+         */
+        Status = PcdSet32S (PcdXhciPci, 0);
+        ASSERT_EFI_ERROR (Status);
+      } else {
+        /*
+         * Enable PCIe
+         */
+        Status = PcdSet32S (PcdXhciPci, 1);
+        ASSERT_EFI_ERROR (Status);
+      }
+    }
+  } else {
+    /*
+     * Disable PCIe and XHCI
+     */
+    Status = PcdSet32S (PcdXhciPci, 0);
     ASSERT_EFI_ERROR (Status);
   }
 
@@ -886,6 +921,13 @@ ConfigInitialize (
     DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi installed RAM size: %r\n", Status));
   } else {
     DEBUG ((DEBUG_INFO, "Current Raspberry Pi installed RAM size is %d MB\n", mModelInstalledMB));
+  }
+
+  Status = mFwProtocol->GetModelRevision (&mModelRevision);
+  if (Status != EFI_SUCCESS) {
+    DEBUG ((DEBUG_ERROR, "Couldn't get the Raspberry Pi revision: %r\n", Status));
+  } else {
+    DEBUG ((DEBUG_INFO, "Current Raspberry Pi revision %x\n", mModelRevision));
   }
 
   Status = SetupVariables ();

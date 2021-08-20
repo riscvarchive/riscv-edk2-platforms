@@ -57,6 +57,11 @@
 #string STR_ADVANCED_FANTEMP_PROMPT   #language en-US "ACPI fan temperature"
 #string STR_ADVANCED_FANTEMP_HELP     #language en-US "Cycle a fan at C"
 
+#string STR_ADVANCED_XHCIPCI_PROMPT   #language en-US "ACPI XHCI/PCIe"
+#string STR_ADVANCED_XHCIPCI_HELP     #language en-US "OS sees XHCI USB platform device or PCIe bridge"
+#string STR_ADVANCED_XHCIPCI_XHCI     #language en-US "XHCI"
+#string STR_ADVANCED_XHCIPCI_PCIE     #language en-US "PCIe"
+
 #string STR_ADVANCED_ASSET_TAG_PROMPT #language en-US "Asset Tag"
 #string STR_ADVANCED_ASSET_TAG_HELP   #language en-US "Set the system Asset Tag"
 
