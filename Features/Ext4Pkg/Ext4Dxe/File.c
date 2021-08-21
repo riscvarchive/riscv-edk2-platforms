@@ -207,6 +207,11 @@ Ext4Open (
 
     FileName += Length;
 
+    if (StrCmp(PathSegment, L".") == 0) {
+      // Opens of "." are a no-op
+      continue;
+    }
+
     DEBUG ((DEBUG_FS, "[ext4] Opening %s\n", PathSegment));
 
     if (!Ext4FileIsDir (Current)) {
@@ -512,12 +517,20 @@ Ext4GetFileInfo (
   IN EXT4_FILE *File, OUT EFI_FILE_INFO *Info, IN OUT UINTN *BufferSize
   )
 {
-  UINTN  FileNameLen;
-  UINTN  FileNameSize;
-  UINTN  NeededLength;
+  UINTN         FileNameLen;
+  UINTN         FileNameSize;
+  UINTN         NeededLength;
+  CONST CHAR16  *FileName;
 
-  FileNameLen  = StrLen (File->FileName);
-  FileNameSize = StrSize (File->FileName);
+  if (File->InodeNum == 2) {
+    // Root inode gets a filename of "", regardless of how it was opened.
+    FileName = L"";
+  } else {
+    FileName = File->FileName;
+  }
+
+  FileNameLen  = StrLen (FileName);
+  FileNameSize = StrSize (FileName);
 
   NeededLength = SIZE_OF_EFI_FILE_INFO + FileNameSize;
 
@@ -540,7 +553,7 @@ Ext4GetFileInfo (
 
   *BufferSize = NeededLength;
 
-  return StrCpyS (Info->FileName, FileNameLen + 1, File->FileName);
+  return StrCpyS (Info->FileName, FileNameLen + 1, FileName);
 }
 
 /**
@@ -687,6 +700,7 @@ Ext4DuplicateFile (
 {
   EXT4_PARTITION  *Partition;
   EXT4_FILE       *File;
+  EFI_STATUS      Status;
 
   Partition = Original->Partition;
   File = AllocateZeroPool (sizeof (EXT4_FILE));
@@ -717,7 +731,8 @@ Ext4DuplicateFile (
   File->InodeNum = Original->InodeNum;
   File->OpenMode = 0; // Will be filled by other code
 
-  if (!Ext4InitExtentsMap (File)) {
+  Status = Ext4InitExtentsMap (File);
+  if (EFI_ERROR (Status)) {
     FreePool (File->FileName);
     FreePool (File->Inode);
     FreePool (File);
