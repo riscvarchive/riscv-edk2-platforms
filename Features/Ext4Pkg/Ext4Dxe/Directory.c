@@ -51,6 +51,37 @@ Ext4GetUcs2DirentName (
 }
 
 /**
+   Validates a directory entry.
+
+   @param[in]      Dirent      Pointer to the directory entry.
+
+   @retval TRUE          Valid directory entry.
+           FALSE         Invalid directory entry.
+**/
+STATIC
+BOOLEAN
+Ext4ValidDirent (
+  IN CONST EXT4_DIR_ENTRY  *Dirent
+  )
+{
+  UINTN  RequiredSize;
+
+  RequiredSize = Dirent->name_len + EXT4_MIN_DIR_ENTRY_LEN;
+
+  if (Dirent->rec_len < RequiredSize) {
+    DEBUG ((DEBUG_ERROR, "[ext4] dirent size %lu too small (compared to %lu)\n", Dirent->rec_len, RequiredSize));
+    return FALSE;
+  }
+
+  // Dirent sizes need to be 4 byte aligned
+  if (Dirent->rec_len % 4) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
    Retrieves a directory entry.
 
    @param[in]      Directory   Pointer to the opened directory.
@@ -75,11 +106,11 @@ Ext4RetrieveDirent (
   UINT64          DirInoSize;
   UINT32          BlockRemainder;
   UINTN           Length;
-  CHAR8           *BufPtr;
   EXT4_DIR_ENTRY  *Entry;
   UINTN           RemainingBlock;
   CHAR16          DirentUcs2Name[EXT4_NAME_MAX + 1];
   UINTN           ToCopy;
+  UINTN           BlockOffset;
 
   Status = EFI_NOT_FOUND;
   Buf    = AllocatePool (Partition->BlockSize);
@@ -109,14 +140,19 @@ Ext4RetrieveDirent (
       return Status;
     }
 
-    for (BufPtr = Buf; BufPtr < Buf + Partition->BlockSize; ) {
-      Entry = (EXT4_DIR_ENTRY *)BufPtr;
-      if (Entry->rec_len == 0) {
+    for (BlockOffset = 0; BlockOffset < Partition->BlockSize; ) {
+      Entry = (EXT4_DIR_ENTRY *)(Buf + BlockOffset);
+      RemainingBlock = Partition->BlockSize - BlockOffset;
+      // Check if the minimum directory entry fits inside [BlockOffset, EndOfBlock]
+      if (RemainingBlock < EXT4_MIN_DIR_ENTRY_LEN) {
         FreePool (Buf);
         return EFI_VOLUME_CORRUPTED;
       }
 
-      RemainingBlock = Partition->BlockSize - (BufPtr - Buf);
+      if (!Ext4ValidDirent (Entry)) {
+        FreePool (Buf);
+        return EFI_VOLUME_CORRUPTED;
+      }
 
       if (Entry->name_len > RemainingBlock || Entry->rec_len > RemainingBlock) {
         // Corrupted filesystem
@@ -131,12 +167,13 @@ Ext4RetrieveDirent (
         2) Linux and a number of BSDs also have a filename limit of 255.
       */
       if (Entry->name_len > EXT4_NAME_MAX) {
+        BlockOffset += Entry->rec_len;
         continue;
       }
 
       // Unused entry
       if (Entry->inode == 0) {
-        BufPtr += Entry->rec_len;
+        BlockOffset += Entry->rec_len;
         continue;
       }
 
@@ -150,7 +187,7 @@ Ext4RetrieveDirent (
       if (EFI_ERROR (Status)) {
         // If we error out, skip this entry
         // I'm not sure if this is correct behaviour, but I don't think there's a precedent here.
-        BufPtr += Entry->rec_len;
+        BlockOffset += Entry->rec_len;
         continue;
       }
 
@@ -163,7 +200,7 @@ Ext4RetrieveDirent (
         return EFI_SUCCESS;
       }
 
-      BufPtr += Entry->rec_len;
+      BlockOffset += Entry->rec_len;
     }
 
     Off += Partition->BlockSize;
@@ -380,37 +417,6 @@ Ext4OpenVolume (
 }
 
 /**
-   Validates a directory entry.
-
-   @param[in]      Dirent      Pointer to the directory entry.
-
-   @retval TRUE          Valid directory entry.
-           FALSE         Invalid directory entry.
-**/
-STATIC
-BOOLEAN
-Ext4ValidDirent (
-  IN CONST EXT4_DIR_ENTRY  *Dirent
-  )
-{
-  UINTN  RequiredSize;
-
-  RequiredSize = Dirent->name_len + EXT4_MIN_DIR_ENTRY_LEN;
-
-  if (Dirent->rec_len < RequiredSize) {
-    DEBUG ((DEBUG_ERROR, "[ext4] dirent size %lu too small (compared to %lu)\n", Dirent->rec_len, RequiredSize));
-    return FALSE;
-  }
-
-  // Dirent sizes need to be 4 byte aligned
-  if (Dirent->rec_len % 4) {
-    return FALSE;
-  }
-
-  return TRUE;
-}
-
-/**
    Reads a directory entry.
 
    @param[in]      Partition   Pointer to the ext4 partition.
@@ -477,6 +483,12 @@ Ext4ReadDir (
     // Invalid directory entry length
     if (!Ext4ValidDirent (&Entry)) {
       DEBUG ((DEBUG_ERROR, "[ext4] Invalid dirent at offset %lu\n", Offset));
+      Status = EFI_VOLUME_CORRUPTED;
+      goto Out;
+    }
+
+    // Check if the entire dir entry length fits in Len
+    if (Len < (UINTN)(EXT4_MIN_DIR_ENTRY_LEN + Entry.name_len)) {
       Status = EFI_VOLUME_CORRUPTED;
       goto Out;
     }
