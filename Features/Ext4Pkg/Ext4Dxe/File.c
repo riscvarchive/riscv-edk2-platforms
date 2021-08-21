@@ -35,7 +35,9 @@ Ext4DuplicateFile (
 STATIC
 EFI_STATUS
 GetPathSegment (
-  IN CONST CHAR16 *Path, OUT CHAR16 *PathSegment, OUT UINTN *Length
+  IN CONST CHAR16  *Path,
+  OUT CHAR16       *PathSegment,
+  OUT UINTN        *Length
   )
 {
   CONST CHAR16  *Start;
@@ -514,7 +516,9 @@ Ext4SetPosition (
 **/
 EFI_STATUS
 Ext4GetFileInfo (
-  IN EXT4_FILE *File, OUT EFI_FILE_INFO *Info, IN OUT UINTN *BufferSize
+  IN EXT4_FILE       *File,
+  OUT EFI_FILE_INFO  *Info,
+  IN OUT UINTN       *BufferSize
   )
 {
   UINTN         FileNameLen;
@@ -557,6 +561,54 @@ Ext4GetFileInfo (
 }
 
 /**
+   Retrieves the volume name.
+
+   @param[in]      Part           Pointer to the opened partition.
+   @param[out]     Info           Pointer to a CHAR16*.
+   @param[out]     BufferSize     Pointer to a UINTN, where the string length
+                                  of the name will be put.
+
+   @return Status of the volume name request.
+**/
+EFI_STATUS
+Ext4GetVolumeName (
+  IN EXT4_PARTITION  *Partition,
+  OUT CHAR16         **OutVolName,
+  OUT UINTN          *VolNameLen
+  )
+{
+  CHAR8       TempVolName[16 + 1];
+  CHAR16      *VolumeName;
+  UINTN       VolNameLength;
+  EFI_STATUS  Status;
+
+  VolNameLength = 0;
+  VolumeName    = NULL;
+
+  // s_volume_name is only valid on dynamic revision; old filesystems don't support this
+  if (Partition->SuperBlock.s_rev_level == EXT4_DYNAMIC_REV) {
+    CopyMem (TempVolName, (CONST CHAR8 *)Partition->SuperBlock.s_volume_name, 16);
+    TempVolName[16] = '\0';
+
+    Status = UTF8StrToUCS2 (TempVolName, &VolumeName);
+
+    if (EFI_ERROR (Status)) {
+      return Status;
+    }
+
+    VolNameLength = StrLen (VolumeName);
+  } else {
+    VolumeName    = AllocateZeroPool (sizeof (CHAR16));
+    VolNameLength = 0;
+  }
+
+  *OutVolName = VolumeName;
+  *VolNameLen = VolNameLength;
+
+  return EFI_SUCCESS;
+}
+
+/**
    Retrieves information about the filesystem and stores it in the EFI_FILE_SYSTEM_INFO format.
 
    @param[in]      Part           Pointer to the opened partition.
@@ -568,50 +620,33 @@ Ext4GetFileInfo (
 STATIC
 EFI_STATUS
 Ext4GetFilesystemInfo (
-  IN EXT4_PARTITION *Part, OUT EFI_FILE_SYSTEM_INFO *Info, IN OUT UINTN *BufferSize
+  IN EXT4_PARTITION         *Part,
+  OUT EFI_FILE_SYSTEM_INFO  *Info,
+  IN OUT UINTN              *BufferSize
   )
 {
   // Length of s_volume_name + null terminator
-  CHAR8          TempVolName[16 + 1];
-  CHAR16         *VolumeName;
-  UINTN          VolNameLength;
   EFI_STATUS     Status;
   UINTN          NeededLength;
   EXT4_BLOCK_NR  TotalBlocks;
   EXT4_BLOCK_NR  FreeBlocks;
+  CHAR16         *VolumeName;
+  UINTN          VolNameLength;
 
-  VolNameLength = 0;
-  VolumeName    = NULL;
+  Status = Ext4GetVolumeName (Part, &VolumeName, &VolNameLength);
 
-  // s_volume_name is only valid on dynamic revision; old filesystems don't support this
-  if (Part->SuperBlock.s_rev_level == EXT4_DYNAMIC_REV) {
-    CopyMem (TempVolName, (CONST CHAR8 *)Part->SuperBlock.s_volume_name, 16);
-    TempVolName[16] = '\0';
-
-    Status = UTF8StrToUCS2 (TempVolName, &VolumeName);
-
-    if (EFI_ERROR (Status)) {
-      return Status;
-    }
-
-    VolNameLength = StrLen (VolumeName);
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
   NeededLength = SIZE_OF_EFI_FILE_SYSTEM_INFO;
 
-  if (VolumeName != NULL) {
-    NeededLength += StrSize (VolumeName);
-  } else {
-    // If we don't have a volume name, we set VolumeLabel to a single null terminator
-    NeededLength += sizeof (CHAR16);
-  }
+  NeededLength += StrSize (VolumeName);
 
   if (*BufferSize < NeededLength) {
     *BufferSize = NeededLength;
 
-    if (VolumeName != NULL) {
-      FreePool (VolumeName);
-    }
+    FreePool (VolumeName);
 
     return EFI_BUFFER_TOO_SMALL;
   }
@@ -630,15 +665,59 @@ Ext4GetFilesystemInfo (
   Info->VolumeSize = MultU64x32 (TotalBlocks, Part->BlockSize);
   Info->FreeSpace  = MultU64x32 (FreeBlocks, Part->BlockSize);
 
-  if (VolumeName != NULL) {
-    StrCpyS (Info->VolumeLabel, VolNameLength + 1, VolumeName);
-  } else {
-    Info->VolumeLabel[0] = L'\0';
+  StrCpyS (Info->VolumeLabel, VolNameLength + 1, VolumeName);
+
+  FreePool (VolumeName);
+
+  *BufferSize = NeededLength;
+
+  return EFI_SUCCESS;
+}
+
+/**
+   Retrieves the volume label and stores it in the EFI_FILE_SYSTEM_VOLUME_LABEL format.
+
+   @param[in]      Part           Pointer to the opened partition.
+   @param[out]     Info           Pointer to a EFI_FILE_SYSTEM_VOLUME_LABEL.
+   @param[in out]  BufferSize     Pointer to the buffer size
+
+   @return Status of the file information request.
+**/
+STATIC
+EFI_STATUS
+Ext4GetVolumeLabelInfo (
+  IN EXT4_PARTITION                 *Part,
+  OUT EFI_FILE_SYSTEM_VOLUME_LABEL  *Info,
+  IN OUT UINTN                      *BufferSize
+  )
+{
+  // Length of s_volume_name + null terminator
+  CHAR16      *VolumeName;
+  UINTN       VolNameLength;
+  EFI_STATUS  Status;
+  UINTN       NeededLength;
+
+  Status = Ext4GetVolumeName (Part, &VolumeName, &VolNameLength);
+
+  if (EFI_ERROR (Status)) {
+    return Status;
   }
 
-  if (VolumeName != NULL) {
+  NeededLength = (VolNameLength + 1) * sizeof (CHAR16);
+
+  if (NeededLength > *BufferSize) {
+    *BufferSize = NeededLength;
+
     FreePool (VolumeName);
+
+    return EFI_BUFFER_TOO_SMALL;
   }
+
+  Status = StrCpyS (Info->VolumeLabel, VolNameLength + 1, VolumeName);
+
+  ASSERT_EFI_ERROR (Status);
+
+  FreePool (VolumeName);
 
   *BufferSize = NeededLength;
 
@@ -674,12 +753,20 @@ Ext4GetInfo (
   OUT VOID              *Buffer
   )
 {
+  EXT4_PARTITION  *Partition;
+
+  Partition = ((EXT4_FILE *)This)->Partition;
+
   if (CompareGuid (InformationType, &gEfiFileInfoGuid)) {
     return Ext4GetFileInfo ((EXT4_FILE *)This, Buffer, BufferSize);
   }
 
   if (CompareGuid (InformationType, &gEfiFileSystemInfoGuid)) {
-    return Ext4GetFilesystemInfo (((EXT4_FILE *)This)->Partition, Buffer, BufferSize);
+    return Ext4GetFilesystemInfo (Partition, Buffer, BufferSize);
+  }
+
+  if (CompareGuid (InformationType, &gEfiFileSystemVolumeLabelInfoIdGuid)) {
+    return Ext4GetVolumeLabelInfo (Partition, Buffer, BufferSize);
   }
 
   return EFI_UNSUPPORTED;

@@ -1100,4 +1100,21 @@ Ext4CalculateBlockGroupDescChecksum (
 #define EXT4_HAS_GDT_CSUM(Partition) \
   EXT4_HAS_RO_COMPAT (Partition, EXT4_FEATURE_RO_COMPAT_METADATA_CSUM)
 
+/**
+   Retrieves the volume name.
+
+   @param[in]      Part           Pointer to the opened partition.
+   @param[out]     Info           Pointer to a CHAR16*.
+   @param[out]     BufferSize     Pointer to a UINTN, where the string length
+                                  of the name will be put.
+
+   @return Status of the volume name request.
+**/
+EFI_STATUS
+Ext4GetVolumeName (
+  IN EXT4_PARTITION  *Partition,
+  OUT CHAR16         **OutVolName,
+  OUT UINTN          *VolNameLen
+  );
+
 #endif

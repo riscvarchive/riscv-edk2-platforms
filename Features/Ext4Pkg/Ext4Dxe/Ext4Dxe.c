@@ -6,7 +6,6 @@
 **/
 
 #include "Ext4Dxe.h"
-#include "Uefi/UefiBaseType.h"
 
 GLOBAL_REMOVE_IF_UNREFERENCED EFI_UNICODE_STRING_TABLE  mExt4DriverNameTable[] = {
   {
