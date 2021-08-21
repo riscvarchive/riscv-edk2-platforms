@@ -353,6 +353,7 @@ Ext4OpenFile (
    @param[in]      OpenMode    Mode in which the file is supposed to be open.
    @param[out]     OutFile     Pointer to the newly opened file.
    @param[in]      Entry       Directory entry to be used.
+   @param[in]      Directory   Pointer to the opened directory.
 
    @retval EFI_STATUS          Result of the operation
 **/
@@ -361,7 +362,8 @@ Ext4OpenDirent (
   IN  EXT4_PARTITION  *Partition,
   IN  UINT64          OpenMode,
   OUT EXT4_FILE       **OutFile,
-  IN  EXT4_DIR_ENTRY  *Entry
+  IN  EXT4_DIR_ENTRY  *Entry,
+  IN  EXT4_FILE       *Directory
   );
 
 /**

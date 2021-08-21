@@ -89,7 +89,7 @@ Ext4Read (
   IN OUT UINTN           *Length
   )
 {
-  DEBUG ((DEBUG_FS, "[ext4] Ext4Read(Offset %lu, Length %lu)\n", Offset, *Length));
+  DEBUG ((DEBUG_FS, "[ext4] Ext4Read(%s, Offset %lu, Length %lu)\n", File->FileName, Offset, *Length));
   EXT4_INODE   *Inode;
   UINT64       InodeSize;
   UINT64       CurrentSeek;

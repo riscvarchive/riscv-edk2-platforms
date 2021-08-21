@@ -180,6 +180,7 @@ Ext4RetrieveDirent (
    @param[in]      OpenMode    Mode in which the file is supposed to be open.
    @param[out]     OutFile     Pointer to the newly opened file.
    @param[in]      Entry       Directory entry to be used.
+   @param[in]      Directory   Pointer to the opened directory.
 
    @retval EFI_STATUS          Result of the operation
 **/
@@ -188,12 +189,18 @@ Ext4OpenDirent (
   IN  EXT4_PARTITION  *Partition,
   IN  UINT64          OpenMode,
   OUT EXT4_FILE       **OutFile,
-  IN  EXT4_DIR_ENTRY  *Entry
+  IN  EXT4_DIR_ENTRY  *Entry,
+  IN  EXT4_FILE       *Directory
   )
 {
   EFI_STATUS  Status;
-  CHAR16      FileName[EXT4_NAME_MAX + 1];
+  CHAR16      FileNameBuf[EXT4_NAME_MAX + 1];
   EXT4_FILE   *File;
+  CHAR16      *FileName;
+  UINTN       DestMax;
+
+  FileName = FileNameBuf;
+  DestMax  = ARRAY_SIZE (FileNameBuf);
 
   File = AllocateZeroPool (sizeof (EXT4_FILE));
 
@@ -202,10 +209,16 @@ Ext4OpenDirent (
     goto Error;
   }
 
-  Status = Ext4GetUcs2DirentName (Entry, FileName);
+  Status = Ext4GetUcs2DirentName (Entry, FileNameBuf);
 
   if (EFI_ERROR (Status)) {
     goto Error;
+  }
+
+  if (StrCmp (FileNameBuf, L".") == 0) {
+    // We're using the parent directory's name
+    FileName = Directory->FileName;
+    DestMax  = StrLen (FileName) + 1;
   }
 
   File->FileName = AllocateZeroPool (StrSize (FileName));
@@ -222,7 +235,7 @@ Ext4OpenDirent (
   }
 
   // This should not fail.
-  StrCpyS (File->FileName, ARRAY_SIZE (FileName), FileName);
+  StrCpyS (File->FileName, DestMax, FileName);
 
   File->InodeNum = Entry->inode;
 
@@ -290,7 +303,7 @@ Ext4OpenFile (
     return EFI_NOT_FOUND;
   }
 
-  return Ext4OpenDirent (Partition, OpenMode, OutFile, &Entry);
+  return Ext4OpenDirent (Partition, OpenMode, OutFile, &Entry, Directory);
 }
 
 /**
@@ -429,6 +442,8 @@ Ext4ReadDir (
   UINT32          BlockRemainder;
   EXT4_DIR_ENTRY  Entry;
   EXT4_FILE       *TempFile;
+  BOOLEAN         ShouldSkip;
+  BOOLEAN         IsDotOrDotDot;
 
   DirIno     = File->Inode;
   Status     = EFI_SUCCESS;
@@ -470,13 +485,27 @@ Ext4ReadDir (
       goto Out;
     }
 
-    if (Entry.inode == 0) {
-      // When inode = 0, it's unused
+    // We don't care about passing . or .. entries to the caller of ReadDir(),
+    // since they're generally useless entries *and* may break things if too
+    // many callers assume FAT32.
+
+    // Entry.name_len may be 0 if it's a nameless entry, like an unused entry
+    // or a checksum at the end of the directory block.
+    // memcmp (and CompareMem) return 0 when the passed length is 0.
+
+    IsDotOrDotDot = Entry.name_len != 0 &&
+                    (CompareMem (Entry.name, ".", Entry.name_len) == 0 ||
+                     CompareMem (Entry.name, "..", Entry.name_len) == 0);
+
+    // When inode = 0, it's unused.
+    ShouldSkip = Entry.inode == 0 || IsDotOrDotDot;
+
+    if (ShouldSkip) {
       Offset += Entry.rec_len;
       continue;
     }
 
-    Status = Ext4OpenDirent (Partition, EFI_FILE_MODE_READ, &TempFile, &Entry);
+    Status = Ext4OpenDirent (Partition, EFI_FILE_MODE_READ, &TempFile, &Entry, File);
 
     if (EFI_ERROR (Status)) {
       goto Out;
