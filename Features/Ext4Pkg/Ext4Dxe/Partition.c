@@ -108,6 +108,7 @@ Ext4UnmountAndFreePartition (
   LIST_ENTRY  *Entry;
   LIST_ENTRY  *NextEntry;
   EXT4_FILE   *File;
+  BOOLEAN     DeletedRootDentry;
 
   Partition->Unmounting = TRUE;
   Ext4CloseInternal (Partition->Root);
@@ -116,6 +117,12 @@ Ext4UnmountAndFreePartition (
     File = EXT4_FILE_FROM_OPEN_FILES_NODE (Entry);
 
     Ext4CloseInternal (File);
+  }
+
+  DeletedRootDentry = Ext4UnrefDentry (Partition->RootDentry);
+
+  if (!DeletedRootDentry) {
+    DEBUG ((DEBUG_ERROR, "[ext4] Failed to delete root dentry - resource leak present.\n"));
   }
 
   FreePool (Partition->BlockGroups);

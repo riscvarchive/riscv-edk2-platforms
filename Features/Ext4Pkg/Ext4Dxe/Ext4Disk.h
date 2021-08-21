@@ -451,4 +451,7 @@ typedef struct {
 typedef UINT64  EXT4_BLOCK_NR;
 typedef UINT32  EXT4_INO_NR;
 
+// 2 is always the root inode number in ext4
+#define EXT4_ROOT_INODE_NR  2
+
 #endif

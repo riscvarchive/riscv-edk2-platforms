@@ -89,7 +89,6 @@ Ext4Read (
   IN OUT UINTN           *Length
   )
 {
-  DEBUG ((DEBUG_FS, "[ext4] Ext4Read(%s, Offset %lu, Length %lu)\n", File->FileName, Offset, *Length));
   EXT4_INODE   *Inode;
   UINT64       InodeSize;
   UINT64       CurrentSeek;
@@ -115,6 +114,8 @@ Ext4Read (
   CurrentSeek   = Offset;
   RemainingRead = *Length;
   BeenRead      = 0;
+
+  DEBUG ((DEBUG_FS, "[ext4] Ext4Read(%s, Offset %lu, Length %lu)\n", File->Dentry->Name, Offset, *Length));
 
   if (Offset > InodeSize) {
     return EFI_DEVICE_ERROR;

@@ -207,7 +207,7 @@ Ext4Open (
 
     FileName += Length;
 
-    if (StrCmp(PathSegment, L".") == 0) {
+    if (StrCmp (PathSegment, L".") == 0) {
       // Opens of "." are a no-op
       continue;
     }
@@ -272,7 +272,7 @@ Ext4Open (
 
   *NewHandle = &Current->Protocol;
 
-  DEBUG ((DEBUG_FS, "Opened filename %s\n", Current->FileName));
+  DEBUG ((DEBUG_FS, "[ext4] Opened filename %s\n", Current->Dentry->Name));
   return EFI_SUCCESS;
 }
 
@@ -312,9 +312,9 @@ Ext4CloseInternal (
 
   DEBUG ((DEBUG_FS, "[ext4] Closed file %p (inode %lu)\n", File, File->InodeNum));
   RemoveEntryList (&File->OpenFilesListNode);
-  FreePool (File->FileName);
   FreePool (File->Inode);
   Ext4FreeExtentsMap (File);
+  Ext4UnrefDentry (File->Dentry);
   FreePool (File);
   return EFI_SUCCESS;
 }
@@ -522,11 +522,11 @@ Ext4GetFileInfo (
   UINTN         NeededLength;
   CONST CHAR16  *FileName;
 
-  if (File->InodeNum == 2) {
+  if (File->InodeNum == EXT4_ROOT_INODE_NR) {
     // Root inode gets a filename of "", regardless of how it was opened.
     FileName = L"";
   } else {
-    FileName = File->FileName;
+    FileName = File->Dentry->Name;
   }
 
   FileNameLen  = StrLen (FileName);
@@ -717,15 +717,6 @@ Ext4DuplicateFile (
 
   CopyMem (File->Inode, Original->Inode, Partition->InodeSize);
 
-  File->FileName = AllocateZeroPool (StrSize (Original->FileName));
-  if (File->FileName == NULL) {
-    FreePool (File->Inode);
-    FreePool (File);
-    return NULL;
-  }
-
-  StrCpyS (File->FileName, StrLen (Original->FileName) + 1, Original->FileName);
-
   File->Position = 0;
   Ext4SetupFile (File, Partition);
   File->InodeNum = Original->InodeNum;
@@ -733,11 +724,14 @@ Ext4DuplicateFile (
 
   Status = Ext4InitExtentsMap (File);
   if (EFI_ERROR (Status)) {
-    FreePool (File->FileName);
     FreePool (File->Inode);
     FreePool (File);
     return NULL;
   }
+
+  File->Dentry = Original->Dentry;
+
+  Ext4RefDentry (File->Dentry);
 
   InsertTailList (&Partition->OpenFiles, &File->OpenFilesListNode);
 

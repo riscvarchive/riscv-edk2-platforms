@@ -194,13 +194,8 @@ Ext4OpenDirent (
   )
 {
   EFI_STATUS  Status;
-  CHAR16      FileNameBuf[EXT4_NAME_MAX + 1];
+  CHAR16      FileName[EXT4_NAME_MAX + 1];
   EXT4_FILE   *File;
-  CHAR16      *FileName;
-  UINTN       DestMax;
-
-  FileName = FileNameBuf;
-  DestMax  = ARRAY_SIZE (FileNameBuf);
 
   File = AllocateZeroPool (sizeof (EXT4_FILE));
 
@@ -209,23 +204,32 @@ Ext4OpenDirent (
     goto Error;
   }
 
-  Status = Ext4GetUcs2DirentName (Entry, FileNameBuf);
+  Status = Ext4GetUcs2DirentName (Entry, FileName);
 
   if (EFI_ERROR (Status)) {
     goto Error;
   }
 
-  if (StrCmp (FileNameBuf, L".") == 0) {
-    // We're using the parent directory's name
-    FileName = Directory->FileName;
-    DestMax  = StrLen (FileName) + 1;
-  }
+  if (StrCmp (FileName, L".") == 0) {
+    // We're using the parent directory's dentry
+    File->Dentry = Directory->Dentry;
 
-  File->FileName = AllocateZeroPool (StrSize (FileName));
+    ASSERT (File->Dentry != NULL);
 
-  if (!File->FileName) {
-    Status = EFI_OUT_OF_RESOURCES;
-    goto Error;
+    Ext4RefDentry (File->Dentry);
+  } else if (StrCmp (FileName, L"..") == 0) {
+    // Using the parent's parent's dentry
+    File->Dentry = Directory->Dentry->Parent;
+
+    ASSERT (File->Dentry != NULL);
+
+    Ext4RefDentry (File->Dentry);
+  } else {
+    File->Dentry = Ext4CreateDentry (FileName, Directory->Dentry);
+
+    if (!File->Dentry) {
+      goto Error;
+    }
   }
 
   Status = Ext4InitExtentsMap (File);
@@ -233,9 +237,6 @@ Ext4OpenDirent (
   if (EFI_ERROR (Status)) {
     goto Error;
   }
-
-  // This should not fail.
-  StrCpyS (File->FileName, DestMax, FileName);
 
   File->InodeNum = Entry->inode;
 
@@ -255,8 +256,8 @@ Ext4OpenDirent (
 
 Error:
   if (File != NULL) {
-    if (File->FileName != NULL) {
-      FreePool (File->FileName);
+    if (File->Dentry != NULL) {
+      Ext4UnrefDentry (File->Dentry);
     }
 
     if (File->ExtentsMap != NULL) {
@@ -333,52 +334,47 @@ Ext4OpenVolume (
   OUT EFI_FILE_PROTOCOL               **Root
   )
 {
-  EXT4_INODE  *RootInode;
-  EFI_STATUS  Status;
-  EXT4_FILE   *RootDir;
+  EXT4_INODE      *RootInode;
+  EFI_STATUS      Status;
+  EXT4_FILE       *RootDir;
+  EXT4_PARTITION  *Partition;
 
-  // 2 is always the root inode number in ext4
-  Status = Ext4ReadInode ((EXT4_PARTITION *)This, 2, &RootInode);
+  Partition = (EXT4_PARTITION *)This;
+
+  Status = Ext4ReadInode (Partition, EXT4_ROOT_INODE_NR, &RootInode);
 
   if (EFI_ERROR (Status)) {
-    DEBUG ((DEBUG_ERROR, "[ext4] Could not open root inode - status %x\n", Status));
+    DEBUG ((DEBUG_ERROR, "[ext4] Could not open root inode - error %r\n", Status));
     return Status;
   }
 
   RootDir = AllocateZeroPool (sizeof (EXT4_FILE));
 
-  if (!RootDir) {
+  if (RootDir == NULL) {
     FreePool (RootInode);
     return EFI_OUT_OF_RESOURCES;
   }
-
-  // The filename will be "\"(null terminated of course)
-  RootDir->FileName = AllocateZeroPool (2 * sizeof (CHAR16));
-
-  if (!RootDir->FileName) {
-    FreePool (RootDir);
-    FreePool (RootInode);
-    return EFI_OUT_OF_RESOURCES;
-  }
-
-  RootDir->FileName[0] = L'\\';
 
   RootDir->Inode    = RootInode;
-  RootDir->InodeNum = 2;
+  RootDir->InodeNum = EXT4_ROOT_INODE_NR;
 
   Status = Ext4InitExtentsMap (RootDir);
 
   if (EFI_ERROR (Status)) {
-    FreePool (RootDir->FileName);
     FreePool (RootInode);
     FreePool (RootDir);
     return EFI_OUT_OF_RESOURCES;
   }
 
-  Ext4SetupFile (RootDir, (EXT4_PARTITION *)This);
+  Ext4SetupFile (RootDir, Partition);
   *Root = &RootDir->Protocol;
 
-  InsertTailList (&((EXT4_PARTITION *)This)->OpenFiles, &RootDir->OpenFilesListNode);
+  InsertTailList (&Partition->OpenFiles, &RootDir->OpenFilesListNode);
+
+  ASSERT (Partition->RootDentry != NULL);
+  RootDir->Dentry = Partition->RootDentry;
+
+  Ext4RefDentry (RootDir->Dentry);
 
   return EFI_SUCCESS;
 }
@@ -524,4 +520,160 @@ Ext4ReadDir (
   Status = EFI_SUCCESS;
 Out:
   return Status;
+}
+
+/**
+   Removes a dentry from the other's list.
+
+   @param[in out]            Parent       Pointer to the parent EXT4_DENTRY.
+   @param[in out]            ToBeRemoved  Pointer to the child EXT4_DENTRY.
+**/
+STATIC
+VOID
+Ext4RemoveDentry (
+  IN OUT EXT4_DENTRY  *Parent,
+  IN OUT EXT4_DENTRY  *ToBeRemoved
+  )
+{
+  EXT4_DENTRY  *D;
+  LIST_ENTRY   *Entry;
+  LIST_ENTRY   *NextEntry;
+
+  BASE_LIST_FOR_EACH_SAFE (Entry, NextEntry, &Parent->Children) {
+    D = EXT4_DENTRY_FROM_DENTRY_LIST (Entry);
+
+    if (D == ToBeRemoved) {
+      RemoveEntryList (Entry);
+      return;
+    }
+  }
+
+  DEBUG ((DEBUG_ERROR, "[ext4] Ext4RemoveDentry did not find the asked-for dentry\n"));
+}
+
+/**
+   Adds a dentry to the other's list.
+
+   The dentry that is added to the other one's list gets ->Parent set to Parent,
+   and the parent gets its reference count incremented.
+
+   @param[in out]            Parent       Pointer to the parent EXT4_DENTRY.
+   @param[in out]            ToBeAdded    Pointer to the child EXT4_DENTRY.
+**/
+STATIC
+VOID
+Ext4AddDentry (
+  IN OUT EXT4_DENTRY  *Parent,
+  IN OUT EXT4_DENTRY  *ToBeAdded
+  )
+{
+  ToBeAdded->Parent = Parent;
+  InsertTailList (&Parent->Children, &ToBeAdded->ListNode);
+  Ext4RefDentry (Parent);
+}
+
+/**
+   Creates a new dentry object.
+
+   @param[in]              Name        Name of the dentry.
+   @param[in out opt]      Parent      Parent dentry, if it's not NULL.
+
+   @return The new allocated and initialised dentry.
+           The ref count will be set to 1.
+**/
+EXT4_DENTRY *
+Ext4CreateDentry (
+  IN CONST CHAR16              *Name,
+  IN OUT EXT4_DENTRY  *Parent  OPTIONAL
+  )
+{
+  EXT4_DENTRY  *Dentry;
+  EFI_STATUS   Status;
+
+  Dentry = AllocateZeroPool (sizeof (EXT4_DENTRY));
+
+  if (Dentry == NULL) {
+    return NULL;
+  }
+
+  Dentry->RefCount = 1;
+
+  // This StrCpyS should not fail.
+  Status = StrCpyS (Dentry->Name, ARRAY_SIZE (Dentry->Name), Name);
+
+  ASSERT_EFI_ERROR (Status);
+
+  InitializeListHead (&Dentry->Children);
+
+  if (Parent != NULL) {
+    Ext4AddDentry (Parent, Dentry);
+  }
+
+  DEBUG ((DEBUG_FS, "[ext4] Created dentry %s\n", Name));
+
+  return Dentry;
+}
+
+/**
+   Increments the ref count of the dentry.
+
+   @param[in out]            Dentry    Pointer to a valid EXT4_DENTRY.
+**/
+VOID
+Ext4RefDentry (
+  IN OUT EXT4_DENTRY  *Dentry
+  )
+{
+  UINTN  OldRef;
+
+  OldRef = Dentry->RefCount;
+
+  Dentry->RefCount++;
+
+  // I'm not sure if this (Refcount overflow) is a valid concern,
+  // but it's better to be safe than sorry.
+  ASSERT (OldRef < Dentry->RefCount);
+}
+
+/**
+   Deletes the dentry.
+
+   @param[in out]            Dentry    Pointer to a valid EXT4_DENTRY.
+**/
+STATIC
+VOID
+Ext4DeleteDentry (
+  IN OUT EXT4_DENTRY  *Dentry
+  )
+{
+  if (Dentry->Parent) {
+    Ext4RemoveDentry (Dentry->Parent, Dentry);
+    Ext4UnrefDentry (Dentry->Parent);
+  }
+
+  DEBUG ((DEBUG_FS, "[ext4] Deleted dentry %s\n", Dentry->Name));
+  FreePool (Dentry);
+}
+
+/**
+   Decrements the ref count of the dentry.
+   If the ref count is 0, it's destroyed.
+
+   @param[in out]            Dentry    Pointer to a valid EXT4_DENTRY.
+
+   @retval True if it was destroyed, false if it's alive.
+**/
+BOOLEAN
+Ext4UnrefDentry (
+  IN OUT EXT4_DENTRY  *Dentry
+  )
+{
+  Dentry->RefCount--;
+
+  if (Dentry->RefCount == 0) {
+    Ext4DeleteDentry (Dentry);
+    return TRUE;
+  }
+
+  return FALSE;
 }

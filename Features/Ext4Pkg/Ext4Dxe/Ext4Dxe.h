@@ -55,6 +55,7 @@ Ext4OpenPartition (
   );
 
 typedef struct _Ext4File EXT4_FILE;
+typedef struct _Ext4_Dentry EXT4_DENTRY;
 
 typedef struct _Ext4_PARTITION {
   EFI_SIMPLE_FILE_SYSTEM_PROTOCOL    Interface;
@@ -81,7 +82,67 @@ typedef struct _Ext4_PARTITION {
   UINT32                             InitialSeed;
 
   LIST_ENTRY                         OpenFiles;
+
+  EXT4_DENTRY                        *RootDentry;
 } EXT4_PARTITION;
+
+/**
+   This structure represents a directory entry inside our directory entry tree.
+   For now, it will be used as a way to track file names inside our opening code,
+   but it may very well be used as a directory cache in the future.
+   Because it's not being used as a directory cache right now,
+   an EXT4_DENTRY structure is not necessarily unique name-wise in the list of
+   children. Therefore, the dentry tree does not accurately reflect the filesystem
+   structure.
+ */
+struct _Ext4_Dentry {
+  UINTN                  RefCount;
+  CHAR16                 Name[EXT4_NAME_MAX + 1];
+  EXT4_INO_NR            Inode;
+  struct _Ext4_Dentry    *Parent;
+  LIST_ENTRY             Children;
+  LIST_ENTRY             ListNode;
+};
+
+#define EXT4_DENTRY_FROM_DENTRY_LIST(Node)  BASE_CR (Node, EXT4_DENTRY, ListNode)
+
+/**
+   Creates a new dentry object.
+
+   @param[in]              Name        Name of the dentry.
+   @param[in out opt]      Parent      Parent dentry, if it's not NULL.
+
+   @return The new allocated and initialised dentry.
+           The ref count will be set to 1.
+**/
+EXT4_DENTRY *
+Ext4CreateDentry (
+  IN CONST CHAR16     *Name,
+  IN OUT EXT4_DENTRY  *Parent  OPTIONAL
+  );
+
+/**
+   Increments the ref count of the dentry.
+
+   @param[in out]            Dentry    Pointer to a valid EXT4_DENTRY.
+**/
+VOID
+Ext4RefDentry (
+  IN OUT EXT4_DENTRY  *Dentry
+  );
+
+/**
+   Decrements the ref count of the dentry.
+   If the ref count is 0, it's destroyed.
+
+   @param[in out]            Dentry    Pointer to a valid EXT4_DENTRY.
+
+   @retval True if it was destroyed, false if it's alive.
+**/
+BOOLEAN
+Ext4UnrefDentry (
+  IN OUT EXT4_DENTRY  *Dentry
+  );
 
 /**
    Opens and parses the superblock.
@@ -126,7 +187,7 @@ Ext4OpenSuperblock (
    @param[in]     Partition  Pointer to the opened ext4 partition.
    @return The media ID associated with the partition.
 **/
-#define EXT4_MEDIA_ID(Partition) Partition->BlockIo->Media->MediaId
+#define EXT4_MEDIA_ID(Partition)  Partition->BlockIo->Media->MediaId
 
 /**
    Reads from the partition's disk using the DISK_IO protocol.
@@ -299,11 +360,13 @@ struct _Ext4File {
   UINT64                Position;
 
   EXT4_PARTITION        *Partition;
-  CHAR16                *FileName;
 
   ORDERED_COLLECTION    *ExtentsMap;
 
   LIST_ENTRY            OpenFilesListNode;
+
+  // Owning reference to this file's directory entry.
+  EXT4_DENTRY           *Dentry;
 };
 
 #define EXT4_FILE_FROM_OPEN_FILES_NODE(Node)  BASE_CR (Node, EXT4_FILE, OpenFilesListNode)

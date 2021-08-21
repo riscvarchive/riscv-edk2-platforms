@@ -167,8 +167,11 @@ Ext4OpenSuperblock (
   // accidentally opening an ext2/3/4 filesystem we don't understand, which would be disasterous.
 
   if (Partition->FeaturesIncompat & ~gSupportedIncompatFeat) {
-    DEBUG ((DEBUG_ERROR, "[ext4] Unsupported features %lx\n",
-            Partition->FeaturesIncompat & ~gSupportedIncompatFeat));
+    DEBUG ((
+      DEBUG_ERROR,
+      "[ext4] Unsupported features %lx\n",
+      Partition->FeaturesIncompat & ~gSupportedIncompatFeat
+      ));
     return EFI_UNSUPPORTED;
   }
 
@@ -247,7 +250,7 @@ Ext4OpenSuperblock (
 
   Partition->BlockGroups = Ext4AllocAndReadBlocks (Partition, NrBlocks, Partition->BlockSize == 1024 ? 2 : 1);
 
-  if (!Partition->BlockGroups) {
+  if (Partition->BlockGroups == NULL) {
     return EFI_OUT_OF_RESOURCES;
   }
 
@@ -255,12 +258,26 @@ Ext4OpenSuperblock (
     Desc = Ext4GetBlockGroupDesc (Partition, Index);
     if (!Ext4VerifyBlockGroupDescChecksum (Partition, Desc, Index)) {
       DEBUG ((DEBUG_ERROR, "[ext4] Block group descriptor %u has an invalid checksum\n", Index));
+      FreePool (Partition->BlockGroups);
       return EFI_VOLUME_CORRUPTED;
     }
   }
 
+  // RootDentry will serve as the basis of our directory entry tree.
+  Partition->RootDentry = Ext4CreateDentry (L"\\", NULL);
+
+  if (Partition->RootDentry == NULL) {
+    FreePool (Partition->BlockGroups);
+    return EFI_OUT_OF_RESOURCES;
+  }
+
   // Note that the cast below is completely safe, because EXT4_FILE is a specialisation of EFI_FILE_PROTOCOL
   Status = Ext4OpenVolume (&Partition->Interface, (EFI_FILE_PROTOCOL **)&Partition->Root);
+
+  if (EFI_ERROR (Status)) {
+    Ext4UnrefDentry (Partition->RootDentry);
+    FreePool (Partition->BlockGroups);
+  }
 
   return Status;
 }
