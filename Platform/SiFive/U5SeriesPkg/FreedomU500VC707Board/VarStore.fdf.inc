@@ -9,7 +9,7 @@
 #
 ##
 
-$(VARS_OFFSET)|0x00007000
+$(VARS_OFFSET)|$(VARS_SIZE)
 gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPlatformFlashNvStorageVariableBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableSize
 #
 # NV_VARIABLE_STORE
@@ -56,7 +56,7 @@ DATA = {
   0x5A, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 }
 
-0x007e7000|0x00001000
+$(VARS_FTW_WORKING_OFFSET)|$(VARS_FTW_WORKING_SIZE)
 gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPlatformFlashNvStorageFtwWorkingBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwWorkingSize
 #
 #NV_FTW_WROK
@@ -72,7 +72,7 @@ DATA = {
   0xE0, 0x0F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 }
 
-0x007e8000|0x00018000
+$(VARS_FTW_SPARE_OFFSET)|$(VARS_FTW_SPARE_SIZE)
 gUefiRiscVPlatformPkgTokenSpaceGuid.PcdPlatformFlashNvStorageFtwSpareBase|gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageFtwSpareSize
 #
 #NV_FTW_SPARE
