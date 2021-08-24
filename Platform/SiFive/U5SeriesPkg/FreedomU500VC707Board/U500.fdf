@@ -181,6 +181,7 @@ INF  MdeModulePkg/Universal/DisplayEngineDxe/DisplayEngineDxe.inf
 INF  MdeModulePkg/Universal/MemoryTest/NullMemoryTestDxe/NullMemoryTestDxe.inf
 INF  FatPkg/EnhancedFatDxe/Fat.inf
 INF  MdeModulePkg/Universal/Disk/UdfDxe/UdfDxe.inf
+INF  Silicon/RISC-V/ProcessorPkg/Universal/FdtDxe/FdtDxe.inf
 
 !ifndef $(SOURCE_DEBUG_ENABLE)
 INF MdeModulePkg/Universal/SerialDxe/SerialDxe.inf
