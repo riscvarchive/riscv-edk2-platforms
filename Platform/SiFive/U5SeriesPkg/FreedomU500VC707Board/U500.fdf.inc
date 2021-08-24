@@ -83,7 +83,6 @@ SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdTemporaryRamSize = 0x10000
 
 SET gUefiRiscVPkgTokenSpaceGuid.PcdRiscVMachineTimerFrequencyInHerz    = 1000000
 SET gSiFiveU5SeriesPlatformsPkgTokenSpaceGuid.PcdU5PlatformSystemClock = 100000000 # 100Mhz system clock
-SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdHartCount                   = 4         # Total cores on U500 platform
 SET gUefiRiscVPlatformPkgTokenSpaceGuid.PcdBootableHartNumber          = 4         # The bootable hart core number.
                                                                                    # Which is incorporate with OpenSBI
                                                                                    # platform hart_index2id value.
