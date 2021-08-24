@@ -100,6 +100,7 @@ INF  MdeModulePkg/Core/DxeIplPeim/DxeIpl.inf
 
 # RISC-V Platform PEI Driver
 INF  Platform/RISC-V/PlatformPkg/Universal/Pei/PlatformPei/PlatformPei.inf
+INF  Platform/RISC-V/PlatformPkg/Universal/FdtPeim/FdtPeim.inf
 
 ################################################################################
 
