@@ -190,6 +190,8 @@
   DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
 !endif
   PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
+  # RISC-V platform PEI core entry point.
+  PeiCoreEntryPoint|Platform/RISC-V/PlatformPkg/Library/PeiCoreEntryPoint/PeiCoreEntryPoint.inf
 
 [LibraryClasses.common.PEIM]
   HobLib|MdePkg/Library/PeiHobLib/PeiHobLib.inf
