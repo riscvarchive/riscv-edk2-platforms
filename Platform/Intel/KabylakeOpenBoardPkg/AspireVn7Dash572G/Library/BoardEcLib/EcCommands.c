@@ -1,7 +1,7 @@
 /** @file
   Board-specific EC commands.
 
-  Copyright (c) 2021, Benjamin Doran
+  Copyright (c) 2021, Baruch Binyamin Doron
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/

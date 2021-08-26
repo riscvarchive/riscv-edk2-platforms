@@ -1,7 +1,7 @@
 /** @file
   This file contains the Aspire VN7-572G SSDT Table ASL code.
 
-  Copyright (c) 2021, Benjamin Doran
+  Copyright (c) 2021, Baruch Binyamin Doron
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
