@@ -7,7 +7,7 @@
   Make sure you meet the requirements for the library (protocol dependencies, use
   restrictions, etc).
 
-Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -109,9 +109,10 @@ LpcEcInterface (
   @param[in]  Address          Address to read
   @param[out] Data             Data received
 
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @retval    EFI_SUCCESS            Command success
+  @retval    EFI_INVALID_PARAMETER  Data is NULL
+  @retval    EFI_DEVICE_ERROR       Command error
+  @retval    EFI_TIMEOUT            Command timeout
 **/
 EFI_STATUS
 EcRead (
