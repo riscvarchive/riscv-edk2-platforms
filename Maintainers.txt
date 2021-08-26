@@ -141,6 +141,10 @@ M: Leif Lindholm <leif@nuviainc.com>
 R: Ard Biesheuvel <ardb+tianocore@kernel.org>
 R: Wenyi Xie <xiewenyi2@huawei.com>
 
+Features/Ext4Pkg
+F: Features/Ext4Pkg/
+M: Pedro Falcato <pedro.falcato@gmail.com>
+
 Features/Intel
 F: Features/Intel/
 M: Sai Chaganty <rangasai.v.chaganty@intel.com>
