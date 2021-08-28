@@ -453,7 +453,7 @@ RegisterStaticHotkey (
   //
   // [F2]/[F7]
   //
-  if (mSetupOptionNumber) {
+  if (mSetupOptionNumber != LoadOptionNumberUnassigned) {
     F2.Key.ScanCode    = SCAN_F2;
     F2.Key.UnicodeChar = CHAR_NULL;
     F2.KeyState.KeyShiftState = EFI_SHIFT_STATE_VALID;
