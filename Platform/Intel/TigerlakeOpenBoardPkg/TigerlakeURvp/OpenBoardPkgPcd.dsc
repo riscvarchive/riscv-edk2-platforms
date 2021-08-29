@@ -30,7 +30,6 @@
   #
   # 0: FSP Wrapper is running in Dispatch mode.
   # 1: FSP Wrapper is running in API mode.
-  # Note: Dispatch mode is currently NOT supported for this board.
   #
   gIntelFsp2WrapperTokenSpaceGuid.PcdFspModeSelection|0
 
