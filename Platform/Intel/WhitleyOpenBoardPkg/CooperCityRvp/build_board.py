@@ -94,6 +94,17 @@ def post_build_ex(config, functions):
     :rtype: Dictionary
     """
     print("post_build_ex")
+    fv_path = os.path.join(config["BUILD_DIR_PATH"], "FV")
+    board_fd = config["BOARD"].upper()
+    final_fd = os.path.join(fv_path, "{}.fd".format(board_fd))
+    final_ifwi = os.path.join(fv_path, "{}.bin".format(board_fd))
+
+    ifwi_ingredients_path = os.path.join(config["WORKSPACE_PLATFORM_BIN"], "Ifwi", config["BOARD"])
+    flash_descriptor = os.path.join(ifwi_ingredients_path, "FlashDescriptor.bin")
+    intel_me = os.path.join(ifwi_ingredients_path, "Me.bin")
+    _merge_files((flash_descriptor, intel_me, final_fd), final_ifwi)
+    if os.path.isfile(final_fd):
+        print("IFWI image can be found at {}".format(final_ifwi))
     return None
 
 
