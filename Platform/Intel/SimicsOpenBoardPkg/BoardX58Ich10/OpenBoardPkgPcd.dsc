@@ -221,8 +221,6 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdSmiHandlerProfilePropertyMask|0x1
 !endif
   gEfiMdeModulePkgTokenSpaceGuid.PcdUse1GPageTable|TRUE
-  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|1024
-  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|600
   gPcAtChipsetPkgTokenSpaceGuid.PcdHpetBaseAddress|0xFED00000
 
   ######################################
@@ -238,6 +236,8 @@
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiS3Enable|FALSE
   gEfiMdeModulePkgTokenSpaceGuid.PcdEmuVariableNvStoreReserved|0
   gEfiMdeModulePkgTokenSpaceGuid.PcdFlashNvStorageVariableBase64|0
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoHorizontalResolution|1024
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVideoVerticalResolution|600
 
   ######################################
   # Board Configuration
