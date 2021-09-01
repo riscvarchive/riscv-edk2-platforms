@@ -138,6 +138,27 @@ DefinitionBlock (__FILE__, "SSDT", 5, "RPIFDN", "RPI4XHCI", 2)
             Debug = "xHCI enable"
             Store (0x6, CMND)
         }
+
+        /*
+         * Microsoft's USB Device-Specific Methods. See:
+         * https://docs.microsoft.com/en-us/windows-hardware/drivers/bringup/usb-device-specific-method---dsm-
+         */
+        Name (DSMU, ToUUID ("ce2ee385-00e6-48cb-9f05-2edb927c4899"))
+
+        Method (_DSM, 4, Serialized) {
+            If (LEqual (Arg0, DSMU)) {              // USB capabilities UUID
+                Switch (ToInteger (Arg2)) {
+                Case (0) {                          // Function 0: List of supported functions
+                    Return (Buffer () { 0x41 })     // 0x41 - Functions 0 and 6 supported
+                }
+                Case (6) {                          // Function 6: RegisterAccessType
+                    Return (Buffer () { 0x01 })     // 0x01 - Must use 32bit register access
+                }
+                Default { }                         // Unsupported
+                }
+            }
+            return (Buffer () { 0x00 })             // Return 0x00 for anything unsupported
+        }
       } // end XHC0
     } //end SCB0
   } //end scope sb
