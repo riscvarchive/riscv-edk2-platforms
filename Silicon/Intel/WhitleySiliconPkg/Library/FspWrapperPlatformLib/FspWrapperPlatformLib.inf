@@ -35,7 +35,6 @@
 [Sources]
   FspWrapperPlatformLib.c
 
-
 ################################################################################
 #
 # Package Dependency Section - list of Package files that are required for
@@ -47,11 +46,11 @@
   MdePkg/MdePkg.dec
   IntelFsp2Pkg/IntelFsp2Pkg.dec
   IntelFsp2WrapperPkg/IntelFsp2WrapperPkg.dec
-  WhitleySiliconPkg/WhitleySiliconPkg.dec
+  MinPlatformPkg/MinPlatformPkg.dec
   WhitleySiliconPkg/SiliconPkg.dec
   WhitleySiliconPkg/CpRcPkg.dec
-  WhitleyOpenBoardPkg/PlatformPkg.dec
-  CedarIslandFspBinPkg/CedarIslandFspBinPkg.dec
+  WhitleyOpenBoardPkg/PlatformPkg.dec   # For LargeVariableReadLib
+  WhitleyFspBinPkg/WhitleyFspBinPkg.dec
 
 [Ppis]
   gUpiSiPolicyPpiGuid
@@ -63,9 +62,10 @@
 
 [LibraryClasses]
   PeiServicesLib
+  LargeVariableReadLib
 
 [Pcd]
   gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamBase         ## CONSUMES
-  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize
-  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize
+  gIntelFsp2PkgTokenSpaceGuid.PcdTemporaryRamSize         ## CONSUMES
+  gIntelFsp2PkgTokenSpaceGuid.PcdFspTemporaryRamSize      ## CONSUMES
   gEfiCpRcPkgTokenSpaceGuid.PcdPeiTemporaryRamRcHeapSize  ## CONSUMES

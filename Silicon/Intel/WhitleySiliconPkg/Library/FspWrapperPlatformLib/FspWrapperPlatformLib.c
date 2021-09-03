@@ -10,76 +10,52 @@
 #include <PiPei.h>
 #include <Library/PeiServicesLib.h>
 #include <Library/DebugLib.h>
-#include <FspmUpd.h>
-#include <Ppi/UpiPolicyPpi.h>
-#include <Guid/PlatformInfo.h>
 #include <Library/HobLib.h>
-#include <Ppi/ReadOnlyVariable2.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Library/LargeVariableReadLib.h>
+
+#include <FspmUpd.h>
+#include <Guid/PlatformInfo.h>
+#include <Ppi/UpiPolicyPpi.h>
 
 VOID *
-GetPlatformNvs(
+GetFspNvsBuffer (
+  VOID
 )
 {
   EFI_STATUS          Status;
-  EFI_PEI_READ_ONLY_VARIABLE2_PPI *PeiVariable;
-  VOID                *DataBuffer;
-  UINT32               DataBufferSize;
-  UINTN                VarAttrib;
-  CHAR16               EfiMemoryConfigVariable[] = L"MemoryConfig";
+  UINTN                     FspNvsBufferSize;
+  VOID                      *FspNvsBufferPtr;
 
-  DEBUG ((EFI_D_INFO, "Start PlatformGetNvs\n"));
-
-  Status = PeiServicesLocatePpi (
-             &gEfiPeiReadOnlyVariable2PpiGuid,
-             0,
-             NULL,
-             (VOID **) &PeiVariable
-           );
-  if (EFI_ERROR (Status)) {
-    DEBUG ((EFI_D_ERROR, "PlatformGetNvs: PeiServicesLocatePpi not found\n"));
+  FspNvsBufferPtr   = NULL;
+  FspNvsBufferSize  = 0;
+  Status = GetLargeVariable (L"FspNvsBuffer", &gFspNonVolatileStorageHobGuid, &FspNvsBufferSize, NULL);
+  if (Status == EFI_BUFFER_TOO_SMALL) {
+    DEBUG ((DEBUG_INFO, "FspNvsBuffer Size = %d\n", FspNvsBufferSize));
+    FspNvsBufferPtr = AllocateZeroPool (FspNvsBufferSize);
+    if (FspNvsBufferPtr == NULL) {
+      DEBUG ((DEBUG_ERROR, "Error: Cannot create FspNvsBuffer, out of memory!\n"));
     ASSERT (FALSE);
     return NULL;
   }
-
-    VarAttrib = EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS;
-    DataBufferSize = 0;
-    DataBuffer = NULL;
-
-    Status = PeiVariable->GetVariable (
-                PeiVariable,
-                EfiMemoryConfigVariable,
-                &gFspNonVolatileStorageHobGuid,
-                (UINT32*)&VarAttrib,
-                &DataBufferSize,
-                NULL
-              );
-  if (Status == EFI_NOT_FOUND) {
-    DEBUG ((EFI_D_ERROR, "PlatformGetNvs: gEfiMemoryConfigDataGuid Variable not found\n"));
+    Status = GetLargeVariable (L"FspNvsBuffer", &gFspNonVolatileStorageHobGuid, &FspNvsBufferSize, FspNvsBufferPtr);
+    if (EFI_ERROR (Status)) {
+      DEBUG ((DEBUG_ERROR, "Error: Unable to read FspNvsBuffer UEFI variable Status: %r\n", Status));
+      ASSERT_EFI_ERROR (Status);
     return NULL;
   }
 
-  if (Status != EFI_BUFFER_TOO_SMALL) {
-    DEBUG ((EFI_D_ERROR, "PlatformGetNvs: gEfiMemoryConfigDataGuid Get Error %r\n", Status));
-    ASSERT (FALSE);
+    return FspNvsBufferPtr;
+
+  } else if (Status == EFI_NOT_FOUND) {
+    DEBUG ((DEBUG_INFO, "Cannot create FSP NVS Buffer, UEFI variable does not exist (this is likely a first boot)\n"));
+  } else {
+    DEBUG ((DEBUG_ERROR, "Error: Unable to read FspNvsBuffer UEFI variable Status: %r\n", Status));
+    ASSERT_EFI_ERROR (Status);
   }
 
-  DataBuffer = AllocateZeroPool(DataBufferSize);
-  Status = PeiVariable->GetVariable (
-             PeiVariable,
-             EfiMemoryConfigVariable,
-             &gFspNonVolatileStorageHobGuid,
-             (UINT32*)&VarAttrib,
-             &DataBufferSize,
-             DataBuffer
-           );
-  if (EFI_ERROR(Status)) {
-    DEBUG ((EFI_D_ERROR, "PlatformGetNvs: gEfiMemoryConfigDataGuid Variable Error %r\n", Status));
     return NULL;
   }
-  DEBUG ((EFI_D_INFO, "PlatformGetNvs: GetNVS %x %x\n", DataBuffer, DataBufferSize));
-  return DataBuffer;
-}
 
 VOID
 EFIAPI
@@ -164,11 +140,10 @@ UpdateFspmUpdData (
   FspmUpd->FspmConfig.AllLanesSizeOfTable = Upi->AllLanesSizeOfTable;
   FspmUpd->FspmConfig.PerLaneSizeOfTable = Upi->PerLaneSizeOfTable;
   FspmUpd->FspmConfig.WaitTimeForPSBP = Upi->WaitTimeForPSBP;
-  FspmUpd->FspmConfig.IsKtiNvramDataReady = Upi->IsKtiNvramDataReady;
   FspmUpd->FspmConfig.WaSerializationEn = Upi->WaSerializationEn;
   FspmUpd->FspmConfig.KtiInEnableMktme = Upi->KtiInEnableMktme;
   FspmUpd->FspmConfig.BoardId = PlatformInfo->BoardId;
-  FspmUpd->FspmArchUpd.NvsBufferPtr = GetPlatformNvs();
+  FspmUpd->FspmArchUpd.NvsBufferPtr = GetFspNvsBuffer ();
 }
 
 /**
