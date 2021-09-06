@@ -12,12 +12,13 @@
 /**
   Reads a byte of EC RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
+  @param[in]  Address               Address to read
+  @param[out] Data                  Data received
 
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @retval    EFI_SUCCESS            Command success
+  @retval    EFI_INVALID_PARAMETER  Data is NULL
+  @retval    EFI_DEVICE_ERROR       Command error
+  @retval    EFI_TIMEOUT            Command timeout
 **/
 EFI_STATUS
 EcCmd90Read (
@@ -44,11 +45,12 @@ EcCmd91Write (
 /**
   Query the EC status.
 
-  @param[out] Status           EC status byte
+  @param[out] Status                EC status byte
 
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @retval    EFI_SUCCESS            Command success
+  @retval    EFI_INVALID_PARAMETER  Data is NULL
+  @retval    EFI_DEVICE_ERROR       Command error
+  @retval    EFI_TIMEOUT            Command timeout
 **/
 EFI_STATUS
 EcCmd94Query (
@@ -58,12 +60,8 @@ EcCmd94Query (
 /**
   Reads a byte of EC (index) RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
-
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @param[in]  Address               Address to read
+  @param[out] Data                  Data received
 **/
 VOID
 EcIdxRead (
@@ -74,12 +72,8 @@ EcIdxRead (
 /**
   Writes a byte of EC (index) RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
-
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @param[in] Address          Address to read
+  @param[in] Data             Data received
 **/
 VOID
 EcIdxWrite (
@@ -91,10 +85,8 @@ EcIdxWrite (
   Read EC analog-digital converter.
   TODO: Check if ADC is valid.
 
+  @param[in]  Adc
   @param[out] DataBuffer
-
-  @retval     EFI_SUCCESS       Command success
-  @retval     EFI_DEVICE_ERROR  Command error
 **/
 VOID
 ReadEcAdcConverter (

@@ -12,18 +12,22 @@
 #include <Library/EcLib.h>
 #include <Library/IoLib.h>
 
-/* TODO - Implement:
+/* Notes:
+ * - ACPI "CMDB": Writing to this offset is equivalent to sending commands.
+ *   The CMDx bytes contain the command parameters.
+ *
+ * TODO - Implement:
  *   - Commands: 0x58, 0xE1 and 0xE2
  *     - 0x51, 0x52: EC flash write?
  *   - ACPI CMDB: 0x63 and 0x64, 0xC7
  *     - 0x0B: Flash write (Boolean argument? Set in offset 0x0B?)
  *
- * NB: Consider that if a vendor's UEFI driver consumes
- *     unimplemented PPI/protocol, the driver is dead code.
+ * Reversing vendor's protocols:
+ * - Only read and write are used.
+ * - Query, ACPI "CMDB" processing and command 58 are unused.
+ * - Equivalent KbcPeim is an unused PPI.
  *
- * NOTE: Check protocol use.
- *   - Commands delivered across vendor's modules
- *   - EC writes also control behaviour
+ * NB: Also look for potential EC library
  */
 
 #define EC_INDEX_IO_PORT            0x1200
@@ -34,12 +38,13 @@
 /**
   Reads a byte of EC RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
+  @param[in]  Address               Address to read
+  @param[out] Data                  Data received
 
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @retval    EFI_SUCCESS            Command success
+  @retval    EFI_INVALID_PARAMETER  Data is NULL
+  @retval    EFI_DEVICE_ERROR       Command error
+  @retval    EFI_TIMEOUT            Command timeout
 **/
 EFI_STATUS
 EcCmd90Read (
@@ -48,6 +53,10 @@ EcCmd90Read (
   )
 {
   EFI_STATUS                 Status;
+
+  if (Data == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
 
   Status = SendEcCommand (0x90);
   if (EFI_ERROR (Status)) {
@@ -110,11 +119,12 @@ EcCmd91Write (
 /**
   Query the EC status.
 
-  @param[out] Status           EC status byte
+  @param[out] Status                EC status byte
 
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
-  @retval    EFI_TIMEOUT       Command timeout
+  @retval    EFI_SUCCESS            Command success
+  @retval    EFI_INVALID_PARAMETER  Data is NULL
+  @retval    EFI_DEVICE_ERROR       Command error
+  @retval    EFI_TIMEOUT            Command timeout
 **/
 EFI_STATUS
 EcCmd94Query (
@@ -122,6 +132,10 @@ EcCmd94Query (
   )
 {
   EFI_STATUS                 Status;
+
+  if (Data == NULL) {
+    return EFI_INVALID_PARAMETER;
+  }
 
   Status = SendEcCommand (0x94);
   if (EFI_ERROR (Status)) {
@@ -140,11 +154,8 @@ EcCmd94Query (
 /**
   Reads a byte of EC (index) RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
-
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
+  @param[in]  Address               Address to read
+  @param[out] Data                  Data received
 **/
 VOID
 EcIdxRead (
@@ -152,6 +163,10 @@ EcIdxRead (
   OUT UINT8                  *Data
   )
 {
+  if (Data == NULL) {
+    return;
+  }
+
   IoWrite8 (EC_INDEX_IO_HIGH_ADDR_PORT, Address >> 8);
   IoWrite8 (EC_INDEX_IO_LOW_ADDR_PORT, Address);
   *Data = IoRead8 (EC_INDEX_IO_DATA_PORT);
@@ -160,11 +175,8 @@ EcIdxRead (
 /**
   Writes a byte of EC (index) RAM.
 
-  @param[in]  Address          Address to read
-  @param[out] Data             Data received
-
-  @retval    EFI_SUCCESS       Command success
-  @retval    EFI_DEVICE_ERROR  Command error
+  @param[in] Address          Address to read
+  @param[in] Data             Data received
 **/
 VOID
 EcIdxWrite (
@@ -181,10 +193,8 @@ EcIdxWrite (
   Read EC analog-digital converter.
   TODO: Check if ADC is valid.
 
+  @param[in]  Adc
   @param[out] DataBuffer
-
-  @retval     EFI_SUCCESS       Command success
-  @retval     EFI_DEVICE_ERROR  Command error
 **/
 VOID
 ReadEcAdcConverter (
@@ -194,6 +204,10 @@ ReadEcAdcConverter (
 {
   UINT8            AdcConvertersEnabled;  // Contains some ADCs and some DACs
   UINT8            IdxData;
+
+  if (DataBuffer == NULL) {
+    return;
+  }
 
   // Backup enabled ADCs
   EcIdxRead (0xff15, &AdcConvertersEnabled);  // ADDAEN
