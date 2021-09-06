@@ -24,7 +24,7 @@ EcSendTime (
 {
   EFI_STATUS  Status;
   EFI_TIME    EfiTime;
-  // TODO: Confirm this is really INTN and not UINTN
+  // Time could be negative (before 2016)
   INTN        EcTime;
   UINT8       EcTimeByte;
   INTN        Index;
@@ -36,7 +36,7 @@ EcSendTime (
     return;
   }
 
-  // Time since year of release?
+  // Time since year of release. Note that "century" is ignored.
   EcTime = ((EfiTime.Year << 26) + (EfiTime.Month << 22) + (EfiTime.Day << 17)
          + (EfiTime.Hour << 12) + (EfiTime.Minute << 6) + (EfiTime.Second)
          /* 16 years */
@@ -45,7 +45,8 @@ EcSendTime (
   DEBUG ((DEBUG_INFO, "EC: reporting present time 0x%x\n", EcTime));
   SendEcCommand (0xE0);
   for (Index = 0; Index < 4; Index++) {
-    EcTimeByte = EcTime >> Index;
+    // Shift bytes
+    EcTimeByte = EcTime >> Index*8;
     DEBUG ((DEBUG_INFO, "EC: Sending 0x%x (iteration %d)\n", EcTimeByte, Index));
     SendEcData (EcTimeByte);
   }
@@ -61,13 +62,14 @@ EcSendTime (
 
 **/
 VOID
-EcInit (
+EcRequestsTime (
   VOID
   )
 {
   UINT8           Dat;
 
-  /* Vendor's UEFI modules "notify" this protocol in RtKbcDriver */
+  /* This is executed as protocol notify in vendor's RtKbcDriver when *CommonService
+   * protocol is installed. Effectively, this code could execute from the entrypoint */
   EcCmd90Read (0x79, &Dat);
   if (Dat & BIT0) {
     EcSendTime ();
@@ -86,7 +88,7 @@ BoardInitAfterPciEnumeration (
   VOID
   )
 {
-  EcInit ();
+  EcRequestsTime ();
   return EFI_SUCCESS;
 }
 
