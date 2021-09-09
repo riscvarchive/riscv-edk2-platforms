@@ -35,7 +35,8 @@
   PL011UartLib|ArmPlatformPkg/Library/PL011UartLib/PL011UartLib.inf
 
 [LibraryClasses.common.DXE_DRIVER]
-
+  # Pci dependencies
+  PciSegmentLib|Silicon/Phytium/FT2000-4Pkg/Library/PciSegmentLib/PciSegmentLib.inf
 
 ################################################################################
 #
@@ -261,12 +262,6 @@
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
-
-  #
-  # PCI Support
-  #
-  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
-  MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   #
   # The following 2 module perform the same work except one operate variable.
