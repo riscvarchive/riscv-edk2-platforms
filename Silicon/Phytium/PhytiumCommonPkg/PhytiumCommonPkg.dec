@@ -45,6 +45,7 @@
   gPhytiumPlatformTokenSpaceGuid.PcdSpiFlashSize|0x0|UINT64|0x00000005
   gPhytiumPlatformTokenSpaceGuid.PcdSpiControllerBase|0x0|UINT64|0x00000006
   gPhytiumPlatformTokenSpaceGuid.PcdSpiControllerSize|0x0|UINT64|0x00000007
+  gPhytiumPlatformTokenSpaceGuid.PcdRtcBaseAddress|0x0|UINT32|0x00000008
 
 [Protocols]
   gSpiMasterProtocolGuid = { 0xdf093560, 0xf955, 0x11ea, { 0x96, 0x42, 0x43, 0x9d, 0x80, 0xdd, 0x0b, 0x7c}}

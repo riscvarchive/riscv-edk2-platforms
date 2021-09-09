@@ -29,6 +29,10 @@
   # Phytium Platform library
   ArmPlatformLib|Silicon/Phytium/FT2000-4Pkg/Library/PlatformLib/PlatformLib.inf
 
+  #FT2000-4Pkg RTC Driver
+  RealTimeClockLib|Silicon/Phytium/FT2000-4Pkg/Library/RealTimeClockLib/RealTimeClockLib.inf
+  TimeBaseLib|EmbeddedPkg/Library/TimeBaseLib/TimeBaseLib.inf
+
   # PL011 UART Driver and Dependency Libraries
   SerialPortLib|ArmPlatformPkg/Library/PL011SerialPortLib/PL011SerialPortLib.inf
   PL011UartClockLib|ArmPlatformPkg/Library/PL011UartClockLib/PL011UartClockLib.inf
@@ -168,6 +172,8 @@
       NULL|MdeModulePkg/Library/VarCheckUefiLib/VarCheckUefiLib.inf
   }
   MdeModulePkg/Universal/FaultTolerantWriteDxe/FaultTolerantWriteDxe.inf
+  EmbeddedPkg/ResetRuntimeDxe/ResetRuntimeDxe.inf
+  EmbeddedPkg/RealTimeClockRuntimeDxe/RealTimeClockRuntimeDxe.inf
 
   #
   # Common Arm Timer and Gic Components
