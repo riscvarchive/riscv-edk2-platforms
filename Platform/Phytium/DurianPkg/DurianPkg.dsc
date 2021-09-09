@@ -37,6 +37,7 @@
 [LibraryClasses.common.DXE_DRIVER]
   # Pci dependencies
   PciSegmentLib|Silicon/Phytium/FT2000-4Pkg/Library/PciSegmentLib/PciSegmentLib.inf
+  PciHostBridgeLib|Silicon/Phytium/FT2000-4Pkg/Library/PciHostBridgeLib/PciHostBridgeLib.inf
 
 ################################################################################
 #
@@ -262,6 +263,14 @@
   MdeModulePkg/Bus/Scsi/ScsiBusDxe/ScsiBusDxe.inf
   MdeModulePkg/Bus/Scsi/ScsiDiskDxe/ScsiDiskDxe.inf
   MdeModulePkg/Bus/Ata/AtaAtapiPassThru/AtaAtapiPassThru.inf
+
+  #
+  # PCI Support
+  #
+  ArmPkg/Drivers/ArmPciCpuIo2Dxe/ArmPciCpuIo2Dxe.inf
+  MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+  MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  MdeModulePkg/Bus/Pci/NonDiscoverablePciDeviceDxe/NonDiscoverablePciDeviceDxe.inf
 
   #
   # The following 2 module perform the same work except one operate variable.

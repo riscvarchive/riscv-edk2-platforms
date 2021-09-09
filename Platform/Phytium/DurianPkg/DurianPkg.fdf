@@ -136,6 +136,12 @@ READ_LOCK_STATUS   = TRUE
   INF MdeModulePkg/Universal/Disk/UnicodeCollation/EnglishDxe/EnglishDxe.inf
 
   #
+  # PCI Support
+  #
+  INF MdeModulePkg/Bus/Pci/PciBusDxe/PciBusDxe.inf
+  INF MdeModulePkg/Bus/Pci/PciHostBridgeDxe/PciHostBridgeDxe.inf
+
+  #
   # SATA Controller
   #
   INF MdeModulePkg/Bus/Pci/SataControllerDxe/SataControllerDxe.inf
