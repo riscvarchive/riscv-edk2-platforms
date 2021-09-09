@@ -245,6 +245,11 @@
   ArmPkg/Drivers/GenericWatchdogDxe/GenericWatchdogDxe.inf
 
   #
+  # Spi driver
+  #
+  Silicon/Phytium/FT2000-4Pkg/Drivers/SpiDxe/SpiDxe.inf
+
+  #
   # Usb Support
   #
   MdeModulePkg/Bus/Pci/UhciDxe/UhciDxe.inf
