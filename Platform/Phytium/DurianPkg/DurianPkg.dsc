@@ -287,6 +287,12 @@
   Silicon/Phytium/PhytiumCommonPkg/Drivers/AcpiPlatformDxe/AcpiPlatformDxe.inf
 
   #
+  # SMBIOS
+  #
+  MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  Silicon/Phytium/FT2000-4Pkg/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
+
+  #
   # Bds
   #
   MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf

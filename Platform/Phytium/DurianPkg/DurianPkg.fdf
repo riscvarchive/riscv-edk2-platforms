@@ -179,6 +179,12 @@ READ_LOCK_STATUS   = TRUE
   INF ShellPkg/Application/Shell/Shell.inf
 
   #
+  # SMBIOS
+  #
+  INF MdeModulePkg/Universal/SmbiosDxe/SmbiosDxe.inf
+  INF Silicon/Phytium/FT2000-4Pkg/Drivers/SmbiosPlatformDxe/SmbiosPlatformDxe.inf
+
+  #
   # Bds
   #
   INF MdeModulePkg/Universal/DevicePathDxe/DevicePathDxe.inf
