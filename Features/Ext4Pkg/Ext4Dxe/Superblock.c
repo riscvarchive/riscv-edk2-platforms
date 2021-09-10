@@ -18,7 +18,7 @@ STATIC CONST UINT32  gSupportedIncompatFeat =
   EXT4_FEATURE_INCOMPAT_64BIT | EXT4_FEATURE_INCOMPAT_DIRDATA |
   EXT4_FEATURE_INCOMPAT_FLEX_BG | EXT4_FEATURE_INCOMPAT_FILETYPE |
   EXT4_FEATURE_INCOMPAT_EXTENTS | EXT4_FEATURE_INCOMPAT_LARGEDIR |
-  EXT4_FEATURE_INCOMPAT_MMP;
+  EXT4_FEATURE_INCOMPAT_MMP | EXT4_FEATURE_INCOMPAT_RECOVER;
 
 // Future features that may be nice additions in the future:
 // 1) Btree support: Required for write support and would speed up lookups in large directories.
@@ -89,10 +89,8 @@ Ext4SuperblockValidate (
     return FALSE;
   }
 
-  // Is this correct behaviour? Imagine the power cuts out, should the system fail to boot because
-  // we're scared of touching something corrupt?
   if ((Sb->s_state & EXT4_FS_STATE_UNMOUNTED) == 0) {
-    return FALSE;
+    DEBUG ((DEBUG_WARN, "[ext4] Filesystem was not unmounted cleanly\n"));
   }
 
   return TRUE;
@@ -213,6 +211,11 @@ Ext4OpenSuperblock (
   // This should be removed once we add ext2/3 support in the future.
   if ((Partition->FeaturesIncompat & EXT4_FEATURE_INCOMPAT_EXTENTS) == 0) {
     return EFI_UNSUPPORTED;
+  }
+
+  if (EXT4_HAS_INCOMPAT (Partition, EXT4_FEATURE_INCOMPAT_RECOVER)) {
+    DEBUG ((DEBUG_WARN, "[ext4] Needs journal recovery, mounting read-only\n"));
+    Partition->ReadOnly = TRUE;
   }
 
   // At the time of writing, it's the only supported checksum.
