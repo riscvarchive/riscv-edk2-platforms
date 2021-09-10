@@ -631,7 +631,6 @@ Ext4Unload (
   @retval EFI_ACCESS_DENIED        The device specified by ControllerHandle and
                                    RemainingDevicePath is already being managed by a different
                                    driver or an application that requires exclusive access.
-                                   Currently not implemented.
   @retval EFI_UNSUPPORTED          The device specified by ControllerHandle and
                                    RemainingDevicePath is not supported by the driver specified by This.
 **/
@@ -643,32 +642,65 @@ Ext4IsBindingSupported (
   IN EFI_DEVICE_PATH *RemainingDevicePath  OPTIONAL
   )
 {
-  // Note to self: EFI_OPEN_PROTOCOL_TEST_PROTOCOL lets us not close the
-  // protocol and ignore the output argument entirely
+  EFI_STATUS            Status;
+  EFI_DISK_IO_PROTOCOL  *DiskIo;
+  EFI_BLOCK_IO_PROTOCOL *BlockIo;
 
-  EFI_STATUS  Status;
+  DiskIo = NULL;
+  BlockIo = NULL;
 
+  //
+  // Open the IO Abstraction(s) needed to perform the supported test
+  //
   Status = gBS->OpenProtocol (
                   ControllerHandle,
                   &gEfiDiskIoProtocolGuid,
-                  NULL,
-                  BindingProtocol->ImageHandle,
+                  (VOID **) &DiskIo,
+                  BindingProtocol->DriverBindingHandle,
                   ControllerHandle,
-                  EFI_OPEN_PROTOCOL_TEST_PROTOCOL
+                  EFI_OPEN_PROTOCOL_BY_DRIVER
                   );
 
   if (EFI_ERROR (Status)) {
     return Status;
   }
-
+  //
+  // Open the IO Abstraction(s) needed to perform the supported test
+  //
   Status = gBS->OpenProtocol (
                   ControllerHandle,
                   &gEfiBlockIoProtocolGuid,
-                  NULL,
-                  BindingProtocol->ImageHandle,
+                  (VOID **) &BlockIo,
+                  BindingProtocol->DriverBindingHandle,
                   ControllerHandle,
-                  EFI_OPEN_PROTOCOL_TEST_PROTOCOL
+                  EFI_OPEN_PROTOCOL_GET_PROTOCOL
                   );
+
+  if (!EFI_ERROR (Status)) {
+    if (!Ext4SuperblockCheckMagic (DiskIo, BlockIo)) {
+      Status = EFI_UNSUPPORTED;
+    }
+  }
+
+  //
+  // Close the I/O Abstraction(s) used to perform the supported test
+  //
+  if (DiskIo != NULL) {
+    gBS->CloseProtocol (
+          ControllerHandle,
+          &gEfiDiskIoProtocolGuid,
+          BindingProtocol->DriverBindingHandle,
+          ControllerHandle
+          );
+  }
+  if (BlockIo != NULL) {
+    gBS->CloseProtocol (
+          ControllerHandle,
+          &gEfiBlockIoProtocolGuid,
+          BindingProtocol->DriverBindingHandle,
+          ControllerHandle
+          );
+  }
   return Status;
 }
 

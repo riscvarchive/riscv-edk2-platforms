@@ -1117,4 +1117,18 @@ Ext4GetVolumeName (
   OUT UINTN          *VolNameLen
   );
 
+/**
+   Checks the superblock's magic value.
+
+   @param[in] DiskIo      Pointer to the DiskIo.
+   @param[in] BlockIo     Pointer to the BlockIo.
+
+   @returns Whether the partition has a valid EXT4 superblock magic value.
+**/
+BOOLEAN
+Ext4SuperblockCheckMagic (
+  IN EFI_DISK_IO_PROTOCOL   *DiskIo,
+  IN EFI_BLOCK_IO_PROTOCOL  *BlockIo
+  );
+
 #endif

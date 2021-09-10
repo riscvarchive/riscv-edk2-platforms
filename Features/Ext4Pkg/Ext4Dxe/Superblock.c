@@ -35,6 +35,41 @@ STATIC CONST UINT32  gSupportedIncompatFeat =
 // references and add some Ext4SignalCorruption function + function call.
 
 /**
+   Checks the superblock's magic value.
+
+   @param[in] DiskIo      Pointer to the DiskIo.
+   @param[in] BlockIo     Pointer to the BlockIo.
+
+   @returns Whether the partition has a valid EXT4 superblock magic value.
+**/
+BOOLEAN
+Ext4SuperblockCheckMagic (
+  IN EFI_DISK_IO_PROTOCOL   *DiskIo,
+  IN EFI_BLOCK_IO_PROTOCOL  *BlockIo
+  )
+{
+  UINT16      Magic;
+  EFI_STATUS  Status;
+
+  Status = DiskIo->ReadDisk (
+                     DiskIo,
+                     BlockIo->Media->MediaId,
+                     EXT4_SUPERBLOCK_OFFSET + OFFSET_OF (EXT4_SUPERBLOCK, s_magic),
+                     sizeof (Magic),
+                     &Magic
+                     );
+  if (EFI_ERROR (Status)) {
+    return FALSE;
+  }
+
+  if (Magic != EXT4_SIGNATURE) {
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+/**
    Does brief validation of the ext4 superblock.
 
    @param[in] Sb     Pointer to the read superblock.
