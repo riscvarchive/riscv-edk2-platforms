@@ -905,8 +905,6 @@ gPeiSmmControlPpiGuid  =  {0x61c68702, 0x4d7e, 0x4f43, {0x8d, 0xef, 0xa7, 0x43, 
   gSiPkgTokenSpaceGuid.PcdCpgcGlobalSyncCtrlSupported       |FALSE|BOOLEAN|0xF0000030
   gSiPkgTokenSpaceGuid.PcdCpgcGlobalSyncCtrlEnableDefault   |FALSE|BOOLEAN|0xF0000031
 
-  gSiPkgTokenSpaceGuid.PcdPeiCoreFv                         |0x00000000|UINT32|0xF0000032
-
   gSiPkgTokenSpaceGuid.ReservedN|TRUE|BOOLEAN|0xF0000033
 
   #

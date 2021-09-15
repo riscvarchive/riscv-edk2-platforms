@@ -14,7 +14,7 @@ DEFINE PLATFORM_PKG             = MinPlatformPkg
 # 0x00000060 = (EFI_FIRMWARE_VOLUME_HEADER. HeaderLength + sizeof (EFI_FFS_FILE_HEADER))
 DEFINE FDF_FIRMWARE_HEADER_SIZE = 0x00000060
 
-DEFINE MICROCODE_HEADER_SIZE = 0x00000090
+SET gMinPlatformPkgTokenSpaceGuid.PcdMicrocodeOffsetInFv              = 0x90 # FV Header plus FFS header
 
 DEFINE VPD_HEADER_SIZE = 0x00000090
 
@@ -154,23 +154,11 @@ SET gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaSize         = 0x01000000
   SET gCpPlatFlashTokenSpaceGuid.PcdFlashFvSecPeiSize    = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemorySize
 
   #
-  # For FSP Dispatch Mode, specify the FV containing the PEI core.
-  #
-  !if $(FSP_MODE) == 1
-    #
-    # Tell SEC to use PEI Core from outside FSP for additional debug message control.
-    #
-    SET gSiPkgTokenSpaceGuid.PcdPeiCoreFv                  = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvPreMemoryBase
-  !endif
-
-  #
   # For API mode, wrappers have some duplicate PCD as well
   #
-  !if $(FSP_MODE) == 0
-    SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMBase
-    SET gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTBase
-    SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspSBase
-  !endif
+  SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspsBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspSBase
+  SET gIntelFsp2WrapperTokenSpaceGuid.PcdFspmBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspMBase
+  SET gIntelFsp2WrapperTokenSpaceGuid.PcdFsptBaseAddress = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvFspTBase
 
 ################################################################################
 #
@@ -311,7 +299,8 @@ SET gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaSize         = 0x01000000
   #
   # Set gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress dynamically
   #
-  SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress             = gCpPlatFlashTokenSpaceGuid.PcdFlashFvBinaryBase                 + gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeOffset         + $(MICROCODE_HEADER_SIZE)
+  SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchAddress             = gCpPlatFlashTokenSpaceGuid.PcdFlashFvBinaryBase                 + gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeOffset         + gMinPlatformPkgTokenSpaceGuid.PcdMicrocodeOffsetInFv
+  SET gUefiCpuPkgTokenSpaceGuid.PcdCpuMicrocodePatchRegionSize          = gMinPlatformPkgTokenSpaceGuid.PcdFlashFvMicrocodeSize           - gMinPlatformPkgTokenSpaceGuid.PcdMicrocodeOffsetInFv
 
   #
   # FV Layout (You should not need to modify this section)
@@ -410,12 +399,7 @@ SET gMinPlatformPkgTokenSpaceGuid.PcdFlashAreaSize         = 0x01000000
   !include WhitleyOpenBoardPkg/Include/Fdf/CommonSpiFvHeaderInfo.fdf
   FvNameGuid         = 6522280D-28F9-4131-ADC4-F40EBFA45864
 
-  FILE SEC = 1BA0062E-C779-4582-8566-336AE8F78F09 {
-    SECTION UI = "SecCore"
-    SECTION VERSION = "1.0"
-    SECTION Align = 16 PE32 = $(FSP_BIN_PKG)/UefiDrivers/$(FSP_BIN_DIR)/1BA0062E-C779-4582-8566-336AE8F78F09SecCore.efi
-    SECTION Align = 16 RAW = $(FSP_BIN_PKG)/UefiDrivers/$(FSP_BIN_DIR)/ResetVec.bin
-  }
+  INF  UefiCpuPkg/SecCore/SecCore.inf
   INF  MdeModulePkg/Core/Pei/PeiMain.inf
 
   INF  MdeModulePkg/Universal/PCD/Pei/Pcd.inf
