@@ -251,7 +251,7 @@
   gEfiCpRcPkgTokenSpaceGuid.PcdRcVersion.Major|0
   gEfiCpRcPkgTokenSpaceGuid.PcdRcVersion.Minor|2
   gEfiCpRcPkgTokenSpaceGuid.PcdRcVersion.Revision|2
-  gEfiCpRcPkgTokenSpaceGuid.PcdRcVersion.BuildNumber|0x0033
+  gEfiCpRcPkgTokenSpaceGuid.PcdRcVersion.BuildNumber|0x003a
 
   #
   # MRC DEFAULT SETTINGS
