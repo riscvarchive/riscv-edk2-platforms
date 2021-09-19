@@ -1,5 +1,6 @@
 #
 #  Copyright (c) 2018-2021, ARM Limited. All rights reserved.
+#  (C) Copyright 2021 Hewlett Packard Enterprise Development LP<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -150,7 +151,7 @@
   gArmTokenSpaceGuid.PcdPciBusMax|255
   gArmTokenSpaceGuid.PcdPciIoBase|0x0
   gArmTokenSpaceGuid.PcdPciIoSize|0x00800000
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x77800000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x77800000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
