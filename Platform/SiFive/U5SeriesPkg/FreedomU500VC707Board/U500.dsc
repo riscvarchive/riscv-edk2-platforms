@@ -1,7 +1,7 @@
 ## @file
 #  RISC-V EFI on SiFive VC707 (U500) RISC-V platform
 #
-#  Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+#  Copyright (c) 2019-2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
 #
 #  SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -507,6 +507,11 @@
   MdeModulePkg/Bus/Usb/UsbKbDxe/UsbKbDxe.inf
   MdeModulePkg/Bus/Usb/UsbMassStorageDxe/UsbMassStorageDxe.inf
 
+  #
+  # FAT filesystem + GPT/MBR partitioning + UDF filesystem
+  #
+  FatPkg/EnhancedFatDxe/Fat.inf
+  MdeModulePkg/Universal/Disk/UdfDxe/UdfDxe.inf
 
   ShellPkg/Application/Shell/Shell.inf {
     <LibraryClasses>
