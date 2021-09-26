@@ -1,7 +1,7 @@
 /**@file
   Platform PEI driver
 
-  Copyright (c) 2019, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
+  Copyright (c) 2019-2021, Hewlett Packard Enterprise Development LP. All rights reserved.<BR>
   Copyright (c) 2006 - 2014, Intel Corporation. All rights reserved.<BR>
   Copyright (c) 2011, Andrei Warkentin <andreiw@motorola.com>
 
@@ -199,7 +199,7 @@ MiscInitialization (
   // of IO space. (Side note: unlike other HOBs, the CPU HOB is needed during
   // S3 resume as well, so we build it unconditionally.)
   //
-  BuildCpuHob (32, 32);
+  BuildCpuHob (48, 32);
 }
 
 /**
