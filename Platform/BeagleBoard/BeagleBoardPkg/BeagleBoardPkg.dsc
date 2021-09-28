@@ -169,9 +169,6 @@
 #  PeCoffLib|MdePkg/Library/BasePeCoffLib/BasePeCoffLib.inf
   PeCoffLib|Platform/BeagleBoard/BeagleBoardPkg/Library/DxeHobPeCoffLib/DxeHobPeCoffLib.inf
 
-  PerformanceLib|MdeModulePkg/Library/DxeCorePerformanceLib/DxeCorePerformanceLib.inf
-
-
 [LibraryClasses.common.DXE_DRIVER]
   DxeServicesLib|MdePkg/Library/DxeServicesLib/DxeServicesLib.inf
   SecurityManagementLib|MdeModulePkg/Library/DxeSecurityManagementLib/DxeSecurityManagementLib.inf
