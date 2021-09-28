@@ -45,4 +45,4 @@
   gEmbeddedTokenSpaceGuid.PcdInterruptBaseAddress
 
 [Depex]
-  TRUE
+  gEfiCpuArchProtocolGuid
