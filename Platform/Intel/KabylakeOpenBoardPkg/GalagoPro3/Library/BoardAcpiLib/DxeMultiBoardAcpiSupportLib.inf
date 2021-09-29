@@ -1,7 +1,7 @@
 ### @file
 # System 76 GalagoPro3 board multi-board DXE ACPI table support functionality.
 #
-# Copyright (c) 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2019 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -26,6 +26,7 @@
   BaseLib
   IoLib
   PciLib
+  BoardAcpiTableLib
   AslUpdateLib
 
 [Packages]

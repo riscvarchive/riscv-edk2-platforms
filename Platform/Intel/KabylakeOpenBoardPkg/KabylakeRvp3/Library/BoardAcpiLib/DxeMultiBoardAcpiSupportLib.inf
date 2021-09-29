@@ -1,7 +1,7 @@
 ### @file
 # Kaby Lake RVP 3 Multi-Board ACPI Support library
 #
-# Copyright (c) 2017 - 2019, Intel Corporation. All rights reserved.<BR>
+# Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 #
 # SPDX-License-Identifier: BSD-2-Clause-Patent
 #
@@ -26,6 +26,7 @@
   BaseLib
   IoLib
   PciLib
+  BoardAcpiTableLib
   AslUpdateLib
 
 [Packages]
