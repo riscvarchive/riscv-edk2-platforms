@@ -2,6 +2,7 @@
   Aspire VN7-572G Board Initialization DXE library
 
   Copyright (c) 2021, Baruch Binyamin Doron
+  Copyright (c) 2021, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -46,7 +47,7 @@ EcSendTime (
   SendEcCommand (0xE0);
   for (Index = 0; Index < 4; Index++) {
     // Shift bytes
-    EcTimeByte = EcTime >> Index*8;
+    EcTimeByte = (UINT8) (EcTime >> (Index * 8));
     DEBUG ((DEBUG_INFO, "EC: Sending 0x%x (iteration %d)\n", EcTimeByte, Index));
     SendEcData (EcTimeByte);
   }

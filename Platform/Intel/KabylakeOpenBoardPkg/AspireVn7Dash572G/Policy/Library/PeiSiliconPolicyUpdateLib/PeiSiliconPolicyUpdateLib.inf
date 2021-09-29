@@ -53,6 +53,8 @@
   gHsioSataPreMemConfigGuid                     ## CONSUMES
   gSaMiscPeiPreMemConfigGuid                    ## CONSUMES
   gFspNonVolatileStorageHobGuid                 ## CONSUMES
+  gIoApicConfigGuid                             ## CONSUMES
+  gHpetPreMemConfigGuid                         ## CONSUMES
   gLockDownConfigGuid
   gPchGeneralConfigGuid
   gCpuPowerMgmtBasicConfigGuid

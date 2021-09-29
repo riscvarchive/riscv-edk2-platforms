@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2017, Intel Corporation. All rights reserved.<BR>
+Copyright (c) 2017 - 2021, Intel Corporation. All rights reserved.<BR>
 SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -40,7 +40,6 @@ EcInit (
   UINT16         ABase;
   UINT16         Pm1Sts;
   UINT32         GpeSts;
-  UINT16         XhciPmCs;
 
   /* This is called via a "$FNC" in a PeiOemModule pointer table, with "$DPX" on SiInit */
   IoWrite8 (0x6C, 0x5A);  // 6Ch is the EC sideband port
@@ -66,13 +65,13 @@ EcInit (
       IoWrite32 (ABase + R_PCH_ACPI_GPE0_STS_127_96, GpeSts);
       /* Clear xHCI PM_CS[PME_Status] - RW/1C - and disable xHCI PM_CS[PME_En] */
       PciAndThenOr16 (PCI_LIB_ADDRESS(PCI_BUS_NUMBER_PCH_XHCI, PCI_DEVICE_NUMBER_PCH_XHCI, PCI_FUNCTION_NUMBER_PCH_XHCI, R_PCH_XHCI_PWR_CNTL_STS),
-                      ~B_PCH_XHCI_PWR_CNTL_STS_PME_EN,
+                      (UINT16) ~B_PCH_XHCI_PWR_CNTL_STS_PME_EN,
                       B_PCH_XHCI_PWR_CNTL_STS_PME_STS
                       );
 
       /* Enter S3 sleep */
       IoAndThenOr32 (ABase + R_PCH_ACPI_PM1_CNT,
-                     ~(B_PCH_ACPI_PM1_CNT_SLP_TYP | B_PCH_ACPI_PM1_CNT_SLP_EN),
+                     (UINT32) ~(B_PCH_ACPI_PM1_CNT_SLP_TYP | B_PCH_ACPI_PM1_CNT_SLP_EN),
                      V_PCH_ACPI_PM1_CNT_S3
                      );
       IoWrite32 (ABase + R_PCH_ACPI_PM1_CNT, B_PCH_ACPI_PM1_CNT_SLP_EN);

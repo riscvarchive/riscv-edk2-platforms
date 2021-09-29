@@ -2,6 +2,7 @@
   Board-specific EC commands.
 
   Copyright (c) 2021, Baruch Binyamin Doron
+  Copyright (c) 2021, Intel Corporation. All rights reserved.<BR>
   SPDX-License-Identifier: BSD-2-Clause-Patent
 
 **/
@@ -167,8 +168,8 @@ EcIdxRead (
     return;
   }
 
-  IoWrite8 (EC_INDEX_IO_HIGH_ADDR_PORT, Address >> 8);
-  IoWrite8 (EC_INDEX_IO_LOW_ADDR_PORT, Address);
+  IoWrite8 (EC_INDEX_IO_HIGH_ADDR_PORT, (UINT8) (Address >> 8));
+  IoWrite8 (EC_INDEX_IO_LOW_ADDR_PORT, (UINT8) Address);
   *Data = IoRead8 (EC_INDEX_IO_DATA_PORT);
 }
 
@@ -184,8 +185,8 @@ EcIdxWrite (
   IN  UINT8                  Data
   )
 {
-  IoWrite8 (EC_INDEX_IO_HIGH_ADDR_PORT, Address >> 8);
-  IoWrite8 (EC_INDEX_IO_LOW_ADDR_PORT, Address);
+  IoWrite8 (EC_INDEX_IO_HIGH_ADDR_PORT, (UINT8) (Address >> 8));
+  IoWrite8 (EC_INDEX_IO_LOW_ADDR_PORT, (UINT8) Address);
   IoWrite8 (EC_INDEX_IO_DATA_PORT, Data);
 }
 
