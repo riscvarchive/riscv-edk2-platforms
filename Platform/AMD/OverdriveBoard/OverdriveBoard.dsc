@@ -398,7 +398,7 @@ DEFINE X64EMU_ENABLE  = FALSE
 
   gArmTokenSpaceGuid.PcdPciIoBase|0x1000
   gArmTokenSpaceGuid.PcdPciIoSize|0xF000
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0xEFFF0000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0xEFFF0000
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|16
 
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x40000000
