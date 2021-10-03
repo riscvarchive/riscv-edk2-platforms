@@ -51,7 +51,7 @@
 
   gArmTokenSpaceGuid.PcdPciIoBase
   gArmTokenSpaceGuid.PcdPciIoSize
-  gArmTokenSpaceGuid.PcdPciIoTranslation
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciIoLimit
 
   gArmTokenSpaceGuid.PcdPciMmio32Base

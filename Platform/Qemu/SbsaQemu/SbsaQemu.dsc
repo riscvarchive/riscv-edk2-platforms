@@ -486,7 +486,7 @@ DEFINE NETWORK_HTTP_BOOT_ENABLE       = FALSE
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarSize|0x10000000
   gArmVirtSbsaQemuPlatformTokenSpaceGuid.PcdPciExpressBarLimit|0xFFFFFFFF
 
-  gArmTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
+  gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x7fff0000
   gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
   gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
   ## If TRUE, OvmfPkg/AcpiPlatformDxe will not wait for PCI
