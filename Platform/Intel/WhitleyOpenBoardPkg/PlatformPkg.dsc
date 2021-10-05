@@ -741,10 +741,6 @@
 
   $(RP_PKG)/Features/Pci/Dxe/PciPlatform/PciPlatform.inf
 
-  $(PLATFORM_PKG)/Acpi/AcpiTables/AcpiPlatform.inf {
-    <LibraryClasses>
-      BoardAcpiTableLib|$(RP_PKG)/Library/BoardAcpiLib/DxeBoardAcpiTableLib.inf
-  }
 
   $(PLATFORM_PKG)/Acpi/AcpiSmm/AcpiSmm.inf {
     <LibraryClasses>
