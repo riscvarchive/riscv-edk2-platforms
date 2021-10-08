@@ -637,6 +637,7 @@
 
 [LibraryClasses.Common]
   DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+  PeiLib|MinPlatformPkg/Library/PeiLib/PeiLib.inf
 
 [Components.IA32]
   UefiCpuPkg/SecCore/SecCore.inf
