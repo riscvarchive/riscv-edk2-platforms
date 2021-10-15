@@ -393,11 +393,11 @@ DEFINE NUM_CORES    = 4
 
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x40000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x80000000
-  gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio32Translation|0x0
 
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x100000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0x7F00000000
-  gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio64Translation|0x0
 
   ## ACPI (no tables < 4GB)
   gEfiMdeModulePkgTokenSpaceGuid.PcdAcpiExposedTableVersions|0x20
