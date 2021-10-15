@@ -403,11 +403,11 @@ DEFINE X64EMU_ENABLE  = FALSE
 
   gArmTokenSpaceGuid.PcdPciMmio32Base|0x40000000
   gArmTokenSpaceGuid.PcdPciMmio32Size|0x80000000
-  gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio32Translation|0x0
 
   gArmTokenSpaceGuid.PcdPciMmio64Base|0x100000000
   gArmTokenSpaceGuid.PcdPciMmio64Size|0x7F00000000
-  gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio64Translation|0x0
 
   ## Use PCI emulation for ATA PassThru
   # gEfiMdeModulePkgTokenSpaceGuid.PcdAtaPassThruPciEmulation|TRUE
