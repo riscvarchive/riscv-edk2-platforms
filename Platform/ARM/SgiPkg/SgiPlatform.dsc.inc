@@ -152,8 +152,8 @@
   gArmTokenSpaceGuid.PcdPciIoBase|0x0
   gArmTokenSpaceGuid.PcdPciIoSize|0x00800000
   gEfiMdePkgTokenSpaceGuid.PcdPciIoTranslation|0x77800000
-  gArmTokenSpaceGuid.PcdPciMmio32Translation|0x0
-  gArmTokenSpaceGuid.PcdPciMmio64Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio32Translation|0x0
+  gEfiMdePkgTokenSpaceGuid.PcdPciMmio64Translation|0x0
   gEmbeddedTokenSpaceGuid.PcdPrePiCpuIoSize|24
 
   ## PL011 - Serial Terminal
